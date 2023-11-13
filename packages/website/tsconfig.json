@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "outDir": "./lib",
+    "module": "es2020",
+    "moduleResolution": "node",
+    "target": "es2020",
+    "skipLibCheck": true,
+    "declaration": true,
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "types": ["vite/client"],
+    "lib": ["dom", "es2017"],
+    "jsx": "react"
+  },
+  "include": ["src/**/*"]
+}

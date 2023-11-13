@@ -1,0 +1,20 @@
+{
+  "name": "@nlxai/sdk",
+  "version": "0.0.1",
+  "private": true,
+  "description": "SDK for rich conversational experiences",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "postinstall": "npm run build",
+    "build": "lerna run build",
+    "publish": "rm -f package-lock.json && rm -f packages/*/package-lock.json && lerna publish --no-private"
+  },
+  "author": "Peter Szerzo <peter@nlx.ai>",
+  "license": "MIT",
+  "devDependencies": {
+    "lerna": "^7.0.0"
+  },
+  "dependencies": {}
+}

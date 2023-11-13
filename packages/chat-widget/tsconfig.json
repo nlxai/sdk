@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "es6",
+    "lib": ["dom"],
+    "jsx": "react",
+    "skipLibCheck": true,
+    "declaration": true,
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": false,
+    "esModuleInterop": true
+  }
+}

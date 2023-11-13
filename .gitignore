@@ -1,0 +1,11 @@
+node_modules
+.DS_Store
+package-lock.json
+.parcel-cache
+index.html
+yarn.lock
+*.log
+.cache
+.env
+dist
+lib

@@ -1,0 +1,12 @@
+{
+  "npmClient": "npm",
+  "packages": [
+    "packages/chat-core",
+    "packages/chat-react",
+    "packages/chat-preact",
+    "packages/chat-widget",
+    "packages/voice-compass",
+    "packages/website"
+  ],
+  "version": "0.0.1"
+}

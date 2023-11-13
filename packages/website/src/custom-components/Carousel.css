@@ -1,0 +1,89 @@
+.chat-carousel-container {
+  position: relative;
+  padding: 15px;
+}
+
+.chat-carousel-container::after {
+  content: " ";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
+}
+
+.chat-carousel-slides {
+  display: flex;
+  position: relative;
+  overflow-x: auto;
+  padding-right: 40px;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chat-carousel-slides::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.chat-carousel-slides::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.chat-carousel-slides::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-carousel-slide {
+  scroll-snap-align: start;
+  cursor: pointer;
+  flex-shrink: 0;
+  width: 226px;
+  height: 240px;
+  margin-right: 10px;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: rgb(243, 244, 246);
+  transform-origin: center center;
+  transform: scale(1);
+  transition: transform 0.5s;
+  position: relative;
+}
+
+.chat-carousel-slide:hover,
+.chat-carousel-slide--active {
+  border-color: #000;
+}
+
+.chat-carousel-image {
+  width: 100%;
+  height: 100px;
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.chat-carousel-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.chat-carousel-description {
+  font-size: 0.875rem;
+  color: #676767;
+}
+
+.chat-carousel-image img {
+  width: 100%;
+}
+
+.chat-carousel-slide > * + * {
+  margin-top: 10px;
+}
