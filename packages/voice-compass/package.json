@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/voice-compass",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "NLX SDK for multimodal experiences with",
   "type": "module",
   "main": "lib/index.cjs.js",
