@@ -22,7 +22,7 @@
     "@rollup/plugin-typescript": "^11.1.5",
     "@types/isomorphic-fetch": "^0.0.36",
     "@types/node": "^11.15.11",
-    "@types/ramda": "^0.26.44",
+    "@types/ramda": "0.29.1",
     "prettier": "^3.0.3",
     "rollup": "^4.3.0",
     "rollup-plugin-node-polyfills": "^0.2.1",
