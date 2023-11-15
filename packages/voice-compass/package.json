@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/voice-compass",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "NLX SDK for multimodal experiences with",
   "type": "module",
   "main": "lib/index.esm.js",
