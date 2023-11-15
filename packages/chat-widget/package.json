@@ -8,7 +8,7 @@
   "browser": "lib/index.umd.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rm -rf lib && rollup -c",
     "prepublish": "npm run build"
   },
   "author": "Peter Szerzo <peter@nlx.ai>",
