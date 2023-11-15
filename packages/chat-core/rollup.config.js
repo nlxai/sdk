@@ -34,7 +34,6 @@ export default [
   // Bundler/Node-friendly CommonJS and ESM builds
   {
     input: "src/index.ts",
-    external: ["ms"],
     output: [
       { file: pkg.main, format: "cjs" },
       { file: pkg.module, format: "es" },
