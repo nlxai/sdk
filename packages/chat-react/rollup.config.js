@@ -8,7 +8,7 @@ export default [
   {
     input: "src/index.ts",
     output: [
-      { file: pkg.main, format: "cjs" },
+      { file: pkg.commonjs, format: "cjs" },
       { file: pkg.module, format: "es" },
     ],
     plugins: [typescript(), json()],
