@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "description": "NLX Chat SDK core",
   "type": "module",
-  "main": "lib/index.cjs.js",
+  "main": "lib/index.esm.js",
   "module": "lib/index.esm.js",
   "browser": "lib/index.umd.js",
   "types": "lib/index.d.ts",

@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "description": "NLX SDK for multimodal experiences with",
   "type": "module",
-  "main": "lib/index.cjs.js",
+  "main": "lib/index.esm.js",
   "module": "lib/index.esm.js",
   "browser": "lib/index.umd.js",
   "types": "lib/index.d.ts",
