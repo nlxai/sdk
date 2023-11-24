@@ -4,7 +4,7 @@ import { Prose } from "./PageContent";
 
 export const Note: FC<{ title: string; body: string }> = (props) => {
   return (
-    <div className="my-8 flex rounded-3xl p-6 bg-sky-50 dark:bg-slate-800/60 dark:ring-1 dark:ring-slate-300/10">
+    <div className="my-8 flex rounded-3xl p-6 bg-blue05">
       <svg
         aria-hidden="true"
         viewBox="0 0 32 32"

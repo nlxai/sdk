@@ -5,12 +5,26 @@ import React, {
   useState,
   useRef,
 } from "react";
-import { flatten } from "ramda";
+import { last, flatten } from "ramda";
 
 type Item =
   | { type: "user"; message: string }
   | { type: "bot"; message: string }
   | { type: "custom"; element: ReactNode };
+
+const Loader: FC<{}> = () => (
+  <div className="inline-flex items-center py-1 space-x-1">
+    <div className="w-1.5 h-1.5 animate-bounce rounded-full bg-current"></div>
+    <div
+      className="w-1.5 h-1.5 animate-bounce rounded-full bg-current"
+      style={{ animationDelay: "-0.15s" }}
+    ></div>
+    <div
+      className="w-1.5 h-1.5 animate-bounce rounded-full bg-current"
+      style={{ animationDelay: "-0.3s" }}
+    ></div>
+  </div>
+);
 
 export const InlineWidget: FC<{
   items: Item[][];
@@ -32,6 +46,13 @@ export const InlineWidget: FC<{
     ? props.items.slice(0, 1 + (tick % props.items.length))
     : props.items;
 
+  const loader: "user" | "bot" | undefined =
+    displayedItems.length === props.items.length
+      ? undefined
+      : last(last(displayedItems) || [])?.type === "user"
+        ? "bot"
+        : "user";
+
   const messagesContainer = useRef<HTMLDivElement | null>(null);
 
   const isFullyVisible = useRef(true);
@@ -39,7 +60,7 @@ export const InlineWidget: FC<{
   useEffect(() => {
     const callback: MutationCallback = (ch) => {
       const addedNodes = flatten(
-        ch.map((entry) => Array.from(entry.addedNodes))
+        ch.map((entry) => Array.from(entry.addedNodes)),
       );
       const firstContentNode: Node | undefined = addedNodes[0];
       if (
@@ -48,7 +69,7 @@ export const InlineWidget: FC<{
         firstContentNode instanceof HTMLElement
       ) {
         firstContentNode.scrollIntoView({
-          block: "nearest",
+          block: "end",
           behavior: "smooth",
         });
       }
@@ -73,7 +94,7 @@ export const InlineWidget: FC<{
       },
       {
         threshold: 0.95,
-      }
+      },
     );
     if (messagesContainer.current) {
       observer.observe(messagesContainer.current);
@@ -89,7 +110,7 @@ export const InlineWidget: FC<{
         props.className || ""
       }`}
     >
-      <div className="bg-sky-500 text-white text-sm flex-none px-4 py-3">
+      <div className="bg-blueMain text-white text-sm flex-none px-4 py-3">
         Support chat
       </div>
       <div
@@ -103,7 +124,7 @@ export const InlineWidget: FC<{
                 if (item.type === "user") {
                   return (
                     <div
-                      className={`w-fit self-end bg-sky-500 text-white p-2 text-sm rounded-lg mx-4 ${
+                      className={`w-fit self-end bg-blueMain text-white p-2 text-sm rounded-lg mx-4 ${
                         props.animated ? "animate-slideInFromRight" : ""
                       }`}
                       key={itemIndex}
@@ -140,6 +161,20 @@ export const InlineWidget: FC<{
             </div>
           );
         })}
+        {loader &&
+          (loader === "user" ? (
+            <div
+              className={`bg-blueMain w-fit self-end mx-4 px-2 py-2 rounded-lg text-white`}
+            >
+              <Loader />
+            </div>
+          ) : (
+            <div
+              className={`bg-gray-100 w-fit mx-4 px-2 py-2 rounded-lg text-gray-600`}
+            >
+              <Loader />
+            </div>
+          ))}
       </div>
       <input
         className="text-sm flex-none px-4 py-3 focus:outline-none border-t border-gray-200"

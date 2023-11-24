@@ -27,7 +27,7 @@
 .chat-feedback-form [type="submit"] {
   display: block;
   width: 100%;
-  background-color: rgb(14, 165, 233);
+  background-color: rgba(38, 99, 218, 1);
   padding: 8px 12px;
   border-radius: 6px;
   border: none;
@@ -40,5 +40,5 @@
 }
 
 .chat-feedback-form [type="submit"]:hover {
-  background-color: var(--primaryColorLighter);
+  background-color: rgba(30, 86, 196, 1);
 }

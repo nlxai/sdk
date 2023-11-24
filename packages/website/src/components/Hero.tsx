@@ -13,33 +13,33 @@ export const Hero = () => {
     return null;
   }
   return (
-    <div className="overflow-hidden bg-slate-900 dark:-mb-32 dark:mt-[-4.75rem] dark:pb-32 dark:pt-[4.75rem]">
+    <div className="overflow-hidden bg-lightBlueDarker dark:-mb-32 dark:mt-[-4.75rem] dark:pb-32 dark:pt-[4.75rem]">
       <div className="py-16 sm:px-2 lg:relative lg:px-0 lg:py-20">
         <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 lg:max-w-8xl lg:grid-cols-2 lg:px-8 xl:gap-x-16 xl:px-12">
           <div className="relative z-10 md:text-center lg:text-left">
             <div className="relative">
-              <p className="inline bg-gradient-to-r from-indigo-200 via-sky-400 to-indigo-200 bg-clip-text font-display text-5xl tracking-tight text-transparent">
+              <p className="inline text-gray-900 font-display text-5xl">
                 SDK for rich conversational experiences
               </p>
-              <p className="mt-3 text-2xl tracking-tight text-slate-400">
+              <p className="mt-3 text-2xl text-gray-700">
                 Add chat and multimodal capabilities to your page in minutes.
                 Add fully custom components with a dozen lines of code, or
                 engineer from the ground up yourself.
               </p>
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
                 <button
-                  className="rounded-full bg-sky-300 py-2 px-4 text-sm font-semibold text-slate-900 hover:bg-sky-200 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300/50 active:bg-sky-500"
+                  className="rounded-xl bg-gray-800 text-white py-2 px-6 text-sm hover:bg-gray-900 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300/50 active:bg-sky-500"
                   onClick={() => {
                     document.querySelector("article")?.scrollIntoView({
                       block: "start",
-                      behavior: "smooth"
+                      behavior: "smooth",
                     });
                   }}
                 >
                   Get started
                 </button>
                 <a
-                  className="rounded-full bg-slate-800 py-2 px-4 text-sm font-medium text-white hover:bg-slate-700 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 active:text-slate-400"
+                  className="rounded-xl bg-slate-800 py-2 px-6 text-sm text-white hover:bg-gray-900 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 active:text-slate-400"
                   href="https://github.com/nlxai/chat-sdk"
                 >
                   View on GitHub
@@ -54,58 +54,60 @@ export const Hero = () => {
               items={[
                 [
                   {
+                    type: "custom",
+                    element: <Disclaimer />,
+                  },
+                ],
+                [
+                  {
                     type: "user",
+                    message:
+                      "I would like to order a Friday afternoon snack for the office.",
+                  },
+                ],
+                [
+                  {
+                    type: "bot",
+                    message: "Sure, I have these options available:",
+                  },
+                  {
+                    type: "custom",
+                    element: <Carousel data={carouselExampleData} />,
+                  },
+                ],
+                [
+                  {
+                    type: "user",
+                    message: "I would like the fancy coffees",
+                  },
+                ],
+                [
+                  {
+                    type: "bot",
+                    message: "Great, I added the coffees to your order.",
+                  },
+                  {
+                    type: "bot",
                     message:
-                      "I would like to order a Friday afternoon snack for the office."
-                  }
-                ],
-                [
-                  {
-                    type: "bot",
-                    message: "Sure, I have these options available:"
+                      "Would you like to take a moment to give us feedback on your experience with us?",
                   },
-                  {
-                    type: "custom",
-                    element: <Disclaimer />
-                  },
-                  {
-                    type: "custom",
-                    element: <Carousel data={carouselExampleData} />
-                  }
                 ],
                 [
                   {
                     type: "user",
-                    message: "I would like the fancy coffees"
-                  }
-                ],
-                [
-                  {
-                    type: "bot",
-                    message: "Great, I added the coffees to your order."
+                    message: "Yes",
                   },
-                  {
-                    type: "bot",
-                    message:
-                      "Would you like to take a moment to give us feedback on your experience with us?"
-                  }
-                ],
-                [
-                  {
-                    type: "user",
-                    message: "Yes"
-                  }
                 ],
                 [
                   {
                     type: "bot",
-                    message: "Please fill out the following form:"
+                    message: "Please fill out the following form:",
                   },
                   {
                     type: "custom",
-                    element: <FeedbackForm />
-                  }
-                ]
+                    element: <FeedbackForm />,
+                  },
+                ],
               ]}
             />
           </div>

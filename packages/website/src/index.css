@@ -4,6 +4,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Neue Haas Grotesk";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/neue-haas-grotesk/NHaasGroteskDSPro-55Rg.otf");
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk";
+  font-weight: 500;
+  font-style: normal;
+  src: url("/fonts/neue-haas-grotesk/NHaasGroteskDSPro-65Md.otf");
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk";
+  font-weight: 700;
+  font-style: normal;
+  src: url("/fonts/neue-haas-grotesk/NHaasGroteskDSPro-75Bd.otf");
+}
+
 /* Carousel example */
 
 .slides-container {

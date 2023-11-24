@@ -13,6 +13,11 @@
 
 .chat-disclaimer a {
   text-decoration: underline;
+  cursor: pointer;
+}
+
+.chat-disclaimer a:hover {
+  color: rgba(30, 86, 196, 1);
 }
 
 .chat-disclaimer p {
@@ -22,7 +27,7 @@
 .chat-disclaimer button {
   border: none;
   background: none;
-  color: var(--primaryColor);
+  color: rgba(38, 99, 218, 1);
   cursor: pointer;
   display: inline-block;
 }
@@ -32,5 +37,5 @@
 }
 
 .chat-disclaimer button:hover {
-  color: var(--primaryColorLighter);
+  color: rgba(30, 86, 196, 1);
 }

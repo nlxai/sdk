@@ -107,7 +107,7 @@ export interface Config {
 const welcomeIntent = "NLX.Welcome";
 
 const defaultFailureMessages = [
-  "We encountered an issue. Please try again soon."
+  "We encountered an issue. Please try again soon.",
 ];
 
 export type State = Response[];
@@ -116,9 +116,9 @@ const normalizeSlots = (slotsWithLegacy: Slots | SlotValue[]): Slots => {
   let slots: Slots = {};
   if (Array.isArray(slotsWithLegacy)) {
     console.warn(
-      `The legacy slot format is deprecated. Instead of '[{ slotId: "MySlot", value: "my-value" }]', use '{ MySlot: "my-value" }'`
+      `The legacy slot format is deprecated. Instead of '[{ slotId: "MySlot", value: "my-value" }]', use '{ MySlot: "my-value" }'`,
     );
-    slotsWithLegacy.forEach(slot => {
+    slotsWithLegacy.forEach((slot) => {
       slots[slot.slotId] = slot.value;
     });
   }
@@ -180,7 +180,7 @@ type Subscriber = (response: Array<Response>, newResponse?: Response) => void;
 
 export const shouldReinitialize = (
   config1: Config,
-  config2: Config
+  config2: Config,
 ): boolean => {
   return (
     !equals(config1.botUrl, config2.botUrl) ||
@@ -189,11 +189,11 @@ export const shouldReinitialize = (
     !equals(config1.languageCode, config2.languageCode) ||
     !equals(
       config1.experimental?.channelType,
-      config2.experimental?.channelType
+      config2.experimental?.channelType,
     ) ||
     !equals(
       config1.experimental?.completeBotUrl,
-      config2.experimental?.completeBotUrl
+      config2.experimental?.completeBotUrl,
     ) ||
     !equals(config1.headers, config2.headers) ||
     !equals(config1.responses, config2.responses) ||
@@ -207,7 +207,7 @@ export const createConversation = (config: Config): ConversationHandler => {
   // Check if the bot URL has a language code appended to it
   if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(config.botUrl)) {
     console.warn(
-      "Since v1.0.0, the language code is no longer added at the end of the bot URL. Please remove the modifier (e.g. '-en-US') from the URL, and specify it in the `languageCode` parameter instead."
+      "Since v1.0.0, the language code is no longer added at the end of the bot URL. Please remove the modifier (e.g. '-en-US') from the URL, and specify it in the `languageCode` parameter instead.",
     );
   }
 
@@ -228,28 +228,28 @@ export const createConversation = (config: Config): ConversationHandler => {
                     messageId: undefined,
                     text: greetingMessage,
                     choices: [] as Array<Choice>,
-                    selectedChoiceId: undefined
-                  })
-                )
-              }
-            }
+                    selectedChoiceId: undefined,
+                  }),
+                ),
+              },
+            },
           ]
         : []),
     userId: config.userId,
-    conversationId: initialConversationId
+    conversationId: initialConversationId,
   };
 
   const setState = (
     change: Partial<InternalState>,
     // Optionally send the response that causes the current state change, to be sent to subscribers
-    newResponse?: Response
+    newResponse?: Response,
   ): void => {
     state = {
       ...state,
-      ...change
+      ...change,
     };
-    subscribers.forEach(subscriber =>
-      subscriber(fromInternal(state), newResponse)
+    subscribers.forEach((subscriber) =>
+      subscriber(fromInternal(state), newResponse),
     );
   };
 
@@ -261,16 +261,16 @@ export const createConversation = (config: Config): ConversationHandler => {
         messages: (config.failureMessages || defaultFailureMessages).map(
           (messageBody: string): BotMessage => ({
             text: messageBody,
-            choices: [] as Array<Choice>
-          })
-        )
-      }
+            choices: [] as Array<Choice>,
+          }),
+        ),
+      },
     };
     setState(
       {
-        responses: [...state.responses, newResponse]
+        responses: [...state.responses, newResponse],
       },
-      newResponse
+      newResponse,
     );
   };
 
@@ -284,15 +284,15 @@ export const createConversation = (config: Config): ConversationHandler => {
           messages: response.messages.map((message: any) => ({
             messageId: message.messageId,
             text: message.text,
-            choices: message.choices || []
-          }))
-        }
+            choices: message.choices || [],
+          })),
+        },
       };
       setState(
         {
-          responses: [...state.responses, newResponse]
+          responses: [...state.responses, newResponse],
         },
-        newResponse
+        newResponse,
       );
     } else {
       failureHandler();
@@ -301,9 +301,8 @@ export const createConversation = (config: Config): ConversationHandler => {
 
   let socketMessageQueue: BotRequest[] = [];
 
-  let socketMessageQueueCheckInterval: ReturnType<
-    typeof setInterval
-  > | null = null;
+  let socketMessageQueueCheckInterval: ReturnType<typeof setInterval> | null =
+    null;
 
   const sendToBot = (body: BotRequest) => {
     const bodyWithContext = {
@@ -312,7 +311,7 @@ export const createConversation = (config: Config): ConversationHandler => {
       ...body,
       languageCode: config.languageCode,
       channelType: config.experimental?.channelType,
-      environment: config.environment
+      environment: config.environment,
     };
     if (isUsingWebSockets()) {
       if (socket && socket.readyState === 1) {
@@ -329,10 +328,10 @@ export const createConversation = (config: Config): ConversationHandler => {
           method: "POST",
           headers: {
             ...(config.headers || {}),
-            "content-type": "application/json"
+            "content-type": "application/json",
           },
-          body: JSON.stringify(bodyWithContext)
-        }
+          body: JSON.stringify(bodyWithContext),
+        },
       )
         .then((res: any) => res.json())
         .then(messageResponseHandler)
@@ -359,13 +358,13 @@ export const createConversation = (config: Config): ConversationHandler => {
       url.searchParams.set("languageCode", config.languageCode);
       url.searchParams.set(
         "channelKey",
-        `${url.searchParams.get("channelKey") || ""}-${config.languageCode}`
+        `${url.searchParams.get("channelKey") || ""}-${config.languageCode}`,
       );
     }
     url.searchParams.set("conversationId", state.conversationId);
     socket = new ReconnectingWebSocket(url.href);
     socketMessageQueueCheckInterval = setInterval(checkQueue, 500);
-    socket.onmessage = function(e) {
+    socket.onmessage = function (e) {
       if (typeof e?.data === "string") {
         messageResponseHandler(safeJsonParse(e.data));
       }
@@ -389,7 +388,7 @@ export const createConversation = (config: Config): ConversationHandler => {
 
   const appendStructuredUserResponse = (
     structured: StructuredRequest,
-    context?: Context
+    context?: Context,
   ) => {
     const newResponse: Response = {
       type: "user",
@@ -397,14 +396,14 @@ export const createConversation = (config: Config): ConversationHandler => {
       payload: {
         type: "structured",
         ...structured,
-        context
-      }
+        context,
+      },
     };
     setState(
       {
-        responses: [...state.responses, newResponse]
+        responses: [...state.responses, newResponse],
       },
-      newResponse
+      newResponse,
     );
   };
 
@@ -414,14 +413,14 @@ export const createConversation = (config: Config): ConversationHandler => {
       context,
       request: {
         structured: {
-          intentId
-        }
-      }
+          intentId,
+        },
+      },
     });
   };
 
   const unsubscribe = (subscriber: Subscriber) => {
-    subscribers = subscribers.filter(fn => fn !== subscriber);
+    subscribers = subscribers.filter((fn) => fn !== subscriber);
   };
 
   const subscribe = (subscriber: Subscriber) => {
@@ -440,22 +439,22 @@ export const createConversation = (config: Config): ConversationHandler => {
         payload: {
           type: "text",
           text,
-          context
-        }
+          context,
+        },
       };
       setState(
         {
-          responses: [...state.responses, newResponse]
+          responses: [...state.responses, newResponse],
         },
-        newResponse
+        newResponse,
       );
       sendToBot({
         context,
         request: {
           unstructured: {
-            text
-          }
-        }
+            text,
+          },
+        },
       });
     },
     sendStructured: (structured: StructuredRequest, context) => {
@@ -463,8 +462,8 @@ export const createConversation = (config: Config): ConversationHandler => {
       sendToBot({
         context,
         request: {
-          structured
-        }
+          structured,
+        },
       });
     },
     sendSlots: (slotsWithLegacy, context) => {
@@ -474,27 +473,27 @@ export const createConversation = (config: Config): ConversationHandler => {
         context,
         request: {
           structured: {
-            slots
-          }
-        }
+            slots,
+          },
+        },
       });
     },
     sendIntent,
-    sendWelcomeIntent: context => {
+    sendWelcomeIntent: (context) => {
       appendStructuredUserResponse({ intentId: welcomeIntent }, context);
       sendIntent(welcomeIntent, context);
     },
     sendChoice: (choiceId, context) => {
       const containsChoice = (botMessage: BotMessage) =>
         (botMessage.choices || [])
-          .map(choice => choice.choiceId)
+          .map((choice) => choice.choiceId)
           .indexOf(choiceId) > -1;
 
       const lastBotResponseIndex = findLastIndex(
-        response =>
+        (response) =>
           response.type === "bot" &&
           Boolean(response.payload.messages.find(containsChoice)),
-        state.responses
+        state.responses,
       );
 
       let newResponses: Response[] = [...state.responses];
@@ -504,8 +503,8 @@ export const createConversation = (config: Config): ConversationHandler => {
         receivedAt: new Date().getTime(),
         payload: {
           type: "choice",
-          choiceId
-        }
+          choiceId,
+        },
       };
 
       if (lastBotResponseIndex > -1) {
@@ -517,19 +516,19 @@ export const createConversation = (config: Config): ConversationHandler => {
           ...lastBotResponse,
           payload: {
             ...lastBotResponse.payload,
-            messages: lastBotResponse.payload.messages.map(botMessage => ({
+            messages: lastBotResponse.payload.messages.map((botMessage) => ({
               ...botMessage,
               selectedChoiceId: containsChoice(botMessage)
                 ? choiceId
-                : botMessage.selectedChoiceId
-            }))
-          }
+                : botMessage.selectedChoiceId,
+            })),
+          },
         };
 
         newResponses = update(
           lastBotResponseIndex,
           updatedBotResponse,
-          newResponses
+          newResponses,
         );
       }
 
@@ -537,18 +536,18 @@ export const createConversation = (config: Config): ConversationHandler => {
 
       setState(
         {
-          responses: newResponses
+          responses: newResponses,
         },
-        choiceResponse
+        choiceResponse,
       );
 
       sendToBot({
         context,
         request: {
           structured: {
-            choiceId
-          }
-        }
+            choiceId,
+          },
+        },
       });
     },
     currentConversationId: () => {
@@ -559,10 +558,10 @@ export const createConversation = (config: Config): ConversationHandler => {
     unsubscribeAll: () => {
       subscribers = [];
     },
-    reset: options => {
+    reset: (options) => {
       setState({
         conversationId: uuid(),
-        responses: options?.clearResponses ? [] : state.responses
+        responses: options?.clearResponses ? [] : state.responses,
       });
       if (isUsingWebSockets()) {
         teardownWebsocket();
@@ -574,14 +573,14 @@ export const createConversation = (config: Config): ConversationHandler => {
       if (isUsingWebSockets()) {
         teardownWebsocket();
       }
-    }
+    },
   };
 };
 
 export function promisify<T>(
   fn: (payload: T) => void,
   convo: ConversationHandler,
-  timeout = 10000
+  timeout = 10000,
 ): (payload: T) => Promise<Response | null> {
   return (payload: T) => {
     return new Promise((resolve, reject) => {
@@ -590,7 +589,7 @@ export function promisify<T>(
       }, timeout);
       const subscription = (
         _responses: Response[],
-        newResponse: Response | undefined
+        newResponse: Response | undefined,
       ) => {
         if (newResponse && newResponse.type === "bot") {
           clearTimeout(timeoutId);
