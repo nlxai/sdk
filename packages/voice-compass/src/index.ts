@@ -4,11 +4,11 @@ export interface Session {
   conversationId: string;
   journeyId: string;
   languageCode?: string;
-  previousStepId?: string;
+  lastUpdate: Update | null;
 }
 
 // Initial configuration used when creating a journey manager
-interface Config {
+export interface Config {
   apiKey: string;
   conversationId: string;
   journeyId: string;
@@ -21,14 +21,22 @@ interface Config {
 
 export interface StepData {
   stepId?: string;
-  context?: object;
+  context?: Record<string, any>;
 }
+
+export type Context = Record<string, any>;
 
 // The journey manager object
 export interface VoiceCompass {
   updateStep: (data: StepData) => Promise<StepUpdate>;
   changeJourneyId: (journeyId: string) => void;
-  getLastStepId: () => string | null;
+  getLastUpdate: () => Update | null;
+}
+
+export interface Update {
+  stepId: string;
+  journeyId: string;
+  context?: Context;
 }
 
 export interface StepUpdate {
@@ -45,21 +53,22 @@ export const create = (config: Config): VoiceCompass => {
 
   if (!conversationId) {
     console.warn(
-      'No contact ID provided. Please call the Voice Compass client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`'
+      'No contact ID provided. Please call the Voice Compass client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`',
     );
   }
 
   const apiUrl = config.dev ? devApiUrl : prodApiUrl;
 
-  let previousStepId: string | undefined = undefined;
+  let lastUpdate: Update | null = null;
+
   let currentJourneyId: string = config.journeyId;
 
   const saveSession = () => {
     config.onSessionUpdate?.({
       conversationId: config.conversationId,
       journeyId: currentJourneyId,
-      previousStepId,
-      languageCode: config.languageCode
+      lastUpdate,
+      languageCode: config.languageCode,
     });
   };
 
@@ -70,22 +79,22 @@ export const create = (config: Config): VoiceCompass => {
       ...stepData,
       conversationId,
       journeyId: currentJourneyId,
-      languageCode: config.languageCode
+      languageCode: config.languageCode,
     };
 
     return fetch(`${apiUrl}/track`, {
       method: "POST",
       headers: {
-        "x-api-key": config.apiKey
+        "x-api-key": config.apiKey,
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     })
-      .then(res => res.json())
+      .then((res) => res.json())
       .then((res: StepUpdate) => {
         if (config.debug) {
           console.info(
             `${String.fromCodePoint(0x02713)} step: ${payload.stepId}`,
-            payload
+            payload,
           );
         }
         return res;
@@ -94,27 +103,31 @@ export const create = (config: Config): VoiceCompass => {
         if (config.debug) {
           console.error(
             `${String.fromCodePoint(0x000d7)} step: ${payload.stepId}`,
-            err
+            err,
           );
         }
         return {
-          // TODO: look into propagating more error context
-          error: "Something went wrong"
+          error: `Something went wrong`,
         };
       });
   };
 
   const updateStep = (stepData: StepData) => {
-    if (stepData.stepId === previousStepId && config.preventRepeats) {
+    if (stepData.stepId === lastUpdate?.stepId && config.preventRepeats) {
       const warning = `Duplicate step ID detected, step update prevented: ${stepData.stepId}`;
       if (config.debug) {
         console.warn(warning);
       }
       return Promise.resolve({
-        warning: warning
+        warning: warning,
       });
     }
-    previousStepId = stepData.stepId;
+    lastUpdate = {
+      // TODO: sort out whether optional stepID's are even allowed
+      stepId: stepData.stepId || "",
+      journeyId: currentJourneyId,
+      context: stepData.context,
+    };
     saveSession();
     return sendUpdateRequest(stepData);
   };
@@ -125,8 +138,8 @@ export const create = (config: Config): VoiceCompass => {
       currentJourneyId = newJourneyId;
       saveSession();
     },
-    getLastStepId: () => {
-      return previousStepId || null;
-    }
+    getLastUpdate: () => {
+      return lastUpdate;
+    },
   };
 };

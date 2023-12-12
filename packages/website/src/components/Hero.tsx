@@ -13,22 +13,27 @@ export const Hero = () => {
     return null;
   }
   return (
-    <div className="overflow-hidden bg-lightBlueDarker dark:-mb-32 dark:mt-[-4.75rem] dark:pb-32 dark:pt-[4.75rem]">
+    <div
+      className="overflow-hidden bg-lightBlueDarker dark:-mb-32 dark:mt-[-4.75rem] dark:pb-32 dark:pt-[4.75rem] bg-cover"
+      style={{
+        backgroundImage: "url(/banner.jpeg)",
+      }}
+    >
       <div className="py-16 sm:px-2 lg:relative lg:px-0 lg:py-20">
         <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 lg:max-w-8xl lg:grid-cols-2 lg:px-8 xl:gap-x-16 xl:px-12">
           <div className="relative z-10 md:text-center lg:text-left">
             <div className="relative">
-              <p className="inline text-gray-900 font-display text-5xl">
+              <p className="inline text-white font-display text-5xl">
                 SDK for rich conversational experiences
               </p>
-              <p className="mt-3 text-2xl text-gray-700">
+              <p className="mt-3 text-2xl text-white65">
                 Add chat and multimodal capabilities to your page in minutes.
                 Add fully custom components with a dozen lines of code, or
                 engineer from the ground up yourself.
               </p>
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
                 <button
-                  className="rounded-xl bg-gray-800 text-white py-2 px-6 text-sm hover:bg-gray-900 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300/50 active:bg-sky-500"
+                  className="rounded-xl bg-lightBlueMain hover:bg-lightBlueDarker text-black60 py-2 px-6 text-sm hover:bg-gray-900 focus:outline-none"
                   onClick={() => {
                     document.querySelector("article")?.scrollIntoView({
                       block: "start",
@@ -39,7 +44,7 @@ export const Hero = () => {
                   Get started
                 </button>
                 <a
-                  className="rounded-xl bg-slate-800 py-2 px-6 text-sm text-white hover:bg-gray-900 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 active:text-slate-400"
+                  className="rounded-xl bg-lightBlueMain hover:bg-lightBlueDarker text-black60 py-2 px-6 text-sm hover:bg-gray-900 focus:outline-none"
                   href="https://github.com/nlxai/chat-sdk"
                 >
                   View on GitHub

@@ -144,7 +144,9 @@ export const routes: {
 ];
 
 export const ContentRoutes: FC<{}> = () => {
-  const flattenedRoutes = flatten(routes.map((r) => r.items));
+  const flattenedRoutes = flatten(
+    routes.map((r) => r.items.map((item) => ({ ...item, heading: r.heading }))),
+  );
   return (
     <Routes>
       {flattenedRoutes.map(({ url, element }, index) => {
@@ -159,13 +161,13 @@ export const ContentRoutes: FC<{}> = () => {
                 <NextPrevPage
                   prev={
                     prev && {
-                      label: prev.label,
+                      label: `${prev.heading}: ${prev.label}`,
                       url: prev.url,
                     }
                   }
                   next={
                     next && {
-                      label: next.label,
+                      label: `${next.heading}: ${next.label}`,
                       url: next.url,
                     }
                   }
