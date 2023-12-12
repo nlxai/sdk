@@ -14,7 +14,7 @@ export const Hero = () => {
   }
   return (
     <div
-      className="overflow-hidden bg-lightBlueDarker dark:-mb-32 dark:mt-[-4.75rem] dark:pb-32 dark:pt-[4.75rem] bg-cover"
+      className="overflow-hidden bg-black dark:-mb-32 dark:mt-[-4.75rem] dark:pb-32 dark:pt-[4.75rem] bg-cover"
       style={{
         backgroundImage: "url(./banner.jpeg)",
       }}
