@@ -33,7 +33,7 @@ export const Hero = () => {
               </p>
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
                 <button
-                  className="rounded-xl bg-lightBlueMain hover:bg-lightBlueDarker text-black60 py-2 px-6 text-sm hover:bg-gray-900 focus:outline-none"
+                  className="rounded-xl bg-lightBlueMain hover:bg-lightBlueDarker text-black80 py-2 px-6 text-sm hover:bg-gray-900 focus:outline-none"
                   onClick={() => {
                     document.querySelector("article")?.scrollIntoView({
                       block: "start",
@@ -44,7 +44,7 @@ export const Hero = () => {
                   Get started
                 </button>
                 <a
-                  className="rounded-xl bg-lightBlueMain hover:bg-lightBlueDarker text-black60 py-2 px-6 text-sm hover:bg-gray-900 focus:outline-none"
+                  className="rounded-xl bg-lightBlueMain hover:bg-lightBlueDarker text-black80 py-2 px-6 text-sm hover:bg-gray-900 focus:outline-none"
                   href="https://github.com/nlxai/chat-sdk"
                 >
                   View on GitHub
@@ -66,14 +66,14 @@ export const Hero = () => {
                 [
                   {
                     type: "user",
-                    message:
-                      "I would like to order a Friday afternoon snack for the office.",
+                    message: "I would like to buy a new bike.",
                   },
                 ],
                 [
                   {
                     type: "bot",
-                    message: "Sure, I have these options available:",
+                    message:
+                      "Sure, do any of these options look interesting to you?",
                   },
                   {
                     type: "custom",
@@ -83,13 +83,13 @@ export const Hero = () => {
                 [
                   {
                     type: "user",
-                    message: "I would like the fancy coffees",
+                    message: "I would like the sporty one",
                   },
                 ],
                 [
                   {
                     type: "bot",
-                    message: "Great, I added the coffees to your order.",
+                    message: "Great, I noted that to your account.",
                   },
                   {
                     type: "bot",
@@ -106,7 +106,7 @@ export const Hero = () => {
                 [
                   {
                     type: "bot",
-                    message: "Please fill out the following form:",
+                    message: "Amazing, please fill out the following form:",
                   },
                   {
                     type: "custom",
