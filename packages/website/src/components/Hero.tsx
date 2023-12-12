@@ -16,7 +16,7 @@ export const Hero = () => {
     <div
       className="overflow-hidden bg-lightBlueDarker dark:-mb-32 dark:mt-[-4.75rem] dark:pb-32 dark:pt-[4.75rem] bg-cover"
       style={{
-        backgroundImage: "url(/banner.jpeg)",
+        backgroundImage: "url(./banner.jpeg)",
       }}
     >
       <div className="py-16 sm:px-2 lg:relative lg:px-0 lg:py-20">
