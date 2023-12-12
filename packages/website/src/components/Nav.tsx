@@ -2,6 +2,7 @@ import React, { type FC } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, Link } from "react-router-dom";
 import { routes } from "../routes";
+import { Logo } from "./Logo";
 
 const MenuListItem: FC<{
   heading: string;
@@ -102,22 +103,7 @@ export const MobileNav: FC<{
                 </svg>
               </button>
               <a className="ml-6" aria-label="Home page" href="/">
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 36 36"
-                  fill="none"
-                  className="h-9 w-9"
-                >
-                  <g
-                    fill="none"
-                    stroke="#38BDF8"
-                    strokeLinejoin="round"
-                    strokeWidth="3"
-                  >
-                    <path d="M10.308 5L18 17.5 10.308 30 2.615 17.5 10.308 5z"></path>
-                    <path d="M18 17.5L10.308 5h15.144l7.933 12.5M18 17.5h15.385L25.452 30H10.308L18 17.5z"></path>
-                  </g>
-                </svg>
+                <Logo size={32} />
               </a>
             </div>
             <nav className="text-base lg:text-sm mt-5 px-1">
@@ -138,7 +124,7 @@ export const MobileNav: FC<{
                             <Link
                               className={`block w-full pl-3.5 before:pointer-events-none before:absolute before:-left-1 before:top-1/2 before:h-1.5 before:w-1.5 before:-translate-y-1/2 before:rounded-full ${
                                 active
-                                  ? "font-medium text-sky-500 before:bg-sky-500"
+                                  ? "font-medium text-blueMain before:bg-blueMain"
                                   : "text-slate-500 before:hidden before:bg-slate-300 hover:text-slate-600 hover:before:block dark:text-slate-400 dark:before:bg-slate-700 dark:hover:text-slate-300"
                               }`}
                               to={item.url}

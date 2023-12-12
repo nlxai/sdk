@@ -41,13 +41,13 @@ export const Hero = () => {
                     });
                   }}
                 >
-                  Get started
+                  get started
                 </button>
                 <a
                   className="rounded-xl bg-lightBlueMain hover:bg-lightBlueDarker text-black80 py-2 px-6 text-sm hover:bg-gray-900 focus:outline-none"
                   href="https://github.com/nlxai/chat-sdk"
                 >
-                  View on GitHub
+                  view on GitHub
                 </a>
               </div>
             </div>
