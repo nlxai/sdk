@@ -45,7 +45,7 @@ export const Header: FC<{
       <a
         className="group"
         aria-label="GitHub"
-        href="https://github.com/nlxai/chat-sdk"
+        href="https://github.com/nlxai/sdk"
       >
         <svg
           aria-hidden="true"
