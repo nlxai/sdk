@@ -29,15 +29,15 @@ interface LinkData {
 export const NextPrevPage: FC<{ prev?: LinkData; next?: LinkData }> = (
   props,
 ) => (
-  <dl className="mt-12 flex border-t border-gray-200 pt-6 dark:border-gray-800">
+  <dl className="mt-12 flex border-t border-gray-200 pt-6">
     {props.prev && (
       <div>
-        <dt className="font-display text-sm font-medium text-gray-800 dark:text-white">
+        <dt className="font-display text-sm font-medium text-gray-800">
           Previous
         </dt>
         <dd className="mt-1">
           <Link
-            className="flex items-center gap-x-1 text-base font-medium text-black60 hover:text-blueMain dark:text-gray-400 dark:hover:text-gray-300 flex-row-reverse"
+            className="flex items-center gap-x-1 text-base font-medium text-black60 hover:text-blueMain flex-row-reverse"
             to={props.prev.url}
           >
             {props.prev.label}
@@ -48,13 +48,11 @@ export const NextPrevPage: FC<{ prev?: LinkData; next?: LinkData }> = (
     )}
     {props.next && (
       <div className="ml-auto text-right">
-        <dt className="font-display text-sm font-medium text-gray-900 dark:text-white">
-          Next
-        </dt>
+        <dt className="font-display text-sm font-medium text-gray-900">Next</dt>
         <dd className="mt-1">
           <Link
-            className="flex items-center gap-x-1 text-base font-medium text-black60 hover:text-blueMain dark:text-gray-400 dark:hover:text-gray-300"
             to={props.next.url}
+            className="flex items-center gap-x-1 text-base font-medium text-black60 hover:text-blueMain"
           >
             {props.next.label}
             <NextArrow />
