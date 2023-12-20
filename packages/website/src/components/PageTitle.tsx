@@ -5,8 +5,6 @@ export const PageTitle: FC<{ pretitle: string; title: string }> = (props) => (
     <p className="font-display text-sm font-medium text-blueMain">
       {props.pretitle}
     </p>
-    <h1 className="font-display text-3xl text-slate-900 dark:text-white">
-      {props.title}
-    </h1>
+    <h1 className="font-display text-3xl text-slate-900">{props.title}</h1>
   </header>
 );
