@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { last, flatten } from "ramda";
 
-type Item =
+export type Item =
   | { type: "user"; message: string }
   | { type: "bot"; message: string }
   | { type: "custom"; element: ReactNode };
