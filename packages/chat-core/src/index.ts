@@ -295,6 +295,9 @@ export const createConversation = (config: Config): ConversationHandler => {
         newResponse,
       );
     } else {
+      console.warn(
+        "Invalid message structure, expected object with field 'messages'.",
+      );
       failureHandler();
     }
   };
@@ -335,7 +338,10 @@ export const createConversation = (config: Config): ConversationHandler => {
       )
         .then((res: any) => res.json())
         .then(messageResponseHandler)
-        .catch(failureHandler);
+        .catch((err) => {
+          console.warn(err);
+          failureHandler();
+        });
     }
   };
 
