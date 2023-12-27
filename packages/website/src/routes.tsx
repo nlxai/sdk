@@ -26,6 +26,7 @@ import { HeadlessApi } from "./content/05-02-headless-api";
 // 6
 import { MultimodalSetup } from "./content/06-01-multimodal-setup";
 import { MultimodalApiReference } from "./content/06-02-multimodal-api-reference";
+import { WebWidgetComponentsFileUpload } from "./content/03-07-file-upload";
 
 export const routes: {
   heading: string;
@@ -94,6 +95,11 @@ export const routes: {
         label: "Date picker",
         url: "/widget-components-datepicker",
         element: <WebWidgetComponentsDatePicker />,
+      },
+      {
+        label: "File upload",
+        url: "/widget-components/file-upload",
+        element: <WebWidgetComponentsFileUpload />,
       },
     ],
   },
