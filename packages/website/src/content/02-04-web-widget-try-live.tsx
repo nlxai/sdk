@@ -71,7 +71,7 @@ export const WebWidgetTryLive = () => {
       <PageContent md={content} />
       <Note
         title="Important"
-        body="In order for the bot communication to work, make sure that this webpage is added to the whitelisted URL list of your API channel."
+        body="In order for the bot communication to work (i.e. not trigger CORS errors), make sure that the URL of your webpage is added to the whitelisted URL list of your API channel in Dialog Studio."
       />
       <div className="mt-6 space-y-4">
         <ConfigEditor
