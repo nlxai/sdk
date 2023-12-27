@@ -44,7 +44,7 @@ convo.subscribe((responses, newResponse) => {
 // Send a message to the bot
 convo.sendText("Hello, I want to order a coffee");`;
 
-const packageVersion = "0.0.5";
+const packageVersion = "0.0.6";
 
 export const setupSnippet = ({
   config,
