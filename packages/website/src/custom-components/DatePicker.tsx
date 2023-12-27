@@ -1,4 +1,38 @@
+import htm from "htm";
 import "./DatePicker.css";
-import React, { type FC } from "react";
+import { createElement, useEffect, type FC, useState } from "react";
 
-export const DatePicker: FC<{}> = () => <p>TBD date picker</p>;
+const html = htm.bind(createElement);
+
+export const DatePicker: FC<{
+  submitted: boolean;
+  onSubmit: (date: Date) => void;
+}> = ({ submitted, onSubmit }) => {
+  const [datepicker, setDatepicker] = useState(null);
+
+  useEffect(() => {
+    const elem = document.getElementById("datepicker");
+    const datepicker = new (window as any).Datepicker(elem, {
+      weekStart: 1, // Monday
+    });
+    datepicker.setDate(new Date());
+    setDatepicker(datepicker);
+  }, []);
+
+  return html`
+    <form
+      className="chat-datepicker"
+      onSubmit=${(ev: any) => {
+        ev.preventDefault();
+
+        const date = (datepicker as any).getDate();
+        onSubmit(date);
+
+        (datepicker as any).setDate({ clear: true });
+      }}
+    >
+      <div id="datepicker"></div>
+      <button type="submit" disabled=${submitted}>Submit</button>
+    </form>
+  `;
+};
