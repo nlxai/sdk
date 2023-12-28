@@ -245,7 +245,7 @@ export const createConversation = (config: Config): ConversationHandler => {
       type: "failure",
       receivedAt: new Date().getTime(),
       payload: {
-        text: config.failureMessage || defaultFailureMessages,
+        text: config.failureMessage || defaultFailureMessage,
       },
     };
     setState(
