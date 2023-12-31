@@ -4,6 +4,8 @@ export const bottomHeight = 60;
 
 export const fontSize = 15;
 
+export const smallFontSize = 12;
+
 export const largeZIndex = 2147483000;
 
 export const defaultTheme: Theme = {

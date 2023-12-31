@@ -168,7 +168,11 @@ const MessageGroups: FC<{
       }
 
       if (response.type === "failure") {
-        return <p>{response.payload.text}</p>;
+        return (
+          <C.FailureMessage key={responseIndex}>
+            {response.payload.text}
+          </C.FailureMessage>
+        );
       }
 
       if (response.type === "user" && response.payload.type === "text") {

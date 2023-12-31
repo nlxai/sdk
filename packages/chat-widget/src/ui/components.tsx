@@ -190,6 +190,15 @@ export const Message = styled.div<{ type: "user" | "bot" }>`
   }
 `;
 
+export const FailureMessage = styled.p<{}>`
+  font-size: ${constants.smallFontSize}px;
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  background-color: ${(props) => props.theme.lightMessageColor};
+  color: #676767;
+  padding: ${(props) =>
+    `${props.theme.spacing / 2}px ${props.theme.spacing}px`};
+`;
+
 // MessageBody
 
 export const MessageBody = styled.p<{}>`
@@ -271,7 +280,7 @@ export const Input = styled.input<{}>`
   height: 100%;
   background-color: transparent;
   padding: ${(props) =>
-    `0 ${2 * props.theme.spacing}px 0 ${props.theme.spacing}px`};
+    `0 ${2 * props.theme.spacing}px 0 ${2 * props.theme.spacing}px`};
   font-size: ${constants.fontSize}px;
   border: none;
 
