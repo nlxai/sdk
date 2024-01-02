@@ -313,7 +313,8 @@ export const createConversation = (config: Config): ConversationHandler => {
           method: "POST",
           headers: {
             ...(config.headers || {}),
-            "content-type": "application/json",
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(bodyWithContext),
         },
