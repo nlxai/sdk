@@ -191,20 +191,18 @@ export const Message = styled.div<{ type: "user" | "bot" }>`
 `;
 
 export const FailureMessage = styled.p<{}>`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  text-align: center;
+  flex-wrap: wrap;
   font-size: ${constants.smallFontSize}px;
   border-radius: ${(props) => props.theme.borderRadius}px;
-  background-color: ${(props) => props.theme.lightMessageColor};
-  color: #454545;
-  padding: ${(props) =>
-    `${props.theme.spacing / 2}px ${props.theme.spacing}px`};
+  color: #bf1c1c;
   & svg {
     display: inline-block;
-    flex: 0 0 ${constants.fontSize}px;
-    width: ${constants.fontSize}px;
-    height: ${constants.fontSize}px;
+    position: relative;
+    top: -1px;
+    flex: 0 0 ${constants.fontSize - 2}px;
+    width: ${constants.fontSize - 2}px;
+    height: ${constants.fontSize - 2}px;
     margin-right: 4px;
   }
 `;

@@ -13,7 +13,6 @@ export const getInitialConfig = (): Config => {
     headers: {
       "nlx-api-key": apiKey,
     },
-    failureMessage: "Something went wrong",
     languageCode,
   };
 };

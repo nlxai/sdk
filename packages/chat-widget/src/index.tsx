@@ -171,7 +171,7 @@ const MessageGroups: FC<{
         return (
           <C.FailureMessage key={responseIndex}>
             <ErrorOutlineIcon />
-            <span>{response.payload.text}</span>
+            {response.payload.text}
           </C.FailureMessage>
         );
       }
