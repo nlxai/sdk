@@ -17,7 +17,7 @@ import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "@emotion/react";
 import { useChat, type ChatHook } from "@nlxai/chat-react";
 import { type Response, type ConversationHandler } from "@nlxai/chat-core";
-import { CloseIcon, ChatIcon, AirplaneIcon } from "./icons";
+import { CloseIcon, ChatIcon, AirplaneIcon, ErrorOutlineIcon } from "./icons";
 import * as constants from "./ui/constants";
 import {
   type Props,
@@ -170,7 +170,8 @@ const MessageGroups: FC<{
       if (response.type === "failure") {
         return (
           <C.FailureMessage key={responseIndex}>
-            {response.payload.text}
+            <ErrorOutlineIcon />
+            <span>{response.payload.text}</span>
           </C.FailureMessage>
         );
       }
