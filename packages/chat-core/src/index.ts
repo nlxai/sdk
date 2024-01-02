@@ -75,7 +75,17 @@ export type UserResponsePayload =
       context?: Context;
     } & StructuredRequest);
 
-export type Response = BotResponse | UserResponse;
+// Failure message
+
+export interface FailureMessage {
+  type: "failure";
+  payload: {
+    text: string;
+  };
+  receivedAt: Time;
+}
+
+export type Response = BotResponse | UserResponse | FailureMessage;
 
 export type Time = number;
 
@@ -88,8 +98,7 @@ export interface Config {
   conversationId?: string;
   userId?: string;
   responses?: Response[];
-  failureMessages?: string[];
-  greetingMessages?: string[];
+  failureMessage?: string;
   environment?: Environment;
   headers?: {
     [key: string]: string;
@@ -106,9 +115,7 @@ export interface Config {
 
 const welcomeIntent = "NLX.Welcome";
 
-const defaultFailureMessages = [
-  "We encountered an issue. Please try again soon.",
-];
+const defaultFailureMessage = "We encountered an issue. Please try again soon.";
 
 export type State = Response[];
 
@@ -214,27 +221,7 @@ export const createConversation = (config: Config): ConversationHandler => {
   const initialConversationId = config.conversationId || uuid();
 
   let state: InternalState = {
-    responses:
-      config.responses ||
-      (config.greetingMessages && config.greetingMessages.length > 0
-        ? [
-            {
-              type: "bot",
-              receivedAt: new Date().getTime(),
-              payload: {
-                conversationId: initialConversationId,
-                messages: config.greetingMessages.map(
-                  (greetingMessage: string) => ({
-                    messageId: undefined,
-                    text: greetingMessage,
-                    choices: [] as Array<Choice>,
-                    selectedChoiceId: undefined,
-                  }),
-                ),
-              },
-            },
-          ]
-        : []),
+    responses: config.responses || [],
     userId: config.userId,
     conversationId: initialConversationId,
   };
@@ -255,15 +242,10 @@ export const createConversation = (config: Config): ConversationHandler => {
 
   const failureHandler = () => {
     const newResponse: Response = {
-      type: "bot",
+      type: "failure",
       receivedAt: new Date().getTime(),
       payload: {
-        messages: (config.failureMessages || defaultFailureMessages).map(
-          (messageBody: string): BotMessage => ({
-            text: messageBody,
-            choices: [] as Array<Choice>,
-          }),
-        ),
+        text: config.failureMessage || defaultFailureMessage,
       },
     };
     setState(

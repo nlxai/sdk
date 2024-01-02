@@ -1,9 +1,5 @@
 import React, { type FC, type ReactNode } from "react";
-import {
-  type Theme,
-  type TitleBar,
-  defaultTheme,
-} from "@nlxai/chat-widget";
+import { type Theme, type TitleBar, defaultTheme } from "@nlxai/chat-widget";
 import { type Config } from "@nlxai/chat-core";
 import { Behavior } from "../snippets";
 
@@ -17,6 +13,7 @@ export const getInitialConfig = (): Config => {
     headers: {
       "nlx-api-key": apiKey,
     },
+    failureMessage: "Something went wrong",
     languageCode,
   };
 };
@@ -33,7 +30,8 @@ const Labeled: FC<{ label: string; children: ReactNode }> = ({
   );
 };
 
-const inputClass = "text-sm px-1.5 py-1 block w-full rounded border border-gray-300";
+const inputClass =
+  "text-sm px-1.5 py-1 block w-full rounded border border-gray-300";
 
 export const TitleBarEditor: FC<{
   value: TitleBar;
@@ -135,7 +133,7 @@ export const ThemeEditor: FC<{
               <option key={val} value={val}>
                 {val}
               </option>
-            )
+            ),
           )}
         </select>
       </Labeled>
