@@ -1,4 +1,4 @@
-import fetch from "isomorphic-fetch";
+// import fetch from "isomorphic-fetch";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { equals, findLastIndex, update } from "ramda";
 import { v4 as uuid } from "uuid";
