@@ -1,4 +1,5 @@
-import fetch from "isomorphic-fetch";
+// TODO: isomorphic-fetch is currently removed due to UMD bundler issues
+// import fetch from "isomorphic-fetch";
 
 export interface Session {
   conversationId: string;
