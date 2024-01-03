@@ -11,13 +11,13 @@ The [@nlxai/voice-compass]() package allows users to enhance existing visual ass
 On a webpage:
 
 ~~~html
-${voiceCompassSetupSnippet(Environment.Html)}
+${voiceCompassSetupSnippet({ environment: Environment.Html })}
 ~~~
 
 In a bundled JavaScript application or Node.js:
 
 ~~~js
-${voiceCompassSetupSnippet(Environment.Bundle)}
+${voiceCompassSetupSnippet({ environment: Environment.Bundle })}
 ~~~
 `;
 
