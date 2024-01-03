@@ -319,7 +319,11 @@ export const createConversation = (config: Config): ConversationHandler => {
           body: JSON.stringify(bodyWithContext),
         },
       )
-        .then((res: any) => res.json())
+        .then((res: any) => {
+          // Temporary log
+          console.log(res);
+          return res.json();
+        })
         .then(messageResponseHandler)
         .catch((err) => {
           console.warn(err);
