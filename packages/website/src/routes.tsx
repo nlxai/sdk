@@ -16,6 +16,7 @@ import { WebWidgetComponentsDisclaimer } from "./content/03-03-disclaimer";
 import { WebWidgetComponentsCarousel } from "./content/03-04-carousel";
 import { WebWidgetComponentsFeedbackForm } from "./content/03-05-feedback-form";
 import { WebWidgetComponentsDatePicker } from "./content/03-06-datepicker";
+import { WebWidgetComponentsFileUpload } from "./content/03-07-file-upload";
 // 4
 import { CustomWidgetsGettingStarted } from "./content/04-01-custom-widgets-getting-started";
 import { CustomWidgetsReact } from "./content/04-02-custom-widgets-react";
@@ -26,7 +27,7 @@ import { HeadlessApi } from "./content/05-02-headless-api";
 // 6
 import { MultimodalSetup } from "./content/06-01-multimodal-setup";
 import { MultimodalApiReference } from "./content/06-02-multimodal-api-reference";
-import { WebWidgetComponentsFileUpload } from "./content/03-07-file-upload";
+import { MultimodalTryLive } from "./content/06-03-multimodal-try-live";
 
 export const routes: {
   heading: string;
@@ -150,6 +151,11 @@ export const routes: {
         label: "API reference",
         url: "/voice-compass-api-reference",
         element: <MultimodalApiReference />,
+      },
+      {
+        label: "Try live",
+        url: "/voice-compass-try-live",
+        element: <MultimodalTryLive />,
       },
     ],
   },

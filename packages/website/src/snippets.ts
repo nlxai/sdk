@@ -1,6 +1,7 @@
 import { type Config } from "@nlxai/chat-core";
 import { type TitleBar, type Theme } from "@nlxai/chat-widget";
-import { umdScriptTags, packageUrls } from "./constants";
+import { type Config as VoiceCompassConfig } from "@nlxai/voice-compass";
+import { umdScriptTags } from "./constants";
 
 export enum Behavior {
   Simple,
@@ -44,8 +45,6 @@ convo.subscribe((responses, newResponse) => {
 // Send a message to the bot
 convo.sendText("Hello, I want to order a coffee");`;
 
-const packageVersion = "0.0.9";
-
 export const setupSnippet = ({
   config,
   titleBar,
@@ -67,7 +66,7 @@ export const setupSnippet = ({
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <script defer src="https://unpkg.com/@nlxai/chat-widget@${packageVersion}/lib/index.umd.js"></script>${
+    <script defer src="${umdScriptTags.chatWidget}"></script>${
       customModalitiesExample
         ? `
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/htm/3.1.1/htm.js" integrity="sha512-RilD4H0wcNNxG2GvB+L1LRXCntT0zgRvRLnmGu+e9wWaLKGkPifz3Ozb6+WPsyEkTBLw6zWCwwEjs9JLL1KIHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>`
@@ -370,25 +369,41 @@ export const feedbackFormSnippet = `const FeedbackForm = () => {
   \`;
 };`;
 
-const voiceCompassCommonScript = `const client = voiceCompass.create({
-  apiKey: "REPLACE_WITH_API_KEY",
-  conversationId: "REPLACE_WITH_CONVERSATION_ID",
-  journeyId: "REPLACE_WITH_JOURNEY_ID",
+const voiceCompassCommonScript = ({
+  config,
+  environment,
+}: {
+  config?: VoiceCompassConfig;
+  environment?: Environment;
+}) => `${
+  environment === Environment.Html
+    ? ""
+    : `import * as voiceCompass from "@nlxai/voice-compass";\n\n`
+}const client = voiceCompass.create({
+  apiKey: ${config?.apiKey || "REPLACE_WITH_API_KEY"},
+  workspaceId: ${config?.workspaceId || "REPLACE_WITH_WORKSPACE_ID"},
+  conversationId: ${config?.conversationId || "REPLACE_WITH_CONVERSATION_ID"},
+  journeyId: ${config?.journeyId || "REPLACE_WITH_JOURNEY_ID"},
+  languageCode: ${config?.languageCode || "REPLACE_WITH_LANGUAGE_CODE"},
 });
 
 client.updateStep({
   stepId: "REPLACE_WITH_STEP_ID",
 });`;
 
-export const voiceCompassSetupSnippet = (environment: Environment) => {
+export const voiceCompassSetupSnippet = ({
+  config,
+  environment,
+}: {
+  config?: VoiceCompassConfig;
+  environment?: Environment;
+}) => {
   if (environment === Environment.Html) {
     return `<script src="${umdScriptTags.voiceCompass}">
 </script>
 <script>
-  ${indentBy("  ", voiceCompassCommonScript)}
+  ${indentBy("  ", voiceCompassCommonScript({ config, environment }))}
 </script>`;
   }
-  return `import * as voiceCompass from "@nlxai/voice-compass";
-
-${voiceCompassCommonScript}`;
+  return voiceCompassCommonScript({ config, environment });
 };
