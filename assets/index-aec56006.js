@@ -743,7 +743,7 @@ convo.subscribe((responses, newResponse) => {
 });
 
 // Send a message to the bot
-convo.sendText("Hello, I want to order a coffee");`,K5="0.0.6",ml=({config:e,titleBar:t,theme:n,behavior:r,customModalitiesExample:a})=>{var i;return`<!-- Chat widget sample HTML -->
+convo.sendText("Hello, I want to order a coffee");`,K5="0.0.8",ml=({config:e,titleBar:t,theme:n,behavior:r,customModalitiesExample:a})=>{var i;return`<!-- Chat widget sample HTML -->
 <!-- Downloaded from https://nlxai.github.io/chat-sdk -->
 <html lang="en">
   <head>
