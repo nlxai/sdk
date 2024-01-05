@@ -1,0 +1,70 @@
+.address-container {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  gap: 10px;
+  background: #efefef;
+  margin-bottom: 0;
+}
+
+.address-autocomplete-container {
+  flex-basis: 40%;
+  display: flex;
+  flex-direction: column;
+}
+
+.address-textarea {
+  width: 100%;
+  padding: 5px 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  height: 56px;
+  font-size: 14px;
+}
+
+.address-textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}
+
+.map-container,
+.map-placeholder {
+  height: 150px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.map-container {
+  overflow: hidden;
+}
+
+.map-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #d3d3d3;
+  color: #666;
+  font-size: 16px;
+}
+
+.address-container [type="submit"] {
+  display: block;
+  width: 100%;
+  background-color: rgba(38, 99, 218, 1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.05rem;
+}
+
+.address-container [type="submit"]:disabled {
+  background-color: #cccccc;
+}
