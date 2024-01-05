@@ -1,8 +1,10 @@
 // TODO: isomorphic-fetch is currently removed due to UMD bundler issues
-// import fetch from "isomorphic-fetch";
+import fetch from "isomorphic-fetch";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { equals, findLastIndex, update } from "ramda";
 import { v4 as uuid } from "uuid";
+
+console.log("hello2");
 
 // Bot response
 
