@@ -17,7 +17,7 @@ import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "@emotion/react";
 import { useChat, type ChatHook } from "@nlxai/chat-react";
 import { type Response, type ConversationHandler } from "@nlxai/chat-core";
-import { CloseIcon, ChatIcon, AirplaneIcon } from "./icons";
+import { CloseIcon, ChatIcon, AirplaneIcon, ErrorOutlineIcon } from "./icons";
 import * as constants from "./ui/constants";
 import {
   type Props,
@@ -110,70 +110,86 @@ const MessageGroups: FC<{
   customModalities: Record<string, CustomModalityComponent>;
 }> = (props) => (
   <C.MessageGroups>
-    {props.chat.responses.map((response, responseIndex) =>
-      response.type === "bot" ? (
-        <C.MessageGroup key={responseIndex}>
-          {response.payload.messages.map((botMessage, botMessageIndex) => (
-            <C.Message type="bot" key={botMessageIndex}>
+    {props.chat.responses.map((response, responseIndex) => {
+      if (response.type === "bot") {
+        return (
+          <C.MessageGroup key={responseIndex}>
+            {response.payload.messages.map((botMessage, botMessageIndex) => (
+              <C.Message type="bot" key={botMessageIndex}>
+                <C.MessageBody
+                  dangerouslySetInnerHTML={{
+                    __html: marked(botMessage.text),
+                  }}
+                />
+                {botMessage.choices.length > 0 && (
+                  <C.ChoicesContainer>
+                    {botMessage.choices.map((choice, choiceIndex) => (
+                      <C.ChoiceButton
+                        key={choiceIndex}
+                        {...(() => {
+                          return botMessage.selectedChoiceId
+                            ? {
+                                disabled: true,
+                                selected:
+                                  botMessage.selectedChoiceId ===
+                                  choice.choiceId,
+                              }
+                            : {
+                                onClick: () => {
+                                  props.chat.conversationHandler.sendChoice(
+                                    choice.choiceId,
+                                  );
+                                },
+                              };
+                        })()}
+                        dangerouslySetInnerHTML={{
+                          __html: marked(
+                            choice.choiceText +
+                              (false ? " asdf fadsfds  fdsa fdsa fdsa " : ""),
+                          ),
+                        }}
+                      ></C.ChoiceButton>
+                    ))}
+                  </C.ChoicesContainer>
+                )}
+              </C.Message>
+            ))}
+            {Object.entries(response.payload.modalities || {}).map(
+              ([key, value]) => {
+                const Component = props.customModalities[key];
+                if (Component) {
+                  return <Component key={key} data={value} />;
+                }
+                return null;
+              },
+            )}
+          </C.MessageGroup>
+        );
+      }
+
+      if (response.type === "failure") {
+        return (
+          <C.FailureMessage key={responseIndex}>
+            <ErrorOutlineIcon />
+            {response.payload.text}
+          </C.FailureMessage>
+        );
+      }
+
+      if (response.type === "user" && response.payload.type === "text") {
+        return (
+          <C.MessageGroup key={responseIndex}>
+            <C.Message type="user">
               <C.MessageBody
                 dangerouslySetInnerHTML={{
-                  __html: marked(botMessage.text),
+                  __html: marked(response.payload.text),
                 }}
               />
-              {botMessage.choices.length > 0 && (
-                <C.ChoicesContainer>
-                  {botMessage.choices.map((choice, choiceIndex) => (
-                    <C.ChoiceButton
-                      key={choiceIndex}
-                      {...(() => {
-                        return botMessage.selectedChoiceId
-                          ? {
-                              disabled: true,
-                              selected:
-                                botMessage.selectedChoiceId === choice.choiceId,
-                            }
-                          : {
-                              onClick: () => {
-                                props.chat.conversationHandler.sendChoice(
-                                  choice.choiceId,
-                                );
-                              },
-                            };
-                      })()}
-                      dangerouslySetInnerHTML={{
-                        __html: marked(
-                          choice.choiceText +
-                            (false ? " asdf fadsfds  fdsa fdsa fdsa " : ""),
-                        ),
-                      }}
-                    ></C.ChoiceButton>
-                  ))}
-                </C.ChoicesContainer>
-              )}
             </C.Message>
-          ))}
-          {Object.entries(response.payload.modalities || {}).map(
-            ([key, value]) => {
-              const Component = props.customModalities[key];
-              if (Component) {
-                return <Component key={key} data={value} />;
-              }
-              return null;
-            },
-          )}
-        </C.MessageGroup>
-      ) : response.payload.type === "text" ? (
-        <C.MessageGroup key={responseIndex}>
-          <C.Message type="user">
-            <C.MessageBody
-              dangerouslySetInnerHTML={{
-                __html: marked(response.payload.text),
-              }}
-            />
-          </C.Message>
-        </C.MessageGroup>
-      ) : null,
-    )}
+          </C.MessageGroup>
+        );
+      }
+    })}
     {props.children}
   </C.MessageGroups>
 );

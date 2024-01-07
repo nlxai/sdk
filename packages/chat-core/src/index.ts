@@ -1,7 +1,10 @@
+// TODO: isomorphic-fetch is currently removed due to UMD bundler issues
 import fetch from "isomorphic-fetch";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { equals, findLastIndex, update } from "ramda";
 import { v4 as uuid } from "uuid";
+
+console.log("hello2");
 
 // Bot response
 
@@ -75,7 +78,17 @@ export type UserResponsePayload =
       context?: Context;
     } & StructuredRequest);
 
-export type Response = BotResponse | UserResponse;
+// Failure message
+
+export interface FailureMessage {
+  type: "failure";
+  payload: {
+    text: string;
+  };
+  receivedAt: Time;
+}
+
+export type Response = BotResponse | UserResponse | FailureMessage;
 
 export type Time = number;
 
@@ -88,8 +101,7 @@ export interface Config {
   conversationId?: string;
   userId?: string;
   responses?: Response[];
-  failureMessages?: string[];
-  greetingMessages?: string[];
+  failureMessage?: string;
   environment?: Environment;
   headers?: {
     [key: string]: string;
@@ -106,9 +118,7 @@ export interface Config {
 
 const welcomeIntent = "NLX.Welcome";
 
-const defaultFailureMessages = [
-  "We encountered an issue. Please try again soon.",
-];
+const defaultFailureMessage = "We encountered an issue. Please try again soon.";
 
 export type State = Response[];
 
@@ -214,27 +224,7 @@ export const createConversation = (config: Config): ConversationHandler => {
   const initialConversationId = config.conversationId || uuid();
 
   let state: InternalState = {
-    responses:
-      config.responses ||
-      (config.greetingMessages && config.greetingMessages.length > 0
-        ? [
-            {
-              type: "bot",
-              receivedAt: new Date().getTime(),
-              payload: {
-                conversationId: initialConversationId,
-                messages: config.greetingMessages.map(
-                  (greetingMessage: string) => ({
-                    messageId: undefined,
-                    text: greetingMessage,
-                    choices: [] as Array<Choice>,
-                    selectedChoiceId: undefined,
-                  }),
-                ),
-              },
-            },
-          ]
-        : []),
+    responses: config.responses || [],
     userId: config.userId,
     conversationId: initialConversationId,
   };
@@ -255,15 +245,10 @@ export const createConversation = (config: Config): ConversationHandler => {
 
   const failureHandler = () => {
     const newResponse: Response = {
-      type: "bot",
+      type: "failure",
       receivedAt: new Date().getTime(),
       payload: {
-        messages: (config.failureMessages || defaultFailureMessages).map(
-          (messageBody: string): BotMessage => ({
-            text: messageBody,
-            choices: [] as Array<Choice>,
-          }),
-        ),
+        text: config.failureMessage || defaultFailureMessage,
       },
     };
     setState(
@@ -331,12 +316,15 @@ export const createConversation = (config: Config): ConversationHandler => {
           method: "POST",
           headers: {
             ...(config.headers || {}),
-            "content-type": "application/json",
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(bodyWithContext),
         },
       )
-        .then((res: any) => res.json())
+        .then((res: any) => {
+          return res.json();
+        })
         .then(messageResponseHandler)
         .catch((err) => {
           console.warn(err);

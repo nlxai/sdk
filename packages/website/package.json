@@ -3,13 +3,14 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --force",
     "build": "tsc && vite build"
   },
   "dependencies": {
     "@nlxai/chat-core": "*",
     "@nlxai/chat-react": "*",
     "@nlxai/chat-widget": "*",
+    "@nlxai/voice-compass": "*",
     "@react-hookz/web": "^23.1.0",
     "fuse.js": "^7.0.0",
     "htm": "^3.1.1",

@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/chat-core",
-  "version": "0.0.6",
+  "version": "0.0.9",
   "description": "NLX Chat SDK core",
   "type": "module",
   "main": "lib/index.esm.js",
@@ -26,7 +26,7 @@
     "@types/ramda": "0.29.1",
     "@types/uuid": "^9.0.7",
     "prettier": "^3.1.0",
-    "rollup": "^4.3.0",
+    "rollup": "^4.9.3",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "typescript": "^5.2.2"
   },

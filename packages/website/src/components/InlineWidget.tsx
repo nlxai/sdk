@@ -178,7 +178,7 @@ export const InlineWidget: FC<{
       </div>
       <input
         className="text-sm flex-none px-4 py-3 focus:outline-none border-t border-gray-200"
-        placeholder="Say something"
+        placeholder="Type your message..."
       />
     </div>
   );

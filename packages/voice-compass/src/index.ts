@@ -1,18 +1,20 @@
-import fetch from "isomorphic-fetch";
+// TODO: isomorphic-fetch is currently removed due to UMD bundler issues
+// import fetch from "isomorphic-fetch";
 
 export interface Session {
   conversationId: string;
   journeyId: string;
-  languageCode?: string;
+  languageCode: string;
   lastUpdate: Update | null;
 }
 
 // Initial configuration used when creating a journey manager
 export interface Config {
   apiKey: string;
+  workspaceId: string;
   conversationId: string;
   journeyId: string;
-  languageCode?: string;
+  languageCode: string;
   preventRepeats?: boolean;
   onSessionUpdate?: (session: Session) => void;
   debug?: boolean;
@@ -44,9 +46,9 @@ export interface StepUpdate {
   warning?: string;
 }
 
-const devApiUrl = "https://dev.journeys.voicecompass.ai/v1";
+const devApiUrl = "https://dev.mm.nlx.ai";
 
-const prodApiUrl = "https://journeys.voicecompass.ai/v1";
+const prodApiUrl = "https://mm.nlx.ai";
 
 export const create = (config: Config): VoiceCompass => {
   const conversationId = config.conversationId;
@@ -86,6 +88,7 @@ export const create = (config: Config): VoiceCompass => {
       method: "POST",
       headers: {
         "x-api-key": config.apiKey,
+        "x-nlx-id": config.workspaceId,
       },
       body: JSON.stringify(payload),
     })
