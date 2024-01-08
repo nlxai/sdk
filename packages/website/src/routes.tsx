@@ -17,6 +17,7 @@ import { WebWidgetComponentsCarousel } from "./content/03-04-carousel";
 import { WebWidgetComponentsFeedbackForm } from "./content/03-05-feedback-form";
 import { WebWidgetComponentsDatePicker } from "./content/03-06-datepicker";
 import { WebWidgetComponentsFileUpload } from "./content/03-07-file-upload";
+import { WebWidgetComponentsAddressInput } from "./content/03-08-address-input";
 // 4
 import { CustomWidgetsGettingStarted } from "./content/04-01-custom-widgets-getting-started";
 import { CustomWidgetsReact } from "./content/04-02-custom-widgets-react";
@@ -96,6 +97,11 @@ export const routes: {
         label: "Date picker",
         url: "/widget-components-datepicker",
         element: <WebWidgetComponentsDatePicker />,
+      },
+      {
+        label: "Address input",
+        url: "/widget-components-address-input",
+        element: <WebWidgetComponentsAddressInput />,
       },
       {
         label: "File upload",
