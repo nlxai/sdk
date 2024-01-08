@@ -4,8 +4,6 @@ import ReconnectingWebSocket from "reconnecting-websocket";
 import { equals, findLastIndex, update } from "ramda";
 import { v4 as uuid } from "uuid";
 
-console.log("hello2");
-
 // Bot response
 
 export type Context = Record<string, any>;
@@ -39,6 +37,7 @@ export interface BotResponseMetadata {
   escalation?: boolean;
   frustration?: boolean;
   incomprehension?: boolean;
+  hasPendingDataRequest?: boolean;
 }
 
 export interface BotMessage {
@@ -76,7 +75,10 @@ export type UserResponsePayload =
   | ({
       type: "structured";
       context?: Context;
-    } & StructuredRequest);
+    } & StructuredRequest)
+  | {
+      type: "pollPendingDataRequest";
+    };
 
 // Failure message
 
@@ -279,6 +281,11 @@ export const createConversation = (config: Config): ConversationHandler => {
         },
         newResponse,
       );
+      if (response.metadata.hasPendingDataRequest) {
+        setTimeout(() => {
+          pollPendingDataRequest();
+        }, 1500);
+      }
     } else {
       console.warn(
         "Invalid message structure, expected object with field 'messages'.",
@@ -413,6 +420,62 @@ export const createConversation = (config: Config): ConversationHandler => {
     });
   };
 
+  const sendText = (text: string, context?: Context) => {
+    const newResponse: Response = {
+      type: "user",
+      receivedAt: new Date().getTime(),
+      payload: {
+        type: "text",
+        text,
+        context,
+      },
+    };
+    setState(
+      {
+        responses: [...state.responses, newResponse],
+      },
+      newResponse,
+    );
+    sendToBot({
+      context,
+      request: {
+        unstructured: {
+          text,
+        },
+      },
+    });
+  };
+
+  const pollPendingDataRequest = () => {
+    const lastIntentId = state.responses
+      .reverse()
+      .find((response): response is BotResponse =>
+        Boolean(response.type === "bot" && response.payload.metadata?.intentId),
+      )?.payload.metadata?.intentId;
+    if (lastIntentId) {
+      const newResponse: Response = {
+        type: "user",
+        receivedAt: new Date().getTime(),
+        payload: {
+          type: "pollPendingDataRequest",
+        },
+      };
+      sendToBot({
+        request: {
+          structured: {
+            intentId: lastIntentId,
+          },
+        },
+      });
+      setState(
+        {
+          responses: [...state.responses, newResponse],
+        },
+        newResponse,
+      );
+    }
+  };
+
   const unsubscribe = (subscriber: Subscriber) => {
     subscribers = subscribers.filter((fn) => fn !== subscriber);
   };
@@ -426,31 +489,7 @@ export const createConversation = (config: Config): ConversationHandler => {
   };
 
   return {
-    sendText: (text, context) => {
-      const newResponse: Response = {
-        type: "user",
-        receivedAt: new Date().getTime(),
-        payload: {
-          type: "text",
-          text,
-          context,
-        },
-      };
-      setState(
-        {
-          responses: [...state.responses, newResponse],
-        },
-        newResponse,
-      );
-      sendToBot({
-        context,
-        request: {
-          unstructured: {
-            text,
-          },
-        },
-      });
-    },
+    sendText,
     sendStructured: (structured: StructuredRequest, context) => {
       appendStructuredUserResponse(structured, context);
       sendToBot({
@@ -484,7 +523,7 @@ export const createConversation = (config: Config): ConversationHandler => {
           .indexOf(choiceId) > -1;
 
       const lastBotResponseIndex = findLastIndex(
-        (response) =>
+        (response: Response) =>
           response.type === "bot" &&
           Boolean(response.payload.messages.find(containsChoice)),
         state.responses,
