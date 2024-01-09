@@ -1,7 +1,7 @@
 // TODO: isomorphic-fetch is currently removed due to UMD bundler issues
-import fetch from "isomorphic-fetch";
+// import fetch from "isomorphic-fetch";
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { equals, findLastIndex, update } from "ramda";
+import { equals, findLastIndex, update, reverse } from "ramda";
 import { v4 as uuid } from "uuid";
 
 // Bot response
@@ -447,11 +447,10 @@ export const createConversation = (config: Config): ConversationHandler => {
   };
 
   const pollPendingDataRequest = () => {
-    const lastIntentId = state.responses
-      .reverse()
-      .find((response): response is BotResponse =>
+    const lastIntentId = reverse(state.responses).find(
+      (response): response is BotResponse =>
         Boolean(response.type === "bot" && response.payload.metadata?.intentId),
-      )?.payload.metadata?.intentId;
+    )?.payload.metadata?.intentId;
     if (lastIntentId) {
       const newResponse: Response = {
         type: "user",
