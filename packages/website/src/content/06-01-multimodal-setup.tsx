@@ -4,7 +4,7 @@ import { PageContent } from "../components/PageContent";
 import { Environment, voiceCompassSetupSnippet } from "../snippets";
 
 export const content = `
-The [@nlxai/voice-compass]() package allows users to enhance existing visual assets (websites, mobile apps) with multimodal capabilities.
+The [@nlxai/voice-compass](https://www.npmjs.com/package/@nlxai/voice-compass) package allows users to enhance existing visual assets (websites, mobile apps) with multimodal capabilities.
 
 ## Setup
 
