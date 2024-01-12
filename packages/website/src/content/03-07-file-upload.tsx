@@ -3,11 +3,13 @@ import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { FileUpload } from "../custom-components/FileUpload";
 import { InlineWidget, Item } from "../components/InlineWidget";
-import { disclaimerSnippet } from "../snippets";
+import { fileUploadSnippet } from "../snippets";
 
 export const content = `
+This component allows you to upload files to your bot. You can use it to upload images, videos, audio files, PDFs, etc.
+
 ~~~js
-${disclaimerSnippet}
+${fileUploadSnippet}
 ~~~
 `;
 
