@@ -20,7 +20,9 @@ export default [
     plugins: [
       typescript(),
       json(),
-      resolve(),
+      resolve({
+        browser: true,
+      }),
       commonjs(),
       nodePolyfills({
         include: "../**/node_modules/**/*.js",

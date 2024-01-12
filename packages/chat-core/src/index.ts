@@ -1,7 +1,6 @@
-// TODO: isomorphic-fetch is currently causing issues in the UMD build
 import fetch from "isomorphic-fetch";
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { equals, findLastIndex, update, reverse } from "ramda";
+import { equals, findLastIndex, update } from "ramda";
 import { v4 as uuid } from "uuid";
 
 // Bot response
@@ -334,7 +333,7 @@ export const createConversation = (config: Config): ConversationHandler => {
           body: JSON.stringify(bodyWithContext),
         },
       )
-        .then((res: any) => {
+        .then((res) => {
           return res.json();
         })
         .then(messageResponseHandler)

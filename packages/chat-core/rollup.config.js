@@ -18,9 +18,11 @@ export default [
       format: "umd",
     },
     plugins: [
-      typescript(),
       json(),
-      nodeResolve(),
+      typescript(),
+      nodeResolve({
+        browser: true,
+      }),
       commonjs(),
       nodePolyfills({
         include: "../**/node_modules/**/*.js",
