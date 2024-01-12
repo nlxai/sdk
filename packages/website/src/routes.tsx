@@ -61,7 +61,7 @@ export const routes: {
   },
   {
     heading: "Web widget",
-    items: sortByLabel([
+    items: [
       { label: "Setup", url: "/widget-setup", element: <WebWidgetSetup /> },
       {
         label: "Theming",
@@ -78,7 +78,7 @@ export const routes: {
         url: "/widget-try-live",
         element: <WebWidgetTryLive />,
       },
-    ]),
+    ],
   },
   {
     heading: "Web widget components",
@@ -88,36 +88,38 @@ export const routes: {
         url: "/widget-components-getting-started",
         element: <WebWidgetComponentsGettingStarted />,
       },
-      {
-        label: "Disclaimer",
-        url: "/widget-components-disclaimer",
-        element: <WebWidgetComponentsDisclaimer />,
-      },
-      {
-        label: "Carousel",
-        url: "/widget-components-carousel",
-        element: <WebWidgetComponentsCarousel />,
-      },
-      {
-        label: "Feedback form",
-        url: "/widget-components-feedback-form",
-        element: <WebWidgetComponentsFeedbackForm />,
-      },
-      {
-        label: "Date picker",
-        url: "/widget-components-datepicker",
-        element: <WebWidgetComponentsDatePicker />,
-      },
-      {
-        label: "Address input",
-        url: "/widget-components-address-input",
-        element: <WebWidgetComponentsAddressInput />,
-      },
-      {
-        label: "File upload",
-        url: "/widget-components/file-upload",
-        element: <WebWidgetComponentsFileUpload />,
-      },
+      ...sortByLabel([
+        {
+          label: "Disclaimer",
+          url: "/widget-components-disclaimer",
+          element: <WebWidgetComponentsDisclaimer />,
+        },
+        {
+          label: "Carousel",
+          url: "/widget-components-carousel",
+          element: <WebWidgetComponentsCarousel />,
+        },
+        {
+          label: "Feedback form",
+          url: "/widget-components-feedback-form",
+          element: <WebWidgetComponentsFeedbackForm />,
+        },
+        {
+          label: "Date picker",
+          url: "/widget-components-datepicker",
+          element: <WebWidgetComponentsDatePicker />,
+        },
+        {
+          label: "Address input",
+          url: "/widget-components-address-input",
+          element: <WebWidgetComponentsAddressInput />,
+        },
+        {
+          label: "File upload",
+          url: "/widget-components/file-upload",
+          element: <WebWidgetComponentsFileUpload />,
+        },
+      ]),
     ],
   },
   {
