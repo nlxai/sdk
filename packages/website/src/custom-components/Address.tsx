@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef, FC } from "react";
 
 import "./Address.css";
 
+const GOOGLE_MAPS_API_KEY = "";
+
 interface MapProps {
   lat: number;
   lng: number;
@@ -55,9 +57,7 @@ const AddressInput: FC<{
 
       const script = document.createElement("script");
       script.type = "text/javascript";
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${
-        import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-      }&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`;
       script.async = true;
       script.defer = true;
       script.onload = () => setIsGoogleMapsLoaded(true);
