@@ -18,6 +18,8 @@ jobs:
         run:
           npm install
       - name: Build 🔧
+        env:
+          VITE_GOOGLE_MAPS_API_KEY: ${{secrets.VITE_GOOGLE_MAPS_API_KEY}}
         run:
           npm run build
         working-directory: ./packages/website
