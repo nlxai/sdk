@@ -30,9 +30,19 @@ import { MultimodalSetup } from "./content/06-01-multimodal-setup";
 import { MultimodalApiReference } from "./content/06-02-multimodal-api-reference";
 import { MultimodalTryLive } from "./content/06-03-multimodal-try-live";
 
+type Item = {
+  label: string;
+  url: string;
+  element: JSX.Element;
+};
+
+function sortByLabel(items: Item[]): Item[] {
+  return items.sort((a, b) => a.label.localeCompare(b.label));
+}
+
 export const routes: {
   heading: string;
-  items: { label: string; url: string; element: ReactNode }[];
+  items: Item[];
 }[] = [
   {
     heading: "Introduction",
@@ -51,7 +61,7 @@ export const routes: {
   },
   {
     heading: "Web widget",
-    items: [
+    items: sortByLabel([
       { label: "Setup", url: "/widget-setup", element: <WebWidgetSetup /> },
       {
         label: "Theming",
@@ -68,7 +78,7 @@ export const routes: {
         url: "/widget-try-live",
         element: <WebWidgetTryLive />,
       },
-    ],
+    ]),
   },
   {
     heading: "Web widget components",
