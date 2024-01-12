@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+      TEST_VARIABLE: ${{ vars.TEST_VARIABLE }}
+      TEST_SECRET: ${{ secrets.TEST_SECRET }}
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
