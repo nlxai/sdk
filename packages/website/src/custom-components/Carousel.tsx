@@ -23,7 +23,7 @@ export const carouselExampleData: Document[] = [
   {
     id: "2",
     name: "The Hip",
-    description: "Time to hit the streest on that brand new fixie.",
+    description: "Time to hit the streets on that brand new fixie.",
     imageUrl: "./images/robert-bye-tG36rvCeqng-unsplash.jpg",
     url: "",
   },

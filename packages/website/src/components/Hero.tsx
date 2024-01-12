@@ -24,12 +24,16 @@ export const Hero = () => {
           <div className="relative z-10 md:text-center lg:text-left">
             <div className="relative">
               <p className="inline text-white font-display text-5xl">
-                SDK for rich conversational experiences powered by <a href="https://nlx.ai" target="_blank">NLX</a>&reg;
+                SDK for rich conversational experiences powered by{" "}
+                <a href="https://nlx.ai" target="_blank">
+                  NLX
+                </a>
+                &reg;
               </p>
               <p className="mt-3 text-2xl text-white65">
                 Add chat and multimodal capabilities to your page in minutes.
-                Add fully custom components with a dozen lines of code, or
-                engineer from the ground up yourself.
+                Introduce fully custom components with only a dozen lines of
+                code, or engineer from the ground up yourself.
               </p>
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
                 <button

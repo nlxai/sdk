@@ -32,7 +32,7 @@ Trigger a specific intent. The most common use of this method is to show welcome
 
 ### \`sendStructured: (request: StructuredRequest) => void\`
 
-Send a combination of choice, slots and intent ID in one request.
+Send a combination of choice, slots, and intent ID in one request.
 
 ### \`subscribe: (subscriber: (responses: Response[], newResponse: Response | undefined) => void) => void\`
 
@@ -54,7 +54,7 @@ Reset the conversation. This makes sure that information previously collected by
 export const HeadlessApi = () => {
   return (
     <>
-      <PageTitle pretitle="Headless API" title="API Reference" />
+      <PageTitle pretitle="Headless API" title="API reference" />
       <PageContent md={content} />
     </>
   );

@@ -25,7 +25,7 @@ export const WebWidgetComponentsDisclaimer = () => {
       <PageContent md={content} />
       <Note
         title="Note"
-        body="This component example is purely presentational. What happens when the user clicks the 'Accept' or 'Deny' buttons should be wired up according individual tracking setups and privacy policy."
+        body="This component example is purely presentational. What happens when the user clicks the 'Accept' or 'Deny' buttons should be wired up according to individual tracking setups and privacy policy."
       />
     </>
   );

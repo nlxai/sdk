@@ -4,7 +4,7 @@ import { PageContent } from "../components/PageContent";
 import { customWidgetSnippet } from "../snippets";
 
 export const content = `
-The React and Preact packages expose a single custom hook called [useChat]().
+The React and Preact packages expose a single custom hook called \`useChat\`.
 
 The following code snippet shows a few features easily implemented using this hook:
 - set up a controlled input field.

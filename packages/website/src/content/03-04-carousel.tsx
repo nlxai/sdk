@@ -7,7 +7,7 @@ import { InlineWidget } from "../components/InlineWidget";
 import { carouselSnippet } from "../snippets";
 
 export const content = `
-This carousel component presents list-type information in a rich, visually appealing manner.
+This carousel component presents list-type information in a rich, visually-appealing manner.
 
 ~~~js
 ${carouselSnippet}
@@ -24,9 +24,9 @@ export const WebWidgetComponentsCarousel = () => {
           [
             {
               type: "custom",
-              element: <Carousel data={carouselExampleData} />
-            }
-          ]
+              element: <Carousel data={carouselExampleData} />,
+            },
+          ],
         ]}
       />
       <PageContent md={content} />
