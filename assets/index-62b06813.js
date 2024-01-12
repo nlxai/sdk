@@ -1160,7 +1160,7 @@ Remove all subscriptions.
 
 Reset the conversation. This makes sure that information previously collected by your bot will not affect the logic of the conversation any longer.
 `,_6=()=>b.jsxs(b.Fragment,{children:[b.jsx(De,{pretitle:"Headless API",title:"API reference"}),b.jsx(Te,{md:k6})]}),T6=`
-The [@nlxai/voice-compass]() package allows users to enhance existing visual assets (websites, mobile apps) with multimodal capabilities.
+The [@nlxai/voice-compass](https://www.npmjs.com/package/@nlxai/voice-compass) package allows users to enhance existing visual assets (websites, mobile apps) with multimodal capabilities.
 
 ## Setup
 
