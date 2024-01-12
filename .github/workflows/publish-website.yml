@@ -7,6 +7,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      VITE_GOOGLE_MAPS_API_KEY: test
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
@@ -18,8 +20,6 @@ jobs:
         run:
           npm install
       - name: Build 🔧
-        env:
-          VITE_GOOGLE_MAPS_API_KEY: test
         run:
           npm run build
         working-directory: ./packages/website
