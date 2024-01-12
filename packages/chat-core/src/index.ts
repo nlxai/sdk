@@ -1,5 +1,5 @@
-// TODO: isomorphic-fetch is currently removed due to UMD bundler issues
-// import fetch from "isomorphic-fetch";
+// TODO: isomorphic-fetch is currently causing issues in the UMD build
+import fetch from "isomorphic-fetch";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { equals, findLastIndex, update, reverse } from "ramda";
 import { v4 as uuid } from "uuid";
@@ -75,10 +75,7 @@ export type UserResponsePayload =
   | ({
       type: "structured";
       context?: Context;
-    } & StructuredRequest)
-  | {
-      type: "pollPendingDataRequest";
-    };
+    } & StructuredRequest);
 
 // Failure message
 
@@ -141,6 +138,7 @@ export interface StructuredRequest {
   choiceId?: string;
   intentId?: string;
   slots?: Slots | SlotValue[];
+  poll?: boolean;
 }
 
 interface BotRequest {
@@ -282,8 +280,15 @@ export const createConversation = (config: Config): ConversationHandler => {
         newResponse,
       );
       if (response.metadata.hasPendingDataRequest) {
+        appendStructuredUserResponse({ poll: true });
         setTimeout(() => {
-          pollPendingDataRequest();
+          sendToBot({
+            request: {
+              structured: {
+                poll: true,
+              },
+            },
+          });
         }, 1500);
       }
     } else {
@@ -444,35 +449,6 @@ export const createConversation = (config: Config): ConversationHandler => {
         },
       },
     });
-  };
-
-  const pollPendingDataRequest = () => {
-    const lastIntentId = reverse(state.responses).find(
-      (response): response is BotResponse =>
-        Boolean(response.type === "bot" && response.payload.metadata?.intentId),
-    )?.payload.metadata?.intentId;
-    if (lastIntentId) {
-      const newResponse: Response = {
-        type: "user",
-        receivedAt: new Date().getTime(),
-        payload: {
-          type: "pollPendingDataRequest",
-        },
-      };
-      sendToBot({
-        request: {
-          structured: {
-            intentId: lastIntentId,
-          },
-        },
-      });
-      setState(
-        {
-          responses: [...state.responses, newResponse],
-        },
-        newResponse,
-      );
-    }
   };
 
   const unsubscribe = (subscriber: Subscriber) => {
