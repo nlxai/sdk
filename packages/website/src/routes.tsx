@@ -29,6 +29,7 @@ import { HeadlessApi } from "./content/05-02-headless-api";
 import { MultimodalSetup } from "./content/06-01-multimodal-setup";
 import { MultimodalApiReference } from "./content/06-02-multimodal-api-reference";
 import { MultimodalTryLive } from "./content/06-03-multimodal-try-live";
+import { WebWidgetComponentsSecureInput } from "./content/03-10-secure-input";
 
 export const routes: {
   heading: string;
@@ -107,6 +108,11 @@ export const routes: {
         label: "File upload",
         url: "/widget-components/file-upload",
         element: <WebWidgetComponentsFileUpload />,
+      },
+      {
+        label: "Secure input",
+        url: "/widget-components/secure-input",
+        element: <WebWidgetComponentsSecureInput />,
       },
     ],
   },
