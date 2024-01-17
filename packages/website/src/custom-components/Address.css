@@ -30,24 +30,11 @@
   box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
 }
 
-.map-container,
-.map-placeholder {
+.map-container {
+  overflow: hidden;
   height: 150px;
   width: 100%;
   border-radius: 8px;
-}
-
-.map-container {
-  overflow: hidden;
-}
-
-.map-placeholder {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #d3d3d3;
-  color: #666;
-  font-size: 16px;
 }
 
 .address-container [type="submit"] {
