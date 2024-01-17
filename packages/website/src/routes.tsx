@@ -29,6 +29,7 @@ import { HeadlessApi } from "./content/05-02-headless-api";
 import { MultimodalSetup } from "./content/06-01-multimodal-setup";
 import { MultimodalApiReference } from "./content/06-02-multimodal-api-reference";
 import { MultimodalTryLive } from "./content/06-03-multimodal-try-live";
+import { WebWidgetComponentsVideoPlayer } from "./content/03-09-video-player";
 
 export const routes: {
   heading: string;
@@ -107,6 +108,11 @@ export const routes: {
         label: "File upload",
         url: "/widget-components/file-upload",
         element: <WebWidgetComponentsFileUpload />,
+      },
+      {
+        label: "Video player",
+        url: "/widget-components/video-player",
+        element: <WebWidgetComponentsVideoPlayer />,
       },
     ],
   },
