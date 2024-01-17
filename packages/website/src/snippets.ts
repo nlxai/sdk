@@ -369,6 +369,201 @@ export const feedbackFormSnippet = `const FeedbackForm = () => {
   \`;
 };`;
 
+export const fileUploadSnippet = `const FileUpload = ({ onUploadComplete }) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [dragOver, setDragOver] = useState<boolean>(false);
+
+  const uploadFile = (file: File) => {
+    const uploadTime = 2000;
+
+    setUploadProgress(0);
+    const interval = setInterval(() => {
+      setUploadProgress((oldProgress) => {
+        if (oldProgress === 100) {
+          clearInterval(interval);
+          onUploadCompleted(file.name);
+          return 100;
+        }
+        return Math.min(oldProgress + 10, 100);
+      });
+    }, uploadTime / 10);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    if (file) {
+      setSelectedFile(file);
+      uploadFile(file);
+    }
+  };
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+
+    e.preventDefault();
+    setDragOver(true);
+  };
+
+  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragOver(false);
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragOver(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length) {
+      uploadFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  return html\`
+    <div
+      className=\${dragOver ? "file-upload file-upload-drag-over" : "file-upload"}
+      onDragOver=\${handleDragOver}
+      onDragLeave=\${handleDragLeave}
+      onDrop=\${handleDrop}
+      onClick=\${() => document.getElementById("file-upload")?.click()}
+    >
+      <input type="file" id="file-upload" hidden onChange=\${handleFileChange} />
+      <div className="file-input-custom">
+        <div className="file-input-custom-icon">
+          \${uploadProgress > 0 ? 
+            '<CircularProgressBar progress=' + uploadProgress + ' size=25 strokeWidth=2 />' :
+            '<img src=' + uploadIcon + ' alt="upload" className="file-input-button-icon" />'}
+        </div>
+        <span className="file-input-name">
+          \${selectedFile?.name ?? "Select a file..."}
+        </span>
+      </div>
+    </div>
+  \`;
+`;
+
+export const datePickerSnippet = `export const DatePicker = ({ submitted, onSubmit }) => {
+  const [datepicker, setDatepicker] = useState(null);
+
+  useEffect(() => {
+    const elem = document.getElementById("datepicker");
+    const datepicker = new window.Datepicker(elem, {
+      weekStart: 1, // Monday
+    });
+    datepicker.setDate(new Date());
+    setDatepicker(datepicker);
+  }, []);
+
+  return html\`
+    <form
+      className="chat-datepicker"
+      onSubmit=\${(ev) => {
+        ev.preventDefault();
+
+        const date = datepicker.getDate();
+        onSubmit(date);
+
+        datepicker.setDate({ clear: true });
+      }}
+    >
+      <div id="datepicker"></div>
+      <button type="submit" disabled=\${submitted}>Submit</button>
+    </form>
+  \`;
+};
+`;
+
+export const addressInputSnippet = `const AddressInput = ({ onAddressChange, address, onSubmit, submitted }) => {
+  const [coordinates, setCoordinates] = useState(null);
+  const textareaRef = useRef(null);
+  const [isGoogleMapsLoaded, setIsGoogleMapsLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadGoogleMapsScript = () => {
+      if (window.google) {
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=' + import.meta.env.VITE_GOOGLE_MAPS_API_KEY + '&libraries=places';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => setIsGoogleMapsLoaded(true);
+      document.head.appendChild(script);
+    };
+
+    loadGoogleMapsScript();
+  }, []);
+
+  useEffect(() => {
+    const initializeAutocomplete = () => {
+      if (!window.google || !textareaRef.current) return;
+
+      const autocomplete = new google.maps.places.Autocomplete(
+        textareaRef.current,
+        { types: ['address'] }
+      );
+
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        // ... rest of the logic
+      });
+    };
+
+    initializeAutocomplete();
+  }, [isGoogleMapsLoaded]);
+
+  return html\`
+    <form
+      className="address-container"
+      onSubmit=\${(event) => {
+        event.preventDefault();
+        onSubmit();
+      }}
+    >
+      <textarea
+        ref=\${textareaRef}
+        value=\${address}
+        onChange=\${(e) => onAddressChange(e.target.value)}
+        placeholder="Enter address here"
+        rows={5}
+        className="address-textarea"
+      />
+      \${coordinates ? 
+        '<Map className="map-container" lat=' + coordinates.lat + ' lng=' + coordinates.lng + ' />' :
+        '<div className="map-placeholder"></div>'
+      }
+      <button disabled=\${!coordinates || submitted} type="submit">Submit</button>
+    </form>
+  \`;
+};
+`;
+
+export const mapSnippet = `const Map = ({ lat, lng, className }) => {
+  const mapRef = useRef(null);
+
+  useEffect(() => {
+    if (mapRef.current) {
+      const map = new google.maps.Map(mapRef.current, {
+        center: { lat, lng },
+        zoom: 15,
+        zoomControl: false,
+        mapTypeControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: true,
+      });
+
+      new google.maps.Marker({
+        map: map,
+        position: { lat, lng },
+      });
+    }
+  }, [lat, lng]);
+
+  return html\`<div className=\${className} ref=\${mapRef}></div>\`;
+};
+`;
+
 const voiceCompassCommonScript = ({
   config,
   environment,

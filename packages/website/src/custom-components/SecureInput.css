@@ -1,0 +1,66 @@
+.form-container,
+.success-container {
+  height: 168px;
+  padding: 20px;
+  background: #efefef;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-container form {
+  margin: 0;
+}
+
+.form-container form > input {
+  margin-bottom: 10px;
+}
+
+.success-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkmark-icon {
+  height: 50px;
+  width: auto;
+}
+
+.checkmark-icon path {
+  fill: green;
+}
+
+input {
+  width: 100%;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-container [type="submit"] {
+  display: block;
+  width: 100%;
+  background-color: rgba(38, 99, 218, 1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.05rem;
+}
+
+.form-container [type="submit"]:hover {
+  background-color: rgba(30, 86, 196, 1);
+}
+
+.form-container [type="submit"]:disabled {
+  background-color: #cccccc;
+}

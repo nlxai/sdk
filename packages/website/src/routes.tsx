@@ -18,6 +18,8 @@ import { WebWidgetComponentsFeedbackForm } from "./content/03-05-feedback-form";
 import { WebWidgetComponentsDatePicker } from "./content/03-06-datepicker";
 import { WebWidgetComponentsFileUpload } from "./content/03-07-file-upload";
 import { WebWidgetComponentsAddressInput } from "./content/03-08-address-input";
+import { WebWidgetComponentsVideoPlayer } from "./content/03-09-video-player";
+import { WebWidgetComponentsSecureInput } from "./content/03-10-secure-input";
 // 4
 import { CustomWidgetsGettingStarted } from "./content/04-01-custom-widgets-getting-started";
 import { CustomWidgetsReact } from "./content/04-02-custom-widgets-react";
@@ -118,6 +120,16 @@ export const routes: {
           label: "File upload",
           url: "/widget-components/file-upload",
           element: <WebWidgetComponentsFileUpload />,
+        },
+        {
+          label: "Secure input",
+          url: "/widget-components/secure-input",
+          element: <WebWidgetComponentsSecureInput />,
+        },
+        {
+          label: "Video player",
+          url: "/widget-components/video-player",
+          element: <WebWidgetComponentsVideoPlayer />,
         },
       ]),
     ],
