@@ -32,9 +32,19 @@ import { MultimodalSetup } from "./content/06-01-multimodal-setup";
 import { MultimodalApiReference } from "./content/06-02-multimodal-api-reference";
 import { MultimodalTryLive } from "./content/06-03-multimodal-try-live";
 
+type Item = {
+  label: string;
+  url: string;
+  element: JSX.Element;
+};
+
+function sortByLabel(items: Item[]): Item[] {
+  return items.sort((a, b) => a.label.localeCompare(b.label));
+}
+
 export const routes: {
   heading: string;
-  items: { label: string; url: string; element: ReactNode }[];
+  items: Item[];
 }[] = [
   {
     heading: "Introduction",
@@ -80,46 +90,48 @@ export const routes: {
         url: "/widget-components-getting-started",
         element: <WebWidgetComponentsGettingStarted />,
       },
-      {
-        label: "Disclaimer",
-        url: "/widget-components-disclaimer",
-        element: <WebWidgetComponentsDisclaimer />,
-      },
-      {
-        label: "Carousel",
-        url: "/widget-components-carousel",
-        element: <WebWidgetComponentsCarousel />,
-      },
-      {
-        label: "Feedback form",
-        url: "/widget-components-feedback-form",
-        element: <WebWidgetComponentsFeedbackForm />,
-      },
-      {
-        label: "Date picker",
-        url: "/widget-components-datepicker",
-        element: <WebWidgetComponentsDatePicker />,
-      },
-      {
-        label: "Address input",
-        url: "/widget-components-address-input",
-        element: <WebWidgetComponentsAddressInput />,
-      },
-      {
-        label: "File upload",
-        url: "/widget-components/file-upload",
-        element: <WebWidgetComponentsFileUpload />,
-      },
-      {
-        label: "Secure input",
-        url: "/widget-components/secure-input",
-        element: <WebWidgetComponentsSecureInput />,
-      },
-      {
-        label: "Video player",
-        url: "/widget-components/video-player",
-        element: <WebWidgetComponentsVideoPlayer />,
-      },
+      ...sortByLabel([
+        {
+          label: "Disclaimer",
+          url: "/widget-components-disclaimer",
+          element: <WebWidgetComponentsDisclaimer />,
+        },
+        {
+          label: "Carousel",
+          url: "/widget-components-carousel",
+          element: <WebWidgetComponentsCarousel />,
+        },
+        {
+          label: "Feedback form",
+          url: "/widget-components-feedback-form",
+          element: <WebWidgetComponentsFeedbackForm />,
+        },
+        {
+          label: "Date picker",
+          url: "/widget-components-datepicker",
+          element: <WebWidgetComponentsDatePicker />,
+        },
+        {
+          label: "Address input",
+          url: "/widget-components-address-input",
+          element: <WebWidgetComponentsAddressInput />,
+        },
+        {
+          label: "File upload",
+          url: "/widget-components/file-upload",
+          element: <WebWidgetComponentsFileUpload />,
+        },
+        {
+          label: "Secure input",
+          url: "/widget-components/secure-input",
+          element: <WebWidgetComponentsSecureInput />,
+        },
+        {
+          label: "Video player",
+          url: "/widget-components/video-player",
+          element: <WebWidgetComponentsVideoPlayer />,
+        },
+      ]),
     ],
   },
   {
