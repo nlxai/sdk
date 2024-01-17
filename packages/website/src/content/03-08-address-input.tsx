@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { InlineWidget, Item } from "../components/InlineWidget";
-import { feedbackFormSnippet } from "../snippets";
+import { addressInputSnippet, mapSnippet } from "../snippets";
 import AddressInput from "../custom-components/Address";
 
 export const content = `
 The address input component is used to collect a user's address. It uses Google Maps to autocomplete the address.
 
 ~~~js
-${feedbackFormSnippet}
+${mapSnippet}
+
+${addressInputSnippet}
 ~~~
 `;
 

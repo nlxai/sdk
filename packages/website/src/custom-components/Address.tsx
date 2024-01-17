@@ -132,14 +132,12 @@ const AddressInput: FC<{
         rows={5}
         className="address-textarea"
       />
-      {coordinates ? (
+      {coordinates && (
         <Map
           className="map-container"
           lat={coordinates.lat}
           lng={coordinates.lng}
         />
-      ) : (
-        <div className="map-placeholder" />
       )}
       <button disabled={!coordinates || submitted} type="submit">
         Submit
