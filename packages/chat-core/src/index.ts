@@ -487,7 +487,6 @@ export const createConversation = (config: Config): ConversationHandler => {
     },
     sendIntent,
     sendWelcomeIntent: (context) => {
-      appendStructuredUserResponse({ intentId: welcomeIntent }, context);
       sendIntent(welcomeIntent, context);
     },
     sendChoice: (choiceId, context) => {
