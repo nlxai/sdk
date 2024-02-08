@@ -200,15 +200,19 @@ const RadioList = <T extends unknown>({
   return (
     <div className="space-y-1">
       {options.map((option) => (
-        <label key={option.label} className="flex items-center space-x-2">
+        <label
+          key={option.label}
+          className="flex items-center justify-start space-x-2"
+        >
           <input
+            className="flex-shrink max-w-[60px]"
             type="radio"
             checked={option.value === selected}
             onChange={() => {
               onChange(option.value);
             }}
-          />{" "}
-          <p className="text-sm text-gray-800">{option.label}</p>
+          />
+          <p className="text-sm flex-grow text-gray-800">{option.label}</p>
         </label>
       ))}
     </div>

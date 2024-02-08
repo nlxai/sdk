@@ -165,6 +165,7 @@ storeIn: "localStorage",
             ? indentBy(
                 "        ",
                 `
+
 // CUSTOM BEHAVIOR SNIPPET
 ${sendWelcomeOnTimeoutSnippet}
 // CUSTOM BEHAVIOR SNIPPET END`,
@@ -181,6 +182,7 @@ export const sendWelcomeOnTimeoutSnippet = `setTimeout(() => {
   const conversationHandler = widget.getConversationHandler();
   if (conversationHandler) {
     conversationHandler.sendIntent("MyCustomIntent");
+    widget.expand();
   }
 }, 16000);`;
 
