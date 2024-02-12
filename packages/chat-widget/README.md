@@ -36,7 +36,7 @@ There is also a packaged version of the SDK that exposes the `nlxChat.widget.cre
 
 ```html
 <body>
-  <script src="https://unpkg.com/@nlxai/chat-widget@0.1.0/lib/umd/index.js"></script>
+  <script src="https://unpkg.com/@nlxai/chat-widget@0.0.14/lib/index.umd.js"></script>
   <script>
     window.nlxChat.widget.create({
       config: {
