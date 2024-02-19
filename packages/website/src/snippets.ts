@@ -67,11 +67,11 @@ export const setupSnippet = ({
   </head>
   <body>
     <script defer src="${umdScriptTags.chatWidget}"></script>${
-    customModalitiesExample
-      ? `
+      customModalitiesExample
+        ? `
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/htm/3.1.1/htm.js" integrity="sha512-RilD4H0wcNNxG2GvB+L1LRXCntT0zgRvRLnmGu+e9wWaLKGkPifz3Ozb6+WPsyEkTBLw6zWCwwEjs9JLL1KIHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>`
-      : ""
-  }
+        : ""
+    }
     <script>
       window.addEventListener("DOMContentLoaded", () => {${
         customModalitiesExample
@@ -116,12 +116,12 @@ export const setupSnippet = ({
           }
           titleBar: ${indentBy(
             "          ",
-            JSON.stringify(titleBar, null, 2)
+            JSON.stringify(titleBar, null, 2),
           )},${
-    behavior === Behavior.WelcomeIntentOnOpen
-      ? indentBy(
-          "          ",
-          `
+            behavior === Behavior.WelcomeIntentOnOpen
+              ? indentBy(
+                  "          ",
+                  `
 // CUSTOM BEHAVIOR SNIPPET
 onExpand: (conversationHandler) => {
   const checkMessages = (messages) => {
@@ -132,31 +132,31 @@ onExpand: (conversationHandler) => {
   }
   conversationHandler.subscribe(checkMessages);
 },
-// CUSTOM BEHAVIOR SNIPPET END`
-        )
-      : behavior === Behavior.UseSessionStorage
-      ? indentBy(
-          "          ",
-          `
+// CUSTOM BEHAVIOR SNIPPET END`,
+                )
+              : behavior === Behavior.UseSessionStorage
+                ? indentBy(
+                    "          ",
+                    `
 // CUSTOM BEHAVIOR SNIPPET
 storeIn: "sessionStorage",
-// CUSTOM BEHAVIOR SNIPPET END`
-        )
-      : behavior === Behavior.UseLocalStorage
-      ? indentBy(
-          "          ",
-          `
+// CUSTOM BEHAVIOR SNIPPET END`,
+                  )
+                : behavior === Behavior.UseLocalStorage
+                  ? indentBy(
+                      "          ",
+                      `
 // CUSTOM BEHAVIOR SNIPPET
 storeIn: "localStorage",
-// CUSTOM BEHAVIOR SNIPPET END`
-        )
-      : ""
-  }
+// CUSTOM BEHAVIOR SNIPPET END`,
+                    )
+                  : ""
+          }
           ${
             theme
               ? `theme: ${indentBy(
                   "          ",
-                  JSON.stringify(theme, null, 2)
+                  JSON.stringify(theme, null, 2),
                 )}`
               : ""
           }
@@ -168,7 +168,7 @@ storeIn: "localStorage",
 
 // CUSTOM BEHAVIOR SNIPPET
 ${sendWelcomeOnTimeoutSnippet}
-// CUSTOM BEHAVIOR SNIPPET END`
+// CUSTOM BEHAVIOR SNIPPET END`,
               )
             : ""
         }
@@ -576,7 +576,9 @@ const voiceCompassCommonScript = ({
   environment === Environment.Html
     ? ""
     : `import * as voiceCompass from "@nlxai/voice-compass";\n\n`
-}const client = voiceCompass.create({
+}const client = ${
+  environment === Environment.Html ? "nlxai." : ""
+}voiceCompass.create({
   apiKey: "${config?.apiKey || "REPLACE_WITH_API_KEY"}",
   workspaceId: "${config?.workspaceId || "REPLACE_WITH_WORKSPACE_ID"}",
   conversationId: "${config?.conversationId || "REPLACE_WITH_CONVERSATION_ID"}",
