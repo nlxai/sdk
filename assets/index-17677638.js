@@ -1184,7 +1184,7 @@ const CustomWidget = () => {
 };
 `,H_=({config:e,environment:t})=>`${t===0?"":`import * as voiceCompass from "@nlxai/voice-compass";
 
-`}const client = voiceCompass.create({
+`}const client = ${t===0?"nlxai.":""}voiceCompass.create({
   apiKey: "${(e==null?void 0:e.apiKey)||"REPLACE_WITH_API_KEY"}",
   workspaceId: "${(e==null?void 0:e.workspaceId)||"REPLACE_WITH_WORKSPACE_ID"}",
   conversationId: "${(e==null?void 0:e.conversationId)||"REPLACE_WITH_CONVERSATION_ID"}",
