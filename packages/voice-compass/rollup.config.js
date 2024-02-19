@@ -3,7 +3,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import nodePolyfills from "rollup-plugin-node-polyfills";
 import replace from "@rollup/plugin-replace";
-import resolve from "@rollup/plugin-node-resolve";
+import nodeResolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import pkg from "./package.json" assert { type: "json" };
@@ -18,9 +18,11 @@ export default [
       format: "umd",
     },
     plugins: [
-      typescript(),
       json(),
-      resolve(),
+      typescript(),
+      nodeResolve({
+        browser: true,
+      }),
       commonjs(),
       nodePolyfills({
         include: "../**/node_modules/**/*.js",

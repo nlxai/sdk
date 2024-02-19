@@ -55,7 +55,7 @@ export const create = (config: Config): VoiceCompass => {
 
   if (!conversationId) {
     console.warn(
-      'No contact ID provided. Please call the Voice Compass client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`',
+      'No conversation ID provided. Please call the Voice Compass client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`'
     );
   }
 
@@ -97,7 +97,7 @@ export const create = (config: Config): VoiceCompass => {
         if (config.debug) {
           console.info(
             `${String.fromCodePoint(0x02713)} step: ${payload.stepId}`,
-            payload,
+            payload
           );
         }
         return res;
@@ -106,7 +106,7 @@ export const create = (config: Config): VoiceCompass => {
         if (config.debug) {
           console.error(
             `${String.fromCodePoint(0x000d7)} step: ${payload.stepId}`,
-            err,
+            err
           );
         }
         return {

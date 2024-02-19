@@ -1,19 +1,30 @@
 import React, { type FC } from "react";
-import { type Config } from "@nlxai/voice-compass";
 import { Labeled, inputClass } from "./Ui";
+
+export interface Config {
+  workspaceId: string;
+  apiKey: string;
+  languageCode: string;
+  journeyId: string;
+  conversationId: string;
+  testStepId: string;
+}
 
 export const getInitialConfig = (): Config => {
   const searchParams = new URLSearchParams(window.location.search);
   const workspaceId = searchParams.get("workspaceId") || "";
   const apiKey = searchParams.get("apiKey") || "";
   const languageCode = searchParams.get("languageCode") || "en-US";
-  const journeyId = searchParams.get("journeyId") || "en-US";
+  const journeyId = searchParams.get("journeyId") || "";
+  const conversationId = searchParams.get("conversationId") || "";
+  const testStepId = searchParams.get("testStepId") || "";
   return {
     workspaceId,
     apiKey,
     languageCode,
     journeyId,
-    conversationId: "",
+    conversationId,
+    testStepId,
   };
 };
 
@@ -71,6 +82,16 @@ export const ConfigEditor: FC<{
           value={config.conversationId}
           onInput={(ev: any) => {
             props.onChange({ conversationId: ev.target.value });
+          }}
+        />
+      </Labeled>
+      <Labeled label="Test step ID">
+        <input
+          placeholder="Enter step ID"
+          className={inputClass}
+          value={config.testStepId}
+          onInput={(ev: any) => {
+            props.onChange({ testStepId: ev.target.value });
           }}
         />
       </Labeled>

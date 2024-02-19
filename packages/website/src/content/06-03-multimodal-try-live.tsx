@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { PageTitle } from "../components/PageTitle";
-import { type Config } from "@nlxai/voice-compass";
 import { PageContent } from "../components/PageContent";
 import {
+  type Config,
   getInitialConfig,
   ConfigEditor,
 } from "../components/MultimodalConfiguration";
