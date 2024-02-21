@@ -1,9 +1,9 @@
 export const version = "0.0.14";
 
 export const umdScriptTags = {
-  chatCore: `https://unpkg.com/@nlxai/chat-core@${version}/lib/index.umd.js`,
-  chatWidget: `https://unpkg.com/@nlxai/chat-widget@${version}/lib/index.umd.js`,
-  voiceCompass: `https://unpkg.com/@nlxai/voice-compass@${version}/lib/index.umd.js`,
+  chatCore: `https://unpkg.com/@nlxai/chat-core/lib/index.umd.js`,
+  chatWidget: `https://unpkg.com/@nlxai/chat-widget/lib/index.umd.js`,
+  voiceCompass: `https://unpkg.com/@nlxai/voice-compass/lib/index.umd.js`,
 };
 
 export const packageUrls = {

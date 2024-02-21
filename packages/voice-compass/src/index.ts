@@ -29,9 +29,9 @@ export type Context = Record<string, any>;
 
 // The journey manager object
 export interface VoiceCompass {
-  sendStep: (data: StepData) => Promise<StepUpdate>;
+  sendStep: (stepId: string, context?: Context) => Promise<StepUpdate>;
   changeJourneyId: (journeyId: string) => void;
-  getLastUpdate: () => Update | null;
+  getLastStep: () => Update | null;
 }
 
 export interface Update {
@@ -114,7 +114,11 @@ export const create = (config: Config): VoiceCompass => {
       });
   };
 
-  const sendStep = (stepData: StepData) => {
+  const sendStep = (stepId: string, context?: Context) => {
+    const stepData: StepData = {
+      stepId,
+      context,
+    };
     if (stepData.stepId === lastUpdate?.stepId && config.preventRepeats) {
       const warning = `Duplicate step ID detected, step update prevented: ${stepData.stepId}`;
       if (config.debug) {
@@ -140,7 +144,7 @@ export const create = (config: Config): VoiceCompass => {
       currentJourneyId = newJourneyId;
       saveSession();
     },
-    getLastUpdate: () => {
+    getLastStep: () => {
       return lastUpdate;
     },
   };

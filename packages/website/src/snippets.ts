@@ -586,9 +586,7 @@ const voiceCompassCommonScript = ({
   languageCode: "${config?.languageCode || "REPLACE_WITH_LANGUAGE_CODE"}",
 });
 
-client.sendStep({
-  stepId: "${config?.testStepId || "REPLACE_WITH_STEP_ID"}",
-});`;
+client.sendStep("${config?.testStepId || "REPLACE_WITH_STEP_ID"}");`;
 
 export const voiceCompassSetupSnippet = ({
   config,
