@@ -12,7 +12,7 @@ The starting point of the package is the \`create\` method, which initializes a 
 
 The resulting client has the following methods:
 
-- \`updateStep\`, sending a step update with the following fields:
+- \`sendStep\`, sending a step update with the following fields:
   - \`stepId\`: the next step to transition to.
   - \`context\` (optional, advanced): set Dialog Studio context attributes.
 - \`changeJourneyId\` (advanced): transition to a new journey.

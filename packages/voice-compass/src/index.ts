@@ -1,5 +1,4 @@
-// TODO: isomorphic-fetch is currently removed due to UMD bundler issues
-// import fetch from "isomorphic-fetch";
+import fetch from "isomorphic-fetch";
 
 export interface Session {
   conversationId: string;
@@ -30,7 +29,7 @@ export type Context = Record<string, any>;
 
 // The journey manager object
 export interface VoiceCompass {
-  updateStep: (data: StepData) => Promise<StepUpdate>;
+  sendStep: (data: StepData) => Promise<StepUpdate>;
   changeJourneyId: (journeyId: string) => void;
   getLastUpdate: () => Update | null;
 }
@@ -55,7 +54,7 @@ export const create = (config: Config): VoiceCompass => {
 
   if (!conversationId) {
     console.warn(
-      'No conversation ID provided. Please call the Voice Compass client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`'
+      'No conversation ID provided. Please call the Voice Compass client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`',
     );
   }
 
@@ -97,7 +96,7 @@ export const create = (config: Config): VoiceCompass => {
         if (config.debug) {
           console.info(
             `${String.fromCodePoint(0x02713)} step: ${payload.stepId}`,
-            payload
+            payload,
           );
         }
         return res;
@@ -106,7 +105,7 @@ export const create = (config: Config): VoiceCompass => {
         if (config.debug) {
           console.error(
             `${String.fromCodePoint(0x000d7)} step: ${payload.stepId}`,
-            err
+            err,
           );
         }
         return {
@@ -115,7 +114,7 @@ export const create = (config: Config): VoiceCompass => {
       });
   };
 
-  const updateStep = (stepData: StepData) => {
+  const sendStep = (stepData: StepData) => {
     if (stepData.stepId === lastUpdate?.stepId && config.preventRepeats) {
       const warning = `Duplicate step ID detected, step update prevented: ${stepData.stepId}`;
       if (config.debug) {
@@ -136,7 +135,7 @@ export const create = (config: Config): VoiceCompass => {
   };
 
   return {
-    updateStep,
+    sendStep,
     changeJourneyId: (newJourneyId: string) => {
       currentJourneyId = newJourneyId;
       saveSession();
