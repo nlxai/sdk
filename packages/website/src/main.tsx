@@ -6,6 +6,8 @@ import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Nav, MobileNav } from "./components/Nav";
 import { ContentRoutes } from "./routes";
+import { CodeComponents } from "./components/PageContent";
+import { MDXProvider } from "@mdx-js/react";
 
 const App: FC<{}> = () => {
   const [mobileMenuExpanded, setMobileMenuExpanded] = useState<boolean>(false);
@@ -25,7 +27,9 @@ const App: FC<{}> = () => {
           <Nav />
           <div className="min-w-0 max-w-2xl flex-auto px-4 py-16 lg:max-w-none lg:pl-8 lg:pr-0 xl:px-16">
             <article>
-              <ContentRoutes />
+              <MDXProvider components={CodeComponents}>
+                <ContentRoutes />
+              </MDXProvider>
             </article>
           </div>
         </div>

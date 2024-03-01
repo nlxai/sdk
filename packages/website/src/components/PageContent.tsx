@@ -1,5 +1,4 @@
 import React, { type FC, type ReactNode, useState } from "react";
-import { MDXProvider } from "@mdx-js/react";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { CheckIcon, ContentCopyIcon } from "./Icons";
@@ -41,52 +40,40 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
   </div>
 );
 
-export const PageContent: FC<{ md: string; children?: React.ReactNode }> = ({
-  md,
-  children,
-}) => (
+export const CodeComponents = {
+  pre({ children }: React.HTMLAttributes<HTMLPreElement>) {
+    return <pre className="relative group !font-mono">{children}</pre>;
+  },
+  code({ children, className, ...rest }: React.HTMLAttributes<HTMLElement>) {
+    const match = /language-(\w+)/.exec(className || "");
+    const lines = String(children).replace(/\n$/, "");
+    return (
+      <>
+        <CopyToClipboardButton
+          text={lines}
+          className="absolute top-1.5 right-1.5 hidden group-hover:block"
+        />
+        {match ? (
+          <SyntaxHighlighter
+            children={lines}
+            style={{}}
+            useInlineStyles={false}
+            showLineNumbers={true}
+            language={match[1]}
+            PreTag="div"
+          />
+        ) : (
+          <code {...rest} className={className}>
+            {children}
+          </code>
+        )}
+      </>
+    );
+  },
+};
+
+export const PageContent: FC<{ md: string }> = (props) => (
   <Prose>
-    <MDXProvider
-      components={{
-        pre({ children }: React.HTMLAttributes<HTMLPreElement>) {
-          return <pre className="relative group !font-mono">{children}</pre>;
-        },
-        code({
-          children,
-          className,
-          ...rest
-        }: React.HTMLAttributes<HTMLElement>) {
-          const match = /language-(\w+)/.exec(className || "");
-          const lines = String(children).replace(/\n$/, "");
-          return (
-            <>
-              <CopyToClipboardButton
-                text={lines}
-                className="absolute top-1.5 right-1.5 hidden group-hover:block"
-              />
-              {match ? (
-                <SyntaxHighlighter
-                  children={lines}
-                  style={{}}
-                  useInlineStyles={false}
-                  showLineNumbers={true}
-                  language={match[1]}
-                  PreTag="div"
-                />
-              ) : (
-                <code {...rest} className={className}>
-                  {children}
-                </code>
-              )}
-            </>
-          );
-        },
-      }}
-    >
-      <Markdown>{md}</Markdown>
-      <main>{children}</main>
-    </MDXProvider>
+    <Markdown components={CodeComponents}>{props.md}</Markdown>
   </Prose>
 );
-
-export default PageContent;
