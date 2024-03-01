@@ -3,7 +3,9 @@ import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { umdScriptTags, packageUrls } from "../constants";
 
-export const content = `
+
+<PageTitle pretitle="Install" title="Installation" />
+<PageContent>
 SDK packages can be installed as follows:
 
 ## Using script tags
@@ -48,13 +50,4 @@ npm install @nlxai/chat-core
 # Voice Compass
 npm install @nlxai/voice-compass
 ~~~
-`;
-
-export const Installation = () => {
-  return (
-    <>
-      <PageTitle pretitle="Install" title="Installation" />
-      <PageContent md={content} />
-    </>
-  );
-};
+</PageContent>
