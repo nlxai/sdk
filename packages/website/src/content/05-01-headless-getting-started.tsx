@@ -10,10 +10,10 @@ This package can be used to:
 - communicate with a bot on a Node.js server, passing along responses to a third-party chat system.
 `;
 
-export const HeadlessSetup = () => {
+export const HeadlessGettingStarted = () => {
   return (
     <>
-      <PageTitle pretitle="Headless API" title="Setup" />
+      <PageTitle pretitle="Headless API" title="Getting started" />
       <PageContent md={content} />
     </>
   );

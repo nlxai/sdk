@@ -25,10 +25,10 @@ import { CustomWidgetsGettingStarted } from "./content/04-01-custom-widgets-gett
 import { CustomWidgetsReact } from "./content/04-02-custom-widgets-react";
 import { CustomWidgetsOther } from "./content/04-03-custom-widgets-other";
 // 5
-import { HeadlessSetup } from "./content/05-01-headless-setup";
-import { HeadlessApi } from "./content/05-02-headless-api";
+import { HeadlessGettingStarted } from "./content/05-01-headless-getting-started";
+import { HeadlessApi } from "./content/05-02-headless-api-reference";
 // 6
-import { MultimodalSetup } from "./content/06-01-multimodal-setup";
+import { MultimodalGettingStarted } from "./content/06-01-multimodal-getting-started";
 import { MultimodalApiReference } from "./content/06-02-multimodal-api-reference";
 import { MultimodalTryLive } from "./content/06-03-multimodal-try-live";
 
@@ -160,7 +160,7 @@ export const routes: {
       {
         label: "Getting started",
         url: "/headless-getting-started",
-        element: <HeadlessSetup />,
+        element: <HeadlessGettingStarted />,
       },
       {
         label: "API reference",
@@ -174,8 +174,8 @@ export const routes: {
     items: [
       {
         label: "Getting started",
-        url: "/voice-compass-setup",
-        element: <MultimodalSetup />,
+        url: "/voice-compass-getting-started",
+        element: <MultimodalGettingStarted />,
       },
       {
         label: "API reference",
