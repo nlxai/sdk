@@ -6,6 +6,7 @@
     "dev": "vite --force",
     "build": "tsc && vite build"
   },
+  "type": "module",
   "dependencies": {
     "@nlxai/chat-core": "*",
     "@nlxai/chat-react": "*",
