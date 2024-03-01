@@ -8,6 +8,8 @@
   },
   "type": "module",
   "dependencies": {
+    "@mdx-js/react": "^3.0.1",
+    "@mdx-js/rollup": "^3.0.1",
     "@nlxai/chat-core": "*",
     "@nlxai/chat-react": "*",
     "@nlxai/chat-widget": "*",
@@ -26,6 +28,7 @@
   "devDependencies": {
     "@babel/core": "^7.23.3",
     "@tailwindcss/typography": "^0.5.10",
+    "@types/mdx": "^2.0.11",
     "@types/ramda": "0.29.1",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",

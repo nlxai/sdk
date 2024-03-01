@@ -9,7 +9,7 @@
     "declaration": true,
     "rootDir": "./src",
     "esModuleInterop": true,
-    "types": ["vite/client"],
+    "types": ["vite/client", "mdx"],
     "lib": ["dom", "es2017"],
     "jsx": "react"
   },

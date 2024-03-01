@@ -1,8 +1,8 @@
 import React, { type FC, type ReactNode, useState } from "react";
+import { MDXProvider } from "@mdx-js/react";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { CheckIcon, ContentCopyIcon } from "./Icons";
-import remarkGfm from "remark-gfm";
 
 const CopyToClipboardButton: FC<{ text: string; className?: string }> = ({
   text,
@@ -41,18 +41,21 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
   </div>
 );
 
-export const PageContent: FC<{ md: string }> = ({ md }) => (
+export const PageContent: FC<{ md: string; children?: React.ReactNode }> = ({
+  md,
+  children,
+}) => (
   <Prose>
-    <Markdown
-      remarkPlugins={[remarkGfm]}
+    <MDXProvider
       components={{
-        pre(props) {
-          return (
-            <pre className="relative group !font-mono">{props.children}</pre>
-          );
+        pre({ children }: React.HTMLAttributes<HTMLPreElement>) {
+          return <pre className="relative group !font-mono">{children}</pre>;
         },
-        code(props) {
-          const { children, className, node, ...rest } = props;
+        code({
+          children,
+          className,
+          ...rest
+        }: React.HTMLAttributes<HTMLElement>) {
           const match = /language-(\w+)/.exec(className || "");
           const lines = String(children).replace(/\n$/, "");
           return (
@@ -80,7 +83,10 @@ export const PageContent: FC<{ md: string }> = ({ md }) => (
         },
       }}
     >
-      {md}
-    </Markdown>
+      <Markdown>{md}</Markdown>
+      <main>{children}</main>
+    </MDXProvider>
   </Prose>
 );
+
+export default PageContent;

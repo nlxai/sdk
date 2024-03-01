@@ -3,8 +3,8 @@ import { flatten } from "ramda";
 import { Routes, Route } from "react-router-dom";
 import { NextPrevPage } from "./components/NextPrevPage";
 // 1
-import { GettingStarted } from "./content/01-01-getting-started";
-import { Installation } from "./content/01-02-installation";
+import GettingStarted from "./content/01-01-getting-started.mdx";
+import Installation from "./content/01-02-installation.mdx";
 // 2
 import { WebWidgetSetup } from "./content/02-01-web-widget-setup";
 import { WebWidgetTheming } from "./content/02-02-web-widget-theming";
