@@ -1,14 +1,14 @@
 import React, { type FC } from "react";
 import { Labeled, inputClass } from "./Ui";
 
-export interface Config {
+export type Config = {
   workspaceId: string;
   apiKey: string;
   languageCode: string;
   journeyId: string;
   conversationId: string;
   testStepId: string;
-}
+};
 
 export const getInitialConfig = (): Config => {
   const searchParams = new URLSearchParams(window.location.search);

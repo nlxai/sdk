@@ -570,7 +570,7 @@ const voiceCompassCommonScript = ({
   config,
   environment,
 }: {
-  config?: MMConfig;
+  config?: MMConfig & { testStepVarName?: string };
   environment?: Environment;
 }) => `${
   environment === Environment.Html
@@ -586,7 +586,7 @@ const voiceCompassCommonScript = ({
   languageCode: "${config?.languageCode || "REPLACE_WITH_LANGUAGE_CODE"}",
 });
 
-client.sendStep("${config?.testStepId || "REPLACE_WITH_STEP_ID"}");`;
+client.sendStep(${config?.testStepVarName ?? config?.testStepId ?? "REPLACE_WITH_STEP_ID"});`;
 
 export const voiceCompassSetupSnippet = ({
   config,
