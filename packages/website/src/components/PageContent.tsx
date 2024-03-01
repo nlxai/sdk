@@ -2,6 +2,7 @@ import React, { type FC, type ReactNode, useState } from "react";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { CheckIcon, ContentCopyIcon } from "./Icons";
+import remarkGfm from "remark-gfm";
 
 const CopyToClipboardButton: FC<{ text: string; className?: string }> = ({
   text,
@@ -43,6 +44,7 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
 export const PageContent: FC<{ md: string }> = ({ md }) => (
   <Prose>
     <Markdown
+      remarkPlugins={[remarkGfm]}
       components={{
         pre(props) {
           return (
