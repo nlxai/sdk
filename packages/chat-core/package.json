@@ -10,6 +10,8 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "rm -rf lib && rollup -c",
+    "lint:check": "npx eslint src/ --ext .ts,.tsx,.js,.jsx",
+    "lint": "npx eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
     "prepublish": "npm run build"
   },
   "author": "Peter Szerzo <peter@nlx.ai>",
@@ -25,6 +27,7 @@
     "@types/node": "^11.15.11",
     "@types/ramda": "0.29.1",
     "@types/uuid": "^9.0.7",
+    "eslint-config-nlx": "*",
     "prettier": "^3.1.0",
     "rollup": "^4.9.3",
     "rollup-plugin-node-polyfills": "^0.2.1",
