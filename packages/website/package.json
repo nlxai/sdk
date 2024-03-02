@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "dev": "vite --force",
     "build": "tsc && vite build",
+    "dev": "vite --force",
     "lint:check": "npx eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx",
     "lint": "npx eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx --fix"
   },
