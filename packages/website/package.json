@@ -4,7 +4,9 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "vite --force",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "lint:check": "npx eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx",
+    "lint": "npx eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx --fix"
   },
   "dependencies": {
     "@nlxai/chat-core": "*",
@@ -35,6 +37,8 @@
     "@vitejs/plugin-react": "^4.0.3",
     "autoprefixer": "^10.4.16",
     "esbuild": "^0.18.20",
+    "eslint-config-nlx": "*",
+    "eslint-plugin-mdx": "^3.1.5",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
     "typescript": "^5.0.2",
