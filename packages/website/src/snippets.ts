@@ -211,8 +211,8 @@ const CustomWidget = () => {
         }
       })}
       {chat.waiting && <div>...</div>}
-      <input 
-        value={chat.inputValue} 
+      <input
+        value={chat.inputValue}
         onInput={(event) => {
           chat.setInputValue(event.target.value);
         }}
@@ -429,7 +429,7 @@ export const fileUploadSnippet = `const FileUpload = ({ onUploadComplete }) => {
       <input type="file" id="file-upload" hidden onChange=\${handleFileChange} />
       <div className="file-input-custom">
         <div className="file-input-custom-icon">
-          \${uploadProgress > 0 ? 
+          \${uploadProgress > 0 ?
             '<CircularProgressBar progress=' + uploadProgress + ' size=25 strokeWidth=2 />' :
             '<img src=' + uploadIcon + ' alt="upload" className="file-input-button-icon" />'}
         </div>
@@ -529,7 +529,7 @@ export const addressInputSnippet = `const AddressInput = ({ onAddressChange, add
         rows={5}
         className="address-textarea"
       />
-      \${coordinates ? 
+      \${coordinates ?
         '<Map className="map-container" lat=' + coordinates.lat + ' lng=' + coordinates.lng + ' />' :
         '<div className="map-placeholder"></div>'
       }
@@ -570,7 +570,7 @@ const voiceCompassCommonScript = ({
   config,
   environment,
 }: {
-  config?: MMConfig & { testStepVarName?: string };
+  config?: Partial<MMConfig> & { testStepVarName?: string };
   environment?: Environment;
 }) => `${
   environment === Environment.Html
@@ -592,7 +592,7 @@ export const voiceCompassSetupSnippet = ({
   config,
   environment,
 }: {
-  config?: MMConfig;
+  config?: Partial<MMConfig>;
   environment?: Environment;
 }) => {
   if (environment === Environment.Html) {
