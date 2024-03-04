@@ -8,6 +8,8 @@
   ],
   "scripts": {
     "build": "lerna run build",
+    "lint:check": "lerna run lint:check",
+    "lint": "lerna run lint",
     "postinstall": "npm run build",
     "publish": "rm -f package-lock.json && rm -f packages/*/package-lock.json && lerna publish --no-private",
     "test": "lerna run test",
