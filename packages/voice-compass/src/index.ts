@@ -16,6 +16,7 @@ export interface Config {
   languageCode: string;
   preventRepeats?: boolean;
   onSessionUpdate?: (session: Session) => void;
+  lastUpdate?: Update;
   debug?: boolean;
   apiUrl?: string;
 }
@@ -55,7 +56,7 @@ export const create = (config: Config): VoiceCompass => {
 
   const apiUrl = config.apiUrl ?? "https://mm.nlx.ai";
 
-  let lastUpdate: Update | null = null;
+  let lastUpdate: Update | null = config.lastUpdate ?? null;
 
   let currentJourneyId: string = config.journeyId;
 
@@ -68,7 +69,8 @@ export const create = (config: Config): VoiceCompass => {
     });
   };
 
-  saveSession();
+  // initialize session if we're not recovering an existing session
+  if (!lastUpdate) saveSession();
 
   const sendUpdateRequest = (stepData: StepData): Promise<StepUpdate> => {
     const payload = {
