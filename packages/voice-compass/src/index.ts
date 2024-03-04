@@ -104,7 +104,14 @@ export const create = (config: Config): VoiceCompass => {
       });
   };
 
+  // uuid v4 regex
+  const stepIdRegex =
+    /^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
   const sendStep = (stepId: string, context?: Context) => {
+    if (!stepIdRegex.test(stepId)) {
+      throw new Error("Invalid stepId. It should be formatted as a UUID.");
+    }
+
     const stepData: StepData = {
       stepId,
       context,
