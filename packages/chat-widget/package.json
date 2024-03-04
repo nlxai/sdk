@@ -10,6 +10,8 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "rm -rf lib && rollup -c",
+    "lint:check": "npx eslint src/ --ext .ts,.tsx,.js,.jsx",
+    "lint": "npx eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
     "prepublish": "npm run build"
   },
   "author": "Peter Szerzo <peter@nlx.ai>",
@@ -26,6 +28,7 @@
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@types/tinycolor2": "^1.4.2",
+    "eslint-config-nlx": "*",
     "prettier": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
