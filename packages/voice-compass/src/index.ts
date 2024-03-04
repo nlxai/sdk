@@ -17,7 +17,7 @@ export interface Config {
   preventRepeats?: boolean;
   onSessionUpdate?: (session: Session) => void;
   debug?: boolean;
-  dev?: boolean;
+  apiUrl?: string;
 }
 
 export interface StepData {
@@ -45,10 +45,6 @@ export interface StepUpdate {
   warning?: string;
 }
 
-const devApiUrl = "https://dev.mm.nlx.ai";
-
-const prodApiUrl = "https://mm.nlx.ai";
-
 export const create = (config: Config): VoiceCompass => {
   const conversationId = config.conversationId;
 
@@ -58,7 +54,7 @@ export const create = (config: Config): VoiceCompass => {
     );
   }
 
-  const apiUrl = config.dev ? devApiUrl : prodApiUrl;
+  const apiUrl = config.apiUrl ?? "https://mm.nlx.ai";
 
   let lastUpdate: Update | null = null;
 
