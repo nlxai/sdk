@@ -21,7 +21,7 @@ export interface Config {
 }
 
 export interface StepData {
-  stepId?: string;
+  stepId: string;
   context?: Record<string, any>;
 }
 
@@ -119,8 +119,7 @@ export const create = (config: Config): VoiceCompass => {
       });
     }
     lastUpdate = {
-      // TODO: sort out whether optional stepID's are even allowed
-      stepId: stepData.stepId || "",
+      stepId: stepData.stepId,
       journeyId: currentJourneyId,
       context: stepData.context,
     };
