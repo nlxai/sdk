@@ -41,7 +41,6 @@ export interface Update {
 }
 
 export interface StepUpdate {
-  error?: string;
   warning?: string;
 }
 
@@ -98,9 +97,7 @@ export const create = (config: Config): VoiceCompass => {
         if (config.debug) {
           console.error(`× step: ${payload.stepId}`, err, payload);
         }
-        return {
-          error: `Something went wrong`,
-        };
+        throw err;
       });
   };
 
