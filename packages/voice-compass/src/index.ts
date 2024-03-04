@@ -87,12 +87,12 @@ export const create = (config: Config): VoiceCompass => {
       },
       body: JSON.stringify(payload),
     })
-      .then((res) => res.json())
-      .then((res: StepUpdate) => {
+      .then(() => {
         if (config.debug) {
           console.info(`✓ step: ${payload.stepId}`, payload);
         }
-        return res;
+
+        return {};
       })
       .catch((err: Error) => {
         if (config.debug) {
