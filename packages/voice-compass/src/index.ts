@@ -23,10 +23,21 @@ export interface Config {
 
 export interface StepData {
   stepId: string;
-  context?: Record<string, any>;
+  context?: Context;
 }
 
-export type Context = Record<string, any>;
+/** A JSON stringify-able value. */
+export type jsonable =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | jsonable[]
+  | { [key: string]: jsonable }
+  | { toJSON(): jsonable };
+
+export type Context = Record<string, jsonable>;
 
 // The journey manager object
 export interface VoiceCompass {
