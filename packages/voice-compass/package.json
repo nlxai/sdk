@@ -15,7 +15,8 @@
     "lint": "npx eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
     "prepublish": "npm run build",
     "publish-docs": "npm run docs && concat-md --decrease-title-levels --dir-name-as-title docs/ > ../website/src/content/06-03-multimodal-api-reference.md",
-    "test": "jest"
+    "test": "jest",
+    "tsc": "tsc"
   },
   "author": "Peter Szerzo <peter@nlx.ai>",
   "license": "MIT",

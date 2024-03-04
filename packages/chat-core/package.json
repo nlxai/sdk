@@ -12,7 +12,8 @@
     "build": "rm -rf lib && rollup -c",
     "lint:check": "npx eslint src/ --ext .ts,.tsx,.js,.jsx",
     "lint": "npx eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "tsc": "tsc"
   },
   "author": "Peter Szerzo <peter@nlx.ai>",
   "license": "MIT",

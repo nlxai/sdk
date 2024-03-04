@@ -3,7 +3,7 @@
     "strict": true,
     "outDir": "./lib",
     "module": "es2020",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "target": "es2020",
     "skipLibCheck": true,
     "declaration": true,
