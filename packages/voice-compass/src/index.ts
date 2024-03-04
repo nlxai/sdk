@@ -90,19 +90,13 @@ export const create = (config: Config): VoiceCompass => {
       .then((res) => res.json())
       .then((res: StepUpdate) => {
         if (config.debug) {
-          console.info(
-            `${String.fromCodePoint(0x02713)} step: ${payload.stepId}`,
-            payload,
-          );
+          console.info(`✓ step: ${payload.stepId}`, payload);
         }
         return res;
       })
       .catch((err: Error) => {
         if (config.debug) {
-          console.error(
-            `${String.fromCodePoint(0x000d7)} step: ${payload.stepId}`,
-            err,
-          );
+          console.error(`× step: ${payload.stepId}`, err);
         }
         return {
           error: `Something went wrong`,
