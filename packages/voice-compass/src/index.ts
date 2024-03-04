@@ -96,7 +96,7 @@ export const create = (config: Config): VoiceCompass => {
       })
       .catch((err: Error) => {
         if (config.debug) {
-          console.error(`× step: ${payload.stepId}`, err);
+          console.error(`× step: ${payload.stepId}`, err, payload);
         }
         return {
           error: `Something went wrong`,
