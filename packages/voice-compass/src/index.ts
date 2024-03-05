@@ -1,12 +1,5 @@
 import fetch from "isomorphic-fetch";
 
-export interface Session {
-  conversationId: string;
-  journeyId: string;
-  languageCode: string;
-  lastUpdate: Update | null;
-}
-
 // Initial configuration used when creating a journey manager
 export interface Config {
   apiKey: string;
@@ -14,9 +7,6 @@ export interface Config {
   conversationId: string;
   journeyId: string;
   languageCode: string;
-  preventRepeats?: boolean;
-  onSessionUpdate?: (session: Session) => void;
-  lastUpdate?: Update;
   debug?: boolean;
   apiUrl?: string;
 }
@@ -30,18 +20,7 @@ export interface StepData {
 
 // The journey manager object
 export interface VoiceCompass {
-  sendStep: (stepId: string, context?: Context) => Promise<StepUpdate>;
-  getLastStep: () => Update | null;
-}
-
-export interface Update {
-  stepId: string;
-  journeyId: string;
-  context?: Context;
-}
-
-export interface StepUpdate {
-  warning?: string;
+  sendStep: (stepId: string, context?: Context) => Promise<void>;
 }
 
 export const create = (config: Config): VoiceCompass => {
@@ -55,21 +34,7 @@ export const create = (config: Config): VoiceCompass => {
 
   const apiUrl = config.apiUrl ?? "https://mm.nlx.ai";
 
-  let lastUpdate: Update | null = config.lastUpdate ?? null;
-
   const currentJourneyId: string = config.journeyId;
-
-  const saveSession = () => {
-    config.onSessionUpdate?.({
-      conversationId: config.conversationId,
-      journeyId: currentJourneyId,
-      lastUpdate,
-      languageCode: config.languageCode,
-    });
-  };
-
-  // initialize session if we're not recovering an existing session
-  if (!lastUpdate) saveSession();
 
   const sendUpdateRequest = (stepData: StepData): Promise<StepUpdate> => {
     const payload = {
@@ -91,8 +56,6 @@ export const create = (config: Config): VoiceCompass => {
         if (config.debug) {
           console.info(`✓ step: ${payload.stepId}`, payload);
         }
-
-        return {};
       })
       .catch((err: Error) => {
         if (config.debug) {
@@ -114,28 +77,8 @@ export const create = (config: Config): VoiceCompass => {
       stepId,
       context,
     };
-    if (stepData.stepId === lastUpdate?.stepId && config.preventRepeats) {
-      const warning = `Duplicate step ID detected, step update prevented: ${stepData.stepId}`;
-      if (config.debug) {
-        console.warn(warning);
-      }
-      return Promise.resolve({
-        warning: warning,
-      });
-    }
-    lastUpdate = {
-      stepId: stepData.stepId,
-      journeyId: currentJourneyId,
-      context: stepData.context,
-    };
-    saveSession();
     return sendUpdateRequest(stepData);
   };
 
-  return {
-    sendStep,
-    getLastStep: () => {
-      return lastUpdate;
-    },
-  };
+  return { sendStep };
 };
