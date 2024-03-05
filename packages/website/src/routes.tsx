@@ -29,8 +29,10 @@ import { HeadlessGettingStarted } from "./content/05-01-headless-getting-started
 import { HeadlessApi } from "./content/05-02-headless-api-reference";
 // 6
 import { MultimodalGettingStarted } from "./content/06-01-multimodal-getting-started";
-import { MultimodalApiReference } from "./content/06-02-multimodal-api-reference";
-import { MultimodalTryLive } from "./content/06-03-multimodal-try-live";
+import { MultimodalOnASPA } from "./content/06-03-multimodal-on-a-single-page-app";
+import { MultimodalApiReference } from "./content/06-04-multimodal-api-reference";
+import { MultimodalTryLive } from "./content/06-05-multimodal-try-live";
+import { MultimodalOnAMultiPageWebsite } from "./content/06-02-multimodal-on-a-multi-page-website";
 
 type Item = {
   label: string;
@@ -169,26 +171,36 @@ export const routes: {
       },
     ],
   },
-  // {
-  //   heading: "Voice Compass",
-  //   items: [
-  //     {
-  //       label: "Getting started",
-  //       url: "/voice-compass-getting-started",
-  //       element: <MultimodalGettingStarted />,
-  //     },
-  //     {
-  //       label: "API reference",
-  //       url: "/voice-compass-api-reference",
-  //       element: <MultimodalApiReference />,
-  //     },
-  //     {
-  //       label: "Try live",
-  //       url: "/voice-compass-try-live",
-  //       element: <MultimodalTryLive />,
-  //     },
-  //   ],
-  // },
+  {
+    heading: "Voice Compass",
+    items: [
+      {
+        label: "Getting started",
+        url: "/voice-compass-getting-started",
+        element: <MultimodalGettingStarted />,
+      },
+      {
+        label: "Usage on a multi page website",
+        url: "/voice-compass-on-a-multi page website",
+        element: <MultimodalOnAMultiPageWebsite />,
+      },
+      {
+        label: "Usage on a single page app",
+        url: "/voice-compass-on-a-single-page-app",
+        element: <MultimodalOnASPA />,
+      },
+      {
+        label: "API reference",
+        url: "/voice-compass-api-reference",
+        element: <MultimodalApiReference />,
+      },
+      {
+        label: "Try live",
+        url: "/voice-compass-try-live",
+        element: <MultimodalTryLive />,
+      },
+    ],
+  },
 ];
 
 export const ContentRoutes: FC<{}> = () => {
