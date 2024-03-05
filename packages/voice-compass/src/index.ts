@@ -13,11 +13,6 @@ export interface Config {
 
 export type Context = Record<string, any>;
 
-export interface StepData {
-  stepId: string;
-  context?: Context;
-}
-
 // The journey manager object
 export interface VoiceCompass {
   sendStep: (stepId: string, context?: Context) => Promise<void>;
@@ -36,9 +31,17 @@ export const create = (config: Config): VoiceCompass => {
 
   const currentJourneyId: string = config.journeyId;
 
-  const sendUpdateRequest = (stepData: StepData): Promise<StepUpdate> => {
+  // uuid v4 regex
+  const stepIdRegex =
+    /^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
+  const sendStep = (stepId: string, context?: Context) => {
+    if (!stepIdRegex.test(stepId)) {
+      throw new Error("Invalid stepId. It should be formatted as a UUID.");
+    }
+
     const payload = {
-      ...stepData,
+      stepId,
+      context,
       conversationId,
       journeyId: currentJourneyId,
       languageCode: config.languageCode,
@@ -54,30 +57,15 @@ export const create = (config: Config): VoiceCompass => {
     })
       .then(() => {
         if (config.debug) {
-          console.info(`✓ step: ${payload.stepId}`, payload);
+          console.info(`✓ step: ${stepId}`, payload);
         }
       })
       .catch((err: Error) => {
         if (config.debug) {
-          console.error(`× step: ${payload.stepId}`, err, payload);
+          console.error(`× step: ${stepId}`, err, payload);
         }
         throw err;
       });
-  };
-
-  // uuid v4 regex
-  const stepIdRegex =
-    /^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
-  const sendStep = (stepId: string, context?: Context) => {
-    if (!stepIdRegex.test(stepId)) {
-      throw new Error("Invalid stepId. It should be formatted as a UUID.");
-    }
-
-    const stepData: StepData = {
-      stepId,
-      context,
-    };
-    return sendUpdateRequest(stepData);
   };
 
   return { sendStep };
