@@ -31,7 +31,6 @@ export type Context = Record<string, any>;
 // The journey manager object
 export interface VoiceCompass {
   sendStep: (stepId: string, context?: Context) => Promise<StepUpdate>;
-  changeJourneyId: (journeyId: string) => void;
   getLastStep: () => Update | null;
 }
 
@@ -58,7 +57,7 @@ export const create = (config: Config): VoiceCompass => {
 
   let lastUpdate: Update | null = config.lastUpdate ?? null;
 
-  let currentJourneyId: string = config.journeyId;
+  const currentJourneyId: string = config.journeyId;
 
   const saveSession = () => {
     config.onSessionUpdate?.({
@@ -135,10 +134,6 @@ export const create = (config: Config): VoiceCompass => {
 
   return {
     sendStep,
-    changeJourneyId: (newJourneyId: string) => {
-      currentJourneyId = newJourneyId;
-      saveSession();
-    },
     getLastStep: () => {
       return lastUpdate;
     },
