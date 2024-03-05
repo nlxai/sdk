@@ -21,12 +21,12 @@ export interface Config {
   apiUrl?: string;
 }
 
+export type Context = Record<string, any>;
+
 export interface StepData {
   stepId: string;
-  context?: Record<string, any>;
+  context?: Context;
 }
-
-export type Context = Record<string, any>;
 
 // The journey manager object
 export interface VoiceCompass {
