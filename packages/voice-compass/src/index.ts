@@ -16,12 +16,13 @@ export interface Config {
   languageCode: string;
   preventRepeats?: boolean;
   onSessionUpdate?: (session: Session) => void;
+  lastUpdate?: Update;
   debug?: boolean;
-  dev?: boolean;
+  apiUrl?: string;
 }
 
 export interface StepData {
-  stepId?: string;
+  stepId: string;
   context?: Record<string, any>;
 }
 
@@ -41,13 +42,8 @@ export interface Update {
 }
 
 export interface StepUpdate {
-  error?: string;
   warning?: string;
 }
-
-const devApiUrl = "https://dev.mm.nlx.ai";
-
-const prodApiUrl = "https://mm.nlx.ai";
 
 export const create = (config: Config): VoiceCompass => {
   const conversationId = config.conversationId;
@@ -58,9 +54,9 @@ export const create = (config: Config): VoiceCompass => {
     );
   }
 
-  const apiUrl = config.dev ? devApiUrl : prodApiUrl;
+  const apiUrl = config.apiUrl ?? "https://mm.nlx.ai";
 
-  let lastUpdate: Update | null = null;
+  let lastUpdate: Update | null = config.lastUpdate ?? null;
 
   let currentJourneyId: string = config.journeyId;
 
@@ -73,7 +69,8 @@ export const create = (config: Config): VoiceCompass => {
     });
   };
 
-  saveSession();
+  // initialize session if we're not recovering an existing session
+  if (!lastUpdate) saveSession();
 
   const sendUpdateRequest = (stepData: StepData): Promise<StepUpdate> => {
     const payload = {
@@ -91,30 +88,29 @@ export const create = (config: Config): VoiceCompass => {
       },
       body: JSON.stringify(payload),
     })
-      .then((res) => res.json())
-      .then((res: StepUpdate) => {
+      .then(() => {
         if (config.debug) {
-          console.info(
-            `${String.fromCodePoint(0x02713)} step: ${payload.stepId}`,
-            payload,
-          );
+          console.info(`✓ step: ${payload.stepId}`, payload);
         }
-        return res;
+
+        return {};
       })
       .catch((err: Error) => {
         if (config.debug) {
-          console.error(
-            `${String.fromCodePoint(0x000d7)} step: ${payload.stepId}`,
-            err,
-          );
+          console.error(`× step: ${payload.stepId}`, err, payload);
         }
-        return {
-          error: `Something went wrong`,
-        };
+        throw err;
       });
   };
 
+  // uuid v4 regex
+  const stepIdRegex =
+    /^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
   const sendStep = (stepId: string, context?: Context) => {
+    if (!stepIdRegex.test(stepId)) {
+      throw new Error("Invalid stepId. It should be formatted as a UUID.");
+    }
+
     const stepData: StepData = {
       stepId,
       context,
@@ -129,8 +125,7 @@ export const create = (config: Config): VoiceCompass => {
       });
     }
     lastUpdate = {
-      // TODO: sort out whether optional stepID's are even allowed
-      stepId: stepData.stepId || "",
+      stepId: stepData.stepId,
       journeyId: currentJourneyId,
       context: stepData.context,
     };
