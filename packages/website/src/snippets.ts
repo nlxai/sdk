@@ -129,7 +129,7 @@ onExpand: (conversationHandler) => {
       conversationHandler.sendWelcomeIntent();
     }
     conversationHandler.unsubscribe(checkMessages);
-  }
+  };
   conversationHandler.subscribe(checkMessages);
 },
 // CUSTOM BEHAVIOR SNIPPET END`,
