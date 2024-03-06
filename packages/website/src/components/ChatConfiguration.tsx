@@ -194,26 +194,27 @@ const RadioList = <T extends unknown>({
   onChange,
 }: {
   selected: T;
-  options: { value: T; label: string }[];
+  options: { id: string; value: T; label: string }[];
   onChange: (val: T) => void;
 }): ReactNode => {
+  console.log(selected, options);
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       {options.map((option) => (
-        <label
-          key={option.label}
-          className="flex items-center justify-start space-x-2"
-        >
+        <div className="flex items-center" key={option.id}>
           <input
-            className="flex-shrink max-w-[60px]"
+            id={option.id}
             type="radio"
+            className="w-4 h-4 text-blueMain bg-gray-100 border-gray-300 focus:ring-blueMain dark:focus:ring-blueDarker dark:ring-offset-gray-800 focus:ring-2"
             checked={option.value === selected}
             onChange={() => {
               onChange(option.value);
             }}
           />
-          <p className="text-sm flex-grow text-gray-800">{option.label}</p>
-        </label>
+          <label htmlFor={option.id} className="ms-2 text-black80">
+            {option.label}
+          </label>
+        </div>
       ))}
     </div>
   );
@@ -228,23 +229,27 @@ export const BehaviorEditor: FC<{
       selected={behavior}
       onChange={setBehavior}
       options={[
-        { value: Behavior.Simple, label: "Simple chat" },
+        { value: Behavior.Simple, label: "Simple chat", id: "simple" },
         {
           value: Behavior.WelcomeIntentOnOpen,
           label: "Send welcome intent when the chat is opened",
+          id: "welcome",
         },
         {
           value: Behavior.CustomIntentOnInactivity,
           label: "Send custom intent after a period of inactivity",
+          id: "custom",
         },
         {
           value: Behavior.UseSessionStorage,
           label: "Retain conversation through refreshes (SessionStorage)",
+          id: "session",
         },
         {
           value: Behavior.UseLocalStorage,
           label:
             "Retain conversation through refreshes and closed browser sessions (LocalStorage)",
+          id: "local",
         },
       ]}
     />
