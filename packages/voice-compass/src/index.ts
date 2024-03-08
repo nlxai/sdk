@@ -8,7 +8,7 @@ export interface Config {
   journeyId: string;
   languageCode: string;
   debug?: boolean;
-  apiUrl?: string;
+  dev?: boolean;
 }
 
 export type Context = Record<string, any>;
@@ -25,7 +25,6 @@ export const create = ({
   journeyId,
   languageCode,
   debug = false,
-  apiUrl = "https://mm.nlx.ai",
 }: Config): VoiceCompass => {
   if (!conversationId) {
     console.warn(
@@ -48,11 +47,12 @@ export const create = ({
       languageCode,
     };
 
-    return fetch(`${apiUrl}/track`, {
+    return fetch(`https://${dev ? "dev." : ""}mm.nlx.ai/v1/track`, {
       method: "POST",
       headers: {
         "x-api-key": apiKey,
         "x-nlx-id": workspaceId,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     })
