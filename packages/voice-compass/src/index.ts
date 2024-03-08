@@ -25,6 +25,7 @@ export const create = ({
   journeyId,
   languageCode,
   debug = false,
+  dev = false,
 }: Config): VoiceCompass => {
   if (!conversationId) {
     console.warn(
