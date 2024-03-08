@@ -29,8 +29,6 @@ export const create = (config: Config): VoiceCompass => {
 
   const apiUrl = config.apiUrl ?? "https://mm.nlx.ai";
 
-  const currentJourneyId: string = config.journeyId;
-
   // uuid v4 regex
   const stepIdRegex =
     /^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
@@ -43,7 +41,7 @@ export const create = (config: Config): VoiceCompass => {
       stepId,
       context,
       conversationId,
-      journeyId: currentJourneyId,
+      journeyId: config.journeyId,
       languageCode: config.languageCode,
     };
 
