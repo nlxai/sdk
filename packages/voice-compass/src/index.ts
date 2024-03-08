@@ -18,17 +18,20 @@ export interface VoiceCompass {
   sendStep: (stepId: string, context?: Context) => Promise<void>;
 }
 
-export const create = (config: Config): VoiceCompass => {
-  const conversationId = config.conversationId;
-
+export const create = ({
+  apiKey,
+  workspaceId,
+  conversationId,
+  journeyId,
+  languageCode,
+  debug = false,
+  apiUrl = "https://mm.nlx.ai",
+}: Config): VoiceCompass => {
   if (!conversationId) {
     console.warn(
       'No conversation ID provided. Please call the Voice Compass client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`',
     );
   }
-
-  const apiUrl = config.apiUrl ?? "https://mm.nlx.ai";
-
   // uuid v4 regex
   const stepIdRegex =
     /^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
@@ -41,25 +44,25 @@ export const create = (config: Config): VoiceCompass => {
       stepId,
       context,
       conversationId,
-      journeyId: config.journeyId,
-      languageCode: config.languageCode,
+      journeyId,
+      languageCode,
     };
 
     return fetch(`${apiUrl}/track`, {
       method: "POST",
       headers: {
-        "x-api-key": config.apiKey,
-        "x-nlx-id": config.workspaceId,
+        "x-api-key": apiKey,
+        "x-nlx-id": workspaceId,
       },
       body: JSON.stringify(payload),
     })
       .then(() => {
-        if (config.debug) {
+        if (debug) {
           console.info(`✓ step: ${stepId}`, payload);
         }
       })
       .catch((err: Error) => {
-        if (config.debug) {
+        if (debug) {
           console.error(`× step: ${stepId}`, err, payload);
         }
         throw err;
