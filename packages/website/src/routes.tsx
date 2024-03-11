@@ -169,26 +169,26 @@ export const routes: {
       },
     ],
   },
-  {
-    heading: "Voice Compass",
-    items: [
-      {
-        label: "Getting started",
-        url: "/voice-compass-getting-started",
-        element: <MultimodalGettingStarted />,
-      },
-      {
-        label: "API reference",
-        url: "/voice-compass-api-reference",
-        element: <MultimodalApiReference />,
-      },
-      {
-        label: "Try live",
-        url: "/voice-compass-try-live",
-        element: <MultimodalTryLive />,
-      },
-    ],
-  },
+  // {
+  //   heading: "Voice Compass",
+  //   items: [
+  //     {
+  //       label: "Getting started",
+  //       url: "/voice-compass-getting-started",
+  //       element: <MultimodalGettingStarted />,
+  //     },
+  //     {
+  //       label: "API reference",
+  //       url: "/voice-compass-api-reference",
+  //       element: <MultimodalApiReference />,
+  //     },
+  //     {
+  //       label: "Try live",
+  //       url: "/voice-compass-try-live",
+  //       element: <MultimodalTryLive />,
+  //     },
+  //   ],
+  // },
 ];
 
 export const ContentRoutes: FC<{}> = () => {
