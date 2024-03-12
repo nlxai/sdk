@@ -1,4 +1,4 @@
-export const version = "0.0.14";
+export const version = "0.1.0";
 
 export const umdScriptTags = {
   chatCore: `https://unpkg.com/@nlxai/chat-core/lib/index.umd.js`,

@@ -187,6 +187,7 @@ const safeJsonParse = (val: string) => {
 
 type Subscriber = (response: Array<Response>, newResponse?: Response) => void;
 
+// Helper method to decide when a conversation needs to be re-initialized (e.g. bot URL change)
 export const shouldReinitialize = (
   config1: Config,
   config2: Config,
