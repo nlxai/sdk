@@ -18,3 +18,14 @@ jobs:
         run: npm install
       - name: Build the app
         run: npm run build
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+            node-version-file: '.node-version'
+      - name: Installing node_modules
+        run: npm install
+      - name: Test the app
+        run: npm run test
