@@ -30,7 +30,6 @@ import { HeadlessApi } from "./content/05-02-headless-api-reference";
 // 6
 import { MultimodalGettingStarted } from "./content/06-01-multimodal-getting-started";
 import { MultimodalUsage } from "./content/06-02-multimodal-usage";
-import { MultimodalFromNode } from "./content/06-03-multimodal-from-node";
 import { MultimodalApiReference } from "./content/06-03-multimodal-api-reference";
 import { MultimodalTryLive } from "./content/06-04-multimodal-try-live";
 
