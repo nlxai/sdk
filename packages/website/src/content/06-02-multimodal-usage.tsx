@@ -70,7 +70,7 @@ const client = ${clientName}.create({
   languageCode: navigator.language
 });
 
-client.sendStep('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
+client.sendStep("REPLACE_WITH_STEP_ID");
 `;
     const prefixString = " ".repeat(indentSpaces);
     return content
@@ -114,7 +114,7 @@ For an alternative, see the next example._
         languageCode: navigator.language
       });
 
-      client.sendStep('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
+      client.sendStep('REPLACE_WITH_STEP_ID');
     </script>
   </body>
 </html>
@@ -155,28 +155,15 @@ ${withPersitanceJavascript("voiceCompass")}
 ~~~`;
     case Usage.Node:
       return `
-## From NodeJS
-From Node, you
+## From Node.js (or other non-web environments)
 
-- initially transmit the \`conversationId\` via a URL search param (in this case, in the param \`cid\`)
-- subsequently fetch it from a session
-- fetch the user's \`languageCode\` from the browser
+The \`conversationID\` and the \`languageCode\` must be set dynamically.
 
-Here's an example:
+When not using web, you'll have to determine how to fetch these on a case-by-case basis.
+
 ~~~typescript
 
 import voiceCompass from '@nlxai/voice-compass'
-
-const fetchConversationId = function() {
-  const VOICE_COMPASS_SESSION_KEY = 'voiceCompassSession';
-
-  const conversationIdFromUrl = new URLSearchParams(window.location.search).get("cid")
-  if(conversationIdFromUrl != null) {
-    localStorage.setItem(VOICE_COMPASS_SESSION_KEY, conversationIdFromURL);
-  } else {
-    localStorage.getItem(VOICE_COMPASS_SESSION_KEY);
-  }
-};
 
 const client = voiceCompass.create({
   // HARD CODED PARAMS
@@ -185,67 +172,16 @@ const client = voiceCompass.create({
   journeyId: "REPLACE_WITH_JOURNEY_ID",
 
   // DYNAMIC PARAMS
-  conversationId:  fetchConversationId(), // you determine where to fetch the \`conversationId\` from.
-  languageCode: navigator.language
+  conversationId:  "REPLACE_WITH_CONVERSATION_ID",
+  languageCode: "REPLACE_WITH_LANGUAGE_CODE"
 });
 
-const GREET_STEP_ID = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
-client.sendStep(GREET_STEP_ID);
+client.sendStep("REPLACE_WITH_STEP_ID");
 ~~~`;
     default:
       assertNever(usageFrom); // exhaustiveness checking
   }
 }
-
-const content = `
-
-
-## Usage from
-
-
-
-
-
-~~~typescript
-const VOICE_COMPASS_SESSION_KEY = 'voiceCompassSession';
-
-
-// load session if it exists
-const session_string = localStorage.getItem(VOICE_COMPASS_SESSION_KEY);
-const session =  session_string ? JSON.parse(session_string) : null;
-
-// fetch the conversation from the url search params, or from local storage if it's not on the URL
-const conversationId = new URLSearchParams(window.location.search).get("cid") ?? session.conversationId;
-
-const client = nlxai.voiceCompass.create({
-  apiKey: "REPLACE_WITH_API_KEY",
-  workspaceId: "REPLACE_WITH_WORKSPACE_ID",
-  journeyId: "REPLACE_WITH_JOURNEY_ID",
-  languageCode: "REPLACE_WITH_LANGUAGE_CODE",
-
-  // note: the next line loads any existing session from local storage
-  localUpdate: session?.lastUpdate
-  // and this line ensures that between pages
-  onSessionUpdate: (session) => {
-    localStorage.setItem(VOICE_COMPASS_SESSION_KEY, JSON.stringify(session));
-  },
-  conversationId
-});
-
-
-const GREET_STEP_ID = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
-// send greeting
-client.sendStep(GREET_STEP_ID);
-
-<form>
-~~~
-
-
-[//]: <> (TODO: add proper links...)
-
-[journey]: <>
-
-`;
 
 export const MultimodalUsage = () => {
   const [usageFrom, setUsageFrom] = useState<Usage>(Usage.SimpleHTML);
@@ -265,17 +201,17 @@ export const MultimodalUsage = () => {
           {
             value: Usage.WithPersitanceHTML,
             label: "Persisting `conversationId` between Pages (in HTML)",
-            id: "welcome",
+            id: "persistance-html",
           },
           {
             value: Usage.WithPersistanceBundled,
             label: "Persisting `conversationId` between Pages (in JavaScript)",
-            id: "custom",
+            id: "persistance-bundle",
           },
           {
             value: Usage.Node,
-            label: "From NodeJS",
-            id: "session",
+            label: "From Node.js or other non-web environments",
+            id: "nodejs",
           },
         ]}
       />
