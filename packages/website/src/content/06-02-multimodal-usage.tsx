@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { umdScriptTags } from "../constants";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
-import { RadioList } from "../components/ChatConfiguration";
+import { RadioList } from "../components/RadioList";
 
 const header = `
 The Multimodal client is initiated with _dynamic_ params and _hard-coded_ parameters.
