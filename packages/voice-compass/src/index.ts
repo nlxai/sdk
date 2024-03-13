@@ -36,9 +36,9 @@ export const create = ({
     );
   }
   const sendStep = (stepId: string, context?: Context) => {
-    // if (!stepIdRegex.test(stepId)) {
-    //   throw new Error("Invalid stepId. It should be formatted as a UUID.");
-    // }
+    if (!stepIdRegex.test(stepId)) {
+      throw new Error("Invalid stepId. It should be formatted as a UUID.");
+    }
 
     const payload = {
       stepId,
