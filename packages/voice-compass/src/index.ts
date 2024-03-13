@@ -18,6 +18,9 @@ export interface VoiceCompass {
   sendStep: (stepId: string, context?: Context) => Promise<void>;
 }
 
+export const stepIdRegex =
+  /^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
+
 export const create = ({
   apiKey,
   workspaceId,
@@ -33,9 +36,6 @@ export const create = ({
     );
   }
   const sendStep = (stepId: string, context?: Context) => {
-    // uuid v4 regex
-    // const stepIdRegex =
-    //   /^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
     // if (!stepIdRegex.test(stepId)) {
     //   throw new Error("Invalid stepId. It should be formatted as a UUID.");
     // }
