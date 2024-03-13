@@ -7,8 +7,8 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "npm run build",
     "build": "lerna run build",
+    "postinstall": "npm run build",
     "publish": "rm -f package-lock.json && rm -f packages/*/package-lock.json && lerna publish --no-private",
     "watch": "lerna watch -- lerna run build --since"
   },
