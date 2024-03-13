@@ -29,10 +29,10 @@ import { HeadlessGettingStarted } from "./content/05-01-headless-getting-started
 import { HeadlessApi } from "./content/05-02-headless-api-reference";
 // 6
 import { MultimodalGettingStarted } from "./content/06-01-multimodal-getting-started";
-import { MultimodalOnASPA } from "./content/06-03-multimodal-on-a-single-page-app";
-import { MultimodalApiReference } from "./content/06-04-multimodal-api-reference";
-import { MultimodalTryLive } from "./content/06-05-multimodal-try-live";
-import { MultimodalOnAMultiPageWebsite } from "./content/06-02-multimodal-on-a-multi-page-website";
+import { MultimodalUsage } from "./content/06-02-multimodal-usage";
+import { MultimodalFromNode } from "./content/06-03-multimodal-from-node";
+import { MultimodalApiReference } from "./content/06-03-multimodal-api-reference";
+import { MultimodalTryLive } from "./content/06-04-multimodal-try-live";
 
 type Item = {
   label: string;
@@ -172,26 +172,21 @@ export const routes: {
     ],
   },
   {
-    heading: "Voice Compass",
+    heading: "Multimodal",
     items: [
       {
         label: "Getting started",
-        url: "/voice-compass-getting-started",
+        url: "/multimodal-getting-started",
         element: <MultimodalGettingStarted />,
       },
       {
-        label: "Usage on a multi page website",
-        url: "/voice-compass-on-a-multi page website",
-        element: <MultimodalOnAMultiPageWebsite />,
-      },
-      {
-        label: "Usage on a single page app",
-        url: "/voice-compass-on-a-single-page-app",
-        element: <MultimodalOnASPA />,
+        label: "Usage",
+        url: "/multimodal-usage",
+        element: <MultimodalUsage />,
       },
       {
         label: "API reference",
-        url: "/voice-compass-api-reference",
+        url: "/multimodal-api-reference",
         element: <MultimodalApiReference />,
       },
       {

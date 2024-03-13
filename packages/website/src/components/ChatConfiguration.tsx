@@ -188,7 +188,7 @@ export const ThemeEditor: FC<{
   );
 };
 
-const RadioList = <T extends unknown>({
+export const RadioList = <T extends unknown>({
   selected,
   options,
   onChange,
