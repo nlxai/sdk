@@ -5,6 +5,7 @@ import {
   type Config,
   getInitialConfig,
   ConfigEditor,
+  CodeFreeConfig,
 } from "../components/MultimodalConfiguration";
 import { Note } from "../components/Note";
 import { voiceCompassSetupSnippet, Environment } from "../snippets";
@@ -29,7 +30,7 @@ ${voiceCompassSetupSnippet({ config, environment })}
 `;
 
 export const MultimodalTryLive = () => {
-  const [config, setConfig] = useState<Config>(getInitialConfig());
+  const [config, setConfig] = useState<CodeFreeConfig>(getInitialConfig());
 
   return (
     <>

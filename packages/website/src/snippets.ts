@@ -570,23 +570,55 @@ const voiceCompassCommonScript = ({
   config,
   environment,
 }: {
-  config?: Partial<MMConfig> & { testStepVarName?: string };
+  config?: Partial<MMConfig>;
   environment?: Environment;
-}) => `${
-  environment === Environment.Html
-    ? ""
-    : `import * as voiceCompass from "@nlxai/voice-compass";\n\n`
-}const client = ${
-  environment === Environment.Html ? "nlxai." : ""
-}voiceCompass.create({
+}) => {
+  const conversationId = (() => {
+    if (config !== undefined) {
+      if ("conversationIdSnippet" in config) {
+        return config.conversationIdSnippet;
+      }
+
+      if ("conversationId" in config) {
+        return `"${config.conversationId}"`;
+      }
+    }
+
+    return '"REPLACE_WITH_CONVERSATION_ID"';
+  })();
+
+  const languageCode = (() => {
+    if (config !== undefined) {
+      if ("languageCodeSnippet" in config) {
+        return config.languageCodeSnippet;
+      }
+
+      if ("languageCode" in config) {
+        return `"${config.languageCode}"`;
+      }
+    }
+
+    return '"REPLACE_WITH_CONVERSATION_ID"';
+  })();
+
+  return `${
+    environment === Environment.Html
+      ? ""
+      : `import * as voiceCompass from "@nlxai/voice-compass";\n\n`
+  }const client = ${
+    environment === Environment.Html ? "nlxai." : ""
+  }voiceCompass.create({
+  // hard-coded params
   apiKey: "${config?.apiKey || "REPLACE_WITH_API_KEY"}",
   workspaceId: "${config?.workspaceId || "REPLACE_WITH_WORKSPACE_ID"}",
-  conversationId: "${config?.conversationId || "REPLACE_WITH_CONVERSATION_ID"}",
   journeyId: "${config?.journeyId || "REPLACE_WITH_JOURNEY_ID"}",
-  languageCode: "${config?.languageCode || "REPLACE_WITH_LANGUAGE_CODE"}",
+  // dynamic params
+  conversationId: ${conversationId},
+  languageCode: ${languageCode},
 });
 
-client.sendStep(${config?.testStepVarName ?? config?.testStepId ?? "REPLACE_WITH_STEP_ID"});`;
+client.sendStep("${config?.testStepId ?? "REPLACE_WITH_STEP_ID"}");`;
+};
 
 export const voiceCompassSetupSnippet = ({
   config,
