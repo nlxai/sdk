@@ -12,11 +12,11 @@ jobs:
       VITE_STRIPE_PUBLISHING_KEY: ${{ vars.VITE_STRIPE_PUBLISHING_KEY }}
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version-file: .node-version
       - name: Install
         run:
           npm install
@@ -28,4 +28,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: ./packages/website/dist # output folder from `npm run build:website`
+          folder: ./packages/website/dist # output folder from `npm run build -- --scope @nlxai/website`
