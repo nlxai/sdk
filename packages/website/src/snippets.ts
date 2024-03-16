@@ -601,11 +601,7 @@ export const voiceCompassSnippet = ({
     return '"REPLACE_WITH_CONVERSATION_ID"';
   })();
 
-  return `${
-    environment === Environment.Html
-      ? ""
-      : `import * as voiceCompass from "@nlxai/voice-compass";\n\n`
-  }const client = ${
+  return `const client = ${
     environment === Environment.Html ? "nlxai." : ""
   }voiceCompass.create({
   // hard-coded params
@@ -635,9 +631,9 @@ export const voiceCompassSetupSnippet = (cfg: {
 }) => {
   if (cfg.environment === Environment.Html) {
     return `${umdScriptTags.voiceCompass}
-    <script>
-      ${indentBy("  ", voiceCompassSnippet(cfg))}
-    </script>`;
+<script>
+  ${indentBy("  ", voiceCompassSnippet(cfg))}
+</script>`;
   }
 
   return `import * as voiceCompass from "@nlxai/voice-compass";

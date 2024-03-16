@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import { umdScriptTags } from "../constants";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { RadioList } from "../components/RadioList";
+import {
+  Environment,
+  umdScriptTags,
+  voiceCompassSetupSnippet,
+} from "../snippets";
 
 const header = `
 The Multimodal client is initiated with _dynamic_ params and _hard-coded_ parameters.
@@ -38,19 +42,10 @@ function assertNever(x: never): never {
 }
 
 function getUsageFrom(usageFrom: Usage): string {
-  const withPersistanceContent = `The \`conversationID\` and the \`languageCode\` must be set dynamically.
-In this example,
-- Initially, the \`conversationId\` comes from a URL search param (\`CID\`, e.g. \`http://example.com?cid=123\`).
-    - then it is stored in \`localStorage\`
-    - on on subsequent pages, if the URL search param is missing, it will fetch the value from  \`localStorage\`
-- the \`languageCode\` comes from the browser's language settings. (\`navigator.language\`)
-
-Storing the \`conversationId\` in local storage allows for navigation between pages without passing the CID in a search param.`;
-
-  const withPersitanceJavascript = (
-    clientName: string,
-    indentSpaces: number = 0,
+  const persitanceCodeSample = (
+    usageFrom: Usage.WithPersistanceBundled | Usage.WithPersitanceHTML,
   ) => {
+    const usageFromHtml = usageFrom === Usage.WithPersitanceHTML;
     const content = `let conversationId = new URLSearchParams(window.location.search).get("cid");
 
 if(conversationId != null) {
@@ -59,7 +54,7 @@ if(conversationId != null) {
   conversationId = localStorage.getItem(VOICE_COMPASS_SESSION_KEY);
 }
 
-const client = ${clientName}.create({
+const client = ${usageFromHtml ? "nlxai." : ""}voiceCompass.create({
   // HARD CODED PARAMS
   apiKey: "REPLACE_WITH_API_KEY",
   workspaceId: "REPLACE_WITH_WORKSPACE_ID",
@@ -70,13 +65,25 @@ const client = ${clientName}.create({
   languageCode: navigator.language
 });
 
-client.sendStep("REPLACE_WITH_STEP_ID");
-`;
-    const prefixString = " ".repeat(indentSpaces);
-    return content
-      .split("\n")
-      .map((line) => prefixString + line)
-      .join("\n");
+client.sendStep("REPLACE_WITH_STEP_ID");`;
+
+    if (usageFromHtml) {
+      return `~~~html
+${umdScriptTags.voiceCompass}
+<script>
+${content
+  .split("\n")
+  .map((line) => "  " + line)
+  .join("\n")}
+</script>
+~~~`;
+    }
+
+    return `~~~typescript
+import * as voiceCompass from "@nlxai/voice-compass"
+
+${content}
+~~~`;
   };
 
   switch (usageFrom) {
@@ -94,65 +101,31 @@ _Note: When using this approach, pass \`conversationId\` in the URL as a search 
 For an alternative, see the next example._
 
 ~~~html
-<!-- Multimodal sample HTML -->
-<!-- Downloaded from https://nlxai.github.io/#/multimodal-usage -->
-<html lang="en">
-  <head>
-    <title>NLX Multimodal Example</title>
-  </head>
-  <body>
-    <script defer src="${umdScriptTags.voiceCompass}"></script>
-    <script>
-      const client = nlxai.voiceCompass.create({
-        // HARD CODED PARAMS
-        apiKey: "REPLACE_WITH_API_KEY",
-        workspaceId: "REPLACE_WITH_WORKSPACE_ID",
-        journeyId: "REPLACE_WITH_JOURNEY_ID",
-
-        // DYNAMIC PARAMS
-        conversationId: new URLSearchParams(window.location.search).get("cid"),
-        languageCode: navigator.language
-      });
-
-      client.sendStep('REPLACE_WITH_STEP_ID');
-    </script>
-  </body>
-</html>
+${voiceCompassSetupSnippet({
+  environment: Environment.Html,
+  config: {
+    conversationIdSnippet:
+      'new URLSearchParams(window.location.search).get("cid")',
+    languageCodeSnippet: "navigator.language",
+  },
+})}
 ~~~`;
     case Usage.WithPersitanceHTML:
-      return `
-## Persisting \`conversationId\` between Pages (in HTML)
-
-${withPersistanceContent}
-
-~~~html
-<!-- Multimodal sample HTML -->
-<!-- Downloaded from https://nlxai.github.io/#/multimodal-usage -->
-<html lang="en">
-  <head>
-    <title>NLX Multimodal Example</title>
-  </head>
-  <body>
-    <script defer src="${umdScriptTags.voiceCompass}"></script>
-    <script>
-${withPersitanceJavascript("nlxai.voiceCompass", 6)}
-    </script>
-  </body>
-</html>
-~~~`;
-
     case Usage.WithPersistanceBundled:
       return `
-## Persisting \`conversationId\` between Pages (in JavaScript)
+## Persisting \`conversationId\` between Pages (in ${usageFrom === Usage.WithPersitanceHTML ? "HTML" : "JavaScript"})
 
-${withPersistanceContent}
+The \`conversationID\` and the \`languageCode\` must be set dynamically.
+In this example,
+- Initially, the \`conversationId\` comes from a URL search param (\`CID\`, e.g. \`http://example.com?cid=123\`).
+    - then it is stored in \`localStorage\`
+    - on on subsequent pages, if the URL search param is missing, it will fetch the value from  \`localStorage\`
+- the \`languageCode\` comes from the browser's language settings. (\`navigator.language\`)
 
-~~~typescript
+Storing the \`conversationId\` in local storage allows for navigation between pages without passing the CID in a search param.
 
-import voiceCompass from '@nlxai/voice-compass'
-
-${withPersitanceJavascript("voiceCompass")}
-~~~`;
+${persitanceCodeSample(usageFrom)}
+`;
     case Usage.Node:
       return `
 ## From Node.js (or other non-web environments)
@@ -162,21 +135,7 @@ The \`conversationID\` and the \`languageCode\` must be set dynamically.
 When not using web, you'll have to determine how to fetch these on a case-by-case basis.
 
 ~~~typescript
-
-import voiceCompass from '@nlxai/voice-compass'
-
-const client = voiceCompass.create({
-  // HARD CODED PARAMS
-  apiKey: "REPLACE_WITH_API_KEY",
-  workspaceId: "REPLACE_WITH_WORKSPACE_ID",
-  journeyId: "REPLACE_WITH_JOURNEY_ID",
-
-  // DYNAMIC PARAMS
-  conversationId:  "REPLACE_WITH_CONVERSATION_ID",
-  languageCode: "REPLACE_WITH_LANGUAGE_CODE"
-});
-
-client.sendStep("REPLACE_WITH_STEP_ID");
+${voiceCompassSetupSnippet({ environment: Environment.Node })}
 ~~~`;
     default:
       assertNever(usageFrom); // exhaustiveness checking
