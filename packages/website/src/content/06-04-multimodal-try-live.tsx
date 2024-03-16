@@ -5,7 +5,7 @@ import {
   type Config,
   getInitialConfig,
   ConfigEditor,
-  CodeFreeConfig,
+  ConfigAsStrings,
 } from "../components/MultimodalConfiguration";
 import { Note } from "../components/Note";
 import { voiceCompassSetupSnippet, Environment } from "../snippets";
@@ -24,7 +24,7 @@ ${voiceCompassSetupSnippet({ config, environment: Environment.Html })}
 `;
 
 export const MultimodalTryLive = () => {
-  const [config, setConfig] = useState<CodeFreeConfig>(getInitialConfig());
+  const [config, setConfig] = useState<ConfigAsStrings>(getInitialConfig());
 
   return (
     <>

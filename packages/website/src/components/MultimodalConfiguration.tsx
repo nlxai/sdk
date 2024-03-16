@@ -1,27 +1,28 @@
 import React, { type FC } from "react";
 import { Labeled, inputClass } from "./Ui";
 
-type BaseConfig = {
+type HardCodedConfig = {
   workspaceId: string;
   apiKey: string;
   journeyId: string;
   testStepId: string;
 };
 
-type StringConfig = {
+type DynamicConfigAsStrings = {
   languageCode: string;
   conversationId: string;
 };
-type SnippetConfig = {
+type DynamicConfigAsCode = {
   languageCodeSnippet: string;
   conversationIdSnippet: string;
 };
 
-export type Config = BaseConfig & (StringConfig | SnippetConfig);
+export type Config = HardCodedConfig &
+  (DynamicConfigAsCode | DynamicConfigAsStrings);
 
-export type CodeFreeConfig = BaseConfig & StringConfig;
+export type ConfigAsStrings = HardCodedConfig & DynamicConfigAsStrings;
 
-export const getInitialConfig = (): CodeFreeConfig => {
+export const getInitialConfig = (): ConfigAsStrings => {
   const searchParams = new URLSearchParams(window.location.search);
   const workspaceId = searchParams.get("workspaceId") || "";
   const apiKey = searchParams.get("apiKey") || "";
@@ -40,8 +41,8 @@ export const getInitialConfig = (): CodeFreeConfig => {
 };
 
 export const ConfigEditor: FC<{
-  value: CodeFreeConfig;
-  onChange: (newValue: Partial<CodeFreeConfig>) => void;
+  value: ConfigAsStrings;
+  onChange: (newValue: Partial<ConfigAsStrings>) => void;
 }> = (props) => {
   const config = props.value;
   return (
