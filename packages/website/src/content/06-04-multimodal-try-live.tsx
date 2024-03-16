@@ -14,19 +14,13 @@ export const content = `
 You can try your journeys directly on this configuration page.
 `;
 
-export const snippetContent = ({
-  config,
-  environment,
-}: {
-  config: Config;
-  environment: Environment;
-}) => `
+export const snippetContent = (config: Config) => `
 
 ### Setup snippet
 
-\`\`\`html
-${voiceCompassSetupSnippet({ config, environment })}
-\`\`\`
+~~~html
+${voiceCompassSetupSnippet({ config, environment: Environment.Html })}
+~~~
 `;
 
 export const MultimodalTryLive = () => {
@@ -47,12 +41,7 @@ export const MultimodalTryLive = () => {
             setConfig((prev) => ({ ...prev, ...val }));
           }}
         />
-        <PageContent
-          md={snippetContent({
-            config,
-            environment: Environment.Html,
-          })}
-        />
+        <PageContent md={snippetContent(config)} />
       </div>
     </>
   );

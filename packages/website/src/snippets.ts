@@ -1,6 +1,6 @@
 import { type Config } from "@nlxai/chat-core";
 import { type TitleBar, type Theme } from "@nlxai/chat-widget";
-import { umdScriptTags } from "./constants";
+import { umdScriptSrc } from "./constants";
 import { type Config as MMConfig } from "./components/MultimodalConfiguration";
 
 export enum Behavior {
@@ -66,7 +66,7 @@ export const setupSnippet = ({
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <script defer src="${umdScriptTags.chatWidget}"></script>${
+    <script defer src="${umdScriptSrc.chatWidget}"></script>${
       customModalitiesExample
         ? `
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/htm/3.1.1/htm.js" integrity="sha512-RilD4H0wcNNxG2GvB+L1LRXCntT0zgRvRLnmGu+e9wWaLKGkPifz3Ozb6+WPsyEkTBLw6zWCwwEjs9JLL1KIHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>`
@@ -566,7 +566,7 @@ export const mapSnippet = `const Map = ({ lat, lng, className }) => {
 };
 `;
 
-const voiceCompassCommonScript = ({
+export const voiceCompassSnippet = ({
   config,
   environment,
 }: {
@@ -620,19 +620,27 @@ const voiceCompassCommonScript = ({
 client.sendStep("${config?.testStepId ?? "REPLACE_WITH_STEP_ID"}");`;
 };
 
-export const voiceCompassSetupSnippet = ({
-  config,
-  environment,
-}: {
+type ScriptTagsType = Record<keyof typeof umdScriptSrc, string>;
+export const umdScriptTags = Object.keys(umdScriptSrc).reduce<ScriptTagsType>(
+  (acc, key) => ({
+    ...acc,
+    [key]: `<script defer src="${umdScriptSrc[key as keyof typeof umdScriptSrc]}"></script>`,
+  }),
+  {} as ScriptTagsType,
+);
+
+export const voiceCompassSetupSnippet = (cfg: {
   config?: Partial<MMConfig>;
   environment?: Environment;
 }) => {
-  if (environment === Environment.Html) {
-    return `<script src="${umdScriptTags.voiceCompass}">
-</script>
-<script>
-  ${indentBy("  ", voiceCompassCommonScript({ config, environment }))}
-</script>`;
+  if (cfg.environment === Environment.Html) {
+    return `${umdScriptTags.voiceCompass}
+    <script>
+      ${indentBy("  ", voiceCompassSnippet(cfg))}
+    </script>`;
   }
-  return voiceCompassCommonScript({ config, environment });
+
+  return `import * as voiceCompass from "@nlxai/voice-compass";
+
+${voiceCompassSnippet(cfg)}`;
 };

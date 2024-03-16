@@ -1,6 +1,6 @@
 export const version = "0.1.0";
 
-export const umdScriptTags = {
+export const umdScriptSrc = {
   chatCore: `https://unpkg.com/@nlxai/chat-core/lib/index.umd.js`,
   chatWidget: `https://unpkg.com/@nlxai/chat-widget/lib/index.umd.js`,
   voiceCompass: `https://unpkg.com/@nlxai/voice-compass/lib/index.umd.js`,
