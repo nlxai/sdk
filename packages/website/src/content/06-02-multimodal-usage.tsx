@@ -6,6 +6,7 @@ import {
   Environment,
   umdScriptTags,
   voiceCompassSetupSnippet,
+  voiceCompassSnippet,
 } from "../snippets";
 
 const header = `
@@ -45,7 +46,10 @@ function getUsageFrom(usageFrom: Usage): string {
   const persitanceCodeSample = (
     usageFrom: Usage.WithPersistanceBundled | Usage.WithPersitanceHTML,
   ) => {
-    const usageFromHtml = usageFrom === Usage.WithPersitanceHTML;
+    const environment =
+      usageFrom === Usage.WithPersitanceHTML
+        ? Environment.Html
+        : Environment.Bundle;
     const content = `let conversationId = new URLSearchParams(window.location.search).get("cid");
 
 if(conversationId != null) {
@@ -54,20 +58,14 @@ if(conversationId != null) {
   conversationId = localStorage.getItem(VOICE_COMPASS_SESSION_KEY);
 }
 
-const client = ${usageFromHtml ? "nlxai." : ""}voiceCompass.create({
-  // HARD CODED PARAMS
-  apiKey: "REPLACE_WITH_API_KEY",
-  workspaceId: "REPLACE_WITH_WORKSPACE_ID",
-  journeyId: "REPLACE_WITH_JOURNEY_ID",
-
-  // DYNAMIC PARAMS
-  conversationId: conversationId,
-  languageCode: navigator.language
-});
-
-client.sendStep("REPLACE_WITH_STEP_ID");`;
-
-    if (usageFromHtml) {
+${voiceCompassSnippet({
+  environment: environment,
+  config: {
+    conversationIdSnippet: "conversationId",
+    languageCodeSnippet: "navigator.language",
+  },
+})}`;
+    if (environment === Environment.Html) {
       return `~~~html
 ${umdScriptTags.voiceCompass}
 <script>
