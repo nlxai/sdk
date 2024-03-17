@@ -16,6 +16,21 @@ import fetch from "isomorphic-fetch";
 /**
  * The starting point of the package. Call create to create a `VoiceCompass` client.
  *
+ * @example
+ * ```typescript
+ *  const client = nlxai.voiceCompass.create({
+ *  // hard-coded params
+ *  apiKey: "REPLACE_WITH_API_KEY",
+ *  workspaceId: "REPLACE_WITH_WORKSPACE_ID",
+ *  journeyId: "REPLACE_WITH_JOURNEY_ID",
+ *  // dynamic params
+ *  conversationId: "REPLACE_WITH_CONVERSATION_ID",
+ *  languageCode: "en-US",
+ * });
+ *
+ * client.sendStep("REPLACE_WITH_STEP_ID");
+ * ```
+ *
  * @category Setup
  *
  * @param options - the configuration object
