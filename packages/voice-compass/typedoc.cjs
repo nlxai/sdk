@@ -5,4 +5,6 @@ module.exports = {
   out: "docs",
   validation: { notExported: true, invalidLink: true, notDocumented: true },
   treatWarningsAsErrors: true,
+  treatValidationWarningsAsErrors: true,
+  categoryOrder: ["Setup", "Client"],
 };

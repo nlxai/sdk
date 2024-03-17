@@ -10,6 +10,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "rm -rf lib && rollup -c",
+    "docs": "typedoc",
     "prepublish": "npm run build",
     "test": "jest"
   },
