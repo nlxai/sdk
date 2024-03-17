@@ -1,4 +1,4 @@
-import React, { type ReactNode, type FC } from "react";
+import React, { type FC } from "react";
 import { flatten } from "ramda";
 import { Routes, Route } from "react-router-dom";
 import { NextPrevPage } from "./components/NextPrevPage";
