@@ -1,19 +1,6 @@
 import fetch from "isomorphic-fetch";
 
 /**
- * @packageDocumentation
- * @categoryDescription Setup
- * React Components -- This description is added with the `@categoryDescription` tag
- * on the entry point in src/index.ts
- */
-
-/**
- * @packageDocumentation
- * @categoryDescription Client
- * usage of the VoiceCompass Client
- */
-
-/**
  * The starting point of the package. Call create to create a `VoiceCompass` client.
  *
  * @example
