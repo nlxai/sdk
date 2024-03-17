@@ -1,7 +1,8 @@
 import React from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
-import { umdScriptTags, packageUrls } from "../constants";
+import { packageUrls } from "../constants";
+import { umdScriptTags } from "../snippets";
 
 export const content = `
 SDK packages can be installed as follows:
@@ -13,19 +14,19 @@ The following packages are available as direct script tags:
 * [@nlxai/chat-widget](${packageUrls.chatWidget}) - add a chat widget to your website with only HTML:
 
 ~~~html
-<script defer src="${umdScriptTags.chatWidget}"></script>
+${umdScriptTags.chatWidget}
 ~~~
 
 * [@nlxai/chat-core](${packageUrls.chatCore}) - talk to a bot in plain JavaScript without a bundler:
 
 ~~~html
-<script defer src="${umdScriptTags.chatCore}"></script>
+${umdScriptTags.chatCore}
 ~~~
 
 * [@nlxai/voice-compass](${packageUrls.voiceCompass}) - add multimodal capabilities to a plain HTML page:
 
 ~~~html
-<script defer src="${umdScriptTags.voiceCompass}"></script>
+${umdScriptTags.voiceCompass}
 ~~~
 
 ## Using npm

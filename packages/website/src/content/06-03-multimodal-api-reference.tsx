@@ -8,7 +8,7 @@ The starting point of the package is the \`create\` method, which initializes a 
 - \`apiKey\`: the API key generated for the journey.
 - \`journeyId\`: the ID of the journey.
 
-*Note: these values are collected and auto-generated when the journey is deployed.*
+*Note: these values are auto-generated when the journey is deployed.*
 
 The resulting client has the following methods:
 

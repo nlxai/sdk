@@ -1,8 +1,9 @@
-import React, { type FC, type ReactNode } from "react";
+import React, { type FC } from "react";
 import { type Theme, type TitleBar, defaultTheme } from "@nlxai/chat-widget";
 import { type Config } from "@nlxai/chat-core";
 import { Behavior } from "../snippets";
 import { Labeled, inputClass } from "./Ui";
+import { RadioList } from "./RadioList";
 
 export const getInitialConfig = (): Config => {
   const searchParams = new URLSearchParams(window.location.search);
@@ -184,38 +185,6 @@ export const ThemeEditor: FC<{
         />
         <span className="text-xs text-gray-700">{theme.borderRadius}px</span>
       </Labeled>
-    </div>
-  );
-};
-
-const RadioList = <T extends unknown>({
-  selected,
-  options,
-  onChange,
-}: {
-  selected: T;
-  options: { id: string; value: T; label: string }[];
-  onChange: (val: T) => void;
-}): ReactNode => {
-  console.log(selected, options);
-  return (
-    <div className="space-y-2">
-      {options.map((option) => (
-        <div className="flex items-center" key={option.id}>
-          <input
-            id={option.id}
-            type="radio"
-            className="w-4 h-4 text-blueMain bg-gray-100 border-gray-300 focus:ring-blueMain dark:focus:ring-blueDarker dark:ring-offset-gray-800 focus:ring-2"
-            checked={option.value === selected}
-            onChange={() => {
-              onChange(option.value);
-            }}
-          />
-          <label htmlFor={option.id} className="ms-2 text-black80">
-            {option.label}
-          </label>
-        </div>
-      ))}
     </div>
   );
 };

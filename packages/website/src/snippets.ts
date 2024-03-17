@@ -1,6 +1,6 @@
 import { type Config } from "@nlxai/chat-core";
 import { type TitleBar, type Theme } from "@nlxai/chat-widget";
-import { umdScriptTags } from "./constants";
+import { umdScriptSrc } from "./constants";
 import { type Config as MMConfig } from "./components/MultimodalConfiguration";
 
 export enum Behavior {
@@ -66,7 +66,7 @@ export const setupSnippet = ({
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <script defer src="${umdScriptTags.chatWidget}"></script>${
+    ${umdScriptTags.chatWidget}${
       customModalitiesExample
         ? `
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/htm/3.1.1/htm.js" integrity="sha512-RilD4H0wcNNxG2GvB+L1LRXCntT0zgRvRLnmGu+e9wWaLKGkPifz3Ozb6+WPsyEkTBLw6zWCwwEjs9JLL1KIHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>`
@@ -211,8 +211,8 @@ const CustomWidget = () => {
         }
       })}
       {chat.waiting && <div>...</div>}
-      <input 
-        value={chat.inputValue} 
+      <input
+        value={chat.inputValue}
         onInput={(event) => {
           chat.setInputValue(event.target.value);
         }}
@@ -429,7 +429,7 @@ export const fileUploadSnippet = `const FileUpload = ({ onUploadComplete }) => {
       <input type="file" id="file-upload" hidden onChange=\${handleFileChange} />
       <div className="file-input-custom">
         <div className="file-input-custom-icon">
-          \${uploadProgress > 0 ? 
+          \${uploadProgress > 0 ?
             '<CircularProgressBar progress=' + uploadProgress + ' size=25 strokeWidth=2 />' :
             '<img src=' + uploadIcon + ' alt="upload" className="file-input-button-icon" />'}
         </div>
@@ -529,7 +529,7 @@ export const addressInputSnippet = `const AddressInput = ({ onAddressChange, add
         rows={5}
         className="address-textarea"
       />
-      \${coordinates ? 
+      \${coordinates ?
         '<Map className="map-container" lat=' + coordinates.lat + ' lng=' + coordinates.lng + ' />' :
         '<div className="map-placeholder"></div>'
       }
@@ -566,41 +566,77 @@ export const mapSnippet = `const Map = ({ lat, lng, className }) => {
 };
 `;
 
-const voiceCompassCommonScript = ({
+export const voiceCompassSnippet = ({
   config,
   environment,
 }: {
-  config?: MMConfig;
+  config?: Partial<MMConfig>;
   environment?: Environment;
-}) => `${
-  environment === Environment.Html
-    ? ""
-    : `import * as voiceCompass from "@nlxai/voice-compass";\n\n`
-}const client = ${
-  environment === Environment.Html ? "nlxai." : ""
-}voiceCompass.create({
+}) => {
+  const conversationId = (() => {
+    if (config !== undefined) {
+      if ("conversationIdSnippet" in config) {
+        return config.conversationIdSnippet;
+      }
+
+      if ("conversationId" in config && config.conversationId !== "") {
+        return `"${config.conversationId}"`;
+      }
+    }
+
+    return '"REPLACE_WITH_CONVERSATION_ID"';
+  })();
+
+  const languageCode = (() => {
+    if (config !== undefined) {
+      if ("languageCodeSnippet" in config) {
+        return config.languageCodeSnippet;
+      }
+
+      if ("languageCode" in config && config.languageCode !== "") {
+        return `"${config.languageCode}"`;
+      }
+    }
+
+    return '"REPLACE_WITH_LANGUAGE_CODE"';
+  })();
+
+  return `const client = ${
+    environment === Environment.Html ? "nlxai." : ""
+  }voiceCompass.create({
+  // hard-coded params
   apiKey: "${config?.apiKey || "REPLACE_WITH_API_KEY"}",
   workspaceId: "${config?.workspaceId || "REPLACE_WITH_WORKSPACE_ID"}",
-  conversationId: "${config?.conversationId || "REPLACE_WITH_CONVERSATION_ID"}",
   journeyId: "${config?.journeyId || "REPLACE_WITH_JOURNEY_ID"}",
-  languageCode: "${config?.languageCode || "REPLACE_WITH_LANGUAGE_CODE"}",
+  // dynamic params
+  conversationId: ${conversationId},
+  languageCode: ${languageCode},
 });
 
 client.sendStep("${config?.testStepId || "REPLACE_WITH_STEP_ID"}");`;
+};
 
-export const voiceCompassSetupSnippet = ({
-  config,
-  environment,
-}: {
-  config?: MMConfig;
+type ScriptTagsType = Record<keyof typeof umdScriptSrc, string>;
+export const umdScriptTags = Object.keys(umdScriptSrc).reduce<ScriptTagsType>(
+  (acc, key) => ({
+    ...acc,
+    [key]: `<script defer src="${umdScriptSrc[key as keyof typeof umdScriptSrc]}"></script>`,
+  }),
+  {} as ScriptTagsType,
+);
+
+export const voiceCompassSetupSnippet = (cfg: {
+  config?: Partial<MMConfig>;
   environment?: Environment;
 }) => {
-  if (environment === Environment.Html) {
-    return `<script src="${umdScriptTags.voiceCompass}">
-</script>
+  if (cfg.environment === Environment.Html) {
+    return `${umdScriptTags.voiceCompass}
 <script>
-  ${indentBy("  ", voiceCompassCommonScript({ config, environment }))}
+  ${indentBy("  ", voiceCompassSnippet(cfg))}
 </script>`;
   }
-  return voiceCompassCommonScript({ config, environment });
+
+  return `import * as voiceCompass from "@nlxai/voice-compass";
+
+${voiceCompassSnippet(cfg)}`;
 };

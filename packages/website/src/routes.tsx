@@ -1,4 +1,4 @@
-import React, { type ReactNode, type FC } from "react";
+import React, { type FC } from "react";
 import { flatten } from "ramda";
 import { Routes, Route } from "react-router-dom";
 import { NextPrevPage } from "./components/NextPrevPage";
@@ -29,8 +29,9 @@ import { HeadlessGettingStarted } from "./content/05-01-headless-getting-started
 import { HeadlessApi } from "./content/05-02-headless-api-reference";
 // 6
 import { MultimodalGettingStarted } from "./content/06-01-multimodal-getting-started";
-import { MultimodalApiReference } from "./content/06-02-multimodal-api-reference";
-import { MultimodalTryLive } from "./content/06-03-multimodal-try-live";
+import { MultimodalUsage } from "./content/06-02-multimodal-usage";
+import { MultimodalApiReference } from "./content/06-03-multimodal-api-reference";
+import { MultimodalTryLive } from "./content/06-04-multimodal-try-live";
 
 type Item = {
   label: string;
@@ -170,16 +171,21 @@ export const routes: {
     ],
   },
   // {
-  //   heading: "Voice Compass",
+  //   heading: "Multimodal",
   //   items: [
   //     {
   //       label: "Getting started",
-  //       url: "/voice-compass-getting-started",
+  //       url: "/multimodal-getting-started",
   //       element: <MultimodalGettingStarted />,
   //     },
   //     {
+  //       label: "Usage",
+  //       url: "/multimodal-usage",
+  //       element: <MultimodalUsage />,
+  //     },
+  //     {
   //       label: "API reference",
-  //       url: "/voice-compass-api-reference",
+  //       url: "/multimodal-api-reference",
   //       element: <MultimodalApiReference />,
   //     },
   //     {
