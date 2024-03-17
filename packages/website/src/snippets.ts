@@ -579,7 +579,7 @@ export const voiceCompassSnippet = ({
         return config.conversationIdSnippet;
       }
 
-      if ("conversationId" in config) {
+      if ("conversationId" in config && config.conversationId !== "") {
         return `"${config.conversationId}"`;
       }
     }
@@ -593,12 +593,12 @@ export const voiceCompassSnippet = ({
         return config.languageCodeSnippet;
       }
 
-      if ("languageCode" in config) {
+      if ("languageCode" in config && config.languageCode !== "") {
         return `"${config.languageCode}"`;
       }
     }
 
-    return '"REPLACE_WITH_CONVERSATION_ID"';
+    return '"REPLACE_WITH_LANGUAGE_CODE"';
   })();
 
   return `const client = ${
@@ -613,7 +613,7 @@ export const voiceCompassSnippet = ({
   languageCode: ${languageCode},
 });
 
-client.sendStep("${config?.testStepId ?? "REPLACE_WITH_STEP_ID"}");`;
+client.sendStep("${config?.testStepId || "REPLACE_WITH_STEP_ID"}");`;
 };
 
 type ScriptTagsType = Record<keyof typeof umdScriptSrc, string>;
