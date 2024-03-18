@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@nlxai/voice-compass": "^0.1.0",
+    "@testing-library/dom": "^9.3.4",
     "isomorphic-fetch": "^3.0.0",
     "ramda": "^0.29.1"
   },

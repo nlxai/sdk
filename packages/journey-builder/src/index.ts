@@ -1,22 +1,13 @@
 import { type VoiceCompass } from "@nlxai/voice-compass";
-
-type Query = unknown;
+import { find, fromJson, Query } from "./queries";
 
 type StepId = string;
 
-type Trigger = { event: "pageLoad" | "click"; query?: Query };
+type Trigger = { event: "pageLoad" | "click"; query?: string };
 
 type Triggers = Record<StepId, Trigger>;
 
 type StepWithQuery = [StepId, Query];
-
-const matchesQuery = (node: HTMLElement, query: Query) => {
-  return false;
-};
-
-const isDomElement = (node: any): node is HTMLElement => {
-  return node instanceof HTMLElement;
-};
 
 export const run = (client: VoiceCompass, triggers: Triggers) => {
   const loadSteps: StepId[] = Object.entries(triggers).reduce(
@@ -36,7 +27,7 @@ export const run = (client: VoiceCompass, triggers: Triggers) => {
   const clickSteps: StepWithQuery[] = Object.entries(triggers).reduce(
     (prev: StepWithQuery[], [stepId, trigger]: [StepId, Trigger]) => {
       if (trigger.event === "click" && trigger.query) {
-        const newEntry: StepWithQuery = [stepId, trigger.query];
+        const newEntry: StepWithQuery = [stepId, fromJson(trigger.query)];
         return [...prev, newEntry];
       }
       return prev;
@@ -44,18 +35,26 @@ export const run = (client: VoiceCompass, triggers: Triggers) => {
     [],
   );
 
-  const handleGlobalClickForAnnotations = (ev: any) => {
-    let node = ev.target;
-    while (node && node !== document.body) {
-      if (isDomElement(node)) {
-        const clickStep: StepWithQuery | undefined = clickSteps.find(
-          ([_, query]) => matchesQuery(node, query),
-        );
-        if (clickStep) {
-          client.sendStep(clickStep[0]);
+  const handleGlobalClickForAnnotations = async (ev: any) => {
+    const targets = await Promise.all(
+      clickSteps.map(async ([step, query]) => {
+        try {
+          return {
+            step,
+            query,
+            element: await find(query),
+          };
+        } catch (e) {
+          return { step, query };
         }
-      }
-      node = node.parentNode;
+      }),
+    );
+    let node = ev.target;
+    const clickStep: { step: StepId } | undefined = targets.find(
+      ({ element }) => element && element.contains(node),
+    );
+    if (clickStep) {
+      client.sendStep(clickStep.step);
     }
   };
 
