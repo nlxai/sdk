@@ -1,9 +1,9 @@
 import { type VoiceCompass } from "@nlxai/voice-compass";
-import { find, fromJson, Query } from "./queries";
+import { find, decode, Query, EncodedQuery } from "./queries";
 
 type StepId = string;
 
-type Trigger = { event: "pageLoad" | "click"; query?: string };
+type Trigger = { event: "pageLoad" | "click"; query?: EncodedQuery };
 
 type Triggers = Record<StepId, Trigger>;
 
@@ -27,7 +27,7 @@ export const run = (client: VoiceCompass, triggers: Triggers) => {
   const clickSteps: StepWithQuery[] = Object.entries(triggers).reduce(
     (prev: StepWithQuery[], [stepId, trigger]: [StepId, Trigger]) => {
       if (trigger.event === "click" && trigger.query) {
-        const newEntry: StepWithQuery = [stepId, fromJson(trigger.query)];
+        const newEntry: StepWithQuery = [stepId, decode(trigger.query)];
         return [...prev, newEntry];
       }
       return prev;
