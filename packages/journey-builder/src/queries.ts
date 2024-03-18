@@ -18,7 +18,7 @@ export function toJson(q: Query): string {
       options: q.queryArgs[1],
       parent: q.parent,
     },
-    (key: string, val: unknown) => {
+    (_key: string, val: unknown) => {
       if (val instanceof RegExp) {
         return { regexp: val.source, flags: val.flags };
       }
@@ -28,8 +28,8 @@ export function toJson(q: Query): string {
 }
 
 export function fromJson(json: string): Query {
-  const done = JSON.parse(json, (key, val) => {
-    if (val["regexp"] && val["flags"]) {
+  const done = JSON.parse(json, (_key, val) => {
+    if (val && val["regexp"] && val["flags"]) {
       return new RegExp(val.regexp, val.flags);
     }
     return val;
@@ -55,7 +55,7 @@ export async function find(q: Query): Promise<HTMLElement> {
 
   const methodName = `findBy${q.queryName}` as `findBy${Method}`;
 
-  return await queryFns[methodName](container, ...(q.queryArgs as any));
+  return await queryFns[methodName](container, ...q.queryArgs);
 }
 
 export type Method =
@@ -85,7 +85,7 @@ const queryMethods: Method[] = [
 export function getQuery(
   rootNode: HTMLElement,
   element: HTMLElement,
-): Query | undefined {
+): Query | void {
   for (const method of queryMethods) {
     const suggestion = getSuggestedQuery(element, "get", method);
 
@@ -107,7 +107,7 @@ function getAll(
   { queryName, queryArgs }: Query,
 ): HTMLElement[] {
   // use queryBy here, we don't want to throw on no-results-found
-  return queryFns[`queryAllBy${queryName}`](rootNode, ...(queryArgs as any));
+  return queryFns[`queryAllBy${queryName}`](rootNode, ...queryArgs);
 }
 
 function matchesSingleElement(rootNode: HTMLElement, query: Query): boolean {
@@ -141,7 +141,7 @@ function makeUnique(
   rootNode: HTMLElement,
   element: HTMLElement,
   elementQuery: Query,
-): Query | undefined {
+): Query | void {
   // query the element on `screen`, if it results in a single element
   if (matchesSingleElement(rootNode, elementQuery)) {
     return elementQuery;

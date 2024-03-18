@@ -37,24 +37,24 @@ export const run = (client: VoiceCompass, triggers: Triggers) => {
 
   const handleGlobalClickForAnnotations = async (ev: any) => {
     const targets = await Promise.all(
-      clickSteps.map(async ([step, query]) => {
+      clickSteps.map(async ([stepId, query]) => {
         try {
           return {
-            step,
+            stepId,
             query,
             element: await find(query),
           };
         } catch (e) {
-          return { step, query };
+          return { stepId, query };
         }
       }),
     );
-    let node = ev.target;
-    const clickStep: { step: StepId } | undefined = targets.find(
+    const node = ev.target;
+    const clickStep: { stepId: StepId } | undefined = targets.find(
       ({ element }) => element && element.contains(node),
     );
     if (clickStep) {
-      client.sendStep(clickStep.step);
+      client.sendStep(clickStep.stepId);
     }
   };
 
