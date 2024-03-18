@@ -6,39 +6,69 @@ import {
 
 export type Query = {
   queryName: Method;
-  queryArgs: QueryArgs;
+  queryArgs: [
+    string | RegExp,
+    {
+      [key: string]: RegExp | boolean;
+    }?,
+  ];
   parent?: Query;
 };
 
-export function toJson(q: Query): string {
-  return JSON.stringify(
-    {
-      name: q.queryName,
-      target: q.queryArgs[0],
-      options: q.queryArgs[1],
-      parent: q.parent,
-    },
-    (_key: string, val: unknown) => {
-      if (val instanceof RegExp) {
-        return { regexp: val.source, flags: val.flags };
-      }
-      return val;
-    },
-  );
+export type EncodedQuery = {
+  name: Method;
+  target: string | { regexp: string; flags: string };
+  options: {
+    [key: string]: { regexp: string; flags: string } | boolean;
+  } | null;
+  parent: EncodedQuery | null;
+};
+
+function encodeTarget<T>(
+  val: T | RegExp,
+): T | { regexp: string; flags: string } {
+  if (val instanceof RegExp) {
+    return { regexp: val.source, flags: val.flags };
+  }
+  return val;
 }
 
-export function fromJson(json: string): Query {
-  const done = JSON.parse(json, (_key, val) => {
-    if (val && val["regexp"] && val["flags"]) {
-      return new RegExp(val.regexp, val.flags);
-    }
-    return val;
-  });
+export function encode(q: Query): EncodedQuery {
   return {
-    queryName: done.name,
-    queryArgs: [done.target, done.options],
-    parent: done.parent,
+    name: q.queryName,
+    target: encodeTarget(q.queryArgs[0]),
+    options: q.queryArgs[1]
+      ? Object.fromEntries(
+          Object.entries(q.queryArgs[1]).map(([k, v]) => [k, encodeTarget(v)]),
+        )
+      : null,
+    parent: q.parent ? encode(q.parent) : null,
   };
+}
+
+export function decode(q: EncodedQuery): Query {
+  return {
+    queryName: q.name,
+    queryArgs: [
+      decodeTarget(q.target),
+      q.options
+        ? Object.fromEntries(
+            Object.entries(q.options).map(([k, v]) => [k, decodeTarget(v)]),
+          )
+        : undefined,
+    ],
+    parent: q.parent ? decode(q.parent) : undefined,
+  };
+}
+
+function decodeTarget<T>(
+  val: { regexp: string; flags: string } | T,
+): RegExp | T {
+  if (val && val["regexp"] && val["flags"]) {
+    return new RegExp(val["regexp"], val["flags"]);
+  } else {
+    return val as T;
+  }
 }
 
 export async function evaluate(q: Query): Promise<boolean> {
@@ -55,7 +85,7 @@ export async function find(q: Query): Promise<HTMLElement> {
 
   const methodName = `findBy${q.queryName}` as `findBy${Method}`;
 
-  return await queryFns[methodName](container, ...q.queryArgs);
+  return await queryFns[methodName](container, ...(q.queryArgs as QueryArgs));
 }
 
 export type Method =
@@ -107,7 +137,10 @@ function getAll(
   { queryName, queryArgs }: Query,
 ): HTMLElement[] {
   // use queryBy here, we don't want to throw on no-results-found
-  return queryFns[`queryAllBy${queryName}`](rootNode, ...queryArgs);
+  return queryFns[`queryAllBy${queryName}`](
+    rootNode,
+    ...(queryArgs as QueryArgs),
+  );
 }
 
 function matchesSingleElement(rootNode: HTMLElement, query: Query): boolean {
