@@ -14,6 +14,7 @@
     "packages/chat-preact",
     "packages/chat-widget",
     "packages/voice-compass",
+    "packages/journey-builder",
     "packages/website"
   ],
   "version": "0.1.15",
