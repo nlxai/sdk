@@ -85,26 +85,27 @@ export const run = (client: VoiceCompass, triggers: Triggers) => {
 
   const handleGlobalClickForAnnotations = async (ev: any) => {
     const targets = await Promise.all(
-      clickSteps.map(async ({ stepId, query, urlCondition }) => {
-        try {
-          return {
-            stepId,
-            query,
-            urlCondition,
-            element: await find(query),
-          };
-        } catch (e) {
-          return { stepId, query, urlCondition };
-        }
-      }),
+      clickSteps
+        .filter(
+          ({ urlCondition }) =>
+            !urlCondition || matchesUrlCondition(urlCondition),
+        )
+        .map(async ({ stepId, query }) => {
+          try {
+            return {
+              stepId,
+              query,
+              element: await find(query),
+            };
+          } catch (e) {
+            return { stepId, query };
+          }
+        }),
     );
     const node = ev.target;
     const clickStep: (ClickStep & { element?: HTMLElement }) | undefined =
       targets.find(({ element }) => element && element.contains(node));
-    if (
-      clickStep &&
-      (!clickStep.urlCondition || matchesUrlCondition(clickStep.urlCondition))
-    ) {
+    if (clickStep) {
       client.sendStep(clickStep.stepId);
     }
   };
