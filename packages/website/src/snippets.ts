@@ -7,6 +7,7 @@ export enum Behavior {
   Simple,
   WelcomeIntentOnOpen,
   CustomIntentOnInactivity,
+  InitializeWithContext,
   UseSessionStorage,
   UseLocalStorage,
 }
@@ -171,6 +172,17 @@ ${sendWelcomeOnTimeoutSnippet}
 // CUSTOM BEHAVIOR SNIPPET END`,
               )
             : ""
+        }${
+          behavior === Behavior.InitializeWithContext
+            ? indentBy(
+                "        ",
+                `
+
+// CUSTOM BEHAVIOR SNIPPET
+${initializeWithContextSnippet}
+// CUSTOM BEHAVIOR SNIPPET END`,
+              )
+            : ""
         }
       });
     </script>
@@ -185,6 +197,14 @@ export const sendWelcomeOnTimeoutSnippet = `setTimeout(() => {
     widget.expand();
   }
 }, 16000);`;
+
+export const initializeWithContextSnippet = `const conversationHandler = widget.getConversationHandler();
+
+const context = {
+  firstName: "Joe"
+};
+
+conversationHandler.sendWelcomeIntent(context);`;
 
 export const customWidgetSnippet = `
 import { useChat } from "@nlxai/chat-react";
@@ -620,7 +640,9 @@ type ScriptTagsType = Record<keyof typeof umdScriptSrc, string>;
 export const umdScriptTags = Object.keys(umdScriptSrc).reduce<ScriptTagsType>(
   (acc, key) => ({
     ...acc,
-    [key]: `<script defer src="${umdScriptSrc[key as keyof typeof umdScriptSrc]}"></script>`,
+    [key]: `<script defer src="${
+      umdScriptSrc[key as keyof typeof umdScriptSrc]
+    }"></script>`,
   }),
   {} as ScriptTagsType,
 );

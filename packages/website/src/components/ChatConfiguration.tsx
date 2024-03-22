@@ -210,6 +210,11 @@ export const BehaviorEditor: FC<{
           id: "custom",
         },
         {
+          value: Behavior.InitializeWithContext,
+          label: "Initialize conversation with context",
+          id: "context",
+        },
+        {
           value: Behavior.UseSessionStorage,
           label: "Retain conversation through refreshes (SessionStorage)",
           id: "session",

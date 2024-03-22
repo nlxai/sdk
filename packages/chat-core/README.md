@@ -35,25 +35,25 @@ convo.sendText("hello");
 
 The package exports a main function called `createConversation`, which is called with the bot configuration and returns a conversation handler object.
 
-The conversation handler has the following methods:
+The conversation handler has the following methods. For each send method, conversation context can be optionally specified as a second argument.
 
-#### `sendText: (text: string) => void`
+#### `sendText: (text: string, context?: Record<string, unknown>) => void`
 
 Send a simple text to your bot.
 
-#### `sendChoice: (choiceId: string) => void`
+#### `sendChoice: (choiceId: string, context?: Record<string, unknown>) => void`
 
 Your bot may send a list of choices to choose from, each with a `choiceText` and a `choiceId` field. You can use `choiceText` as button labels, and include the `choiceId` in this method when sending responses.
 
-#### `sendSlots: (slots: Array<{ slotId: string; value: unknown }>) => void`
+#### `sendSlots: (slots: Record<string, unknown>, context?: Record<string, unknown>) => void`
 
 Send slot values directly through custom widgets such as interactive maps.
 
-#### `sendIntent: (intentId: string) => void`
+#### `sendIntent: (intentId: string, context?: Record<string, unknown>) => void`
 
 Trigger a specific intent. The most common use of this method is to show welcome messages by sending the `NLX.Welcome` intent.
 
-#### `sendStructured: (request: StructuredRequest) => void`
+#### `sendStructured: (request: StructuredRequest, context?: Record<string, unknown>) => void`
 
 Send a combination of choice, slots and intent ID in one request.
 
