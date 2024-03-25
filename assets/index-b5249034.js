@@ -284,6 +284,23 @@ and limitations under the License.
   p {
     color: ${e=>e.type==="user"?e.theme.white:"#232323"};
   }
+
+  ul,
+  ol {
+    list-style-position: inside;
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+
+  ul ::marker {
+    margin-right: 6px;
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
 `,i2=be.p`
   text-align: center;
   flex-wrap: wrap;
