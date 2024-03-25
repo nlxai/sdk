@@ -188,6 +188,23 @@ export const Message = styled.div<{ type: "user" | "bot" }>`
     color: ${(props) =>
       props.type === "user" ? props.theme.white : "#232323"};
   }
+
+  ul,
+  ol {
+    list-style-position: inside;
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+
+  ul ::marker {
+    margin-right: 6px;
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
 `;
 
 export const FailureMessage = styled.p<{}>`
