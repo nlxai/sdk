@@ -33,51 +33,47 @@ export const create = ({
   debug = false,
   dev = false,
 }: Config): Client => {
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-  if (!conversationId) {
+  if (typeof conversationId !== "string" || conversationId.length === 0) {
     console.warn(
       'No conversation ID provided. Please call the Voice Compass client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`',
     );
   }
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const sendStep = async (stepId: string, context?: Context) => {
-    if (!stepIdRegex.test(stepId)) {
-      throw new Error("Invalid stepId. It should be formatted as a UUID.");
-    }
+  return {
+    sendStep: async (stepId: string, context?: Context) => {
+      if (!stepIdRegex.test(stepId)) {
+        throw new Error("Invalid stepId. It should be formatted as a UUID.");
+      }
 
-    const payload = {
-      stepId,
-      context,
-      conversationId,
-      journeyId,
-      languageCode,
-    };
+      const payload = {
+        stepId,
+        context,
+        conversationId,
+        journeyId,
+        languageCode,
+      };
 
-    await fetch(`https://${dev ? "dev." : ""}mm.nlx.ai/v1/track`, {
-      method: "POST",
-      headers: {
-        "x-api-key": apiKey,
-        "x-nlx-id": workspaceId,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    })
-      .then(() => {
-        if (debug) {
-          console.info(`✓ step: ${stepId}`, payload);
-        }
+      await fetch(`https://${dev ? "dev." : ""}mm.nlx.ai/v1/track`, {
+        method: "POST",
+        headers: {
+          "x-api-key": apiKey,
+          "x-nlx-id": workspaceId,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       })
-      .catch((err: Error) => {
-        if (debug) {
-          console.error(`× step: ${stepId}`, err, payload);
-        }
-        throw err;
-      });
+        .then(() => {
+          if (debug) {
+            console.info(`✓ step: ${stepId}`, payload);
+          }
+        })
+        .catch((err: Error) => {
+          if (debug) {
+            console.error(`× step: ${stepId}`, err, payload);
+          }
+          throw err;
+        });
+    },
   };
-
-  return { sendStep };
 };
 
 /**

@@ -6,7 +6,7 @@ import createConversation, {
   type Config,
   type ConversationHandler,
   shouldReinitialize,
-  type Response
+  type Response,
 } from "@nlxai/chat-core";
 
 export interface ChatHook {
@@ -28,14 +28,8 @@ export const useChat = (config: Config): ChatHook => {
   const conversationHandler: ConversationHandler = useMemo(() => {
     // Prevent re-initialization if backend-related props have not changed
     if (
-      // initial eslint integration
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      prevConfig.current &&
-      // initial eslint integration
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      prevConversationHandler.current &&
-      // initial eslint integration
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+      prevConfig.current != null &&
+      prevConversationHandler.current != null &&
       !shouldReinitialize(prevConfig.current, config)
     ) {
       return prevConversationHandler.current;
@@ -58,16 +52,14 @@ export const useChat = (config: Config): ChatHook => {
   }, [conversationHandler]);
 
   const lastMessage = last<Response>(responses);
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-  const isWaiting = lastMessage ? lastMessage.type === "user" : false;
+  const isWaiting = lastMessage?.type === "user";
 
   return {
     conversationHandler,
     inputValue,
     responses,
     waiting: isWaiting,
-    setInputValue
+    setInputValue,
   };
 };
 
