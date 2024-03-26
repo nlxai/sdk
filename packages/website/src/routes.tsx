@@ -190,7 +190,7 @@ export const routes: {
       },
       {
         label: "Try live",
-        url: "/voice-compass-try-live",
+        url: "/multimodal-try-live",
         element: <MultimodalTryLive />,
       },
     ],
