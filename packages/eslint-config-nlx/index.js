@@ -25,13 +25,9 @@ module.exports = {
     sourceType: "module",
   },
   plugins: [
-    "eslint-plugin-tsdoc",
     "react"
   ],
   ignorePatterns: ["dist", "node_modules", "vite-env.d.ts"],
-  rules: {
-    "tsdoc/syntax": "error",
-  },
   settings: {
     react: {
       version: "detect",
