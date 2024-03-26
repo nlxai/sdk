@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { DatePicker } from "../custom-components/DatePicker";
-import { InlineWidget, Item } from "../components/InlineWidget";
+import { InlineWidget, type Item } from "../components/InlineWidget";
 import { datePickerSnippet } from "../snippets";
 
 export const content = `

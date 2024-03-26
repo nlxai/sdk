@@ -6,7 +6,7 @@ export const RadioList = <T extends unknown>({
   onChange,
 }: {
   selected: T;
-  options: { id: string; value: T; label: string }[];
+  options: Array<{ id: string; value: T; label: string }>;
   onChange: (val: T) => void;
 }): ReactNode => {
   console.log(selected, options);

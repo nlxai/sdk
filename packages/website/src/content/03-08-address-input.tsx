@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
-import { InlineWidget, Item } from "../components/InlineWidget";
+import { InlineWidget, type Item } from "../components/InlineWidget";
 import { addressInputSnippet, mapSnippet } from "../snippets";
 import AddressInput from "../custom-components/Address";
 
@@ -26,9 +26,9 @@ export const WebWidgetComponentsAddressInput = () => {
         element: (
           <AddressInput
             address={formattedAddress}
-            onAddressChange={(address: string) => setFormattedAddress(address)}
+            onAddressChange={(address: string) => { setFormattedAddress(address); }}
             submitted={submitted}
-            onSubmit={() => setSubmitted(true)}
+            onSubmit={() => { setSubmitted(true); }}
           />
         ),
       },

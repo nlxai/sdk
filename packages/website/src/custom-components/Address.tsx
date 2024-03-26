@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, FC } from "react";
+import React, { useEffect, useState, useRef, type FC } from "react";
 
 import "./Address.css";
 
@@ -25,7 +25,7 @@ const Map: React.FC<MapProps> = ({ lat, lng, className }) => {
       });
 
       new (window as any).google.maps.Marker({
-        map: map,
+        map,
         position: { lat, lng },
       });
     }
@@ -35,10 +35,10 @@ const Map: React.FC<MapProps> = ({ lat, lng, className }) => {
 };
 
 const AddressInput: FC<{
-  onAddressChange(address: string): void;
+  onAddressChange: (address: string) => void;
   address: string;
   submitted: boolean;
-  onSubmit(): void;
+  onSubmit: () => void;
 }> = ({ onAddressChange, address, onSubmit, submitted }) => {
   const [coordinates, setCoordinates] = useState<{
     lat: number;
@@ -60,7 +60,7 @@ const AddressInput: FC<{
       }&libraries=places`;
       script.async = true;
       script.defer = true;
-      script.onload = () => setIsGoogleMapsLoaded(true);
+      script.onload = () => { setIsGoogleMapsLoaded(true); };
       document.head.appendChild(script);
     };
 
@@ -127,7 +127,7 @@ const AddressInput: FC<{
       <textarea
         ref={textareaRef}
         value={address}
-        onChange={(e) => onAddressChange(e.target.value)}
+        onChange={(e) => { onAddressChange(e.target.value); }}
         placeholder="Enter address here"
         rows={5}
         className="address-textarea"

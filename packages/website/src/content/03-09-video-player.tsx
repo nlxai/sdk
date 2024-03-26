@@ -1,7 +1,7 @@
 import React from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
-import { InlineWidget, Item } from "../components/InlineWidget";
+import { InlineWidget, type Item } from "../components/InlineWidget";
 import { disclaimerSnippet } from "../snippets";
 import VideoPlayer from "../custom-components/VideoPlayer";
 

@@ -33,20 +33,20 @@ import { MultimodalUsage } from "./content/06-02-multimodal-usage";
 import { MultimodalApiReference } from "./content/06-03-multimodal-api-reference";
 import { MultimodalTryLive } from "./content/06-04-multimodal-try-live";
 
-type Item = {
+interface Item {
   label: string;
   url: string;
   element: JSX.Element;
-};
+}
 
 function sortByLabel(items: Item[]): Item[] {
   return items.sort((a, b) => a.label.localeCompare(b.label));
 }
 
-export const routes: {
+export const routes: Array<{
   heading: string;
   items: Item[];
-}[] = [
+}> = [
   {
     heading: "Introduction",
     items: [

@@ -101,9 +101,7 @@ export interface Config {
   responses?: Response[];
   failureMessage?: string;
   environment?: Environment;
-  headers?: {
-    [key: string]: string;
-  };
+  headers?: Record<string, string>;
   languageCode: string;
   // Experimental settings
   experimental?: {
@@ -121,7 +119,7 @@ const defaultFailureMessage = "We encountered an issue. Please try again soon.";
 export type State = Response[];
 
 const normalizeSlots = (slotsWithLegacy: Slots | SlotValue[]): Slots => {
-  let slots: Slots = {};
+  const slots: Slots = {};
   if (Array.isArray(slotsWithLegacy)) {
     console.warn(
       `The legacy slot format is deprecated. Instead of '[{ slotId: "MySlot", value: "my-value" }]', use '{ MySlot: "my-value" }'`,
@@ -185,7 +183,7 @@ const safeJsonParse = (val: string) => {
   }
 };
 
-type Subscriber = (response: Array<Response>, newResponse?: Response) => void;
+type Subscriber = (response: Response[], newResponse?: Response) => void;
 
 // Helper method to decide when a conversation needs to be re-initialized (e.g. bot URL change)
 export const shouldReinitialize = (
@@ -239,7 +237,7 @@ export const createConversation = (config: Config): ConversationHandler => {
       ...change,
     };
     subscribers.forEach((subscriber) =>
-      subscriber(fromInternal(state), newResponse),
+      { subscriber(fromInternal(state), newResponse); },
     );
   };
 
@@ -260,7 +258,7 @@ export const createConversation = (config: Config): ConversationHandler => {
   };
 
   const messageResponseHandler = (response: any) => {
-    if (response && response.messages) {
+    if (response?.messages) {
       const newResponse: Response = {
         type: "bot",
         receivedAt: new Date().getTime(),
@@ -304,7 +302,7 @@ export const createConversation = (config: Config): ConversationHandler => {
   let socketMessageQueueCheckInterval: ReturnType<typeof setInterval> | null =
     null;
 
-  const sendToBot = (body: BotRequest) => {
+  const sendToBot = async (body: BotRequest) => {
     const bodyWithContext = {
       userId: state.userId,
       conversationId: state.conversationId,
@@ -320,7 +318,7 @@ export const createConversation = (config: Config): ConversationHandler => {
         socketMessageQueue = [...socketMessageQueue, bodyWithContext];
       }
     } else {
-      return fetch(
+      await fetch(
         `${config.botUrl}${
           config.experimental?.completeBotUrl ? "" : `-${config.languageCode}`
         }`,
@@ -334,14 +332,14 @@ export const createConversation = (config: Config): ConversationHandler => {
           body: JSON.stringify(bodyWithContext),
         },
       )
-        .then((res) => {
-          return res.json();
+        .then(async (res) => {
+          return await res.json();
         })
         .then(messageResponseHandler)
         .catch((err) => {
           console.warn(err);
           failureHandler();
-        });
+        }); 
     }
   };
 
@@ -494,7 +492,7 @@ export const createConversation = (config: Config): ConversationHandler => {
       const containsChoice = (botMessage: BotMessage) =>
         (botMessage.choices || [])
           .map((choice) => choice.choiceId)
-          .indexOf(choiceId) > -1;
+          .includes(choiceId);
 
       const lastBotResponseIndex = findLastIndex(
         (response: Response) =>
@@ -589,8 +587,8 @@ export function promisify<T>(
   convo: ConversationHandler,
   timeout = 10000,
 ): (payload: T) => Promise<Response | null> {
-  return (payload: T) => {
-    return new Promise((resolve, reject) => {
+  return async (payload: T) => {
+    return await new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         reject("The request timed out.");
       }, timeout);

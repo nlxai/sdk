@@ -59,7 +59,7 @@ if(conversationId != null) {
 }
 
 ${voiceCompassSnippet({
-  environment: environment,
+  environment,
   config: {
     conversationIdSnippet: "conversationId",
     languageCodeSnippet: "navigator.language",

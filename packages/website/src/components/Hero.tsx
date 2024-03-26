@@ -25,7 +25,7 @@ export const Hero = () => {
             <div className="relative">
               <p className="inline text-white font-display text-5xl">
                 SDK for rich conversational experiences powered by{" "}
-                <a href="https://nlx.ai" target="_blank">
+                <a href="https://nlx.ai" target="_blank" rel="noreferrer">
                   NLX
                 </a>
                 &reg;

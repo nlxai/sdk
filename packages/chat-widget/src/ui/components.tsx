@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
-import { Theme } from "../theme";
+import { type Theme } from "../theme";
 import * as constants from "./constants";
 import tinycolor from "tinycolor2";
 

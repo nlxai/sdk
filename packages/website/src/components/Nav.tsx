@@ -6,7 +6,7 @@ import { Logo } from "./Logo";
 
 const MenuListItem: FC<{
   heading: string;
-  items: { label: string; url: string }[];
+  items: Array<{ label: string; url: string }>;
 }> = (props) => {
   const location = useLocation();
   const pathname =

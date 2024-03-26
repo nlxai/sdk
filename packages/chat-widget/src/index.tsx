@@ -225,7 +225,7 @@ export const retrieveSession = (storeIn: StorageType): SessionData | null => {
     const responses: Response[] | undefined = data?.responses;
     const conversationId: string | undefined = data?.conversationId;
     if (responses) {
-      let expirationTimestamp: number | undefined = undefined;
+      let expirationTimestamp: number | undefined;
       responses.forEach((response) => {
         if (response.type === "bot" && response.payload.expirationTimestamp) {
           expirationTimestamp = response.payload.expirationTimestamp;

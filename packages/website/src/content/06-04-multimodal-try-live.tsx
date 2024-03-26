@@ -5,7 +5,7 @@ import {
   type Config,
   getInitialConfig,
   ConfigEditor,
-  ConfigAsStrings,
+  type ConfigAsStrings,
 } from "../components/MultimodalConfiguration";
 import { Note } from "../components/Note";
 import { voiceCompassSetupSnippet, Environment } from "../snippets";

@@ -38,7 +38,7 @@ export const create = ({
       'No conversation ID provided. Please call the Voice Compass client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`',
     );
   }
-  const sendStep = (stepId: string, context?: Context) => {
+  const sendStep = async (stepId: string, context?: Context) => {
     if (!stepIdRegex.test(stepId)) {
       throw new Error("Invalid stepId. It should be formatted as a UUID.");
     }
@@ -51,7 +51,7 @@ export const create = ({
       languageCode,
     };
 
-    return fetch(`https://${dev ? "dev." : ""}mm.nlx.ai/v1/track`, {
+    await fetch(`https://${dev ? "dev." : ""}mm.nlx.ai/v1/track`, {
       method: "POST",
       headers: {
         "x-api-key": apiKey,

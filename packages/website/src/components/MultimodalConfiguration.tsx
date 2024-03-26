@@ -1,21 +1,21 @@
 import React, { type FC } from "react";
 import { Labeled, inputClass } from "./Ui";
 
-type HardCodedConfig = {
+interface HardCodedConfig {
   workspaceId: string;
   apiKey: string;
   journeyId: string;
   testStepId: string;
-};
+}
 
-type DynamicConfigAsStrings = {
+interface DynamicConfigAsStrings {
   languageCode: string;
   conversationId: string;
-};
-type DynamicConfigAsCode = {
+}
+interface DynamicConfigAsCode {
   languageCodeSnippet: string;
   conversationIdSnippet: string;
-};
+}
 
 export type Config = HardCodedConfig &
   (DynamicConfigAsCode | DynamicConfigAsStrings);

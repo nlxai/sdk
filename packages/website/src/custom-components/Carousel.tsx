@@ -1,5 +1,5 @@
 import "./Carousel.css";
-import { createElement, FC, useState } from "react";
+import { createElement, type FC, useState } from "react";
 import htm from "htm";
 
 const html = htm.bind(createElement);

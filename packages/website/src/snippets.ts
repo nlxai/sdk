@@ -644,7 +644,7 @@ export const umdScriptTags = Object.keys(umdScriptSrc).reduce<ScriptTagsType>(
       umdScriptSrc[key as keyof typeof umdScriptSrc]
     }"></script>`,
   }),
-  {} as ScriptTagsType,
+  {},
 );
 
 export const voiceCompassSetupSnippet = (cfg: {

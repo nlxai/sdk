@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { FileUpload } from "../custom-components/FileUpload";
-import { InlineWidget, Item } from "../components/InlineWidget";
+import { InlineWidget, type Item } from "../components/InlineWidget";
 import { fileUploadSnippet } from "../snippets";
 
 export const content = `
