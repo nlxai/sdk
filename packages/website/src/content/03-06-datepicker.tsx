@@ -13,6 +13,8 @@ ${datePickerSnippet}
 ~~~
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const WebWidgetComponentsDatePicker = () => {
   const [submitted, setSubmitted] = useState(false);
   const [date, setDate] = useState<Date | null>(null);

@@ -1,6 +1,8 @@
 import { DownloadIcon } from "./Icons";
 import React, { type FC, useRef, useEffect } from "react";
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const escapeForHighlightJs = (str: string) =>
   str
     .replace(/&/g, "&amp;")

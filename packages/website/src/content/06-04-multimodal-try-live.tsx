@@ -14,6 +14,8 @@ export const content = `
 You can try your journeys directly on this configuration page.
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const snippetContent = (config: Config) => `
 
 ### Setup snippet
@@ -23,6 +25,8 @@ ${voiceCompassSetupSnippet({ config, environment: Environment.Html })}
 ~~~
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const MultimodalTryLive = () => {
   const [config, setConfig] = useState<ConfigAsStrings>(getInitialConfig());
 

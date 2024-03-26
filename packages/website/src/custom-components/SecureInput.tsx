@@ -8,14 +8,20 @@ const SecureInput: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
@@ -40,6 +46,8 @@ const SecureInput: React.FC = () => {
 
   return (
     <div className="form-container">
+      {/* initial eslint integration */}
+      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={handleSubmit}>
         <input
           type="email"

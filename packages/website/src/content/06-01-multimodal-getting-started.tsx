@@ -43,6 +43,8 @@ ${voiceCompassSetupSnippet({ environment: Environment.Bundle })}
 [journey]: <>
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const MultimodalGettingStarted = () => {
   return (
     <>

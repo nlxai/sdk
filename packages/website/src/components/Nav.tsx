@@ -42,6 +42,8 @@ const MenuListItem: FC<{
   );
 };
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const Nav: FC<{}> = () => (
   <div className="hidden lg:relative lg:block lg:flex-none">
     <div className="absolute inset-y-0 right-0 w-[50vw] bg-gray-50"></div>
@@ -146,6 +148,8 @@ export const MobileNav: FC<{
         </div>
       </div>
     </div>,
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     document.querySelector("#portal")!,
   );
 };

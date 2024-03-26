@@ -33,11 +33,15 @@ export const create = ({
   debug = false,
   dev = false,
 }: Config): Client => {
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   if (!conversationId) {
     console.warn(
       'No conversation ID provided. Please call the Voice Compass client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`',
     );
   }
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const sendStep = async (stepId: string, context?: Context) => {
     if (!stepIdRegex.test(stepId)) {
       throw new Error("Invalid stepId. It should be formatted as a UUID.");

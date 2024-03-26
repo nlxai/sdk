@@ -8,6 +8,8 @@ export const content = `
 If you are using a different frontend framework, you can easily integrate the [@nlxai/chat-core](${packageUrls.chatCore}) package covered in the next chapter to build a custom widget. In fact, the [React](${packageUrls.chatReact}) and [Preact](${packageUrls.chatReact}) packages are both under 100 lines of TypeScript.
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const CustomWidgetsOther = () => {
   return (
     <>

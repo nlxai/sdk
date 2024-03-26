@@ -13,7 +13,11 @@ ${disclaimerSnippet}
 ~~~
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const WebWidgetComponentsSecureInput = () => {
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [submitted, setSubmitted] = useState(false);
 
   const items: Item[][] = [

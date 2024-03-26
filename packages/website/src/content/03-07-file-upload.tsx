@@ -13,6 +13,8 @@ ${fileUploadSnippet}
 ~~~
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const WebWidgetComponentsFileUpload = () => {
   const [uploaded, setUploaded] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);

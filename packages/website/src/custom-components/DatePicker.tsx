@@ -16,6 +16,8 @@ export const DatePicker: FC<{
       weekStart: 1, // Monday
     });
     datepicker.setDate(new Date());
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     setDatepicker(datepicker);
   }, []);
 
@@ -26,6 +28,8 @@ export const DatePicker: FC<{
         ev.preventDefault();
 
         const date = (datepicker as any).getDate();
+        // initial eslint integration
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         onSubmit(date);
 
         (datepicker as any).setDate({ clear: true });

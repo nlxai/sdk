@@ -35,6 +35,8 @@ export const snippetContent = ({
   titleBar: TitleBar;
   theme: Partial<Theme>;
   behavior: Behavior;
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 }) => `
 
 ### Setup snippet
@@ -44,10 +46,14 @@ ${setupSnippet({ config, titleBar, theme, behavior })}
 \`\`\`
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const WebWidgetTryLive = () => {
   const [config, setConfig] = useState<Config>(getInitialConfig());
 
   const [theme, setTheme] = useState<Partial<Theme>>(
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
     retrieveTheme() || defaultTheme,
   );
 
@@ -56,6 +62,8 @@ export const WebWidgetTryLive = () => {
   }, [theme]);
 
   const [titleBar, setTitleBar] = useState<TitleBar>(
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
     retrieveTitleBar() || {
       title: "Support",
     },

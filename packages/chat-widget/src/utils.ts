@@ -14,6 +14,8 @@ const groupWhileHelper = <T>(
   const [head, ...tail] = list;
   const newGroup = (() => {
     const lastInGroup = currentGroup[currentGroup.length - 1];
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!lastInGroup) {
       return false;
     }

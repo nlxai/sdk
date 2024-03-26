@@ -197,6 +197,8 @@ export const routes: Array<{
   },
 ];
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const ContentRoutes: FC<{}> = () => {
   const flattenedRoutes = flatten(
     routes.map((r) => r.items.map((item) => ({ ...item, heading: r.heading }))),
@@ -214,12 +216,16 @@ export const ContentRoutes: FC<{}> = () => {
                 {element}
                 <NextPrevPage
                   prev={
+                    // initial eslint integration
+                    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                     prev && {
                       label: `${prev.heading}: ${prev.label}`,
                       url: prev.url,
                     }
                   }
                   next={
+                    // initial eslint integration
+                    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                     next && {
                       label: `${next.heading}: ${next.label}`,
                       url: next.url,

@@ -10,6 +10,8 @@ This package can be used to:
 - communicate with a bot on a Node.js server, passing along responses to a third-party chat system.
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const HeadlessGettingStarted = () => {
   return (
     <>

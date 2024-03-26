@@ -2,7 +2,11 @@ import React, { type FC } from "react";
 
 export const Logo: FC<{ size?: number }> = ({ size }) => (
   <svg
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
     width={size || 32}
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
     height={size || 32}
     viewBox="0 -5 24 24"
     fill="currentColor"

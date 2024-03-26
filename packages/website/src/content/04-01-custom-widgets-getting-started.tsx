@@ -8,6 +8,8 @@ The [@nlxai/chat-react]() and [@nlxai/chat-preact]() packages expose a complete 
 The [@nlxai/chat-core]() framework-agnostic package is available for widget authors working in other frameworks.
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const CustomWidgetsGettingStarted = () => {
   return (
     <>

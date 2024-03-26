@@ -55,6 +55,8 @@ export const FileUpload: FC<{
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [dragOver, setDragOver] = useState<boolean>(false);
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const uploadFile = (file: File) => {
     const uploadTime = 2000;
 
@@ -71,27 +73,41 @@ export const FileUpload: FC<{
     }, uploadTime / 10);
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     const file = e.target.files ? e.target.files[0] : null;
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (file) {
       setSelectedFile(file);
       uploadFile(file);
     }
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(true);
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(false);
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(false);
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-optional-chain
     if (e.dataTransfer.files && e.dataTransfer.files.length) {
       uploadFile(e.dataTransfer.files[0]);
     }

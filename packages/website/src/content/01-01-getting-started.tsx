@@ -12,6 +12,8 @@ This is the official JavaScript SDK to communicate with conversational bots crea
 * [@nlxai/voice-compass](${packageUrls.voiceCompass}): multimodal capabilities.
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const GettingStarted = () => {
   return (
     <>

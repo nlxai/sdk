@@ -24,11 +24,23 @@ export type ConfigAsStrings = HardCodedConfig & DynamicConfigAsStrings;
 
 export const getInitialConfig = (): ConfigAsStrings => {
   const searchParams = new URLSearchParams(window.location.search);
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
   const workspaceId = searchParams.get("workspaceId") || "";
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
   const apiKey = searchParams.get("apiKey") || "";
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
   const languageCode = searchParams.get("languageCode") || "en-US";
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
   const journeyId = searchParams.get("journeyId") || "";
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
   const conversationId = searchParams.get("conversationId") || "";
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
   const testStepId = searchParams.get("testStepId") || "";
   return {
     workspaceId,

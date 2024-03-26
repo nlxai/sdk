@@ -7,6 +7,8 @@ import { Hero } from "./components/Hero";
 import { Nav, MobileNav } from "./components/Nav";
 import { ContentRoutes } from "./routes";
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/ban-types
 const App: FC<{}> = () => {
   const [mobileMenuExpanded, setMobileMenuExpanded] = useState<boolean>(false);
 

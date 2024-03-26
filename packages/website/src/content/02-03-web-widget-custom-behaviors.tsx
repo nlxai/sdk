@@ -8,6 +8,8 @@ export const content = `
 The widget can be configured to handle a number of custom behaviors. Select one from below and see how the code snippet changes:
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const codeContent = (behavior: Behavior) => `
 ~~~html
 ${setupSnippet({
@@ -18,6 +20,8 @@ ${setupSnippet({
 ~~~
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const WebWidgetCustomBehaviors = () => {
   const [behavior, setBehavior] = useState<Behavior>(Behavior.Simple);
   return (

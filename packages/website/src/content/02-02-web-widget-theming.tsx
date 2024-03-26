@@ -14,6 +14,8 @@ The chat widget exposes a number of style theme parameters that can be customize
 - \`chatWindowMaxHeight\`: the maximum height of the chat box, relevant for large screens.
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const WebWidgetTheming = () => {
   return (
     <>

@@ -20,6 +20,8 @@ In this snippet, the script is deferred in order to reduce impact on page speed.
   - \`logo\`: the static URL of a logo image that appears left of the title.
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const WebWidgetSetup = () => {
   return (
     <>

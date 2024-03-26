@@ -15,6 +15,8 @@ ${addressInputSnippet}
 ~~~
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const WebWidgetComponentsAddressInput = () => {
   const [formattedAddress, setFormattedAddress] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);

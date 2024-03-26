@@ -51,6 +51,8 @@ npm install @nlxai/voice-compass
 ~~~
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const Installation = () => {
   return (
     <>

@@ -174,6 +174,8 @@ interface InternalState {
 const fromInternal = (internalState: InternalState): State =>
   internalState.responses;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const safeJsonParse = (val: string) => {
   try {
     const json = JSON.parse(val);
@@ -219,9 +221,13 @@ export const createConversation = (config: Config): ConversationHandler => {
     );
   }
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
   const initialConversationId = config.conversationId || uuid();
 
   let state: InternalState = {
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
     responses: config.responses || [],
     userId: config.userId,
     conversationId: initialConversationId,
@@ -241,11 +247,15 @@ export const createConversation = (config: Config): ConversationHandler => {
     );
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const failureHandler = () => {
     const newResponse: Response = {
       type: "failure",
       receivedAt: new Date().getTime(),
       payload: {
+        // initial eslint integration
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
         text: config.failureMessage || defaultFailureMessage,
       },
     };
@@ -257,7 +267,11 @@ export const createConversation = (config: Config): ConversationHandler => {
     );
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const messageResponseHandler = (response: any) => {
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (response?.messages) {
       const newResponse: Response = {
         type: "bot",
@@ -267,6 +281,8 @@ export const createConversation = (config: Config): ConversationHandler => {
           messages: response.messages.map((message: any) => ({
             messageId: message.messageId,
             text: message.text,
+            // initial eslint integration
+            // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
             choices: message.choices || [],
           })),
         },
@@ -277,9 +293,13 @@ export const createConversation = (config: Config): ConversationHandler => {
         },
         newResponse,
       );
+      // initial eslint integration
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       if (response.metadata.hasPendingDataRequest) {
         appendStructuredUserResponse({ poll: true });
         setTimeout(() => {
+          // initial eslint integration
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           sendToBot({
             request: {
               structured: {
@@ -302,6 +322,8 @@ export const createConversation = (config: Config): ConversationHandler => {
   let socketMessageQueueCheckInterval: ReturnType<typeof setInterval> | null =
     null;
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const sendToBot = async (body: BotRequest) => {
     const bodyWithContext = {
       userId: state.userId,
@@ -311,7 +333,11 @@ export const createConversation = (config: Config): ConversationHandler => {
       channelType: config.experimental?.channelType,
       environment: config.environment,
     };
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (isUsingWebSockets()) {
+      // initial eslint integration
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       if (socket && socket.readyState === 1) {
         socket.send(JSON.stringify(bodyWithContext));
       } else {
@@ -320,11 +346,15 @@ export const createConversation = (config: Config): ConversationHandler => {
     } else {
       await fetch(
         `${config.botUrl}${
+          // initial eslint integration
+          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
           config.experimental?.completeBotUrl ? "" : `-${config.languageCode}`
         }`,
         {
           method: "POST",
           headers: {
+            // initial eslint integration
+            // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
             ...(config.headers || {}),
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -343,25 +373,41 @@ export const createConversation = (config: Config): ConversationHandler => {
     }
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const isUsingWebSockets = () => {
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     return config.botUrl && config.botUrl.indexOf("wss://") === 0;
   };
 
   let subscribers: Subscriber[] = [];
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const checkQueue = () => {
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (socket?.readyState === 1 && socketMessageQueue[0]) {
+      // initial eslint integration
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       sendToBot(socketMessageQueue[0]);
       socketMessageQueue = socketMessageQueue.slice(1);
     }
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const setupWebsocket = () => {
     const url = new URL(config.botUrl);
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!config.experimental?.completeBotUrl) {
       url.searchParams.set("languageCode", config.languageCode);
       url.searchParams.set(
         "channelKey",
+        // initial eslint integration
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
         `${url.searchParams.get("channelKey") || ""}-${config.languageCode}`,
       );
     }
@@ -375,10 +421,16 @@ export const createConversation = (config: Config): ConversationHandler => {
     };
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const teardownWebsocket = () => {
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (socketMessageQueueCheckInterval) {
       clearInterval(socketMessageQueueCheckInterval);
     }
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (socket) {
       socket.onmessage = null;
       socket.close();
@@ -386,6 +438,8 @@ export const createConversation = (config: Config): ConversationHandler => {
     }
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   if (isUsingWebSockets()) {
     setupWebsocket();
   }
@@ -393,6 +447,8 @@ export const createConversation = (config: Config): ConversationHandler => {
   const appendStructuredUserResponse = (
     structured: StructuredRequest,
     context?: Context,
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   ) => {
     const newResponse: Response = {
       type: "user",
@@ -411,8 +467,12 @@ export const createConversation = (config: Config): ConversationHandler => {
     );
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const sendIntent = (intentId: string, context?: Context) => {
     appendStructuredUserResponse({ intentId }, context);
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     sendToBot({
       context,
       request: {
@@ -423,6 +483,8 @@ export const createConversation = (config: Config): ConversationHandler => {
     });
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const sendText = (text: string, context?: Context) => {
     const newResponse: Response = {
       type: "user",
@@ -439,6 +501,8 @@ export const createConversation = (config: Config): ConversationHandler => {
       },
       newResponse,
     );
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     sendToBot({
       context,
       request: {
@@ -449,10 +513,14 @@ export const createConversation = (config: Config): ConversationHandler => {
     });
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const unsubscribe = (subscriber: Subscriber) => {
     subscribers = subscribers.filter((fn) => fn !== subscriber);
   };
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const subscribe = (subscriber: Subscriber) => {
     subscribers = [...subscribers, subscriber];
     subscriber(fromInternal(state));
@@ -465,6 +533,8 @@ export const createConversation = (config: Config): ConversationHandler => {
     sendText,
     sendStructured: (structured: StructuredRequest, context) => {
       appendStructuredUserResponse(structured, context);
+      // initial eslint integration
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       sendToBot({
         context,
         request: {
@@ -475,6 +545,8 @@ export const createConversation = (config: Config): ConversationHandler => {
     sendSlots: (slotsWithLegacy, context) => {
       const slots = normalizeSlots(slotsWithLegacy);
       appendStructuredUserResponse({ slots }, context);
+      // initial eslint integration
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       sendToBot({
         context,
         request: {
@@ -489,7 +561,11 @@ export const createConversation = (config: Config): ConversationHandler => {
       sendIntent(welcomeIntent, context);
     },
     sendChoice: (choiceId, context) => {
+      // initial eslint integration
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       const containsChoice = (botMessage: BotMessage) =>
+        // initial eslint integration
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         (botMessage.choices || [])
           .map((choice) => choice.choiceId)
           .includes(choiceId);
@@ -546,6 +622,8 @@ export const createConversation = (config: Config): ConversationHandler => {
         choiceResponse,
       );
 
+      // initial eslint integration
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       sendToBot({
         context,
         request: {
@@ -566,8 +644,12 @@ export const createConversation = (config: Config): ConversationHandler => {
     reset: (options) => {
       setState({
         conversationId: uuid(),
+        // initial eslint integration
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         responses: options?.clearResponses ? [] : state.responses,
       });
+      // initial eslint integration
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       if (isUsingWebSockets()) {
         teardownWebsocket();
         setupWebsocket();
@@ -575,6 +657,8 @@ export const createConversation = (config: Config): ConversationHandler => {
     },
     destroy: () => {
       subscribers = [];
+      // initial eslint integration
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       if (isUsingWebSockets()) {
         teardownWebsocket();
       }
@@ -590,12 +674,18 @@ export function promisify<T>(
   return async (payload: T) => {
     return await new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
+        // initial eslint integration
+        // eslint-disable-next-line prefer-promise-reject-errors
         reject("The request timed out.");
       }, timeout);
       const subscription = (
         _responses: Response[],
         newResponse: Response | undefined,
+      // initial eslint integration
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       ) => {
+        // initial eslint integration
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         if (newResponse && newResponse.type === "bot") {
           clearTimeout(timeoutId);
           convo.unsubscribe(subscription);
