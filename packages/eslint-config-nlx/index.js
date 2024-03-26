@@ -4,7 +4,11 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ["standard-with-typescript", "plugin:react/recommended", "prettier"],
+  extends: [
+    "standard-with-typescript",
+    "plugin:react/recommended",
+    "prettier" // note: order matters. prettier being last overrides standard-with-typescript formatting
+  ],
   overrides: [
     {
       env: {
@@ -20,9 +24,14 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["react"],
+  plugins: [
+    "eslint-plugin-tsdoc",
+    "react"
+  ],
   ignorePatterns: ["dist", "node_modules", "vite-env.d.ts"],
-  rules: {},
+  rules: {
+    "tsdoc/syntax": "error",
+  },
   settings: {
     react: {
       version: "detect",
