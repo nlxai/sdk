@@ -170,31 +170,31 @@ export const routes: {
       },
     ],
   },
-  // {
-  //   heading: "Multimodal",
-  //   items: [
-  //     {
-  //       label: "Getting started",
-  //       url: "/multimodal-getting-started",
-  //       element: <MultimodalGettingStarted />,
-  //     },
-  //     {
-  //       label: "Usage",
-  //       url: "/multimodal-usage",
-  //       element: <MultimodalUsage />,
-  //     },
-  //     {
-  //       label: "API reference",
-  //       url: "/multimodal-api-reference",
-  //       element: <MultimodalApiReference />,
-  //     },
-  //     {
-  //       label: "Try live",
-  //       url: "/voice-compass-try-live",
-  //       element: <MultimodalTryLive />,
-  //     },
-  //   ],
-  // },
+  {
+    heading: "Multimodal",
+    items: [
+      {
+        label: "Getting started",
+        url: "/multimodal-getting-started",
+        element: <MultimodalGettingStarted />,
+      },
+      {
+        label: "Usage",
+        url: "/multimodal-usage",
+        element: <MultimodalUsage />,
+      },
+      {
+        label: "API reference",
+        url: "/multimodal-api-reference",
+        element: <MultimodalApiReference />,
+      },
+      {
+        label: "Try live",
+        url: "/voice-compass-try-live",
+        element: <MultimodalTryLive />,
+      },
+    ],
+  },
 ];
 
 export const ContentRoutes: FC<{}> = () => {
