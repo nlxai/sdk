@@ -3,6 +3,8 @@ import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { CheckIcon, ContentCopyIcon } from "./Icons";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import rehypeSlug from "rehype-slug";
 
 const CopyToClipboardButton: FC<{ text: string; className?: string }> = ({
   text,
@@ -45,6 +47,7 @@ export const PageContent: FC<{ md: string }> = ({ md }) => (
   <Prose>
     <Markdown
       remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeRaw, rehypeSlug]}
       components={{
         pre(props) {
           return (
