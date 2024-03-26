@@ -20,7 +20,7 @@ import fetch from "isomorphic-fetch";
  *
  * @category Setup
  *
- * @param options - the configuration object
+ * @param options
  *
  * @returns a Voice Compass client
  */
@@ -147,7 +147,8 @@ export interface Config {
 }
 
 /**
- * @internal @hidden
+ * @internal
+ * @hidden
  * this is exported so we can test it. Should be equivalent to a UUID v4 regex.
  */
 export const stepIdRegex =
