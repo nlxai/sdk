@@ -673,14 +673,18 @@ client.sendStep("${
 };
 
 type ScriptTagsType = Record<keyof typeof umdScriptSrc, string>;
-export const umdScriptTags = Object.keys(umdScriptSrc).reduce<ScriptTagsType>(
+export const umdScriptTags: ScriptTagsType = (
+  Object.keys(umdScriptSrc) as Array<keyof typeof umdScriptSrc>
+).reduce<ScriptTagsType>(
   (acc, key) => ({
     ...acc,
     [key]: `<script defer src="${
       umdScriptSrc[key as keyof typeof umdScriptSrc]
     }"></script>`,
   }),
-  {},
+
+  // eslint-disable-next-line @typescript-eslint/prefer-reduce-type-parameter, @typescript-eslint/consistent-type-assertions
+  {} as ScriptTagsType,
 );
 
 export const voiceCompassSetupSnippet = (cfg: {
