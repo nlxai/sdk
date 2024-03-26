@@ -2,7 +2,6 @@ import fetch from "isomorphic-fetch";
 
 /**
  * The starting point of the package. Call create to create a `VoiceCompass` client.
- *
  * @example
  * ```typescript
  *  const client = nlxai.voiceCompass.create({
@@ -17,11 +16,8 @@ import fetch from "isomorphic-fetch";
  *
  * client.sendStep("REPLACE_WITH_STEP_ID");
  * ```
- *
  * @category Setup
- *
- * @param options
- *
+ * @param options - configuration options for the client
  * @returns a Voice Compass client
  */
 export const create = ({
@@ -83,7 +79,7 @@ export const create = ({
 export interface Client {
   /**
    *
-   * * @example
+   * @example
    * ```typescript
    *  const client = nlxai.voiceCompass.create({
    *  // hard-coded params
@@ -102,7 +98,6 @@ export interface Client {
    *
    *
    *   _Note: Must be a valid UUID_
-   *
    * @param context -  context to send back to the voice bot, for usage later in the intent.
    */
   sendStep: (stepId: string, context?: Context) => Promise<void>;
@@ -119,7 +114,7 @@ export type Context = Record<string, any>;
  * @category Setup
  */
 export interface Config {
-  /** * the API key generated for the journey.  **/
+  /** * the API key generated for the journey.  */
   apiKey: string;
   /** the ID of the journey.  */
   journeyId: string;
@@ -127,16 +122,18 @@ export interface Config {
   /** your workspace id */
   workspaceId: string;
 
-  /** the conversation id, passed from the active voice bot.
+  /**
+   * the conversation id, passed from the active voice bot.
    *
    * _Note: This must be dynamically set by the voice bot._
-   * */
+   */
   conversationId: string;
 
-  /** the user's language code.
+  /**
+   * the user's language code.
    *
    * In the browser may be fetched from `navigator.language`, or if the journey doesn't support multiple languages, can be hardcoded.
-   * */
+   */
   languageCode: string;
 
   /** set to true to help debug issues or errors. Defaults to false */
