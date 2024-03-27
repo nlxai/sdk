@@ -5,11 +5,12 @@
     "jsx": "react",
     "jsxFactory": "h",
     "lib": ["dom"],
-    "module": "commonjs",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "outDir": "./lib",
     "rootDir": "./src",
     "strict": true,
     "strictNullChecks": true,
-    "target": "es5"
+    "target": "es6"
   }
 }

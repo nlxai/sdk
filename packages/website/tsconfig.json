@@ -4,13 +4,13 @@
     "esModuleInterop": true,
     "jsx": "react",
     "lib": ["dom", "es2017"],
-    "module": "es2020",
+    "module": "esnext",
     "moduleResolution": "bundler",
     "outDir": "./lib",
     "rootDir": "./src",
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2020",
+    "target": "es6",
     "types": ["vite/client"]
   },
   "include": ["src/**/*"]
