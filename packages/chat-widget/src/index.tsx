@@ -484,6 +484,7 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
                       <C.TitleIcon src={props.titleBar.logo} />
                     )}
                     <C.Title>{props.titleBar.title}</C.Title>
+                    {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */}
                     {props.titleBar.withCollapseButton ? (
                       <C.TitleBarButton
                         title="Close"
