@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,6 +18,8 @@ jobs:
         run: npm install
       - name: Build the app
         run: npm run build
+      - name: Run lint # we do this after build so we can use .d.ts files
+        run: npm run lint:check
   test:
     runs-on: ubuntu-latest
     steps:
@@ -29,17 +31,6 @@ jobs:
         run: npm install
       - name: Test the app
         run: npm run test
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-            node-version-file: '.node-version'
-      - name: Installing node_modules
-        run: npm install
-      - name: Run lint
-        run: npm run lint:check
   typecheck:
     runs-on: ubuntu-latest
     steps:
