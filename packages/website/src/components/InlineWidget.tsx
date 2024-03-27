@@ -12,6 +12,8 @@ export type Item =
   | { type: "bot"; message: string }
   | { type: "custom"; element: ReactNode };
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/ban-types
 const Loader: FC<{}> = () => (
   <div className="inline-flex items-center py-1 space-x-1">
     <div className="w-1.5 h-1.5 animate-bounce rounded-full bg-current"></div>
@@ -42,6 +44,8 @@ export const InlineWidget: FC<{
     };
   }, [setTick]);
 
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   const displayedItems = props.animated
     ? props.items.slice(0, 1 + (tick % props.items.length))
     : props.items;
@@ -49,6 +53,8 @@ export const InlineWidget: FC<{
   const loader: "user" | "bot" | undefined =
     displayedItems.length === props.items.length
       ? undefined
+      // initial eslint integration
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
       : last(last(displayedItems) || [])?.type === "user"
         ? "bot"
         : "user";
@@ -65,6 +71,8 @@ export const InlineWidget: FC<{
       const firstContentNode: Node | undefined = addedNodes[0];
       if (
         isFullyVisible.current &&
+        // initial eslint integration
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         firstContentNode &&
         firstContentNode instanceof HTMLElement
       ) {
@@ -75,6 +83,8 @@ export const InlineWidget: FC<{
       }
     };
     const observer = new MutationObserver(callback);
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (messagesContainer.current) {
       observer.observe(messagesContainer.current, {
         childList: true,
@@ -88,6 +98,8 @@ export const InlineWidget: FC<{
   useEffect(() => {
     const observer = new IntersectionObserver(
       (event) => {
+        // initial eslint integration
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         if (event[0]) {
           isFullyVisible.current = event[0].intersectionRatio > 0.95;
         }
@@ -96,6 +108,8 @@ export const InlineWidget: FC<{
         threshold: 0.95,
       },
     );
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (messagesContainer.current) {
       observer.observe(messagesContainer.current);
     }
@@ -107,6 +121,8 @@ export const InlineWidget: FC<{
   return (
     <div
       className={`rounded-xl max-w-sm max-h-[440px] shadow-lg overflow-hidden flex flex-col ${
+        // initial eslint integration
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
         props.className || ""
       }`}
     >
@@ -120,11 +136,15 @@ export const InlineWidget: FC<{
         {displayedItems.map((items: Item[], index: number) => {
           return (
             <div key={index} className="space-y-2 flex flex-col">
+              {/* initial eslint integration */}
+              {/* eslint-disable-next-line array-callback-return */}
               {items.map((item, itemIndex) => {
                 if (item.type === "user") {
                   return (
                     <div
                       className={`w-fit self-end bg-blueMain text-white p-2 text-sm rounded-lg mx-4 ${
+                        // initial eslint integration
+                        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                         props.animated ? "animate-slideInFromRight" : ""
                       }`}
                       key={itemIndex}
@@ -137,6 +157,8 @@ export const InlineWidget: FC<{
                   return (
                     <div
                       className={`w-fit self-start bg-gray-100 p-2 text-sm rounded-lg mx-4 ${
+                        // initial eslint integration
+                        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                         props.animated ? "animate-slideInFromLeft" : ""
                       }`}
                       key={itemIndex}
@@ -149,6 +171,8 @@ export const InlineWidget: FC<{
                   return (
                     <div
                       className={`w-full ${
+                        // initial eslint integration
+                        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                         props.animated ? "animate-slideInFromLeft" : ""
                       }`}
                       key={itemIndex}
@@ -161,6 +185,8 @@ export const InlineWidget: FC<{
             </div>
           );
         })}
+        {/* initial eslint integration */}
+        {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */}
         {loader &&
           (loader === "user" ? (
             <div

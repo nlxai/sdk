@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { FileUpload } from "../custom-components/FileUpload";
-import { InlineWidget, Item } from "../components/InlineWidget";
+import { InlineWidget, type Item } from "../components/InlineWidget";
 import { fileUploadSnippet } from "../snippets";
 
 export const content = `
@@ -13,6 +13,8 @@ ${fileUploadSnippet}
 ~~~
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const WebWidgetComponentsFileUpload = () => {
   const [uploaded, setUploaded] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);

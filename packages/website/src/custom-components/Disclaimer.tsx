@@ -4,6 +4,8 @@ import htm from "htm";
 
 const html = htm.bind(createElement);
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const Disclaimer = () => {
   const [status, setStatus] = useState<"pending" | "accepted" | "denied">(
     "pending"

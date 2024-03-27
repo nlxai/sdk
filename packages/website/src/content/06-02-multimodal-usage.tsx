@@ -39,12 +39,16 @@ enum Usage {
 }
 
 function assertNever(x: never): never {
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
   throw new Error("Unexpected object: " + x);
 }
 
 function getUsageFrom(usageFrom: Usage): string {
   const persitanceCodeSample = (
     usageFrom: Usage.WithPersistanceBundled | Usage.WithPersitanceHTML,
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   ) => {
     const environment =
       usageFrom === Usage.WithPersitanceHTML
@@ -59,7 +63,7 @@ if(conversationId != null) {
 }
 
 ${voiceCompassSnippet({
-  environment: environment,
+  environment,
   config: {
     conversationIdSnippet: "conversationId",
     languageCodeSnippet: "navigator.language",
@@ -140,6 +144,8 @@ ${voiceCompassSetupSnippet({ environment: Environment.Node })}
   }
 }
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const MultimodalUsage = () => {
   const [usageFrom, setUsageFrom] = useState<Usage>(Usage.SimpleHTML);
   return (

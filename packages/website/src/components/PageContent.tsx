@@ -15,10 +15,14 @@ const CopyToClipboardButton: FC<{ text: string; className?: string }> = ({
   return (
     <button
       className={`w-8 h-8 p-1.5 bg-slate-900 border border-slate-600 rounded-lg hover:bg-slate-800 ${
+        // initial eslint integration
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
         className || ""
       }`}
       onClick={() => {
         setCopied(true);
+        // initial eslint integration
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         navigator.clipboard.writeText(text);
         setTimeout(() => {
           setCopied(false);
@@ -36,6 +40,8 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
 }) => (
   <div
     className={`prose prose-slate max-w-none prose-headings:scroll-mt-28 prose-headings:font-display prose-headings:font-normal lg:prose-headings:scroll-mt-[8.5rem] prose-lead:text-slate-500 prose-a:font-medium prose-a:no-underline prose-a:shadow-[inset_0_-2px_0_0_var(--tw-prose-background,#fff),inset_0_calc(-1*(var(--tw-prose-underline-size,4px)+2px))_0_0_var(--tw-prose-underline,theme(colors.blue.300))] hover:prose-a:[--tw-prose-underline-size:6px]] prose-pre:rounded-xl prose-pre:bg-slate-900 prose-pre:shadow-lg ${
+      // initial eslint integration
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
       className || ""
     }`}
   >
@@ -55,7 +61,11 @@ export const PageContent: FC<{ md: string }> = ({ md }) => (
           );
         },
         code(props) {
+          // initial eslint integration
+          // eslint-disable-next-line react/prop-types
           const { children, className, node, ...rest } = props;
+          // initial eslint integration
+          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
           const match = /language-(\w+)/.exec(className || "");
           const lines = String(children).replace(/\n$/, "");
           return (
@@ -64,8 +74,12 @@ export const PageContent: FC<{ md: string }> = ({ md }) => (
                 text={lines}
                 className="absolute top-1.5 right-1.5 hidden group-hover:block"
               />
+              {/* initial eslint integration */}
+              {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */}
               {match ? (
                 <SyntaxHighlighter
+                  // initial eslint integration
+                  // eslint-disable-next-line react/no-children-prop
                   children={lines}
                   style={{}}
                   useInlineStyles={false}

@@ -33,20 +33,20 @@ import { MultimodalUsage } from "./content/06-02-multimodal-usage";
 import { MultimodalApiReference } from "./content/06-03-multimodal-api-reference";
 import { MultimodalTryLive } from "./content/06-04-multimodal-try-live";
 
-type Item = {
+interface Item {
   label: string;
   url: string;
   element: JSX.Element;
-};
+}
 
 function sortByLabel(items: Item[]): Item[] {
   return items.sort((a, b) => a.label.localeCompare(b.label));
 }
 
-export const routes: {
+export const routes: Array<{
   heading: string;
   items: Item[];
-}[] = [
+}> = [
   {
     heading: "Introduction",
     items: [
@@ -197,6 +197,8 @@ export const routes: {
   },
 ];
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const ContentRoutes: FC<{}> = () => {
   const flattenedRoutes = flatten(
     routes.map((r) => r.items.map((item) => ({ ...item, heading: r.heading }))),
@@ -214,12 +216,16 @@ export const ContentRoutes: FC<{}> = () => {
                 {element}
                 <NextPrevPage
                   prev={
+                    // initial eslint integration
+                    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                     prev && {
                       label: `${prev.heading}: ${prev.label}`,
                       url: prev.url,
                     }
                   }
                   next={
+                    // initial eslint integration
+                    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                     next && {
                       label: `${next.heading}: ${next.label}`,
                       url: next.url,

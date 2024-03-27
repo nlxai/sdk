@@ -1,3 +1,5 @@
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { type Theme as ThemeType } from "./theme";
 import "@emotion/react";
 

@@ -7,8 +7,14 @@ import { RadioList } from "./RadioList";
 
 export const getInitialConfig = (): Config => {
   const searchParams = new URLSearchParams(window.location.search);
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
   const botUrl = searchParams.get("botUrl") || "";
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
   const apiKey = searchParams.get("apiKey") || "";
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
   const languageCode = searchParams.get("languageCode") || "en-US";
   return {
     botUrl,
@@ -109,6 +115,8 @@ export const ThemeEditor: FC<{
           value={theme.fontFamily}
           onChange={(ev: any) => {
             props.onChange({
+              // initial eslint integration
+              // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
               fontFamily: ev.target.value || defaultTheme.fontFamily,
             });
           }}
@@ -230,6 +238,8 @@ export const BehaviorEditor: FC<{
   );
 };
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const saveTheme = (theme: Partial<Theme>) => {
   localStorage.setItem("nlxchat-theme", JSON.stringify(theme));
 };
@@ -237,6 +247,8 @@ export const saveTheme = (theme: Partial<Theme>) => {
 export const retrieveTheme = (): Partial<Theme> | null => {
   try {
     const themeString = localStorage.getItem("nlxchat-theme");
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
     const theme = JSON.parse(themeString || "");
     if (typeof theme !== "object") {
       throw new Error("Invalid theme");
@@ -247,6 +259,8 @@ export const retrieveTheme = (): Partial<Theme> | null => {
   }
 };
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const saveTitleBar = (theme: TitleBar) => {
   localStorage.setItem("nlxchat-titleBar", JSON.stringify(theme));
 };
@@ -254,6 +268,8 @@ export const saveTitleBar = (theme: TitleBar) => {
 export const retrieveTitleBar = (): TitleBar | null => {
   try {
     const titleBarString = localStorage.getItem("nlxchat-titleBar");
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
     const titleBar = JSON.parse(titleBarString || "");
     if (typeof titleBar !== "object") {
       throw new Error("Invalid theme");

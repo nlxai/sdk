@@ -5,6 +5,8 @@ import { useConversationHandler } from "@nlxai/chat-widget";
 
 const html = htm.bind(createElement);
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const FeedbackForm = () => {
   const handler = useConversationHandler();
   const [firstName, setFirstName] = useState("");
@@ -34,6 +36,8 @@ export const FeedbackForm = () => {
         disabled=${submitted}
         value=${firstName}
         onInput=${(ev: any) => {
+          // initial eslint integration
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           setFirstName(ev.target.value);
         }}
       />
@@ -43,6 +47,8 @@ export const FeedbackForm = () => {
         disabled=${submitted}
         value=${lastName}
         onInput=${(ev: any) => {
+          // initial eslint integration
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           setLastName(ev.target.value);
         }}
       />
@@ -53,6 +59,8 @@ export const FeedbackForm = () => {
         disabled=${submitted}
         value=${email}
         onInput=${(ev: any) => {
+          // initial eslint integration
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           setEmail(ev.target.value);
         }}
       />
@@ -62,6 +70,8 @@ export const FeedbackForm = () => {
         disabled=${submitted}
         value=${feedback}
         onInput=${(ev: any) => {
+          // initial eslint integration
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           setFeedback(ev.target.value);
         }}
       />

@@ -7,6 +7,6 @@ module.exports = {
   treatWarningsAsErrors: true,
   treatValidationWarningsAsErrors: true,
   categoryOrder: ["Setup", "Client"],
-  plugin: ["typedoc-plugin-markdown"],
+  // plugin: ["typedoc-plugin-markdown"],
   readme: "none",
 };

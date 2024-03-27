@@ -1,6 +1,8 @@
 import React, { type FC } from "react";
 import { Link } from "react-router-dom";
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/ban-types
 const PrevArrow: FC<{}> = () => (
   <svg
     viewBox="0 0 16 16"
@@ -11,6 +13,8 @@ const PrevArrow: FC<{}> = () => (
   </svg>
 );
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/ban-types
 const NextArrow: FC<{}> = () => (
   <svg
     viewBox="0 0 16 16"
@@ -30,6 +34,8 @@ export const NextPrevPage: FC<{ prev?: LinkData; next?: LinkData }> = (
   props,
 ) => (
   <dl className="mt-12 flex border-t border-gray-200 pt-6">
+    {/* initial eslint integration */}
+    {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */}
     {props.prev && (
       <div>
         <dt className="font-display text-sm font-medium text-gray-800">
@@ -46,6 +52,8 @@ export const NextPrevPage: FC<{ prev?: LinkData; next?: LinkData }> = (
         </dd>
       </div>
     )}
+    {/* initial eslint integration */}
+    {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */}
     {props.next && (
       <div className="ml-auto text-right">
         <dt className="font-display text-sm font-medium text-gray-900">Next</dt>

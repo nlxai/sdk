@@ -2,7 +2,6 @@ import fetch from "isomorphic-fetch";
 
 /**
  * The starting point of the package. Call create to create a `VoiceCompass` client.
- *
  * @example
  * ```typescript
  *  const client = nlxai.voiceCompass.create({
@@ -17,11 +16,8 @@ import fetch from "isomorphic-fetch";
  *
  * client.sendStep("REPLACE_WITH_STEP_ID");
  * ```
- *
  * @category Setup
- *
- * @param options - the configuration object
- *
+ * @param options - configuration options for the client
  * @returns a Voice Compass client
  */
 export const create = ({
@@ -33,47 +29,47 @@ export const create = ({
   debug = false,
   dev = false,
 }: Config): Client => {
-  if (!conversationId) {
+  if (typeof conversationId !== "string" || conversationId.length === 0) {
     console.warn(
       'No conversation ID provided. Please call the Voice Compass client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`',
     );
   }
-  const sendStep = (stepId: string, context?: Context) => {
-    if (!stepIdRegex.test(stepId)) {
-      throw new Error("Invalid stepId. It should be formatted as a UUID.");
-    }
+  return {
+    sendStep: async (stepId: string, context?: Context) => {
+      if (!stepIdRegex.test(stepId)) {
+        throw new Error("Invalid stepId. It should be formatted as a UUID.");
+      }
 
-    const payload = {
-      stepId,
-      context,
-      conversationId,
-      journeyId,
-      languageCode,
-    };
+      const payload = {
+        stepId,
+        context,
+        conversationId,
+        journeyId,
+        languageCode,
+      };
 
-    return fetch(`https://${dev ? "dev." : ""}mm.nlx.ai/v1/track`, {
-      method: "POST",
-      headers: {
-        "x-api-key": apiKey,
-        "x-nlx-id": workspaceId,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    })
-      .then(() => {
-        if (debug) {
-          console.info(`✓ step: ${stepId}`, payload);
-        }
+      await fetch(`https://${dev ? "dev." : ""}mm.nlx.ai/v1/track`, {
+        method: "POST",
+        headers: {
+          "x-api-key": apiKey,
+          "x-nlx-id": workspaceId,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       })
-      .catch((err: Error) => {
-        if (debug) {
-          console.error(`× step: ${stepId}`, err, payload);
-        }
-        throw err;
-      });
+        .then(() => {
+          if (debug) {
+            console.info(`✓ step: ${stepId}`, payload);
+          }
+        })
+        .catch((err: Error) => {
+          if (debug) {
+            console.error(`× step: ${stepId}`, err, payload);
+          }
+          throw err;
+        });
+    },
   };
-
-  return { sendStep };
 };
 
 /**
@@ -83,7 +79,7 @@ export const create = ({
 export interface Client {
   /**
    *
-   * * @example
+   * @example
    * ```typescript
    *  const client = nlxai.voiceCompass.create({
    *  // hard-coded params
@@ -102,7 +98,6 @@ export interface Client {
    *
    *
    *   _Note: Must be a valid UUID_
-   *
    * @param context -  context to send back to the voice bot, for usage later in the intent.
    */
   sendStep: (stepId: string, context?: Context) => Promise<void>;
@@ -119,7 +114,7 @@ export type Context = Record<string, any>;
  * @category Setup
  */
 export interface Config {
-  /** * the API key generated for the journey.  **/
+  /** * the API key generated for the journey.  */
   apiKey: string;
   /** the ID of the journey.  */
   journeyId: string;
@@ -127,16 +122,18 @@ export interface Config {
   /** your workspace id */
   workspaceId: string;
 
-  /** the conversation id, passed from the active voice bot.
+  /**
+   * the conversation id, passed from the active voice bot.
    *
    * _Note: This must be dynamically set by the voice bot._
-   * */
+   */
   conversationId: string;
 
-  /** the user's language code.
+  /**
+   * the user's language code.
    *
    * In the browser may be fetched from `navigator.language`, or if the journey doesn't support multiple languages, can be hardcoded.
-   * */
+   */
   languageCode: string;
 
   /** set to true to help debug issues or errors. Defaults to false */
@@ -147,7 +144,8 @@ export interface Config {
 }
 
 /**
- * @internal @hidden
+ * @internal
+ * @hidden
  * this is exported so we can test it. Should be equivalent to a UUID v4 regex.
  */
 export const stepIdRegex =

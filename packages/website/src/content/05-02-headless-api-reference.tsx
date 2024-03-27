@@ -51,6 +51,8 @@ Remove all subscriptions.
 Reset the conversation. This makes sure that information previously collected by your bot will not affect the logic of the conversation any longer.
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const HeadlessApi = () => {
   return (
     <>

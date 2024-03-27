@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { DatePicker } from "../custom-components/DatePicker";
-import { InlineWidget, Item } from "../components/InlineWidget";
+import { InlineWidget, type Item } from "../components/InlineWidget";
 import { datePickerSnippet } from "../snippets";
 
 export const content = `
@@ -13,6 +13,8 @@ ${datePickerSnippet}
 ~~~
 `;
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const WebWidgetComponentsDatePicker = () => {
   const [submitted, setSubmitted] = useState(false);
   const [date, setDate] = useState<Date | null>(null);

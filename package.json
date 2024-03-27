@@ -8,10 +8,13 @@
   ],
   "scripts": {
     "build": "lerna run build",
+    "lint:check": "lerna run lint:check",
+    "lint": "lerna run lint",
     "postinstall": "npm run build",
     "publish": "rm -f package-lock.json && rm -f packages/*/package-lock.json && lerna publish --no-private",
     "publish-docs": "lerna run publish-docs",
     "test": "lerna run test",
+    "tsc": "lerna run tsc",
     "watch": "lerna watch -- lerna run build --since"
   },
   "author": "Peter Szerzo <peter@nlx.ai>",

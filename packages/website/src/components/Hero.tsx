@@ -5,6 +5,8 @@ import { FeedbackForm } from "../custom-components/FeedbackForm";
 import { Carousel, carouselExampleData } from "../custom-components/Carousel";
 import { InlineWidget } from "../components/InlineWidget";
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const Hero = () => {
   const location = useLocation();
   const pathname =
@@ -25,7 +27,7 @@ export const Hero = () => {
             <div className="relative">
               <p className="inline text-white font-display text-5xl">
                 SDK for rich conversational experiences powered by{" "}
-                <a href="https://nlx.ai" target="_blank">
+                <a href="https://nlx.ai" target="_blank" rel="noreferrer">
                   NLX
                 </a>
                 &reg;

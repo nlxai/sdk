@@ -3,17 +3,17 @@ import { useState, useEffect, useRef, useMemo } from "preact/hooks";
 // Code from here on out is identical in the React and Preact packages
 import { last } from "ramda";
 import createConversation, {
-  Config,
-  ConversationHandler,
+  type Config,
+  type ConversationHandler,
   shouldReinitialize,
-  Response
+  type Response,
 } from "@nlxai/chat-core";
 
 export interface ChatHook {
   conversationHandler: ConversationHandler;
   inputValue: string;
   setInputValue: (val: string) => void;
-  responses: Array<Response>;
+  responses: Response[];
   waiting: boolean;
 }
 
@@ -28,8 +28,8 @@ export const useChat = (config: Config): ChatHook => {
   const conversationHandler: ConversationHandler = useMemo(() => {
     // Prevent re-initialization if backend-related props have not changed
     if (
-      prevConfig.current &&
-      prevConversationHandler.current &&
+      prevConfig.current != null &&
+      prevConversationHandler.current != null &&
       !shouldReinitialize(prevConfig.current, config)
     ) {
       return prevConversationHandler.current;
@@ -39,7 +39,7 @@ export const useChat = (config: Config): ChatHook => {
     return newHandler;
   }, [config]);
 
-  const [responses, setResponses] = useState<Array<Response>>([]);
+  const [responses, setResponses] = useState<Response[]>([]);
 
   const [inputValue, setInputValue] = useState<string>("");
 
@@ -52,14 +52,14 @@ export const useChat = (config: Config): ChatHook => {
   }, [conversationHandler]);
 
   const lastMessage = last<Response>(responses);
-  const isWaiting = lastMessage ? lastMessage.type === "user" : false;
+  const isWaiting = lastMessage?.type === "user";
 
   return {
     conversationHandler,
     inputValue,
     responses,
     waiting: isWaiting,
-    setInputValue
+    setInputValue,
   };
 };
 

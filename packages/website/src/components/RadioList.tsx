@@ -1,12 +1,14 @@
 import React, { type ReactNode } from "react";
 
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
 export const RadioList = <T extends unknown>({
   selected,
   options,
   onChange,
 }: {
   selected: T;
-  options: { id: string; value: T; label: string }[];
+  options: Array<{ id: string; value: T; label: string }>;
   onChange: (val: T) => void;
 }): ReactNode => {
   console.log(selected, options);
