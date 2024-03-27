@@ -149,12 +149,7 @@ const MessageGroups: FC<{
                               };
                         })()}
                         dangerouslySetInnerHTML={{
-                          __html: marked(
-                            choice.choiceText +
-                              // initial eslint integration
-                              // eslint-disable-next-line no-constant-condition
-                              (false ? " asdf fadsfds  fdsa fdsa fdsa " : ""),
-                          ),
+                          __html: marked(choice.choiceText),
                         }}
                       ></C.ChoiceButton>
                     ))}
@@ -483,14 +478,22 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
                 {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */}
                 {props.titleBar && (
                   <C.TitleBar>
-                    <C.TitleContainer>
-                      {/* initial eslint integration */}
-                      {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */}
-                      {props.titleBar.logo && (
-                        <C.TitleIcon src={props.titleBar.logo} />
-                      )}
-                      <C.Title>{props.titleBar.title}</C.Title>
-                    </C.TitleContainer>
+                    {/* initial eslint integration */}
+                    {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */}
+                    {props.titleBar.logo && (
+                      <C.TitleIcon src={props.titleBar.logo} />
+                    )}
+                    <C.Title>{props.titleBar.title}</C.Title>
+                    {props.titleBar.withCollapseButton ? (
+                      <C.TitleBarButton
+                        title="Close"
+                        onClick={() => {
+                          collapse();
+                        }}
+                      >
+                        <CloseIcon />
+                      </C.TitleBarButton>
+                    ) : null}
                   </C.TitleBar>
                 )}
                 <MessageGroups
@@ -557,9 +560,9 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
           >
             {expanded ? (
               <CloseIcon />
-            // initial eslint integration
+            ) : // initial eslint integration
             // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-            ) : props.chatIcon ? (
+            props.chatIcon ? (
               <img src={props.chatIcon} />
             ) : (
               <ChatIcon />

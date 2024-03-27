@@ -35,8 +35,8 @@ export const snippetContent = ({
   titleBar: TitleBar;
   theme: Partial<Theme>;
   behavior: Behavior;
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  // initial eslint integration
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 }) => `
 
 ### Setup snippet
@@ -66,6 +66,7 @@ export const WebWidgetTryLive = () => {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
     retrieveTitleBar() || {
       title: "Support",
+      withCollapseButton: true,
     },
   );
 

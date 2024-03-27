@@ -591,25 +591,31 @@ export const TitleBar = styled.div<{}>`
   z-index: 10;
 `;
 
-// TitleContainer
-
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const TitleContainer = styled.div<{}>`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-`;
-
 // Title
 
 // initial eslint integration
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const Title = styled.p<{}>`
+  flex-grow: 1;
   font-size: 16px;
   font-weight: bold;
   margin: 0;
   color: ${(props) => props.theme.white};
+`;
+
+// TitleBarButton
+
+// initial eslint integration
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const TitleBarButton = styled.button<{}>`
+  height: 28px;
+  flex: 0 0 28px;
+  padding: 2px;
+  color: ${(props) => props.theme.white};
+  opacity: 0.8;
+  :hover {
+    opacity: 1;
+  }
 `;
 
 // DiscreteButton
@@ -647,7 +653,7 @@ export const DiscreteLink = styled.a<{}>`
 // initial eslint integration
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const TitleIcon = styled.img<{}>`
-  width: 22px;
+  flex: 0 0 22px;
   height: 22px;
   margin-right: 6px;
 `;
