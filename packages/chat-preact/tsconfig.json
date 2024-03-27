@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "lib": ["dom"],
+    "declaration": true,
+    "esModuleInterop": true,
     "jsx": "react",
     "jsxFactory": "h",
-    "declaration": true,
+    "lib": ["dom"],
+    "module": "commonjs",
     "outDir": "./lib",
     "rootDir": "./src",
     "strict": true,
     "strictNullChecks": true,
-    "esModuleInterop": true
+    "target": "es5"
   }
 }
