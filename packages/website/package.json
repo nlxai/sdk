@@ -5,8 +5,8 @@
   "scripts": {
     "build": "tsc && vite build",
     "dev": "vite --force",
-    "lint:check": "npx eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx",
-    "lint": "npx eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx --fix",
+    "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx",
+    "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx --fix",
     "tsc": "tsc"
   },
   "dependencies": {
