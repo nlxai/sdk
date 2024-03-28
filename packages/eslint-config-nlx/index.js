@@ -5,7 +5,7 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    "standard-with-typescript",
+    "love",
     "plugin:react/recommended",
     "prettier" // note: order matters. prettier being last overrides standard-with-typescript formatting
   ],

@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "declaration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": false,
     "module": "esnext",
     "moduleResolution": "bundler",
-    "declaration": true,
     "outDir": "./lib",
     "rootDir": "./src",
     "strict": true,
     "strictNullChecks": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": false
+    "target": "es6"
   }
 }
