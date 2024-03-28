@@ -119,17 +119,17 @@ export const routes: Array<{
         },
         {
           label: "File upload",
-          url: "/widget-components/file-upload",
+          url: "/widget-components-file-upload",
           element: <WebWidgetComponentsFileUpload />,
         },
         {
           label: "Secure input",
-          url: "/widget-components/secure-input",
+          url: "/widget-components-secure-input",
           element: <WebWidgetComponentsSecureInput />,
         },
         {
           label: "Video player",
-          url: "/widget-components/video-player",
+          url: "/widget-components-video-player",
           element: <WebWidgetComponentsVideoPlayer />,
         },
       ]),
