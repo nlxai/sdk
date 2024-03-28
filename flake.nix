@@ -30,6 +30,8 @@
       devShells.default = pkgs.mkShell {
         packages = with pkgs; [
           (assertVersion (nixpkgs.lib.strings.fileContents "${self}/.node-version") nodejs_18)
+          # caddy is used to mimic github actions more closely than the vite dev server
+          (assertVersion "2.7.6" caddy)
         ];
       };
     });
