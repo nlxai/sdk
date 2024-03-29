@@ -62,11 +62,10 @@ export const WebWidgetTryLive = () => {
   }, [theme]);
 
   const [titleBar, setTitleBar] = useState<TitleBar>(
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-    retrieveTitleBar() || {
+    retrieveTitleBar() ?? {
       title: "Support",
       withCollapseButton: true,
+      withCloseButton: true,
     },
   );
 
