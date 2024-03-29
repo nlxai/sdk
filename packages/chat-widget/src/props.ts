@@ -6,6 +6,7 @@ export interface TitleBar {
   logo?: string;
   title: string;
   withCollapseButton?: boolean;
+  withCloseButton?: boolean;
 }
 
 export type StorageType = "localStorage" | "sessionStorage";
@@ -24,5 +25,6 @@ export interface Props {
   storeIn?: StorageType;
   onExpand?: (conversationHandler: ConversationHandler) => void;
   onCollapse?: (conversationHandler: ConversationHandler) => void;
+  onClose?: () => void;
   customModalities?: Record<string, CustomModalityComponent>;
 }

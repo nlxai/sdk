@@ -17,7 +17,13 @@ import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "@emotion/react";
 import { useChat, type ChatHook } from "@nlxai/chat-react";
 import { type Response, type ConversationHandler } from "@nlxai/chat-core";
-import { CloseIcon, ChatIcon, AirplaneIcon, ErrorOutlineIcon } from "./icons";
+import {
+  CloseIcon,
+  MinimizeIcon,
+  ChatIcon,
+  SendIcon,
+  ErrorOutlineIcon,
+} from "./icons";
 import * as constants from "./ui/constants";
 import {
   type Props,
@@ -72,13 +78,6 @@ export const create = (props: Props): WidgetInstance => {
       return ref.current?.conversationHandler;
     },
   };
-};
-
-const toStringWithLeadingZero = (n: number): string => {
-  if (n < 10) {
-    return `0${n}`;
-  }
-  return `${n}`;
 };
 
 const Loader: FC<{ message?: string; showAfter?: number }> = (props) => {
@@ -434,23 +433,10 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
       chat.setInputValue("");
     });
 
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const dateTimestamp = useMemo(() => {
-    const d = new Date();
-    return `${d.getFullYear()}-${toStringWithLeadingZero(
-      d.getMonth() + 1,
-    )}-${toStringWithLeadingZero(d.getDate())}-${toStringWithLeadingZero(
-      d.getHours(),
-    )}:${toStringWithLeadingZero(d.getMinutes())}`;
-  }, [chat.responses]);
-
   const mergedTheme = useMemo(
     () => ({
       ...constants.defaultTheme,
-      // initial eslint integration
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-      ...(props.theme || {}),
+      ...(props.theme ?? {}),
       windowInnerHeight: windowInnerHeightValue,
     }),
     [props.theme, windowInnerHeightValue],
@@ -484,12 +470,25 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
                       <C.TitleIcon src={props.titleBar.logo} />
                     )}
                     <C.Title>{props.titleBar.title}</C.Title>
-                    {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */}
-                    {props.titleBar.withCollapseButton ? (
+                    {props.titleBar.withCollapseButton ?? false ? (
+                      <C.TitleBarButton
+                        title="Minimize"
+                        onClick={() => {
+                          collapse();
+                        }}
+                      >
+                        <MinimizeIcon />
+                      </C.TitleBarButton>
+                    ) : null}
+                    {props.titleBar.withCloseButton ?? false ? (
                       <C.TitleBarButton
                         title="Close"
                         onClick={() => {
                           collapse();
+                          props.onClose?.();
+                          chat.conversationHandler.reset({
+                            clearResponses: true,
+                          });
                         }}
                       >
                         <CloseIcon />
@@ -499,9 +498,7 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
                 )}
                 <MessageGroups
                   chat={chat}
-                  // initial eslint integration
-                  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-                  customModalities={props.customModalities || {}}
+                  customModalities={props.customModalities ?? {}}
                 >
                   {chat.waiting && (
                     <C.MessageGroup>
@@ -519,9 +516,7 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
                 <C.Input
                   ref={inputRef}
                   value={chat.inputValue}
-                  // initial eslint integration
-                  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-                  placeholder={props.inputPlaceholder || "Type something..."}
+                  placeholder={props.inputPlaceholder ?? "Type something..."}
                   onChange={(event: any) => {
                     // initial eslint integration
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -548,7 +543,7 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
                       }
                     }}
                   >
-                    <AirplaneIcon />
+                    <SendIcon />
                   </C.IconButton>
                 </C.BottomButtonsContainer>
               </C.Bottom>
@@ -559,7 +554,11 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
               setExpanded(!expanded);
             }}
           >
-            {expanded ? (
+            {expanded &&
+            !(
+              (props.titleBar?.withCloseButton ?? false) ||
+              (props.titleBar?.withCollapseButton ?? false)
+            ) ? (
               <CloseIcon />
             ) : // initial eslint integration
             // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
