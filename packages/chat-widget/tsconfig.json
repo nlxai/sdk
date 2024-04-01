@@ -1,17 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "declaration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": false,
+    "jsx": "react",
+    "lib": ["dom"],
     "module": "esnext",
     "moduleResolution": "bundler",
-    "lib": ["dom"],
-    "jsx": "react",
-    "skipLibCheck": true,
-    "declaration": true,
     "outDir": "./lib",
     "rootDir": "./src",
+    "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": false,
-    "esModuleInterop": true
+    "target": "es6"
   }
 }

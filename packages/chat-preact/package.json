@@ -9,8 +9,8 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "rm -rf lib && rollup -c",
-    "lint:check": "npx eslint src/ --ext .ts,.tsx,.js,.jsx",
-    "lint": "npx eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
+    "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx",
+    "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
     "prepublish": "npm run build",
     "tsc": "tsc"
   },
