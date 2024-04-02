@@ -569,6 +569,8 @@ and limitations under the License.
   margin: 0;
   color: ${e=>e.theme.white};
 `,b1=Ie.button`
+  border: none;
+  background: none;
   height: 28px;
   flex: 0 0 28px;
   padding: 2px;
