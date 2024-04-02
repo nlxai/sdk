@@ -679,7 +679,7 @@ export const umdScriptTags: ScriptTagsType = (
   (acc, key) => ({
     ...acc,
     [key]: `<script defer src="${
-      umdScriptSrc[key as keyof typeof umdScriptSrc]
+      umdScriptSrc[key]
     }"></script>`,
   }),
 
