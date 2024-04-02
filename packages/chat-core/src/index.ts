@@ -242,9 +242,9 @@ export const createConversation = (config: Config): ConversationHandler => {
       ...state,
       ...change,
     };
-    subscribers.forEach((subscriber) =>
-      { subscriber(fromInternal(state), newResponse); },
-    );
+    subscribers.forEach((subscriber) => {
+      subscriber(fromInternal(state), newResponse);
+    });
   };
 
   // initial eslint integration
@@ -369,7 +369,7 @@ export const createConversation = (config: Config): ConversationHandler => {
         .catch((err) => {
           console.warn(err);
           failureHandler();
-        }); 
+        });
     }
   };
 
@@ -447,8 +447,8 @@ export const createConversation = (config: Config): ConversationHandler => {
   const appendStructuredUserResponse = (
     structured: StructuredRequest,
     context?: Context,
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   ) => {
     const newResponse: Response = {
       type: "user",
@@ -561,12 +561,8 @@ export const createConversation = (config: Config): ConversationHandler => {
       sendIntent(welcomeIntent, context);
     },
     sendChoice: (choiceId, context) => {
-      // initial eslint integration
-      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-      const containsChoice = (botMessage: BotMessage) =>
-        // initial eslint integration
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        (botMessage.choices || [])
+      const containsChoice = (botMessage: BotMessage): boolean =>
+        (botMessage.choices ?? [])
           .map((choice) => choice.choiceId)
           .includes(choiceId);
 
@@ -681,8 +677,8 @@ export function promisify<T>(
       const subscription = (
         _responses: Response[],
         newResponse: Response | undefined,
-      // initial eslint integration
-      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+        // initial eslint integration
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       ) => {
         // initial eslint integration
         // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
