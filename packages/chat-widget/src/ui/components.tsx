@@ -608,6 +608,8 @@ export const Title = styled.p<{}>`
 // initial eslint integration
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const TitleBarButton = styled.button<{}>`
+  border: none;
+  background: none;
   height: 28px;
   flex: 0 0 28px;
   padding: 2px;
