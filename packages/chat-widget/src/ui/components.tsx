@@ -610,6 +610,7 @@ export const Title = styled.p<{}>`
 export const TitleBarButton = styled.button<{}>`
   border: none;
   background: none;
+  cursor: pointer;
   height: 28px;
   flex: 0 0 28px;
   padding: 2px;
