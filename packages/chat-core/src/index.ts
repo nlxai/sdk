@@ -6,111 +6,312 @@ import packageJson from "../package.json";
 
 // Bot response
 
+/**
+ *
+ */
 export type Context = Record<string, any>;
 
+/**
+ *
+ */
 export interface SlotValue {
+  /**
+   *
+   */
   slotId: string;
+  /**
+   *
+   */
   value: any;
 }
 
+/**
+ *
+ */
 export type SlotsRecord = Record<string, any>;
 
+/**
+ *
+ */
 export type SlotsRecordOrArray = SlotsRecord | SlotValue[];
 
+/**
+ *
+ */
 export interface BotResponse {
+  /**
+   *
+   */
   type: "bot";
+  /**
+   *
+   */
   receivedAt: Time;
+  /**
+   *
+   */
   payload: BotResponsePayload;
 }
 
+/**
+ *
+ */
 export interface BotResponsePayload {
+  /**
+   *
+   */
   expirationTimestamp?: number;
+  /**
+   *
+   */
   conversationId?: string;
+  /**
+   *
+   */
   messages: BotMessage[];
+  /**
+   *
+   */
   metadata?: BotResponseMetadata;
+  /**
+   *
+   */
   payload?: string;
+  /**
+   *
+   */
   modalities?: Record<string, any>;
+  /**
+   *
+   */
   context?: Context;
 }
 
+/**
+ *
+ */
 export interface BotResponseMetadata {
+  /**
+   *
+   */
   intentId?: string;
+  /**
+   *
+   */
   escalation?: boolean;
+  /**
+   *
+   */
   frustration?: boolean;
+  /**
+   *
+   */
   incomprehension?: boolean;
+  /**
+   *
+   */
   hasPendingDataRequest?: boolean;
 }
 
+/**
+ *
+ */
 export interface BotMessage {
+  /**
+   *
+   */
   messageId?: string;
+  /**
+   *
+   */
   nodeId?: string;
+  /**
+   *
+   */
   text: string;
+  /**
+   *
+   */
   choices: Choice[];
+  /**
+   *
+   */
   selectedChoiceId?: string;
 }
 
+/**
+ *
+ */
 export interface Choice {
+  /**
+   *
+   */
   choiceId: string;
+  /**
+   *
+   */
   choiceText: string;
+  /**
+   *
+   */
   choicePayload?: string;
 }
 
 // User message
 
+/**
+ *
+ */
 export interface UserResponse {
+  /**
+   *
+   */
   type: "user";
+  /**
+   *
+   */
   receivedAt: Time;
+  /**
+   *
+   */
   payload: UserResponsePayload;
 }
 
+/**
+ *
+ */
 export type UserResponsePayload =
   | {
+      /**
+       *
+       */
       type: "text";
+      /**
+       *
+       */
       text: string;
+      /**
+       *
+       */
       context?: Context;
     }
   | {
+      /**
+       *
+       */
       type: "choice";
+      /**
+       *
+       */
       choiceId: string;
+      /**
+       *
+       */
       context?: Context;
     }
   | ({
+      /**
+       *
+       */
       type: "structured";
+      /**
+       *
+       */
       context?: Context;
     } & StructuredRequest);
 
 // Failure message
 
+/**
+ *
+ */
 export interface FailureMessage {
+  /**
+   *
+   */
   type: "failure";
+  /**
+   *
+   */
   payload: {
+    /**
+     *
+     */
     text: string;
   };
+  /**
+   *
+   */
   receivedAt: Time;
 }
 
+/**
+ *
+ */
 export type Response = BotResponse | UserResponse | FailureMessage;
 
+/**
+ *
+ */
 export type Time = number;
 
 // Config and state
 
+/**
+ *
+ */
 export type Environment = "production" | "development";
 
+/**
+ *
+ */
 export interface Config {
+  /**
+   *
+   */
   botUrl: string;
+  /**
+   *
+   */
   conversationId?: string;
+  /**
+   *
+   */
   userId?: string;
+  /**
+   *
+   */
   responses?: Response[];
+  /**
+   *
+   */
   failureMessage?: string;
+  /**
+   *
+   */
   environment?: Environment;
+  /**
+   *
+   */
   headers: Record<string, string> & { "nlx-api-key": string };
+  /**
+   *
+   */
   languageCode: string;
   // Experimental settings
+  /**
+   *
+   */
   experimental?: {
     // Simulate alternative channel types
+    /**
+     *
+     */
     channelType?: string;
     // Prevent the `languageCode` parameter to be appended to the bot URL - used in special deployment environments such as the sandbox chat inside Dialog Studio
+    /**
+     *
+     */
     completeBotUrl?: boolean;
   };
 }
@@ -119,6 +320,9 @@ const welcomeIntent = "NLX.Welcome";
 
 const defaultFailureMessage = "We encountered an issue. Please try again soon.";
 
+/**
+ *
+ */
 export type State = Response[];
 
 const normalizeSlots = (
@@ -133,11 +337,29 @@ const normalizeSlots = (
   }));
 };
 
+/**
+ *
+ */
 export interface StructuredRequest {
+  /**
+   *
+   */
   choiceId?: string;
+  /**
+   *
+   */
   intentId?: string;
+  /**
+   *
+   */
   nodeId?: string;
+  /**
+   *
+   */
   slots?: SlotsRecordOrArray;
+  /**
+   *
+   */
   poll?: boolean;
 }
 
@@ -159,22 +381,66 @@ interface ChoiceRequestMetadata {
   nodeId?: string;
 }
 
+/**
+ *
+ */
 export interface ConversationHandler {
+  /**
+   *
+   */
   sendText: (text: string, context?: Context) => void;
+  /**
+   *
+   */
   sendSlots: (slots: SlotsRecordOrArray, context?: Context) => void;
+  /**
+   *
+   */
   sendChoice: (
     choiceId: string,
     context?: Context,
     metadata?: ChoiceRequestMetadata,
   ) => void;
+  /**
+   *
+   */
   sendWelcomeIntent: (context?: Context) => void;
+  /**
+   *
+   */
   sendIntent: (intentId: string, context?: Context) => void;
+  /**
+   *
+   */
   sendStructured: (request: StructuredRequest, context?: Context) => void;
+  /**
+   *
+   */
   subscribe: (subscriber: Subscriber) => () => void;
+  /**
+   *
+   */
   unsubscribe: (subscriber: Subscriber) => void;
+  /**
+   *
+   */
   unsubscribeAll: () => void;
+  /**
+   *
+   */
   currentConversationId: () => string | undefined;
-  reset: (options?: { clearResponses?: boolean }) => void;
+  /**
+   *
+   */
+  reset: (options?: {
+    /**
+     *
+     */
+    clearResponses?: boolean;
+  }) => void;
+  /**
+   *
+   */
   destroy: () => void;
 }
 
@@ -578,6 +844,12 @@ export const createConversation = (config: Config): ConversationHandler => {
   };
 };
 
+/**
+ *
+ * @param fn
+ * @param convo
+ * @param timeout
+ */
 export function promisify<T>(
   fn: (payload: T) => void,
   convo: ConversationHandler,
