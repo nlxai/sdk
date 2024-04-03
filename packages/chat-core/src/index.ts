@@ -291,6 +291,7 @@ export const createConversation = (config: Config): ConversationHandler => {
         payload: {
           ...response,
           messages: response.messages.map((message: any) => ({
+            nodeId: message.nodeId,
             messageId: message.messageId,
             text: message.text,
             // initial eslint integration
