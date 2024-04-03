@@ -1,6 +1,6 @@
 import fetch from "isomorphic-fetch";
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { equals, findLastIndex, update } from "ramda";
+import { equals, adjust } from "ramda";
 import { v4 as uuid } from "uuid";
 
 // Bot response
@@ -152,10 +152,20 @@ interface BotRequest {
   };
 }
 
+interface ChoiceRequestMetadata {
+  responseIndex?: number;
+  messageIndex?: number;
+  nodeId?: string;
+}
+
 export interface ConversationHandler {
   sendText: (text: string, context?: Context) => void;
   sendSlots: (slots: Slots | SlotValue[], context?: Context) => void;
-  sendChoice: (choiceId: string, context?: Context, nodeId?: string) => void;
+  sendChoice: (
+    choiceId: string,
+    context?: Context,
+    metadata?: ChoiceRequestMetadata,
+  ) => void;
   sendWelcomeIntent: (context?: Context) => void;
   sendIntent: (intentId: string, context?: Context) => void;
   sendStructured: (request: StructuredRequest, context?: Context) => void;
@@ -562,19 +572,7 @@ export const createConversation = (config: Config): ConversationHandler => {
     sendWelcomeIntent: (context) => {
       sendIntent(welcomeIntent, context);
     },
-    sendChoice: (choiceId, context, nodeId) => {
-      const containsChoice = (botMessage: BotMessage): boolean =>
-        (botMessage.choices ?? [])
-          .map((choice) => choice.choiceId)
-          .includes(choiceId);
-
-      const lastBotResponseIndex = findLastIndex(
-        (response: Response) =>
-          response.type === "bot" &&
-          Boolean(response.payload.messages.find(containsChoice)),
-        state.responses,
-      );
-
+    sendChoice: (choiceId, context, metadata) => {
       let newResponses: Response[] = [...state.responses];
 
       const choiceResponse: Response = {
@@ -586,27 +584,26 @@ export const createConversation = (config: Config): ConversationHandler => {
         },
       };
 
-      if (lastBotResponseIndex > -1) {
-        const lastBotResponse = state.responses[
-          lastBotResponseIndex
-        ] as BotResponse;
+      const responseIndex = metadata?.responseIndex ?? -1;
+      const messageIndex = metadata?.messageIndex ?? -1;
 
-        const updatedBotResponse = {
-          ...lastBotResponse,
-          payload: {
-            ...lastBotResponse.payload,
-            messages: lastBotResponse.payload.messages.map((botMessage) => ({
-              ...botMessage,
-              selectedChoiceId: containsChoice(botMessage)
-                ? choiceId
-                : botMessage.selectedChoiceId,
-            })),
-          },
-        };
-
-        newResponses = update(
-          lastBotResponseIndex,
-          updatedBotResponse,
+      if (responseIndex > -1 && messageIndex > -1) {
+        newResponses = adjust(
+          responseIndex,
+          (response) =>
+            response.type === "bot"
+              ? {
+                  ...response,
+                  payload: {
+                    ...response.payload,
+                    messages: adjust(
+                      messageIndex,
+                      (message) => ({ ...message, selectedChoiceId: choiceId }),
+                      response.payload.messages,
+                    ),
+                  },
+                }
+              : response,
           newResponses,
         );
       }
@@ -626,7 +623,7 @@ export const createConversation = (config: Config): ConversationHandler => {
         context,
         request: {
           structured: {
-            nodeId,
+            nodeId: metadata?.nodeId,
             choiceId,
           },
         },
