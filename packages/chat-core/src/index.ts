@@ -41,6 +41,7 @@ export interface BotResponseMetadata {
 
 export interface BotMessage {
   messageId?: string;
+  nodeId?: string;
   text: string;
   choices: Choice[];
   selectedChoiceId?: string;
@@ -134,6 +135,7 @@ const normalizeSlots = (slotsWithLegacy: Slots | SlotValue[]): Slots => {
 export interface StructuredRequest {
   choiceId?: string;
   intentId?: string;
+  nodeId?: string;
   slots?: Slots | SlotValue[];
   poll?: boolean;
 }
@@ -153,7 +155,7 @@ interface BotRequest {
 export interface ConversationHandler {
   sendText: (text: string, context?: Context) => void;
   sendSlots: (slots: Slots | SlotValue[], context?: Context) => void;
-  sendChoice: (choiceId: string, context?: Context) => void;
+  sendChoice: (choiceId: string, context?: Context, nodeId?: string) => void;
   sendWelcomeIntent: (context?: Context) => void;
   sendIntent: (intentId: string, context?: Context) => void;
   sendStructured: (request: StructuredRequest, context?: Context) => void;
@@ -560,7 +562,7 @@ export const createConversation = (config: Config): ConversationHandler => {
     sendWelcomeIntent: (context) => {
       sendIntent(welcomeIntent, context);
     },
-    sendChoice: (choiceId, context) => {
+    sendChoice: (choiceId, context, nodeId) => {
       const containsChoice = (botMessage: BotMessage): boolean =>
         (botMessage.choices ?? [])
           .map((choice) => choice.choiceId)
@@ -624,6 +626,7 @@ export const createConversation = (config: Config): ConversationHandler => {
         context,
         request: {
           structured: {
+            nodeId,
             choiceId,
           },
         },
