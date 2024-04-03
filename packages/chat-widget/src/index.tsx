@@ -109,6 +109,7 @@ const MessageGroups: FC<{
   chat: ChatHook;
   children?: ReactNode;
   customModalities: Record<string, CustomModalityComponent>;
+  allowChoiceReselection?: boolean;
 }> = (props) => (
   <C.MessageGroups>
     {/* initial eslint integration */}
@@ -132,7 +133,8 @@ const MessageGroups: FC<{
                         {...(() => {
                           // initial eslint integration
                           // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-                          return botMessage.selectedChoiceId
+                          return !(props.allowChoiceReselection ?? false) &&
+                            botMessage.selectedChoiceId != null
                             ? {
                                 disabled: true,
                                 selected:
@@ -499,6 +501,7 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
                 <MessageGroups
                   chat={chat}
                   customModalities={props.customModalities ?? {}}
+                  allowChoiceReselection={props.allowChoiceReselection}
                 >
                   {chat.waiting && (
                     <C.MessageGroup>

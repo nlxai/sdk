@@ -22,6 +22,7 @@ export interface Props {
   inputPlaceholder?: string;
   loaderMessage?: string;
   showLoaderMessageAfter?: number;
+  allowChoiceReselection?: boolean;
   storeIn?: StorageType;
   onExpand?: (conversationHandler: ConversationHandler) => void;
   onCollapse?: (conversationHandler: ConversationHandler) => void;
