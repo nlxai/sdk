@@ -133,17 +133,18 @@ const MessageGroups: FC<{
                         {...(() => {
                           const allowChoiceReselection =
                             props.allowChoiceReselection ?? false;
+                          const selected =
+                            botMessage.selectedChoiceId === choice.choiceId;
                           // initial eslint integration
                           // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                           return !allowChoiceReselection &&
                             botMessage.selectedChoiceId != null
                             ? {
                                 disabled: true,
-                                selected:
-                                  botMessage.selectedChoiceId ===
-                                  choice.choiceId,
+                                selected,
                               }
                             : {
+                                selected,
                                 onClick: () => {
                                   props.chat.conversationHandler.sendChoice(
                                     choice.choiceId,
