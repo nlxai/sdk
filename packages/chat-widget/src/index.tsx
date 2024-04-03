@@ -149,10 +149,16 @@ const MessageGroups: FC<{
                                     choice.choiceId,
                                     {},
                                     // Upon reselection, send the node ID
-                                    allowChoiceReselection &&
-                                      botMessage.selectedChoiceId != null
-                                      ? botMessage.nodeId
-                                      : undefined,
+                                    allowChoiceReselection
+                                      ? {
+                                          nodeId: botMessage.nodeId,
+                                          responseIndex,
+                                          messageIndex: botMessageIndex,
+                                        }
+                                      : {
+                                          responseIndex,
+                                          messageIndex: botMessageIndex,
+                                        },
                                   );
                                 },
                               };
