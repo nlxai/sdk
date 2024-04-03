@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/chat-core",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "NLX Chat SDK core",
   "main": "lib/index.esm.js",
   "module": "lib/index.esm.js",
