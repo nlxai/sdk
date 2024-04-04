@@ -7,13 +7,14 @@ import { v4 as uuid } from "uuid";
 
 export type Context = Record<string, any>;
 
-export type Slots = Record<string, any>;
-
-// Legacy format
 export interface SlotValue {
   slotId: string;
   value: any;
 }
+
+export type SlotsRecord = Record<string, any>;
+
+export type SlotsRecordOrArray = SlotsRecord | SlotValue[];
 
 export interface BotResponse {
   type: "bot";
@@ -119,24 +120,23 @@ const defaultFailureMessage = "We encountered an issue. Please try again soon.";
 
 export type State = Response[];
 
-const normalizeSlots = (slotsWithLegacy: Slots | SlotValue[]): Slots => {
-  const slots: Slots = {};
-  if (Array.isArray(slotsWithLegacy)) {
-    console.warn(
-      `The legacy slot format is deprecated. Instead of '[{ slotId: "MySlot", value: "my-value" }]', use '{ MySlot: "my-value" }'`,
-    );
-    slotsWithLegacy.forEach((slot) => {
-      slots[slot.slotId] = slot.value;
-    });
+const normalizeSlots = (
+  slotsRecordOrArray: SlotsRecordOrArray,
+): SlotValue[] => {
+  if (Array.isArray(slotsRecordOrArray)) {
+    return slotsRecordOrArray;
   }
-  return slots;
+  return Object.entries(slotsRecordOrArray).map(([key, value]) => ({
+    slotId: key,
+    value,
+  }));
 };
 
 export interface StructuredRequest {
   choiceId?: string;
   intentId?: string;
   nodeId?: string;
-  slots?: Slots | SlotValue[];
+  slots?: SlotsRecordOrArray;
   poll?: boolean;
 }
 
@@ -160,7 +160,7 @@ interface ChoiceRequestMetadata {
 
 export interface ConversationHandler {
   sendText: (text: string, context?: Context) => void;
-  sendSlots: (slots: Slots | SlotValue[], context?: Context) => void;
+  sendSlots: (slots: SlotsRecordOrArray, context?: Context) => void;
   sendChoice: (
     choiceId: string,
     context?: Context,
@@ -485,18 +485,20 @@ export const createConversation = (config: Config): ConversationHandler => {
       void sendToBot({
         context,
         request: {
-          structured,
+          structured: {
+            ...structured,
+            slots: normalizeSlots(structured.slots ?? []),
+          },
         },
       });
     },
-    sendSlots: (slotsWithLegacy, context) => {
-      const slots = normalizeSlots(slotsWithLegacy);
+    sendSlots: (slots, context) => {
       appendStructuredUserResponse({ slots }, context);
       void sendToBot({
         context,
         request: {
           structured: {
-            slots,
+            slots: normalizeSlots(slots),
           },
         },
       });
