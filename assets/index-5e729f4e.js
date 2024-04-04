@@ -377,10 +377,10 @@ and limitations under the License.
   transform: translate3d(0, -50%, 0);
 `,LM=Ie.input`
   display: block;
-  flex: 1;
   width: 100%;
   height: 100%;
   background-color: transparent;
+  box-sizing: border-box;
   padding: ${e=>`0 ${2*e.theme.spacing}px 0 ${2*e.theme.spacing}px`};
   font-size: ${An}px;
   border: none;
