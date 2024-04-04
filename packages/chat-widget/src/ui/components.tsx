@@ -334,10 +334,10 @@ export const BottomButtonsContainer = styled.div<{}>`
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const Input = styled.input<{}>`
   display: block;
-  flex: 1;
   width: 100%;
   height: 100%;
   background-color: transparent;
+  box-sizing: border-box;
   padding: ${(props) =>
     `0 ${2 * props.theme.spacing}px 0 ${2 * props.theme.spacing}px`};
   font-size: ${constants.fontSize}px;
