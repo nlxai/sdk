@@ -148,7 +148,7 @@ interface BotRequest {
     unstructured?: {
       text: string;
     };
-    structured?: StructuredRequest;
+    structured?: StructuredRequest & { slots?: SlotValue[] };
   };
 }
 
