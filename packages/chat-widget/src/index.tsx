@@ -173,17 +173,16 @@ const MessageGroups: FC<{
                 )}
               </C.Message>
             ))}
-            {/* initial eslint integration */}
-            {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing */}
-            {Object.entries(response.payload.modalities || {}).map(
+            {Object.entries(response.payload.modalities ?? {}).map(
               ([key, value]) => {
                 const Component = props.customModalities[key];
-                // initial eslint integration
-                // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-                if (Component) {
-                  return <Component key={key} data={value} />;
+                if (Component == null) {
+                  console.warn(
+                    `Custom component implementation missing for the ${key} modality.`,
+                  );
+                  return null;
                 }
-                return null;
+                return <Component key={key} data={value} />;
               },
             )}
           </C.MessageGroup>
