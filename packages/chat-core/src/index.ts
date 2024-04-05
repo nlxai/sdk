@@ -1,6 +1,6 @@
 import fetch from "isomorphic-fetch";
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { equals, adjust, omit } from "ramda";
+import { equals, adjust, omit, findLast } from "ramda";
 import { v4 as uuid } from "uuid";
 
 // Bot response
@@ -208,6 +208,20 @@ export const shouldReinitialize = (
   );
 };
 
+const getLastExpirationTimestamp = (
+  responses: Response[],
+): number | undefined => {
+  const lastExpirationResponse = findLast(
+    (response) =>
+      response.type === "bot" &&
+      typeof response.payload.expirationTimestamp === "number",
+    responses,
+  );
+  return lastExpirationResponse?.type === "bot"
+    ? lastExpirationResponse.payload.expirationTimestamp
+    : undefined;
+};
+
 export const createConversation = (config: Config): ConversationHandler => {
   let socket: ReconnectingWebSocket | undefined;
 
@@ -303,6 +317,15 @@ export const createConversation = (config: Config): ConversationHandler => {
     null;
 
   const sendToBot = async (body: BotRequest): Promise<void> => {
+    const lastExpirationTimestamp = getLastExpirationTimestamp(state.responses);
+    if (
+      typeof lastExpirationTimestamp === "number" &&
+      new Date().getTime() > lastExpirationTimestamp
+    ) {
+      setState({
+        conversationId: uuid(),
+      });
+    }
     const bodyWithContext = {
       userId: state.userId,
       conversationId: state.conversationId,
