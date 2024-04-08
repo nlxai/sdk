@@ -375,7 +375,7 @@ interface BotRequest {
   };
 }
 
-interface ChoiceRequestMetadata {
+export interface ChoiceRequestMetadata {
   responseIndex?: number;
   messageIndex?: number;
   nodeId?: string;
@@ -462,7 +462,7 @@ const safeJsonParse = (val: string): any => {
   }
 };
 
-type Subscriber = (response: Response[], newResponse?: Response) => void;
+export type Subscriber = (response: Response[], newResponse?: Response) => void;
 
 // Helper method to decide when a conversation needs to be re-initialized (e.g. bot URL change)
 export const shouldReinitialize = (
