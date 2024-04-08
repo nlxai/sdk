@@ -7,48 +7,65 @@ import packageJson from "../package.json";
 // Bot response
 
 /**
- *
+ * Context to send back to the bot, for usage later in the intent.
  */
 export type Context = Record<string, any>;
 
 /**
+ * Values to fill an intent's [attached slots](https://docs.studio.nlx.ai/intents/documentation-intents/intents-attached-slots).
  *
+ * An array of `SlotValue` objects is equivalent to a {@link SlotsRecord}.
  */
 export interface SlotValue {
   /**
-   *
+   * The attached slot's name
    */
   slotId: string;
   /**
-   *
+   * Usually this will be a discrete value matching the slots's [type](https://docs.studio.nlx.ai/slots/documentation-slots/slots-values#system-slots).
+   * for custom slots, this can optionally be the value's ID.
    */
   value: any;
 }
 
 /**
+ * Values to fill an intent's [attached slots](https://docs.studio.nlx.ai/intents/documentation-intents/intents-attached-slots).
  *
+ * `SlotRecord` Keys are the attached slot's name
+ *
+ * `SlotRecord` Values are usually a discrete value matching the slots's [type](https://docs.studio.nlx.ai/slots/documentation-slots/slots-values#system-slots).
+ * for custom slots, this can optionally be the value's ID.
+ *
+ * A `SlotsRecord` is equivalent to an array of {@link SlotValue} objects.
  */
 export type SlotsRecord = Record<string, any>;
 
 /**
+ * Values to fill an intent's [attached slots](https://docs.studio.nlx.ai/intents/documentation-intents/intents-attached-slots).
  *
+ * Supports either a {@link SlotsRecord} or an array of {@link SlotValue} objects
  */
 export type SlotsRecordOrArray = SlotsRecord | SlotValue[];
 
 /**
+ * A message from the bot
  *
+ * See also:
+ * - {@link UserResponse}
+ * - {@link FailureMessage}
+ * - {@link Response}
  */
 export interface BotResponse {
   /**
-   *
+   * The type of the response is `"bot"` for bot and `"user"` for user.
    */
   type: "bot";
   /**
-   *
+   * When the response was received
    */
   receivedAt: Time;
   /**
-   *
+   * The payload of the response
    */
   payload: BotResponsePayload;
 }
@@ -164,7 +181,7 @@ export interface Choice {
  */
 export interface UserResponse {
   /**
-   *
+   * The type of the response is `"bot"` for bot and `"user"` for user.
    */
   type: "user";
   /**
@@ -375,9 +392,21 @@ interface BotRequest {
   };
 }
 
+/**
+ *
+ */
 export interface ChoiceRequestMetadata {
+  /**
+   *
+   */
   responseIndex?: number;
+  /**
+   *
+   */
   messageIndex?: number;
+  /**
+   *
+   */
   nodeId?: string;
 }
 
@@ -462,6 +491,9 @@ const safeJsonParse = (val: string): any => {
   }
 };
 
+/**
+ *
+ */
 export type Subscriber = (response: Response[], newResponse?: Response) => void;
 
 // Helper method to decide when a conversation needs to be re-initialized (e.g. bot URL change)
@@ -846,9 +878,10 @@ export const createConversation = (config: Config): ConversationHandler => {
 
 /**
  *
- * @param fn
- * @param convo
- * @param timeout
+ * @param fn - the function to wrap
+ * @param convo - the whole conversation handler (from {@link createConversation})
+ * @param timeout - the timeout in milliseconds, defaults to 10,000
+ * @returns A wrapped version of the function that returns a promise with its response.
  */
 export function promisify<T>(
   fn: (payload: T) => void,
@@ -858,6 +891,7 @@ export function promisify<T>(
   return async (payload: T) => {
     return await new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
+        // TODO should this unsubscribe?
         reject(new Error("The request timed out."));
       }, timeout);
       const subscription = (
