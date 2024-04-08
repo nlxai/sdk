@@ -9,9 +9,11 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "rm -rf lib && rollup -c",
+    "docs": "typedoc",
     "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
     "prepublish": "npm run build",
+    "publish-docs": "npm run docs && concat-md --decrease-title-levels --dir-name-as-title docs/ > ../website/src/content/05-02-headless-api-reference.md",
     "tsc": "tsc"
   },
   "author": "Peter Szerzo <peter@nlx.ai>",
@@ -27,10 +29,13 @@
     "@types/node": "^11.15.11",
     "@types/ramda": "0.29.1",
     "@types/uuid": "^9.0.7",
+    "concat-md": "^0.5.1",
     "eslint-config-nlx": "*",
     "prettier": "^3.1.0",
     "rollup": "^4.9.3",
     "rollup-plugin-node-polyfills": "^0.2.1",
+    "typedoc": "^0.25.13",
+    "typedoc-plugin-markdown": "^3.17.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
