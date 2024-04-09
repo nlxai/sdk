@@ -103,7 +103,7 @@ export interface Config {
   responses?: Response[];
   failureMessage?: string;
   environment?: Environment;
-  headers?: Record<string, string>;
+  headers: Record<string, string> & { "nlx-api-key": string };
   languageCode: string;
   // Experimental settings
   experimental?: {
