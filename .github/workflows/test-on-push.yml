@@ -14,8 +14,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
             node-version-file: '.node-version'
+            cache: 'npm'
       - name: Installing node_modules
-        run: npm install
+        run: npm ci
       - name: Build the app
         run: npm run build
   test:
@@ -25,8 +26,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
             node-version-file: '.node-version'
+            cache: 'npm'
       - name: Installing node_modules
-        run: npm install
+        run: npm ci
       - name: Test the app
         run: npm run test
   lint:
@@ -36,8 +38,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
             node-version-file: '.node-version'
+            cache: 'npm'
       - name: Installing node_modules
-        run: npm install
+        run: npm ci
       - name: Run lint
         run: npm run lint:check
   typecheck:
@@ -47,7 +50,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
             node-version-file: '.node-version'
+            cache: 'npm'
       - name: Installing node_modules
-        run: npm install
+        run: npm ci
       - name: Run tsc
         run: npm run tsc
