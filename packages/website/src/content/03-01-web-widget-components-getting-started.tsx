@@ -12,9 +12,9 @@ As the widget is built in [React](https://react.dev), it exposes the React insta
 
 ~~~html
 ${setupSnippet({
-  config: { botUrl: "", languageCode: "en-US" },
+  config: { botUrl: "", languageCode: "en-US", headers: { "nlx-api-key": "" } },
   titleBar: { title: "Support chat" },
-  customModalitiesExample: true
+  customModalitiesExample: true,
 })}
 ~~~
 `;

@@ -84,19 +84,19 @@ export const WebWidgetTryLive = () => {
       <div className="mt-6 space-y-4">
         <ConfigEditor
           value={config}
-          onChange={(val) => {
+          onChange={(val: any) => {
             setConfig((prev) => ({ ...prev, ...val }));
           }}
         />
         <ThemeEditor
           value={theme}
-          onChange={(val) => {
+          onChange={(val: any) => {
             setTheme((prev) => ({ ...prev, ...val }));
           }}
         />
         <TitleBarEditor
           value={titleBar}
-          onChange={(val) => {
+          onChange={(val: any) => {
             setTitleBar((prev) => ({ ...prev, ...val }));
           }}
         />

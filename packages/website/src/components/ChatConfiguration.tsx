@@ -4,6 +4,7 @@ import { type Config } from "@nlxai/chat-core";
 import { Behavior } from "../snippets";
 import { Labeled, inputClass } from "./Ui";
 import { RadioList } from "./RadioList";
+import { type PartialDeep } from "type-fest";
 
 export const getInitialConfig = (): Config => {
   const searchParams = new URLSearchParams(window.location.search);
@@ -60,7 +61,7 @@ export const TitleBarEditor: FC<{
 
 export const ConfigEditor: FC<{
   value: Config;
-  onChange: (val: Partial<Config>) => void;
+  onChange: (val: PartialDeep<Config>) => void;
 }> = (props) => {
   const config = props.value;
   return (

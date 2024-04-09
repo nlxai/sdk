@@ -1,6 +1,6 @@
 import fetch from "isomorphic-fetch";
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { equals, adjust } from "ramda";
+import { equals, adjust, omit } from "ramda";
 import { v4 as uuid } from "uuid";
 
 // Bot response
@@ -103,7 +103,7 @@ export interface Config {
   responses?: Response[];
   failureMessage?: string;
   environment?: Environment;
-  headers?: Record<string, string>;
+  headers: Record<string, string> & { "nlx-api-key": string };
   languageCode: string;
   // Experimental settings
   experimental?: {
@@ -202,22 +202,9 @@ export const shouldReinitialize = (
   config1: Config,
   config2: Config,
 ): boolean => {
-  return (
-    !equals(config1.botUrl, config2.botUrl) ||
-    !equals(config1.userId, config2.userId) ||
-    !equals(config1.conversationId, config2.conversationId) ||
-    !equals(config1.languageCode, config2.languageCode) ||
-    !equals(
-      config1.experimental?.channelType,
-      config2.experimental?.channelType,
-    ) ||
-    !equals(
-      config1.experimental?.completeBotUrl,
-      config2.experimental?.completeBotUrl,
-    ) ||
-    !equals(config1.headers, config2.headers) ||
-    !equals(config1.responses, config2.responses) ||
-    !equals(config1.environment, config2.environment)
+  return !equals(
+    omit(["failureMessage"], config1),
+    omit(["failureMessage"], config2),
   );
 };
 

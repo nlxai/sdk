@@ -8,8 +8,8 @@ The simplest way to talk to a bot is to include an out-of-the-box chat widget on
 
 ~~~html
 ${setupSnippet({
-  config: { botUrl: "", languageCode: "en-US" },
-  titleBar: { title: "Support chat" }
+  config: { botUrl: "", languageCode: "en-US", headers: { "nlx-api-key": "" } },
+  titleBar: { title: "Support chat" },
 })}
 ~~~
 
