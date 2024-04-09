@@ -1,4 +1,12 @@
 {
+  "command": {
+    "publish": {
+      "private": false
+    },
+    "version": {
+      "private": false
+    }
+  },
   "npmClient": "npm",
   "packages": [
     "packages/chat-core",
@@ -8,5 +16,6 @@
     "packages/voice-compass",
     "packages/website"
   ],
-  "version": "0.1.12"
+  "version": "0.1.12",
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json"
 }
