@@ -13,9 +13,9 @@ The widget can be configured to handle a number of custom behaviors. Select one 
 export const codeContent = (behavior: Behavior) => `
 ~~~html
 ${setupSnippet({
-  config: { botUrl: "", languageCode: "en-US" },
+  config: { botUrl: "", languageCode: "en-US", headers: { "nlx-api-key": "" } },
   titleBar: { title: "Support chat" },
-  behavior
+  behavior,
 })}
 ~~~
 `;
