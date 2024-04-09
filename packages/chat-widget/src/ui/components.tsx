@@ -207,7 +207,9 @@ export const Message = styled.div<{ type: "user" | "bot" }>`
       ? "margin-left: 20px; margin-right: 0; border-radius: 10px 10px 0 10px; align-self: flex-end;"
       : "margin-right: 20px; margin-left: 0; border-radius: 10px 10px 10px 0; align-self: flex-start;"}
 
-  * + * {
+  * + *,
+  ol + p,
+  ul + p {
     margin-top: 12px;
   }
 
@@ -230,7 +232,7 @@ export const Message = styled.div<{ type: "user" | "bot" }>`
   }
 
   li + li {
-    margin-top: 6px;
+    margin-top: 4px;
   }
 `;
 
@@ -262,6 +264,7 @@ export const MessageBody = styled.p<{}>`
   font-size: ${constants.fontSize}px;
   a,
   a:visited {
+    text-decoration: underline;
     color: inherit;
     font-size: ${constants.fontSize}px;
   }
