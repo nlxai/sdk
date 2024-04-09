@@ -199,21 +199,22 @@ export const Message = styled.div<{ type: "user" | "bot" }>`
     props.type === "user"
       ? props.theme.darkMessageColor
       : props.theme.lightMessageColor};
-  color: ${(props) => (props.type === "user" ? props.theme.white : "#676767")};
+  color: ${(props) => (props.type === "user" ? props.theme.white : "#232323")};
   padding: ${(props) => `${props.theme.spacing}px ${props.theme.spacing}px`};
   max-width: calc(100% - 20px);
   ${(props) =>
     props.type === "user"
       ? "margin-left: 20px; margin-right: 0; border-radius: 10px 10px 0 10px; align-self: flex-end;"
       : "margin-right: 20px; margin-left: 0; border-radius: 10px 10px 10px 0; align-self: flex-start;"}
-  p {
-    color: ${(props) =>
-      props.type === "user" ? props.theme.white : "#232323"};
+
+  * + * {
+    margin-top: 12px;
   }
 
   ul,
   ol {
     list-style-position: inside;
+    padding-left: 0;
   }
 
   ul {
@@ -226,6 +227,10 @@ export const Message = styled.div<{ type: "user" | "bot" }>`
 
   ol {
     list-style-type: decimal;
+  }
+
+  li + li {
+    margin-top: 6px;
   }
 `;
 
