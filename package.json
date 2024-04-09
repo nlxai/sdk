@@ -11,7 +11,7 @@
     "lint:check": "lerna run lint:check",
     "lint": "lerna run lint",
     "postinstall": "npm run build",
-    "publish": "lerna publish --no-private",
+    "publish": "lerna publish",
     "publish-docs": "lerna run publish-docs",
     "test": "lerna run test",
     "tsc": "lerna run tsc",

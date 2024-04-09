@@ -1,4 +1,12 @@
 {
+  "command": {
+    "publish": {
+      "private": false
+    },
+    "version": {
+      "private": false
+    }
+  },
   "npmClient": "npm",
   "packages": [
     "packages/chat-core",
