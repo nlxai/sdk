@@ -16,6 +16,6 @@
     "packages/voice-compass",
     "packages/website"
   ],
-  "version": "0.1.13",
+  "version": "0.1.14",
   "$schema": "node_modules/lerna/schemas/lerna-schema.json"
 }
