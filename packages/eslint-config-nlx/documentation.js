@@ -11,7 +11,7 @@ module.exports = {
         contexts: ["TSTypeAliasDeclaration","TSInterfaceDeclaration","TSMethodSignature","TSPropertySignature"]
       }
     ],
-    "jsdoc/check-tag-names": ["error", { definedTags: ["category", "hidden"] }],
+    "jsdoc/check-tag-names": ["error", { definedTags: ["category", "hidden", "typeParam"] }],
     "jsdoc/require-param": ["error", { checkDestructured: false }],
     "jsdoc/check-param-names": ["error", { checkDestructured: false }],
     "tsdoc/syntax": "error",
