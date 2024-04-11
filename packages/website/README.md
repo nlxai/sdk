@@ -4,13 +4,25 @@ This is the source of https://developers.nlx.ai/, the documentation website for 
 
 ## Run locally
 
-* `npm install`
-* `npm run dev`
+```sh
+npm install
+npm run dev
+```
 
 ## Build
 
-* `npm run build`
+```sh
+npm run build
+```
 
+## Differences between `npm run dev` and _github pages_
+`npm run dev` assumes routing on the SPA will be handled by the server. This means, for instance, BrowserRouter doesn't work out of the box with github pages. To emulate a _github pages_ environment locally, build the site, then load it up with caddy:
+
+```sh
+npm run build
+npm run caddy
+open http://localhost:9000
+```
 
 ## Updating docs
 
