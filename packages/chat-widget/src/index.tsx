@@ -1,4 +1,4 @@
-import { marked } from "marked";
+import { marked, type MarkedExtension } from "marked";
 import React, {
   type FC,
   type ReactNode,
@@ -104,6 +104,17 @@ const Loader: FC<{ message?: string; showAfter?: number }> = (props) => {
     </C.LoaderContainer>
   );
 };
+
+const markdownRendererOverrides: MarkedExtension = {
+  renderer: {
+    link(href, title, text) {
+      const link = marked.Renderer.prototype.link.call(this, href, title, text);
+      return link.replace("<a", "<a target='_blank' ");
+    },
+  },
+};
+
+marked.use(markdownRendererOverrides);
 
 const MessageGroups: FC<{
   chat: ChatHook;
