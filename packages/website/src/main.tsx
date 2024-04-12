@@ -1,7 +1,7 @@
 import React, { type FC, useState } from "react";
 import "./index.css";
 import { createRoot } from "react-dom/client";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Nav, MobileNav } from "./components/Nav";
@@ -37,7 +37,7 @@ const App: FC<{}> = () => {
 };
 
 createRoot(document.getElementById("app") as Element).render(
-  <HashRouter>
+  <BrowserRouter>
     <App />
-  </HashRouter>,
+  </BrowserRouter>,
 );
