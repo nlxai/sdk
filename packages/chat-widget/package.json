@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/chat-widget",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "Standalone chat widget based on the NLX Chat SDK",
   "main": "lib/index.esm.js",
   "module": "lib/index.esm.js",
