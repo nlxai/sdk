@@ -4,7 +4,7 @@ import { PageContent } from "../components/PageContent";
 import { Environment, voiceCompassSetupSnippet } from "../snippets";
 
 export const content = `
-The [@nlxai/voice-compass](https://www.npmjs.com/package/@nlxai/voice-compass) package allows integrating custom out-of-band interactions into bots using voice channels.
+The [@nlxai/voice-compass](https://www.npmjs.com/package/@nlxai/voice-compass) package is used to implement multimodal conversational applications.
 
 ## How it works
 
@@ -14,11 +14,11 @@ From a bot's voice [flow][flow]
     1. The user will use your interaction
     2. (Optionally) Use the voice compass API to communicate over the voice channel
     3. When the interaction is complete, use the voice compass API to return to the voice flow.
-3. in the _flow_, use a [MultiModal node][multimodal-node] to handle the completion.
+3. in the _flow_, use a [multimodal node][multimodal-node] to handle the completion.
 
-The Voice Compass API interacts with an intent using a [step id][step-id] from a [journey][journey], with an optional payload.
+The Voice Compass API interacts with an intent using a [step ID][step-id] from a [journey][journey], with an optional payload.
 
-The step ID is found in dialog studio under journeys.
+The step ID is found in Dialog Studio under journeys.
 
 ## Setup
 
