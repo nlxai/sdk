@@ -16,4 +16,12 @@ module.exports = {
     "jsdoc/check-param-names": ["error", { checkDestructured: false }],
     "tsdoc/syntax": "error",
   },
+  overrides: [
+    {
+      files: ["*.cjs", "*.js"],
+      rules: {
+        "tsdoc/syntax": "off",
+      }
+    }
+  ]
 };

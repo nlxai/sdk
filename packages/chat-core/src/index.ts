@@ -6,7 +6,6 @@ import packageJson from "../package.json";
 
 /**
  * Call this to create a conversation handler.
- *
  * @param config -
  * @returns The {@link ConversationHandler} is a bundle of functions to interact with the conversation.
  */
