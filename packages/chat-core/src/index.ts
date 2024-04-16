@@ -2,6 +2,7 @@ import fetch from "isomorphic-fetch";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { equals, adjust, omit } from "ramda";
 import { v4 as uuid } from "uuid";
+import packageJson from "../package.json";
 
 // Bot response
 
@@ -330,6 +331,7 @@ export const createConversation = (config: Config): ConversationHandler => {
             ...(config.headers ?? {}),
             Accept: "application/json",
             "Content-Type": "application/json",
+            "nlx-sdk-version": packageJson.version,
           },
           body: JSON.stringify(bodyWithContext),
         },
