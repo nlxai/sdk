@@ -258,29 +258,11 @@ export const retrieveSession = (storeIn: StorageType): SessionData | null => {
   try {
     const storage =
       storeIn === "sessionStorage" ? sessionStorage : localStorage;
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-    const data = JSON.parse(storage.getItem(storageKey) || "");
+    const data = JSON.parse(storage.getItem(storageKey) ?? "");
     const responses: Response[] | undefined = data?.responses;
     const conversationId: string | undefined = data?.conversationId;
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (responses) {
-      let expirationTimestamp: number | undefined;
-      responses.forEach((response) => {
-        // initial eslint integration
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        if (response.type === "bot" && response.payload.expirationTimestamp) {
-          expirationTimestamp = response.payload.expirationTimestamp;
-        }
-      });
-      // initial eslint integration
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      if (!expirationTimestamp || new Date().getTime() < expirationTimestamp) {
-        return { responses, conversationId };
-      } else {
-        return { responses };
-      }
+    if (responses != null) {
+      return { responses, conversationId };
     }
     return null;
   } catch (err) {
