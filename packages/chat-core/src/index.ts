@@ -584,6 +584,7 @@ export function promisify<T>(
     return await new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         reject(new Error("The request timed out."));
+        convo.unsubscribe(subscription);
       }, timeout);
       const subscription = (
         _responses: Response[],
