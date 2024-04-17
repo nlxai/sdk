@@ -46,7 +46,7 @@ client.sendStep("REPLACE_WITH_STEP_ID");
 
 #### Defined in
 
-[index.ts:23](https://github.com/nlxai/sdk/blob/05aef14f503ae87d487cac75223a950d4c5753ce/packages/voice-compass/src/index.ts#L23)
+[index.ts:23](https://github.com/nlxai/sdk/blob/9000e5617de1de2b189dac5dc77d80c0222fb982/packages/voice-compass/src/index.ts#L23)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[index.ts:110](https://github.com/nlxai/sdk/blob/05aef14f503ae87d487cac75223a950d4c5753ce/packages/voice-compass/src/index.ts#L110)
+[index.ts:110](https://github.com/nlxai/sdk/blob/9000e5617de1de2b189dac5dc77d80c0222fb982/packages/voice-compass/src/index.ts#L110)
 
 
 <a name="indexmd"></a>
@@ -115,7 +115,7 @@ sends a step to the voice bot
 
 ##### Defined in
 
-[index.ts:103](https://github.com/nlxai/sdk/blob/05aef14f503ae87d487cac75223a950d4c5753ce/packages/voice-compass/src/index.ts#L103)
+[index.ts:103](https://github.com/nlxai/sdk/blob/9000e5617de1de2b189dac5dc77d80c0222fb982/packages/voice-compass/src/index.ts#L103)
 
 
 <a name="interfacesconfigmd"></a>
@@ -134,7 +134,7 @@ Initial configuration used when creating a journey manager
 
 ##### Defined in
 
-[index.ts:118](https://github.com/nlxai/sdk/blob/05aef14f503ae87d487cac75223a950d4c5753ce/packages/voice-compass/src/index.ts#L118)
+[index.ts:118](https://github.com/nlxai/sdk/blob/9000e5617de1de2b189dac5dc77d80c0222fb982/packages/voice-compass/src/index.ts#L118)
 
 ___
 
@@ -146,7 +146,7 @@ the ID of the journey.
 
 ##### Defined in
 
-[index.ts:120](https://github.com/nlxai/sdk/blob/05aef14f503ae87d487cac75223a950d4c5753ce/packages/voice-compass/src/index.ts#L120)
+[index.ts:120](https://github.com/nlxai/sdk/blob/9000e5617de1de2b189dac5dc77d80c0222fb982/packages/voice-compass/src/index.ts#L120)
 
 ___
 
@@ -158,7 +158,7 @@ your workspace id
 
 ##### Defined in
 
-[index.ts:123](https://github.com/nlxai/sdk/blob/05aef14f503ae87d487cac75223a950d4c5753ce/packages/voice-compass/src/index.ts#L123)
+[index.ts:123](https://github.com/nlxai/sdk/blob/9000e5617de1de2b189dac5dc77d80c0222fb982/packages/voice-compass/src/index.ts#L123)
 
 ___
 
@@ -172,7 +172,7 @@ _Note: This must be dynamically set by the voice bot._
 
 ##### Defined in
 
-[index.ts:130](https://github.com/nlxai/sdk/blob/05aef14f503ae87d487cac75223a950d4c5753ce/packages/voice-compass/src/index.ts#L130)
+[index.ts:130](https://github.com/nlxai/sdk/blob/9000e5617de1de2b189dac5dc77d80c0222fb982/packages/voice-compass/src/index.ts#L130)
 
 ___
 
@@ -186,7 +186,7 @@ In the browser may be fetched from `navigator.language`, or if the journey doesn
 
 ##### Defined in
 
-[index.ts:137](https://github.com/nlxai/sdk/blob/05aef14f503ae87d487cac75223a950d4c5753ce/packages/voice-compass/src/index.ts#L137)
+[index.ts:137](https://github.com/nlxai/sdk/blob/9000e5617de1de2b189dac5dc77d80c0222fb982/packages/voice-compass/src/index.ts#L137)
 
 ___
 
@@ -198,4 +198,4 @@ set to true to help debug issues or errors. Defaults to false
 
 ##### Defined in
 
-[index.ts:140](https://github.com/nlxai/sdk/blob/05aef14f503ae87d487cac75223a950d4c5753ce/packages/voice-compass/src/index.ts#L140)
+[index.ts:140](https://github.com/nlxai/sdk/blob/9000e5617de1de2b189dac5dc77d80c0222fb982/packages/voice-compass/src/index.ts#L140)
