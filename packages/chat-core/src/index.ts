@@ -135,8 +135,7 @@ export interface BotResponseMetadata {
  */
 export interface BotMessage {
   /**
-   * @hidden
-   * a unique identifier for the message
+   * A unique identifier for the message.
    */
   messageId?: string;
   /**
@@ -297,26 +296,6 @@ export interface Config {
    */
   botUrl: string;
   /**
-   * The conversation ID. If not set, a new conversation will be started.
-   */
-  conversationId?: string;
-  /**
-   * Setting the `userID` allows it to be searchable in bot history, as well as usable via `{System.userId}` in the intent.
-   */
-  userId?: string;
-  /**
-   * Set this to initialize the chat with historical messages.
-   */
-  responses?: Response[];
-  /**
-   * When set, this overrides the default failure message ("We encountered an issue. Please try again soon.").
-   */
-  failureMessage?: string;
-  /**
-   * @hidden
-   */
-  environment?: Environment;
-  /**
    * Headers to forward to the NLX API.
    */
   headers: Record<string, string> & {
@@ -325,11 +304,33 @@ export interface Config {
      */
     "nlx-api-key": string;
   };
+
+  /**
+   * Set `conversationId` to continue an existing conversation. If not set, a new conversation will be started.
+   */
+  conversationId?: string;
+  /**
+   * Setting the `userID` allows it to be searchable in bot history, as well as usable via `{System.userId}` in the intent.
+   */
+  userId?: string;
+  /**
+   * When `responses` is set, initialize the chatHandler with historical messages.
+   */
+  responses?: Response[];
+  /**
+   * When set, this overrides the default failure message ("We encountered an issue. Please try again soon.").
+   */
+  failureMessage?: string;
   /**
    * The language code to use for the bot. In the browser this can be fetched with `navigator.language`.
    * If you don't have translations, hard-code this to the language code you support.
    */
   languageCode: string;
+  /**
+   * @hidden
+   * this should only be used for NLX internal testing.
+   */
+  environment?: Environment;
   /**
    * Experimental settings
    */
