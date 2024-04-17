@@ -301,7 +301,7 @@ export interface Config {
    */
   conversationId?: string;
   /**
-   * TODO I don't know what this is
+   * Setting the `userID` allows it to be searchable in bot history, as well as usable via `{System.userId}` in the intent.
    */
   userId?: string;
   /**
@@ -954,7 +954,6 @@ export function promisify<T>(
   return async (payload: T) => {
     return await new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
-        // TODO should this unsubscribe?
         reject(new Error("The request timed out."));
       }, timeout);
       const subscription = (
