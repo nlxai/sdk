@@ -5,463 +5,6 @@ import { v4 as uuid } from "uuid";
 import packageJson from "../package.json";
 
 /**
- * Call this to create a conversation handler.
- * @param config -
- * @returns The {@link ConversationHandler} is a bundle of functions to interact with the conversation.
- */
-export default function createConversation(
-  config: Config,
-): ConversationHandler {
-  let socket: ReconnectingWebSocket | undefined;
-
-  // Check if the bot URL has a language code appended to it
-  if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(config.botUrl)) {
-    console.warn(
-      "Since v1.0.0, the language code is no longer added at the end of the bot URL. Please remove the modifier (e.g. '-en-US') from the URL, and specify it in the `languageCode` parameter instead.",
-    );
-  }
-
-  const initialConversationId = config.conversationId ?? uuid();
-
-  let state: InternalState = {
-    responses: config.responses ?? [],
-    userId: config.userId,
-    conversationId: initialConversationId,
-  };
-
-  const setState = (
-    change: Partial<InternalState>,
-    // Optionally send the response that causes the current state change, to be sent to subscribers
-    newResponse?: Response,
-  ): void => {
-    state = {
-      ...state,
-      ...change,
-    };
-    subscribers.forEach((subscriber) => {
-      subscriber(fromInternal(state), newResponse);
-    });
-  };
-
-  const failureHandler = (): void => {
-    const newResponse: Response = {
-      type: "failure",
-      receivedAt: new Date().getTime(),
-      payload: {
-        text: config.failureMessage ?? defaultFailureMessage,
-      },
-    };
-    setState(
-      {
-        responses: [...state.responses, newResponse],
-      },
-      newResponse,
-    );
-  };
-
-  const messageResponseHandler = (response: any): void => {
-    if (response?.messages.length > 0) {
-      const newResponse: Response = {
-        type: "bot",
-        receivedAt: new Date().getTime(),
-        payload: {
-          ...response,
-          messages: response.messages.map((message: any) => ({
-            nodeId: message.nodeId,
-            messageId: message.messageId,
-            text: message.text,
-            choices: message.choices ?? [],
-          })),
-        },
-      };
-      setState(
-        {
-          responses: [...state.responses, newResponse],
-        },
-        newResponse,
-      );
-      if (response.metadata.hasPendingDataRequest as boolean) {
-        appendStructuredUserResponse({ poll: true });
-        setTimeout(() => {
-          void sendToBot({
-            request: {
-              structured: {
-                poll: true,
-              },
-            },
-          });
-        }, 1500);
-      }
-    } else {
-      console.warn(
-        "Invalid message structure, expected object with field 'messages'.",
-      );
-      failureHandler();
-    }
-  };
-
-  let socketMessageQueue: BotRequest[] = [];
-
-  let socketMessageQueueCheckInterval: ReturnType<typeof setInterval> | null =
-    null;
-
-  const sendToBot = async (body: BotRequest): Promise<void> => {
-    const bodyWithContext = {
-      userId: state.userId,
-      conversationId: state.conversationId,
-      ...body,
-      languageCode: config.languageCode,
-      channelType: config.experimental?.channelType,
-      environment: config.environment,
-    };
-    if (isUsingWebSockets()) {
-      if (socket?.readyState === 1) {
-        socket.send(JSON.stringify(bodyWithContext));
-      } else {
-        socketMessageQueue = [...socketMessageQueue, bodyWithContext];
-      }
-    } else {
-      await fetch(
-        `${config.botUrl}${
-          config.experimental?.completeBotUrl === true
-            ? ""
-            : `-${config.languageCode}`
-        }`,
-        {
-          method: "POST",
-          headers: {
-            ...(config.headers ?? {}),
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "nlx-sdk-version": packageJson.version,
-          },
-          body: JSON.stringify(bodyWithContext),
-        },
-      )
-        .then(async (res) => {
-          return await res.json();
-        })
-        .then(messageResponseHandler)
-        .catch((err) => {
-          console.warn(err);
-          failureHandler();
-        });
-    }
-  };
-
-  const isUsingWebSockets = (): boolean => {
-    return config.botUrl.indexOf("wss://") === 0;
-  };
-
-  let subscribers: Subscriber[] = [];
-
-  const checkQueue = async (): Promise<void> => {
-    if (socket?.readyState === 1 && socketMessageQueue[0] != null) {
-      await sendToBot(socketMessageQueue[0]);
-      socketMessageQueue = socketMessageQueue.slice(1);
-    }
-  };
-
-  const setupWebsocket = (): void => {
-    const url = new URL(config.botUrl);
-    if (config.experimental?.completeBotUrl !== true) {
-      url.searchParams.set("languageCode", config.languageCode);
-      url.searchParams.set(
-        "channelKey",
-        `${url.searchParams.get("channelKey") ?? ""}-${config.languageCode}`,
-      );
-    }
-    url.searchParams.set("conversationId", state.conversationId);
-    socket = new ReconnectingWebSocket(url.href);
-    socketMessageQueueCheckInterval = setInterval(() => {
-      void checkQueue;
-    }, 500);
-    socket.onmessage = function (e) {
-      if (typeof e?.data === "string") {
-        messageResponseHandler(safeJsonParse(e.data));
-      }
-    };
-  };
-
-  const teardownWebsocket = (): void => {
-    if (socketMessageQueueCheckInterval != null) {
-      clearInterval(socketMessageQueueCheckInterval);
-    }
-    if (socket != null) {
-      socket.onmessage = null;
-      socket.close();
-      socket = undefined;
-    }
-  };
-
-  if (isUsingWebSockets()) {
-    setupWebsocket();
-  }
-
-  const appendStructuredUserResponse = (
-    structured: StructuredRequest,
-    context?: Context,
-  ): void => {
-    const newResponse: Response = {
-      type: "user",
-      receivedAt: new Date().getTime(),
-      payload: {
-        type: "structured",
-        ...structured,
-        context,
-      },
-    };
-    setState(
-      {
-        responses: [...state.responses, newResponse],
-      },
-      newResponse,
-    );
-  };
-
-  const sendIntent = (intentId: string, context?: Context): void => {
-    appendStructuredUserResponse({ intentId }, context);
-    void sendToBot({
-      context,
-      request: {
-        structured: {
-          intentId,
-        },
-      },
-    });
-  };
-
-  const sendText = (text: string, context?: Context): void => {
-    const newResponse: Response = {
-      type: "user",
-      receivedAt: new Date().getTime(),
-      payload: {
-        type: "text",
-        text,
-        context,
-      },
-    };
-    setState(
-      {
-        responses: [...state.responses, newResponse],
-      },
-      newResponse,
-    );
-    void sendToBot({
-      context,
-      request: {
-        unstructured: {
-          text,
-        },
-      },
-    });
-  };
-
-  const unsubscribe = (subscriber: Subscriber): void => {
-    subscribers = subscribers.filter((fn) => fn !== subscriber);
-  };
-
-  const subscribe = (subscriber: Subscriber): (() => void) => {
-    subscribers = [...subscribers, subscriber];
-    subscriber(fromInternal(state));
-    return () => {
-      unsubscribe(subscriber);
-    };
-  };
-
-  return {
-    sendText,
-    sendStructured: (structured: StructuredRequest, context) => {
-      appendStructuredUserResponse(structured, context);
-      void sendToBot({
-        context,
-        request: {
-          structured: {
-            ...structured,
-            slots: normalizeSlots(structured.slots ?? []),
-          },
-        },
-      });
-    },
-    sendSlots: (slots, context) => {
-      appendStructuredUserResponse({ slots }, context);
-      void sendToBot({
-        context,
-        request: {
-          structured: {
-            slots: normalizeSlots(slots),
-          },
-        },
-      });
-    },
-    sendIntent,
-    sendWelcomeIntent: (context) => {
-      sendIntent(welcomeIntent, context);
-    },
-    sendChoice: (choiceId, context, metadata) => {
-      let newResponses: Response[] = [...state.responses];
-
-      const choiceResponse: Response = {
-        type: "user",
-        receivedAt: new Date().getTime(),
-        payload: {
-          type: "choice",
-          choiceId,
-        },
-      };
-
-      const responseIndex = metadata?.responseIndex ?? -1;
-      const messageIndex = metadata?.messageIndex ?? -1;
-
-      if (responseIndex > -1 && messageIndex > -1) {
-        newResponses = adjust(
-          responseIndex,
-          (response) =>
-            response.type === "bot"
-              ? {
-                  ...response,
-                  payload: {
-                    ...response.payload,
-                    messages: adjust(
-                      messageIndex,
-                      (message) => ({ ...message, selectedChoiceId: choiceId }),
-                      response.payload.messages,
-                    ),
-                  },
-                }
-              : response,
-          newResponses,
-        );
-      }
-
-      newResponses = [...newResponses, choiceResponse];
-
-      setState(
-        {
-          responses: newResponses,
-        },
-        choiceResponse,
-      );
-
-      void sendToBot({
-        context,
-        request: {
-          structured: {
-            nodeId: metadata?.nodeId,
-            choiceId,
-          },
-        },
-      });
-    },
-    currentConversationId: () => {
-      return state.conversationId;
-    },
-    subscribe,
-    unsubscribe,
-    unsubscribeAll: () => {
-      subscribers = [];
-    },
-    reset: (options) => {
-      setState({
-        conversationId: uuid(),
-        responses: options?.clearResponses === true ? [] : state.responses,
-      });
-      if (isUsingWebSockets()) {
-        teardownWebsocket();
-        setupWebsocket();
-      }
-    },
-    destroy: () => {
-      subscribers = [];
-      if (isUsingWebSockets()) {
-        teardownWebsocket();
-      }
-    },
-  };
-}
-
-/**
- * A bundle of functions to interact with a conversation, created by {@link createConversation}.
- */
-export interface ConversationHandler {
-  /**
-   * Send user's message
-   * @param text - the user's message
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   */
-  sendText: (text: string, context?: Context) => void;
-  /**
-   * Send [slots](https://docs.studio.nlx.ai/workspacesettings/introduction-to-settings) to the bot.
-   * @param slots - The slots to populate
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   */
-  sendSlots: (slots: SlotsRecordOrArray, context?: Context) => void;
-  /**
-   * Respond to [a choice](https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/nodes#user-choice) from the bot.
-   * @param choidId - The `choiceId` is in the {@link BotResponse}'s `.payload.messages[].choices[].choiceId` fields
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   * @param metadata - links the choice to the specific message and node in the conversation.
-   */
-  sendChoice: (
-    choiceId: string,
-    context?: Context,
-    metadata?: ChoiceRequestMetadata,
-  ) => void;
-
-  /**
-   * Trigger the welcome [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents). This should be done when the user starts interacting with the chat.
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   */
-  sendWelcomeIntent: (context?: Context) => void;
-
-  /**
-   * Trigger a specific [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents).
-   * @param intentId - the intent to trigger. The id is the name under the Bot's _Intents_.
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   */
-  sendIntent: (intentId: string, context?: Context) => void;
-
-  /**
-   * Send a combination of choice, slots, and intent in one request.
-   * @param request -
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   */
-  sendStructured: (request: StructuredRequest, context?: Context) => void;
-  /**
-   * Subscribe a callback to the conversation. On subscribe, the subscriber will receive all of the Responses that the conversation has already received.
-   * @param subscriber - The callback to subscribe
-   */
-  subscribe: (subscriber: Subscriber) => () => void;
-  /**
-   * Unsubscribe a callback from the conversation.
-   * @param subscriber - The callback to unsubscribe
-   */
-  unsubscribe: (subscriber: Subscriber) => void;
-  /**
-   * Unsubscribe all callback from the conversation.
-   */
-  unsubscribeAll: () => void;
-  /**
-   * Get the current conversation ID if it's set, or undefined if there is no conversation.
-   */
-  currentConversationId: () => string | undefined;
-  /**
-   * Forces a new conversation. If `clearResponses` is set to true, will also clear historical responses passed to subscribers.
-   * Retains all existing subscribers.
-   */
-  reset: (options?: {
-    /**
-     * If set to true, will clear historical responses passed to subscribers.
-     */
-    clearResponses?: boolean;
-  }) => void;
-  /**
-   * Removes all subscribers and, if using websockets, closes the connection.
-   */
-  destroy: () => void;
-}
-
-/**
  * [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
  */
 export type Context = Record<string, any>;
@@ -882,6 +425,87 @@ export interface ChoiceRequestMetadata {
   nodeId?: string;
 }
 
+/**
+ * A bundle of functions to interact with a conversation, created by {@link createConversation}.
+ */
+export interface ConversationHandler {
+  /**
+   * Send user's message
+   * @param text - the user's message
+   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   */
+  sendText: (text: string, context?: Context) => void;
+  /**
+   * Send [slots](https://docs.studio.nlx.ai/workspacesettings/introduction-to-settings) to the bot.
+   * @param slots - The slots to populate
+   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   */
+  sendSlots: (slots: SlotsRecordOrArray, context?: Context) => void;
+  /**
+   * Respond to [a choice](https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/nodes#user-choice) from the bot.
+   * @param choidId - The `choiceId` is in the {@link BotResponse}'s `.payload.messages[].choices[].choiceId` fields
+   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   * @param metadata - links the choice to the specific message and node in the conversation.
+   */
+  sendChoice: (
+    choiceId: string,
+    context?: Context,
+    metadata?: ChoiceRequestMetadata,
+  ) => void;
+
+  /**
+   * Trigger the welcome [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents). This should be done when the user starts interacting with the chat.
+   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   */
+  sendWelcomeIntent: (context?: Context) => void;
+
+  /**
+   * Trigger a specific [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents).
+   * @param intentId - the intent to trigger. The id is the name under the Bot's _Intents_.
+   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   */
+  sendIntent: (intentId: string, context?: Context) => void;
+
+  /**
+   * Send a combination of choice, slots, and intent in one request.
+   * @param request -
+   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   */
+  sendStructured: (request: StructuredRequest, context?: Context) => void;
+  /**
+   * Subscribe a callback to the conversation. On subscribe, the subscriber will receive all of the Responses that the conversation has already received.
+   * @param subscriber - The callback to subscribe
+   */
+  subscribe: (subscriber: Subscriber) => () => void;
+  /**
+   * Unsubscribe a callback from the conversation.
+   * @param subscriber - The callback to unsubscribe
+   */
+  unsubscribe: (subscriber: Subscriber) => void;
+  /**
+   * Unsubscribe all callback from the conversation.
+   */
+  unsubscribeAll: () => void;
+  /**
+   * Get the current conversation ID if it's set, or undefined if there is no conversation.
+   */
+  currentConversationId: () => string | undefined;
+  /**
+   * Forces a new conversation. If `clearResponses` is set to true, will also clear historical responses passed to subscribers.
+   * Retains all existing subscribers.
+   */
+  reset: (options?: {
+    /**
+     * If set to true, will clear historical responses passed to subscribers.
+     */
+    clearResponses?: boolean;
+  }) => void;
+  /**
+   * Removes all subscribers and, if using websockets, closes the connection.
+   */
+  destroy: () => void;
+}
+
 interface InternalState {
   responses: Response[];
   conversationId: string;
@@ -923,6 +547,382 @@ export const shouldReinitialize = (
     omit(["failureMessage"], config2),
   );
 };
+
+/**
+ * Call this to create a conversation handler.
+ * @param config -
+ * @returns The {@link ConversationHandler} is a bundle of functions to interact with the conversation.
+ */
+export default function createConversation(
+  config: Config,
+): ConversationHandler {
+  let socket: ReconnectingWebSocket | undefined;
+
+  // Check if the bot URL has a language code appended to it
+  if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(config.botUrl)) {
+    console.warn(
+      "Since v1.0.0, the language code is no longer added at the end of the bot URL. Please remove the modifier (e.g. '-en-US') from the URL, and specify it in the `languageCode` parameter instead.",
+    );
+  }
+
+  const initialConversationId = config.conversationId ?? uuid();
+
+  let state: InternalState = {
+    responses: config.responses ?? [],
+    userId: config.userId,
+    conversationId: initialConversationId,
+  };
+
+  const setState = (
+    change: Partial<InternalState>,
+    // Optionally send the response that causes the current state change, to be sent to subscribers
+    newResponse?: Response,
+  ): void => {
+    state = {
+      ...state,
+      ...change,
+    };
+    subscribers.forEach((subscriber) => {
+      subscriber(fromInternal(state), newResponse);
+    });
+  };
+
+  const failureHandler = (): void => {
+    const newResponse: Response = {
+      type: "failure",
+      receivedAt: new Date().getTime(),
+      payload: {
+        text: config.failureMessage ?? defaultFailureMessage,
+      },
+    };
+    setState(
+      {
+        responses: [...state.responses, newResponse],
+      },
+      newResponse,
+    );
+  };
+
+  const messageResponseHandler = (response: any): void => {
+    if (response?.messages.length > 0) {
+      const newResponse: Response = {
+        type: "bot",
+        receivedAt: new Date().getTime(),
+        payload: {
+          ...response,
+          messages: response.messages.map((message: any) => ({
+            nodeId: message.nodeId,
+            messageId: message.messageId,
+            text: message.text,
+            choices: message.choices ?? [],
+          })),
+        },
+      };
+      setState(
+        {
+          responses: [...state.responses, newResponse],
+        },
+        newResponse,
+      );
+      if (response.metadata.hasPendingDataRequest as boolean) {
+        appendStructuredUserResponse({ poll: true });
+        setTimeout(() => {
+          void sendToBot({
+            request: {
+              structured: {
+                poll: true,
+              },
+            },
+          });
+        }, 1500);
+      }
+    } else {
+      console.warn(
+        "Invalid message structure, expected object with field 'messages'.",
+      );
+      failureHandler();
+    }
+  };
+
+  let socketMessageQueue: BotRequest[] = [];
+
+  let socketMessageQueueCheckInterval: ReturnType<typeof setInterval> | null =
+    null;
+
+  const sendToBot = async (body: BotRequest): Promise<void> => {
+    const bodyWithContext = {
+      userId: state.userId,
+      conversationId: state.conversationId,
+      ...body,
+      languageCode: config.languageCode,
+      channelType: config.experimental?.channelType,
+      environment: config.environment,
+    };
+    if (isUsingWebSockets()) {
+      if (socket?.readyState === 1) {
+        socket.send(JSON.stringify(bodyWithContext));
+      } else {
+        socketMessageQueue = [...socketMessageQueue, bodyWithContext];
+      }
+    } else {
+      await fetch(
+        `${config.botUrl}${
+          config.experimental?.completeBotUrl === true
+            ? ""
+            : `-${config.languageCode}`
+        }`,
+        {
+          method: "POST",
+          headers: {
+            ...(config.headers ?? {}),
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "nlx-sdk-version": packageJson.version,
+          },
+          body: JSON.stringify(bodyWithContext),
+        },
+      )
+        .then(async (res) => {
+          return await res.json();
+        })
+        .then(messageResponseHandler)
+        .catch((err) => {
+          console.warn(err);
+          failureHandler();
+        });
+    }
+  };
+
+  const isUsingWebSockets = (): boolean => {
+    return config.botUrl.indexOf("wss://") === 0;
+  };
+
+  let subscribers: Subscriber[] = [];
+
+  const checkQueue = async (): Promise<void> => {
+    if (socket?.readyState === 1 && socketMessageQueue[0] != null) {
+      await sendToBot(socketMessageQueue[0]);
+      socketMessageQueue = socketMessageQueue.slice(1);
+    }
+  };
+
+  const setupWebsocket = (): void => {
+    const url = new URL(config.botUrl);
+    if (config.experimental?.completeBotUrl !== true) {
+      url.searchParams.set("languageCode", config.languageCode);
+      url.searchParams.set(
+        "channelKey",
+        `${url.searchParams.get("channelKey") ?? ""}-${config.languageCode}`,
+      );
+    }
+    url.searchParams.set("conversationId", state.conversationId);
+    socket = new ReconnectingWebSocket(url.href);
+    socketMessageQueueCheckInterval = setInterval(() => {
+      void checkQueue;
+    }, 500);
+    socket.onmessage = function (e) {
+      if (typeof e?.data === "string") {
+        messageResponseHandler(safeJsonParse(e.data));
+      }
+    };
+  };
+
+  const teardownWebsocket = (): void => {
+    if (socketMessageQueueCheckInterval != null) {
+      clearInterval(socketMessageQueueCheckInterval);
+    }
+    if (socket != null) {
+      socket.onmessage = null;
+      socket.close();
+      socket = undefined;
+    }
+  };
+
+  if (isUsingWebSockets()) {
+    setupWebsocket();
+  }
+
+  const appendStructuredUserResponse = (
+    structured: StructuredRequest,
+    context?: Context,
+  ): void => {
+    const newResponse: Response = {
+      type: "user",
+      receivedAt: new Date().getTime(),
+      payload: {
+        type: "structured",
+        ...structured,
+        context,
+      },
+    };
+    setState(
+      {
+        responses: [...state.responses, newResponse],
+      },
+      newResponse,
+    );
+  };
+
+  const sendIntent = (intentId: string, context?: Context): void => {
+    appendStructuredUserResponse({ intentId }, context);
+    void sendToBot({
+      context,
+      request: {
+        structured: {
+          intentId,
+        },
+      },
+    });
+  };
+
+  const sendText = (text: string, context?: Context): void => {
+    const newResponse: Response = {
+      type: "user",
+      receivedAt: new Date().getTime(),
+      payload: {
+        type: "text",
+        text,
+        context,
+      },
+    };
+    setState(
+      {
+        responses: [...state.responses, newResponse],
+      },
+      newResponse,
+    );
+    void sendToBot({
+      context,
+      request: {
+        unstructured: {
+          text,
+        },
+      },
+    });
+  };
+
+  const unsubscribe = (subscriber: Subscriber): void => {
+    subscribers = subscribers.filter((fn) => fn !== subscriber);
+  };
+
+  const subscribe = (subscriber: Subscriber): (() => void) => {
+    subscribers = [...subscribers, subscriber];
+    subscriber(fromInternal(state));
+    return () => {
+      unsubscribe(subscriber);
+    };
+  };
+
+  return {
+    sendText,
+    sendStructured: (structured: StructuredRequest, context) => {
+      appendStructuredUserResponse(structured, context);
+      void sendToBot({
+        context,
+        request: {
+          structured: {
+            ...structured,
+            slots: normalizeSlots(structured.slots ?? []),
+          },
+        },
+      });
+    },
+    sendSlots: (slots, context) => {
+      appendStructuredUserResponse({ slots }, context);
+      void sendToBot({
+        context,
+        request: {
+          structured: {
+            slots: normalizeSlots(slots),
+          },
+        },
+      });
+    },
+    sendIntent,
+    sendWelcomeIntent: (context) => {
+      sendIntent(welcomeIntent, context);
+    },
+    sendChoice: (choiceId, context, metadata) => {
+      let newResponses: Response[] = [...state.responses];
+
+      const choiceResponse: Response = {
+        type: "user",
+        receivedAt: new Date().getTime(),
+        payload: {
+          type: "choice",
+          choiceId,
+        },
+      };
+
+      const responseIndex = metadata?.responseIndex ?? -1;
+      const messageIndex = metadata?.messageIndex ?? -1;
+
+      if (responseIndex > -1 && messageIndex > -1) {
+        newResponses = adjust(
+          responseIndex,
+          (response) =>
+            response.type === "bot"
+              ? {
+                  ...response,
+                  payload: {
+                    ...response.payload,
+                    messages: adjust(
+                      messageIndex,
+                      (message) => ({ ...message, selectedChoiceId: choiceId }),
+                      response.payload.messages,
+                    ),
+                  },
+                }
+              : response,
+          newResponses,
+        );
+      }
+
+      newResponses = [...newResponses, choiceResponse];
+
+      setState(
+        {
+          responses: newResponses,
+        },
+        choiceResponse,
+      );
+
+      void sendToBot({
+        context,
+        request: {
+          structured: {
+            nodeId: metadata?.nodeId,
+            choiceId,
+          },
+        },
+      });
+    },
+    currentConversationId: () => {
+      return state.conversationId;
+    },
+    subscribe,
+    unsubscribe,
+    unsubscribeAll: () => {
+      subscribers = [];
+    },
+    reset: (options) => {
+      setState({
+        conversationId: uuid(),
+        responses: options?.clearResponses === true ? [] : state.responses,
+      });
+      if (isUsingWebSockets()) {
+        teardownWebsocket();
+        setupWebsocket();
+      }
+    },
+    destroy: () => {
+      subscribers = [];
+      if (isUsingWebSockets()) {
+        teardownWebsocket();
+      }
+    },
+  };
+}
 
 /**
  * This package is intentionally designed with a subscription-based API as opposed to a promise-based one where each message corresponds to a single bot response, available asynchronously.
