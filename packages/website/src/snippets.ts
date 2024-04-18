@@ -60,9 +60,7 @@ export const setupSnippet = ({
   theme?: Partial<Theme>;
   behavior?: Behavior;
   customModalitiesExample?: boolean;
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-}) => {
+}): string => {
   return `<!-- Chat widget sample HTML -->
 <!-- Downloaded from https://nlxai.github.io/chat-sdk -->
 <html lang="en">
@@ -72,18 +70,14 @@ export const setupSnippet = ({
   </head>
   <body>
     ${umdScriptTags.chatWidget}${
-      // initial eslint integration
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      customModalitiesExample
+      customModalitiesExample != null
         ? `
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/htm/3.1.1/htm.js" integrity="sha512-RilD4H0wcNNxG2GvB+L1LRXCntT0zgRvRLnmGu+e9wWaLKGkPifz3Ozb6+WPsyEkTBLw6zWCwwEjs9JLL1KIHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>`
         : ""
     }
     <script>
       window.addEventListener("DOMContentLoaded", () => {${
-        // initial eslint integration
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        customModalitiesExample
+        customModalitiesExample != null
           ? `
 
         // EMBEDDABLE COMPONENT SETUP
@@ -109,23 +103,15 @@ export const setupSnippet = ({
       }
         const widget = nlxai.chatWidget.create({
           config: {
-            botUrl: "${
-              // initial eslint integration
-              // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-              config.botUrl || "REPLACE_WITH_BOT_URL"
-            }",
+            botUrl: "${config.botUrl ?? "REPLACE_WITH_BOT_URL"}",
             headers: {
               "nlx-api-key": "${
-                // initial eslint integration
-                // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-                config.headers?.["nlx-api-key"] || "REPLACE_WITH_API_KEY"
+                config.headers?.["nlx-api-key"] ?? "REPLACE_WITH_API_KEY"
               }"
             },
             languageCode: "${config.languageCode}"
           },${
-            // initial eslint integration
-            // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-            customModalitiesExample
+            customModalitiesExample != null
               ? `
           // Include custom embeddable component under the 'customModalities' field
           customModalities: { SendExampleSlot },`
@@ -170,9 +156,7 @@ storeIn: "localStorage",
                   : ""
           }
           ${
-            // initial eslint integration
-            // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-            theme
+            theme != null
               ? `theme: ${indentBy(
                   "          ",
                   JSON.stringify(theme, null, 2),
@@ -610,9 +594,7 @@ export const voiceCompassSnippet = ({
 }: {
   config?: Partial<MMConfig>;
   environment?: Environment;
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-}) => {
+}): string => {
   const conversationId = (() => {
     if (config !== undefined) {
       if ("conversationIdSnippet" in config) {
@@ -645,42 +627,25 @@ export const voiceCompassSnippet = ({
     environment === Environment.Html ? "nlxai." : ""
   }voiceCompass.create({
   // hard-coded params
-  apiKey: "${
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-    config?.apiKey || "REPLACE_WITH_API_KEY"
-  }",
-  workspaceId: "${
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-    config?.workspaceId || "REPLACE_WITH_WORKSPACE_ID"
-  }",
-  journeyId: "${
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-    config?.journeyId || "REPLACE_WITH_JOURNEY_ID"
-  }",
+  apiKey: "${config?.apiKey ?? "REPLACE_WITH_API_KEY"}",
+  workspaceId: "${config?.workspaceId ?? "REPLACE_WITH_WORKSPACE_ID"}",
+  journeyId: "${config?.journeyId ?? "REPLACE_WITH_JOURNEY_ID"}",
   // dynamic params
   conversationId: ${conversationId},
   languageCode: ${languageCode},
 });
 
-client.sendStep("${
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-    config?.testStepId || "REPLACE_WITH_STEP_ID"
-  }");`;
+client.sendStep("${config?.testStepId ?? "REPLACE_WITH_STEP_ID"}");`;
 };
 
 type ScriptTagsType = Record<keyof typeof umdScriptSrc, string>;
+
 export const umdScriptTags: ScriptTagsType = (
   Object.keys(umdScriptSrc) as Array<keyof typeof umdScriptSrc>
 ).reduce<ScriptTagsType>(
   (acc, key) => ({
     ...acc,
-    [key]: `<script defer src="${
-      umdScriptSrc[key]
-    }"></script>`,
+    [key]: `<script defer src="${umdScriptSrc[key]}"></script>`,
   }),
 
   // eslint-disable-next-line @typescript-eslint/prefer-reduce-type-parameter, @typescript-eslint/consistent-type-assertions
@@ -690,9 +655,7 @@ export const umdScriptTags: ScriptTagsType = (
 export const voiceCompassSetupSnippet = (cfg: {
   config?: Partial<MMConfig>;
   environment?: Environment;
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-}) => {
+}): string => {
   if (cfg.environment === Environment.Html) {
     return `${umdScriptTags.voiceCompass}
 <script>
