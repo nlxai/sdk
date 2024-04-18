@@ -204,7 +204,7 @@ interface RouteInfo {
   element: JSX.Element;
 }
 
-const flattenedRoutes: RouteInfo[] = flatten(
+export const flattenedRoutes: RouteInfo[] = flatten(
   routes.map((r) => r.items.map((item) => ({ ...item, heading: r.heading }))),
 );
 
