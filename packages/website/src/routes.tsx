@@ -197,17 +197,23 @@ export const routes: Array<{
   },
 ];
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const ContentRoutes: FC<{}> = () => {
-  const flattenedRoutes = flatten(
-    routes.map((r) => r.items.map((item) => ({ ...item, heading: r.heading }))),
-  );
+interface RouteInfo {
+  heading: string;
+  label: string;
+  url: string;
+  element: JSX.Element;
+}
+
+const flattenedRoutes: RouteInfo[] = flatten(
+  routes.map((r) => r.items.map((item) => ({ ...item, heading: r.heading }))),
+);
+
+export const ContentRoutes: FC<unknown> = () => {
   return (
     <Routes>
       {flattenedRoutes.map(({ url, element }, index) => {
-        const prev = flattenedRoutes[index - 1];
-        const next = flattenedRoutes[index + 1];
+        const prev: RouteInfo | undefined = flattenedRoutes[index - 1];
+        const next: RouteInfo | undefined = flattenedRoutes[index + 1];
         return (
           <Route
             path={url.slice(1)}
