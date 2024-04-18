@@ -1,6 +1,6 @@
 # NLX Chat SDK Core
 
-This is the core package of our official JavaScript SDK to communicate with NLX conversational bots.
+The core package of our official JavaScript SDK to communicate with NLX conversational bots.
 
 ## Getting started
 

@@ -98,13 +98,13 @@ export interface Client {
    *
    *
    *   _Note: Must be a valid UUID_
-   * @param context -  context to send back to the voice bot, for usage later in the intent.
+   * @param context - [context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) to send back to the voice bot, for usage later in the intent.
    */
   sendStep: (stepId: string, context?: Context) => Promise<void>;
 }
 
 /**
- * context to send back to the voice bot, for usage later in the intent.
+ * [context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) to send back to the voice bot, for usage later in the intent.
  * @category Client
  */
 export type Context = Record<string, any>;

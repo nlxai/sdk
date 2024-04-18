@@ -9,11 +9,12 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "rm -rf lib && rollup -c",
-    "docs": "typedoc",
+    "docs": "rm -rf docs/ && typedoc && concat-md --decrease-title-levels --dir-name-as-title docs/ > docs/index.md",
     "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
     "prepublish": "npm run build",
-    "publish-docs": "npm run docs && concat-md --decrease-title-levels --dir-name-as-title docs/ > ../website/src/content/06-03-multimodal-api-reference.md",
+    "preview-docs": "npm run docs && comrak --unsafe --gfm  -o docs/index.html docs/index.md && open docs/index.html",
+    "publish-docs": "npm run docs && mv docs/index.md ../website/src/content/06-03-multimodal-api-reference.md",
     "test": "jest",
     "tsc": "tsc"
   },
