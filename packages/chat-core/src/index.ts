@@ -1,6 +1,6 @@
 import fetch from "isomorphic-fetch";
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { equals, adjust, omit } from "ramda";
+import { equals, adjust } from "ramda";
 import { v4 as uuid } from "uuid";
 import packageJson from "../package.json";
 
@@ -203,10 +203,7 @@ export const shouldReinitialize = (
   config1: Config,
   config2: Config,
 ): boolean => {
-  return !equals(
-    omit(["failureMessage"], config1),
-    omit(["failureMessage"], config2),
-  );
+  return !equals(config1, config2);
 };
 
 export const createConversation = (config: Config): ConversationHandler => {
@@ -587,6 +584,7 @@ export function promisify<T>(
     return await new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         reject(new Error("The request timed out."));
+        convo.unsubscribe(subscription);
       }, timeout);
       const subscription = (
         _responses: Response[],
