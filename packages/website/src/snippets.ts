@@ -48,6 +48,13 @@ convo.subscribe((responses, newResponse) => {
 // Send a message to the bot
 convo.sendText("Hello, I want to order a coffee");`;
 
+function defaultTo(
+  value: string | undefined | null,
+  defaultValue: string,
+): string {
+  return value != null && value !== "" ? value : defaultValue;
+}
+
 export const setupSnippet = ({
   config,
   titleBar,
@@ -103,11 +110,9 @@ export const setupSnippet = ({
       }
         const widget = nlxai.chatWidget.create({
           config: {
-            botUrl: "${config.botUrl ?? "REPLACE_WITH_BOT_URL"}",
+            botUrl: "${defaultTo(config.botUrl, "REPLACE_WITH_BOT_URL")}",
             headers: {
-              "nlx-api-key": "${
-                config.headers?.["nlx-api-key"] ?? "REPLACE_WITH_API_KEY"
-              }"
+              "nlx-api-key": "${defaultTo(config.headers?.["nlx-api-key"], "REPLACE_WITH_API_KEY")}"
             },
             languageCode: "${config.languageCode}"
           },${
@@ -627,15 +632,15 @@ export const voiceCompassSnippet = ({
     environment === Environment.Html ? "nlxai." : ""
   }voiceCompass.create({
   // hard-coded params
-  apiKey: "${config?.apiKey ?? "REPLACE_WITH_API_KEY"}",
-  workspaceId: "${config?.workspaceId ?? "REPLACE_WITH_WORKSPACE_ID"}",
-  journeyId: "${config?.journeyId ?? "REPLACE_WITH_JOURNEY_ID"}",
+  apiKey: "${defaultTo(config?.apiKey, "REPLACE_WITH_API_KEY")}",
+  workspaceId: "${defaultTo(config?.workspaceId, "REPLACE_WITH_WORKSPACE_ID")}",
+  journeyId: "${defaultTo(config?.journeyId, "REPLACE_WITH_JOURNEY_ID")}",
   // dynamic params
   conversationId: ${conversationId},
   languageCode: ${languageCode},
 });
 
-client.sendStep("${config?.testStepId ?? "REPLACE_WITH_STEP_ID"}");`;
+client.sendStep("${defaultTo(config?.testStepId, "REPLACE_WITH_STEP_ID")}");`;
 };
 
 type ScriptTagsType = Record<keyof typeof umdScriptSrc, string>;
