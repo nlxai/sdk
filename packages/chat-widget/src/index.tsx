@@ -96,9 +96,7 @@ const Loader: FC<{ message?: string; showAfter?: number }> = (props) => {
   return (
     <C.LoaderContainer>
       <C.PendingMessageDots />
-      {/* initial eslint integration */}
-      {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */}
-      {showMessage && props.message && (
+      {showMessage && props.message != null && (
         <C.LoaderText>{props.message}</C.LoaderText>
       )}
     </C.LoaderContainer>
@@ -123,8 +121,6 @@ const MessageGroups: FC<{
   allowChoiceReselection?: boolean;
 }> = (props) => (
   <C.MessageGroups>
-    {/* initial eslint integration */}
-    {/* eslint-disable-next-line array-callback-return */}
     {props.chat.responses.map((response, responseIndex) => {
       if (response.type === "bot") {
         return (
@@ -222,6 +218,8 @@ const MessageGroups: FC<{
           </C.MessageGroup>
         );
       }
+
+      return null;
     })}
     {props.children}
   </C.MessageGroups>

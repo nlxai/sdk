@@ -14,7 +14,7 @@ ${setupSnippet({
 ~~~
 
 In this snippet, the script is deferred in order to reduce impact on page speed. After the script is initialized, we use the \`nlxai.chatWidget\` global to instantiate the widget. The following parameters are used:
-- \`config\`: the bot configuration, including the bot URL obtained and headers obtained from the deployment of your bot.
+- \`config\`: the [bot configuration](/headless-api-reference#interfacesconfigmd), including the bot URL obtained and headers obtained from the deployment of your bot.
 - \`titleBar\`: configuration for the header bar of the widget, containing the following fields:
   - \`title\`: the text content of the title, e.g. "Support chat".
   - \`logo\`: the static URL of a logo image that appears left of the title.

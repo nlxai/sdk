@@ -130,9 +130,7 @@ export interface Config {
   conversationId: string;
 
   /**
-   * the user's language code.
-   *
-   * In the browser may be fetched from `navigator.language`, or if the journey doesn't support multiple languages, can be hardcoded.
+   * the user's language code, consistent with the language codes defined on the journey.
    */
   languageCode: string;
 
