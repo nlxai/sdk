@@ -287,8 +287,7 @@ export type Time = number;
 export type Environment = "production" | "development";
 
 /**
- * The config to create a conversation.
- * `botUrl` and
+ * The configuration to create a conversation.
  */
 export interface Config {
   /**
