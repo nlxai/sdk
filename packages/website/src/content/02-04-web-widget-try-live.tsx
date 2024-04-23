@@ -20,6 +20,7 @@ import {
 } from "../components/ChatConfiguration";
 import { Note } from "../components/Note";
 import { setupSnippet, Behavior } from "../snippets";
+import { omit } from "ramda";
 
 export const content = `
 You can try your bots directly on this configuration widget.
@@ -97,7 +98,11 @@ export const WebWidgetTryLive = () => {
         <TitleBarEditor
           value={titleBar}
           onChange={(val: any) => {
-            setTitleBar((prev) => ({ ...prev, ...val }));
+            setTitleBar((prev) => {
+              const titleBar = { ...prev, ...val };
+              if (titleBar.logo?.length === 0) return omit(["logo"], titleBar);
+              else return titleBar;
+            });
           }}
         />
         <PageContent
