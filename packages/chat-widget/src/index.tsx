@@ -142,8 +142,6 @@ const MessageGroups: FC<{
                             props.allowChoiceReselection ?? false;
                           const selected =
                             botMessage.selectedChoiceId === choice.choiceId;
-                          // initial eslint integration
-                          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                           return !allowChoiceReselection &&
                             botMessage.selectedChoiceId != null
                             ? {
@@ -232,9 +230,7 @@ interface SessionData {
   responses: Response[];
 }
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const saveSession = (chat: ChatHook, storeIn: StorageType) => {
+const saveSession = (chat: ChatHook, storeIn: StorageType): void => {
   const storage = storeIn === "sessionStorage" ? sessionStorage : localStorage;
   storage.setItem(
     storageKey,
@@ -245,9 +241,7 @@ const saveSession = (chat: ChatHook, storeIn: StorageType) => {
   );
 };
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const clearSession = (storeIn: StorageType) => {
+export const clearSession = (storeIn: StorageType): void => {
   const storage = storeIn === "sessionStorage" ? sessionStorage : localStorage;
   storage.removeItem(storageKey);
 };
@@ -256,25 +250,23 @@ export const retrieveSession = (storeIn: StorageType): SessionData | null => {
   try {
     const storage =
       storeIn === "sessionStorage" ? sessionStorage : localStorage;
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-    const data = JSON.parse(storage.getItem(storageKey) || "");
+    const data = JSON.parse(storage.getItem(storageKey) ?? "");
     const responses: Response[] | undefined = data?.responses;
     const conversationId: string | undefined = data?.conversationId;
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (responses) {
+    if (responses != null) {
       let expirationTimestamp: number | undefined;
       responses.forEach((response) => {
-        // initial eslint integration
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        if (response.type === "bot" && response.payload.expirationTimestamp) {
+        if (
+          response.type === "bot" &&
+          response.payload.expirationTimestamp != null
+        ) {
           expirationTimestamp = response.payload.expirationTimestamp;
         }
       });
-      // initial eslint integration
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      if (!expirationTimestamp || new Date().getTime() < expirationTimestamp) {
+      if (
+        expirationTimestamp == null ||
+        new Date().getTime() < expirationTimestamp
+      ) {
         return { responses, conversationId };
       } else {
         return { responses };
@@ -290,24 +282,18 @@ const ConversationHandlerContext = createContext<ConversationHandler | null>(
   null,
 );
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const useConversationHandler = () => {
+export const useConversationHandler = (): ConversationHandler | null => {
   return useContext(ConversationHandlerContext);
 };
 
-// initial eslint integration
-// eslint-disable-next-line react/display-name
-export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
+export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
   const [windowInnerHeightValue, setWindowInnerHeightValue] = useState<
     number | null
   >(null);
 
   useEffect(() => {
     setWindowInnerHeightValue(window.innerHeight);
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const handleResize = () => {
+    const handleResize = (): void => {
       setWindowInnerHeightValue(window.innerHeight);
     };
     window.addEventListener("resize", handleResize);
@@ -317,27 +303,19 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
   }, []);
 
   const savedSessionData = useMemo(
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    () => (props.storeIn ? retrieveSession(props.storeIn) : null),
+    () => (props.storeIn != null ? retrieveSession(props.storeIn) : null),
     [props.storeIn],
   );
 
   const configWithSession = useMemo(() => {
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (!savedSessionData) {
+    if (savedSessionData == null) {
       return props.config;
     }
     return {
       ...props.config,
       conversationId:
-        // initial eslint integration
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-        savedSessionData.conversationId || props.config.conversationId,
-      // initial eslint integration
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      responses: savedSessionData.responses || props.config.responses,
+        savedSessionData.conversationId ?? props.config.conversationId,
+      responses: savedSessionData.responses ?? props.config.responses,
     };
   }, [props.config, savedSessionData]);
 
@@ -346,9 +324,7 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
   const chat = useChat(configWithSession);
 
   useEffect(() => {
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (props.storeIn) {
+    if (props.storeIn != null) {
       saveSession(chat, props.storeIn);
     }
   }, [chat.responses, props.storeIn]);
@@ -383,12 +359,10 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
 
   // Input focus
 
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-optional-chain
-    if (inputRef && inputRef.current) {
+    if (inputRef.current != null) {
       (inputRef as any).current.focus();
     }
   }, [expanded, chat.responses]);
@@ -402,9 +376,7 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
   // Escape handling
 
   useEffect(() => {
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const handler = (ev: KeyboardEvent) => {
+    const handler = (ev: KeyboardEvent): void => {
       if (ev.key === "Escape") {
         setExpanded(false);
       }
@@ -438,9 +410,7 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
 
   const scrollToBottom = useCallback(() => {
     const node = messagesContainerRef.current;
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (node) {
+    if (node != null) {
       node.scrollTop = node.scrollHeight;
     }
   }, [messagesContainerRef]);
@@ -471,9 +441,7 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
     <ConversationHandlerContext.Provider value={chat.conversationHandler}>
       <ThemeProvider theme={mergedTheme}>
         <>
-          {/* initial eslint integration */}
-          {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */}
-          {props.bubble ? (
+          {props.bubble != null ? (
             <C.PinBubble
               isActive={!expanded && bubble}
               onClick={() => {
@@ -485,15 +453,11 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
           {expanded && (
             <C.Container>
               <C.Main ref={messagesContainerRef}>
-                {/* initial eslint integration */}
-                {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */}
-                {props.titleBar && (
+                {props.titleBar != null ? (
                   <C.TitleBar>
-                    {/* initial eslint integration */}
-                    {/* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */}
-                    {props.titleBar.logo && (
+                    {props.titleBar.logo != null ? (
                       <C.TitleIcon src={props.titleBar.logo} />
-                    )}
+                    ) : null}
                     <C.Title>{props.titleBar.title}</C.Title>
                     {props.titleBar.withCollapseButton ?? false ? (
                       <C.TitleBarButton
@@ -520,7 +484,7 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
                       </C.TitleBarButton>
                     ) : null}
                   </C.TitleBar>
-                )}
+                ) : null}
                 <MessageGroups
                   chat={chat}
                   customModalities={props.customModalities ?? {}}
@@ -544,27 +508,21 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
                   value={chat.inputValue}
                   placeholder={props.inputPlaceholder ?? "Type something..."}
                   onChange={(event: any) => {
-                    // initial eslint integration
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                    chat.setInputValue(event.target.value);
+                    chat.setInputValue(
+                      (event.target as HTMLInputElement).value,
+                    );
                   }}
-                  onKeyPress={(event: any) => {
-                    // initial eslint integration
-                    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-                    if (event.key === "Enter" && submit) {
+                  onKeyUp={(event: any) => {
+                    if (event.key === "Enter" && submit !== false) {
                       submit();
                     }
                   }}
                 />
                 <C.BottomButtonsContainer>
                   <C.IconButton
-                    // initial eslint integration
-                    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-                    disabled={Boolean(!submit)}
+                    disabled={Boolean(submit === false)}
                     onClick={() => {
-                      // initial eslint integration
-                      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-                      if (submit) {
+                      if (submit !== false) {
                         submit();
                       }
                     }}
@@ -586,9 +544,7 @@ export const Widget = forwardRef<WidgetRef, Props>((props, ref) => {
               (props.titleBar?.withCollapseButton ?? false)
             ) ? (
               <CloseIcon />
-            ) : // initial eslint integration
-            // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-            props.chatIcon ? (
+            ) : props.chatIcon != null ? (
               <img src={props.chatIcon} />
             ) : (
               <ChatIcon />
