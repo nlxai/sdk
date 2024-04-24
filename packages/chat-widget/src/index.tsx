@@ -43,16 +43,44 @@ export {
 export { type Theme } from "./theme";
 export { defaultTheme } from "./ui/constants";
 
+/**
+ * A handler for a Widget. Created with {@link create}
+ */
 export interface WidgetInstance {
+  /**
+   * End the conversation & remove the widget from the DOM.
+   */
   teardown: () => void;
+  /**
+   * Expand the widget and call the `onExpand` callback if present.
+   */
   expand: () => void;
+  /**
+   * Collapse the widget and call the `onCollapse` callback if present.
+   */
   collapse: () => void;
+  /**
+   * Get the ConversationHandler for widget. Returns undefined if the widget has been torn down.
+   * See: {@link @nlxai/chat-core#ConversationHandler}
+   */
   getConversationHandler: () => ConversationHandler | undefined;
 }
 
+/**
+ * Widget Ref, for use when rendering a Widget without using the `create` helper function.
+ */
 export interface WidgetRef {
+  /**
+   * {@inheritDoc WidgetInstance.expand}
+   */
   expand: () => void;
+  /**
+   * {@inheritDoc WidgetInstance.collapse}
+   */
   collapse: () => void;
+  /**
+   * {@inheritDoc WidgetInstance.conversationHandler}
+   */
   conversationHandler: ConversationHandler;
 }
 
@@ -241,11 +269,15 @@ const saveSession = (chat: ChatHook, storeIn: StorageType): void => {
   );
 };
 
+// TODO incorporate this into the main API and don't expose it
+// user shouldn't have to handle managing `storeIn` config after widget is started
 export const clearSession = (storeIn: StorageType): void => {
   const storage = storeIn === "sessionStorage" ? sessionStorage : localStorage;
   storage.removeItem(storageKey);
 };
 
+// TODO can we stop exporting this?
+// user shouldn't have to handle managing `storeIn` config after widget is started
 export const retrieveSession = (storeIn: StorageType): SessionData | null => {
   try {
     const storage =
@@ -394,11 +426,11 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
   useEffect(() => {
     const timeout1 = setTimeout(() => {
       setBubble(true);
-    }, 3000);
+    }, 3_000);
 
     const timeout2 = setTimeout(() => {
       setBubble(false);
-    }, 20000);
+    }, 20_000);
 
     return () => {
       clearTimeout(timeout1);

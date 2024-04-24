@@ -77,11 +77,23 @@ const DotsContainer = styled.div<{ children: React.ReactNode }>`
   padding: 4px 0;
 `;
 
-export const LoaderContainer = styled.div<{ children: React.ReactNode }>`
+export const LoaderContainer = styled.div<{
+  /**
+   * @internal
+   * @hidden
+   */
+  children: React.ReactNode;
+}>`
   display: flex;
 `;
 
-export const LoaderText = styled.span<{ children: React.ReactNode }>`
+export const LoaderText = styled.span<{
+  /**
+   * @internal
+   * @hidden
+   */
+  children: React.ReactNode;
+}>`
   display: inline-block;
   margin-left: 10px;
   font-size: ${constants.fontSize}px;
@@ -102,7 +114,13 @@ export const PendingMessageDots: React.FunctionComponent<
 const top = 20;
 const bottom = 90;
 
-export const Container = styled.div<{ children: React.ReactNode }>`
+export const Container = styled.div<{
+  /**
+   * @internal
+   * @hidden
+   */
+  children: React.ReactNode;
+}>`
   position: fixed;
   top: ${(props) => {
     if (props.theme.windowInnerHeight == null) {
@@ -134,14 +152,20 @@ export const Container = styled.div<{ children: React.ReactNode }>`
 
 // Main
 
-export const Main = styled.div<{ children: React.ReactNode }>`
+export const Main = styled.div<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   height: calc(100% - ${constants.bottomHeight}px);
   overflow: auto;
 `;
 
 // MessageGroups
 
-export const MessageGroups = styled.div<{ children: React.ReactNode }>`
+export const MessageGroups = styled.div<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   padding: ${(props) => props.theme.spacing}px;
   box-sizing: border-box;
 
@@ -159,7 +183,10 @@ export const MessageGroups = styled.div<{ children: React.ReactNode }>`
 
 // MessageGroup
 
-export const MessageGroup = styled.div<{ children: React.ReactNode }>`
+export const MessageGroup = styled.div<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   display: flex;
   flex-direction: column;
 
@@ -174,7 +201,10 @@ export const MessageGroup = styled.div<{ children: React.ReactNode }>`
 
 // Message
 
-export const Message = styled.div<{ type: "user" | "bot" }>`
+export const Message = styled.div<{
+  /** @hidden @internal */
+  type: "user" | "bot";
+}>`
   background-color: ${(props) =>
     props.type === "user"
       ? props.theme.darkMessageColor
@@ -216,7 +246,10 @@ export const Message = styled.div<{ type: "user" | "bot" }>`
   }
 `;
 
-export const FailureMessage = styled.p<{ children: React.ReactNode }>`
+export const FailureMessage = styled.p<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   text-align: center;
   flex-wrap: wrap;
   font-size: ${constants.smallFontSize}px;
@@ -236,7 +269,15 @@ export const FailureMessage = styled.p<{ children: React.ReactNode }>`
 // MessageBody
 
 export const MessageBody = styled.p<{
-  dangerouslySetInnerHTML: { __html: string };
+  /**
+   *
+   */
+  dangerouslySetInnerHTML: {
+    /**
+     *
+     */
+    __html: string;
+  };
 }>`
   margin: 0;
   font-size: ${constants.fontSize}px;
@@ -258,7 +299,10 @@ export const MessageBody = styled.p<{
 
 // Bottom
 
-export const Bottom = styled.div<{ children: React.ReactNode }>`
+export const Bottom = styled.div<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   height: ${constants.bottomHeight}px;
   position: relative;
   border-top: 1px solid rgba(0, 0, 0, 0.08);
@@ -266,7 +310,10 @@ export const Bottom = styled.div<{ children: React.ReactNode }>`
   border-bottom-right-radius: ${(props) => props.theme.borderRadius}px;
 `;
 
-export const IconButton = styled.button<{ disabled?: boolean }>`
+export const IconButton = styled.button<{
+  /** @hidden @internal */
+  disabled?: boolean;
+}>`
   height: 35px;
   width: 35px;
   border-radius: 18px;
@@ -304,6 +351,9 @@ export const IconButton = styled.button<{ disabled?: boolean }>`
 `;
 
 export const BottomButtonsContainer = styled.div<{
+  /**
+   *
+   */
   children: React.ReactNode;
 }>`
   position: absolute;
@@ -313,10 +363,25 @@ export const BottomButtonsContainer = styled.div<{
 `;
 
 export const Input = styled.input<{
+  /**
+   *
+   */
   ref: React.RefObject<HTMLInputElement>;
+  /**
+   *
+   */
   value: string;
+  /**
+   *
+   */
   placeholder: string;
+  /**
+   *
+   */
   onChange: (event: any) => void;
+  /**
+   *
+   */
   onKeyUp: (event: any) => void;
 }>`
   display: block;
@@ -335,7 +400,13 @@ export const Input = styled.input<{
 `;
 
 export const Pin = styled.button<{
+  /**
+   *
+   */
   children: React.ReactNode;
+  /**
+   *
+   */
   onClick: () => void;
 }>`
   position: fixed;
@@ -371,8 +442,17 @@ export const Pin = styled.button<{
 // PinBubble
 
 export const PinBubble: React.FunctionComponent<{
+  /**
+   *
+   */
   isActive: boolean;
+  /**
+   *
+   */
   content: string;
+  /**
+   *
+   */
   onClick: () => void;
 }> = (props) => (
   <PinBubbleContainer isActive={props.isActive}>
@@ -386,6 +466,9 @@ export const PinBubble: React.FunctionComponent<{
 );
 
 export const PinBubbleContainer = styled.div<{
+  /**
+   *
+   */
   isActive: boolean;
 }>`
   position: fixed;
@@ -438,7 +521,10 @@ export const PinBubbleContainer = styled.div<{
 
 // PinBubbleButton
 
-export const PinBubbleButton = styled.button<{ children: React.ReactNode }>`
+export const PinBubbleButton = styled.button<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   width: 32px;
   height: 32px;
   border: 0;
@@ -469,7 +555,10 @@ export const PinBubbleButton = styled.button<{ children: React.ReactNode }>`
 
 // ChoicesContainer
 
-export const ChoicesContainer = styled.div<{ children: React.ReactNode }>`
+export const ChoicesContainer = styled.div<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   margin-top: 10px;
   margin-bottom: -6px;
 
@@ -486,7 +575,13 @@ export const ChoicesContainer = styled.div<{ children: React.ReactNode }>`
 // ChoiceButton
 
 export const ChoiceButton = styled.button<{
+  /**
+   *
+   */
   disabled?: boolean;
+  /**
+   *
+   */
   selected?: boolean;
 }>`
   ${(props) =>
@@ -553,7 +648,10 @@ export const ChoiceButton = styled.button<{
 
 // TitleBar
 
-export const TitleBar = styled.div<{ children: React.ReactNode }>`
+export const TitleBar = styled.div<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   height: ${constants.bottomHeight}px;
   padding: 0 ${(props) => 2 * props.theme.spacing}px;
   border-top-left-radius: ${(props) => props.theme.borderRadius}px;
@@ -570,7 +668,10 @@ export const TitleBar = styled.div<{ children: React.ReactNode }>`
 
 // Title
 
-export const Title = styled.p<{ children: React.ReactNode }>`
+export const Title = styled.p<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   flex-grow: 1;
   font-size: 16px;
   font-weight: bold;
@@ -581,8 +682,17 @@ export const Title = styled.p<{ children: React.ReactNode }>`
 // TitleBarButton
 
 export const TitleBarButton = styled.button<{
+  /**
+   *
+   */
   children: React.ReactNode;
+  /**
+   *
+   */
   title: string;
+  /**
+   *
+   */
   onClick: () => void;
 }>`
   border: none;
@@ -628,7 +738,10 @@ export const DiscreteLink = styled.a<Record<string, never>>`
 
 // TitleIcon
 
-export const TitleIcon = styled.img<{ src: string }>`
+export const TitleIcon = styled.img<{
+  /** @hidden @internal */
+  src: string;
+}>`
   flex: 0 0 22px;
   height: 22px;
   margin-right: 6px;
