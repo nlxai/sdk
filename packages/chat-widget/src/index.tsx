@@ -32,7 +32,9 @@ import {
 } from "./props";
 import * as C from "./ui/components";
 
+/** @hidden */
 export { default as React } from "react";
+/** @hidden */
 export { default as ReactDOM } from "react-dom";
 
 export {
