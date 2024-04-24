@@ -77,7 +77,7 @@ export interface WidgetRef {
    */
   collapse: () => void;
   /**
-   * {@inheritDoc WidgetInstance.conversationHandler}
+   * the ConversationHandler for the widget.
    */
   conversationHandler: ConversationHandler;
 }
