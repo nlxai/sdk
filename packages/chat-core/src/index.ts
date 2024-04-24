@@ -287,8 +287,7 @@ export type Time = number;
 export type Environment = "production" | "development";
 
 /**
- * The config to create a conversation.
- * `botUrl` and
+ * The configuration to create a conversation.
  */
 export interface Config {
   /**
@@ -942,7 +941,7 @@ export default function createConversation(
  * @param fn - the function to wrap (e.g. `convo.sendText`, `convo.sendChoice`, etc.)
  * @param convo - the `ConversationHandler` (from {@link createConversation})
  * @param timeout - the timeout in milliseconds
- * @returns A wrapped version of the function that returns a promise that resolves to the Conversation's next response.
+ * @returns A promise-wrapped version of the function. The function, when called, returns a promise that resolves to the Conversation's next response.
  */
 export function promisify<T>(
   fn: (payload: T) => void,

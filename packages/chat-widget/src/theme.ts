@@ -1,14 +1,17 @@
-// Colors may be in any CSS-compatible format like rgb(50, 50, 50) or #aaa
+/**
+ * The theme to apply to the chat widget.
+ *  Colors may be in any CSS-compatible format like rgb(50, 50, 50) or #aaa
+ */
 export interface Theme {
   /** Primary color for interactive UI elements like buttons */
-  primaryColor: string; 
+  primaryColor: string;
   /** Background color for the dark chat bubbles (sent by the user) */
-  darkMessageColor: string; 
+  darkMessageColor: string;
   /** Background color for the light chat bubbles (sent by the bot) */
   lightMessageColor: string;
   /** Customized shade of white */
   white: string;
-   /** Widget font family */
+  /** Widget font family */
   fontFamily: string;
   /** Main spacing unit */
   spacing: number;

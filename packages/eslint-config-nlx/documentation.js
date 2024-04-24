@@ -6,6 +6,13 @@ module.exports = {
     "jsdoc/require-jsdoc": [
       "error",
       {
+        require: {
+            FunctionDeclaration: true,
+            MethodDefinition: true,
+            ClassDeclaration: true,
+            ArrowFunctionExpression: true,
+            FunctionExpression: true
+        },
         publicOnly: true,
         // these ensure that documentation of various type script constructs is required. Will tweak as we go.
         contexts: ["TSTypeAliasDeclaration","TSInterfaceDeclaration","TSMethodSignature","TSPropertySignature"]

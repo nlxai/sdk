@@ -20,9 +20,9 @@ export const hoverBg = `
   }
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const focusShadow = (theme: Theme) => `
+// eslint-disable-next-line jsdoc/require-returns, jsdoc/require-param
+/** @hidden @internal */
+export const focusShadow = (theme: Theme): string => `
   box-shadow: 0 0 0 3px ${tinycolor(theme.primaryColor)
     .setAlpha(0.15)
     .toRgbString()};
@@ -49,9 +49,7 @@ const bounceKeyframes = keyframes`
 `;
 
 // The 'display: block !important' rule circumvents typical base CSS rules that set 'display: none' on empty HTML elements
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-const Dot = styled.div<{}>`
+const Dot = styled.div<Record<string, never>>`
   display: block !important;
   width: 6px;
   height: 6px;
@@ -74,32 +72,40 @@ const Dot = styled.div<{}>`
   }
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-const DotsContainer = styled.div<{}>`
+const DotsContainer = styled.div<{ children: React.ReactNode }>`
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 4px 0;
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const LoaderContainer = styled.div<{}>`
+export const LoaderContainer = styled.div<{
+  /**
+   * @internal
+   * @hidden
+   */
+  children: React.ReactNode;
+}>`
   display: flex;
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const LoaderText = styled.span<{}>`
+export const LoaderText = styled.span<{
+  /**
+   * @internal
+   * @hidden
+   */
+  children: React.ReactNode;
+}>`
   display: inline-block;
   margin-left: 10px;
   font-size: ${constants.fontSize}px;
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const PendingMessageDots: React.FunctionComponent<{}> = () => (
+// eslint-disable-next-line jsdoc/require-returns
+/** @hidden @internal */
+export const PendingMessageDots: React.FunctionComponent<
+  Record<string, never>
+> = () => (
   <DotsContainer>
     <Dot />
     <Dot />
@@ -112,14 +118,16 @@ export const PendingMessageDots: React.FunctionComponent<{}> = () => (
 const top = 20;
 const bottom = 90;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const Container = styled.div<{}>`
+export const Container = styled.div<{
+  /**
+   * @internal
+   * @hidden
+   */
+  children: React.ReactNode;
+}>`
   position: fixed;
   top: ${(props) => {
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (!props.theme.windowInnerHeight) {
+    if (props.theme.windowInnerHeight == null) {
       return `${top}px`;
     }
     return `${Math.max(
@@ -148,18 +156,20 @@ export const Container = styled.div<{}>`
 
 // Main
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const Main = styled.div<{}>`
+export const Main = styled.div<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   height: calc(100% - ${constants.bottomHeight}px);
   overflow: auto;
 `;
 
 // MessageGroups
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const MessageGroups = styled.div<{}>`
+export const MessageGroups = styled.div<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   padding: ${(props) => props.theme.spacing}px;
   box-sizing: border-box;
 
@@ -177,9 +187,10 @@ export const MessageGroups = styled.div<{}>`
 
 // MessageGroup
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const MessageGroup = styled.div<{}>`
+export const MessageGroup = styled.div<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   display: flex;
   flex-direction: column;
 
@@ -194,7 +205,10 @@ export const MessageGroup = styled.div<{}>`
 
 // Message
 
-export const Message = styled.div<{ type: "user" | "bot" }>`
+export const Message = styled.div<{
+  /** @hidden @internal */
+  type: "user" | "bot";
+}>`
   background-color: ${(props) =>
     props.type === "user"
       ? props.theme.darkMessageColor
@@ -236,9 +250,10 @@ export const Message = styled.div<{ type: "user" | "bot" }>`
   }
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const FailureMessage = styled.p<{}>`
+export const FailureMessage = styled.p<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   text-align: center;
   flex-wrap: wrap;
   font-size: ${constants.smallFontSize}px;
@@ -257,9 +272,17 @@ export const FailureMessage = styled.p<{}>`
 
 // MessageBody
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const MessageBody = styled.p<{}>`
+export const MessageBody = styled.p<{
+  /**
+   *
+   */
+  dangerouslySetInnerHTML: {
+    /**
+     *
+     */
+    __html: string;
+  };
+}>`
   margin: 0;
   font-size: ${constants.fontSize}px;
   a,
@@ -280,9 +303,10 @@ export const MessageBody = styled.p<{}>`
 
 // Bottom
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const Bottom = styled.div<{}>`
+export const Bottom = styled.div<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   height: ${constants.bottomHeight}px;
   position: relative;
   border-top: 1px solid rgba(0, 0, 0, 0.08);
@@ -290,7 +314,10 @@ export const Bottom = styled.div<{}>`
   border-bottom-right-radius: ${(props) => props.theme.borderRadius}px;
 `;
 
-export const IconButton = styled.button<{ disabled?: boolean }>`
+export const IconButton = styled.button<{
+  /** @hidden @internal */
+  disabled?: boolean;
+}>`
   height: 35px;
   width: 35px;
   border-radius: 18px;
@@ -298,9 +325,7 @@ export const IconButton = styled.button<{ disabled?: boolean }>`
   padding: 8px;
   font-size: ${constants.fontSize}px;
   ${(props) =>
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    props.disabled
+    props.disabled === true
       ? `
   opacity: 0.6;
   `
@@ -329,18 +354,40 @@ export const IconButton = styled.button<{ disabled?: boolean }>`
   ${hoverBg}
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const BottomButtonsContainer = styled.div<{}>`
+export const BottomButtonsContainer = styled.div<{
+  /**
+   *
+   */
+  children: React.ReactNode;
+}>`
   position: absolute;
   top: 50%;
   right: ${(props) => `${props.theme.spacing}px`};
   transform: translate3d(0, -50%, 0);
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const Input = styled.input<{}>`
+export const Input = styled.input<{
+  /**
+   *
+   */
+  ref: React.RefObject<HTMLInputElement>;
+  /**
+   *
+   */
+  value: string;
+  /**
+   *
+   */
+  placeholder: string;
+  /**
+   *
+   */
+  onChange: (event: any) => void;
+  /**
+   *
+   */
+  onKeyUp: (event: any) => void;
+}>`
   display: block;
   width: 100%;
   height: 100%;
@@ -356,9 +403,16 @@ export const Input = styled.input<{}>`
   }
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const Pin = styled.button<{}>`
+export const Pin = styled.button<{
+  /**
+   *
+   */
+  children: React.ReactNode;
+  /**
+   *
+   */
+  onClick: () => void;
+}>`
   position: fixed;
   background-color: ${(props) => props.theme.primaryColor};
   border: 0;
@@ -391,9 +445,20 @@ export const Pin = styled.button<{}>`
 
 // PinBubble
 
+// eslint-disable-next-line jsdoc/require-returns, jsdoc/require-param
+/** @hidden @internal */
 export const PinBubble: React.FunctionComponent<{
+  /**
+   *
+   */
   isActive: boolean;
+  /**
+   *
+   */
   content: string;
+  /**
+   *
+   */
   onClick: () => void;
 }> = (props) => (
   <PinBubbleContainer isActive={props.isActive}>
@@ -407,6 +472,9 @@ export const PinBubble: React.FunctionComponent<{
 );
 
 export const PinBubbleContainer = styled.div<{
+  /**
+   *
+   */
   isActive: boolean;
 }>`
   position: fixed;
@@ -459,9 +527,10 @@ export const PinBubbleContainer = styled.div<{
 
 // PinBubbleButton
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const PinBubbleButton = styled.button<{}>`
+export const PinBubbleButton = styled.button<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   width: 32px;
   height: 32px;
   border: 0;
@@ -492,9 +561,10 @@ export const PinBubbleButton = styled.button<{}>`
 
 // ChoicesContainer
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const ChoicesContainer = styled.div<{}>`
+export const ChoicesContainer = styled.div<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   margin-top: 10px;
   margin-bottom: -6px;
 
@@ -511,7 +581,13 @@ export const ChoicesContainer = styled.div<{}>`
 // ChoiceButton
 
 export const ChoiceButton = styled.button<{
+  /**
+   *
+   */
   disabled?: boolean;
+  /**
+   *
+   */
   selected?: boolean;
 }>`
   ${(props) =>
@@ -520,9 +596,7 @@ export const ChoiceButton = styled.button<{
   color: ${props.theme.white};
   `}
   ${(props) =>
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    props.selected
+    props.selected === true
       ? `
   outline: 2px solid ${props.theme.primaryColor};
   outline-offset: 2px;
@@ -533,9 +607,7 @@ export const ChoiceButton = styled.button<{
     const hoverColor = tinycolor(props.theme.primaryColor)
       .brighten(5)
       .toRgbString();
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    return props.disabled
+    return props.disabled === true
       ? `
   opacity: 0.5;
       `
@@ -582,9 +654,10 @@ export const ChoiceButton = styled.button<{
 
 // TitleBar
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const TitleBar = styled.div<{}>`
+export const TitleBar = styled.div<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   height: ${constants.bottomHeight}px;
   padding: 0 ${(props) => 2 * props.theme.spacing}px;
   border-top-left-radius: ${(props) => props.theme.borderRadius}px;
@@ -601,9 +674,10 @@ export const TitleBar = styled.div<{}>`
 
 // Title
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const Title = styled.p<{}>`
+export const Title = styled.p<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   flex-grow: 1;
   font-size: 16px;
   font-weight: bold;
@@ -613,9 +687,20 @@ export const Title = styled.p<{}>`
 
 // TitleBarButton
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const TitleBarButton = styled.button<{}>`
+export const TitleBarButton = styled.button<{
+  /**
+   *
+   */
+  children: React.ReactNode;
+  /**
+   *
+   */
+  title: string;
+  /**
+   *
+   */
+  onClick: () => void;
+}>`
   border: none;
   background: none;
   cursor: pointer;
@@ -631,9 +716,7 @@ export const TitleBarButton = styled.button<{}>`
 
 // DiscreteButton
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const DiscreteLink = styled.a<{}>`
+export const DiscreteLink = styled.a<Record<string, never>>`
   color: ${(props) => props.theme.white};
   border: 0;
   display: inline-flex;
@@ -661,9 +744,10 @@ export const DiscreteLink = styled.a<{}>`
 
 // TitleIcon
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const TitleIcon = styled.img<{}>`
+export const TitleIcon = styled.img<{
+  /** @hidden @internal */
+  src: string;
+}>`
   flex: 0 0 22px;
   height: 22px;
   margin-right: 6px;
