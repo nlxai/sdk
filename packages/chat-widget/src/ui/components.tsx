@@ -20,6 +20,8 @@ export const hoverBg = `
   }
 `;
 
+// eslint-disable-next-line jsdoc/require-returns, jsdoc/require-param
+/** @hidden @internal */
 export const focusShadow = (theme: Theme): string => `
   box-shadow: 0 0 0 3px ${tinycolor(theme.primaryColor)
     .setAlpha(0.15)
@@ -99,6 +101,8 @@ export const LoaderText = styled.span<{
   font-size: ${constants.fontSize}px;
 `;
 
+// eslint-disable-next-line jsdoc/require-returns
+/** @hidden @internal */
 export const PendingMessageDots: React.FunctionComponent<
   Record<string, never>
 > = () => (
@@ -441,6 +445,8 @@ export const Pin = styled.button<{
 
 // PinBubble
 
+// eslint-disable-next-line jsdoc/require-returns, jsdoc/require-param
+/** @hidden @internal */
 export const PinBubble: React.FunctionComponent<{
   /**
    *

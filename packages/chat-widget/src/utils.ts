@@ -1,3 +1,5 @@
+// eslint-disable-next-line jsdoc/require-returns, jsdoc/require-param
+/** @hidden @internal */
 export const groupWhile = <T>(
   list: T[],
   breakGroup: (prev: T, current: T) => boolean,
