@@ -46,7 +46,8 @@ export { defaultTheme } from "./ui/constants";
  */
 export interface WidgetInstance {
   /**
-   * End the conversation & remove the widget from the DOM.
+   * End the conversation, clean up all event handlers, and remove the widget from the DOM.
+   * TODO: should this also clear the session?
    */
   teardown: () => void;
   /**
@@ -58,8 +59,9 @@ export interface WidgetInstance {
    */
   collapse: () => void;
   /**
-   * Get the ConversationHandler for widget. Returns undefined if the widget has been torn down.
-   * See: {@link @nlxai/chat-core#ConversationHandler}
+   * Get the ConversationHandler for widget. Returns undefined if the widget has not yet been established.
+   * Note that this might not be available synchronously after widget initialization, and therefore an `undefined` check is highly recommended before use.
+   * See: https://developers.nlx.ai/headless-api-reference#interfacesconversationhandlermd
    */
   getConversationHandler: () => ConversationHandler | undefined;
 }
@@ -82,6 +84,11 @@ export interface WidgetRef {
   conversationHandler: ConversationHandler;
 }
 
+/**
+ * Create a new chat widget and renders it as the last element in the body.
+ * @param props -
+ * @returns the WidgetInstance to script widget behavior.
+ */
 export const create = (props: Props): WidgetInstance => {
   const node = document.createElement("div");
   node.setAttribute("id", "widget-container");
@@ -267,8 +274,10 @@ const saveSession = (chat: ChatHook, storeIn: StorageType): void => {
   );
 };
 
-// TODO incorporate this into the main API and don't expose it
-// user shouldn't have to handle managing `storeIn` config after widget is started
+/**
+ * Clears stored session history.
+ * @param storeIn - where to clear the session.
+ */
 export const clearSession = (storeIn: StorageType): void => {
   const storage = storeIn === "sessionStorage" ? sessionStorage : localStorage;
   storage.removeItem(storageKey);
@@ -312,6 +321,12 @@ const ConversationHandlerContext = createContext<ConversationHandler | null>(
   null,
 );
 
+/**
+ * Hook to get the ConversationHandler for the widget.
+ * This may be called before the Widget has been created.
+ * It will return null until the Widget has been created and the conversation has been established.
+ * @returns the ConversationHandler if the widget has been created and its conversation has been established, otherwise it returns null.
+ */
 export const useConversationHandler = (): ConversationHandler | null => {
   return useContext(ConversationHandlerContext);
 };
