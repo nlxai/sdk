@@ -8,6 +8,7 @@ export const smallFontSize = 12;
 
 export const largeZIndex = 2147483000;
 
+/** the default theme */
 export const defaultTheme: Theme = {
   primaryColor: "#2663da",
   darkMessageColor: "#2663da",
