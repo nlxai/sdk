@@ -275,7 +275,7 @@ export const clearSession = (storeIn: StorageType): void => {
 
 // TODO can we stop exporting this?
 // user shouldn't have to handle managing `storeIn` config after widget is started
-export const retrieveSession = (storeIn: StorageType): SessionData | null => {
+const retrieveSession = (storeIn: StorageType): SessionData | null => {
   try {
     const storage =
       storeIn === "sessionStorage" ? sessionStorage : localStorage;
