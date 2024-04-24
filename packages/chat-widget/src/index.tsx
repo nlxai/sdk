@@ -36,6 +36,7 @@ export {
   type Props,
   type TitleBar,
   type CustomModalityComponent,
+  type StorageType,
 } from "./props";
 export { type Theme } from "./theme";
 export { defaultTheme } from "./ui/constants";
