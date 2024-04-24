@@ -52,7 +52,7 @@ export { defaultTheme } from "./ui/constants";
 export interface WidgetInstance {
   /**
    * End the conversation, clean up all event handlers, and remove the widget from the DOM.
-   * TODO: should this also clear the session?
+   * If you want to additionally clear a stored session, explicitly call {@link clearSession} with your {@link Props}.
    */
   teardown: () => void;
   /**
@@ -288,7 +288,6 @@ export const clearSession = (storeIn: StorageType): void => {
   storage.removeItem(storageKey);
 };
 
-// TODO can we stop exporting this?
 // user shouldn't have to handle managing `storeIn` config after widget is started
 const retrieveSession = (storeIn: StorageType): SessionData | null => {
   try {
