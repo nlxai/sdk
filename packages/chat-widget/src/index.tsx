@@ -32,6 +32,9 @@ import {
 } from "./props";
 import * as C from "./ui/components";
 
+export { default as React } from "react";
+export { default as ReactDOM } from "react-dom";
+
 export {
   type Props,
   type TitleBar,
