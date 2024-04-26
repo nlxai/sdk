@@ -10,8 +10,8 @@
     "rootDir": "./src",
     "skipLibCheck": true,
     "strict": true,
-    "target": "es6",
     "types": ["vite/client"]
+    "target": "esnext",
   },
   "include": ["src/**/*"]
 }
