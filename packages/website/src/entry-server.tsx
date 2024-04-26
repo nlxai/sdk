@@ -9,7 +9,6 @@ export function render(url: string): { html: string; head?: string } {
       <StaticRouter location={url}>
         <App />
       </StaticRouter>
-      ,
     </React.StrictMode>,
   );
   return { html };
