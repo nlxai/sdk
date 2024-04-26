@@ -1,7 +1,7 @@
 # used to reproduce github actions environment
 # for instance, to confirm <BrowserRouter> works correctly
 :9000
-root * ./dist
+root * ./dist/client
 file_server
 handle_errors {
 	@404 {

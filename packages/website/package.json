@@ -4,9 +4,11 @@
   "type": "module",
   "version": "0.1.0",
   "scripts": {
-    "build": "tsc && vite build && cp 404.html dist/404.html",
+    "build": "npm run build:client && npm run build:static && npm run render-static",
+    "build:client": "vite build --outDir dist/client",
+    "build:static": "vite build --ssr src/entry-server.tsx --outDir dist/static",
     "dev": "vite --force",
-    "render-static": "tsx src/render-static.ts",
+    "render-static": "tsx render-static.ts",
     "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx --fix",
     "tsc": "tsc",
