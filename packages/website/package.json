@@ -12,7 +12,8 @@
     "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx --fix",
     "tsc": "tsc",
-    "caddy": "caddy run --config Caddyfile"
+    "caddy": "caddy run --config Caddyfile",
+    "test": "npm run build && scripts/check-for-broken-links.sh"
   },
   "dependencies": {
     "@nlxai/chat-core": "*",
