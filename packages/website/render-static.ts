@@ -1,7 +1,9 @@
 import fs from "node:fs/promises";
 import { exit } from "node:process";
 // @ts-ignore
-import { render } from "./dist/static/entry-server.js";
+import { render as untypedRender } from "./dist/static/entry-server.js";
+const render: (url: string) => { head?: string; html: string } = untypedRender;
+
 import { createServer } from "vite";
 import { dirname } from "node:path";
 
