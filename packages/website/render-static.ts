@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
 import { exit } from "node:process";
+// @ts-ignore
 import { render } from "./dist/static/entry-server.js";
 import { createServer } from "vite";
 import { dirname } from "node:path";
-import { PathLike } from "node:fs";
 
 const server = await createServer({
   server: { middlewareMode: true },

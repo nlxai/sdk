@@ -7,7 +7,7 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "outDir": "./lib",
-    "rootDir": "./src",
+    "rootDir": ".",
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
