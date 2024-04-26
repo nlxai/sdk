@@ -1,6 +1,7 @@
 <html lang="en">
   <head>
     <title>NLX | Developers</title>
+    <!--app-head-->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link
@@ -49,10 +50,10 @@
       }(window.location))
     </script>
 
-    <script type="module" src="/src/main.tsx"></script>
   </head>
   <body>
-    <div id="app" class="flex min-h-full bg-white"></div>
+    <div id="app" class="flex min-h-full bg-white"><!--app-html--></div>
     <div id="portal"></div>
+    <script type="module" src="/src/entry-client.tsx"></script>
   </body>
 </html>
