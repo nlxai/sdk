@@ -3,7 +3,7 @@ import ReactDOMServer from "react-dom/server";
 import App from "./App";
 import { StaticRouter } from "react-router-dom/server";
 
-export function render(url: string) {
+export function render(url: string): { html: string; head?: string } {
   const html = ReactDOMServer.renderToString(
     <React.StrictMode>
       <StaticRouter location={url}>
