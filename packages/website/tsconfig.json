@@ -10,8 +10,8 @@
     "rootDir": "./src",
     "skipLibCheck": true,
     "strict": true,
-    "types": ["vite/client"]
     "target": "esnext",
+    "types": ["vite/client", "node"]
   },
   "include": ["src/**/*"]
 }

@@ -208,6 +208,8 @@ export const flattenedRoutes: RouteInfo[] = flatten(
   routes.map((r) => r.items.map((item) => ({ ...item, heading: r.heading }))),
 );
 
+export const urls: string[] = flattenedRoutes.map(({ url }) => url);
+
 export const ContentRoutes: FC<unknown> = () => {
   return (
     <Routes>

@@ -6,24 +6,35 @@ import { Labeled, inputClass } from "./Ui";
 import { RadioList } from "./RadioList";
 import { type PartialDeep } from "type-fest";
 
-export const getInitialConfig = (): Config => {
-  const searchParams = new URLSearchParams(window.location.search);
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-  const botUrl = searchParams.get("botUrl") || "";
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-  const apiKey = searchParams.get("apiKey") || "";
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-  const languageCode = searchParams.get("languageCode") || "en-US";
+function defaultInitialConfig({
+  botUrl,
+  apiKey,
+  languageCode,
+}: {
+  botUrl?: string | null;
+  apiKey?: string | null;
+  languageCode?: string | null;
+} = {}): Config {
   return {
-    botUrl,
+    botUrl: botUrl ?? "",
     headers: {
-      "nlx-api-key": apiKey,
+      "nlx-api-key": apiKey ?? "",
     },
-    languageCode,
+    languageCode: languageCode ?? "en-US",
   };
+}
+
+export const getInitialConfig = (): Config => {
+  // for static rendering
+  if (typeof window === "undefined") {
+    return defaultInitialConfig();
+  }
+  const searchParams = new URLSearchParams(window.location.search);
+  return defaultInitialConfig({
+    botUrl: searchParams.get("botUrl"),
+    apiKey: searchParams.get("apiKey"),
+    languageCode: searchParams.get("languageCode"),
+  });
 };
 
 export const TitleBarEditor: FC<{
