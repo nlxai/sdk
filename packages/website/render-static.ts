@@ -21,7 +21,7 @@ const template = (
 
 await Promise.all(
   urls.map(async (url: string) => {
-    await renderTo(url, `./dist/client${url}`);
+    await renderTo(url, `./dist/client${url}.html`);
   }),
 );
 
