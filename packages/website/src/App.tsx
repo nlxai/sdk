@@ -1,7 +1,4 @@
 import React, { type FC, useState } from "react";
-import "./index.css";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Nav, MobileNav } from "./components/Nav";
@@ -9,7 +6,7 @@ import { ContentRoutes } from "./routes";
 
 // initial eslint integration
 // eslint-disable-next-line @typescript-eslint/ban-types
-const App: FC<{}> = () => {
+export const App: FC<{}> = () => {
   const [mobileMenuExpanded, setMobileMenuExpanded] = useState<boolean>(false);
 
   return (
@@ -36,8 +33,4 @@ const App: FC<{}> = () => {
   );
 };
 
-createRoot(document.getElementById("app") as Element).render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-);
+export default App;

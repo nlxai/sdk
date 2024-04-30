@@ -20,6 +20,7 @@ jobs:
       - name: Build the app
         run: npm run build
   test:
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,10 +28,16 @@ jobs:
         with:
             node-version-file: '.node-version'
             cache: 'npm'
+      - uses: cachix/install-nix-action@v26
+        with:
+          extra_nix_config: |
+            keep-derivations = true
+            keep-outputs = true
       - name: Installing node_modules
         run: npm ci
       - name: Test the app
-        run: npm run test
+        # use nix develop to ensure caddy is installed
+        run: nix develop --command npm run test
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -43,6 +50,7 @@ jobs:
         run: npm ci
       - name: Run lint
         run: npm run lint:check
+
   typecheck:
     runs-on: ubuntu-latest
     steps:

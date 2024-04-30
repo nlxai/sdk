@@ -7,11 +7,11 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "outDir": "./lib",
-    "rootDir": "./src",
+    "rootDir": ".",
     "skipLibCheck": true,
     "strict": true,
-    "target": "es6",
-    "types": ["vite/client"]
+    "target": "esnext",
+    "types": ["vite/client", "node"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "dist/static/entry-server.js", "render-static.ts"]
 }
