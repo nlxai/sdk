@@ -1,8 +1,7 @@
 #! /bin/bash
 export CADDY_PORT=9999
 echo "starting caddy..."
-caddy run --config Caddyfile >/dev/null 2>&1 &
-CADDY_PID=$!
+caddy start --config Caddyfile >/dev/null 2>&1 &
 
 echo "Waiting for Caddy to launch on port 9999..."
 while ! curl -s -o /dev/null -w "%{http_code}" http://localhost:$CADDY_PORT | grep -q "200"; do
@@ -23,8 +22,7 @@ wget --spider -r -l1 --span-hosts -o wget.log http://localhost:$CADDY_PORT
 WGET_EXIT_STATUS=$?
 
 # Stop Caddy
-kill $CADDY_PID
-wait $CADDY_PID 2>/dev/null
+caddy stop
 
 # If wget exited with a non-zero status, check the log for errors and print them
 if [ $WGET_EXIT_STATUS -eq 0 ]; then
