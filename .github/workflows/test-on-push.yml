@@ -31,7 +31,7 @@ jobs:
       - name: Installing node_modules
         run: npm ci
       - name: Test the app
-        run: npm run test
+        run: cd packages/website && npm run test
   lint:
     runs-on: ubuntu-latest
     steps:
