@@ -20,6 +20,7 @@ jobs:
       - name: Build the app
         run: npm run build
   test:
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,6 +44,7 @@ jobs:
         run: npm ci
       - name: Run lint
         run: npm run lint:check
+
   typecheck:
     runs-on: ubuntu-latest
     steps:
