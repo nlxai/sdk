@@ -24,14 +24,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: cachix/install-nix-action@v26
         with:
-            node-version-file: '.node-version'
-            cache: 'npm'
+          extra_nix_config: |
+            keep-derivations = true
+            keep-outputs = true
       - name: Installing node_modules
-        run: npm ci
+        run: nix develop --command npm ci
       - name: Test the app
-        run: cd packages/website && npm run test
+        run: cd packages/website && nix develop --command npm run test
   lint:
     runs-on: ubuntu-latest
     steps:
