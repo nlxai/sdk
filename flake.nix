@@ -34,6 +34,7 @@
           (assertVersion "2.7.6" caddy)
           # comrak is used to preview rendered markdown. Not used in production.
           (assertVersion "0.19.0" comrak)
+          # used for testing dead website links
           (assertVersion "1.21.4" wget)
         ];
       };
