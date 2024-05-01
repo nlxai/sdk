@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_GOOGLE_MAPS_API_KEY: ${{ vars.VITE_GOOGLE_MAPS_API_KEY }}
+      VITE_ALGOLIA_APP_ID: ${{ vars.ALGOLIA_APP_ID }}
+      VITE_ALGOLIA_INDEX_NAME: ${{ vars.ALGOLIA_INDEX_NAME }}
+      VITE_ALGOLIA_API_KEY: ${{ vars.ALGOLIA_SEARCH_API_KEY }}
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
@@ -39,6 +42,6 @@ jobs:
         with:
           crawler-user-id: ${{ secrets.ALGOLIA_CRAWLER_USER_ID }}
           crawler-api-key: ${{ secrets.ALGOLIA_CRAWLER_API_KEY }}
-          algolia-app-id: ${{ secrets.ALGOLIA_APP_ID }}
+          algolia-app-id: ${{ vars.ALGOLIA_APP_ID }}
           algolia-api-key: ${{ secrets.ALGOLIA_WRITE_API_KEY }}
           site-url: 'https://developers.nlx.ai/'
