@@ -151,12 +151,12 @@ export const routes: Array<{
         element: <CustomWidgetsReact />,
       },
       {
-        label: "React Api Reference",
+        label: "React API Reference",
         url: "/react-api-reference",
         element: <ReactApi />,
       },
       {
-        label: "Preact Api Reference",
+        label: "Preact API Reference",
         url: "/preact-api-reference",
         element: <PreactApi />,
       },
