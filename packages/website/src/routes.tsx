@@ -24,6 +24,7 @@ import { WebWidgetComponentsSecureInput } from "./content/03-10-secure-input";
 import { CustomWidgetsGettingStarted } from "./content/04-01-custom-widgets-getting-started";
 import { CustomWidgetsReact } from "./content/04-02-custom-widgets-react";
 import { ReactApi } from "./content/04-03-react-api-reference";
+import { PreactApi } from "./content/04-04-preact-api-reference";
 import { CustomWidgetsOther } from "./content/04-05-custom-widgets-other";
 // 5
 import { HeadlessGettingStarted } from "./content/05-01-headless-getting-started";
@@ -153,6 +154,11 @@ export const routes: Array<{
         label: "React Api Reference",
         url: "/react-api-reference",
         element: <ReactApi />,
+      },
+      {
+        label: "Preact Api Reference",
+        url: "/preact-api-reference",
+        element: <PreactApi />,
       },
       {
         label: "Other frameworks",
