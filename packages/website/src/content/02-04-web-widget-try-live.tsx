@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { type FC, useState, useEffect } from "react";
 import { PageTitle } from "../components/PageTitle";
 import { type Config } from "@nlxai/chat-core";
 import {
@@ -36,9 +36,7 @@ export const snippetContent = ({
   titleBar: TitleBar;
   theme: Partial<Theme>;
   behavior: Behavior;
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-}) => `
+}): string => `
 
 ### Setup snippet
 
@@ -47,15 +45,11 @@ ${setupSnippet({ config, titleBar, theme, behavior })}
 \`\`\`
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const WebWidgetTryLive = () => {
+export const WebWidgetTryLive: FC<unknown> = () => {
   const [config, setConfig] = useState<Config>(getInitialConfig());
 
   const [theme, setTheme] = useState<Partial<Theme>>(
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-    retrieveTheme() || defaultTheme,
+    retrieveTheme() ?? defaultTheme,
   );
 
   useEffect(() => {

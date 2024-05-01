@@ -5,5 +5,6 @@ declare module "@emotion/react" {
   // Private theme properties
   interface Theme extends WidgetTheme {
     windowInnerHeight: number | null;
+    inputDisabled: boolean;
   }
 }

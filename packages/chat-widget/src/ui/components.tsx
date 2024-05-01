@@ -312,6 +312,8 @@ export const Bottom = styled.div<{
   border-top: 1px solid rgba(0, 0, 0, 0.08);
   border-bottom-left-radius: ${(props) => props.theme.borderRadius}px;
   border-bottom-right-radius: ${(props) => props.theme.borderRadius}px;
+  background: ${(props) =>
+    props.theme.inputDisabled ? "rgba(0, 0, 0, 0.05)" : "transparent"};
 `;
 
 export const IconButton = styled.button<{
