@@ -45,3 +45,4 @@ jobs:
           algolia-app-id: ${{ vars.ALGOLIA_APP_ID }}
           algolia-api-key: ${{ secrets.ALGOLIA_WRITE_API_KEY }}
           site-url: 'https://developers.nlx.ai/'
+          crawler-name: ${{ vars.ALGOLIA_INDEX_NAME }}
