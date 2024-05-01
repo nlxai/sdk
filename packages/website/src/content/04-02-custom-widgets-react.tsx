@@ -17,9 +17,7 @@ ${customWidgetSnippet}
 ~~~
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const CustomWidgetsReact = () => {
+export const CustomWidgetsReact = (): JSX.Element => {
   return (
     <>
       <PageTitle pretitle="Custom widgets" title="React & Preact" />

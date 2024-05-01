@@ -61,7 +61,7 @@ Hold and modify the value of the chat input field, which is auto-cleared wheneve
 
 #### `responses`
 
-The reactive full history of the chat messages. It contains the `type: "user" | "bot"` field and an associated payload. Please refer to the type definitions for a complete structure.
+The reactive full history of the chat messages. It contains the `type: "user" | "bot"` field and an associated payload. Please refer to [the type definitions](https://developers.nlx.ai/headless-api-reference#response) fora complete structure.
 
 #### `waiting`
 

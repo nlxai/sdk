@@ -9,14 +9,46 @@ import createConversation, {
   type Response,
 } from "@nlxai/chat-core";
 
+/**
+ * Created by {@link useChat}.
+ */
 export interface ChatHook {
+  /**
+   * Contains the full conversation handler object from the [the \@nlxai/chat-core package](https://github.com/nlxai/chat-sdk/blob/master/packages/chat-core/README.md).
+   * This is mostly used for the `send*` methods like `sendText` or `sendStructured`, as the response subscription is
+   * handled by the hook automatically.
+   */
   conversationHandler: ConversationHandler;
+  /**
+   * Hold the value of the chat input field, which is auto-cleared whenever a message is sent.
+   *
+   * Using this field is optional and you can hold input state separately.
+   */
   inputValue: string;
+  /**
+   * Modify the value of the chat input field.
+   * @param val - The new value of the input field.
+   */
   setInputValue: (val: string) => void;
+  /**
+   * The reactive full history of the chat messages.
+   * It contains the `type: "user" | "bot"` field and an associated payload.
+   * Please refer to [the type definitions](https://developers.nlx.ai/headless-api-reference#response) for a complete structure.
+   */
   responses: Response[];
+  /**
+   * A reactive value that is `true` whenever a response from the bot is in progress, used to render a message
+   * bubble with loading dots.
+   */
   waiting: boolean;
 }
 
+/**
+ * A [custom hook](https://react.dev/learn/reusing-logic-with-custom-hooks)
+ * used to create fully custom chat widgets for web and mobile.
+ * @param config - The configuration object for the chatbot.
+ * @returns the hook object containing the chat state and methods.
+ */
 export const useChat = (config: Config): ChatHook => {
   const prevConversationHandler = useRef<ConversationHandler | null>(null);
   const prevConfig = useRef<Config | null>(null);
