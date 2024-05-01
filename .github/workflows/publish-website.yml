@@ -29,3 +29,16 @@ jobs:
         with:
           branch: gh-pages
           folder: ./packages/website/dist/client # output folder from `npm run build -- --scope @nlxai/website`
+      # copied from https://github.com/algolia/algoliasearch-crawler-github-actions/blob/v1/examples/github_pages.yml
+      # we could explicitly poll for the github pages for a specific change.
+      # For now we just sleep.
+      - name: Wait for github actions deploy
+        run: sleep 30
+      - name: Trigger Algolia Crawler
+        uses: algolia/algoliasearch-crawler-github-actions@v1.1.10
+        with:
+          crawler-user-id: ${{ secrets.ALGOLIA_CRAWLER_USER_ID }}
+          crawler-api-key: ${{ secrets.ALGOLIA_CRAWLER_API_KEY }}
+          algolia-app-id: ${{ secrets.ALGOLIA_APP_ID }}
+          algolia-api-key: ${{ secrets.ALGOLIA_WRITE_API_KEY }}
+          site-url: 'https://developers.nlx.ai/'
