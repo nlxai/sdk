@@ -24,6 +24,7 @@ import {
   SendIcon,
   ErrorOutlineIcon,
 } from "./icons";
+import { last } from "ramda";
 import * as constants from "./ui/constants";
 import {
   type Props,
@@ -325,6 +326,20 @@ const ConversationHandlerContext = createContext<ConversationHandler | null>(
   null,
 );
 
+// eslint-disable-next-line jsdoc/require-returns
+// If the last bot message contains the payload 'nlx:input-disabled=true'
+const isInputDisabled = (responses: Response[]): boolean => {
+  const lastResponse = last(responses);
+  if (lastResponse == null) {
+    return false;
+  }
+  if (lastResponse.type !== "bot") {
+    return false;
+  }
+  const payload = lastResponse.payload.payload ?? "";
+  return new URLSearchParams(payload).get("nlx:input-disabled") === "true";
+};
+
 /**
  * Hook to get the ConversationHandler for the widget.
  * This may be called before the Widget has been created.
@@ -468,8 +483,6 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
     scrollToBottom();
   }, [chat.responses]);
 
-  // Download
-
   const submit =
     chat.inputValue.replace(/ /gi, "") !== "" &&
     (() => {
@@ -477,13 +490,16 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
       chat.setInputValue("");
     });
 
+  const inputDisabled = isInputDisabled(chat.responses);
+
   const mergedTheme = useMemo(
     () => ({
       ...constants.defaultTheme,
       ...(props.theme ?? {}),
       windowInnerHeight: windowInnerHeightValue,
+      inputDisabled,
     }),
-    [props.theme, windowInnerHeightValue],
+    [props.theme, windowInnerHeightValue, inputDisabled],
   );
 
   return (
@@ -552,33 +568,39 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
                 </MessageGroups>
               </C.Main>
               <C.Bottom>
-                <C.Input
-                  ref={inputRef}
-                  value={chat.inputValue}
-                  placeholder={props.inputPlaceholder ?? "Type something..."}
-                  onChange={(event: any) => {
-                    chat.setInputValue(
-                      (event.target as HTMLInputElement).value,
-                    );
-                  }}
-                  onKeyUp={(event: any) => {
-                    if (event.key === "Enter" && submit !== false) {
-                      submit();
-                    }
-                  }}
-                />
-                <C.BottomButtonsContainer>
-                  <C.IconButton
-                    disabled={Boolean(submit === false)}
-                    onClick={() => {
-                      if (submit !== false) {
-                        submit();
+                {inputDisabled ? null : (
+                  <>
+                    <C.Input
+                      ref={inputRef}
+                      value={chat.inputValue}
+                      placeholder={
+                        props.inputPlaceholder ?? "Type something..."
                       }
-                    }}
-                  >
-                    <SendIcon />
-                  </C.IconButton>
-                </C.BottomButtonsContainer>
+                      onChange={(event: any) => {
+                        chat.setInputValue(
+                          (event.target as HTMLInputElement).value,
+                        );
+                      }}
+                      onKeyUp={(event: any) => {
+                        if (event.key === "Enter" && submit !== false) {
+                          submit();
+                        }
+                      }}
+                    />
+                    <C.BottomButtonsContainer>
+                      <C.IconButton
+                        disabled={Boolean(submit === false)}
+                        onClick={() => {
+                          if (submit !== false) {
+                            submit();
+                          }
+                        }}
+                      >
+                        <SendIcon />
+                      </C.IconButton>
+                    </C.BottomButtonsContainer>
+                  </>
+                )}
               </C.Bottom>
             </C.Container>
           )}
