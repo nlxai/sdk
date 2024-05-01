@@ -326,7 +326,6 @@ const ConversationHandlerContext = createContext<ConversationHandler | null>(
   null,
 );
 
-// eslint-disable-next-line jsdoc/require-returns
 // If the last bot message contains the payload 'nlx:input-disabled=true'
 const isInputDisabled = (responses: Response[]): boolean => {
   const lastResponse = last(responses);
