@@ -1,6 +1,8 @@
 import React, { type FC } from "react";
 import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
+import { DocSearch } from "@docsearch/react";
+import "@docsearch/css";
 
 export const Header: FC<{
   mobileMenuExpanded: boolean;
@@ -39,6 +41,11 @@ export const Header: FC<{
         <span className="block" aria-label="Home page">
           Developers
         </span>
+        <DocSearch
+          appId={import.meta.env.VITE_ALGOLIA_APP_ID}
+          indexName={import.meta.env.VITE_ALGOLIA_INDEX_NAME}
+          apiKey={import.meta.env.VITE_ALGOLIA_API_KEY}
+        />
       </Link>
     </div>
     <div className="relative flex basis-0 justify-end gap-6 sm:gap-8 md:flex-grow">
