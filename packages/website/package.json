@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run build:client && npm run build:static && npm run render-static",
     "build:client": "vite build --outDir dist/client",
-    "build:static": "vite build --ssr src/entry-server.tsx --outDir dist/static",
+    "build:static": "vite build --ssr src/static-renderer.tsx --outDir dist/static",
     "dev": "vite --force",
     "render-static": "tsx render-static.ts",
     "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx --max-warnings 0",
@@ -16,7 +16,8 @@
     "test": "npm run build && scripts/check-for-broken-links.sh"
   },
   "dependencies": {
-    "@docsearch/js": "^3.6.0",
+    "@docsearch/css": "^3.6.0",
+    "@docsearch/react": "^3.6.0",
     "@nlxai/chat-core": "*",
     "@nlxai/chat-react": "*",
     "@nlxai/chat-widget": "*",

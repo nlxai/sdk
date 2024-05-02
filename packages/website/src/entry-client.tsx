@@ -1,14 +1,19 @@
 import "./index.css";
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM, { createRoot } from "react-dom/client";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 
-ReactDOM.hydrateRoot(
-  document.getElementById("app") as Element,
+const contents = (
   <React.StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
+
+if (import.meta.env.DEV) {
+  createRoot(document.getElementById("app") as Element).render(contents);
+} else {
+  ReactDOM.hydrateRoot(document.getElementById("app") as Element, contents);
+}
