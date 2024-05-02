@@ -14,12 +14,13 @@ export const Disclaimer = () => {
     <div className="chat-disclaimer">
       ${status === "pending" &&
       html`
-        <p>
+        <p key="pending">
           In order to enhance your experience in this chat, we would like to
           temporarily store personal data according to our${" "}
           <a>privacy policy</a>.
         </p>
         <button
+          key="pending-accepted-button"
           onClick=${() => {
             setStatus("accepted");
           }}
@@ -27,6 +28,7 @@ export const Disclaimer = () => {
           Accept
         </button>
         <button
+          key="pending-denied-button"
           onClick=${() => {
             setStatus("denied");
           }}
