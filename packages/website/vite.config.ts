@@ -15,7 +15,6 @@ export default defineConfig({
   build: {
     commonjsOptions: {
       include: [/node_modules/, /chat-core/, /chat-react/, /chat-widget/],
-      transformMixedEsModules: true,
     },
   },
   ssr: {
