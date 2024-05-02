@@ -16,6 +16,7 @@
     "test": "npm run build && scripts/check-for-broken-links.sh"
   },
   "dependencies": {
+    "@docsearch/js": "^3.6.0",
     "@nlxai/chat-core": "*",
     "@nlxai/chat-react": "*",
     "@nlxai/chat-widget": "*",
@@ -51,6 +52,7 @@
     "tailwindcss": "^3.3.5",
     "tsx": "^4.7.2",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "xmlbuilder2": "^3.1.1"
   }
 }

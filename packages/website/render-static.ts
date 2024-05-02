@@ -4,6 +4,8 @@ import { createServer } from "vite";
 import { dirname } from "node:path";
 // @ts-expect-error we need to build this before usage to ensure cache-busted assets are included, but building right now doesn't build .d.ts files
 import { render as untypedRender } from "./dist/static/entry-server.js";
+import { create } from "xmlbuilder2";
+import { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
 const render: (url: string) => string = untypedRender;
 
 const server = await createServer({
@@ -34,5 +36,24 @@ async function renderTo(url: string, destination: string): Promise<void> {
   await fs.mkdir(dirname(destination), { recursive: true });
   await fs.writeFile(destination, html);
 }
+
+const sitemap = [...urls, "/"]
+  .reduce<XMLBuilder>(
+    (acc, url) => {
+      return acc
+        .ele("url")
+        .ele("loc")
+        .txt(`https://developers.nlx.ai${url}`)
+        .up()
+        .up();
+    },
+    create({ version: "1.0" }).ele("urlset", {
+      xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9",
+    }),
+  )
+  .doc()
+  .end({ prettyPrint: true });
+
+await fs.writeFile("./dist/client/sitemap.xml", sitemap);
 
 exit(0);
