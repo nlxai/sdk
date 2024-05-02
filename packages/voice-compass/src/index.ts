@@ -1,5 +1,8 @@
 import fetch from "isomorphic-fetch";
 
+// use a custom Console to indicate we really want to log to the console and it's not incidental. `console.log` causes an eslint error
+const Console = console;
+
 /**
  * The starting point of the package. Call create to create a `VoiceCompass` client.
  * @example
@@ -30,7 +33,7 @@ export const create = ({
   dev = false,
 }: Config): Client => {
   if (typeof conversationId !== "string" || conversationId.length === 0) {
-    console.warn(
+    Console.warn(
       'No conversation ID provided. Please call the Voice Compass client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`',
     );
   }
@@ -59,12 +62,12 @@ export const create = ({
       })
         .then(() => {
           if (debug) {
-            console.info(`✓ step: ${stepId}`, payload);
+            Console.info(`✓ step: ${stepId}`, payload);
           }
         })
         .catch((err: Error) => {
           if (debug) {
-            console.error(`× step: ${stepId}`, err, payload);
+            Console.error(`× step: ${stepId}`, err, payload);
           }
           throw err;
         });

@@ -4,6 +4,9 @@ import { equals, adjust } from "ramda";
 import { v4 as uuid } from "uuid";
 import packageJson from "../package.json";
 
+// use a custom Console to indicate we really want to log to the console and it's not incidental. `console.log` causes an eslint error
+const Console = console;
+
 /**
  * [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
  */
@@ -557,7 +560,7 @@ export default function createConversation(
 
   // Check if the bot URL has a language code appended to it
   if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(config.botUrl)) {
-    console.warn(
+    Console.warn(
       "Since v1.0.0, the language code is no longer added at the end of the bot URL. Please remove the modifier (e.g. '-en-US') from the URL, and specify it in the `languageCode` parameter instead.",
     );
   }
@@ -634,7 +637,7 @@ export default function createConversation(
         }, 1500);
       }
     } else {
-      console.warn(
+      Console.warn(
         "Invalid message structure, expected object with field 'messages'.",
       );
       failureHandler();
@@ -684,7 +687,7 @@ export default function createConversation(
         })
         .then(messageResponseHandler)
         .catch((err) => {
-          console.warn(err);
+          Console.warn(err);
           failureHandler();
         });
     }

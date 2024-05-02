@@ -10,25 +10,49 @@ const render: (url: string) => string = untypedRender;
 
 /* this script statically renders the website, and generates a sitemap */
 
-const server = await createServer({
-  server: { middlewareMode: true },
-  appType: "custom",
-});
+const { urls } = await (async () => {
+  // we use the vite server just to load / parse the routes.
+  const viteServer = await createServer({
+    server: { middlewareMode: true },
+    appType: "custom",
+  });
+  return await viteServer.ssrLoadModule("/src/routes.tsx");
+})();
 
-const { urls } = await server.ssrLoadModule("/src/routes.tsx");
+const loadEnvFromFile = async (
+  filename: string,
+): Promise<Record<string, string> | null> => {
+  try {
+    return Object.fromEntries(
+      (await fs.readFile(filename, "utf-8"))
+        .split("\n")
+        .map((line) => line.split("=")),
+    );
+  } catch (_) {
+    return null;
+  }
+};
+
+const algoliaAppId =
+  process.env.VITE_ALGOLIA_APP_ID ??
+  (await loadEnvFromFile(".env.local"))?.VITE_ALGOLIA_APP_ID;
+
+if (
+  process.env.GITHUB_WORKFLOW === "Build and deploy website" &&
+  algoliaAppId == null
+) {
+  throw new Error("expected env var VITE_ALGOLIA_APP_ID to be set");
+}
 
 // Cached production assets
 const template = (
   (await fs.readFile("./dist/client/index.html", "utf-8")) as unknown as string
-).replace("./", "/"); // use absolute instead of relative paths
-
-await Promise.all(
-  urls.map(async (url: string) => {
-    await renderTo(url, `./dist/client${url}.html`);
-  }),
-);
-
-await renderTo("/", "./dist/client/index.html");
+)
+  .replace(
+    "<!--algolia-preload-tag-->",
+    `<link rel="preconnect" href="https://${algoliaAppId}-dsn.algolia.net" crossorigin />`,
+  ) // should improve search performance, see https://docsearch.algolia.com/docs/DocSearch-v3#preconnect
+  .replace("./", "/"); // use absolute instead of relative paths in case pre-rendered pages are served from a subdirectory
 
 async function renderTo(url: string, destination: string): Promise<void> {
   const rendered = render(url);
@@ -38,6 +62,14 @@ async function renderTo(url: string, destination: string): Promise<void> {
   await fs.mkdir(dirname(destination), { recursive: true });
   await fs.writeFile(destination, html);
 }
+
+await Promise.all(
+  urls.map(async (url: string) => {
+    await renderTo(url, `./dist/client${url}.html`);
+  }),
+);
+
+await renderTo("/", "./dist/client/index.html");
 
 const sitemap = [...urls, "/"]
   .reduce<XMLBuilder>(

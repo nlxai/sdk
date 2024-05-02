@@ -29,9 +29,7 @@ const SecureInput: React.FC = () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setIsSuccess(true);
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    } catch (error) {}
 
     setIsLoading(false);
   };

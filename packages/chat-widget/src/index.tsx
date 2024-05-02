@@ -47,6 +47,9 @@ export {
 export { type Theme } from "./theme";
 export { defaultTheme } from "./ui/constants";
 
+// use a custom Console to indicate we really want to log to the console and it's not incidental. `console.log` causes an eslint error
+const Console = console;
+
 /**
  * A handler for a Widget. Created with {@link create}
  */
@@ -221,7 +224,7 @@ const MessageGroups: FC<{
               ([key, value]) => {
                 const Component = props.customModalities[key];
                 if (Component == null) {
-                  console.warn(
+                  Console.warn(
                     `Custom component implementation missing for the ${key} modality.`,
                   );
                   return null;

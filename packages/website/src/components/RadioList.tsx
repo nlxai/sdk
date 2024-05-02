@@ -11,7 +11,6 @@ export const RadioList = <T extends unknown>({
   options: Array<{ id: string; value: T; label: string }>;
   onChange: (val: T) => void;
 }): ReactNode => {
-  console.log(selected, options);
   return (
     <div className="space-y-2">
       {options.map((option) => (
