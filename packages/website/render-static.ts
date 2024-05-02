@@ -19,8 +19,9 @@ const { urls } = await (async () => {
   return await viteServer.ssrLoadModule("/src/routes.tsx");
 })();
 
-
-const envFromFile = await (async (filename) => {
+const loadEnvFromFile = async (
+  filename: string,
+): Promise<Record<string, string> | null> => {
   try {
     return Object.fromEntries(
       (await fs.readFile(filename, "utf-8"))
@@ -30,10 +31,11 @@ const envFromFile = await (async (filename) => {
   } catch (_) {
     return null;
   }
-})(".env.local");
+};
 
 const algoliaAppId =
-  process.env.VITE_ALGOLIA_APP_ID ?? envFromFile?.VITE_ALGOLIA_APP_ID;
+  process.env.VITE_ALGOLIA_APP_ID ??
+  (await loadEnvFromFile(".env.local"))?.VITE_ALGOLIA_APP_ID;
 
 if (process.env.CI === "true" && algoliaAppId == null) {
   throw new Error("expected env var VITE_ALGOLIA_APP_ID to be set");
