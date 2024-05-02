@@ -49,15 +49,7 @@ const template = (
     "<!--algolia-preload-tag-->",
     `<link rel="preconnect" href="https://${algoliaAppId}-dsn.algolia.net" crossorigin />`,
   ) // should improve search performance, see https://docsearch.algolia.com/docs/DocSearch-v3#preconnect
-  .replace("./", "/"); // use absolute instead of relative paths
-
-await Promise.all(
-  urls.map(async (url: string) => {
-    await renderTo(url, `./dist/client${url}.html`);
-  }),
-);
-
-await renderTo("/", "./dist/client/index.html");
+  .replace("./", "/"); // use absolute instead of relative paths in case pre-rendered pages are served from a subdirectory
 
 async function renderTo(url: string, destination: string): Promise<void> {
   const rendered = render(url);
@@ -67,6 +59,14 @@ async function renderTo(url: string, destination: string): Promise<void> {
   await fs.mkdir(dirname(destination), { recursive: true });
   await fs.writeFile(destination, html);
 }
+
+await Promise.all(
+  urls.map(async (url: string) => {
+    await renderTo(url, `./dist/client${url}.html`);
+  }),
+);
+
+await renderTo("/", "./dist/client/index.html");
 
 const sitemap = [...urls, "/"]
   .reduce<XMLBuilder>(
