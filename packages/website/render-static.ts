@@ -37,7 +37,10 @@ const algoliaAppId =
   process.env.VITE_ALGOLIA_APP_ID ??
   (await loadEnvFromFile(".env.local"))?.VITE_ALGOLIA_APP_ID;
 
-if (process.env.CI === "true" && algoliaAppId == null) {
+if (
+  process.env.GITHUB_WORKFLOW === "Build and deploy website" &&
+  algoliaAppId == null
+) {
   throw new Error("expected env var VITE_ALGOLIA_APP_ID to be set");
 }
 
