@@ -282,9 +282,9 @@ and limitations under the License.
   max-width: calc(100% - 20px);
   ${e=>e.type==="user"?"margin-left: 20px; margin-right: 0; border-radius: 10px 10px 0 10px; align-self: flex-end;":"margin-right: 20px; margin-left: 0; border-radius: 10px 10px 10px 0; align-self: flex-start;"}
 
-  * + *,
-  ol + p,
-  ul + p {
+  & > * + *,
+  & > ol + p,
+  & > ul + p {
     margin-top: 12px;
   }
 
