@@ -10,12 +10,15 @@ const render: (url: string) => string = untypedRender;
 
 /* this script statically renders the website, and generates a sitemap */
 
-const server = await createServer({
-  server: { middlewareMode: true },
-  appType: "custom",
-});
+const { urls } = await (async () => {
+  // we use the vite server just to load / parse the routes.
+  const viteServer = await createServer({
+    server: { middlewareMode: true },
+    appType: "custom",
+  });
+  return await viteServer.ssrLoadModule("/src/routes.tsx");
+})();
 
-const { urls } = await server.ssrLoadModule("/src/routes.tsx");
 
 const envFromFile = await (async (filename) => {
   try {
