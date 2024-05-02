@@ -17,10 +17,34 @@ const server = await createServer({
 
 const { urls } = await server.ssrLoadModule("/src/routes.tsx");
 
+const envFromFile = await (async (filename) => {
+  try {
+    return Object.fromEntries(
+      (await fs.readFile(filename, "utf-8"))
+        .split("\n")
+        .map((line) => line.split("=")),
+    );
+  } catch (_) {
+    return null;
+  }
+})(".env.local");
+
+const algoliaAppId =
+  process.env.VITE_ALGOLIA_APP_ID ?? envFromFile?.VITE_ALGOLIA_APP_ID;
+
+if (process.env.CI === "true" && algoliaAppId == null) {
+  throw new Error("expected env var VITE_ALGOLIA_APP_ID to be set");
+}
+
 // Cached production assets
 const template = (
   (await fs.readFile("./dist/client/index.html", "utf-8")) as unknown as string
-).replace("./", "/"); // use absolute instead of relative paths
+)
+  .replace(
+    "<!--algolia-preload-tag-->",
+    `<link rel="preconnect" href="https://${algoliaAppId}-dsn.algolia.net" crossorigin />`,
+  ) // should improve search performance, see https://docsearch.algolia.com/docs/DocSearch-v3#preconnect
+  .replace("./", "/"); // use absolute instead of relative paths
 
 await Promise.all(
   urls.map(async (url: string) => {
