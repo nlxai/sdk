@@ -45,7 +45,7 @@ export const Header: FC<{
         </span>
       </Link>
     </div>
-    <div className="relative flex basis-0 justify-end gap-6 sm:gap-8 md:flex-grow items-center">
+    <div className="relative flex basis-0 justify-end gap-4 md:flex-grow items-center">
       <DocSearch
         appId={import.meta.env.VITE_ALGOLIA_APP_ID}
         indexName={import.meta.env.VITE_ALGOLIA_INDEX_NAME}
