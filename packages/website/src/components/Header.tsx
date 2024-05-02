@@ -43,13 +43,13 @@ export const Header: FC<{
           Developers
         </span>
       </Link>
+    </div>
+    <div className="relative flex basis-0 justify-end gap-6 sm:gap-8 md:flex-grow">
       <DocSearch
         appId={import.meta.env.VITE_ALGOLIA_APP_ID}
         indexName={import.meta.env.VITE_ALGOLIA_INDEX_NAME}
         apiKey={import.meta.env.VITE_ALGOLIA_API_KEY}
       />
-    </div>
-    <div className="relative flex basis-0 justify-end gap-6 sm:gap-8 md:flex-grow">
       <a
         className="group"
         aria-label="GitHub"
