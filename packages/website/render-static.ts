@@ -2,11 +2,13 @@ import fs from "node:fs/promises";
 import { exit } from "node:process";
 import { createServer } from "vite";
 import { dirname } from "node:path";
-// @ts-expect-error we need to build this before usage to ensure cache-busted assets are included, but building right now doesn't build .d.ts files
-import { render as untypedRender } from "./dist/static/entry-server.js";
 import { create } from "xmlbuilder2";
-import { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
+import type { XMLBuilder } from "xmlbuilder2/lib/interfaces";
+// @ts-expect-error we need to build this before usage to ensure cache-busted assets are included, but building right now doesn't build .d.ts files
+import { render as untypedRender } from "./dist/static/static-renderer.js";
 const render: (url: string) => string = untypedRender;
+
+/* this script statically renders the website, and generates a sitemap */
 
 const server = await createServer({
   server: { middlewareMode: true },

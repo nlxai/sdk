@@ -13,5 +13,5 @@
     "target": "esnext",
     "types": ["vite/client", "node"]
   },
-  "include": ["src/**/*", "dist/static/entry-server.js", "render-static.ts"]
+  "include": ["src/**/*", "dist/static/static-renderer.js", "render-static.ts"]
 }
