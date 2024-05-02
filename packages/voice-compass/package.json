@@ -10,7 +10,7 @@
   "scripts": {
     "build": "rm -rf lib && rollup -c",
     "docs": "rm -rf docs/ && typedoc && concat-md --decrease-title-levels --dir-name-as-title docs/ > docs/index.md",
-    "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx",
+    "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
     "prepublish": "npm run build",
     "preview-docs": "npm run docs && comrak --unsafe --gfm  -o docs/index.html docs/index.md && open docs/index.html",
