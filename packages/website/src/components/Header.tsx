@@ -4,6 +4,7 @@ import { Logo } from "./Logo";
 
 import { DocSearch } from "@docsearch/react";
 import "@docsearch/css";
+import "./Header.css";
 
 export const Header: FC<{
   mobileMenuExpanded: boolean;
