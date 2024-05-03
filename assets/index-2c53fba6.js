@@ -298,12 +298,6 @@ and limitations under the License.
   max-width: calc(100% - 20px);
   ${e=>e.type==="user"?"margin-left: 20px; margin-right: 0; border-radius: 10px 10px 0 10px; align-self: flex-end;":"margin-right: 20px; margin-left: 0; border-radius: 10px 10px 10px 0; align-self: flex-start;"}
 
-  & > * + *,
-  & > ol + p,
-  & > ul + p {
-    margin-top: 12px;
-  }
-
   ul,
   ol {
     list-style-position: inside;
@@ -315,7 +309,7 @@ and limitations under the License.
   }
 
   ul ::marker {
-    margin-right: 6px;
+    margin-right: 4px;
   }
 
   ol {
@@ -343,16 +337,24 @@ and limitations under the License.
 `,OS=Re.p`
   margin: 0;
   font-size: ${Pn}px;
+
   a,
   a:visited {
     text-decoration: underline;
     color: inherit;
     font-size: ${Pn}px;
   }
+
+  & > * + * {
+    margin-top: 12px;
+    margin-bottom: 0px;
+  }
+
   p {
-    margin: 0;
+    line-height: 1.25;
     font-size: ${Pn}px;
   }
+
   img {
     max-width: 80px;
     max-height: 60px;
