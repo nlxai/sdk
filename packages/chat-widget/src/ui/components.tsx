@@ -221,12 +221,6 @@ export const Message = styled.div<{
       ? "margin-left: 20px; margin-right: 0; border-radius: 10px 10px 0 10px; align-self: flex-end;"
       : "margin-right: 20px; margin-left: 0; border-radius: 10px 10px 10px 0; align-self: flex-start;"}
 
-  & > * + *,
-  & > ol + p,
-  & > ul + p {
-    margin-top: 12px;
-  }
-
   ul,
   ol {
     list-style-position: inside;
@@ -238,7 +232,7 @@ export const Message = styled.div<{
   }
 
   ul ::marker {
-    margin-right: 6px;
+    margin-right: 4px;
   }
 
   ol {
@@ -285,16 +279,24 @@ export const MessageBody = styled.p<{
 }>`
   margin: 0;
   font-size: ${constants.fontSize}px;
+
   a,
   a:visited {
     text-decoration: underline;
     color: inherit;
     font-size: ${constants.fontSize}px;
   }
+
+  & > * + * {
+    margin-top: 12px;
+    margin-bottom: 0px;
+  }
+
   p {
-    margin: 0;
+    line-height: 1.25;
     font-size: ${constants.fontSize}px;
   }
+
   img {
     max-width: 80px;
     max-height: 60px;
