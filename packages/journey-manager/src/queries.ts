@@ -1,28 +1,48 @@
 import {
-  QueryArgs,
+  type QueryArgs,
   getSuggestedQuery,
   queries as queryFns,
 } from "@testing-library/dom";
 
-export type Query = {
+/**
+ * Query
+ */
+export interface Query {
+  /**
+   * Query name
+   */
   queryName: Method;
-  queryArgs: [
-    string | RegExp,
-    {
-      [key: string]: RegExp | boolean;
-    }?,
-  ];
+  /**
+   * Query arguments
+   */
+  queryArgs: [string | RegExp, Record<string, RegExp | boolean>?];
+  /**
+   *
+   */
   parent?: Query;
-};
+}
 
-export type EncodedQuery = {
+/**
+ *
+ */
+export interface EncodedQuery {
+  /**
+   *
+   */
   name: Method;
+  /**
+   *
+   */
   target: string | { regexp: string; flags: string };
-  options: {
-    [key: string]: { regexp: string; flags: string } | boolean;
-  } | null;
+  /**
+   *
+   */
+  options: Record<string, { regexp: string; flags: string } | boolean> | null;
+  /**
+   *
+   */
   parent: EncodedQuery | null;
-};
+}
 
 function encodeTarget<T>(
   val: T | RegExp,
@@ -33,31 +53,45 @@ function encodeTarget<T>(
   return val;
 }
 
+/**
+ * Encode query
+ * @param q - Query
+ * @returns encoded query
+ */
 export function encode(q: Query): EncodedQuery {
   return {
     name: q.queryName,
     target: encodeTarget(q.queryArgs[0]),
-    options: q.queryArgs[1]
-      ? Object.fromEntries(
-          Object.entries(q.queryArgs[1]).map(([k, v]) => [k, encodeTarget(v)]),
-        )
-      : null,
-    parent: q.parent ? encode(q.parent) : null,
+    options:
+      q.queryArgs[1] != null
+        ? Object.fromEntries(
+            Object.entries(q.queryArgs[1]).map(([k, v]) => [
+              k,
+              encodeTarget(v),
+            ]),
+          )
+        : null,
+    parent: q.parent != null ? encode(q.parent) : null,
   };
 }
 
+/**
+ * Decode query
+ * @param q - Encoded query
+ * @returns query
+ */
 export function decode(q: EncodedQuery): Query {
   return {
     queryName: q.name,
     queryArgs: [
       decodeTarget(q.target),
-      q.options
+      q.options != null
         ? Object.fromEntries(
             Object.entries(q.options).map(([k, v]) => [k, decodeTarget(v)]),
           )
         : undefined,
     ],
-    parent: q.parent ? decode(q.parent) : undefined,
+    parent: q.parent != null ? decode(q.parent) : undefined,
   };
 }
 
@@ -66,13 +100,18 @@ function decodeTarget<T>(
 ): RegExp | T {
   if (typeof val === "object") {
     const valAsRecord = val as Record<string, string>;
-    if (valAsRecord.regexp && valAsRecord.flags) {
+    if (valAsRecord.regexp != null && valAsRecord.flags != null) {
       return new RegExp(valAsRecord.regexp, valAsRecord.flags);
     }
   }
   return val as T;
 }
 
+/**
+ * Evaluate query
+ * @param q - Query
+ * @returns promise of whether the query matches
+ */
 export async function evaluate(q: Query): Promise<boolean> {
   try {
     await find(q);
@@ -82,14 +121,23 @@ export async function evaluate(q: Query): Promise<boolean> {
   }
 }
 
+/**
+ *
+ * @param q - Query
+ * @returns promise of a HTML element
+ */
 export async function find(q: Query): Promise<HTMLElement> {
-  const container = q.parent ? await find(q.parent) : document.body;
+  const container = q.parent != null ? await find(q.parent) : document.body;
 
-  const methodName = `findBy${q.queryName}` as `findBy${Method}`;
+  const methodName = `findBy${q.queryName}`;
 
+  // eslint-disable-next-line @typescript-eslint/return-await --  initial eslint integration: disable all existing eslint errors
   return await queryFns[methodName](container, ...(q.queryArgs as QueryArgs));
 }
 
+/**
+ *
+ */
 export type Method =
   | "AltText"
   | "DisplayValue"
@@ -114,20 +162,26 @@ const queryMethods: Method[] = [
   "TestId",
 ];
 
+/**
+ * Get query
+ * @param rootNode - Root node
+ * @param element - Element
+ * @returns query
+ */
 export function getQuery(
   rootNode: HTMLElement,
   element: HTMLElement,
-): Query | void {
+): Query | undefined {
   for (const method of queryMethods) {
     const suggestion = getSuggestedQuery(element, "get", method);
 
-    if (suggestion) {
+    if (suggestion != null) {
       const uniqueSuggestion = makeUnique(
         rootNode,
         element,
         suggestion as Query,
       );
-      if (uniqueSuggestion) {
+      if (uniqueSuggestion != null) {
         return uniqueSuggestion;
       }
     }
@@ -152,11 +206,10 @@ function matchesSingleElement(rootNode: HTMLElement, query: Query): boolean {
 /**
  * Check if the viewQuery only matches a single element within the rootNode
  * and if the elementQuery only matches a single element within the view
- *
- * @param rootNode HTMLElement
- * @param viewQuery QuerySuggestion
- * @param elementQuery QuerySuggestion
- * @returns {boolean}
+ * @param rootNode - Root node
+ * @param viewQuery - View query
+ * @param elementQuery - Element query
+ * @returns whether it matches a single element in view
  */
 function matchesSingleElementInView(
   rootNode: HTMLElement,
@@ -176,7 +229,7 @@ function makeUnique(
   rootNode: HTMLElement,
   element: HTMLElement,
   elementQuery: Query,
-): Query | void {
+): Query | undefined {
   // query the element on `screen`, if it results in a single element
   if (matchesSingleElement(rootNode, elementQuery)) {
     return elementQuery;
@@ -185,11 +238,14 @@ function makeUnique(
   // turns out, there are multiple matches. We're going to try to scope
   // the query by using the `within` helper method.
   let node: ParentNode | null = element;
-  while (node && node !== rootNode) {
+  while (node != null && node !== rootNode) {
     if (node instanceof HTMLElement) {
       const view = getSuggestedQuery(node, "get") as Query | undefined;
 
-      if (view && matchesSingleElementInView(rootNode, view, elementQuery)) {
+      if (
+        view != null &&
+        matchesSingleElementInView(rootNode, view, elementQuery)
+      ) {
         return { ...elementQuery, parent: view };
       }
     }

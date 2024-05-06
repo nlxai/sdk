@@ -1,34 +1,34 @@
-import { type VoiceCompass } from "@nlxai/voice-compass";
-import { find, decode, Query, EncodedQuery } from "./queries";
+import { type Config, create } from "@nlxai/voice-compass";
+import { find, decode, type Query, type EncodedQuery } from "./queries";
 
 type StepId = string;
 
 // TODO: add regex match condition
-type UrlCondition = {
+interface UrlCondition {
   operator: "eq" | "neq" | "suffix" | "prefix" | "contains" | "not_contains";
   value: string;
-};
+}
 
-type Trigger = {
+interface Trigger {
   event: "pageLoad" | "click";
   query?: EncodedQuery;
   urlCondition?: UrlCondition;
-};
+}
 
 type Triggers = Record<StepId, Trigger>;
 
-type LoadStep = {
+interface LoadStep {
   stepId: StepId;
   urlCondition?: UrlCondition;
-};
+}
 
-type ClickStep = {
+interface ClickStep {
   stepId: StepId;
   query: Query;
   urlCondition?: UrlCondition;
-};
+}
 
-const matchesUrlCondition = (urlCondition: UrlCondition) => {
+const matchesUrlCondition = (urlCondition: UrlCondition): boolean => {
   const url = window.location.href;
   if (urlCondition.operator === "eq") {
     return url === urlCondition.value;
@@ -48,9 +48,19 @@ const matchesUrlCondition = (urlCondition: UrlCondition) => {
   if (urlCondition.operator === "not_contains") {
     return !url.includes(urlCondition.value);
   }
+  return false;
 };
 
-export const run = (client: VoiceCompass, triggers: Triggers) => {
+/**
+ * Run the multimodal journey
+ * @param config - The voice compass configuration
+ * @param triggers - The triggers dictionary, downloaded from the Dialog Studio desktop app
+ * @returns teardown function
+ */
+export const run = (config: Config, triggers: Triggers): (() => void) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument --  initial eslint integration: disable all existing eslint errors
+  const client = create(config);
+
   const loadSteps: LoadStep[] = Object.entries(triggers).reduce(
     (prev: LoadStep[], [stepId, trigger]: [StepId, Trigger]) => {
       if (trigger.event === "pageLoad") {
@@ -62,15 +72,16 @@ export const run = (client: VoiceCompass, triggers: Triggers) => {
   );
 
   loadSteps.forEach(({ stepId, urlCondition }) => {
-    if (urlCondition && !matchesUrlCondition(urlCondition)) {
+    if (urlCondition != null && !matchesUrlCondition(urlCondition)) {
       return;
     }
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises --  initial eslint integration: disable all existing eslint errors
     client.sendStep(stepId);
   });
 
   const clickSteps: ClickStep[] = Object.entries(triggers).reduce(
     (prev: ClickStep[], [stepId, trigger]: [StepId, Trigger]) => {
-      if (trigger.event === "click" && trigger.query) {
+      if (trigger.event === "click" && trigger.query != null) {
         const newEntry: ClickStep = {
           stepId,
           query: decode(trigger.query),
@@ -83,12 +94,12 @@ export const run = (client: VoiceCompass, triggers: Triggers) => {
     [],
   );
 
-  const handleGlobalClickForAnnotations = async (ev: any) => {
+  const handleGlobalClickForAnnotations = async (ev: any): Promise<void> => {
     const targets = await Promise.all(
       clickSteps
         .filter(
           ({ urlCondition }) =>
-            !urlCondition || matchesUrlCondition(urlCondition),
+            urlCondition == null || matchesUrlCondition(urlCondition),
         )
         .map(async ({ stepId, query }) => {
           try {
@@ -103,16 +114,27 @@ export const run = (client: VoiceCompass, triggers: Triggers) => {
         }),
     );
     const node = ev.target;
-    const clickStep: (ClickStep & { element?: HTMLElement }) | undefined =
-      targets.find(({ element }) => element && element.contains(node));
-    if (clickStep) {
+    const clickStep:
+      | (ClickStep & {
+          /**
+           *
+           */
+          element?: HTMLElement;
+        })
+      | undefined =
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument --  initial eslint integration: disable all existing eslint errors
+      targets.find(({ element }) => element?.contains(node));
+    if (clickStep != null) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises --  initial eslint integration: disable all existing eslint errors
       client.sendStep(clickStep.stepId);
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
   document.addEventListener("click", handleGlobalClickForAnnotations);
 
   return () => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
     document.removeEventListener("click", handleGlobalClickForAnnotations);
   };
 };
