@@ -1,0 +1,53 @@
+{
+  "name": "@nlxai/journey-manager",
+  "version": "0.1.18",
+  "description": "Journey Manager",
+  "main": "lib/index.esm.js",
+  "module": "lib/index.esm.js",
+  "commonjs": "lib/index.cjs.js",
+  "browser": "lib/index.umd.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "rm -rf lib && rollup -c",
+    "docs": "rm -rf docs/ && typedoc && concat-md --decrease-title-levels --dir-name-as-title docs/ > docs/index.md",
+    "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0",
+    "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
+    "prepublish": "npm run build",
+    "preview-docs": "echo 'TBD'",
+    "publish-docs": "echo 'TBD'",
+    "test": "typedoc --emit none",
+    "tsc": "tsc"
+  },
+  "author": "Peter Szerzo <peter@nlx.ai>",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.5",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@types/isomorphic-fetch": "^0.0.36",
+    "@types/node": "^11.15.11",
+    "@types/ramda": "0.29.1",
+    "@types/uuid": "^9.0.7",
+    "concat-md": "^0.5.1",
+    "eslint-config-nlx": "*",
+    "prettier": "^3.1.0",
+    "rollup": "^4.9.3",
+    "rollup-plugin-node-polyfills": "^0.2.1",
+    "typedoc": "^0.25.13",
+    "typedoc-plugin-markdown": "^3.17.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@testing-library/dom": "^10.1.0",
+    "@nlxai/voice-compass": "^0.1.18",
+    "ramda": "^0.29.1",
+    "uuid": "^9.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "ddcee77185166c44ed1afc9a6073b51d22d6c6d1"
+}
