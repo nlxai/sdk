@@ -6,8 +6,10 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "outDir": "./lib",
+    "rootDir": "./src",
     "strict": true,
     "strictNullChecks": true,
     "target": "esnext"
-  }
+  },
+  "include": ["src/**/*"]
 }
