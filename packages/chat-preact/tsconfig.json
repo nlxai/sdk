@@ -1,15 +1,12 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./../../tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
-    "esModuleInterop": true,
     "jsx": "react",
     "jsxFactory": "h",
     "lib": ["dom"],
-    "module": "esnext",
-    "moduleResolution": "bundler",
     "outDir": "./lib",
-    "rootDir": "./src",
-    "strict": true,
-    "target": "esnext"
-  }
+    "rootDir": "./src"
+  },
+  "include": ["./src/**/*"]
 }

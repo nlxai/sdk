@@ -1,17 +1,17 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./../../tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
-    "esModuleInterop": true,
     "jsx": "react",
     "lib": ["dom", "es2017"],
-    "module": "esnext",
-    "moduleResolution": "bundler",
     "outDir": "./lib",
     "rootDir": ".",
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "esnext",
-    "types": ["vite/client", "node"]
+    "types": ["vite/client", "node"],
+    "skipLibCheck": true // needed for issues with vite
   },
-  "include": ["src/**/*", "dist/static/static-renderer.js", "render-static.ts"]
+  "include": [
+    "./src/**/*",
+    "./dist/static/static-renderer.js",
+    "./render-static.ts"
+  ]
 }
