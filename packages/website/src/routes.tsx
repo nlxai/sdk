@@ -1,5 +1,5 @@
 import React, { type FC } from "react";
-import { flatten } from "ramda";
+import { aperture, flatten } from "ramda";
 import { Routes, Route } from "react-router-dom";
 import { NextPrevPage } from "./components/NextPrevPage";
 // 1
@@ -12,14 +12,14 @@ import { WebWidgetCustomBehaviors } from "./content/02-03-web-widget-custom-beha
 import { WebWidgetTryLive } from "./content/02-04-web-widget-try-live";
 // 3
 import { WebWidgetComponentsGettingStarted } from "./content/03-01-web-widget-components-getting-started";
+import { WebWidgetComponentsAddressInput } from "./content/03-02-address-input";
 import { WebWidgetComponentsDisclaimer } from "./content/03-03-disclaimer";
 import { WebWidgetComponentsCarousel } from "./content/03-04-carousel";
-import { WebWidgetComponentsFeedbackForm } from "./content/03-05-feedback-form";
-import { WebWidgetComponentsDatePicker } from "./content/03-06-datepicker";
+import { WebWidgetComponentsDatePicker } from "./content/03-05-datepicker";
+import { WebWidgetComponentsFeedbackForm } from "./content/03-06-feedback-form";
 import { WebWidgetComponentsFileUpload } from "./content/03-07-file-upload";
-import { WebWidgetComponentsAddressInput } from "./content/03-08-address-input";
-import { WebWidgetComponentsVideoPlayer } from "./content/03-09-video-player";
-import { WebWidgetComponentsSecureInput } from "./content/03-10-secure-input";
+import { WebWidgetComponentsVideoPlayer } from "./content/03-08-video-player";
+import { WebWidgetComponentsSecureInput } from "./content/03-09-secure-input";
 // 4
 import { CustomWidgetsGettingStarted } from "./content/04-01-custom-widgets-getting-started";
 import { CustomWidgetsReact } from "./content/04-02-custom-widgets-react";
@@ -41,8 +41,14 @@ interface Item {
   element: JSX.Element;
 }
 
-function sortByLabel(items: Item[]): Item[] {
-  return items.sort((a, b) => a.label.localeCompare(b.label));
+function throwIfUnsorted(items: Item[]): Item[] {
+  aperture(2, items).forEach(([a, b]) => {
+    if (a.label.localeCompare(b.label) > 0) {
+      throw new Error("Items are not sorted by label");
+    }
+  });
+
+  return items;
 }
 
 export const routes: Array<{
@@ -93,11 +99,11 @@ export const routes: Array<{
         url: "/widget-components-getting-started",
         element: <WebWidgetComponentsGettingStarted />,
       },
-      ...sortByLabel([
+      ...throwIfUnsorted([
         {
-          label: "Disclaimer",
-          url: "/widget-components-disclaimer",
-          element: <WebWidgetComponentsDisclaimer />,
+          label: "Address input",
+          url: "/widget-components-address-input",
+          element: <WebWidgetComponentsAddressInput />,
         },
         {
           label: "Carousel",
@@ -105,19 +111,19 @@ export const routes: Array<{
           element: <WebWidgetComponentsCarousel />,
         },
         {
-          label: "Feedback form",
-          url: "/widget-components-feedback-form",
-          element: <WebWidgetComponentsFeedbackForm />,
-        },
-        {
           label: "Date picker",
           url: "/widget-components-datepicker",
           element: <WebWidgetComponentsDatePicker />,
         },
         {
-          label: "Address input",
-          url: "/widget-components-address-input",
-          element: <WebWidgetComponentsAddressInput />,
+          label: "Disclaimer",
+          url: "/widget-components-disclaimer",
+          element: <WebWidgetComponentsDisclaimer />,
+        },
+        {
+          label: "Feedback form",
+          url: "/widget-components-feedback-form",
+          element: <WebWidgetComponentsFeedbackForm />,
         },
         {
           label: "File upload",
