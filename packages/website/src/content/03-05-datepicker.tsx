@@ -8,7 +8,7 @@ export const content = `
 This component allows for the user to select a date. For example, the user could select a date of birth, or a date of an appointment. The date picker is a text input that opens a calendar when clicked. The user can then select a date that they are looking for flight tickets.
 
 ~~~js
-export const DatePicker = ({ submitted, onSubmit }) => {
+const DatePicker = ({ submitted, onSubmit }) => {
   const [datepicker, setDatepicker] = useState(null);
 
   useEffect(() => {
