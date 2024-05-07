@@ -1,6 +1,5 @@
 import React, { useState, type ChangeEvent, type FormEvent } from "react";
 import "./SecureInput.css";
-import checkmarkIcon from "./checkmark.svg";
 
 const SecureInput: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -8,21 +7,17 @@ const SecureInput: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setEmail(event.target.value);
   };
 
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setPassword(event.target.value);
   };
 
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     event.preventDefault();
     setIsLoading(true);
 
@@ -37,16 +32,18 @@ const SecureInput: React.FC = () => {
   if (isSuccess) {
     return (
       <div className="success-container">
-        <img className="checkmark-icon" src={checkmarkIcon} alt="checkmark" />
+        <span>✅</span>
       </div>
     );
   }
 
   return (
     <div className="form-container">
-      {/* initial eslint integration */}
-      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={(event) => {
+          void handleSubmit(event);
+        }}
+      >
         <input
           type="email"
           id="email"

@@ -1,5 +1,6 @@
 .form-container,
 .success-container {
+  font-size: 32px;
   height: 168px;
   padding: 20px;
   background: #efefef;

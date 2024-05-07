@@ -8,30 +8,18 @@ export const content = `
 This component allows you to create a secure input field. The input field is rendered in an iframe, and the inputted data is sent to the bot via a secure channel. This means that the inputted data is not accessible to the website owner.
 
 ~~~js
-import "./SecureInput.css";
-import checkmarkIcon from "./checkmark.svg";
+const SecureInput = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-const SecureInput: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
-
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
 
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
-
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handlePasswordChange = (event
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
 
@@ -46,15 +34,13 @@ const SecureInput: React.FC = () => {
   if (isSuccess) {
     return (
       <div className="success-container">
-        <img className="checkmark-icon" src={checkmarkIcon} alt="checkmark" />
+        ✅
       </div>
     );
   }
 
   return (
     <div className="form-container">
-      {/* initial eslint integration */}
-      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={handleSubmit}>
         <input
           type="email"
