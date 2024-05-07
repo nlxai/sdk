@@ -3,11 +3,8 @@
   "extends": "./../../tsconfig.json",
   "compilerOptions": {
     "jsx": "react",
-    "lib": ["dom", "es2017"],
     "outDir": "./lib",
-    "rootDir": ".",
-    "types": ["vite/client", "node"],
-    "skipLibCheck": true // needed for issues with vite
+    "skipLibCheck": true // remove this when upgrading to vite 5.0
   },
   "include": [
     "./src/**/*",
