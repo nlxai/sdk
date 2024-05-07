@@ -4,19 +4,52 @@ import { PageContent } from "../components/PageContent";
 import { Note } from "../components/Note";
 import { Carousel, carouselExampleData } from "../custom-components/Carousel";
 import { InlineWidget } from "../components/InlineWidget";
-import { carouselSnippet } from "../snippets";
 
 export const content = `
 This carousel component presents list-type information in a rich, visually-appealing manner.
 
 ~~~js
-${carouselSnippet}
+const Carousel = ({ data }) => {
+  const [selectedId, setSelectedId] = React.useState<string | null>(null);
+
+  return html\`
+    <div className="chat-carousel-container">
+      <div className="chat-carousel-slides">
+        \${data.map(
+          document =>
+            html\`
+              <div
+                className=\${\`chat-carousel-slide \${
+                  selectedId === document.id
+                    ? "chat-carousel-slide--active"
+                    : ""
+                }\`}
+                key=\${document.id}
+                onClick=\${() => {
+                  setSelectedId(document.id);
+                }}
+              >
+                <div className="chat-carousel-title">\${document.name}</div>
+                <div
+                  className="chat-carousel-image"
+                  style=\${{
+                    backgroundImage: \`url(\${document.imageUrl})\`
+                  }}
+                />
+                <div className="chat-carousel-description">
+                  \${document.description}
+                </div>
+              </div>
+            \`
+        )}
+      </div>
+    </div>
+  \`;
+};
 ~~~
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const WebWidgetComponentsCarousel = () => {
+export const WebWidgetComponentsCarousel = (): JSX.Element => {
   return (
     <>
       <PageTitle pretitle="Web widget components" title="Carousel" />

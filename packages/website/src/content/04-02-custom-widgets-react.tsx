@@ -1,7 +1,6 @@
 import React from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
-import { customWidgetSnippet } from "../snippets";
 
 export const content = `
 The React and Preact packages expose a single custom hook called \`useChat\`.
@@ -13,7 +12,39 @@ The following code snippet shows a few features easily implemented using this ho
 - render a loading element when a bot response is expected to arrive.
 
 ~~~jsx
-${customWidgetSnippet}
+import { useChat } from "@nlxai/chat-react";
+
+const CustomWidget = () => {
+  // Instantiate the chat with the same bot configuration as the off-the-shelf widget
+  const chat = useChat({
+    botUrl: "",
+    headers: {
+      "nlx-api-key": ""
+    }
+  });
+
+  return (
+    <div>
+      {chat.responses.map((response, index) => {
+        if (response.type === "user" && response.payload.type === "text") {
+          return <div className="chat-bubble chat-bubble--user">{response.payload.text}</div>;
+        }
+        if (response.type === "bot") {
+          return response.payload.messages.map((message, messageIndex) => {
+            return <div className="chat-bubble chat-bubble--bot">{message.text}</div>;
+          });
+        }
+      })}
+      {chat.waiting && <div>...</div>}
+      <input
+        value={chat.inputValue}
+        onInput={(event) => {
+          chat.setInputValue(event.target.value);
+        }}
+      />
+    </div>
+  );
+}
 ~~~
 `;
 
