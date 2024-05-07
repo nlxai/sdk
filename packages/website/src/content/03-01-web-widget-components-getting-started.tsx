@@ -1,4 +1,3 @@
-import React from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { setupSnippet } from "../snippets";

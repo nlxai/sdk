@@ -1,4 +1,4 @@
-import React, { type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 // initial eslint integration
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint

@@ -1,4 +1,4 @@
-import React, { type FC, useState } from "react";
+import { type FC, useState } from "react";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Nav, MobileNav } from "./components/Nav";

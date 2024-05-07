@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef, type FC } from "react";
+import type React from "react";
+import { useEffect, useState, useRef, type FC } from "react";
 
 import "./Address.css";
 

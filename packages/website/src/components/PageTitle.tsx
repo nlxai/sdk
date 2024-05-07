@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 export const PageTitle: FC<{ pretitle: string; title: string }> = (props) => (
   <header className="mb-9 space-y-1">

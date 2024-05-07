@@ -1,6 +1,7 @@
 import "./FileUpload.css";
 import uploadIcon from "./upload.png";
-import React, { type FC, useState, type DragEvent } from "react";
+import type React from "react";
+import { type FC, useState, type DragEvent } from "react";
 
 interface CircularProgressBarProps {
   progress: number;

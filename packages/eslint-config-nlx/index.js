@@ -7,6 +7,7 @@ module.exports = {
   extends: [
     "love",
     "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
     "prettier" // note: order matters. prettier being last overrides standard-with-typescript formatting
   ],
   overrides: [

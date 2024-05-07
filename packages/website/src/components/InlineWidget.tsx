@@ -1,10 +1,4 @@
-import React, {
-  type FC,
-  type ReactNode,
-  useEffect,
-  useState,
-  useRef,
-} from "react";
+import { type FC, type ReactNode, useEffect, useState, useRef } from "react";
 import { last, flatten } from "ramda";
 
 export type Item =
@@ -53,9 +47,9 @@ export const InlineWidget: FC<{
   const loader: "user" | "bot" | undefined =
     displayedItems.length === props.items.length
       ? undefined
-      // initial eslint integration
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-      : last(last(displayedItems) || [])?.type === "user"
+      : // initial eslint integration
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
+        last(last(displayedItems) || [])?.type === "user"
         ? "bot"
         : "user";
 

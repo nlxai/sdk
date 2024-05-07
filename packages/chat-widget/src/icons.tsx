@@ -1,4 +1,4 @@
-import React, { type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 // eslint-disable-next-line jsdoc/require-returns
 /** @hidden @internal */

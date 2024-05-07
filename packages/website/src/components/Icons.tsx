@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 // initial eslint integration
 // eslint-disable-next-line @typescript-eslint/ban-types
