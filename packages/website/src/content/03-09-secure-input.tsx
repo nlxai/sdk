@@ -47,6 +47,7 @@ const SecureInput = () => {
           id="email"
           placeholder="Email"
           className="form-input"
+          autoComplete="email"
           value={email}
           onChange={handleEmailChange}
           required
@@ -57,6 +58,7 @@ const SecureInput = () => {
           id="password"
           placeholder="Password"
           className="form-input"
+          autoComplete="current-password"
           value={password}
           onChange={handlePasswordChange}
           required

@@ -49,6 +49,7 @@ const SecureInput: React.FC = () => {
           id="email"
           placeholder="Email"
           className="form-input"
+          autoComplete="email"
           value={email}
           onChange={handleEmailChange}
           required
@@ -59,6 +60,7 @@ const SecureInput: React.FC = () => {
           id="password"
           placeholder="Password"
           className="form-input"
+          autoComplete="current-password"
           value={password}
           onChange={handlePasswordChange}
           required
