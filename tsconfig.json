@@ -10,6 +10,6 @@
     "moduleResolution": "bundler",
     "strict": true,
     "target": "esnext",
-    "jsx": "react-jsx" // when using react >= 17.*, so react-jsx is preferred
+    "jsx": "react-jsx" // when using react >= 17.* or modern preact, react-jsx may lead to smaller bundler sizes
   }
 }
