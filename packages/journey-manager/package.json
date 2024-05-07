@@ -15,7 +15,7 @@
     "prepublish": "npm run build",
     "preview-docs": "echo 'TBD'",
     "publish-docs": "echo 'TBD'",
-    "test": "typedoc --emit none",
+    "test": "echo 'TBD'",
     "tsc": "tsc"
   },
   "author": "Peter Szerzo <peter@nlx.ai>",

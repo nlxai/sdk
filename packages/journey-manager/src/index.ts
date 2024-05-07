@@ -1,21 +1,48 @@
 import { type Config, create } from "@nlxai/voice-compass";
 import { find, decode, type Query, type EncodedQuery } from "./queries";
 
-type StepId = string;
+/**
+ * Step ID
+ */
+export type StepId = string;
 
-// TODO: add regex match condition
-interface UrlCondition {
+/**
+ * URL match condition
+ */
+export interface UrlCondition {
+  /**
+   * Condition operator
+   */
   operator: "eq" | "neq" | "suffix" | "prefix" | "contains" | "not_contains";
+  /**
+   * Condition value
+   */
   value: string;
+  // TODO: add regex match condition
 }
 
-interface Trigger {
+/**
+ * A single trigger
+ */
+export interface Trigger {
+  /**
+   * Event
+   */
   event: "pageLoad" | "click";
+  /**
+   * A query identifying the element
+   */
   query?: EncodedQuery;
+  /**
+   * URL condition
+   */
   urlCondition?: UrlCondition;
 }
 
-type Triggers = Record<StepId, Trigger>;
+/**
+ * A record of triggers
+ */
+export type Triggers = Record<StepId, Trigger>;
 
 interface LoadStep {
   stepId: StepId;
@@ -58,7 +85,6 @@ const matchesUrlCondition = (urlCondition: UrlCondition): boolean => {
  * @returns teardown function
  */
 export const run = (config: Config, triggers: Triggers): (() => void) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument --  initial eslint integration: disable all existing eslint errors
   const client = create(config);
 
   const loadSteps: LoadStep[] = Object.entries(triggers).reduce(

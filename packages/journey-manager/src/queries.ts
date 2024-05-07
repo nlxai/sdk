@@ -23,23 +23,23 @@ export interface Query {
 }
 
 /**
- *
+ * Encoded query
  */
 export interface EncodedQuery {
   /**
-   *
+   * Query name
    */
   name: Method;
   /**
-   *
+   * Query target
    */
   target: string | { regexp: string; flags: string };
   /**
-   *
+   * Query options
    */
   options: Record<string, { regexp: string; flags: string } | boolean> | null;
   /**
-   *
+   * Query parent
    */
   parent: EncodedQuery | null;
 }
@@ -131,7 +131,6 @@ export async function find(q: Query): Promise<HTMLElement> {
 
   const methodName: keyof typeof queryFns = `findBy${q.queryName}`;
 
-  // eslint-disable-next-line @typescript-eslint/return-await --  initial eslint integration: disable all existing eslint errors
   return await queryFns[methodName](container, ...(q.queryArgs as QueryArgs));
 }
 
