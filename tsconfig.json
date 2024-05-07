@@ -9,6 +9,7 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "jsx": "react-jsx" // when using react >= 17.*, so react-jsx is preferred
   }
 }
