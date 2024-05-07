@@ -129,7 +129,7 @@ export async function evaluate(q: Query): Promise<boolean> {
 export async function find(q: Query): Promise<HTMLElement> {
   const container = q.parent != null ? await find(q.parent) : document.body;
 
-  const methodName = `findBy${q.queryName}`;
+  const methodName: keyof typeof queryFns = `findBy${q.queryName}`;
 
   // eslint-disable-next-line @typescript-eslint/return-await --  initial eslint integration: disable all existing eslint errors
   return await queryFns[methodName](container, ...(q.queryArgs as QueryArgs));
