@@ -2,20 +2,28 @@ import React from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { InlineWidget, type Item } from "../components/InlineWidget";
-import { disclaimerSnippet } from "../snippets";
 import VideoPlayer from "../custom-components/VideoPlayer";
 
 export const content = `
 This is a custom component that can be used to embed a video player in the widget.
 
 ~~~js
-${disclaimerSnippet}
+const VideoPlayer = ({ videoId }) => {
+  const videoSrc = \`https://www.youtube.com/embed/\${videoId}\`;
+  return (
+    <iframe
+      width="380"
+      height="213"
+      src={videoSrc}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    ></iframe>
+  );
+};
 ~~~
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const WebWidgetComponentsVideoPlayer = () => {
+export const WebWidgetComponentsVideoPlayer = (): JSX.Element => {
   const items: Item[][] = [
     [
       {
