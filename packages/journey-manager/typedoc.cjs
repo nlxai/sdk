@@ -1,6 +1,5 @@
 /** @type { import('typedoc').TypeDocOptions & { hideInPageTOC?: boolean, hideBreadcrumbs?: boolean} } */
 module.exports = {
-  categoryOrder: ["Setup", "Client"],
   entryPoints: ["./src/index.ts"],
   hideBreadcrumbs: true,
   hideInPageTOC: true,
@@ -11,5 +10,4 @@ module.exports = {
   treatValidationWarningsAsErrors: true,
   treatWarningsAsErrors: true,
   validation: { notExported: true, invalidLink: true, notDocumented: true },
-  tsconfig: "tsconfig.dev.json",
 };
