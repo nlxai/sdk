@@ -448,9 +448,7 @@ export const Pin = styled.button<{
 
 // PinBubble
 
-// eslint-disable-next-line jsdoc/require-returns, jsdoc/require-param
-/** @hidden @internal */
-export const PinBubble: React.FunctionComponent<{
+interface PinBubbleProps {
   /**
    *
    */
@@ -463,7 +461,12 @@ export const PinBubble: React.FunctionComponent<{
    *
    */
   onClick: () => void;
-}> = (props) => (
+}
+// eslint-disable-next-line jsdoc/require-returns, jsdoc/require-param
+/** @hidden @internal */
+export const PinBubble: React.FunctionComponent<PinBubbleProps> = (
+  props: PinBubbleProps,
+) => (
   <PinBubbleContainer isActive={props.isActive}>
     <PinBubbleButton onClick={props.onClick}>
       <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
