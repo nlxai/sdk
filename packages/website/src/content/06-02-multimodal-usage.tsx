@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { RadioList } from "../components/RadioList";
@@ -47,8 +47,8 @@ function assertNever(x: never): never {
 function getUsageFrom(usageFrom: Usage): string {
   const persitanceCodeSample = (
     usageFrom: Usage.WithPersistanceBundled | Usage.WithPersitanceHTML,
-  // initial eslint integration
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    // initial eslint integration
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   ) => {
     const environment =
       usageFrom === Usage.WithPersitanceHTML

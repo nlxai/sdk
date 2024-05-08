@@ -1,15 +1,10 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./../../tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": false,
-    "module": "esnext",
-    "moduleResolution": "bundler",
     "outDir": "./lib",
     "rootDir": "./src",
-    "strict": true,
-    "strictNullChecks": true,
-    "target": "esnext"
+    "noEmitOnError": false // consider enabling this when https://github.com/kulshekhar/ts-jest/issues/4198 is resolved
   },
-  "include": ["src/**/*"]
+  "include": ["./src/**/*"]
 }

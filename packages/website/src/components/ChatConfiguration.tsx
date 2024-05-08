@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import { type FC } from "react";
 import { type Theme, type TitleBar, defaultTheme } from "@nlxai/chat-widget";
 import { type Config } from "@nlxai/chat-core";
 import { Behavior } from "../snippets";

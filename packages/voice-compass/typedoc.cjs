@@ -11,5 +11,4 @@ module.exports = {
   treatValidationWarningsAsErrors: true,
   treatWarningsAsErrors: true,
   validation: { notExported: true, invalidLink: true, notDocumented: true },
-  tsconfig: "tsconfig.dev.json",
 };

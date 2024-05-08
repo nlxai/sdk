@@ -1,4 +1,3 @@
-import React from "react";
 import { useLocation } from "react-router-dom";
 import { Disclaimer } from "../custom-components/Disclaimer";
 import { FeedbackForm } from "../custom-components/FeedbackForm";

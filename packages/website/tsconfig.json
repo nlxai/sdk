@@ -1,17 +1,13 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./../../tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
-    "esModuleInterop": true,
-    "jsx": "react",
-    "lib": ["dom", "es2017"],
-    "module": "esnext",
-    "moduleResolution": "bundler",
     "outDir": "./lib",
-    "rootDir": ".",
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "esnext",
-    "types": ["vite/client", "node"]
+    "skipLibCheck": true // remove this when upgrading to vite 5.0
   },
-  "include": ["src/**/*", "dist/static/static-renderer.js", "render-static.ts"]
+  "include": [
+    "./src/**/*",
+    "./dist/static/static-renderer.js",
+    "./render-static.ts"
+  ]
 }

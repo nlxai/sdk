@@ -1,5 +1,5 @@
 import { marked, type MarkedExtension } from "marked";
-import React, {
+import {
   type FC,
   type ReactNode,
   createRef,

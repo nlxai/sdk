@@ -1,5 +1,5 @@
 import { DownloadIcon } from "./Icons";
-import React, { type FC, useRef, useEffect } from "react";
+import { type FC, useRef, useEffect } from "react";
 
 // initial eslint integration
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -24,7 +24,7 @@ export const CodeEditor: FC<{ code: string }> = (props) => {
         href={window.URL.createObjectURL(
           new Blob([props.code], {
             type: "text/plain",
-          })
+          }),
         )}
         download={`index.html`}
       >

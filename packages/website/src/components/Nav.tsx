@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import { type FC } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, Link } from "react-router-dom";
 import { routes } from "../routes";

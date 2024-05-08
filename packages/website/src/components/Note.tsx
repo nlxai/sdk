@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import { type FC } from "react";
 import Markdown from "react-markdown";
 import { Prose } from "./PageContent";
 

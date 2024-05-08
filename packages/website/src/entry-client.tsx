@@ -1,15 +1,16 @@
 import "./index.css";
-import React from "react";
+
 import ReactDOM, { createRoot } from "react-dom/client";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
+import { StrictMode } from "react";
 
 const contents = (
-  <React.StrictMode>
+  <StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </React.StrictMode>
+  </StrictMode>
 );
 
 if (import.meta.env.DEV) {

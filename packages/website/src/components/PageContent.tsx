@@ -1,4 +1,4 @@
-import React, { type FC, type ReactNode, useState } from "react";
+import { type FC, type ReactNode, useState } from "react";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { CheckIcon, ContentCopyIcon } from "./Icons";

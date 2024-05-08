@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import { type FC } from "react";
 import { Labeled, inputClass } from "./Ui";
 import { isNil, mergeRight, reject } from "ramda";
 

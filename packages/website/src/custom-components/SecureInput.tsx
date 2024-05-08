@@ -1,4 +1,5 @@
-import React, { useState, type ChangeEvent, type FormEvent } from "react";
+import type React from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import "./SecureInput.css";
 
 const SecureInput: React.FC = () => {

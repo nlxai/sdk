@@ -1,4 +1,4 @@
-import React, { type FC, useState, useEffect } from "react";
+import { type FC, useState, useEffect } from "react";
 import { PageTitle } from "../components/PageTitle";
 import { type Config } from "@nlxai/chat-core";
 import {
