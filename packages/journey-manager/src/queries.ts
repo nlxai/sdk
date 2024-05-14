@@ -2,6 +2,7 @@ import {
   type QueryArgs,
   getSuggestedQuery,
   queries as queryFns,
+  waitFor,
 } from "@testing-library/dom";
 
 /**
@@ -11,7 +12,7 @@ export interface Query {
   /**
    * Query name
    */
-  queryName: Method;
+  queryName: Method | "QuerySelector";
   /**
    * Query arguments
    */
@@ -29,7 +30,7 @@ export interface EncodedQuery {
   /**
    * Query name
    */
-  name: Method;
+  name: Method | "QuerySelector";
   /**
    * Query target
    */
@@ -126,12 +127,42 @@ export async function evaluate(q: Query): Promise<boolean> {
  * @param q - Query
  * @returns promise of a HTML element
  */
-export async function find(q: Query): Promise<HTMLElement> {
-  const container = q.parent != null ? await find(q.parent) : document.body;
+export async function find(q: Query): Promise<HTMLElement[]> {
+  const containers = q.parent != null ? await find(q.parent) : [document.body];
 
-  const methodName: keyof typeof queryFns = `findBy${q.queryName}`;
+  let results: HTMLElement[][] = [];
 
-  return await queryFns[methodName](container, ...(q.queryArgs as QueryArgs));
+  if (q.queryName === "QuerySelector") {
+    results = await Promise.all(
+      containers.map(
+        async (container) =>
+          await waitFor(
+            () => {
+              const els = [
+                ...container.querySelectorAll<HTMLElement>(
+                  q.queryArgs[0] as string,
+                ),
+              ];
+              if (els.length === 0) {
+                throw new Error("No elements found");
+              }
+              return els;
+            },
+            { container },
+          ),
+      ),
+    );
+  } else {
+    const methodName: keyof typeof queryFns = `findAllBy${q.queryName}`;
+    results = await Promise.all(
+      containers.map(
+        async (container) =>
+          // TODO improve typing
+          await queryFns[methodName](container, ...(q.queryArgs as QueryArgs)),
+      ),
+    );
+  }
+  return results.flat();
 }
 
 /**
@@ -191,11 +222,17 @@ function getAll(
   rootNode: HTMLElement,
   { queryName, queryArgs }: Query,
 ): HTMLElement[] {
-  // use queryBy here, we don't want to throw on no-results-found
-  return queryFns[`queryAllBy${queryName}`](
-    rootNode,
-    ...(queryArgs as QueryArgs),
-  );
+  if (queryName === "QuerySelector") {
+    return [
+      ...rootNode.querySelectorAll(queryArgs[0] as string),
+    ] as HTMLElement[];
+  } else {
+    // use queryBy here, we don't want to throw on no-results-found
+    return queryFns[`queryAllBy${queryName}`](
+      rootNode,
+      ...(queryArgs as QueryArgs),
+    );
+  }
 }
 
 function matchesSingleElement(rootNode: HTMLElement, query: Query): boolean {
