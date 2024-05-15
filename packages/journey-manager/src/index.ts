@@ -34,6 +34,10 @@ export interface Trigger {
    */
   query?: EncodedQuery;
   /**
+   * A flag specifying whether the trigger should only fire a single time
+   */
+  once?: boolean;
+  /**
    * URL condition
    */
   urlCondition?: UrlCondition;
@@ -46,12 +50,14 @@ export type Triggers = Record<StepId, Trigger>;
 
 interface LoadStep {
   stepId: StepId;
+  once?: boolean;
   urlCondition?: UrlCondition;
 }
 
 interface ClickStep {
   stepId: StepId;
   query: Query;
+  once?: boolean;
   urlCondition?: UrlCondition;
 }
 
@@ -78,6 +84,29 @@ const matchesUrlCondition = (urlCondition: UrlCondition): boolean => {
   return false;
 };
 
+const localStorageKey = (conversationId: string): string =>
+  `jb-triggered-steps-${conversationId}`;
+
+const saveTriggeredSteps = (conversationId: string, steps: string[]): void => {
+  localStorage.setItem(localStorageKey(conversationId), JSON.stringify(steps));
+};
+
+const getTriggeredSteps = (conversationId: string): string[] => {
+  try {
+    const jsonString = localStorage.getItem(localStorageKey(conversationId));
+    if (jsonString == null) {
+      return [];
+    }
+    const parsed = JSON.parse(jsonString);
+    if (!Array.isArray(parsed)) {
+      throw new Error("Triggered steps must be an array");
+    }
+    return parsed;
+  } catch (_err) {
+    return [];
+  }
+};
+
 /**
  * Run the multimodal journey
  * @param config - The voice compass configuration
@@ -86,6 +115,23 @@ const matchesUrlCondition = (urlCondition: UrlCondition): boolean => {
  */
 export const run = (config: Config, triggers: Triggers): (() => void) => {
   const client = create(config);
+
+  const triggeredSteps = getTriggeredSteps(config.conversationId);
+
+  const sendStep = (stepId: string, once: boolean): void => {
+    if (triggeredSteps.includes(stepId)) {
+      if (once) {
+        return;
+      }
+    } else {
+      triggeredSteps.push(stepId);
+      saveTriggeredSteps(config.conversationId, triggeredSteps);
+    }
+    client.sendStep(stepId).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.warn(err);
+    });
+  };
 
   const loadSteps: LoadStep[] = Object.entries(triggers).reduce(
     (prev: LoadStep[], [stepId, trigger]: [StepId, Trigger]) => {
@@ -97,12 +143,11 @@ export const run = (config: Config, triggers: Triggers): (() => void) => {
     [],
   );
 
-  loadSteps.forEach(({ stepId, urlCondition }) => {
+  loadSteps.forEach(({ stepId, urlCondition, once }) => {
     if (urlCondition != null && !matchesUrlCondition(urlCondition)) {
       return;
     }
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises --  initial eslint integration: disable all existing eslint errors
-    client.sendStep(stepId);
+    sendStep(stepId, once ?? false);
   });
 
   const clickSteps: ClickStep[] = Object.entries(triggers).reduce(
@@ -132,7 +177,7 @@ export const run = (config: Config, triggers: Triggers): (() => void) => {
             return {
               stepId,
               query,
-              element: await find(query),
+              elements: await find(query),
             };
           } catch (e) {
             return { stepId, query };
@@ -145,14 +190,14 @@ export const run = (config: Config, triggers: Triggers): (() => void) => {
           /**
            *
            */
-          element?: HTMLElement;
+          elements?: HTMLElement[];
         })
-      | undefined =
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument --  initial eslint integration: disable all existing eslint errors
-      targets.find(({ element }) => element?.contains(node));
+      | undefined = targets.find(({ elements }) =>
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      (elements ?? []).some((element: HTMLElement) => element.contains(node)),
+    );
     if (clickStep != null) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises --  initial eslint integration: disable all existing eslint errors
-      client.sendStep(clickStep.stepId);
+      sendStep(clickStep.stepId, clickStep.once ?? false);
     }
   };
 
