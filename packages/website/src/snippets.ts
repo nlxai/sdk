@@ -264,8 +264,8 @@ export const journeyManagerSnippet: string = `${umdScriptTags.journeyManager}
   const triggers = {};
 
   window.addEventListener("DOMContentLoaded", () => {
-    nlxai.journeyManager.run(
-      {
+    nlxai.journeyManager.run({
+      config: {
         // hard-coded params
         apiKey: "REPLACE_WITH_API_KEY",
         workspaceId: "REPLACE_WITH_WORKSPACE_ID",
@@ -275,7 +275,11 @@ export const journeyManagerSnippet: string = `${umdScriptTags.journeyManager}
         languageCode: "REPLACE_WITH_LANGUAGE_CODE",
       },
       // Triggers object obtained from the journey step configuration
-      {}
+      triggers: {},
+      // Send a custom step if a digression is detected
+      onDigression: (client) => {
+        client.sendStep("REPLACE_WITH_STEP_ID");
+      }
     );
   });
 </script>

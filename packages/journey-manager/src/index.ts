@@ -127,15 +127,50 @@ export interface RunOutput {
 }
 
 /**
+ * Configuration for the run method
+ */
+export interface RunProps {
+  /**
+   * The regular multimodal configuration
+   */
+  config: Config;
+  /**
+   * The triggers dictionary, downloaded from the Dialog Studio desktop app
+   */
+  triggers: Triggers;
+  /**
+   * Digression detection callback
+   */
+  onDigression?: (client: Client) => void;
+}
+
+/**
  * Run the multimodal journey
- * @param config - The voice compass configuration
- * @param triggers - The triggers dictionary, downloaded from the Dialog Studio desktop app
+ * @param props - The run configuration object
  * @returns an object containing a teardown function and the multimodal client.
  */
-export const run = (config: Config, triggers: Triggers): RunOutput => {
-  const client = create(config);
+export const run = (props: RunProps): RunOutput => {
+  const client = create(props.config);
 
-  const triggeredSteps = getTriggeredSteps(config.conversationId);
+  const triggeredSteps = getTriggeredSteps(props.config.conversationId);
+
+  // If all triggers have a URL constraint set and none match the current URL, fire a digression calback
+  if (
+    props?.onDigression != null &&
+    !Object.values(props.triggers).some(
+      (trigger) => trigger.urlCondition == null,
+    )
+  ) {
+    if (
+      Object.entries(props.triggers).find(
+        ([_step, trigger]) =>
+          trigger.urlCondition != null &&
+          matchesUrlCondition(trigger.urlCondition),
+      ) == null
+    ) {
+      props.onDigression(client);
+    }
+  }
 
   const sendStep = (stepId: string, once: boolean): void => {
     if (triggeredSteps.includes(stepId)) {
@@ -144,7 +179,7 @@ export const run = (config: Config, triggers: Triggers): RunOutput => {
       }
     } else {
       triggeredSteps.push(stepId);
-      saveTriggeredSteps(config.conversationId, triggeredSteps);
+      saveTriggeredSteps(props.config.conversationId, triggeredSteps);
     }
     client.sendStep(stepId).catch((err) => {
       // eslint-disable-next-line no-console
@@ -152,7 +187,7 @@ export const run = (config: Config, triggers: Triggers): RunOutput => {
     });
   };
 
-  const loadSteps: LoadStep[] = Object.entries(triggers).reduce(
+  const loadSteps: LoadStep[] = Object.entries(props.triggers).reduce(
     (prev: LoadStep[], [stepId, trigger]: [StepId, Trigger]) => {
       if (trigger.event === "pageLoad") {
         return [...prev, { stepId, urlCondition: trigger.urlCondition }];
@@ -169,7 +204,7 @@ export const run = (config: Config, triggers: Triggers): RunOutput => {
     sendStep(stepId, once ?? false);
   });
 
-  const clickSteps: ClickStep[] = Object.entries(triggers).reduce(
+  const clickSteps: ClickStep[] = Object.entries(props.triggers).reduce(
     (prev: ClickStep[], [stepId, trigger]: [StepId, Trigger]) => {
       if (trigger.event === "click" && trigger.query != null) {
         const newEntry: ClickStep = {
