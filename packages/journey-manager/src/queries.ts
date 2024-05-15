@@ -18,9 +18,23 @@ export interface Query {
    */
   queryArgs: [string | RegExp, Record<string, RegExp | boolean>?];
   /**
-   *
+   * Parent query
    */
   parent?: Query;
+}
+
+/**
+ * Serialized regex
+ */
+export interface SerializedRegex {
+  /**
+   * Regex body
+   */
+  regexp: string;
+  /**
+   * Regex flags
+   */
+  flags: string;
 }
 
 /**
@@ -34,20 +48,18 @@ export interface EncodedQuery {
   /**
    * Query target
    */
-  target: string | { regexp: string; flags: string };
+  target: string | SerializedRegex;
   /**
    * Query options
    */
-  options: Record<string, { regexp: string; flags: string } | boolean> | null;
+  options: Record<string, SerializedRegex | boolean> | null;
   /**
    * Query parent
    */
   parent: EncodedQuery | null;
 }
 
-function encodeTarget<T>(
-  val: T | RegExp,
-): T | { regexp: string; flags: string } {
+function encodeTarget<T>(val: T | RegExp): T | SerializedRegex {
   if (val instanceof RegExp) {
     return { regexp: val.source, flags: val.flags };
   }
@@ -96,9 +108,7 @@ export function decode(q: EncodedQuery): Query {
   };
 }
 
-function decodeTarget<T>(
-  val: { regexp: string; flags: string } | T,
-): RegExp | T {
+function decodeTarget<T>(val: SerializedRegex | T): RegExp | T {
   if (typeof val === "object") {
     const valAsRecord = val as Record<string, string>;
     if (valAsRecord.regexp != null && valAsRecord.flags != null) {
@@ -165,7 +175,7 @@ export async function find(q: Query): Promise<HTMLElement[]> {
 }
 
 /**
- *
+ * Matching method
  */
 export type Method =
   | "AltText"

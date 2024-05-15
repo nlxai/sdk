@@ -32,7 +32,7 @@ export const MultimodalTryLive = () => {
 
   return (
     <>
-      <PageTitle pretitle="Voice Compass" title="Try live" />
+      <PageTitle pretitle="Multimodal" title="Try live" />
       <PageContent md={content} />
       <Note
         title="Important"

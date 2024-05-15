@@ -24,7 +24,7 @@ ${voiceCompassSetupSnippet({ environment: Environment.Bundle })}
 export const MultimodalGettingStarted: FC<unknown> = () => {
   return (
     <>
-      <PageTitle pretitle="Voice Compass" title="Getting started" />
+      <PageTitle pretitle="Multimodal" title="Getting started" />
       <PageContent md={content} />
     </>
   );
