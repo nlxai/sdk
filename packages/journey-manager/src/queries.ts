@@ -157,7 +157,6 @@ export async function find(q: Query): Promise<HTMLElement[]> {
     results = await Promise.all(
       containers.map(
         async (container) =>
-          // TODO improve typing
           await queryFns[methodName](container, ...(q.queryArgs as QueryArgs)),
       ),
     );
