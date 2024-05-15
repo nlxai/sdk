@@ -150,7 +150,7 @@ export const MultimodalUsage = () => {
   const [usageFrom, setUsageFrom] = useState<Usage>(Usage.SimpleHTML);
   return (
     <>
-      <PageTitle pretitle="Voice Compass" title="Usage" />
+      <PageTitle pretitle="Multimodal" title="Usage" />
       <PageContent md={header} />
       <RadioList
         selected={usageFrom}

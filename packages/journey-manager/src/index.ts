@@ -1,5 +1,10 @@
-import { type Config, create } from "@nlxai/voice-compass";
+import { type Config, type Client, create } from "@nlxai/voice-compass";
 import { find, decode, type Query, type EncodedQuery } from "./queries";
+export {
+  type EncodedQuery,
+  type Method,
+  type SerializedRegex,
+} from "./queries";
 
 /**
  * Step ID
@@ -108,12 +113,26 @@ const getTriggeredSteps = (conversationId: string): string[] => {
 };
 
 /**
+ * Created by {@link run}.
+ */
+export interface RunOutput {
+  /**
+   * Stop running the journey, removing all event listeners
+   */
+  teardown: () => void;
+  /**
+   * The regular multimodal SDK client
+   */
+  client: Client;
+}
+
+/**
  * Run the multimodal journey
  * @param config - The voice compass configuration
  * @param triggers - The triggers dictionary, downloaded from the Dialog Studio desktop app
- * @returns teardown function
+ * @returns an object containing a teardown function and the multimodal client.
  */
-export const run = (config: Config, triggers: Triggers): (() => void) => {
+export const run = (config: Config, triggers: Triggers): RunOutput => {
   const client = create(config);
 
   const triggeredSteps = getTriggeredSteps(config.conversationId);
@@ -204,8 +223,11 @@ export const run = (config: Config, triggers: Triggers): (() => void) => {
   // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
   document.addEventListener("click", handleGlobalClickForAnnotations);
 
-  return () => {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
-    document.removeEventListener("click", handleGlobalClickForAnnotations);
+  return {
+    client,
+    teardown: () => {
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
+      document.removeEventListener("click", handleGlobalClickForAnnotations);
+    },
   };
 };

@@ -34,6 +34,9 @@ import { MultimodalGettingStarted } from "./content/06-01-multimodal-getting-sta
 import { MultimodalUsage } from "./content/06-02-multimodal-usage";
 import { MultimodalApiReference } from "./content/06-03-multimodal-api-reference";
 import { MultimodalTryLive } from "./content/06-04-multimodal-try-live";
+// 7
+import { JourneyManagerGettingStarted } from "./content/07-01-journey-manager-getting-started";
+import { JourneyManagerApiReference } from "./content/07-02-journey-manager-api-reference";
 
 interface Item {
   label: string;
@@ -210,6 +213,21 @@ export const routes: Array<{
         label: "Try live",
         url: "/multimodal-try-live",
         element: <MultimodalTryLive />,
+      },
+    ],
+  },
+  {
+    heading: "Journey manager",
+    items: [
+      {
+        label: "Getting started",
+        url: "/journey-manager-getting-started",
+        element: <JourneyManagerGettingStarted />,
+      },
+      {
+        label: "API reference",
+        url: "/journey-manager-api-reference",
+        element: <JourneyManagerApiReference />,
       },
     ],
   },

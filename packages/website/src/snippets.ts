@@ -253,6 +253,34 @@ export const umdScriptTags: ScriptTagsType = (
   {} as ScriptTagsType,
 );
 
+export const journeyManagerSnippet: string = `${umdScriptTags.journeyManager}
+<script>
+  // Get conversation ID from the URL, assuming it is included as a 'cid' search param
+  const getCid = () => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("cid");
+  };
+
+  const triggers = {};
+
+  window.addEventListener("DOMContentLoaded", () => {
+    nlxai.journeyManager.run(
+      {
+        // hard-coded params
+        apiKey: "REPLACE_WITH_API_KEY",
+        workspaceId: "REPLACE_WITH_WORKSPACE_ID",
+        journeyId: "REPLACE_WITH_JOURNEY_ID",
+        // dynamic params
+        conversationId: getCid(),
+        languageCode: "REPLACE_WITH_LANGUAGE_CODE",
+      },
+      // Triggers object obtained from the journey step configuration
+      {}
+    );
+  });
+</script>
+`;
+
 export const voiceCompassSetupSnippet = (cfg: {
   config?: Partial<MMConfig>;
   environment?: Environment;
