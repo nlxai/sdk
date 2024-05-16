@@ -11,12 +11,15 @@ import { StrictMode } from "react";
  * and used to pre-render the website.
  */
 
-export function render(url: string): string {
-  return ReactDOMServer.renderToString(
-    <StrictMode>
-      <StaticRouter location={url}>
-        <App />
-      </StaticRouter>
-    </StrictMode>,
-  );
+export function render(url: string): { head: string; body: string } {
+  return {
+    body: ReactDOMServer.renderToString(
+      <StrictMode>
+        <StaticRouter location={url}>
+          <App />
+        </StaticRouter>
+      </StrictMode>,
+    ),
+    head: "", // TODO RENDER DYNAMICALLY GENERATED HEAD HERE
+  };
 }
