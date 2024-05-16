@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/journey-manager",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "description": "Journey Manager",
   "main": "lib/index.esm.js",
   "module": "lib/index.esm.js",
@@ -41,7 +41,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@nlxai/voice-compass": "^0.1.19",
+    "@nlxai/voice-compass": "^0.1.20",
     "@testing-library/dom": "^10.1.0",
     "ramda": "^0.29.1",
     "uuid": "^9.0.1"
