@@ -1,9 +1,22 @@
 import {
   type QueryArgs,
-  getSuggestedQuery,
   queries as queryFns,
   waitFor,
 } from "@testing-library/dom";
+
+/**
+ * Matching method
+ */
+export type Method =
+  | "AltText"
+  | "DisplayValue"
+  | "LabelText"
+  | "PlaceholderText"
+  | "Role"
+  | "TestId"
+  | "Text"
+  | "Title"
+  | "QuerySelector";
 
 /**
  * Query
@@ -12,7 +25,7 @@ export interface Query {
   /**
    * Query name
    */
-  queryName: Method | "QuerySelector";
+  queryName: Method;
   /**
    * Query arguments
    */
@@ -44,7 +57,7 @@ export interface EncodedQuery {
   /**
    * Query name
    */
-  name: Method | "QuerySelector";
+  name: Method;
   /**
    * Query target
    */
@@ -78,10 +91,7 @@ export function encode(q: Query): EncodedQuery {
     options:
       q.queryArgs[1] != null
         ? Object.fromEntries(
-            Object.entries(q.queryArgs[1]).map(([k, v]) => [
-              k,
-              encodeTarget(v),
-            ]),
+            Object.entries(q.queryArgs[1]).map(([k, v]) => [k, encodeTarget(v)])
           )
         : null,
     parent: q.parent != null ? encode(q.parent) : null,
@@ -100,7 +110,7 @@ export function decode(q: EncodedQuery): Query {
       decodeTarget(q.target),
       q.options != null
         ? Object.fromEntries(
-            Object.entries(q.options).map(([k, v]) => [k, decodeTarget(v)]),
+            Object.entries(q.options).map(([k, v]) => [k, decodeTarget(v)])
           )
         : undefined,
     ],
@@ -133,7 +143,8 @@ export async function evaluate(q: Query): Promise<boolean> {
 }
 
 /**
- *
+ * Finds elements on the page. Waits and retries for up to 1s if no elements are found.
+ * @throws if no elements are found
  * @param q - Query
  * @returns promise of a HTML element
  */
@@ -150,7 +161,7 @@ export async function find(q: Query): Promise<HTMLElement[]> {
             () => {
               const els = [
                 ...container.querySelectorAll<HTMLElement>(
-                  q.queryArgs[0] as string,
+                  q.queryArgs[0] as string
                 ),
               ];
               if (els.length === 0) {
@@ -158,78 +169,31 @@ export async function find(q: Query): Promise<HTMLElement[]> {
               }
               return els;
             },
-            { container },
-          ),
-      ),
+            { container }
+          )
+      )
     );
   } else {
     const methodName: keyof typeof queryFns = `findAllBy${q.queryName}`;
     results = await Promise.all(
       containers.map(
         async (container) =>
-          await queryFns[methodName](container, ...(q.queryArgs as QueryArgs)),
-      ),
+          await queryFns[methodName](container, ...(q.queryArgs as QueryArgs))
+      )
     );
   }
   return results.flat();
 }
 
 /**
- * Matching method
- */
-export type Method =
-  | "AltText"
-  | "DisplayValue"
-  | "LabelText"
-  | "PlaceholderText"
-  | "Role"
-  | "TestId"
-  | "Text"
-  | "Title";
-
-// Code based on @testing-library/testing-plaground/src/lib/queryAdvise.js
-// MIT license - Copyright (c) 2020 Stephan Meijer
-
-const queryMethods: Method[] = [
-  "Role",
-  "LabelText",
-  "PlaceholderText",
-  "Text",
-  "DisplayValue",
-  "AltText",
-  "Title",
-  "TestId",
-];
-
-/**
- * Get query
+ * Get all elements inside rootNode that match the query. Returns immediately and does not throw if no elements are found.
  * @param rootNode - Root node
- * @param element - Element
- * @returns query
+ * @param q - Query
+ * @returns promise of a HTML element
  */
-export function getQuery(
+export function getAll(
   rootNode: HTMLElement,
-  element: HTMLElement,
-): Query | undefined {
-  for (const method of queryMethods) {
-    const suggestion = getSuggestedQuery(element, "get", method);
-
-    if (suggestion != null) {
-      const uniqueSuggestion = makeUnique(
-        rootNode,
-        element,
-        suggestion as Query,
-      );
-      if (uniqueSuggestion != null) {
-        return uniqueSuggestion;
-      }
-    }
-  }
-}
-
-function getAll(
-  rootNode: HTMLElement,
-  { queryName, queryArgs }: Query,
+  { queryName, queryArgs }: Query
 ): HTMLElement[] {
   if (queryName === "QuerySelector") {
     return [
@@ -239,61 +203,7 @@ function getAll(
     // use queryBy here, we don't want to throw on no-results-found
     return queryFns[`queryAllBy${queryName}`](
       rootNode,
-      ...(queryArgs as QueryArgs),
+      ...(queryArgs as QueryArgs)
     );
-  }
-}
-
-function matchesSingleElement(rootNode: HTMLElement, query: Query): boolean {
-  return getAll(rootNode, query)?.length === 1;
-}
-
-/**
- * Check if the viewQuery only matches a single element within the rootNode
- * and if the elementQuery only matches a single element within the view
- * @param rootNode - Root node
- * @param viewQuery - View query
- * @param elementQuery - Element query
- * @returns whether it matches a single element in view
- */
-function matchesSingleElementInView(
-  rootNode: HTMLElement,
-  viewQuery: Query,
-  elementQuery: Query,
-): boolean {
-  const elements = getAll(rootNode, viewQuery);
-
-  if (elements.length !== 1) {
-    return false;
-  }
-
-  return getAll(elements[0], elementQuery).length === 1;
-}
-
-function makeUnique(
-  rootNode: HTMLElement,
-  element: HTMLElement,
-  elementQuery: Query,
-): Query | undefined {
-  // query the element on `screen`, if it results in a single element
-  if (matchesSingleElement(rootNode, elementQuery)) {
-    return elementQuery;
-  }
-
-  // turns out, there are multiple matches. We're going to try to scope
-  // the query by using the `within` helper method.
-  let node: ParentNode | null = element;
-  while (node != null && node !== rootNode) {
-    if (node instanceof HTMLElement) {
-      const view = getSuggestedQuery(node, "get") as Query | undefined;
-
-      if (
-        view != null &&
-        matchesSingleElementInView(rootNode, view, elementQuery)
-      ) {
-        return { ...elementQuery, parent: view };
-      }
-    }
-    node = node.parentNode;
   }
 }
