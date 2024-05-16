@@ -88,7 +88,10 @@ export const setupSnippet = ({
           config: {
             botUrl: "${defaultTo(config.botUrl, "REPLACE_WITH_BOT_URL")}",
             headers: {
-              "nlx-api-key": "${defaultTo(config.headers?.["nlx-api-key"], "REPLACE_WITH_API_KEY")}"
+              "nlx-api-key": "${defaultTo(
+                config.headers?.["nlx-api-key"],
+                "REPLACE_WITH_API_KEY",
+              )}"
             },
             languageCode: "${config.languageCode}"
           },${
@@ -253,36 +256,127 @@ export const umdScriptTags: ScriptTagsType = (
   {} as ScriptTagsType,
 );
 
-export const journeyManagerSnippet: string = `${umdScriptTags.journeyManager}
-<script>
-  // Get conversation ID from the URL, assuming it is included as a 'cid' search param
-  const getCid = () => {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("cid");
-  };
-
-  const triggers = {};
-
-  window.addEventListener("DOMContentLoaded", () => {
-    nlxai.journeyManager.run({
-      config: {
-        // hard-coded params
-        apiKey: "REPLACE_WITH_API_KEY",
-        workspaceId: "REPLACE_WITH_WORKSPACE_ID",
-        journeyId: "REPLACE_WITH_JOURNEY_ID",
-        // dynamic params
-        conversationId: getCid(),
-        languageCode: "REPLACE_WITH_LANGUAGE_CODE",
-      },
-      // Triggers object obtained from the journey step configuration
-      triggers: {},
-      // Send a custom step if a digression is detected
-      onDigression: (client) => {
-        client.sendStep("REPLACE_WITH_STEP_ID");
+export const journeyManagerSnippet = ({
+  digressionButton,
+}: {
+  digressionButton: boolean;
+}): string => `<html>
+  <head>${
+    digressionButton
+      ? `
+    <style>
+      @keyframes fadeInKeyframes {
+        0% {
+          transform: translate3d(0, 8px, 0);
+          opacity: 0;
+        }
+        100% {
+          transform: translate3d(0, 0, 0);
+          opacity: 1;
+        }
       }
-    );
-  });
-</script>
+
+      #nlx-multimodal-resume { 
+        animation: fadeInKeyframes 0.6s normal forwards ease-in-out;
+        position: fixed;
+        bottom: 0; 
+        left: 0;
+        right: 0;
+        z-index: 10000;
+      }
+
+      #nlx-multimodal-resume button {
+        display: block;
+        width: 100%;
+        padding: 15px 10px;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+        text-transform: uppercase;
+        text-align: center;
+        border: 0;
+        background-color: rgba(38, 99, 218, 1);
+        color: white;
+        cursor: pointer;
+      }
+        
+      #nlx-multimodal-resume button:hover {
+        background-color: rgba(30, 86, 196, 1); 
+      }
+    </style>`
+      : ""
+  }
+    ${umdScriptTags.journeyManager}
+    <script>
+      // Get conversation ID from the URL, assuming it is included as a 'cid' search param (and save in session storage)
+      // On subsequent page loads, retrieve from session storage assuming it was saved in the past half an hour
+      const getCid = () => {
+        const localStorageKey = "nlx-multimodal-session";
+        const saveToSessionStorage = (conversationId) => {
+          sessionStorage.setItem(localStorageKey, JSON.stringify({
+            conversationId,
+            timestamp: new Date().getTime()
+          }));
+        };
+        const retrieveFromSessionStorage = () => {
+          try {
+            const val = sessionStorage.getItem(localStorageKey);
+            if (!val) {
+              return null;
+            }
+            const parsed = JSON.parse(val);
+            if (parsed != null && typeof parsed == "object" && new Date().getTime() - parsed.timestamp < 30 * 60 * 1000) {
+              return parsed.conversationId;
+            }
+          } catch(_err) {
+            return null;
+          }
+        }
+        const params = new URLSearchParams(window.location.search);
+        const cidFromParams = params.get("cid");
+        if (cidFromParams) {
+          saveToSessionStorage(cidFromParams);
+          return cidFromParams;
+        }
+        return retrieveFromSessionStorage();
+      };
+
+      const triggers = {};
+
+      window.addEventListener("DOMContentLoaded", () => {
+        nlxai.journeyManager.run({
+          config: {
+            // hard-coded params
+            apiKey: "REPLACE_WITH_API_KEY",
+            workspaceId: "REPLACE_WITH_WORKSPACE_ID",
+            journeyId: "REPLACE_WITH_JOURNEY_ID",
+            // dynamic params
+            conversationId: getCid(),
+            languageCode: "REPLACE_WITH_LANGUAGE_CODE",
+          },
+          // Triggers object obtained from the journey step configuration
+          triggers: {},
+          // Send a custom step if a digression is detected
+          onDigression: (client) => {
+${
+  digressionButton
+    ? `            const container = document.createElement("div");
+            container.id = "nlx-multimodal-resume";
+            container.innerHTML = \`<button>Resume journey</button>\`;
+            document.body.appendChild(container);
+            container.querySelector("button").addEventListener("click", () => {
+              window.history.back();
+            });`
+    : `            client.sendStep("REPLACE_WITH_STEP_ID");`
+}
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
 `;
 
 export const voiceCompassSetupSnippet = (cfg: {
