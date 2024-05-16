@@ -10,6 +10,18 @@ export default {
       serif: ["Times", "serif"],
     },
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            "code::before": {
+              content: "normal",
+            },
+            "code::after": {
+              content: "normal",
+            },
+          },
+        },
+      },
       animation: {
         slideInFromLeft: "slideInFromLeftKeyframes 0.3s ease-in-out",
         slideInFromRight: "slideInFromRightKeyframes 0.3s ease-in-out",
