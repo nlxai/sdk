@@ -144,6 +144,19 @@ export interface RunProps {
   onDigression?: (client: Client) => void;
 }
 
+function filterMap<X, Y>(
+  arr: X[],
+  fn: (value: X) => Y | null | undefined
+): Y[] {
+  return arr.reduce<Y[]>((prev, curr) => {
+    const val = fn(curr);
+    if (val != null) {
+      prev.push(val);
+    }
+    return prev;
+  }, []);
+}
+
 /**
  * Run the multimodal journey
  * @param props - The run configuration object
@@ -155,21 +168,17 @@ export const run = (props: RunProps): RunOutput => {
   const triggeredSteps = getTriggeredSteps(props.config.conversationId);
 
   // If all triggers have a URL constraint set and none match the current URL, fire a digression calback
+
+  const urlConditions: UrlCondition[] = filterMap(
+    Object.values(props.triggers),
+    (trigger) => trigger.urlCondition
+  );
+
   if (
-    props?.onDigression != null &&
-    !Object.values(props.triggers).some(
-      (trigger) => trigger.urlCondition == null,
-    )
+    Object.keys(props.triggers).length === urlConditions.length &&
+    !urlConditions.some(matchesUrlCondition)
   ) {
-    if (
-      Object.entries(props.triggers).find(
-        ([_step, trigger]) =>
-          trigger.urlCondition != null &&
-          matchesUrlCondition(trigger.urlCondition),
-      ) == null
-    ) {
-      props.onDigression(client);
-    }
+    props.onDigression?.(client);
   }
 
   const sendStep = (stepId: string, once: boolean): void => {
@@ -194,7 +203,7 @@ export const run = (props: RunProps): RunOutput => {
       }
       return prev;
     },
-    [],
+    []
   );
 
   loadSteps.forEach(({ stepId, urlCondition, once }) => {
@@ -216,7 +225,7 @@ export const run = (props: RunProps): RunOutput => {
       }
       return prev;
     },
-    [],
+    []
   );
 
   const handleGlobalClickForAnnotations = async (ev: any): Promise<void> => {
@@ -224,7 +233,7 @@ export const run = (props: RunProps): RunOutput => {
       clickSteps
         .filter(
           ({ urlCondition }) =>
-            urlCondition == null || matchesUrlCondition(urlCondition),
+            urlCondition == null || matchesUrlCondition(urlCondition)
         )
         .map(async ({ stepId, query }) => {
           try {
@@ -236,7 +245,7 @@ export const run = (props: RunProps): RunOutput => {
           } catch (e) {
             return { stepId, query };
           }
-        }),
+        })
     );
     const node = ev.target;
     const clickStep:
@@ -248,7 +257,7 @@ export const run = (props: RunProps): RunOutput => {
         })
       | undefined = targets.find(({ elements }) =>
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      (elements ?? []).some((element: HTMLElement) => element.contains(node)),
+      (elements ?? []).some((element: HTMLElement) => element.contains(node))
     );
     if (clickStep != null) {
       sendStep(clickStep.stepId, clickStep.once ?? false);
