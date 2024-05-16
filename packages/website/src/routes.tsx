@@ -37,6 +37,7 @@ import { MultimodalTryLive } from "./content/06-04-multimodal-try-live";
 // 7
 import { JourneyManagerGettingStarted } from "./content/07-01-journey-manager-getting-started";
 import { JourneyManagerApiReference } from "./content/07-02-journey-manager-api-reference";
+import { JourneyManagerQueryEngine } from "./content/07-03-journey-manager-query-engine";
 
 interface Item {
   label: string;
@@ -223,6 +224,11 @@ export const routes: Array<{
         label: "Getting started",
         url: "/journey-manager-getting-started",
         element: <JourneyManagerGettingStarted />,
+      },
+      {
+        label: "Query engine",
+        url: "/journey-manager-query-engine",
+        element: <JourneyManagerQueryEngine />,
       },
       {
         label: "API reference",
