@@ -852,8 +852,8 @@ client.sendStep("${si(e==null?void 0:e.testStepId,"REPLACE_WITH_STEP_ID")}");`},
   const triggers = {};
 
   window.addEventListener("DOMContentLoaded", () => {
-    nlxai.journeyManager.run(
-      {
+    nlxai.journeyManager.run({
+      config: {
         // hard-coded params
         apiKey: "REPLACE_WITH_API_KEY",
         workspaceId: "REPLACE_WITH_WORKSPACE_ID",
@@ -863,7 +863,11 @@ client.sendStep("${si(e==null?void 0:e.testStepId,"REPLACE_WITH_STEP_ID")}");`},
         languageCode: "REPLACE_WITH_LANGUAGE_CODE",
       },
       // Triggers object obtained from the journey step configuration
-      {}
+      triggers: {},
+      // Send a custom step if a digression is detected
+      onDigression: (client) => {
+        client.sendStep("REPLACE_WITH_STEP_ID");
+      }
     );
   });
 <\/script>
