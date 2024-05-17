@@ -24,7 +24,7 @@ import {
   SendIcon,
   ErrorOutlineIcon,
 } from "./icons";
-import { last } from "ramda";
+import { last, equals } from "ramda";
 import * as constants from "./ui/constants";
 import {
   type Props,
@@ -272,13 +272,22 @@ interface SessionData {
   responses: Response[];
 }
 
-const saveSession = (chat: ChatHook, storeIn: StorageType): void => {
+interface SessionIdentifier {
+  botUrl: string;
+  languageCode: string;
+}
+
+const saveSession = (
+  sessionIdentifier: SessionIdentifier,
+  sessionData: SessionData,
+  storeIn: StorageType,
+): void => {
   const storage = storeIn === "sessionStorage" ? sessionStorage : localStorage;
   storage.setItem(
     storageKey,
     JSON.stringify({
-      responses: chat.responses,
-      conversationId: chat.conversationHandler.currentConversationId(),
+      sessionIdentifier,
+      data: sessionData,
     }),
   );
 };
@@ -293,13 +302,20 @@ export const clearSession = (storeIn: StorageType): void => {
 };
 
 // user shouldn't have to handle managing `storeIn` config after widget is started
-const retrieveSession = (storeIn: StorageType): SessionData | null => {
+const retrieveSession = (
+  sessionIdentifier: SessionIdentifier,
+  storeIn: StorageType,
+): SessionData | null => {
   try {
     const storage =
       storeIn === "sessionStorage" ? sessionStorage : localStorage;
     const data = JSON.parse(storage.getItem(storageKey) ?? "");
-    const responses: Response[] | undefined = data?.responses;
-    const conversationId: string | undefined = data?.conversationId;
+    const savedSessionIdentifier = data?.sessionIdentifier;
+    if (!equals(savedSessionIdentifier, sessionIdentifier)) {
+      return null;
+    }
+    const responses: Response[] | undefined = data?.data?.responses;
+    const conversationId: string | undefined = data?.data?.conversationId;
     if (responses != null) {
       let expirationTimestamp: number | undefined;
       responses.forEach((response) => {
@@ -369,8 +385,17 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
   }, []);
 
   const savedSessionData = useMemo(
-    () => (props.storeIn != null ? retrieveSession(props.storeIn) : null),
-    [props.storeIn],
+    () =>
+      props.storeIn != null
+        ? retrieveSession(
+            {
+              botUrl: props.config.botUrl,
+              languageCode: props.config.languageCode,
+            },
+            props.storeIn,
+          )
+        : null,
+    [props.storeIn, props.config],
   );
 
   const configWithSession = useMemo(() => {
@@ -391,9 +416,24 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
 
   useEffect(() => {
     if (props.storeIn != null) {
-      saveSession(chat, props.storeIn);
+      saveSession(
+        {
+          botUrl: props.config.botUrl,
+          languageCode: props.config.languageCode,
+        },
+        {
+          responses: chat.responses,
+          conversationId: chat.conversationHandler.currentConversationId(),
+        },
+        props.storeIn,
+      );
     }
-  }, [chat.responses, props.storeIn]);
+  }, [
+    chat.responses,
+    props.config.botUrl,
+    props.config.languageCode,
+    props.storeIn,
+  ]);
 
   // Expanded state
 
