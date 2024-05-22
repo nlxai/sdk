@@ -192,6 +192,31 @@ const context = {
 
 conversationHandler.sendWelcomeIntent(context);`;
 
+export const headlessSetupSnippet: string = `import createConversation from "@nlxai/chat-core";
+
+// Create some configuration
+const config = {
+  botUrl: "", // obtain from NLX deployments page
+  headers: {
+    "nlx-api-key": "", // obtain from NLX deployments page
+  },
+  userId: "abcd-1234", // optional property to identify the user
+  conversationId: "", // start with a specific conversation ID - useful if you want to resume a previous conversation
+  languageCode: "es-US", // optional language code for standard bots that do not run on US English
+  environment: "production", // optional environment name for multi-environment bots to control which data request environment should be used.  "production" or "development" are the only supported values.
+};
+
+// Start the conversation
+const convo = createConversation(config);
+
+// Subscribe to changes in the list of responses; the newest response is sent as a second argument
+convo.subscribe((responses, newResponse) => {
+  console.log(responses);
+});
+
+// Send a message from the user's end
+convo.sendText("hello");`;
+
 export const voiceCompassSnippet = ({
   config,
   environment,
