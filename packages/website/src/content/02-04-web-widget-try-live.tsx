@@ -1,4 +1,4 @@
-import { type FC, useState, useEffect } from "react";
+import { type FC, useState, useEffect, useRef } from "react";
 import { PageTitle } from "../components/PageTitle";
 import { type Config } from "@nlxai/chat-core";
 import {
@@ -68,6 +68,8 @@ export const WebWidgetTryLive: FC<unknown> = () => {
     saveTitleBar(titleBar);
   }, [titleBar]);
 
+  const welcomeIntentSent = useRef<boolean>(false);
+
   return (
     <>
       <PageTitle pretitle="Web widget" title="Try live" />
@@ -104,11 +106,21 @@ export const WebWidgetTryLive: FC<unknown> = () => {
             config,
             theme,
             titleBar,
-            behavior: Behavior.Simple,
+            behavior: Behavior.WelcomeIntentOnOpen,
           })}
         />
       </div>
-      <Widget config={config} theme={theme} titleBar={titleBar} />
+      <Widget
+        config={config}
+        theme={theme}
+        titleBar={titleBar}
+        onExpand={(handler) => {
+          if (config.botUrl !== "" && !welcomeIntentSent.current) {
+            handler.sendWelcomeIntent();
+            welcomeIntentSent.current = true;
+          }
+        }}
+      />
     </>
   );
 };
