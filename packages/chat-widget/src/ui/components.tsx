@@ -468,12 +468,12 @@ export const PinBubble: React.FunctionComponent<PinBubbleProps> = (
   props: PinBubbleProps,
 ) => (
   <PinBubbleContainer isActive={props.isActive}>
+    <PinBubbleContent>{props.content}</PinBubbleContent>
     <PinBubbleButton onClick={props.onClick}>
       <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
         <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
       </svg>
     </PinBubbleButton>
-    {props.content}
   </PinBubbleContainer>
 );
 
@@ -489,16 +489,14 @@ export const PinBubbleContainer = styled.div<{
   border-radius: 6px;
   box-sizing: border-box;
   width: fit-content;
-  white-space: pre;
+  max-width: calc(100% - 38px);
   box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.3);
-  height: 32px;
-  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
   z-index: ${constants.largeZIndex};
-  padding: 0px 16px 0px 0px;
+  padding: 4px;
   background-color: ${(props) =>
     tinycolor(props.theme.primaryColor).darken(10).toRgbString()};
   color: #fff;
@@ -519,7 +517,7 @@ export const PinBubbleContainer = styled.div<{
   `}
   ::after {
     position: absolute;
-    top: 32px;
+    top: 100%;
     right: 22px;
     content: " ";
     width: 0;
@@ -537,8 +535,8 @@ export const PinBubbleButton = styled.button<{
   /** @hidden @internal */
   children: React.ReactNode;
 }>`
-  width: 32px;
   height: 32px;
+  flex: 0 0 32px;
   border: 0;
   color: ${(props) => props.theme.white};
   cursor: pointer;
@@ -546,11 +544,8 @@ export const PinBubbleButton = styled.button<{
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 8px;
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
+  border-radius: 6px;
   background: none;
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
   svg {
     width: 100%;
     height: 100%;
@@ -563,6 +558,15 @@ export const PinBubbleButton = styled.button<{
     outline: none;
     box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.2);
   }
+`;
+
+export const PinBubbleContent = styled.p<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
+  font-size: ${constants.fontSize}px;
+  line-height: 1.25;
+  padding: 4px 6px;
 `;
 
 // ChoicesContainer
@@ -685,7 +689,7 @@ export const Title = styled.p<{
   children: React.ReactNode;
 }>`
   flex-grow: 1;
-  font-size: 16px;
+  font-size: ${constants.largeFontSize}px;
   font-weight: bold;
   margin: 0;
   color: ${(props) => props.theme.white};
@@ -729,7 +733,7 @@ export const DiscreteLink = styled.a<Record<string, never>>`
   width: 12px;
   height: 12px;
   align-items: center;
-  font-size: 11px;
+  font-size: ${constants.extraSmallFontSize}px;
   border-radius: 4px;
   padding: 4px 8px;
   background: none;
