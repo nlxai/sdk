@@ -77,7 +77,7 @@ export interface Nudge {
    */
   showAfter?: number;
   /**
-   * Hide the nudge after a specific time, measured in milliseconds.
+   * Hide the nudge after a specific time after it appears, measured in milliseconds.
    * Defaults to 20000 (20s) if not set.
    */
   hideAfter?: number;

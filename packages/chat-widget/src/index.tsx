@@ -501,17 +501,15 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
   const hideNudgeAfter = props.nudge?.hideAfter ?? 20_000;
 
   useEffect(() => {
-    const timeout1 = setTimeout(() => {
+    let timeout = setTimeout(() => {
       setIsNudgeVisible(true);
+      timeout = setTimeout(() => {
+        setIsNudgeVisible(false);
+      }, hideNudgeAfter);
     }, showNudgeAfter);
 
-    const timeout2 = setTimeout(() => {
-      setIsNudgeVisible(false);
-    }, hideNudgeAfter);
-
     return () => {
-      clearTimeout(timeout1);
-      clearTimeout(timeout2);
+      clearTimeout(timeout);
     };
   }, [showNudgeAfter, hideNudgeAfter]);
 
