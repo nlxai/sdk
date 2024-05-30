@@ -43,6 +43,7 @@ export {
   type TitleBar,
   type CustomModalityComponent,
   type StorageType,
+  type Nudge,
 } from "./props";
 export { type Theme } from "./theme";
 export { defaultTheme } from "./ui/constants";
