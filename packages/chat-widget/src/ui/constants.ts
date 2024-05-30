@@ -2,9 +2,13 @@ import { type Theme } from "../theme";
 
 export const bottomHeight = 60;
 
+export const largeFontSize = 16;
+
 export const fontSize = 15;
 
 export const smallFontSize = 12;
+
+export const extraSmallFontSize = 11;
 
 export const largeZIndex = 2147483000;
 
