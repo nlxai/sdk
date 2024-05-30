@@ -43,6 +43,7 @@ export {
   type TitleBar,
   type CustomModalityComponent,
   type StorageType,
+  type Nudge,
 } from "./props";
 export { type Theme } from "./theme";
 export { defaultTheme } from "./ui/constants";
@@ -495,22 +496,23 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
 
   // Bubble
 
-  const [bubble, setBubble] = useState(false);
+  const [isNudgeVisible, setIsNudgeVisible] = useState(false);
+
+  const showNudgeAfter = props.nudge?.showAfter ?? 3_000;
+  const hideNudgeAfter = props.nudge?.hideAfter ?? 20_000;
 
   useEffect(() => {
-    const timeout1 = setTimeout(() => {
-      setBubble(true);
-    }, 3_000);
-
-    const timeout2 = setTimeout(() => {
-      setBubble(false);
-    }, 20_000);
+    let timeout = setTimeout(() => {
+      setIsNudgeVisible(true);
+      timeout = setTimeout(() => {
+        setIsNudgeVisible(false);
+      }, hideNudgeAfter);
+    }, showNudgeAfter);
 
     return () => {
-      clearTimeout(timeout1);
-      clearTimeout(timeout2);
+      clearTimeout(timeout);
     };
-  }, []);
+  }, [showNudgeAfter, hideNudgeAfter]);
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -548,13 +550,13 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
     <ConversationHandlerContext.Provider value={chat.conversationHandler}>
       <ThemeProvider theme={mergedTheme}>
         <>
-          {props.bubble != null ? (
+          {props.nudge != null ? (
             <C.PinBubble
-              isActive={!expanded && bubble}
+              isActive={!expanded && isNudgeVisible}
               onClick={() => {
-                setBubble(false);
+                setIsNudgeVisible(false);
               }}
-              content={props.bubble}
+              content={props.nudge.content}
             />
           ) : null}
           {expanded && (

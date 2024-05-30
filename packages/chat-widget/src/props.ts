@@ -60,6 +60,30 @@ export type CustomModalityComponent = FC<{
 }>;
 
 /**
+ * When set, a dismissable call-to-action will appear above the chat icon with the given text.
+ *
+ * By default, the call-to-action will be displayed after 3 seconds, and will automatically dismiss after 20 seconds.
+ *
+ * It will be dissapear when the chat is opened, but until dismissed, will reappear whenever the chat is minimized or closed.
+ */
+export interface Nudge {
+  /**
+   * The text content of the nudge
+   */
+  content: string;
+  /**
+   * Show the nudge after a specific time, measured in milliseconds.
+   * Defaults to 3000 (3s) if not set.
+   */
+  showAfter?: number;
+  /**
+   * Hide the nudge after a specific time after it appears, measured in milliseconds.
+   * Defaults to 20000 (20s) if not set.
+   */
+  hideAfter?: number;
+}
+
+/**
  * The properties for creating the Chat Widget.
  */
 export interface Props {
@@ -80,13 +104,9 @@ export interface Props {
    */
   chatIcon?: string;
   /**
-   * When set to a string, a dismissable call-to-action will appear above the chat icon with the given text.
-   *
-   * The call-to-action will be displayed after 3 seconds, and will automatically dismiss after 20 seconds.
-   *
-   * It will be dissapear when the chat is opened, but until dismissed, will reappear whenever the chat is minimized or closed.
+   * An optional {@link Nudge} configuration object.
    */
-  bubble?: string;
+  nudge?: Nudge;
   /**
    * The placeholder in the input field. When not set, the default placeholder is "Type something..."
    */
