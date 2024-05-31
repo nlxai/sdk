@@ -68,7 +68,7 @@ export type CustomModalityComponent = FC<{
  */
 export interface Nudge {
   /**
-   * The text content of the nudge
+   * The text content of the nudge. Markdown is supported.
    */
   content: string;
   /**
