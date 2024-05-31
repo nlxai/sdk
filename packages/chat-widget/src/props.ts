@@ -140,7 +140,7 @@ export interface Props {
    */
   onClose?: () => void;
   /**
-   * Optional callback to be called when the nudge element is closed.
+   * Optional callback to be called when the nudge element is closed explicitly by the user. It is not called when the nudge is hidden automatically after the `hideAfter` interval passes.
    */
   onNudgeClose?: (conversationHandler: ConversationHandler) => void;
   /**
