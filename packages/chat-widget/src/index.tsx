@@ -554,6 +554,7 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
             <C.PinBubble
               isActive={!expanded && isNudgeVisible}
               onClick={() => {
+                props.onNudgeClose?.(chat.conversationHandler);
                 setIsNudgeVisible(false);
               }}
               content={props.nudge.content}

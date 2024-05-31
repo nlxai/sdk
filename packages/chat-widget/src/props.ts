@@ -140,6 +140,10 @@ export interface Props {
    */
   onClose?: () => void;
   /**
+   * Optional callback to be called when the nudge element is closed.
+   */
+  onNudgeClose?: (conversationHandler: ConversationHandler) => void;
+  /**
    * Set this to render a {@link CustomModalityComponent} for a given modality name
    * See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/advanced-messaging-+-functionality#modalities
    *
