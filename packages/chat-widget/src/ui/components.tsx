@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
+import { marked } from "marked";
 import { type Theme } from "../theme";
 import * as constants from "./constants";
 import tinycolor from "tinycolor2";
@@ -468,7 +469,9 @@ export const PinBubble: React.FunctionComponent<PinBubbleProps> = (
   props: PinBubbleProps,
 ) => (
   <PinBubbleContainer isActive={props.isActive}>
-    <PinBubbleContent>{props.content}</PinBubbleContent>
+    <PinBubbleContent
+      dangerouslySetInnerHTML={{ __html: marked(props.content) }}
+    />
     <PinBubbleButton onClick={props.onClick}>
       <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
         <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
@@ -560,12 +563,17 @@ export const PinBubbleButton = styled.button<{
   }
 `;
 
-export const PinBubbleContent = styled.p<{
+export const PinBubbleContent = styled.div<{
   /** @hidden @internal */
-  children: React.ReactNode;
+  dangerouslySetInnerHTML: {
+    /**
+     *
+     */
+    __html: string;
+  };
 }>`
   font-size: ${constants.fontSize}px;
-  line-height: 1.25;
+  line-height: 1.4;
   padding: 4px 6px;
 `;
 

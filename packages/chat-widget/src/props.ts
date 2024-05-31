@@ -68,7 +68,7 @@ export type CustomModalityComponent = FC<{
  */
 export interface Nudge {
   /**
-   * The text content of the nudge
+   * The text content of the nudge. Markdown is supported.
    */
   content: string;
   /**
@@ -139,6 +139,10 @@ export interface Props {
    * Optional callback to be called when the chat is closed via the close button.
    */
   onClose?: () => void;
+  /**
+   * Optional callback to be called when the nudge element is closed explicitly by the user. It is not called when the nudge is hidden automatically after the `hideAfter` interval passes.
+   */
+  onNudgeClose?: (conversationHandler: ConversationHandler) => void;
   /**
    * Set this to render a {@link CustomModalityComponent} for a given modality name
    * See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/advanced-messaging-+-functionality#modalities
