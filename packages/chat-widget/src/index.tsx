@@ -519,7 +519,7 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
   const scrollToBottom = useCallback(() => {
     const node = messagesContainerRef.current;
     if (node != null) {
-      node.scrollTop = node.scrollHeight;
+      node.scroll({top: node.scrollHeight, behavior: 'smooth'});
     }
   }, [messagesContainerRef]);
 
