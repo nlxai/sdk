@@ -142,6 +142,7 @@ export const Container = styled.div<{
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3);
   background-color: ${(props) => props.theme.white};
   z-index: ${constants.largeZIndex};
+  color-scheme: only light;
 
   @media screen and (min-width: 360px) {
     & {
