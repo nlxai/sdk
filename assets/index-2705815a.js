@@ -253,7 +253,6 @@ and limitations under the License.
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3);
   background-color: ${e=>e.theme.white};
   z-index: ${YE};
-  color-scheme: only light;
 
   @media screen and (min-width: 360px) {
     & {
@@ -413,7 +412,7 @@ and limitations under the License.
   padding: ${e=>`0 ${2*e.theme.spacing}px 0 ${2*e.theme.spacing}px`};
   font-size: ${Sn}px;
   border: none;
-
+  color: #333;
   :focus {
     outline: none;
   }
