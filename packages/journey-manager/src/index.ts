@@ -1,5 +1,5 @@
 import { type Config, type Client, create } from "@nlxai/voice-compass";
-import { find, decode, type Query, type EncodedQuery } from "./queries";
+import { find, getAll, decode, type Query, type EncodedQuery } from "./queries";
 export {
   type EncodedQuery,
   type Method,
@@ -113,15 +113,19 @@ const getTriggeredSteps = (conversationId: string): string[] => {
 };
 
 /**
- * Active trigger elements on the page, grouped by trigger event type
+ * Active trigger event type.
  */
-export interface ActiveTriggers {
-  /**
-   * Trigger elements activated by click
-   */
-  click: HTMLElement[];
-}
+export type ActiveTriggerEventType = "click";
 
+/**
+ * Active trigger.
+ */
+export interface ActiveTrigger {
+  /** The trigger associated with the elements. */
+  trigger: ClickStep;
+  /** The matched elements */
+  elements: HTMLElement[];
+}
 /**
  * Created by {@link run}.
  */
@@ -133,7 +137,7 @@ export interface RunOutput {
   /**
    * Find active triggers on the page
    */
-  findActiveTriggers: () => Promise<ActiveTriggers>;
+  findActiveTriggers: (eventType: ActiveTriggerEventType) => ActiveTrigger[];
   /**
    * The regular multimodal SDK client
    */
@@ -278,24 +282,18 @@ export const run = (props: RunProps): RunOutput => {
     }
   };
 
-  const findActiveTriggers = async (): Promise<ActiveTriggers> => {
-    const targets = await Promise.all(
-      clickSteps
+  const findActiveTriggers = (
+    eventType: ActiveTriggerEventType,
+  ): ActiveTrigger[] => {
+    if (eventType !== "click") {
+      return clickSteps
         .filter(
           ({ urlCondition }) =>
             urlCondition == null || matchesUrlCondition(urlCondition),
         )
-        .map(async ({ query }) => {
-          try {
-            return await find(query);
-          } catch (e) {
-            return [];
-          }
-        }),
-    );
-    return {
-      click: targets.flat(),
-    };
+        .map((trigger) => ({ trigger, elements: getAll(trigger.query) }));
+    }
+    return [];
   };
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors

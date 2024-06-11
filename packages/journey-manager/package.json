@@ -16,7 +16,8 @@
     "preview-docs": "npm run docs && comrak --unsafe --gfm -o docs/index.html docs/index.md && open docs/index.html",
     "publish-docs": "npm run docs && mv docs/index.md ../website/src/content/07-02-journey-manager-api-reference.md",
     "test": "echo 'TBD'",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "format": "prettier --write ."
   },
   "author": "Peter Szerzo <peter@nlx.ai>",
   "license": "MIT",
