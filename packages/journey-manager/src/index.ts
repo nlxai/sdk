@@ -1,5 +1,5 @@
 import { type Config, type Client, create } from "@nlxai/voice-compass";
-import { find, decode, type Query, type EncodedQuery } from "./queries";
+import { find, getAll, decode, type Query, type EncodedQuery } from "./queries";
 export {
   type EncodedQuery,
   type Method,
@@ -113,6 +113,20 @@ const getTriggeredSteps = (conversationId: string): string[] => {
 };
 
 /**
+ * Active trigger event type.
+ */
+export type ActiveTriggerEventType = "click";
+
+/**
+ * Active trigger.
+ */
+export interface ActiveTrigger {
+  /** The trigger associated with the elements. */
+  trigger: ClickStep;
+  /** The matched elements */
+  elements: HTMLElement[];
+}
+/**
  * Created by {@link run}.
  */
 export interface RunOutput {
@@ -120,6 +134,10 @@ export interface RunOutput {
    * Stop running the journey, removing all event listeners
    */
   teardown: () => void;
+  /**
+   * Find active triggers on the page
+   */
+  findActiveTriggers: (eventType: ActiveTriggerEventType) => ActiveTrigger[];
   /**
    * The regular multimodal SDK client
    */
@@ -146,7 +164,7 @@ export interface RunProps {
 
 function filterMap<X, Y>(
   arr: X[],
-  fn: (value: X) => Y | null | undefined
+  fn: (value: X) => Y | null | undefined,
 ): Y[] {
   return arr.reduce<Y[]>((prev, curr) => {
     const val = fn(curr);
@@ -171,7 +189,7 @@ export const run = (props: RunProps): RunOutput => {
 
   const urlConditions: UrlCondition[] = filterMap(
     Object.values(props.triggers),
-    (trigger) => trigger.urlCondition
+    (trigger) => trigger.urlCondition,
   );
 
   if (
@@ -203,7 +221,7 @@ export const run = (props: RunProps): RunOutput => {
       }
       return prev;
     },
-    []
+    [],
   );
 
   loadSteps.forEach(({ stepId, urlCondition, once }) => {
@@ -225,7 +243,7 @@ export const run = (props: RunProps): RunOutput => {
       }
       return prev;
     },
-    []
+    [],
   );
 
   const handleGlobalClickForAnnotations = async (ev: any): Promise<void> => {
@@ -233,7 +251,7 @@ export const run = (props: RunProps): RunOutput => {
       clickSteps
         .filter(
           ({ urlCondition }) =>
-            urlCondition == null || matchesUrlCondition(urlCondition)
+            urlCondition == null || matchesUrlCondition(urlCondition),
         )
         .map(async ({ stepId, query }) => {
           try {
@@ -245,7 +263,7 @@ export const run = (props: RunProps): RunOutput => {
           } catch (e) {
             return { stepId, query };
           }
-        })
+        }),
     );
     const node = ev.target;
     const clickStep:
@@ -257,11 +275,25 @@ export const run = (props: RunProps): RunOutput => {
         })
       | undefined = targets.find(({ elements }) =>
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      (elements ?? []).some((element: HTMLElement) => element.contains(node))
+      (elements ?? []).some((element: HTMLElement) => element.contains(node)),
     );
     if (clickStep != null) {
       sendStep(clickStep.stepId, clickStep.once ?? false);
     }
+  };
+
+  const findActiveTriggers = (
+    eventType: ActiveTriggerEventType,
+  ): ActiveTrigger[] => {
+    if (eventType !== "click") {
+      return clickSteps
+        .filter(
+          ({ urlCondition }) =>
+            urlCondition == null || matchesUrlCondition(urlCondition),
+        )
+        .map((trigger) => ({ trigger, elements: getAll(trigger.query) }));
+    }
+    return [];
   };
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
@@ -269,6 +301,7 @@ export const run = (props: RunProps): RunOutput => {
 
   return {
     client,
+    findActiveTriggers,
     teardown: () => {
       // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
       document.removeEventListener("click", handleGlobalClickForAnnotations);

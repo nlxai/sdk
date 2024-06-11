@@ -91,7 +91,10 @@ export function encode(q: Query): EncodedQuery {
     options:
       q.queryArgs[1] != null
         ? Object.fromEntries(
-            Object.entries(q.queryArgs[1]).map(([k, v]) => [k, encodeTarget(v)])
+            Object.entries(q.queryArgs[1]).map(([k, v]) => [
+              k,
+              encodeTarget(v),
+            ]),
           )
         : null,
     parent: q.parent != null ? encode(q.parent) : null,
@@ -110,7 +113,7 @@ export function decode(q: EncodedQuery): Query {
       decodeTarget(q.target),
       q.options != null
         ? Object.fromEntries(
-            Object.entries(q.options).map(([k, v]) => [k, decodeTarget(v)])
+            Object.entries(q.options).map(([k, v]) => [k, decodeTarget(v)]),
           )
         : undefined,
     ],
@@ -161,7 +164,7 @@ export async function find(q: Query): Promise<HTMLElement[]> {
             () => {
               const els = [
                 ...container.querySelectorAll<HTMLElement>(
-                  q.queryArgs[0] as string
+                  q.queryArgs[0] as string,
                 ),
               ];
               if (els.length === 0) {
@@ -169,17 +172,17 @@ export async function find(q: Query): Promise<HTMLElement[]> {
               }
               return els;
             },
-            { container }
-          )
-      )
+            { container },
+          ),
+      ),
     );
   } else {
     const methodName: keyof typeof queryFns = `findAllBy${q.queryName}`;
     results = await Promise.all(
       containers.map(
         async (container) =>
-          await queryFns[methodName](container, ...(q.queryArgs as QueryArgs))
-      )
+          await queryFns[methodName](container, ...(q.queryArgs as QueryArgs)),
+      ),
     );
   }
   return results.flat();
@@ -187,23 +190,25 @@ export async function find(q: Query): Promise<HTMLElement[]> {
 
 /**
  * Get all elements inside rootNode that match the query. Returns immediately and does not throw if no elements are found.
- * @param rootNode - Root node
  * @param q - Query
- * @returns promise of a HTML element
+ * @param rootNode - Root node (default to `document.body`)
+ * @returns array of HTML elements
  */
 export function getAll(
-  rootNode: HTMLElement,
-  { queryName, queryArgs }: Query
+  { queryName, queryArgs, parent }: Query,
+  rootNode: HTMLElement = document.body,
 ): HTMLElement[] {
+  let rootNodes = [rootNode];
+  if (parent != null) {
+    rootNodes = getAll(parent, rootNode);
+  }
   if (queryName === "QuerySelector") {
-    return [
-      ...rootNode.querySelectorAll(queryArgs[0] as string),
-    ] as HTMLElement[];
+    return rootNodes.flatMap(
+      (n) => [...n.querySelectorAll(queryArgs[0] as string)] as HTMLElement[],
+    );
   } else {
-    // use queryBy here, we don't want to throw on no-results-found
-    return queryFns[`queryAllBy${queryName}`](
-      rootNode,
-      ...(queryArgs as QueryArgs)
+    return rootNodes.flatMap((n) =>
+      queryFns[`queryAllBy${queryName}`](n, ...(queryArgs as QueryArgs)),
     );
   }
 }
