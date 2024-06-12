@@ -1,13 +1,37 @@
-import { type FC, useState } from "react";
+import { type FC, useState, useEffect, useRef } from "react";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Nav, MobileNav } from "./components/Nav";
 import { ContentRoutes } from "./routes";
+import { run } from "@nlxai/journey-manager";
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const App: FC<{}> = () => {
+export const App: FC<unknown> = () => {
   const [mobileMenuExpanded, setMobileMenuExpanded] = useState<boolean>(false);
+
+  const isRun = useRef(false);
+
+  useEffect(() => {
+    if (isRun.current) {
+      return;
+    }
+    isRun.current = true;
+    run({
+      config: {
+        apiKey: "",
+        journeyId: "",
+        workspaceId: "",
+        conversationId: "abcd",
+        languageCode: "en-US",
+      },
+      ui: {
+        title: "abcd",
+        subtitle: "abcd",
+        escalationStep: "abcd-1234",
+        endStep: "1234-1234",
+      },
+      triggers: {},
+    });
+  }, []);
 
   return (
     <>
