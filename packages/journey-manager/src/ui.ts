@@ -292,6 +292,21 @@ const closeIcon = `
 </svg>
 `;
 
+const getButtonAction = (
+  eventTarget: HTMLElement,
+  container: HTMLElement,
+): string | null => {
+  const buttons = container.querySelectorAll<HTMLButtonElement>(
+    "button[data-action]",
+  );
+  for (const button of [...buttons]) {
+    if (button.contains(eventTarget)) {
+      return button.dataset.action ?? null;
+    }
+  }
+  return null;
+};
+
 /**
  * @hidden @internal
  */
@@ -361,7 +376,7 @@ export class JourneyManagerElement extends HTMLElement {
     let isOpen = false;
 
     const pinButton = shadow.querySelector(".pin");
-    const drawer = shadow.querySelector(".drawer");
+    const drawer = shadow.querySelector<HTMLElement>(".drawer");
     const drawerContent = shadow.querySelector(".drawer-content");
 
     const toggleDrawer = (): void => {
@@ -383,7 +398,8 @@ export class JourneyManagerElement extends HTMLElement {
         return;
       }
 
-      const action = eventTarget.getAttribute("data-action");
+      const action =
+        drawer != null ? getButtonAction(eventTarget, drawer) : null;
       if (action != null) {
         if (action === "close") {
           toggleDrawer();
