@@ -101,6 +101,7 @@ p {
 .drawer {
   --primary: ${theme.colors.primary};
   --primary-hover: ${theme.colors.primaryHover};
+  z-index: 1000;
 }
 
 button {
