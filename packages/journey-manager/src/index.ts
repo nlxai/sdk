@@ -1,10 +1,20 @@
 import { type Config, type Client, create } from "@nlxai/voice-compass";
 import { find, getAll, decode, type Query, type EncodedQuery } from "./queries";
+import { type UiConfig, JourneyManagerElement } from "./ui";
 export {
+  type Query,
   type EncodedQuery,
   type Method,
   type SerializedRegex,
 } from "./queries";
+export {
+  type UiConfig,
+  type PartialTheme,
+  type Theme,
+  type ThemeColors,
+} from "./ui";
+
+customElements.define("journey-manager", JourneyManagerElement);
 
 /**
  * Step ID
@@ -59,10 +69,25 @@ interface LoadStep {
   urlCondition?: UrlCondition;
 }
 
-interface ClickStep {
+/**
+ * Click step
+ */
+export interface ClickStep {
+  /**
+   * Step ID
+   */
   stepId: StepId;
+  /**
+   * Element query
+   */
   query: Query;
+  /**
+   * Controls whether the step should only trigger the first time it is clicked, or on all subsequent clicks as well
+   */
   once?: boolean;
+  /**
+   * URL condition for the click
+   */
   urlCondition?: UrlCondition;
 }
 
@@ -126,6 +151,7 @@ export interface ActiveTrigger {
   /** The matched elements */
   elements: HTMLElement[];
 }
+
 /**
  * Created by {@link run}.
  */
@@ -152,6 +178,10 @@ export interface RunProps {
    * The regular multimodal configuration
    */
   config: Config;
+  /**
+   * UI configuration
+   */
+  ui?: UiConfig;
   /**
    * The triggers dictionary, downloaded from the Dialog Studio desktop app
    */
@@ -182,6 +212,17 @@ function filterMap<X, Y>(
  */
 export const run = (props: RunProps): RunOutput => {
   const client = create(props.config);
+
+  // TODO: type this more accurately
+  let uiElement: any;
+
+  if (props.ui != null) {
+    uiElement = document.createElement("journey-manager");
+    console.log(uiElement, props.ui);
+    uiElement.config = props.ui;
+    uiElement.client = client;
+    document.body.appendChild(uiElement);
+  }
 
   const triggeredSteps = getTriggeredSteps(props.config.conversationId);
 
@@ -305,6 +346,9 @@ export const run = (props: RunProps): RunOutput => {
     teardown: () => {
       // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
       document.removeEventListener("click", handleGlobalClickForAnnotations);
+      if (uiElement != null) {
+        document.body.removeChild(uiElement);
+      }
     },
   };
 };
