@@ -216,12 +216,36 @@ export const run = (props: RunProps): RunOutput => {
   // TODO: type this more accurately
   let uiElement: any;
 
+  let teardownUiElement: (() => void) | null = null;
+
   if (props.ui != null) {
     uiElement = document.createElement("journey-manager");
     uiElement.style.zIndex = 1000;
     uiElement.config = props.ui;
     uiElement.client = client;
+    const handleAction = (ev: any): void => {
+      const action = ev.detail?.action;
+      if (action == null) {
+        return;
+      }
+      if (action === "escalate" && props.ui?.escalationStep != null) {
+        client.sendStep(props.ui.escalationStep).catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn(err);
+        });
+      }
+      if (action === "end" && props.ui?.endStep != null) {
+        client.sendStep(props.ui.endStep).catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn(err);
+        });
+      }
+    };
+    uiElement.addEventListener("action", handleAction);
     document.body.appendChild(uiElement);
+    teardownUiElement = () => {
+      document.body.removeChild(uiElement);
+    };
   }
 
   const triggeredSteps = getTriggeredSteps(props.config.conversationId);
@@ -346,9 +370,7 @@ export const run = (props: RunProps): RunOutput => {
     teardown: () => {
       // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
       document.removeEventListener("click", handleGlobalClickForAnnotations);
-      if (uiElement != null) {
-        document.body.removeChild(uiElement);
-      }
+      teardownUiElement?.();
     },
   };
 };

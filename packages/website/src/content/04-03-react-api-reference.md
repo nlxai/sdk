@@ -36,7 +36,7 @@ the hook object containing the chat state and methods.
 
 #### Defined in
 
-[index.ts:52](https://github.com/nlxai/sdk/blob/6475b2bec065072a3e1d8e9eb54888e7f0641fcd/packages/chat-react/src/index.ts#L52)
+[index.ts:52](https://github.com/nlxai/sdk/blob/3c739af84a7dcfbf232764b56f4562fed8077085/packages/chat-react/src/index.ts#L52)
 
 
 <a name="indexmd"></a>
@@ -63,7 +63,7 @@ handled by the hook automatically.
 
 ##### Defined in
 
-[index.ts:21](https://github.com/nlxai/sdk/blob/6475b2bec065072a3e1d8e9eb54888e7f0641fcd/packages/chat-react/src/index.ts#L21)
+[index.ts:21](https://github.com/nlxai/sdk/blob/3c739af84a7dcfbf232764b56f4562fed8077085/packages/chat-react/src/index.ts#L21)
 
 ___
 
@@ -77,7 +77,7 @@ Using this field is optional and you can hold input state separately.
 
 ##### Defined in
 
-[index.ts:27](https://github.com/nlxai/sdk/blob/6475b2bec065072a3e1d8e9eb54888e7f0641fcd/packages/chat-react/src/index.ts#L27)
+[index.ts:27](https://github.com/nlxai/sdk/blob/3c739af84a7dcfbf232764b56f4562fed8077085/packages/chat-react/src/index.ts#L27)
 
 ___
 
@@ -103,7 +103,7 @@ Modify the value of the chat input field.
 
 ##### Defined in
 
-[index.ts:32](https://github.com/nlxai/sdk/blob/6475b2bec065072a3e1d8e9eb54888e7f0641fcd/packages/chat-react/src/index.ts#L32)
+[index.ts:32](https://github.com/nlxai/sdk/blob/3c739af84a7dcfbf232764b56f4562fed8077085/packages/chat-react/src/index.ts#L32)
 
 ___
 
@@ -117,7 +117,7 @@ Please refer to [the type definitions](https://developers.nlx.ai/headless-api-re
 
 ##### Defined in
 
-[index.ts:38](https://github.com/nlxai/sdk/blob/6475b2bec065072a3e1d8e9eb54888e7f0641fcd/packages/chat-react/src/index.ts#L38)
+[index.ts:38](https://github.com/nlxai/sdk/blob/3c739af84a7dcfbf232764b56f4562fed8077085/packages/chat-react/src/index.ts#L38)
 
 ___
 
@@ -130,4 +130,4 @@ bubble with loading dots.
 
 ##### Defined in
 
-[index.ts:43](https://github.com/nlxai/sdk/blob/6475b2bec065072a3e1d8e9eb54888e7f0641fcd/packages/chat-react/src/index.ts#L43)
+[index.ts:43](https://github.com/nlxai/sdk/blob/3c739af84a7dcfbf232764b56f4562fed8077085/packages/chat-react/src/index.ts#L43)
