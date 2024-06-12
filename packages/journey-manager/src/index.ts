@@ -1,10 +1,20 @@
 import { type Config, type Client, create } from "@nlxai/voice-compass";
 import { find, getAll, decode, type Query, type EncodedQuery } from "./queries";
+import { type UiConfig, JourneyManagerElement } from "./ui";
 export {
+  type Query,
   type EncodedQuery,
   type Method,
   type SerializedRegex,
 } from "./queries";
+export {
+  type UiConfig,
+  type PartialTheme,
+  type Theme,
+  type ThemeColors,
+} from "./ui";
+
+customElements.define("journey-manager", JourneyManagerElement);
 
 /**
  * Step ID
@@ -59,10 +69,25 @@ interface LoadStep {
   urlCondition?: UrlCondition;
 }
 
-interface ClickStep {
+/**
+ * Click step
+ */
+export interface ClickStep {
+  /**
+   * Step ID
+   */
   stepId: StepId;
+  /**
+   * Element query
+   */
   query: Query;
+  /**
+   * Controls whether the step should only trigger the first time it is clicked, or on all subsequent clicks as well
+   */
   once?: boolean;
+  /**
+   * URL condition for the click
+   */
   urlCondition?: UrlCondition;
 }
 
@@ -126,6 +151,7 @@ export interface ActiveTrigger {
   /** The matched elements */
   elements: HTMLElement[];
 }
+
 /**
  * Created by {@link run}.
  */
@@ -152,6 +178,10 @@ export interface RunProps {
    * The regular multimodal configuration
    */
   config: Config;
+  /**
+   * UI configuration
+   */
+  ui?: UiConfig;
   /**
    * The triggers dictionary, downloaded from the Dialog Studio desktop app
    */
@@ -182,6 +212,41 @@ function filterMap<X, Y>(
  */
 export const run = (props: RunProps): RunOutput => {
   const client = create(props.config);
+
+  // TODO: type this more accurately
+  let uiElement: any;
+
+  let teardownUiElement: (() => void) | null = null;
+
+  if (props.ui != null) {
+    uiElement = document.createElement("journey-manager");
+    uiElement.style.zIndex = 1000;
+    uiElement.config = props.ui;
+    uiElement.client = client;
+    const handleAction = (ev: any): void => {
+      const action = ev.detail?.action;
+      if (action == null) {
+        return;
+      }
+      if (action === "escalate" && props.ui?.escalationStep != null) {
+        client.sendStep(props.ui.escalationStep).catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn(err);
+        });
+      }
+      if (action === "end" && props.ui?.endStep != null) {
+        client.sendStep(props.ui.endStep).catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn(err);
+        });
+      }
+    };
+    uiElement.addEventListener("action", handleAction);
+    document.body.appendChild(uiElement);
+    teardownUiElement = () => {
+      document.body.removeChild(uiElement);
+    };
+  }
 
   const triggeredSteps = getTriggeredSteps(props.config.conversationId);
 
@@ -305,6 +370,7 @@ export const run = (props: RunProps): RunOutput => {
     teardown: () => {
       // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
       document.removeEventListener("click", handleGlobalClickForAnnotations);
+      teardownUiElement?.();
     },
   };
 };
