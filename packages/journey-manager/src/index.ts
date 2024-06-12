@@ -218,7 +218,6 @@ export const run = (props: RunProps): RunOutput => {
 
   if (props.ui != null) {
     uiElement = document.createElement("journey-manager");
-    console.log(uiElement, props.ui);
     uiElement.config = props.ui;
     uiElement.client = client;
     document.body.appendChild(uiElement);
