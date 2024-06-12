@@ -256,6 +256,23 @@ button {
 
 .drawer-footer button:hover {
 }
+
+/* Success message */
+
+.success-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.success-message svg {
+  color: green;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  margin-right: 4px;
+}
 `;
 
 const voiceCompassIcon = `
@@ -289,6 +306,12 @@ const callEndIcon = `
 const closeIcon = `
 <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
   <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+</svg>
+`;
+
+const checkIcon = `
+<svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
+  <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
 </svg>
 `;
 
@@ -378,6 +401,7 @@ export class JourneyManagerElement extends HTMLElement {
     const pinButton = shadow.querySelector(".pin");
     const drawer = shadow.querySelector<HTMLElement>(".drawer");
     const drawerContent = shadow.querySelector(".drawer-content");
+    const drawerButtons = shadow.querySelector(".drawer-buttons");
 
     const toggleDrawer = (): void => {
       isOpen = !isOpen;
@@ -385,6 +409,14 @@ export class JourneyManagerElement extends HTMLElement {
         drawer?.classList.add("drawer-open");
       } else {
         drawer?.classList.remove("drawer-open");
+      }
+    };
+
+    const handleEndOrEscalate = (action: "end" | "escalate"): void => {
+      const copy =
+        action === "end" ? "Your call has ended" : "You are being transferred";
+      if (drawerButtons != null) {
+        drawerButtons.innerHTML = `<p class="success-message"><span>${checkIcon}</span>${copy}</p>`;
       }
     };
 
@@ -412,6 +444,9 @@ export class JourneyManagerElement extends HTMLElement {
             },
           }),
         );
+        if (action === "escalate" || action === "end") {
+          handleEndOrEscalate(action);
+        }
         return;
       }
       if (drawerContent != null && !drawerContent?.contains(eventTarget)) {
