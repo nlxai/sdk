@@ -133,6 +133,7 @@ button {
   padding: 8px;
   border-radius: 100%;
   background-color: var(--primary);
+  transition: background-color 0.2s ease-in-out;
   color: white;
   position: fixed;
   border: none;
@@ -180,7 +181,7 @@ button {
 }
 
 .drawer-content > * + * {
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
 /* Header */
@@ -190,11 +191,12 @@ button {
 }
 
 .drawer-header > * + * {
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .drawer-header h1 {
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: 500;
 }
  
 .drawer-header p {
@@ -218,8 +220,11 @@ button {
   width: 100%;
   background: transparent;
   color: #333;
-  padding: 4px;
-  border: 1px solid #bcbcbc;
+  transition: background-color 0.2s ease-in-out;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: rgba(0,0,0,0.07);
 }
 
 .drawer-buttons button svg {
@@ -230,8 +235,7 @@ button {
 }
 
 .drawer-buttons button:hover {
-  color: #000;
-  border: 1px solid #ababab;
+  background-color: rgba(0,0,0,0.10);
 }
 
 /* Footer */
@@ -418,6 +422,11 @@ export class JourneyManagerElement extends HTMLElement {
       if (drawerButtons != null) {
         drawerButtons.innerHTML = `<p class="success-message"><span>${checkIcon}</span>${copy}</p>`;
       }
+      setTimeout(() => {
+        if (isOpen) {
+          toggleDrawer();
+        }
+      }, 3000);
     };
 
     const handlePinButtonClick = (): void => {
