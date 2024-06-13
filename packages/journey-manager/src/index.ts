@@ -233,12 +233,23 @@ export const run = (props: RunProps): RunOutput => {
           // eslint-disable-next-line no-console
           console.warn(err);
         });
+        return;
       }
       if (action === "end" && props.ui?.endStep != null) {
         client.sendStep(props.ui.endStep).catch((err) => {
           // eslint-disable-next-line no-console
           console.warn(err);
         });
+        return;
+      }
+      if (action === "previous") {
+        const lastTriggeredStep = triggeredSteps[triggeredSteps.length - 1];
+        if (lastTriggeredStep != null) {
+          client.sendStep(lastTriggeredStep).catch((err) => {
+            // eslint-disable-next-line no-console
+            console.warn(err);
+          });
+        }
       }
     };
     uiElement.addEventListener("action", handleAction);

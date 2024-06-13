@@ -133,6 +133,7 @@ button {
   padding: 8px;
   border-radius: 100%;
   background-color: var(--primary);
+  transition: background-color 0.2s ease-in-out;
   color: white;
   position: fixed;
   border: none;
@@ -180,7 +181,7 @@ button {
 }
 
 .drawer-content > * + * {
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
 /* Header */
@@ -190,11 +191,12 @@ button {
 }
 
 .drawer-header > * + * {
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .drawer-header h1 {
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: 500;
 }
  
 .drawer-header p {
@@ -218,8 +220,11 @@ button {
   width: 100%;
   background: transparent;
   color: #333;
-  padding: 4px;
-  border: 1px solid #bcbcbc;
+  transition: background-color 0.2s ease-in-out;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: rgba(0,0,0,0.07);
 }
 
 .drawer-buttons button svg {
@@ -230,8 +235,7 @@ button {
 }
 
 .drawer-buttons button:hover {
-  color: #000;
-  border: 1px solid #ababab;
+  background-color: rgba(0,0,0,0.10);
 }
 
 /* Footer */
@@ -255,6 +259,23 @@ button {
 }
 
 .drawer-footer button:hover {
+}
+
+/* Success message */
+
+.success-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.success-message svg {
+  color: green;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  margin-right: 4px;
 }
 `;
 
@@ -289,6 +310,12 @@ const callEndIcon = `
 const closeIcon = `
 <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
   <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+</svg>
+`;
+
+const checkIcon = `
+<svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
+  <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
 </svg>
 `;
 
@@ -378,6 +405,7 @@ export class JourneyManagerElement extends HTMLElement {
     const pinButton = shadow.querySelector(".pin");
     const drawer = shadow.querySelector<HTMLElement>(".drawer");
     const drawerContent = shadow.querySelector(".drawer-content");
+    const drawerButtons = shadow.querySelector(".drawer-buttons");
 
     const toggleDrawer = (): void => {
       isOpen = !isOpen;
@@ -386,6 +414,19 @@ export class JourneyManagerElement extends HTMLElement {
       } else {
         drawer?.classList.remove("drawer-open");
       }
+    };
+
+    const handleEndOrEscalate = (action: "end" | "escalate"): void => {
+      const copy =
+        action === "end" ? "Your call has ended" : "You are being transferred";
+      if (drawerButtons != null) {
+        drawerButtons.innerHTML = `<p class="success-message"><span>${checkIcon}</span>${copy}</p>`;
+      }
+      setTimeout(() => {
+        if (isOpen) {
+          toggleDrawer();
+        }
+      }, 3000);
     };
 
     const handlePinButtonClick = (): void => {
@@ -412,6 +453,9 @@ export class JourneyManagerElement extends HTMLElement {
             },
           }),
         );
+        if (action === "escalate" || action === "end") {
+          handleEndOrEscalate(action);
+        }
         return;
       }
       if (drawerContent != null && !drawerContent?.contains(eventTarget)) {
