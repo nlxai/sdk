@@ -244,13 +244,12 @@ export const run = (props: RunProps): RunOutput => {
       }
       if (action === "previous") {
         const lastTriggeredStep = triggeredSteps[triggeredSteps.length - 1];
-        if (lastTriggeredStep) {
+        if (lastTriggeredStep != null) {
           client.sendStep(lastTriggeredStep).catch((err) => {
             // eslint-disable-next-line no-console
             console.warn(err);
           });
         }
-        return;
       }
     };
     uiElement.addEventListener("action", handleAction);
