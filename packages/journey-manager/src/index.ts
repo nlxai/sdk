@@ -1,4 +1,4 @@
-import { type Config, type Client, create } from "@nlxai/voice-compass";
+import { type Config, type Client, create } from "@nlxai/multimodal";
 import { find, getAll, decode, type Query, type EncodedQuery } from "./queries";
 import { type UiConfig, JourneyManagerElement } from "./ui";
 export {

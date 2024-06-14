@@ -1,5 +1,5 @@
 /* eslint-disable accessor-pairs */
-import { type Client } from "@nlxai/voice-compass";
+import { type Client } from "@nlxai/multimodal";
 
 /**
  * Theme colors
@@ -279,7 +279,7 @@ button {
 }
 `;
 
-const voiceCompassIcon = `
+const multimodalIcon = `
 <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
   <path d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C11.4477 20 11 20.4477 11 21C11 21.5523 11.4477 22 12 22C16.456 22 20.2313 19.0855 21.5236 15.0587C22.3766 14.8106 23 14.0231 23 13.09V11.09C23 10.1795 22.4064 9.40764 21.5851 9.14028C20.3549 5.01091 16.5291 2 12 2C7.47091 2 3.64506 5.01091 2.41488 9.14028C1.59358 9.40764 1 10.1795 1 11.09V13.09C1 14.1666 1.82988 15.0493 2.88483 15.1334C2.92262 15.1378 2.96105 15.14 3 15.14C3.55228 15.14 4 14.6923 4 14.14V12Z"></path>
   <path d="M10.09 10.8L15.2453 6.27083L13.9005 13L8.74526 17.5292L10.09 10.8ZM12.8613 12.4C12.5851 12.8783 11.9735 13.0422 11.4953 12.766C11.017 12.4899 10.8531 11.8783 11.1292 11.4C11.4054 10.9217 12.017 10.7578 12.4953 11.034C12.9735 11.3101 13.1374 11.9217 12.8613 12.4Z"></path>
@@ -342,7 +342,7 @@ export class JourneyManagerElement extends HTMLElement {
   _client: Client | null = null;
 
   /**
-   * Set Voice Compass client
+   * Set multimodal client
    */
   set client(client: Client) {
     this._client = client;
@@ -357,7 +357,7 @@ export class JourneyManagerElement extends HTMLElement {
     const shadow = this.attachShadow({ mode: "open" });
     shadow.innerHTML = `
 <style>${styles(mergeWithDefault(config.theme))}</style>
-<button class="pin">${voiceCompassIcon}</button>
+<button class="pin">${multimodalIcon}</button>
 <div class="drawer">
   <div class="drawer-content">
     <div class="drawer-header">

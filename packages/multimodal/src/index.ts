@@ -4,10 +4,10 @@ import fetch from "isomorphic-fetch";
 const Console = console;
 
 /**
- * The starting point of the package. Call create to create a `VoiceCompass` client.
+ * The starting point of the package. Call create to create a multimodal client.
  * @example
  * ```typescript
- *  const client = nlxai.voiceCompass.create({
+ *  const client = nlxai.multimodal.create({
  *  // hard-coded params
  *  apiKey: "REPLACE_WITH_API_KEY",
  *  workspaceId: "REPLACE_WITH_WORKSPACE_ID",
@@ -21,7 +21,7 @@ const Console = console;
  * ```
  * @category Setup
  * @param options - configuration options for the client
- * @returns a Voice Compass client
+ * @returns a multimodal client
  */
 export const create = ({
   apiKey,
@@ -34,7 +34,7 @@ export const create = ({
 }: Config): Client => {
   if (typeof conversationId !== "string" || conversationId.length === 0) {
     Console.warn(
-      'No conversation ID provided. Please call the Voice Compass client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`',
+      'No conversation ID provided. Please call the multimodal client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`',
     );
   }
   return {
@@ -76,7 +76,7 @@ export const create = ({
 };
 
 /**
- * The VoiceCompass client
+ * The multimodal client
  * @category Client
  */
 export interface Client {
@@ -84,7 +84,7 @@ export interface Client {
    *
    * @example
    * ```typescript
-   *  const client = nlxai.voiceCompass.create({
+   *  const client = nlxai.multimodal.create({
    *  // hard-coded params
    *  apiKey: "REPLACE_WITH_API_KEY",
    *  workspaceId: "REPLACE_WITH_WORKSPACE_ID",

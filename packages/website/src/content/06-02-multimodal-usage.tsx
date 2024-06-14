@@ -5,8 +5,8 @@ import { RadioList } from "../components/RadioList";
 import {
   Environment,
   umdScriptTags,
-  voiceCompassSetupSnippet,
-  voiceCompassSnippet,
+  multimodalSetupSnippet,
+  multimodalSnippet,
 } from "../snippets";
 
 const header = `
@@ -57,12 +57,12 @@ function getUsageFrom(usageFrom: Usage): string {
     const content = `let conversationId = new URLSearchParams(window.location.search).get("cid");
 
 if(conversationId != null) {
-  localStorage.setItem(VOICE_COMPASS_SESSION_KEY, conversationIdFromURL);
+  localStorage.setItem(MULTIMODAL_SESSION_KEY, conversationIdFromURL);
 } else {
-  conversationId = localStorage.getItem(VOICE_COMPASS_SESSION_KEY);
+  conversationId = localStorage.getItem(MULTIMODAL_SESSION_KEY);
 }
 
-${voiceCompassSnippet({
+${multimodalSnippet({
   environment,
   config: {
     conversationIdSnippet: "conversationId",
@@ -71,7 +71,7 @@ ${voiceCompassSnippet({
 })}`;
     if (environment === Environment.Html) {
       return `~~~html
-${umdScriptTags.voiceCompass}
+${umdScriptTags.multimodal}
 <script>
 ${content
   .split("\n")
@@ -82,7 +82,7 @@ ${content
     }
 
     return `~~~typescript
-import * as voiceCompass from "@nlxai/voice-compass"
+import * as multimodal from "@nlxai/multimodal"
 
 ${content}
 ~~~`;
@@ -103,7 +103,7 @@ _Note: When using this approach, pass \`conversationId\` in the URL as a search 
 For an alternative, see the next example._
 
 ~~~html
-${voiceCompassSetupSnippet({
+${multimodalSetupSnippet({
   environment: Environment.Html,
   config: {
     conversationIdSnippet:
@@ -137,7 +137,7 @@ The \`conversationID\` and the \`languageCode\` must be set dynamically.
 When not using web, you'll have to determine how to fetch these on a case-by-case basis.
 
 ~~~typescript
-${voiceCompassSetupSnippet({ environment: Environment.Node })}
+${multimodalSetupSnippet({ environment: Environment.Node })}
 ~~~`;
     default:
       assertNever(usageFrom); // exhaustiveness checking

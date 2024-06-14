@@ -217,7 +217,7 @@ convo.subscribe((responses, newResponse) => {
 // Send a message from the user's end
 convo.sendText("hello");`;
 
-export const voiceCompassSnippet = ({
+export const multimodalSnippet = ({
   config,
   environment,
 }: {
@@ -254,7 +254,7 @@ export const voiceCompassSnippet = ({
 
   return `const client = ${
     environment === Environment.Html ? "nlxai." : ""
-  }voiceCompass.create({
+  }multimodal.create({
   // hard-coded params
   apiKey: "${defaultTo(config?.apiKey, "REPLACE_WITH_API_KEY")}",
   workspaceId: "${defaultTo(config?.workspaceId, "REPLACE_WITH_WORKSPACE_ID")}",
@@ -404,18 +404,18 @@ ${
 </html>
 `;
 
-export const voiceCompassSetupSnippet = (cfg: {
+export const multimodalSetupSnippet = (cfg: {
   config?: Partial<MMConfig>;
   environment?: Environment;
 }): string => {
   if (cfg.environment === Environment.Html) {
-    return `${umdScriptTags.voiceCompass}
+    return `${umdScriptTags.multimodal}
 <script>
-  ${indentBy("  ", voiceCompassSnippet(cfg))}
+  ${indentBy("  ", multimodalSnippet(cfg))}
 </script>`;
   }
 
-  return `import * as voiceCompass from "@nlxai/voice-compass";
+  return `import * as multimodal from "@nlxai/multimodal";
 
-${voiceCompassSnippet(cfg)}`;
+${multimodalSnippet(cfg)}`;
 };

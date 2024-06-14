@@ -1,7 +1,7 @@
 import { stepIdRegex } from "../src";
 import fc from "fast-check";
 
-describe("voice compass library", () => {
+describe("multimodal library", () => {
   describe("stepIdRegex", () => {
     it("should not match non-uuid-like strings", () => {
       [
