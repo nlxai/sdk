@@ -42,7 +42,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@nlxai/voice-compass": "^0.1.20",
+    "@nlxai/multimodal": "^0.1.20",
     "@testing-library/dom": "^10.1.0",
     "ramda": "^0.29.1",
     "uuid": "^9.0.1"

@@ -8,7 +8,7 @@ This is the official JavaScript SDK to communicate with conversational bots crea
 * [@nlxai/chat-react](${packageUrls.chatReact}): React custom hook for building chat widgets.
 * [@nlxai/chat-preact](${packageUrls.chatPreact}): Preact custom hook for building chat widgets.
 * [@nlxai/chat-core](${packageUrls.chatCore}): vanilla JavaScript SDK for creating fully custom chat widgets.
-* [@nlxai/voice-compass](${packageUrls.voiceCompass}): multimodal capabilities.
+* [@nlxai/multimodal](${packageUrls.multimodal}): multimodal capabilities.
 `;
 
 // initial eslint integration

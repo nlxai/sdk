@@ -13,7 +13,7 @@ export default [
   {
     input: "src/index.ts",
     output: {
-      name: "nlxai.voiceCompass",
+      name: "nlxai.multimodal",
       file: pkg.browser,
       format: "umd",
     },

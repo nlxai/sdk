@@ -8,7 +8,7 @@ import {
   type ConfigAsStrings,
 } from "../components/MultimodalConfiguration";
 import { Note } from "../components/Note";
-import { voiceCompassSetupSnippet, Environment } from "../snippets";
+import { multimodalSetupSnippet, Environment } from "../snippets";
 
 export const content = `
 You can try your journeys directly on this configuration page.
@@ -21,7 +21,7 @@ export const snippetContent = (config: Config) => `
 ### Setup snippet
 
 ~~~html
-${voiceCompassSetupSnippet({ config, environment: Environment.Html })}
+${multimodalSetupSnippet({ config, environment: Environment.Html })}
 ~~~
 `;
 

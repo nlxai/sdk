@@ -13,7 +13,7 @@
     "packages/chat-react",
     "packages/chat-preact",
     "packages/chat-widget",
-    "packages/voice-compass",
+    "packages/multimodal",
     "packages/journey-manager",
     "packages/website"
   ],

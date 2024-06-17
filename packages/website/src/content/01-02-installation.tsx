@@ -22,10 +22,10 @@ ${umdScriptTags.chatWidget}
 ${umdScriptTags.chatCore}
 ~~~
 
-* [@nlxai/voice-compass](${packageUrls.voiceCompass}) - add multimodal capabilities to a plain HTML page:
+* [@nlxai/multimodal](${packageUrls.multimodal}) - add multimodal capabilities to a plain HTML page:
 
 ~~~html
-${umdScriptTags.voiceCompass}
+${umdScriptTags.multimodal}
 ~~~
 
 ## Using npm
@@ -45,8 +45,8 @@ npm install @nlxai/chat-preact preact
 # Core chat SDK
 npm install @nlxai/chat-core
 
-# Voice Compass
-npm install @nlxai/voice-compass
+# Multimodal
+npm install @nlxai/multimodal
 ~~~
 `;
 
