@@ -213,49 +213,52 @@ function filterMap<X, Y>(
 export const run = (props: RunProps): RunOutput => {
   const client = create(props.config);
 
+  let uiContainer: HTMLDivElement | null;
+
   // TODO: type this more accurately
-  let uiElement: any;
+  let controlPanelElement: any;
 
   let teardownUiElement: (() => void) | null = null;
 
   if (props.ui != null) {
-    uiElement = document.createElement("journey-manager");
-    uiElement.style.zIndex = 1000;
-    uiElement.config = props.ui;
-    uiElement.client = client;
+    uiContainer = document.createElement("div");
+    uiContainer.style.zIndex = "1000";
+    controlPanelElement = document.createElement("journey-manager");
+    controlPanelElement.config = props.ui;
+    controlPanelElement.client = client;
     const handleAction = (ev: any): void => {
       const action = ev.detail?.action;
       if (action == null) {
         return;
       }
-      if (action === "escalate" && props.ui?.escalationStep != null) {
-        client.sendStep(props.ui.escalationStep).catch((err) => {
+      const sendStep = (stepId: string): void => {
+        client.sendStep(stepId).catch((err) => {
           // eslint-disable-next-line no-console
           console.warn(err);
         });
+      };
+      if (action === "escalate" && props.ui?.escalationStep != null) {
+        sendStep(props.ui.escalationStep);
         return;
       }
       if (action === "end" && props.ui?.endStep != null) {
-        client.sendStep(props.ui.endStep).catch((err) => {
-          // eslint-disable-next-line no-console
-          console.warn(err);
-        });
+        sendStep(props.ui.endStep);
         return;
       }
       if (action === "previous") {
         const lastTriggeredStep = triggeredSteps[triggeredSteps.length - 1];
         if (lastTriggeredStep != null) {
-          client.sendStep(lastTriggeredStep).catch((err) => {
-            // eslint-disable-next-line no-console
-            console.warn(err);
-          });
+          sendStep(lastTriggeredStep);
         }
       }
     };
-    uiElement.addEventListener("action", handleAction);
-    document.body.appendChild(uiElement);
+    uiContainer.appendChild(controlPanelElement);
+    controlPanelElement.addEventListener("action", handleAction);
+    document.body.appendChild(uiContainer);
     teardownUiElement = () => {
-      document.body.removeChild(uiElement);
+      if (uiContainer != null) {
+        document.body.removeChild(uiContainer);
+      }
     };
   }
 
