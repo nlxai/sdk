@@ -293,7 +293,7 @@ export const run = (props: RunProps): RunOutput => {
   const loadSteps: LoadStep[] = Object.entries(props.triggers).reduce(
     (prev: LoadStep[], [stepId, trigger]: [StepId, Trigger]) => {
       if (trigger.event === "pageLoad") {
-        return [...prev, { stepId, urlCondition: trigger.urlCondition }];
+        return [...prev, { stepId, urlCondition: trigger.urlCondition, once: trigger.once }];
       }
       return prev;
     },
