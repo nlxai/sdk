@@ -1,5 +1,5 @@
 /* eslint-disable accessor-pairs */
-import { type Client } from "@nlxai/multimodal";
+import { computePosition } from "@floating-ui/dom";
 
 /**
  * Theme colors
@@ -13,6 +13,10 @@ export interface ThemeColors {
    * Primary color on hover
    */
   primaryHover: string;
+  /**
+   * Color for trigger highlights
+   */
+  highlight: string;
 }
 
 /**
@@ -56,6 +60,10 @@ export interface UiConfig {
    */
   subtitle: string;
   /**
+   * Render highlights
+   */
+  highlights?: boolean;
+  /**
    * UI theme
    */
   theme?: PartialTheme;
@@ -73,6 +81,7 @@ const defaultTheme: Theme = {
   colors: {
     primary: "rgba(38, 99, 218, 1)",
     primaryHover: "rgba(30, 86, 196, 1)",
+    highlight: "rgba(38, 99, 218, 1)",
   },
   fontFamily: "sans-serif",
 };
@@ -98,9 +107,11 @@ p {
 }
 
 .pin,
-.drawer {
+.drawer,
+.highlights {
   --primary: ${theme.colors.primary};
   --primary-hover: ${theme.colors.primaryHover};
+  --highlight: ${theme.colors.highlight};
   z-index: 1000;
 }
 
@@ -277,6 +288,37 @@ button {
   display: inline-block;
   margin-right: 4px;
 }
+
+/** Highlights */
+
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.highlight {
+  width: 8px;
+  height: 8px;
+  border-radius: 100%;
+  transform: translate3d(50%, 50%, 0);
+  background-color: var(--highlight);
+  position: absolute;
+}
+
+.highlight::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  content: ' ';
+  border-radius: 100%;
+  background-color: var(--highlight);
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
 `;
 
 const multimodalIcon = `
@@ -339,13 +381,37 @@ const getButtonAction = (
  */
 export class JourneyManagerElement extends HTMLElement {
   _teardown: (() => void) | null = null;
-  _client: Client | null = null;
+  _shadowRoot: ShadowRoot | null = null;
 
   /**
-   * Set multimodal client
+   * Add highlights to DOM elements
    */
-  set client(client: Client) {
-    this._client = client;
+  set highlightElements(elements: HTMLElement[]) {
+    if (this._shadowRoot == null) {
+      return;
+    }
+    const shadow = this._shadowRoot;
+    const highlights = shadow.querySelector<HTMLElement>(".highlights");
+    if (highlights == null) {
+      return;
+    }
+    highlights.innerHTML = "";
+    for (const element of elements) {
+      const highlightDiv = document.createElement("div");
+      highlightDiv.className = "highlight";
+      highlights.appendChild(highlightDiv);
+      computePosition(element, highlightDiv, {
+        placement: "top-end",
+      })
+        .then((pos) => {
+          highlightDiv.style.top = `${pos.y}px`;
+          highlightDiv.style.left = `${pos.x}px`;
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn(err);
+        });
+    }
   }
 
   /**
@@ -355,6 +421,7 @@ export class JourneyManagerElement extends HTMLElement {
     this._teardown?.();
 
     const shadow = this.attachShadow({ mode: "open" });
+    this._shadowRoot = shadow;
     shadow.innerHTML = `
 <style>${styles(mergeWithDefault(config.theme))}</style>
 <button class="pin">${multimodalIcon}</button>
@@ -397,6 +464,8 @@ export class JourneyManagerElement extends HTMLElement {
       </button>
     </div>
   </div>
+</div>
+<div class="highlights">
 </div>
 `;
 
