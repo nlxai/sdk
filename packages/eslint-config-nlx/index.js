@@ -35,7 +35,8 @@ module.exports = {
     },
   },
   rules: {
-    "no-console": "error"
+    "no-console": "error",
+    "@typescript-eslint/strict-boolean-expressions": ["error", { allowNullableBoolean: true, }],
   },
   reportUnusedDisableDirectives: true
 };
