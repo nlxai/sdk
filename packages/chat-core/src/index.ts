@@ -961,7 +961,7 @@ export function promisify<T>(
         _responses: Response[],
         newResponse: Response | undefined,
       ): void => {
-        if (newResponse?.type === "bot") {
+        if (newResponse?.type === "bot" || newResponse?.type === "failure") {
           clearTimeout(timeoutId);
           convo.unsubscribe(subscription);
           resolve(newResponse);
