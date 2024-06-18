@@ -161,10 +161,6 @@ export interface RunOutput {
    */
   teardown: () => void;
   /**
-   * Find active triggers on the page
-   */
-  findActiveTriggers: (eventType: ActiveTriggerEventType) => ActiveTrigger[];
-  /**
    * The regular multimodal SDK client
    */
   client: Client;
@@ -212,52 +208,6 @@ function filterMap<X, Y>(
  */
 export const run = (props: RunProps): RunOutput => {
   const client = create(props.config);
-
-  // TODO: type this more accurately
-  let uiElement: any;
-
-  let teardownUiElement: (() => void) | null = null;
-
-  if (props.ui != null) {
-    uiElement = document.createElement("journey-manager");
-    uiElement.style.zIndex = 1000;
-    uiElement.config = props.ui;
-    uiElement.client = client;
-    const handleAction = (ev: any): void => {
-      const action = ev.detail?.action;
-      if (action == null) {
-        return;
-      }
-      if (action === "escalate" && props.ui?.escalationStep != null) {
-        client.sendStep(props.ui.escalationStep).catch((err) => {
-          // eslint-disable-next-line no-console
-          console.warn(err);
-        });
-        return;
-      }
-      if (action === "end" && props.ui?.endStep != null) {
-        client.sendStep(props.ui.endStep).catch((err) => {
-          // eslint-disable-next-line no-console
-          console.warn(err);
-        });
-        return;
-      }
-      if (action === "previous") {
-        const lastTriggeredStep = triggeredSteps[triggeredSteps.length - 1];
-        if (lastTriggeredStep != null) {
-          client.sendStep(lastTriggeredStep).catch((err) => {
-            // eslint-disable-next-line no-console
-            console.warn(err);
-          });
-        }
-      }
-    };
-    uiElement.addEventListener("action", handleAction);
-    document.body.appendChild(uiElement);
-    teardownUiElement = () => {
-      document.body.removeChild(uiElement);
-    };
-  }
 
   const triggeredSteps = getTriggeredSteps(props.config.conversationId);
 
@@ -376,12 +326,73 @@ export const run = (props: RunProps): RunOutput => {
     return [];
   };
 
+  /**
+   * UI management
+   */
+
+  // TODO: type this more accurately
+  let uiElement: any;
+
+  let teardownUiElement: (() => void) | null = null;
+
+  if (props.ui != null) {
+    uiElement = document.createElement("journey-manager");
+    uiElement.style.zIndex = 1000;
+    uiElement.config = props.ui;
+    uiElement.client = client;
+    const handleAction = (ev: any): void => {
+      const action = ev.detail?.action;
+      if (action == null) {
+        return;
+      }
+      if (action === "escalate" && props.ui?.escalationStep != null) {
+        client.sendStep(props.ui.escalationStep).catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn(err);
+        });
+        return;
+      }
+      if (action === "end" && props.ui?.endStep != null) {
+        client.sendStep(props.ui.endStep).catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn(err);
+        });
+        return;
+      }
+      if (action === "previous") {
+        const lastTriggeredStep = triggeredSteps[triggeredSteps.length - 1];
+        if (lastTriggeredStep != null) {
+          client.sendStep(lastTriggeredStep).catch((err) => {
+            // eslint-disable-next-line no-console
+            console.warn(err);
+          });
+        }
+      }
+    };
+    let highlightInterval: NodeJS.Timeout | null = null;
+    if (props.ui.highlights === true) {
+      highlightInterval = setInterval(() => {
+        const highlightElements = findActiveTriggers("click").flatMap(
+          (activeTrigger) => activeTrigger.elements,
+        );
+        uiElement.highlightElements = highlightElements;
+      }, 500);
+    }
+    uiElement.addEventListener("action", handleAction);
+    document.body.appendChild(uiElement);
+    teardownUiElement = () => {
+      document.body.removeChild(uiElement);
+      if (highlightInterval != null) {
+        clearInterval(highlightInterval);
+      }
+    };
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
   document.addEventListener("click", handleGlobalClickForAnnotations);
 
   return {
     client,
-    findActiveTriggers,
     teardown: () => {
       // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
       document.removeEventListener("click", handleGlobalClickForAnnotations);
