@@ -117,11 +117,19 @@ const matchesUrlCondition = (urlCondition: UrlCondition): boolean => {
 const localStorageKey = (conversationId: string): string =>
   `jb-triggered-steps-${conversationId}`;
 
-const saveTriggeredSteps = (conversationId: string, steps: string[]): void => {
+const saveTriggeredSteps = (
+  conversationId: string,
+  steps: TriggeredStep[],
+): void => {
   localStorage.setItem(localStorageKey(conversationId), JSON.stringify(steps));
 };
 
-const getTriggeredSteps = (conversationId: string): string[] => {
+interface TriggeredStep {
+  stepId: string;
+  url: string;
+}
+
+const getTriggeredSteps = (conversationId: string): TriggeredStep[] => {
   try {
     const jsonString = localStorage.getItem(localStorageKey(conversationId));
     if (jsonString == null) {
@@ -226,12 +234,14 @@ export const run = (props: RunProps): RunOutput => {
   }
 
   const sendStep = (stepId: string, once: boolean): void => {
-    if (triggeredSteps.includes(stepId)) {
+    if (
+      triggeredSteps.some((triggeredStep) => triggeredStep.stepId === stepId)
+    ) {
       if (once) {
         return;
       }
     } else {
-      triggeredSteps.push(stepId);
+      triggeredSteps.push({ stepId, url: window.location.toString() });
       saveTriggeredSteps(props.config.conversationId, triggeredSteps);
     }
     client.sendStep(stepId).catch((err) => {
@@ -363,10 +373,14 @@ export const run = (props: RunProps): RunOutput => {
       if (action === "previous") {
         const lastTriggeredStep = triggeredSteps[triggeredSteps.length - 1];
         if (lastTriggeredStep != null) {
-          client.sendStep(lastTriggeredStep).catch((err) => {
+          client.sendStep(lastTriggeredStep.stepId).catch((err) => {
             // eslint-disable-next-line no-console
             console.warn(err);
           });
+          // Redirect to previous page if the last triggered step occurred on it
+          if (lastTriggeredStep.url !== window.location.toString()) {
+            window.location.href = lastTriggeredStep.url;
+          }
         }
       }
     };
