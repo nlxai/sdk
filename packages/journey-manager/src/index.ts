@@ -315,7 +315,7 @@ export const run = (props: RunProps): RunOutput => {
   const findActiveTriggers = (
     eventType: ActiveTriggerEventType,
   ): ActiveTrigger[] => {
-    if (eventType !== "click") {
+    if (eventType === "click") {
       return clickSteps
         .filter(
           ({ urlCondition }) =>
