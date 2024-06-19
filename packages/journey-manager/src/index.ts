@@ -338,6 +338,7 @@ export const run = (props: RunProps): RunOutput => {
   if (props.ui != null) {
     uiElement = document.createElement("journey-manager");
     uiElement.style.zIndex = 1000;
+    uiElement.style.position = "relative";
     uiElement.config = props.ui;
     uiElement.client = client;
     const handleAction = (ev: any): void => {
@@ -376,7 +377,7 @@ export const run = (props: RunProps): RunOutput => {
           (activeTrigger) => activeTrigger.elements,
         );
         uiElement.highlightElements = highlightElements;
-      }, 500);
+      }, 1200);
     }
     uiElement.addEventListener("action", handleAction);
     document.body.appendChild(uiElement);
