@@ -219,17 +219,32 @@ export const run = (props: RunProps): RunOutput => {
 
   const triggeredSteps = getTriggeredSteps(props.config.conversationId);
 
-  // If all triggers have a URL constraint set and none match the current URL, fire a digression calback
+  /**
+   * Digression detection
+   * - if all triggers have a URL constraint set and none match the current URL, fire a digression callback
+   * - notable exception: if the step is used as escalation or end as well, missing URL constraint is ok.
+   */
 
   const urlConditions: UrlCondition[] = filterMap(
     Object.values(props.triggers),
     (trigger) => trigger.urlCondition,
   );
 
-  if (
-    Object.keys(props.triggers).length === urlConditions.length &&
-    !urlConditions.some(matchesUrlCondition)
-  ) {
+  // If there are any steps for which there is no URL condition while also not being used for escalation or end,
+  // the package assumes that a digression cannot be reliably detected.
+  const isDigressionDetectable = Object.entries(props.triggers).every(
+    ([stepId, trigger]) => {
+      return (
+        // every step has a URL condition
+        trigger.urlCondition != null ||
+        // unless it's an escalation step or end step
+        stepId === props.ui?.escalationStep ||
+        stepId === props.ui?.endStep
+      );
+    },
+  );
+
+  if (isDigressionDetectable && !urlConditions.some(matchesUrlCondition)) {
     props.onDigression?.(client);
   }
 
