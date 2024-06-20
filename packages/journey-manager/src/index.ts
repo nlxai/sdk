@@ -338,7 +338,7 @@ export const run = (props: RunProps): RunOutput => {
   if (props.ui != null) {
     uiElement = document.createElement("journey-manager");
     uiElement.style.zIndex = 1000;
-    uiElement.style.position = "relative";
+    uiElement.style.position = "absolute";
     uiElement.config = props.ui;
     uiElement.client = client;
     const handleAction = (ev: any): void => {
