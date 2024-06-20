@@ -1,5 +1,6 @@
 /* eslint-disable accessor-pairs */
 /* eslint-disable react/prop-types */
+import { type Client } from "@nlxai/multimodal";
 import { computePosition } from "@floating-ui/dom";
 import { render, type FunctionComponent } from "preact";
 import { useEffect, useState, useRef } from "preact/hooks";
@@ -78,6 +79,13 @@ export interface UiConfig {
    * End step ID
    */
   endStep?: string;
+  /**
+   * On previous step
+   */
+  onPreviousStep?: (config: {
+    sendStep: Client["sendStep"];
+    triggeredSteps: Array<{ stepId: string; url: string }>;
+  }) => void;
 }
 
 const defaultTheme: Theme = {
