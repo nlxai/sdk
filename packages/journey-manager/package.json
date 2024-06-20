@@ -45,6 +45,7 @@
     "@floating-ui/dom": "^1.6.5",
     "@nlxai/multimodal": "^0.1.28",
     "@testing-library/dom": "^10.1.0",
+    "preact": "^10.22.0",
     "ramda": "^0.29.1",
     "uuid": "^9.0.1"
   },
