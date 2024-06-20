@@ -386,15 +386,22 @@ export const run = (props: RunProps): RunOutput => {
         return;
       }
       if (action === "previous") {
-        const lastTriggeredStep = triggeredSteps[triggeredSteps.length - 1];
-        if (lastTriggeredStep != null) {
-          client.sendStep(lastTriggeredStep.stepId).catch((err) => {
-            // eslint-disable-next-line no-console
-            console.warn(err);
+        if (props.ui?.onPreviousStep != null) {
+          props.ui.onPreviousStep({
+            sendStep: client.sendStep,
+            triggeredSteps,
           });
-          // Redirect to previous page if the last triggered step occurred on it
-          if (lastTriggeredStep.url !== window.location.toString()) {
-            window.location.href = lastTriggeredStep.url;
+        } else {
+          const lastTriggeredStep = triggeredSteps[triggeredSteps.length - 1];
+          if (lastTriggeredStep != null) {
+            client.sendStep(lastTriggeredStep.stepId).catch((err) => {
+              // eslint-disable-next-line no-console
+              console.warn(err);
+            });
+            // Redirect to previous page if the last triggered step occurred on it
+            if (lastTriggeredStep.url !== window.location.toString()) {
+              window.location.href = lastTriggeredStep.url;
+            }
           }
         }
       }
