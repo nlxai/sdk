@@ -397,7 +397,7 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
           console.warn(err);
         });
     }
-  }, []);
+  }, [element]);
   return (
     <div
       className="highlight"
