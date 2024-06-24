@@ -219,8 +219,8 @@ const resolveTriggers = async (
   }
   const baseUrl =
     config.dev ?? false
-      ? "https://triggers.dev.nlx.ai"
-      : "https://triggers.nlx.ai";
+      ? "https://triggers.dev.mm.nlx.ai"
+      : "https://triggers.mm.nlx.ai";
   const triggersFromCdnRequest = await fetch(
     `${baseUrl}/${config.workspaceId}/${config.journeyId}.json`,
   );
@@ -229,10 +229,10 @@ const resolveTriggers = async (
 };
 
 // eslint-disable-next-line @typescript-eslint/promise-function-async
-const waitUntilDomContentLoaded = (): Promise<unknown> => {
+const waitUntilDomContentLoaded = (): Promise<void> => {
   if (document.readyState === "loading") {
     return new Promise((resolve) => {
-      window.addEventListener("DOMContentLoaded", (event) => {
+      window.addEventListener("DOMContentLoaded", () => {
         resolve();
       });
     });
