@@ -187,9 +187,10 @@ export interface RunProps {
    */
   ui?: UiConfig;
   /**
-   * The triggers dictionary, downloaded from the Dialog Studio desktop app
+   * The triggers dictionary, downloaded from the Dialog Studio desktop app.
+   * If triggers are not provided, they will be fetched from the CDN.
    */
-  triggers: Triggers;
+  triggers?: Triggers;
   /**
    * Digression detection callback
    */
@@ -209,13 +210,47 @@ function filterMap<X, Y>(
   }, []);
 }
 
+const resolveTriggers = async (
+  config: Config,
+  triggers?: Triggers,
+): Promise<Triggers> => {
+  if (triggers != null) {
+    return triggers;
+  }
+  const baseUrl =
+    config.dev ?? false
+      ? "https://triggers.dev.nlx.ai"
+      : "https://triggers.nlx.ai";
+  const triggersFromCdnRequest = await fetch(
+    `${baseUrl}/${config.workspaceId}/${config.journeyId}.json`,
+  );
+  const triggersFromCdn = await triggersFromCdnRequest.json();
+  return triggersFromCdn;
+};
+
+// eslint-disable-next-line @typescript-eslint/promise-function-async
+const waitUntilDomContentLoaded = (): Promise<unknown> => {
+  return new Promise((resolve) => {
+    window.addEventListener("DOMContentLoaded", (event) => {
+      resolve(event);
+    });
+  });
+};
+
 /**
  * Run the multimodal journey
  * @param props - The run configuration object
- * @returns an object containing a teardown function and the multimodal client.
+ * @returns an promise of an object containing a teardown function and the multimodal client.
  */
-export const run = (props: RunProps): RunOutput => {
+export const run = async (props: RunProps): Promise<RunOutput> => {
   const client = create(props.config);
+
+  const triggers: Triggers = await resolveTriggers(
+    props.config,
+    props.triggers,
+  );
+
+  await waitUntilDomContentLoaded();
 
   const triggeredSteps = getTriggeredSteps(props.config.conversationId);
 
@@ -226,13 +261,13 @@ export const run = (props: RunProps): RunOutput => {
    */
 
   const urlConditions: UrlCondition[] = filterMap(
-    Object.values(props.triggers),
+    Object.values(triggers),
     (trigger) => trigger.urlCondition,
   );
 
   // If there are any steps for which there is no URL condition while also not being used for escalation or end,
   // the package assumes that a digression cannot be reliably detected.
-  const isDigressionDetectable = Object.entries(props.triggers).every(
+  const isDigressionDetectable = Object.entries(triggers).every(
     ([stepId, trigger]) => {
       return (
         // every step has a URL condition
@@ -265,7 +300,7 @@ export const run = (props: RunProps): RunOutput => {
     });
   };
 
-  const loadSteps: LoadStep[] = Object.entries(props.triggers).reduce(
+  const loadSteps: LoadStep[] = Object.entries(triggers).reduce(
     (prev: LoadStep[], [stepId, trigger]: [StepId, Trigger]) => {
       if (trigger.event === "pageLoad") {
         return [
@@ -285,7 +320,7 @@ export const run = (props: RunProps): RunOutput => {
     sendStep(stepId, once ?? false);
   });
 
-  const clickSteps: ClickStep[] = Object.entries(props.triggers).reduce(
+  const clickSteps: ClickStep[] = Object.entries(triggers).reduce(
     (prev: ClickStep[], [stepId, trigger]: [StepId, Trigger]) => {
       if (trigger.event === "click" && trigger.query != null) {
         const newEntry: ClickStep = {
