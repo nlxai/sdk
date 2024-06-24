@@ -230,11 +230,15 @@ const resolveTriggers = async (
 
 // eslint-disable-next-line @typescript-eslint/promise-function-async
 const waitUntilDomContentLoaded = (): Promise<unknown> => {
-  return new Promise((resolve) => {
-    window.addEventListener("DOMContentLoaded", (event) => {
-      resolve(event);
+  if (document.readyState === "loading") {
+    return new Promise((resolve) => {
+      window.addEventListener("DOMContentLoaded", (event) => {
+        resolve();
+      });
     });
-  });
+  } else {
+    return Promise.resolve();
+  }
 };
 
 /**
