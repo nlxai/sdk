@@ -91,6 +91,18 @@ export interface ClickStep {
   urlCondition?: UrlCondition;
 }
 
+const debounce = (func: () => void, timeout = 300): (() => void) => {
+  let timer: NodeJS.Timer | null = null;
+  return () => {
+    if (timer != null) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      func();
+    }, timeout);
+  };
+};
+
 const matchesUrlCondition = (urlCondition: UrlCondition): boolean => {
   const url = window.location.href;
   if (urlCondition.operator === "eq") {
@@ -317,12 +329,16 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     [],
   );
 
-  loadSteps.forEach(({ stepId, urlCondition, once }) => {
-    if (urlCondition != null && !matchesUrlCondition(urlCondition)) {
-      return;
-    }
-    sendStep(stepId, once ?? false);
-  });
+  const handleLoadSteps = (): void => {
+    loadSteps.forEach(({ stepId, urlCondition, once }) => {
+      if (urlCondition != null && !matchesUrlCondition(urlCondition)) {
+        return;
+      }
+      sendStep(stepId, once ?? false);
+    });
+  };
+
+  handleLoadSteps();
 
   const clickSteps: ClickStep[] = Object.entries(triggers).reduce(
     (prev: ClickStep[], [stepId, trigger]: [StepId, Trigger]) => {
@@ -399,6 +415,17 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
 
   let teardownUiElement: (() => void) | null = null;
 
+  const setHighlights = (): void => {
+    const highlightElements = findActiveTriggers("click").flatMap(
+      (activeTrigger) => activeTrigger.elements,
+    );
+    if (uiElement != null) {
+      uiElement.highlightElements = highlightElements;
+    }
+  };
+
+  const debouncedSetHighlights = debounce(setHighlights);
+
   if (props.ui != null) {
     uiElement = document.createElement("journey-manager");
     uiElement.style.zIndex = 1000;
@@ -445,24 +472,35 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
         }
       }
     };
-    let highlightInterval: NodeJS.Timeout | null = null;
-    if (props.ui.highlights === true) {
-      highlightInterval = setInterval(() => {
-        const highlightElements = findActiveTriggers("click").flatMap(
-          (activeTrigger) => activeTrigger.elements,
-        );
-        uiElement.highlightElements = highlightElements;
-      }, 1200);
-    }
+    setHighlights();
     uiElement.addEventListener("action", handleAction);
     document.body.appendChild(uiElement);
     teardownUiElement = () => {
       document.body.removeChild(uiElement);
-      if (highlightInterval != null) {
-        clearInterval(highlightInterval);
-      }
     };
   }
+
+  /**
+   * Change detection
+   */
+
+  let previousUrl = window.location.toString();
+
+  const documentObserver = new MutationObserver(() => {
+    debouncedSetHighlights();
+    // If the document changed for any reason (click, popstate event etc.), check if the URL also changed
+    // If it did, handle page load events
+    const newUrl = window.location.toString();
+    if (newUrl !== previousUrl) {
+      handleLoadSteps();
+    }
+    previousUrl = newUrl;
+  });
+
+  documentObserver.observe(document, {
+    childList: true,
+    subtree: true,
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
   document.addEventListener("click", handleGlobalClickForAnnotations);
@@ -472,6 +510,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     teardown: () => {
       // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
       document.removeEventListener("click", handleGlobalClickForAnnotations);
+      documentObserver.disconnect();
       teardownUiElement?.();
     },
   };
