@@ -43,7 +43,7 @@ export interface Trigger {
   /**
    * Event
    */
-  event: "pageLoad" | "click";
+  event: "pageLoad" | "click" | "appear" | "enterViewport";
   /**
    * A query identifying the element
    */
@@ -72,7 +72,7 @@ interface LoadStep {
 /**
  * Click step
  */
-export interface ClickStep {
+export interface StepWithQuery {
   /**
    * Step ID
    */
@@ -167,7 +167,7 @@ export type ActiveTriggerEventType = "click";
  */
 export interface ActiveTrigger {
   /** The trigger associated with the elements. */
-  trigger: ClickStep;
+  trigger: StepWithQuery;
   /** The matched elements */
   elements: HTMLElement[];
 }
@@ -340,10 +340,10 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
 
   handleLoadSteps();
 
-  const clickSteps: ClickStep[] = Object.entries(triggers).reduce(
-    (prev: ClickStep[], [stepId, trigger]: [StepId, Trigger]) => {
+  const clickSteps: StepWithQuery[] = Object.entries(triggers).reduce(
+    (prev: StepWithQuery[], [stepId, trigger]: [StepId, Trigger]) => {
       if (trigger.event === "click" && trigger.query != null) {
-        const newEntry: ClickStep = {
+        const newEntry: StepWithQuery = {
           stepId,
           query: decode(trigger.query),
           urlCondition: trigger.urlCondition,
@@ -377,7 +377,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     );
     const node = ev.target;
     const clickStep:
-      | (ClickStep & {
+      | (StepWithQuery & {
           /**
            *
            */
