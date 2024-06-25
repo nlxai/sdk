@@ -316,6 +316,10 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     });
   };
 
+  /**
+   * Handle load steps
+   */
+
   const loadSteps: LoadStep[] = Object.entries(triggers).reduce(
     (prev: LoadStep[], [stepId, trigger]: [StepId, Trigger]) => {
       if (trigger.event === "pageLoad") {
@@ -329,13 +333,27 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     [],
   );
 
+  let previousUrl = window.location.toString();
+  /**
+   * Keeps track of which load steps matched the URL the last time the URL was checked.
+   * This does not necessarily mean that the steps in question have actually been triggered (page load events should not fire if subsequent pages also satisfy the URL condition for which a step was already fired).
+   */
+  let previouslyMatchedLoadSteps: string[] = [];
+
+  // Checks load steps to be triggered at the current URL
+  // Returns the step ID's that actually trigger so it can be compared to subsequent calls
   const handleLoadSteps = (): void => {
+    const matchingStepIds: string[] = [];
     loadSteps.forEach(({ stepId, urlCondition, once }) => {
       if (urlCondition != null && !matchesUrlCondition(urlCondition)) {
         return;
       }
-      sendStep(stepId, once ?? false);
+      matchingStepIds.push(stepId);
+      if (!previouslyMatchedLoadSteps.includes(stepId)) {
+        sendStep(stepId, once ?? false);
+      }
     });
+    previouslyMatchedLoadSteps = matchingStepIds;
   };
 
   handleLoadSteps();
@@ -483,8 +501,6 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   /**
    * Change detection
    */
-
-  let previousUrl = window.location.toString();
 
   const documentObserver = new MutationObserver(() => {
     debouncedSetHighlights();
