@@ -22,6 +22,7 @@
     "@nlxai/chat-react": "*",
     "@nlxai/chat-widget": "*",
     "@nlxai/multimodal": "*",
+    "@nlxai/journey-manager": "*",
     "@react-hookz/web": "^23.1.0",
     "fuse.js": "^7.0.0",
     "htm": "^3.1.1",
