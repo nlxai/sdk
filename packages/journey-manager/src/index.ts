@@ -43,7 +43,7 @@ export interface Trigger {
   /**
    * Event
    */
-  event: "pageLoad" | "click";
+  event: "pageLoad" | "click" | "appear" | "enterViewport";
   /**
    * A query identifying the element
    */
@@ -72,7 +72,7 @@ interface LoadStep {
 /**
  * Click step
  */
-export interface ClickStep {
+export interface StepWithQuery {
   /**
    * Step ID
    */
@@ -90,6 +90,18 @@ export interface ClickStep {
    */
   urlCondition?: UrlCondition;
 }
+
+const debounce = (func: () => void, timeout = 300): (() => void) => {
+  let timer: NodeJS.Timer | null = null;
+  return () => {
+    if (timer != null) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      func();
+    }, timeout);
+  };
+};
 
 const matchesUrlCondition = (urlCondition: UrlCondition): boolean => {
   const url = window.location.href;
@@ -155,7 +167,7 @@ export type ActiveTriggerEventType = "click";
  */
 export interface ActiveTrigger {
   /** The trigger associated with the elements. */
-  trigger: ClickStep;
+  trigger: StepWithQuery;
   /** The matched elements */
   elements: HTMLElement[];
 }
@@ -304,6 +316,10 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     });
   };
 
+  /**
+   * Handle load steps
+   */
+
   const loadSteps: LoadStep[] = Object.entries(triggers).reduce(
     (prev: LoadStep[], [stepId, trigger]: [StepId, Trigger]) => {
       if (trigger.event === "pageLoad") {
@@ -317,17 +333,35 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     [],
   );
 
-  loadSteps.forEach(({ stepId, urlCondition, once }) => {
-    if (urlCondition != null && !matchesUrlCondition(urlCondition)) {
-      return;
-    }
-    sendStep(stepId, once ?? false);
-  });
+  let previousUrl = window.location.toString();
+  /**
+   * Keeps track of which load steps matched the URL the last time the URL was checked.
+   * This does not necessarily mean that the steps in question have actually been triggered (page load events should not fire if subsequent pages also satisfy the URL condition for which a step was already fired).
+   */
+  let previouslyMatchedLoadSteps: string[] = [];
 
-  const clickSteps: ClickStep[] = Object.entries(triggers).reduce(
-    (prev: ClickStep[], [stepId, trigger]: [StepId, Trigger]) => {
+  // Checks load steps to be triggered at the current URL
+  // Saves the step ID's that actually trigger so it can be compared to subsequent calls
+  const handleLoadSteps = (): void => {
+    const matchingStepIds: string[] = [];
+    loadSteps.forEach(({ stepId, urlCondition, once }) => {
+      if (urlCondition != null && !matchesUrlCondition(urlCondition)) {
+        return;
+      }
+      matchingStepIds.push(stepId);
+      if (!previouslyMatchedLoadSteps.includes(stepId)) {
+        sendStep(stepId, once ?? false);
+      }
+    });
+    previouslyMatchedLoadSteps = matchingStepIds;
+  };
+
+  handleLoadSteps();
+
+  const clickSteps: StepWithQuery[] = Object.entries(triggers).reduce(
+    (prev: StepWithQuery[], [stepId, trigger]: [StepId, Trigger]) => {
       if (trigger.event === "click" && trigger.query != null) {
-        const newEntry: ClickStep = {
+        const newEntry: StepWithQuery = {
           stepId,
           query: decode(trigger.query),
           urlCondition: trigger.urlCondition,
@@ -361,7 +395,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     );
     const node = ev.target;
     const clickStep:
-      | (ClickStep & {
+      | (StepWithQuery & {
           /**
            *
            */
@@ -398,6 +432,17 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   let uiElement: any;
 
   let teardownUiElement: (() => void) | null = null;
+
+  const setHighlights = (): void => {
+    const highlightElements = findActiveTriggers("click").flatMap(
+      (activeTrigger) => activeTrigger.elements,
+    );
+    if (uiElement != null) {
+      uiElement.highlightElements = highlightElements;
+    }
+  };
+
+  const debouncedSetHighlights = debounce(setHighlights);
 
   if (props.ui != null) {
     uiElement = document.createElement("journey-manager");
@@ -445,24 +490,33 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
         }
       }
     };
-    let highlightInterval: NodeJS.Timeout | null = null;
-    if (props.ui.highlights === true) {
-      highlightInterval = setInterval(() => {
-        const highlightElements = findActiveTriggers("click").flatMap(
-          (activeTrigger) => activeTrigger.elements,
-        );
-        uiElement.highlightElements = highlightElements;
-      }, 1200);
-    }
+    setHighlights();
     uiElement.addEventListener("action", handleAction);
     document.body.appendChild(uiElement);
     teardownUiElement = () => {
       document.body.removeChild(uiElement);
-      if (highlightInterval != null) {
-        clearInterval(highlightInterval);
-      }
     };
   }
+
+  /**
+   * Change detection
+   */
+
+  const documentObserver = new MutationObserver(() => {
+    debouncedSetHighlights();
+    // If the document changed for any reason (click, popstate event etc.), check if the URL also changed
+    // If it did, handle page load events
+    const newUrl = window.location.toString();
+    if (newUrl !== previousUrl) {
+      handleLoadSteps();
+    }
+    previousUrl = newUrl;
+  });
+
+  documentObserver.observe(document, {
+    childList: true,
+    subtree: true,
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
   document.addEventListener("click", handleGlobalClickForAnnotations);
@@ -472,6 +526,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     teardown: () => {
       // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
       document.removeEventListener("click", handleGlobalClickForAnnotations);
+      documentObserver.disconnect();
       teardownUiElement?.();
     },
   };

@@ -1,6 +1,7 @@
 import { type FC } from "react";
 import { aperture, flatten } from "ramda";
 import { Routes, Route } from "react-router-dom";
+import { Prototyping } from "./components/Prototyping";
 import { NextPrevPage } from "./components/NextPrevPage";
 // 1
 import { GettingStarted } from "./content/01-01-getting-started";
@@ -289,6 +290,9 @@ export const ContentRoutes: FC<unknown> = () => {
         );
       })}
       <Route path="*" element={<GettingStarted />} />
+      {import.meta.env.DEV ? (
+        <Route path="/dev" element={<Prototyping />} />
+      ) : null}
     </Routes>
   );
 };
