@@ -341,7 +341,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   let previouslyMatchedLoadSteps: string[] = [];
 
   // Checks load steps to be triggered at the current URL
-  // Returns the step ID's that actually trigger so it can be compared to subsequent calls
+  // Saves the step ID's that actually trigger so it can be compared to subsequent calls
   const handleLoadSteps = (): void => {
     const matchingStepIds: string[] = [];
     loadSteps.forEach(({ stepId, urlCondition, once }) => {
