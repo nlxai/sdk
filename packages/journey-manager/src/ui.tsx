@@ -72,13 +72,13 @@ export interface UiConfig {
    */
   theme?: PartialTheme;
   /**
-   * Escalation step ID
+   * Escalation handler
    */
-  escalationStep?: string;
+  onEscalation?: (config: { sendStep: Client["sendStep"] }) => void;
   /**
-   * End step ID
+   * End handler
    */
-  endStep?: string;
+  onEnd?: (config: { sendStep: Client["sendStep"] }) => void;
   /**
    * On previous step
    */
@@ -416,7 +416,8 @@ const ControlCenter: FunctionComponent<{
   onAction: (action: Action) => void;
 }> = ({ config, highlightElements, digression, onAction }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  // TODO: set up success handling API with the new `onEscalation` and `onEnd` handlers
+  const [successMessage] = useState<string | null>(null);
   const drawerContentRef = useRef<HTMLDivElement | null>(null);
 
   return (
@@ -471,15 +472,9 @@ const ControlCenter: FunctionComponent<{
                 <span>Previous Screen</span>
               </button>
 
-              {config.escalationStep != null ? (
+              {config.onEscalation != null ? (
                 <button
                   onClick={() => {
-                    setTimeout(() => {
-                      setSuccessMessage("You are being transferred");
-                    }, 200);
-                    setTimeout(() => {
-                      setIsOpen(false);
-                    }, 3000);
                     onAction("escalate");
                   }}
                 >
@@ -488,15 +483,9 @@ const ControlCenter: FunctionComponent<{
                 </button>
               ) : null}
 
-              {config.endStep != null ? (
+              {config.onEnd != null ? (
                 <button
                   onClick={() => {
-                    setTimeout(() => {
-                      setSuccessMessage("Your call has ended");
-                    }, 200);
-                    setTimeout(() => {
-                      setIsOpen(false);
-                    }, 3000);
                     onAction("end");
                   }}
                 >

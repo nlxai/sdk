@@ -1,148 +1,242 @@
 
 <a name="readmemd"></a>
 
-# @nlxai/chat-widget
+# @nlxai/chat-core
 
 ## Interfaces
 
-- [WidgetInstance](#interfaceswidgetinstancemd)
-- [WidgetRef](#interfaceswidgetrefmd)
-- [TitleBar](#interfacestitlebarmd)
-- [Nudge](#interfacesnudgemd)
-- [Props](#interfacespropsmd)
-- [Theme](#interfacesthememd)
+- [SlotValue](#interfacesslotvaluemd)
+- [BotResponse](#interfacesbotresponsemd)
+- [BotResponsePayload](#interfacesbotresponsepayloadmd)
+- [BotResponseMetadata](#interfacesbotresponsemetadatamd)
+- [BotMessage](#interfacesbotmessagemd)
+- [Choice](#interfaceschoicemd)
+- [UserResponse](#interfacesuserresponsemd)
+- [FailureMessage](#interfacesfailuremessagemd)
+- [Config](#interfacesconfigmd)
+- [StructuredRequest](#interfacesstructuredrequestmd)
+- [ChoiceRequestMetadata](#interfaceschoicerequestmetadatamd)
+- [ConversationHandler](#interfacesconversationhandlermd)
 
 ## Type Aliases
 
-### StorageType
+### Context
 
-Ƭ **StorageType**: ``"localStorage"`` \| ``"sessionStorage"``
+Ƭ **Context**: `Record`\<`string`, `any`\>
 
-When this option is set to `"localStorage"` or `"sessionStorage"`,
-the state of the chat conversation is persisted in [local](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
-or [session](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) storage respectively.
-
-This allows the state and history of the conversation to persist between
-full page refreshes.
-
-\> When using the session storage feature, it is your responsibility
-\> to make sure that your website complies with your data protection
-\> and privacy policy requirements.
+[Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
 
 #### Defined in
 
-[packages/chat-widget/src/props.ts:45](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L45)
+[index.ts:13](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L13)
 
 ___
 
-### CustomModalityComponent
+### SlotsRecord
 
-Ƭ **CustomModalityComponent**: `FC`\<\{ `key`: `string` ; `data`: `any`  }\>
+Ƭ **SlotsRecord**: `Record`\<`string`, `any`\>
 
-Custom Modalities allow rendering of rich components from nodes.
-See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/advanced-messaging-+-functionality#modalities
+Values to fill an intent's [attached slots](https://docs.studio.nlx.ai/intents/documentation-intents/intents-attached-slots).
 
-#### Defined in
+`SlotRecord` Keys are the attached slot's name
 
-[packages/chat-widget/src/props.ts:51](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L51)
+`SlotRecord` Values are usually a discrete value matching the slots's [type](https://docs.studio.nlx.ai/slots/documentation-slots/slots-values#system-slots).
+for custom slots, this can optionally be the value's ID.
 
-## Variables
-
-### defaultTheme
-
-• `Const` **defaultTheme**: [`Theme`](#interfacesthememd)
-
-the default theme
+A `SlotsRecord` is equivalent to an array of [SlotValue](#interfacesslotvaluemd) objects.
 
 #### Defined in
 
-[packages/chat-widget/src/ui/constants.ts:16](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/ui/constants.ts#L16)
+[index.ts:42](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L42)
 
-## Functions
+___
 
-### create
+### SlotsRecordOrArray
 
-▸ **create**(`props`): [`WidgetInstance`](#interfaceswidgetinstancemd)
+Ƭ **SlotsRecordOrArray**: [`SlotsRecord`](#slotsrecord) \| [`SlotValue`](#interfacesslotvaluemd)[]
 
-Create a new chat widget and renders it as the last element in the body.
+Values to fill an intent's [attached slots](https://docs.studio.nlx.ai/intents/documentation-intents/intents-attached-slots).
 
-#### Parameters
+Supports either a [SlotsRecord](#slotsrecord) or an array of [SlotValue](#interfacesslotvaluemd) objects
+
+#### Defined in
+
+[index.ts:49](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L49)
+
+___
+
+### UserResponsePayload
+
+Ƭ **UserResponsePayload**: \{ `type`: ``"text"`` ; `text`: `string` ; `context?`: [`Context`](#context)  } \| \{ `type`: ``"choice"`` ; `choiceId`: `string` ; `context?`: [`Context`](#context)  } \| \{ `type`: ``"structured"`` ; `context?`: [`Context`](#context)  } & [`StructuredRequest`](#interfacesstructuredrequestmd)
+
+The payload of the user response
+
+#### Defined in
+
+[index.ts:209](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L209)
+
+___
+
+### Response
+
+Ƭ **Response**: [`BotResponse`](#interfacesbotresponsemd) \| [`UserResponse`](#interfacesuserresponsemd) \| [`FailureMessage`](#interfacesfailuremessagemd)
+
+A response from the bot or the user.
+
+#### Defined in
+
+[index.ts:278](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L278)
+
+___
+
+### Time
+
+Ƭ **Time**: `number`
+
+The time value in milliseconds since midnight, January 1, 1970 UTC.
+
+#### Defined in
+
+[index.ts:283](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L283)
+
+___
+
+### Subscriber
+
+Ƭ **Subscriber**: (`response`: [`Response`](#response)[], `newResponse?`: [`Response`](#response)) => `void`
+
+The callback function for listening to all responses.
+
+#### Type declaration
+
+▸ (`response`, `newResponse?`): `void`
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `props` | [`Props`](#interfacespropsmd) |
+| `response` | [`Response`](#response)[] |
+| `newResponse?` | [`Response`](#response) |
 
-#### Returns
-
-[`WidgetInstance`](#interfaceswidgetinstancemd)
-
-the WidgetInstance to script widget behavior.
-
-#### Defined in
-
-[packages/chat-widget/src/index.tsx:102](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/index.tsx#L102)
-
-___
-
-### clearSession
-
-▸ **clearSession**(`storeIn`): `void`
-
-Clears stored session history.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `storeIn` | [`StorageType`](#storagetype) | where to clear the session. |
-
-#### Returns
+##### Returns
 
 `void`
 
 #### Defined in
 
-[packages/chat-widget/src/index.tsx:300](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/index.tsx#L300)
+[index.ts:533](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L533)
 
-___
+## Functions
 
-### useConversationHandler
+### shouldReinitialize
 
-▸ **useConversationHandler**(): ``null`` \| `ConversationHandler`
+▸ **shouldReinitialize**(`config1`, `config2`): `boolean`
 
-Hook to get the ConversationHandler for the widget.
-This may be called before the Widget has been created.
-It will return null until the Widget has been created and the conversation has been established.
+Helper method to decide when a new [Config](#interfacesconfigmd) requires creating a new [ConversationHandler](#interfacesconversationhandlermd) or whether the old `Config`'s
+`ConversationHandler` can be used.
 
-#### Returns
-
-``null`` \| `ConversationHandler`
-
-the ConversationHandler if the widget has been created and its conversation has been established, otherwise it returns null.
-
-#### Defined in
-
-[packages/chat-widget/src/index.tsx:368](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/index.tsx#L368)
-
-___
-
-### Widget
-
-▸ **Widget**(`props`): `ReactNode`
+The order of configs doesn't matter.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `props` | [`Props`](#interfacespropsmd) & `RefAttributes`\<[`WidgetRef`](#interfaceswidgetrefmd)\> |
+| `config1` | [`Config`](#interfacesconfigmd) |
+| `config2` | [`Config`](#interfacesconfigmd) |
 
 #### Returns
 
-`ReactNode`
+`boolean`
+
+true if `createConversation` should be called again
 
 #### Defined in
 
-[packages/chat-widget/src/index.tsx:372](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/index.tsx#L372)
+[index.ts:544](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L544)
+
+___
+
+### default
+
+▸ **default**(`config`): [`ConversationHandler`](#interfacesconversationhandlermd)
+
+Call this to create a conversation handler.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `config` | [`Config`](#interfacesconfigmd) |
+
+#### Returns
+
+[`ConversationHandler`](#interfacesconversationhandlermd)
+
+The [ConversationHandler](#interfacesconversationhandlermd) is a bundle of functions to interact with the conversation.
+
+#### Defined in
+
+[index.ts:556](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L556)
+
+___
+
+### promisify
+
+▸ **promisify**\<`T`\>(`fn`, `convo`, `timeout?`): (`payload`: `T`) => `Promise`\<[`Response`](#response) \| ``null``\>
+
+This package is intentionally designed with a subscription-based API as opposed to a promise-based one where each message corresponds to a single bot response, available asynchronously.
+
+If you need a promise-based wrapper, you can use the `promisify` helper available in the package:
+
+#### Type parameters
+
+| Name | Description |
+| :------ | :------ |
+| `T` | the type of the function's params, e.g. for `sendText` it's `text: string, context?: Context` |
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `fn` | (`payload`: `T`) => `void` | `undefined` | the function to wrap (e.g. `convo.sendText`, `convo.sendChoice`, etc.) |
+| `convo` | [`ConversationHandler`](#interfacesconversationhandlermd) | `undefined` | the `ConversationHandler` (from [createConversation](#default)) |
+| `timeout` | `number` | `10000` | the timeout in milliseconds |
+
+#### Returns
+
+`fn`
+
+A promise-wrapped version of the function. The function, when called, returns a promise that resolves to the Conversation's next response.
+
+▸ (`payload`): `Promise`\<[`Response`](#response) \| ``null``\>
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `payload` | `T` |
+
+##### Returns
+
+`Promise`\<[`Response`](#response) \| ``null``\>
+
+**`Example`**
+
+```typescript
+import { createConversation, promisify } from "@nlxai/chat-core";
+
+const convo = createConversation(config);
+
+const sendTextWrapped = promisify(convo.sendText, convo);
+
+sendTextWrapped("Hello").then((response) => {
+  console.log(response);
+});
+```
+
+#### Defined in
+
+[index.ts:949](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L949)
 
 
 <a name="indexmd"></a>
@@ -151,198 +245,509 @@ ___
 # Interfaces
 
 
-<a name="interfacesnudgemd"></a>
+<a name="interfacesbotmessagemd"></a>
 
-## Interface: Nudge
+## Interface: BotMessage
 
-When set, a dismissable call-to-action will appear above the chat icon with the given text.
-
-By default, the call-to-action will be displayed after 3 seconds, and will automatically dismiss after 20 seconds.
-
-It will be dissapear when the chat is opened, but until dismissed, will reappear whenever the chat is minimized or closed.
+A message from the bot, as well as any choices the user can make.
 
 ### Properties
 
-#### content
+#### messageId
 
-• **content**: `string`
+• `Optional` **messageId**: `string`
 
-The text content of the nudge. Markdown is supported.
+A unique identifier for the message.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:73](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L73)
+[index.ts:143](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L143)
 
 ___
 
-#### showAfter
+#### nodeId
 
-• `Optional` **showAfter**: `number`
+• `Optional` **nodeId**: `string`
 
-Show the nudge after a specific time, measured in milliseconds.
-Defaults to 3000 (3s) if not set.
+The node id that this message is associated with.
+This is must be sent with a choice when the user is changing a previously sent choice.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:78](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L78)
+[index.ts:148](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L148)
 
 ___
 
-#### hideAfter
+#### text
 
-• `Optional` **hideAfter**: `number`
+• **text**: `string`
 
-Hide the nudge after a specific time after it appears, measured in milliseconds.
-Defaults to 20000 (20s) if not set.
+The body of the message. Show this to the user.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:83](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L83)
+[index.ts:152](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L152)
+
+___
+
+#### choices
+
+• **choices**: [`Choice`](#interfaceschoicemd)[]
+
+A selection of choices to show to the user. They may choose one of them.
+
+##### Defined in
+
+[index.ts:156](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L156)
+
+___
+
+#### selectedChoiceId
+
+• `Optional` **selectedChoiceId**: `string`
+
+After a choice has been made by the user, this will be updated locally to the selected choice id.
+This field is set locally and does not come from the bot.
+
+##### Defined in
+
+[index.ts:161](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L161)
 
 
-<a name="interfacespropsmd"></a>
+<a name="interfacesbotresponsemd"></a>
 
-## Interface: Props
+## Interface: BotResponse
 
-The properties for creating the Chat Widget.
+A message from the bot
+
+See also:
+- [UserResponse](#interfacesuserresponsemd)
+- [FailureMessage](#interfacesfailuremessagemd)
+- [Response](#response)
 
 ### Properties
 
-#### config
+#### type
 
-• **config**: `Config`
+• **type**: ``"bot"``
+
+The type of the response is `"bot"` for bot and `"user"` for user, and "failure" for failure.
+
+##### Defined in
+
+[index.ts:63](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L63)
+
+___
+
+#### receivedAt
+
+• **receivedAt**: `number`
+
+When the response was received
+
+##### Defined in
+
+[index.ts:67](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L67)
+
+___
+
+#### payload
+
+• **payload**: [`BotResponsePayload`](#interfacesbotresponsepayloadmd)
+
+The payload of the response
+
+##### Defined in
+
+[index.ts:71](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L71)
+
+
+<a name="interfacesbotresponsemetadatamd"></a>
+
+## Interface: BotResponseMetadata
+
+Global state about the current conversation
+as well as whether the client should poll for more bot responses.
+
+### Properties
+
+#### intentId
+
+• `Optional` **intentId**: `string`
+
+The conversation's intent
+
+##### Defined in
+
+[index.ts:117](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L117)
+
+___
+
+#### escalation
+
+• `Optional` **escalation**: `boolean`
+
+Whether the current conversation has been marked as incomprehension.
+
+##### Defined in
+
+[index.ts:121](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L121)
+
+___
+
+#### frustration
+
+• `Optional` **frustration**: `boolean`
+
+Whether the current conversation has been marked frustrated
+
+##### Defined in
+
+[index.ts:125](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L125)
+
+___
+
+#### incomprehension
+
+• `Optional` **incomprehension**: `boolean`
+
+Whether the current conversation has been marked as incomprehension.
+
+##### Defined in
+
+[index.ts:129](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L129)
+
+___
+
+#### hasPendingDataRequest
+
+• `Optional` **hasPendingDataRequest**: `boolean`
+
+Whether the client should poll for more bot responses.
+
+##### Defined in
+
+[index.ts:133](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L133)
+
+
+<a name="interfacesbotresponsepayloadmd"></a>
+
+## Interface: BotResponsePayload
+
+The payload of the bot response
+
+### Properties
+
+#### expirationTimestamp
+
+• `Optional` **expirationTimestamp**: `number`
+
+If there isn't some interaction by this time, the conversation will expire.
+
+##### Defined in
+
+[index.ts:81](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L81)
+
+___
+
+#### conversationId
+
+• `Optional` **conversationId**: `string`
+
+The active conversation ID. If not set, a new conversation will be started.
+
+##### Defined in
+
+[index.ts:85](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L85)
+
+___
+
+#### messages
+
+• **messages**: [`BotMessage`](#interfacesbotmessagemd)[]
+
+Any messages from the bot.
+
+##### Defined in
+
+[index.ts:89](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L89)
+
+___
+
+#### metadata
+
+• `Optional` **metadata**: [`BotResponseMetadata`](#interfacesbotresponsemetadatamd)
+
+Global state about the current conversation
+as well as whether the client should poll for more bot responses.
+
+##### Defined in
+
+[index.ts:94](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L94)
+
+___
+
+#### payload
+
+• `Optional` **payload**: `string`
+
+If configured, the [node's payload.](#add-functionality)
+
+##### Defined in
+
+[index.ts:98](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L98)
+
+___
+
+#### modalities
+
+• `Optional` **modalities**: `Record`\<`string`, `any`\>
+
+If configured, the node's modalities and their payloads.
+
+##### Defined in
+
+[index.ts:102](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L102)
+
+___
+
+#### context
+
+• `Optional` **context**: [`Context`](#context)
+
+If the node is set to send context, the whole context associated with the conversation.
+
+##### Defined in
+
+[index.ts:106](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L106)
+
+
+<a name="interfaceschoicemd"></a>
+
+## Interface: Choice
+
+A choices to show to the user.
+
+### Properties
+
+#### choiceId
+
+• **choiceId**: `string`
+
+`choiceId` is used by `sendChoice` to let the user choose this choice.
+
+##### Defined in
+
+[index.ts:171](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L171)
+
+___
+
+#### choiceText
+
+• **choiceText**: `string`
+
+The text of the choice
+
+##### Defined in
+
+[index.ts:175](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L175)
+
+___
+
+#### choicePayload
+
+• `Optional` **choicePayload**: `any`
+
+An optional, schemaless payload for the choice.
+
+##### Defined in
+
+[index.ts:179](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L179)
+
+
+<a name="interfaceschoicerequestmetadatamd"></a>
+
+## Interface: ChoiceRequestMetadata
+
+Helps link the choice to the specific message in the conversation.
+
+### Properties
+
+#### responseIndex
+
+• `Optional` **responseIndex**: `number`
+
+The index of the [Response](#response) associated with this choice.
+Setting this ensures that local state's `selectedChoiceId` on the corresponding [BotResponse](#interfacesbotresponsemd) is set.
+It is not sent to the bot.
+
+##### Defined in
+
+[index.ts:417](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L417)
+
+___
+
+#### messageIndex
+
+• `Optional` **messageIndex**: `number`
+
+The index of the [BotMessage](#interfacesbotmessagemd) associated with this choice.
+Setting this ensures that local state's `selectedChoiceId` on the corresponding [BotResponse](#interfacesbotresponsemd) is set.
+It is not sent to the bot.
+
+##### Defined in
+
+[index.ts:423](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L423)
+
+___
+
+#### nodeId
+
+• `Optional` **nodeId**: `string`
+
+Required if you want to change a choice that's already been sent.
+The `nodeId` can be found in the corresponding [BotMessage](#interfacesbotmessagemd).
+
+##### Defined in
+
+[index.ts:428](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L428)
+
+
+<a name="interfacesconfigmd"></a>
+
+## Interface: Config
 
 The configuration to create a conversation.
 
-##### Defined in
+### Properties
 
-[packages/chat-widget/src/props.ts:93](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L93)
+#### botUrl
 
-___
+• **botUrl**: `string`
 
-#### theme
-
-• `Optional` **theme**: `Partial`\<[`Theme`](#interfacesthememd)\>
-
-The theme to apply to the chat widget.
+Fetch this from the bot's Deployment page.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:97](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L97)
+[index.ts:299](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L299)
 
 ___
 
-#### titleBar
+#### headers
 
-• `Optional` **titleBar**: [`TitleBar`](#interfacestitlebarmd)
+• **headers**: `Record`\<`string`, `string`\> & \{ `nlx-api-key`: `string`  }
 
-How to configure the title bar. When missing, the widget will not have a title bar.
+Headers to forward to the NLX API.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:101](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L101)
+[index.ts:303](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L303)
 
 ___
 
-#### chatIcon
+#### conversationId
 
-• `Optional` **chatIcon**: `string`
+• `Optional` **conversationId**: `string`
 
-If you want a custom chat icon, set this to the URL of an image to use.
+Set `conversationId` to continue an existing conversation. If not set, a new conversation will be started.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:105](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L105)
+[index.ts:313](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L313)
 
 ___
 
-#### nudge
+#### userId
 
-• `Optional` **nudge**: [`Nudge`](#interfacesnudgemd)
+• `Optional` **userId**: `string`
 
-An optional [Nudge](#interfacesnudgemd) configuration object.
+Setting the `userID` allows it to be searchable in bot history, as well as usable via `{System.userId}` in the intent.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:109](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L109)
+[index.ts:317](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L317)
 
 ___
 
-#### inputPlaceholder
+#### responses
 
-• `Optional` **inputPlaceholder**: `string`
+• `Optional` **responses**: [`Response`](#response)[]
 
-The placeholder in the input field. When not set, the default placeholder is "Type something..."
+When `responses` is set, initialize the chatHandler with historical messages.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:113](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L113)
+[index.ts:321](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L321)
 
 ___
 
-#### loaderMessage
+#### failureMessage
 
-• `Optional` **loaderMessage**: `string`
+• `Optional` **failureMessage**: `string`
 
-A message to display to the user while the bot is still processing the previous message from the user.
+When set, this overrides the default failure message ("We encountered an issue. Please try again soon.").
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:117](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L117)
+[index.ts:325](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L325)
 
 ___
 
-#### showLoaderMessageAfter
+#### languageCode
 
-• `Optional` **showLoaderMessageAfter**: `number`
+• **languageCode**: `string`
 
-How long to wait, in milliseconds, before the loader message is displayed. Default is 2,500ms.
+The language code to use for the bot. In the browser this can be fetched with `navigator.language`.
+If you don't have translations, hard-code this to the language code you support.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:121](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L121)
+[index.ts:330](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L330)
 
 ___
 
-#### allowChoiceReselection
+#### experimental
 
-• `Optional` **allowChoiceReselection**: `boolean`
+• `Optional` **experimental**: `Object`
 
-If set to true, previously selected choices in the chat can be changed.
-
-##### Defined in
-
-[packages/chat-widget/src/props.ts:125](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L125)
-
-___
-
-#### storeIn
-
-• `Optional` **storeIn**: [`StorageType`](#storagetype)
-
-When set, chat history & conversation will be stored in the browser.
-
-##### Defined in
-
-[packages/chat-widget/src/props.ts:129](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L129)
-
-___
-
-#### onExpand
-
-• `Optional` **onExpand**: (`conversationHandler`: `ConversationHandler`) => `void`
-
-Optional callback to be called when the chat is expanded.
+Experimental settings
 
 ##### Type declaration
 
-▸ (`conversationHandler`): `void`
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `channelType?` | `string` | Simulate alternative channel types |
+| `completeBotUrl?` | `boolean` | Prevent the `languageCode` parameter to be appended to the bot URL - used in special deployment environments such as the sandbox chat inside Dialog Studio |
+
+##### Defined in
+
+[index.ts:339](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L339)
+
+
+<a name="interfacesconversationhandlermd"></a>
+
+## Interface: ConversationHandler
+
+A bundle of functions to interact with a conversation, created by [createConversation](#default).
+
+### Properties
+
+#### sendText
+
+• **sendText**: (`text`: `string`, `context?`: [`Context`](#context)) => `void`
+
+Send user's message
+
+##### Type declaration
+
+▸ (`text`, `context?`): `void`
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `conversationHandler` | `ConversationHandler` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `text` | `string` | the user's message |
+| `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
 
 ###### Returns
 
@@ -350,25 +755,26 @@ Optional callback to be called when the chat is expanded.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:133](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L133)
+[index.ts:440](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L440)
 
 ___
 
-#### onCollapse
+#### sendSlots
 
-• `Optional` **onCollapse**: (`conversationHandler`: `ConversationHandler`) => `void`
+• **sendSlots**: (`slots`: [`SlotsRecordOrArray`](#slotsrecordorarray), `context?`: [`Context`](#context)) => `void`
 
-Optional callback to be called when the chat is collapsed. This is also called when the chat is closed.
+Send [slots](https://docs.studio.nlx.ai/workspacesettings/introduction-to-settings) to the bot.
 
 ##### Type declaration
 
-▸ (`conversationHandler`): `void`
+▸ (`slots`, `context?`): `void`
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `conversationHandler` | `ConversationHandler` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `slots` | [`SlotsRecordOrArray`](#slotsrecordorarray) | The slots to populate |
+| `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
 
 ###### Returns
 
@@ -376,45 +782,27 @@ Optional callback to be called when the chat is collapsed. This is also called w
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:137](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L137)
+[index.ts:446](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L446)
 
 ___
 
-#### onClose
+#### sendChoice
 
-• `Optional` **onClose**: () => `void`
+• **sendChoice**: (`choiceId`: `string`, `context?`: [`Context`](#context), `metadata?`: [`ChoiceRequestMetadata`](#interfaceschoicerequestmetadatamd)) => `void`
 
-Optional callback to be called when the chat is closed via the close button.
-
-##### Type declaration
-
-▸ (): `void`
-
-###### Returns
-
-`void`
-
-##### Defined in
-
-[packages/chat-widget/src/props.ts:141](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L141)
-
-___
-
-#### onNudgeClose
-
-• `Optional` **onNudgeClose**: (`conversationHandler`: `ConversationHandler`) => `void`
-
-Optional callback to be called when the nudge element is closed explicitly by the user. It is not called when the nudge is hidden automatically after the `hideAfter` interval passes.
+Respond to [a choice](https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/nodes#user-choice) from the bot.
 
 ##### Type declaration
 
-▸ (`conversationHandler`): `void`
+▸ (`choiceId`, `context?`, `metadata?`): `void`
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `conversationHandler` | `ConversationHandler` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `choiceId` | `string` | - |
+| `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
+| `metadata?` | [`ChoiceRequestMetadata`](#interfaceschoicerequestmetadatamd) | links the choice to the specific message and node in the conversation. |
 
 ###### Returns
 
@@ -422,331 +810,418 @@ Optional callback to be called when the nudge element is closed explicitly by th
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:145](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L145)
+[index.ts:453](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L453)
 
 ___
 
-#### customModalities
+#### sendWelcomeIntent
 
-• `Optional` **customModalities**: `Record`\<`string`, [`CustomModalityComponent`](#custommodalitycomponent)\>
+• **sendWelcomeIntent**: (`context?`: [`Context`](#context)) => `void`
 
-Set this to render a [CustomModalityComponent](#custommodalitycomponent) for a given modality name
-See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/advanced-messaging-+-functionality#modalities
+Trigger the welcome [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents). This should be done when the user starts interacting with the chat.
+
+##### Type declaration
+
+▸ (`context?`): `void`
+
+###### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
+
+###### Returns
+
+`void`
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:151](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L151)
+[index.ts:463](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L463)
+
+___
+
+#### sendIntent
+
+• **sendIntent**: (`intentId`: `string`, `context?`: [`Context`](#context)) => `void`
+
+Trigger a specific [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents).
+
+##### Type declaration
+
+▸ (`intentId`, `context?`): `void`
+
+###### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `intentId` | `string` | the intent to trigger. The id is the name under the Bot's _Intents_. |
+| `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
+
+###### Returns
+
+`void`
+
+##### Defined in
+
+[index.ts:470](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L470)
+
+___
+
+#### sendStructured
+
+• **sendStructured**: (`request`: [`StructuredRequest`](#interfacesstructuredrequestmd), `context?`: [`Context`](#context)) => `void`
+
+Send a combination of choice, slots, and intent in one request.
+
+##### Type declaration
+
+▸ (`request`, `context?`): `void`
+
+###### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `request` | [`StructuredRequest`](#interfacesstructuredrequestmd) |  |
+| `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
+
+###### Returns
+
+`void`
+
+##### Defined in
+
+[index.ts:477](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L477)
+
+___
+
+#### subscribe
+
+• **subscribe**: (`subscriber`: [`Subscriber`](#subscriber)) => () => `void`
+
+Subscribe a callback to the conversation. On subscribe, the subscriber will receive all of the Responses that the conversation has already received.
+
+##### Type declaration
+
+▸ (`subscriber`): () => `void`
+
+###### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `subscriber` | [`Subscriber`](#subscriber) | The callback to subscribe |
+
+###### Returns
+
+`fn`
+
+▸ (): `void`
+
+###### Returns
+
+`void`
+
+##### Defined in
+
+[index.ts:482](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L482)
+
+___
+
+#### unsubscribe
+
+• **unsubscribe**: (`subscriber`: [`Subscriber`](#subscriber)) => `void`
+
+Unsubscribe a callback from the conversation.
+
+##### Type declaration
+
+▸ (`subscriber`): `void`
+
+###### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `subscriber` | [`Subscriber`](#subscriber) | The callback to unsubscribe |
+
+###### Returns
+
+`void`
+
+##### Defined in
+
+[index.ts:487](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L487)
+
+___
+
+#### unsubscribeAll
+
+• **unsubscribeAll**: () => `void`
+
+Unsubscribe all callback from the conversation.
+
+##### Type declaration
+
+▸ (): `void`
+
+###### Returns
+
+`void`
+
+##### Defined in
+
+[index.ts:491](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L491)
+
+___
+
+#### currentConversationId
+
+• **currentConversationId**: () => `undefined` \| `string`
+
+Get the current conversation ID if it's set, or undefined if there is no conversation.
+
+##### Type declaration
+
+▸ (): `undefined` \| `string`
+
+###### Returns
+
+`undefined` \| `string`
+
+##### Defined in
+
+[index.ts:495](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L495)
+
+___
+
+#### reset
+
+• **reset**: (`options?`: \{ `clearResponses?`: `boolean`  }) => `void`
+
+Forces a new conversation. If `clearResponses` is set to true, will also clear historical responses passed to subscribers.
+Retains all existing subscribers.
+
+##### Type declaration
+
+▸ (`options?`): `void`
+
+###### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `options?` | `Object` | - |
+| `options.clearResponses?` | `boolean` | If set to true, will clear historical responses passed to subscribers. |
+
+###### Returns
+
+`void`
+
+##### Defined in
+
+[index.ts:500](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L500)
+
+___
+
+#### destroy
+
+• **destroy**: () => `void`
+
+Removes all subscribers and, if using websockets, closes the connection.
+
+##### Type declaration
+
+▸ (): `void`
+
+###### Returns
+
+`void`
+
+##### Defined in
+
+[index.ts:509](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L509)
 
 
-<a name="interfacesthememd"></a>
+<a name="interfacesfailuremessagemd"></a>
 
-## Interface: Theme
+## Interface: FailureMessage
 
-The theme to apply to the chat widget.
- Colors may be in any CSS-compatible format like rgb(50, 50, 50) or #aaa
+A failure message is received when the NLX api is unreachable, or sends an unparsable response.
 
 ### Properties
 
-#### primaryColor
+#### type
 
-• **primaryColor**: `string`
+• **type**: ``"failure"``
 
-Primary color for interactive UI elements like buttons
+The type of the response is `"bot"` for bot and `"user"` for user.
 
 ##### Defined in
 
-[packages/chat-widget/src/theme.ts:7](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/theme.ts#L7)
+[index.ts:259](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L259)
 
 ___
 
-#### darkMessageColor
+#### payload
 
-• **darkMessageColor**: `string`
+• **payload**: `Object`
 
-Background color for the dark chat bubbles (sent by the user)
+The payload only includes an error message.
+
+##### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `text` | `string` | The error message is either the default, or the `failureMessage` set in the [Config](#interfacesconfigmd). |
 
 ##### Defined in
 
-[packages/chat-widget/src/theme.ts:9](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/theme.ts#L9)
+[index.ts:263](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L263)
 
 ___
 
-#### lightMessageColor
+#### receivedAt
 
-• **lightMessageColor**: `string`
+• **receivedAt**: `number`
 
-Background color for the light chat bubbles (sent by the bot)
-
-##### Defined in
-
-[packages/chat-widget/src/theme.ts:11](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/theme.ts#L11)
-
-___
-
-#### white
-
-• **white**: `string`
-
-Customized shade of white
+When the failure occurred.
 
 ##### Defined in
 
-[packages/chat-widget/src/theme.ts:13](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/theme.ts#L13)
-
-___
-
-#### fontFamily
-
-• **fontFamily**: `string`
-
-Widget font family
-
-##### Defined in
-
-[packages/chat-widget/src/theme.ts:15](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/theme.ts#L15)
-
-___
-
-#### spacing
-
-• **spacing**: `number`
-
-Main spacing unit
-
-##### Defined in
-
-[packages/chat-widget/src/theme.ts:17](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/theme.ts#L17)
-
-___
-
-#### borderRadius
-
-• **borderRadius**: `number`
-
-Chat border radius
-
-##### Defined in
-
-[packages/chat-widget/src/theme.ts:19](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/theme.ts#L19)
-
-___
-
-#### chatWindowMaxHeight
-
-• **chatWindowMaxHeight**: `number`
-
-Max height of the chat window
-
-##### Defined in
-
-[packages/chat-widget/src/theme.ts:21](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/theme.ts#L21)
+[index.ts:272](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L272)
 
 
-<a name="interfacestitlebarmd"></a>
+<a name="interfacesslotvaluemd"></a>
 
-## Interface: TitleBar
+## Interface: SlotValue
 
-Configures the Title Bar of the Chat Widget.
-This is visible at the top of the widget when it is open / expanded.
+Values to fill an intent's [attached slots](https://docs.studio.nlx.ai/intents/documentation-intents/intents-attached-slots).
+
+An array of `SlotValue` objects is equivalent to a [SlotsRecord](#slotsrecord).
 
 ### Properties
 
-#### logo
+#### slotId
 
-• `Optional` **logo**: `string`
+• **slotId**: `string`
 
-Optional URL to a logo image to be displayed on to the left of the title.
+The attached slot's name
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:13](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L13)
+[index.ts:24](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L24)
 
 ___
 
-#### title
+#### value
 
-• **title**: `string`
+• **value**: `any`
 
-The title string.
-
-##### Defined in
-
-[packages/chat-widget/src/props.ts:17](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L17)
-
-___
-
-#### withCollapseButton
-
-• `Optional` **withCollapseButton**: `boolean`
-
-Setting this to true shows the collapse button ("_").
-Pressing the collapse button will hide the chat overlay but keep it active.
+Usually this will be a discrete value matching the slots's [type](https://docs.studio.nlx.ai/slots/documentation-slots/slots-values#system-slots).
+for custom slots, this can optionally be the value's ID.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:22](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L22)
-
-___
-
-#### withCloseButton
-
-• `Optional` **withCloseButton**: `boolean`
-
-Setting this to true shows the close button ("X").
-Pressing the close button will
-- hide the chat overlay
-- terminate the ongoing conversation
-- call the chat's onClose handler if provided.
-
-##### Defined in
-
-[packages/chat-widget/src/props.ts:30](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/props.ts#L30)
+[index.ts:29](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L29)
 
 
-<a name="interfaceswidgetinstancemd"></a>
+<a name="interfacesstructuredrequestmd"></a>
 
-## Interface: WidgetInstance
+## Interface: StructuredRequest
 
-A handler for a Widget. Created with [create](#create)
+The body of `sendStructured`
+Includes a combination of choice, slots, and intent in one request.
 
 ### Properties
 
-#### teardown
+#### choiceId
 
-• **teardown**: () => `void`
+• `Optional` **choiceId**: `string`
 
-End the conversation, clean up all event handlers, and remove the widget from the DOM.
-If you want to additionally clear a stored session, explicitly call [clearSession](#clearsession) with your [Props](#interfacespropsmd).
-
-##### Type declaration
-
-▸ (): `void`
-
-###### Returns
-
-`void`
+The `choiceId` is in the [BotResponse](#interfacesbotresponsemd)'s `.payload.messages[].choices[].choiceId` fields
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:62](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/index.tsx#L62)
+[index.ts:375](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L375)
 
 ___
 
-#### expand
+#### nodeId
 
-• **expand**: () => `void`
+• `Optional` **nodeId**: `string`
 
-Expand the widget and call the `onExpand` callback if present.
-
-##### Type declaration
-
-▸ (): `void`
-
-###### Returns
-
-`void`
+Required if you want to change a choice that's already been sent.
+The `nodeId` can be found in the corresponding [BotMessage](#interfacesbotmessagemd).
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:66](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/index.tsx#L66)
+[index.ts:380](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L380)
 
 ___
 
-#### collapse
+#### intentId
 
-• **collapse**: () => `void`
+• `Optional` **intentId**: `string`
 
-Collapse the widget and call the `onCollapse` callback if present.
-
-##### Type declaration
-
-▸ (): `void`
-
-###### Returns
-
-`void`
+The intent to trigger. The `intentId` is the name under the Bot's _Intents_.
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:70](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/index.tsx#L70)
+[index.ts:384](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L384)
 
 ___
 
-#### getConversationHandler
+#### slots
 
-• **getConversationHandler**: () => `undefined` \| `ConversationHandler`
+• `Optional` **slots**: [`SlotsRecordOrArray`](#slotsrecordorarray)
 
-Get the ConversationHandler for widget. Returns undefined if the widget has not yet been established.
-Note that this might not be available synchronously after widget initialization, and therefore an `undefined` check is highly recommended before use.
-See: https://developers.nlx.ai/headless-api-reference#interfacesconversationhandlermd
-
-##### Type declaration
-
-▸ (): `undefined` \| `ConversationHandler`
-
-###### Returns
-
-`undefined` \| `ConversationHandler`
+The slots to populate
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:76](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/index.tsx#L76)
+[index.ts:388](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L388)
 
 
-<a name="interfaceswidgetrefmd"></a>
+<a name="interfacesuserresponsemd"></a>
 
-## Interface: WidgetRef
+## Interface: UserResponse
 
-Widget Ref, for use when rendering a Widget without using the `create` helper function.
+A message from the user
+
+See also:
+- [BotResponse](#interfacesbotresponsemd)
+- [FailureMessage](#interfacesfailuremessagemd)
+- [Response](#response)
 
 ### Properties
 
-#### expand
+#### type
 
-• **expand**: () => `void`
+• **type**: ``"user"``
 
-Expand the widget and call the `onExpand` callback if present.
-
-##### Type declaration
-
-▸ (): `void`
-
-###### Returns
-
-`void`
+The type of the response is `"bot"` for bot and `"user"` for user, and "failure" for failure.
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:86](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/index.tsx#L86)
+[index.ts:195](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L195)
 
 ___
 
-#### collapse
+#### receivedAt
 
-• **collapse**: () => `void`
+• **receivedAt**: `number`
 
-Collapse the widget and call the `onCollapse` callback if present.
-
-##### Type declaration
-
-▸ (): `void`
-
-###### Returns
-
-`void`
+When the response was received
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:90](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/index.tsx#L90)
+[index.ts:199](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L199)
 
 ___
 
-#### conversationHandler
+#### payload
 
-• **conversationHandler**: `ConversationHandler`
+• **payload**: [`UserResponsePayload`](#userresponsepayload)
 
-the ConversationHandler for the widget.
+The payload of the response
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:94](https://github.com/nlxai/sdk/blob/e6f65697e16134f7e08dae17f2a4ecc6197a3f32/packages/chat-widget/src/index.tsx#L94)
+[index.ts:203](https://github.com/nlxai/sdk/blob/e92c6c48369da0688f12542ba524ad339d6d78f7/packages/chat-core/src/index.ts#L203)
