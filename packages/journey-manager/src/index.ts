@@ -284,13 +284,10 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   // If there are any steps for which there is no URL condition while also not being used for escalation or end,
   // the package assumes that a digression cannot be reliably detected.
   const isDigressionDetectable = Object.entries(triggers).every(
-    ([stepId, trigger]) => {
+    ([_stepId, trigger]) => {
       return (
         // every step has a URL condition
-        trigger.urlCondition != null ||
-        // unless it's an escalation step or end step
-        stepId === props.ui?.escalationStep ||
-        stepId === props.ui?.endStep
+        trigger.urlCondition != null
       );
     },
   );
@@ -455,18 +452,12 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
       if (action == null) {
         return;
       }
-      if (action === "escalate" && props.ui?.escalationStep != null) {
-        client.sendStep(props.ui.escalationStep).catch((err) => {
-          // eslint-disable-next-line no-console
-          console.warn(err);
-        });
+      if (action === "escalate" && props.ui?.onEscalation != null) {
+        props.ui.onEscalation({ sendStep: client.sendStep });
         return;
       }
-      if (action === "end" && props.ui?.endStep != null) {
-        client.sendStep(props.ui.endStep).catch((err) => {
-          // eslint-disable-next-line no-console
-          console.warn(err);
-        });
+      if (action === "end" && props.ui?.onEnd != null) {
+        props.ui.onEnd({ sendStep: client.sendStep });
         return;
       }
       if (action === "previous") {

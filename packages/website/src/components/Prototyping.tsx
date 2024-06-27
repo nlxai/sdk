@@ -13,9 +13,7 @@ const runJourneyManager = async (): Promise<unknown> => {
     ui: {
       title: "Call Control Center",
       subtitle: "Manage your call experience with us",
-      escalationStep: "abcd-1234",
       highlights: true,
-      endStep: "1234-1234",
       theme: {
         fontFamily: "'Neue Haas Grotesk'",
       },
