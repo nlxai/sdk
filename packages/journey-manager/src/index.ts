@@ -101,6 +101,8 @@ export type StepWithQueryAndElements = StepWithQuery & {
   elements?: HTMLElement[];
 };
 
+type Fn = () => void;
+
 const debounce = (func: () => void, timeout = 300): (() => void) => {
   let timer: NodeJS.Timer | null = null;
   return () => {
@@ -208,7 +210,7 @@ const getTriggeredSteps = (conversationId: string): TriggeredStep[] => {
 /**
  * Active trigger event type.
  */
-export type ActiveTriggerEventType = "click";
+export type ActiveTriggerEventType = "click" | "enterViewport";
 
 /**
  * Active trigger.
@@ -255,6 +257,10 @@ export interface RunProps {
    * Digression detection callback
    */
   onDigression?: (client: Client) => void;
+  /**
+   * Runs when a step is triggered, used primarily for debugging
+   */
+  onStep?: (stepId: string) => void;
 }
 
 function filterMap<X, Y>(
@@ -355,6 +361,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
       triggeredSteps.push({ stepId, url: window.location.toString() });
       saveTriggeredSteps(props.config.conversationId, triggeredSteps);
     }
+    props.onStep?.(stepId);
     client.sendStep(stepId).catch((err) => {
       // eslint-disable-next-line no-console
       console.warn(err);
@@ -380,6 +387,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   );
 
   let previousUrl = window.location.toString();
+
   /**
    * Keeps track of which load steps matched the URL the last time the URL was checked.
    * This does not necessarily mean that the steps in question have actually been triggered (page load events should not fire if subsequent pages also satisfy the URL condition for which a step was already fired).
@@ -434,6 +442,21 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     },
   );
 
+  const enterViewportSteps: StepWithQuery[] = filterMap(
+    Object.entries(triggers),
+    ([stepId, trigger]: [StepId, Trigger]) => {
+      if (trigger.event === "enterViewport" && trigger.query != null) {
+        return {
+          stepId,
+          query: decode(trigger.query),
+          urlCondition: trigger.urlCondition,
+          once: trigger.once,
+        };
+      }
+      return null;
+    },
+  );
+
   const handleGlobalClickForAnnotations = async (ev: any): Promise<void> => {
     const targets = await withElements(clickSteps);
     const node = ev.target;
@@ -450,15 +473,18 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   const findActiveTriggers = (
     eventType: ActiveTriggerEventType,
   ): ActiveTrigger[] => {
-    if (eventType === "click") {
-      return clickSteps
-        .filter(
-          ({ urlCondition }) =>
-            urlCondition == null || matchesUrlCondition(urlCondition),
-        )
-        .map((trigger) => ({ trigger, elements: getAll(trigger.query) }));
-    }
-    return [];
+    const steps =
+      eventType === "click"
+        ? clickSteps
+        : eventType === "enterViewport"
+          ? enterViewportSteps
+          : [];
+    return steps
+      .filter(
+        ({ urlCondition }) =>
+          urlCondition == null || matchesUrlCondition(urlCondition),
+      )
+      .map((trigger) => ({ trigger, elements: getAll(trigger.query) }));
   };
 
   /**
@@ -468,18 +494,16 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   // TODO: type this more accurately
   let uiElement: any;
 
-  let teardownUiElement: (() => void) | null = null;
-
-  const setHighlights = (): void => {
+  const setHighlights = debounce((): void => {
     const highlightElements = findActiveTriggers("click").flatMap(
       (activeTrigger) => activeTrigger.elements,
     );
     if (uiElement != null) {
       uiElement.highlightElements = highlightElements;
     }
-  };
+  });
 
-  const debouncedSetHighlights = debounce(setHighlights);
+  let teardownUiElement: (() => void) | null = null;
 
   if (props.ui != null) {
     uiElement = document.createElement("journey-manager");
@@ -509,10 +533,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
         } else {
           const lastTriggeredStep = triggeredSteps[triggeredSteps.length - 1];
           if (lastTriggeredStep != null) {
-            client.sendStep(lastTriggeredStep.stepId).catch((err) => {
-              // eslint-disable-next-line no-console
-              console.warn(err);
-            });
+            sendStep(lastTriggeredStep.stepId, false);
             // Redirect to previous page if the last triggered step occurred on it
             if (lastTriggeredStep.url !== window.location.toString()) {
               window.location.href = lastTriggeredStep.url;
@@ -521,13 +542,48 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
         }
       }
     };
-    setHighlights();
+    if (props.ui.highlights ?? false) {
+      setHighlights();
+    }
     uiElement.addEventListener("action", handleAction);
     document.body.appendChild(uiElement);
     teardownUiElement = () => {
       document.body.removeChild(uiElement);
     };
   }
+
+  let teardownIntersectionObserve: Fn | null = null;
+
+  const observeIntersections = debounce(() => {
+    teardownIntersectionObserve?.();
+    const enterViewportTriggers = findActiveTriggers("enterViewport");
+    const onIntersection: IntersectionObserverCallback = (data) => {
+      data.forEach((entry) => {
+        if (entry.intersectionRatio < 0.99) {
+          return;
+        }
+        const target: HTMLElement | null =
+          entry.target instanceof HTMLElement ? entry.target : null;
+        if (target == null) {
+          return;
+        }
+        const trigger = enterViewportTriggers.find(({ elements }) =>
+          elements.includes(target),
+        );
+        if (trigger != null) {
+          sendStep(trigger.trigger.stepId, trigger.trigger.once ?? false);
+        }
+      });
+    };
+    const observer = new IntersectionObserver(onIntersection, { threshold: 1 });
+    const elements = enterViewportTriggers.flatMap(({ elements }) => elements);
+    elements.forEach((element) => {
+      observer.observe(element);
+    });
+    teardownIntersectionObserve = () => {
+      observer.disconnect();
+    };
+  });
 
   /**
    * Change detection
@@ -549,14 +605,20 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
         }
       });
     });
-    debouncedSetHighlights();
-    // If the document changed for any reason (click, popstate event etc.), check if the URL also changed
-    // If it did, handle page load events
-    const newUrl = window.location.toString();
-    if (newUrl !== previousUrl) {
-      handleLoadSteps();
+    if (props.ui?.highlights ?? false) {
+      setHighlights();
     }
-    previousUrl = newUrl;
+    observeIntersections();
+    // This timeout here seems to solve some timing issues on URL handling
+    setTimeout(() => {
+      // If the document changed for any reason (click, popstate event etc.), check if the URL also changed
+      // If it did, handle page load events
+      const newUrl = window.location.toString();
+      if (newUrl !== previousUrl) {
+        handleLoadSteps();
+        previousUrl = newUrl;
+      }
+    });
   });
 
   documentObserver.observe(document, {
@@ -572,6 +634,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     teardown: () => {
       // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
       document.removeEventListener("click", handleGlobalClickForAnnotations);
+      teardownIntersectionObserve?.();
       documentObserver.disconnect();
       teardownUiElement?.();
     },
