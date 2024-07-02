@@ -201,6 +201,8 @@ const MessageGroups: FC<{
                                     allowChoiceReselection
                                       ? {
                                           nodeId: botMessage.nodeId,
+                                          intentId:
+                                            botMessage.metadata?.intentId,
                                           responseIndex,
                                           messageIndex: botMessageIndex,
                                         }
@@ -519,7 +521,7 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
   const scrollToBottom = useCallback(() => {
     const node = messagesContainerRef.current;
     if (node != null) {
-      node.scroll({top: node.scrollHeight, behavior: 'smooth'});
+      node.scroll({ top: node.scrollHeight, behavior: "smooth" });
     }
   }, [messagesContainerRef]);
 
