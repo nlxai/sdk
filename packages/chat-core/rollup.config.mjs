@@ -41,6 +41,7 @@ export default [
       { file: pkg.main, format: "cjs" },
       { file: pkg.module, format: "es" },
     ],
+    external: ["isomorphic-fetch", "reconnecting-websocket", "uuid", "ramda"],
     plugins: [typescript(), json()],
   },
 ];
