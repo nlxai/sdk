@@ -65,7 +65,9 @@ export default function buildconfig({
         commonjs(), // needed to bundle node modules that use cjs
         json(), // needed to fetch package version from package.json
         nodeResolve({ browser: true }), // bundles packages from node_modules
-        nodePolyfills(),
+        nodePolyfills({
+          include: "../../node_modules/**/*.js",
+        }),
         terser(),
         replace({
           preventAssignment: true,
