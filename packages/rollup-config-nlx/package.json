@@ -6,6 +6,7 @@
   "main": "index.js",
   "types": "index.ts",
   "scripts": {
+    "postinstall": "npm run tsc",
     "tsc": "tsc index.ts --target ESNext --moduleResolution 'bundler'"
   },
   "devDependencies": {
