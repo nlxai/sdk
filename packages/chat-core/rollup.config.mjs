@@ -28,6 +28,7 @@ export default [
         include: "../**/node_modules/**/*.js",
       }),
       replace({
+        preventAssignment: true,
         "process.env.NODE_ENV": JSON.stringify("production"),
       }),
       terser(),
