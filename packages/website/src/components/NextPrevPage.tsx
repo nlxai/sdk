@@ -34,8 +34,6 @@ export const NextPrevPage: FC<{ prev?: LinkData; next?: LinkData }> = (
   props,
 ) => (
   <dl className="mt-12 flex border-t border-gray-200 pt-6">
-    {/* initial eslint integration */}
-    { }
     {props.prev && (
       <div>
         <dt className="font-display text-sm font-medium text-gray-800">
@@ -52,8 +50,6 @@ export const NextPrevPage: FC<{ prev?: LinkData; next?: LinkData }> = (
         </dd>
       </div>
     )}
-    {/* initial eslint integration */}
-    { }
     {props.next && (
       <div className="ml-auto text-right">
         <dt className="font-display text-sm font-medium text-gray-900">Next</dt>

@@ -74,8 +74,6 @@ export const PageContent: FC<{ md: string }> = ({ md }) => (
                 text={lines}
                 className="absolute top-1.5 right-1.5 hidden group-hover:block"
               />
-              {/* initial eslint integration */}
-              { }
               {match ? (
                 <SyntaxHighlighter
                   // initial eslint integration

@@ -38,8 +38,6 @@ export const InlineWidget: FC<{
     };
   }, [setTick]);
 
-  // initial eslint integration
-   
   const displayedItems = props.animated
     ? props.items.slice(0, 1 + (tick % props.items.length))
     : props.items;
@@ -77,8 +75,7 @@ export const InlineWidget: FC<{
       }
     };
     const observer = new MutationObserver(callback);
-    // initial eslint integration
-     
+
     if (messagesContainer.current) {
       observer.observe(messagesContainer.current, {
         childList: true,
@@ -102,8 +99,7 @@ export const InlineWidget: FC<{
         threshold: 0.95,
       },
     );
-    // initial eslint integration
-     
+
     if (messagesContainer.current) {
       observer.observe(messagesContainer.current);
     }
@@ -137,8 +133,6 @@ export const InlineWidget: FC<{
                   return (
                     <div
                       className={`w-fit self-end bg-blueMain text-white p-2 text-sm rounded-lg mx-4 ${
-                        // initial eslint integration
-                         
                         props.animated ? "animate-slideInFromRight" : ""
                       }`}
                       key={itemIndex}
@@ -151,8 +145,6 @@ export const InlineWidget: FC<{
                   return (
                     <div
                       className={`w-fit self-start bg-gray-100 p-2 text-sm rounded-lg mx-4 ${
-                        // initial eslint integration
-                         
                         props.animated ? "animate-slideInFromLeft" : ""
                       }`}
                       key={itemIndex}
@@ -165,8 +157,6 @@ export const InlineWidget: FC<{
                   return (
                     <div
                       className={`w-full ${
-                        // initial eslint integration
-                         
                         props.animated ? "animate-slideInFromLeft" : ""
                       }`}
                       key={itemIndex}
@@ -180,7 +170,7 @@ export const InlineWidget: FC<{
           );
         })}
         {/* initial eslint integration */}
-        { }
+        {}
         {loader &&
           (loader === "user" ? (
             <div
