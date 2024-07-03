@@ -2,7 +2,6 @@
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import nodePolyfills from "rollup-plugin-node-polyfills";
-import replace from "@rollup/plugin-replace";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
@@ -25,10 +24,6 @@ export default [
       }),
       commonjs(),
       nodePolyfills(),
-      replace({
-        preventAssignment: true,
-        "process.env.NODE_ENV": JSON.stringify("production"),
-      }),
       terser(),
     ],
   },
