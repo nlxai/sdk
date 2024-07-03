@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/chat-preact",
-  "version": "0.1.28",
+  "version": "0.1.34",
   "description": "Preact hook wrapper for the NLX Chat SDK",
   "main": "lib/index.esm.js",
   "module": "lib/index.esm.js",
@@ -35,7 +35,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@nlxai/chat-core": "^0.1.28",
+    "@nlxai/chat-core": "^0.1.34",
     "ramda": "^0.29.1"
   },
   "publishConfig": {
