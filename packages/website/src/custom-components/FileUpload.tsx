@@ -78,10 +78,10 @@ export const FileUpload: FC<{
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+     
     const file = e.target.files ? e.target.files[0] : null;
     // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+     
     if (file) {
       setSelectedFile(file);
       uploadFile(file);
