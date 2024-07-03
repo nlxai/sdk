@@ -2,13 +2,17 @@
   "name": "@nlxai/multimodal",
   "version": "0.1.28",
   "description": "NLX SDK for multimodal experiences with",
-  "main": "lib/index.esm.js",
+  "main": "lib/index.cjs.js",
   "module": "lib/index.esm.js",
-  "commonjs": "lib/index.cjs.js",
   "browser": "lib/index.umd.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    "types": "./lib/index.d.ts",
+    "import": "./lib/index.esm.js",
+    "require": "./lib/index.cjs.js"
+  },
   "scripts": {
-    "build": "rm -rf lib && rollup -c",
+    "build": "rm -rf lib && rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
     "docs": "rm -rf docs/ && typedoc && concat-md --decrease-title-levels --dir-name-as-title docs/ > docs/index.md",
     "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
