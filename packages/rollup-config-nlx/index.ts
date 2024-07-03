@@ -5,7 +5,7 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 
-export default function buildconfig(pkg, name, externalDeps, buildBrowser) {
+export default function buildconfig({ pkg, name, externalDeps, buildBrowser }) {
   const config = [
     // Bundler/Node-friendly CommonJS and ESM builds
     // this version doesn't need to package node_modules because we assume they'll be installed as dependencies of this package
