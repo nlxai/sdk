@@ -1,0 +1,21 @@
+{
+  "name": "chat-core",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "test-cjs": "node src/index.cjs",
+    "test-esm": "node src/index.mjs",
+    "test-typescript": "tsc && node dist/index.js",
+    "test": "npm run test-cjs && npm run test-esm && npm run test-typescript"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.5.2"
+  },
+  "dependencies": {
+    "@nlxai/chat-core": "^0.1.28"
+  }
+}
