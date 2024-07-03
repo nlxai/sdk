@@ -8,7 +8,7 @@ import typescript from "@rollup/plugin-typescript";
 import pkg from "./package.json" assert { type: "json" };
 
 export default [
-  // Browser-friendly UMD build
+  // Browser-friendly UMD build. This version is used with unpkg.com to be directly included in a script tag.
   {
     input: "src/index.ts",
     output: {
@@ -17,17 +17,16 @@ export default [
       format: "umd",
     },
     plugins: [
-      json(),
-      typescript(),
-      nodeResolve({
-        browser: true,
-      }),
-      commonjs(),
+      commonjs(), // needed to bundle node modules that use cjs
+      json(), // needed to fetch package version from package.json
       nodePolyfills(),
+      nodeResolve({ browser: true }), // bundles packages from node_modules
       terser(),
+      typescript(),
     ],
   },
   // Bundler/Node-friendly CommonJS and ESM builds
+  // this version doesn't need to package node_modules because we assume they'll be installed as dependencies of this package
   {
     input: "src/index.ts",
     output: [
