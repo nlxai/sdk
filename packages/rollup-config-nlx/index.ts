@@ -6,11 +6,29 @@ import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import { RollupOptions } from "rollup";
 
-export interface Config {
-  pkg: any;
-  name: string;
+interface CommonConfig {
+  pkg: {
+    main: string;
+    module: string;
+  };
   externalDeps: string[];
 }
+
+interface WithBrowserConfig {
+  pkg: {
+    browser: string;
+  };
+  name: string;
+}
+
+interface WithoutBrowserConfig {
+  pkg?: {
+    browser?: never;
+  };
+  name?: never;
+}
+
+export type Config = (WithBrowserConfig | WithoutBrowserConfig) & CommonConfig;
 
 export default function buildconfig({
   pkg,
