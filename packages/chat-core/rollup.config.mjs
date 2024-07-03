@@ -24,9 +24,7 @@ export default [
         browser: true,
       }),
       commonjs(),
-      nodePolyfills({
-        include: "../**/node_modules/**/*.js",
-      }),
+      nodePolyfills(),
       replace({
         preventAssignment: true,
         "process.env.NODE_ENV": JSON.stringify("production"),
