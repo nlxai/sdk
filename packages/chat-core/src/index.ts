@@ -134,6 +134,17 @@ export interface BotResponseMetadata {
 }
 
 /**
+ * Metadata for the individual bot message
+ * as well as whether the client should poll for more bot responses.
+ */
+export interface BotMessageMetadata {
+  /**
+   * The message node's intent
+   */
+  intentId?: string;
+}
+
+/**
  * A message from the bot, as well as any choices the user can make.
  */
 export interface BotMessage {
@@ -154,6 +165,10 @@ export interface BotMessage {
    * A selection of choices to show to the user. They may choose one of them.
    */
   choices: Choice[];
+  /**
+   * Metadata
+   */
+  metadata?: BotMessageMetadata;
   /**
    * After a choice has been made by the user, this will be updated locally to the selected choice id.
    * This field is set locally and does not come from the bot.
@@ -426,6 +441,10 @@ export interface ChoiceRequestMetadata {
    * The `nodeId` can be found in the corresponding {@link BotMessage}.
    */
   nodeId?: string;
+  /**
+   * Intent ID, used for sending to the NLU to allow it to double-check
+   */
+  intentId?: string;
 }
 
 /**
@@ -892,6 +911,7 @@ export default function createConversation(
         request: {
           structured: {
             nodeId: metadata?.nodeId,
+            intentId: metadata?.intentId,
             choiceId,
           },
         },
