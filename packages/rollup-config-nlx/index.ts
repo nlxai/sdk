@@ -3,6 +3,7 @@ import json from "@rollup/plugin-json";
 import nodePolyfills from "rollup-plugin-polyfill-node";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
+import replace from "@rollup/plugin-replace";
 import typescript from "@rollup/plugin-typescript";
 import { RollupOptions } from "rollup";
 
@@ -12,6 +13,7 @@ interface CommonConfig {
     module: string;
   };
   externalDeps: string[];
+  input: string;
 }
 
 interface WithBrowserConfig {
@@ -34,12 +36,13 @@ export default function buildconfig({
   pkg,
   name,
   externalDeps,
+  input,
 }: Config): RollupOptions[] {
   const config: RollupOptions[] = [
     // Bundler/Node-friendly CommonJS and ESM builds
     // this version doesn't need to package node_modules because we assume they'll be installed as dependencies of this package
     {
-      input: "src/index.ts",
+      input: input,
       output: [
         { file: pkg.main, format: "cjs" },
         { file: pkg.module, format: "es" },
@@ -52,7 +55,7 @@ export default function buildconfig({
   if (pkg.browser) {
     // Browser-friendly UMD build. This version is used with unpkg.com to be directly included in a script tag.
     config.push({
-      input: "src/index.ts",
+      input: input,
       output: {
         name: name,
         file: pkg.browser,
@@ -64,6 +67,11 @@ export default function buildconfig({
         nodeResolve({ browser: true }), // bundles packages from node_modules
         nodePolyfills(),
         terser(),
+        replace({
+          preventAssignment: true,
+          // this is used by some libraries and polyfills
+          "process.env.NODE_ENV": JSON.stringify("production"),
+        }),
         typescript(),
       ],
     });
