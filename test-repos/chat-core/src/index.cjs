@@ -5,7 +5,7 @@
 // TODO:
 // - stop mixing default & named exports. I guess that will be a breaking change and imply a version bump
 // - main in package.json should point to cjs file
-const createConversation = require("@nlxai/chat-core/lib/index.cjs").default;
+const { createConversation } = require("@nlxai/chat-core");
 
 const config = {
   botUrl: "", // obtain from NLX deployments page

@@ -2,7 +2,8 @@ import { useState, useEffect, useRef, useMemo } from "react";
 
 // Code from here on out is identical in the React and Preact packages
 import { last } from "ramda";
-import createConversation, {
+import {
+  createConversation,
   type Config,
   type ConversationHandler,
   shouldReinitialize,

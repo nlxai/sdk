@@ -1,5 +1,4 @@
-import { Config } from "@nlxai/chat-core";
-import createConversation from "@nlxai/chat-core";
+import { createConversation, type Config } from "@nlxai/chat-core";
 
 const config: Config = {
   botUrl: "", // obtain from NLX deployments page

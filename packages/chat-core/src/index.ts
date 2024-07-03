@@ -572,9 +572,7 @@ export const shouldReinitialize = (
  * @param config -
  * @returns The {@link ConversationHandler} is a bundle of functions to interact with the conversation.
  */
-export default function createConversation(
-  config: Config,
-): ConversationHandler {
+export function createConversation(config: Config): ConversationHandler {
   let socket: ReconnectingWebSocket | undefined;
 
   // Check if the bot URL has a language code appended to it
