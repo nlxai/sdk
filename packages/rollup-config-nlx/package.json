@@ -3,6 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "main": "index.js",
+  "types": "index.ts",
+  "scripts": {
+    "tsc": "tsc index.ts --target ESNext --moduleResolution 'bundler'"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  },
   "peerDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.0.1",
