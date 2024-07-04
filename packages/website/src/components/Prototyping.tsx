@@ -115,7 +115,7 @@ const runJourneyManager = async (): Promise<unknown> => {
     ui: {
       title: "Call Control Center",
       subtitle: "Manage your call experience with us",
-      highlights: false,
+      highlights: true, // note: on load the highlights don't move with their original parent when the page changes
       theme: {
         fontFamily: "'Neue Haas Grotesk'",
       },
