@@ -11,6 +11,7 @@ import { WebWidgetSetup } from "./content/02-01-web-widget-setup";
 import { WebWidgetTheming } from "./content/02-02-web-widget-theming";
 import { WebWidgetCustomBehaviors } from "./content/02-03-web-widget-custom-behaviors";
 import { WebWidgetTryLive } from "./content/02-04-web-widget-try-live";
+import { WebWidgetApi } from "./content/02-05-web-widget-api-reference";
 // 3
 import { WebWidgetComponentsGettingStarted } from "./content/03-01-web-widget-components-getting-started";
 import { WebWidgetComponentsAddressInput } from "./content/03-02-address-input";
@@ -93,6 +94,11 @@ export const routes: Array<{
         label: "Try live",
         url: "/widget-try-live",
         element: <WebWidgetTryLive />,
+      },
+      {
+        label: "API reference",
+        url: "/widget-api-reference",
+        element: <WebWidgetApi />,
       },
     ],
   },
