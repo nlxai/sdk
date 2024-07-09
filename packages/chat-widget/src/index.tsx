@@ -38,6 +38,9 @@ export { default as React } from "react";
 /** @hidden */
 export { default as ReactDOM } from "react-dom";
 
+/** @hidden */
+export { getCurrentExpirationTimestamp } from "@nlxai/chat-core";
+
 export {
   type Props,
   type TitleBar,
@@ -320,23 +323,7 @@ const retrieveSession = (
     const responses: Response[] | undefined = data?.data?.responses;
     const conversationId: string | undefined = data?.data?.conversationId;
     if (responses != null) {
-      let expirationTimestamp: number | undefined;
-      responses.forEach((response) => {
-        if (
-          response.type === "bot" &&
-          response.payload.expirationTimestamp != null
-        ) {
-          expirationTimestamp = response.payload.expirationTimestamp;
-        }
-      });
-      if (
-        expirationTimestamp == null ||
-        new Date().getTime() < expirationTimestamp
-      ) {
-        return { responses, conversationId };
-      } else {
-        return { responses };
-      }
+      return { responses, conversationId };
     }
     return null;
   } catch (err) {

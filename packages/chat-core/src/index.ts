@@ -945,6 +945,26 @@ export default function createConversation(
 }
 
 /**
+ * Get current expiration timestamp from the current list of reponses
+ * @param responses - the current list of user and bot responses (first argument in the subscribe callback)
+ * @returns an expiration timestamp in Unix Epoch (`new Date().getTime()`), or `null` if this is not known (typically occurs if the bot has not responded yet)
+ */
+export const getCurrentExpirationTimestamp = (
+  responses: Response[],
+): number | null => {
+  let expirationTimestamp: number | null = null;
+  responses.forEach((response) => {
+    if (
+      response.type === "bot" &&
+      response.payload.expirationTimestamp != null
+    ) {
+      expirationTimestamp = response.payload.expirationTimestamp;
+    }
+  });
+  return expirationTimestamp;
+};
+
+/**
  * This package is intentionally designed with a subscription-based API as opposed to a promise-based one where each message corresponds to a single bot response, available asynchronously.
  *
  * If you need a promise-based wrapper, you can use the `promisify` helper available in the package:
