@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/multimodal",
-  "version": "0.1.28",
+  "version": "0.1.35",
   "description": "NLX SDK for multimodal experiences with",
   "main": "lib/index.cjs.js",
   "module": "lib/index.esm.js",

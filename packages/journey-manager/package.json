@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/journey-manager",
-  "version": "0.1.34",
+  "version": "0.1.35",
   "description": "Journey Manager",
   "main": "lib/index.cjs.js",
   "module": "lib/index.esm.js",
@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.6.5",
-    "@nlxai/multimodal": "^0.1.28",
+    "@nlxai/multimodal": "^0.1.35",
     "@testing-library/dom": "^10.1.0",
     "preact": "^10.22.0",
     "ramda": "^0.29.1",
