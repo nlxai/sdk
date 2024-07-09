@@ -71,12 +71,13 @@ export const useChat = (config: Config): ChatHook => {
     return newHandler;
   }, [config]);
 
-  const [responses, setResponses] = useState<Response[]>([]);
+  const [responses, setResponses] = useState<Response[]>(
+    config.responses ?? [],
+  );
 
   const [inputValue, setInputValue] = useState<string>("");
 
   useEffect(() => {
-    setResponses([]);
     conversationHandler.subscribe(setResponses);
     return () => {
       conversationHandler.destroy();
