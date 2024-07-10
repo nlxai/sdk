@@ -429,16 +429,25 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
     props.storeIn,
   ]);
 
+  // Maintain a set of expioration timestamps for which resets have been performed, to ensure they are not handled multiple times
+  const resetTimestamps = useRef(new Set<number>());
+
   useEffect(() => {
     const expirationTimestamp = getCurrentExpirationTimestamp(chat.responses);
     if (expirationTimestamp != null) {
       const until = expirationTimestamp - new Date().getTime();
       if (until <= 0) {
-        chat.conversationHandler.reset({ clearResponses: false });
-        return;
+        if (!resetTimestamps.current.has(expirationTimestamp)) {
+          resetTimestamps.current.add(expirationTimestamp);
+          chat.conversationHandler.reset({ clearResponses: false });
+          return;
+        }
       }
       const timeout = setTimeout(() => {
-        chat.conversationHandler.reset({ clearResponses: false });
+        if (!resetTimestamps.current.has(expirationTimestamp)) {
+          resetTimestamps.current.add(expirationTimestamp);
+          chat.conversationHandler.reset({ clearResponses: false });
+        }
       }, until);
       return () => {
         clearTimeout(timeout);
