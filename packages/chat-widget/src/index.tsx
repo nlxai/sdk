@@ -16,7 +16,11 @@ import {
 import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "@emotion/react";
 import { useChat, type ChatHook } from "@nlxai/chat-react";
-import { type Response, type ConversationHandler } from "@nlxai/chat-core";
+import {
+  type Response,
+  type ConversationHandler,
+  getCurrentExpirationTimestamp,
+} from "@nlxai/chat-core";
 import {
   CloseIcon,
   MinimizeIcon,
@@ -424,6 +428,23 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
     props.config.languageCode,
     props.storeIn,
   ]);
+
+  useEffect(() => {
+    const expirationTimestamp = getCurrentExpirationTimestamp(chat.responses);
+    if (expirationTimestamp != null) {
+      const until = expirationTimestamp - new Date().getTime();
+      if (until <= 0) {
+        chat.conversationHandler.reset({ clearResponses: false });
+        return;
+      }
+      const timeout = setTimeout(() => {
+        chat.conversationHandler.reset({ clearResponses: false });
+      }, until);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+  }, [chat.responses, chat.conversationHandler.reset]);
 
   // Expanded state
 
