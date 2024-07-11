@@ -385,6 +385,16 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
+
+  const ancestors: Element[] = ((element: HTMLElement) => {
+    const ancestors: Element[] = [];
+    while (element.parentNode instanceof HTMLElement) {
+      ancestors.push(element.parentNode);
+      element = element.parentNode;
+    }
+    return ancestors;
+  })(element);
+
   useEffect(() => {
     if (ref.current != null) {
       const highlight = ref.current;
@@ -403,17 +413,6 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
 
       const cleanupAutoUpdate = autoUpdate(element, highlight, moveHighlight);
       const resizeObserver = new ResizeObserver(moveHighlight);
-      const ancestors: HTMLElement[] = ((element: HTMLElement) => {
-        const ancestors: HTMLElement[] = [];
-        while (
-          element.parentNode &&
-          element.parentNode instanceof HTMLElement
-        ) {
-          ancestors.push(element.parentNode);
-          element = element.parentNode;
-        }
-        return ancestors;
-      })(element);
 
       ancestors.forEach((ancestor) => {
         resizeObserver.observe(ancestor);
