@@ -1,7 +1,7 @@
-/* eslint-disable accessor-pairs */
-/* eslint-disable react/prop-types */
+/* eslint-disable accessor-pairs,  react/prop-types */
+
 import { type Client } from "@nlxai/multimodal";
-import { computePosition } from "@floating-ui/dom";
+import { autoUpdate, computePosition } from "@floating-ui/dom";
 import { render, type FunctionComponent } from "preact";
 import { useEffect, useState, useRef } from "preact/hooks";
 
@@ -133,7 +133,7 @@ button {
 @keyframes fadein {
   0% {
     opacity: 0%;
-  } 
+  }
   100% {
     opacity: 100%;
   }
@@ -142,7 +142,7 @@ button {
 @keyframes slideup {
   0% {
     transform: translateY(8px);
-  } 
+  }
   100% {
     transform: translateY(0px);
   }
@@ -220,7 +220,7 @@ button {
   font-size: 18px;
   font-weight: 500;
 }
- 
+
 .drawer-header p {
   font-size: 14px;
   color: #777;
@@ -384,18 +384,43 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
+
+  const ancestors: Element[] = ((element: HTMLElement) => {
+    const ancestors: Element[] = [];
+    while (element.parentNode instanceof HTMLElement) {
+      ancestors.push(element.parentNode);
+      element = element.parentNode;
+    }
+    return ancestors;
+  })(element);
+
   useEffect(() => {
     if (ref.current != null) {
-      computePosition(element, ref.current, {
-        placement: "top-end",
-      })
-        .then((pos) => {
-          setPos(pos);
+      const highlight = ref.current;
+      const moveHighlight = (): void => {
+        computePosition(element, highlight, {
+          placement: "top-end",
         })
-        .catch((err) => {
-          // eslint-disable-next-line no-console
-          console.warn(err);
-        });
+          .then((pos) => {
+            setPos(pos);
+          })
+          .catch((err) => {
+            // eslint-disable-next-line no-console
+            console.warn(err);
+          });
+      };
+
+      const cleanupAutoUpdate = autoUpdate(element, highlight, moveHighlight);
+      const resizeObserver = new ResizeObserver(moveHighlight);
+
+      ancestors.forEach((ancestor) => {
+        resizeObserver.observe(ancestor);
+      });
+
+      return () => {
+        resizeObserver.disconnect();
+        cleanupAutoUpdate();
+      };
     }
   }, [element]);
   return (

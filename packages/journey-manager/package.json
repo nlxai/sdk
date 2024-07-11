@@ -39,7 +39,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.6.5",
+    "@floating-ui/dom": "^1.6.7",
     "@nlxai/multimodal": "^0.1.35",
     "@testing-library/dom": "^10.1.0",
     "preact": "^10.22.0",
