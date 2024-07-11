@@ -1,6 +1,5 @@
-/* eslint-disable accessor-pairs */
+/* eslint-disable accessor-pairs,  react/prop-types */
 
-/* eslint-disable react/prop-types */
 import { type Client } from "@nlxai/multimodal";
 import { autoUpdate, computePosition } from "@floating-ui/dom";
 import { render, type FunctionComponent } from "preact";
