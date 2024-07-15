@@ -3,7 +3,7 @@
 import { type Client } from "@nlxai/multimodal";
 import { autoUpdate, computePosition } from "@floating-ui/dom";
 import { render, type FunctionComponent } from "preact";
-import { useEffect, useState, useRef } from "preact/hooks";
+import { useEffect, useState, useRef, useMemo } from "preact/hooks";
 
 /**
  * Theme colors
@@ -182,7 +182,7 @@ button {
 
 .drawer-open {
   transform: translateY(0%);
-  animation: fadein 0.8s normal forwards ease-in-out;
+  animation: fadein 0.3s normal forwards ease-in-out;
 }
 
 .drawer-content {
@@ -260,6 +260,14 @@ button {
   background-color: rgba(0,0,0,0.10);
 }
 
+.drawer-buttons button:disabled {
+  opacity: 0.5;
+}
+
+.drawer-buttons button:disabled:hover {
+  background-color: rgba(0,0,0,0.07);
+}
+
 /* Footer */
 
 .drawer-footer {
@@ -271,6 +279,7 @@ button {
   align-items: center;
   border: none;
   background: none;
+  color: #777;
 }
 
 .drawer-footer button svg {
@@ -281,6 +290,7 @@ button {
 }
 
 .drawer-footer button:hover {
+  color: #000;
 }
 
 /* Success message */
@@ -434,6 +444,13 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
 
 type Action = "end" | "escalate" | "previous";
 
+type ControlCenterStatus =
+  | null
+  | "pending-escalation"
+  | "pending-end"
+  | "success-escalation"
+  | "success-end";
+
 const ControlCenter: FunctionComponent<{
   config: UiConfig;
   digression: boolean;
@@ -442,8 +459,18 @@ const ControlCenter: FunctionComponent<{
 }> = ({ config, highlightElements, digression, onAction }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   // TODO: set up success handling API with the new `onEscalation` and `onEnd` handlers
-  const [successMessage] = useState<string | null>(null);
+  const [status, setStatus] = useState<ControlCenterStatus>(null);
   const drawerContentRef = useRef<HTMLDivElement | null>(null);
+
+  const successMessage = useMemo<string | null>(() => {
+    if (status === "success-escalation") {
+      return "Your call is being transferred to an agent.";
+    }
+    if (status === "success-end") {
+      return "Your call has ended.";
+    }
+    return null;
+  }, [status]);
 
   return (
     <>
@@ -499,8 +526,16 @@ const ControlCenter: FunctionComponent<{
 
               {config.onEscalation != null ? (
                 <button
+                  disabled={status === "pending-escalation"}
                   onClick={() => {
                     onAction("escalate");
+                    setStatus("pending-escalation");
+                    setTimeout(() => {
+                      setStatus("success-escalation");
+                    }, 800);
+                    setTimeout(() => {
+                      setIsOpen(false);
+                    }, 5000);
                   }}
                 >
                   <SupportAgentIcon />
@@ -510,8 +545,16 @@ const ControlCenter: FunctionComponent<{
 
               {config.onEnd != null ? (
                 <button
+                  disabled={status === "pending-end"}
                   onClick={() => {
                     onAction("end");
+                    setStatus("pending-end");
+                    setTimeout(() => {
+                      setStatus("success-end");
+                    }, 800);
+                    setTimeout(() => {
+                      setIsOpen(false);
+                    }, 5000);
                   }}
                 >
                   <CallEndIcon />
