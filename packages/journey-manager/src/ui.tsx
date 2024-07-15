@@ -458,7 +458,6 @@ const ControlCenter: FunctionComponent<{
   onAction: (action: Action) => void;
 }> = ({ config, highlightElements, digression, onAction }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  // TODO: set up success handling API with the new `onEscalation` and `onEnd` handlers
   const [status, setStatus] = useState<ControlCenterStatus>(null);
   const drawerContentRef = useRef<HTMLDivElement | null>(null);
 
