@@ -119,6 +119,10 @@ const runJourneyManager = async (): Promise<unknown> => {
       theme: {
         fontFamily: "'Neue Haas Grotesk'",
       },
+      onEscalation: () => {
+        // eslint-disable-next-line no-console
+        console.log("escalation");
+      },
     },
     triggers: triggersForRun(),
     onStep: (stepId) => {
