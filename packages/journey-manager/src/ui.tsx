@@ -4,6 +4,7 @@ import { type Client } from "@nlxai/multimodal";
 import { autoUpdate, platform } from "@floating-ui/dom";
 import { render, type FunctionComponent } from "preact";
 import { useEffect, useState, useRef, useMemo } from "preact/hooks";
+import tinycolor from "tinycolor2";
 
 /**
  * Theme colors
@@ -106,34 +107,10 @@ const mergeWithDefault = (partial?: PartialTheme): Theme => ({
   },
 });
 
-const hexToRgb = (hex: string): { r: number; g: number; b: number } | null => {
-  // Remove the leading # if present
-  hex = hex.replace(/^#/, "");
+const styles = (theme: Theme): string => {
+  const highlight = tinycolor(theme.colors.highlight).toRgb();
 
-  // Check if the hex string is valid
-  if (hex.length !== 6 && hex.length !== 3) {
-    return null; // Invalid hex color
-  }
-
-  // If the hex string is shorthand (3 characters), convert it to 6 characters
-  if (hex.length === 3) {
-    hex = hex
-      .split("")
-      .map((char) => char + char)
-      .join("");
-  }
-
-  // Convert the hex values to RGB values
-  const bigint = parseInt(hex, 16);
-  const r = (bigint >> 16) & 255;
-  const g = (bigint >> 8) & 255;
-  const b = bigint & 255;
-
-  return { r, g, b };
-};
-
-const styles = (theme: Theme): string => `
-* {
+  return `* {
   font-family: ${theme.fontFamily};
   font-size: 14px;
 }
@@ -148,10 +125,9 @@ p {
 .highlights {
   --primary: ${theme.colors.primary};
   --primary-hover: ${theme.colors.primaryHover};
-  --highlight: ${theme.colors.highlight};
-  --highlightR: ${hexToRgb(theme.colors.highlight)?.r};
-  --highlightG: ${hexToRgb(theme.colors.highlight)?.g};
-  --highlightB: ${hexToRgb(theme.colors.highlight)?.b};
+  --highlightR: ${highlight.r};
+  --highlightG: ${highlight.g};
+  --highlightB: ${highlight.b};
   z-index: 1000;
 }
 
@@ -364,6 +340,7 @@ button {
   animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 `;
+};
 
 const MultimodalIcon: FunctionComponent<unknown> = () => (
   <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
