@@ -192,7 +192,7 @@ const context = {
 
 conversationHandler.sendWelcomeIntent(context);`;
 
-export const headlessSetupSnippet: string = `import createConversation from "@nlxai/chat-core";
+export const headlessSetupSnippet: string = `import { createConversation } from "@nlxai/chat-core";
 
 // Create some configuration
 const config = {
@@ -301,10 +301,10 @@ export const journeyManagerSnippet = ({
         }
       }
 
-      #nlx-multimodal-resume { 
+      #nlx-multimodal-resume {
         animation: fadeInKeyframes 0.6s normal forwards ease-in-out;
         position: fixed;
-        bottom: 0; 
+        bottom: 0;
         left: 0;
         right: 0;
         z-index: 10000;
@@ -324,9 +324,9 @@ export const journeyManagerSnippet = ({
         color: white;
         cursor: pointer;
       }
-        
+
       #nlx-multimodal-resume button:hover {
-        background-color: rgba(30, 86, 196, 1); 
+        background-color: rgba(30, 86, 196, 1);
       }
     </style>`
       : ""

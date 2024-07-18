@@ -5,7 +5,7 @@ The core package of our official JavaScript SDK to communicate with NLX conversa
 ## Getting started
 
 ```js
-import createConversation from "@nlxai/chat-core";
+import { createConversation } from "@nlxai/chat-core";
 
 // Create some configuration
 const config = {

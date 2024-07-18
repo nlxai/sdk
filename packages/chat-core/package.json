@@ -2,14 +2,17 @@
   "name": "@nlxai/chat-core",
   "version": "0.1.36",
   "description": "NLX Chat SDK core",
-  "main": "lib/index.cjs.js",
+  "type": "module",
+  "main": "lib/index.cjs",
   "module": "lib/index.esm.js",
   "browser": "lib/index.umd.js",
   "types": "lib/index.d.ts",
   "exports": {
-    "types": "./lib/index.d.ts",
-    "import": "./lib/index.esm.js",
-    "require": "./lib/index.cjs.js"
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.esm.js",
+      "require": "./lib/index.cjs"
+    }
   },
   "scripts": {
     "build": "rm -rf lib && rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
