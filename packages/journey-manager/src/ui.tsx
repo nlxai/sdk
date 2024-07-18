@@ -426,7 +426,6 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
             floating: highlight,
             strategy: "absolute",
           });
-          console.log(reference);
           // platform.getElementRects is a `Promisable` rather than a `Promise` so we have to use await rather than .then
           setRect(reference);
         })();
