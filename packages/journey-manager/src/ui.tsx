@@ -335,7 +335,7 @@ button {
 
 .highlight {
   position: absolute;
-  border-radius: 10%;
+  border-radius: 5px;
   animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 `;
@@ -417,10 +417,10 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
       style={
         rect != null
           ? {
-              top: `${rect.y}px`,
-              left: `${rect.x}px`,
-              height: `${rect.height}px`,
-              width: `${rect.width}px`,
+              top: `${rect.y - 1}px`,
+              left: `${rect.x - 1}px`,
+              height: `${rect.height + 2}px`,
+              width: `${rect.width + 2}px`,
             }
           : {}
       }
