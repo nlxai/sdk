@@ -2,14 +2,14 @@
   "name": "@nlxai/chat-widget",
   "version": "0.1.37",
   "description": "Standalone chat widget based on the NLX Chat SDK",
-  "main": "lib/index.cjs.js",
+  "main": "lib/index.cjs",
   "module": "lib/index.esm.js",
   "browser": "lib/index.umd.js",
   "types": "lib/index.d.ts",
   "exports": {
     "types": "./lib/index.d.ts",
     "import": "./lib/index.esm.js",
-    "require": "./lib/index.cjs.js"
+    "require": "./lib/index.cjs"
   },
   "scripts": {
     "build": "rm -rf lib && rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
