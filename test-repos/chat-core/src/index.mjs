@@ -3,7 +3,7 @@
 //
 // TODO:
 // - rename index.esm.js to index.mjs
-import { createConversation } from "@nlxai/chat-core/lib/index.mjs";
+import { createConversation } from "@nlxai/chat-core";
 
 const config = {
   botUrl: "", // obtain from NLX deployments page

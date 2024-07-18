@@ -2,6 +2,7 @@
   "name": "@nlxai/chat-core",
   "version": "0.1.36",
   "description": "NLX Chat SDK core",
+  "type": "module",
   "main": "lib/index.cjs",
   "module": "lib/index.esm.js",
   "browser": "lib/index.umd.js",
