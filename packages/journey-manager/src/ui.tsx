@@ -1,7 +1,7 @@
 /* eslint-disable accessor-pairs,  react/prop-types */
 
 import { type Client } from "@nlxai/multimodal";
-import { autoUpdate, computePosition } from "@floating-ui/dom";
+import { autoUpdate, platform } from "@floating-ui/dom";
 import { render, type FunctionComponent } from "preact";
 import { useEffect, useState, useRef, useMemo } from "preact/hooks";
 
@@ -322,17 +322,18 @@ button {
 @keyframes ping {
   75%,
   100% {
+    // consider setting scale from javascript based on the size of the outlined element
     transform: scale(2);
     opacity: 0;
   }
 }
 
 .highlight {
-  width: 8px;
-  height: 8px;
-  border-radius: 100%;
-  transform: translate3d(50%, 50%, 0);
-  background-color: var(--highlight);
+  border-radius: 5%;
+  outline-color: var(--highlight);
+  outline-style: solid;
+  outline-width: 2px;
+  outline-offset: 1px;
   position: absolute;
 }
 
@@ -343,8 +344,11 @@ button {
   right: 0;
   bottom: 0;
   content: ' ';
-  border-radius: 100%;
-  background-color: var(--highlight);
+  border-radius: 5%;
+  outline-color: var(--highlight);
+  outline-width: 2px;
+  outline-style: solid;
+  outline-offset: 3px;
   animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 `;
@@ -393,22 +397,27 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
   element,
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
+  const [rect, setRect] = useState<{
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null>(null);
 
   useEffect(() => {
     if (ref.current != null) {
       const highlight = ref.current;
       const moveHighlight = (): void => {
-        computePosition(element, highlight, {
-          placement: "top-end",
-        })
-          .then((pos) => {
-            setPos(pos);
-          })
-          .catch((err) => {
-            // eslint-disable-next-line no-console
-            console.warn(err);
+        void (async (): Promise<void> => {
+          const { reference } = await platform.getElementRects({
+            reference: element,
+            floating: highlight,
+            strategy: "absolute",
           });
+          console.log(reference);
+          // platform.getElementRects is a `Promisable` rather than a `Promise` so we have to use await rather than .then
+          setRect(reference);
+        })();
       };
 
       return autoUpdate(element, highlight, moveHighlight);
@@ -418,7 +427,16 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
     <div
       className="highlight"
       ref={ref}
-      style={pos != null ? { top: `${pos.y}px`, left: `${pos.x}px` } : {}}
+      style={
+        rect != null
+          ? {
+              top: `${rect.y}px`,
+              left: `${rect.x}px`,
+              height: `${rect.height}px`,
+              width: `${rect.width}px`,
+            }
+          : {}
+      }
     ></div>
   );
 };

@@ -118,6 +118,7 @@ const runJourneyManager = async (): Promise<unknown> => {
       highlights: true,
       theme: {
         fontFamily: "'Neue Haas Grotesk'",
+        colors: { highlight: "#42f5d4" },
       },
       onEscalation: () => {
         // eslint-disable-next-line no-console
