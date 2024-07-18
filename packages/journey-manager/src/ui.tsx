@@ -324,7 +324,6 @@ button {
 
 /** Highlights */
 
-/* consider setting scale from javascript based on the size of the outlined element */
 @keyframes ping {
   0% {
     box-shadow: 0 0 0 0 rgba(var(--highlightR), var(--highlightG), var(--highlightB), 0.8);
