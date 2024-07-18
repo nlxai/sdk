@@ -2,6 +2,7 @@
   "name": "@nlxai/chat-preact",
   "version": "0.1.36",
   "description": "Preact hook wrapper for the NLX Chat SDK",
+  "type": "module",
   "main": "lib/index.cjs",
   "module": "lib/index.esm.js",
   "types": "lib/index.d.ts",

@@ -2,6 +2,7 @@
   "name": "@nlxai/chat-widget",
   "version": "0.1.37",
   "description": "Standalone chat widget based on the NLX Chat SDK",
+  "type": "module",
   "main": "lib/index.cjs",
   "module": "lib/index.esm.js",
   "browser": "lib/index.umd.js",
