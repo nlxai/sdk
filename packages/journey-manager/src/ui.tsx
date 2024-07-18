@@ -335,7 +335,6 @@ button {
 
 .highlight {
   position: absolute;
-  border-radius: 5px;
   animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 `;
@@ -395,6 +394,21 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
   useEffect(() => {
     if (ref.current != null) {
       const highlight = ref.current;
+
+      // copy over computed styles from element so drop shadow looks right
+      const computedStyles = window.getComputedStyle(element);
+
+      for (const property of computedStyles) {
+        if (!property.match(/^border/)) {
+          continue;
+        }
+
+        highlight.style.setProperty(
+          property,
+          computedStyles.getPropertyValue(property),
+        );
+      }
+
       const moveHighlight = (): void => {
         void (async (): Promise<void> => {
           const { reference } = await platform.getElementRects({
