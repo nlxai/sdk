@@ -508,7 +508,6 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   if (props.ui != null) {
     uiElement = document.createElement("journey-manager");
     uiElement.style.zIndex = 1000;
-    uiElement.style.position = "absolute";
     uiElement.config = props.ui;
     uiElement.client = client;
     const handleAction = (ev: any): void => {
