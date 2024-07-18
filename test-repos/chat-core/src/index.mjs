@@ -1,8 +1,3 @@
-// NOTES:
-// import statements within index.esm.js fail when `type:module` isn't set
-//
-// TODO:
-// - rename index.esm.js to index.mjs
 import { createConversation } from "@nlxai/chat-core";
 
 const config = {

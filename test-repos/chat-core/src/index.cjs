@@ -1,10 +1,3 @@
-// NOTES:
-// default export doesn't behave nicely with CJS
-// and need to dip into package path to grab cjs
-//
-// TODO:
-// - stop mixing default & named exports. I guess that will be a breaking change and imply a version bump
-// - main in package.json should point to cjs file
 const { createConversation } = require("@nlxai/chat-core");
 
 const config = {
