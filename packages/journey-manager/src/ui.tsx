@@ -106,6 +106,32 @@ const mergeWithDefault = (partial?: PartialTheme): Theme => ({
   },
 });
 
+const hexToRgb = (hex: string): { r: number; g: number; b: number } | null => {
+  // Remove the leading # if present
+  hex = hex.replace(/^#/, "");
+
+  // Check if the hex string is valid
+  if (hex.length !== 6 && hex.length !== 3) {
+    return null; // Invalid hex color
+  }
+
+  // If the hex string is shorthand (3 characters), convert it to 6 characters
+  if (hex.length === 3) {
+    hex = hex
+      .split("")
+      .map((char) => char + char)
+      .join("");
+  }
+
+  // Convert the hex values to RGB values
+  const bigint = parseInt(hex, 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+
+  return { r, g, b };
+};
+
 const styles = (theme: Theme): string => `
 * {
   font-family: ${theme.fontFamily};
@@ -123,6 +149,9 @@ p {
   --primary: ${theme.colors.primary};
   --primary-hover: ${theme.colors.primaryHover};
   --highlight: ${theme.colors.highlight};
+  --highlightR: ${hexToRgb(theme.colors.highlight)?.r};
+  --highlightG: ${hexToRgb(theme.colors.highlight)?.g};
+  --highlightB: ${hexToRgb(theme.colors.highlight)?.b};
   z-index: 1000;
 }
 
@@ -319,37 +348,20 @@ button {
 
 /** Highlights */
 
+/* consider setting scale from javascript based on the size of the outlined element */
 @keyframes ping {
-  75%,
-  100% {
-    // consider setting scale from javascript based on the size of the outlined element
-    transform: scale(2);
-    opacity: 0;
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--highlightR), var(--highlightG), var(--highlightB), 0.8);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(var(--highlightR), var(--highlightG), var(--highlightB), 0);
   }
 }
 
 .highlight {
-  border-radius: 5%;
-  outline-color: var(--highlight);
-  outline-style: solid;
-  outline-width: 2px;
-  outline-offset: 1px;
   position: absolute;
-}
-
-.highlight::after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  content: ' ';
-  border-radius: 5%;
-  outline-color: var(--highlight);
-  outline-width: 2px;
-  outline-style: solid;
-  outline-offset: 3px;
-  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  border-radius: 10%;
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 `;
 
