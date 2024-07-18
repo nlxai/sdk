@@ -7,9 +7,11 @@
   "browser": "lib/index.umd.js",
   "types": "lib/index.d.ts",
   "exports": {
-    "types": "./lib/index.d.ts",
-    "import": "./lib/index.esm.js",
-    "require": "./lib/index.cjs.js"
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.esm.js",
+      "require": "./lib/index.cjs.js"
+    }
   },
   "scripts": {
     "build": "rm -rf lib && rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
