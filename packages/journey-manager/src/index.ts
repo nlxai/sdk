@@ -149,7 +149,7 @@ const matchesUrlCondition = (urlCondition: UrlCondition): boolean => {
       const params = new URLSearchParams(document.location.search);
 
       for (const [key, value] of parsed.searchParams) {
-        if (params.get(key) !== value && value !== "*") {
+        if (!params.getAll(key).includes(value) && value !== "*") {
           return false;
         }
       }
