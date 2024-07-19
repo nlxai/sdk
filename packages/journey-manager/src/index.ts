@@ -124,39 +124,43 @@ const matchesUrlCondition = (urlCondition: UrlCondition): boolean => {
     return !url.match(new RegExp(urlCondition.value));
   }
   if (urlCondition.operator === "smart_match") {
-    const parsed = new URL(urlCondition.value, window.location.origin);
+    try {
+      const parsed = new URL(urlCondition.value, window.location.origin);
 
-    if (parsed.protocol !== window.location.protocol) {
-      return false;
-    }
-    if (parsed.host !== window.location.host) {
-      return false;
-    }
-
-    const pathUrl = normalizePathname(window.location);
-    const pathQuery = normalizePathname(parsed);
-
-    if (pathUrl.length !== pathQuery.length) {
-      return false;
-    }
-    for (let i = 0; i < pathUrl.length; i++) {
-      if (pathUrl[i] !== pathQuery[i] && pathQuery[i] !== "*") {
+      if (parsed.protocol !== window.location.protocol) {
         return false;
       }
-    }
-
-    const params = new URLSearchParams(document.location.search);
-
-    for (const [key, value] of parsed.searchParams) {
-      if (params.get(key) !== value && value !== "*") {
+      if (parsed.host !== window.location.host) {
         return false;
       }
-    }
 
-    if (parsed.hash !== "" && parsed.hash !== window.location.hash) {
+      const pathUrl = normalizePathname(window.location);
+      const pathQuery = normalizePathname(parsed);
+
+      if (pathUrl.length !== pathQuery.length) {
+        return false;
+      }
+      for (let i = 0; i < pathUrl.length; i++) {
+        if (pathUrl[i] !== pathQuery[i] && pathQuery[i] !== "*") {
+          return false;
+        }
+      }
+
+      const params = new URLSearchParams(document.location.search);
+
+      for (const [key, value] of parsed.searchParams) {
+        if (params.get(key) !== value && value !== "*") {
+          return false;
+        }
+      }
+
+      if (parsed.hash !== "" && parsed.hash !== window.location.hash) {
+        return false;
+      }
+      return true;
+    } catch (e) {
       return false;
     }
-    return true;
   }
   return false;
 };
