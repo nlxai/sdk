@@ -121,7 +121,7 @@ const matchesUrlCondition = (urlCondition: UrlCondition): boolean => {
     return url.includes(urlCondition.value);
   }
   if (urlCondition.operator === "matches_regex") {
-    return !url.match(new RegExp(urlCondition.value));
+    return !!url.match(new RegExp(urlCondition.value));
   }
   if (urlCondition.operator === "smart_match") {
     try {
