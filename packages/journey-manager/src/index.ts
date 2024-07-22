@@ -28,12 +28,11 @@ export interface UrlCondition {
   /**
    * Condition operator
    */
-  operator: "eq" | "neq" | "suffix" | "prefix" | "contains" | "not_contains";
+  operator: "contains" | "matches_regex" | "smart_match";
   /**
    * Condition value
    */
   value: string;
-  // TODO: add regex match condition
 }
 
 /**
@@ -117,26 +116,60 @@ const debounce = (func: () => void, timeout = 300): (() => void) => {
 
 const matchesUrlCondition = (urlCondition: UrlCondition): boolean => {
   const url = window.location.href;
-  if (urlCondition.operator === "eq") {
-    return url === urlCondition.value;
-  }
-  if (urlCondition.operator === "neq") {
-    return url !== urlCondition.value;
-  }
-  if (urlCondition.operator === "prefix") {
-    return url.startsWith(urlCondition.value);
-  }
-  if (urlCondition.operator === "suffix") {
-    return url.endsWith(urlCondition.value);
-  }
+
   if (urlCondition.operator === "contains") {
     return url.includes(urlCondition.value);
   }
-  if (urlCondition.operator === "not_contains") {
-    return !url.includes(urlCondition.value);
+  if (urlCondition.operator === "matches_regex") {
+    return !url.match(new RegExp(urlCondition.value));
+  }
+  if (urlCondition.operator === "smart_match") {
+    try {
+      const parsed = new URL(urlCondition.value, window.location.origin);
+
+      if (parsed.protocol !== window.location.protocol) {
+        return false;
+      }
+      if (parsed.host !== window.location.host) {
+        return false;
+      }
+
+      const pathUrl = normalizePathname(window.location);
+      const pathQuery = normalizePathname(parsed);
+
+      if (pathUrl.length !== pathQuery.length) {
+        return false;
+      }
+      for (let i = 0; i < pathUrl.length; i++) {
+        if (pathUrl[i] !== pathQuery[i] && pathQuery[i] !== "*") {
+          return false;
+        }
+      }
+
+      const params = new URLSearchParams(document.location.search);
+
+      for (const [key, value] of parsed.searchParams) {
+        if (!params.getAll(key).includes(value) && value !== "*") {
+          return false;
+        }
+      }
+
+      if (parsed.hash !== "" && parsed.hash !== window.location.hash) {
+        return false;
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
   return false;
 };
+
+const normalizePathname = (url: URL | Location): string[] =>
+  url.pathname
+    .split("/")
+    .filter(Boolean)
+    .map((str) => str.toLowerCase());
 
 const withElements = async (
   steps: StepWithQuery[],
