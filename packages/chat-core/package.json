@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/chat-core",
-  "version": "0.1.36",
+  "version": "0.1.40",
   "description": "NLX Chat SDK core",
   "type": "module",
   "main": "lib/index.cjs",
