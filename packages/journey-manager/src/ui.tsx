@@ -217,6 +217,82 @@ button {
   background-color: var(--primary-hover);
 }
 
+.pin-bubble-content {
+  line-height: 1.4;
+  padding: 4px 6px;
+}
+
+.pin-bubble-container {
+  position: fixed;
+  bottom: 66px;
+  right: 8px;
+  border-radius: 6px;
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: calc(100% - 38px);
+  box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  z-index: 1001;
+  padding: 4px;
+  background-color: ${tinycolor(theme.colors.primary).darken(10).toRgbString()};
+  color: #fff;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.pin-bubble-container::after {
+  position: absolute;
+  top: 100%;
+  right: 22px;
+  content: " ";
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid ${tinycolor(theme.colors.primary).darken(10).toRgbString()};
+}
+
+.pin-bubble-container.active {
+  transform: translate3d(0, 0, 0);
+  pointer-events: all;
+}
+
+.pin-bubble-container.inactive {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+  pointer-events: none;
+}
+
+.pin-bubble-button {
+  height: 32px;
+  flex: 0 0 32px;
+  border: 0;
+  color: white;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align - items: center;
+  justify - content: center;
+  border - radius: 6px;
+  background: none;
+}
+.pin-bubble-button svg {
+  width: 100 %;
+  height: 100 %;
+  fill: white;
+}
+.pin-bubble-button:hover {
+  background - color: rgba(255, 255, 255, 0.1);
+}
+.pin-bubble-button:focus {
+  outline: none;
+  box - shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+
+
 .drawer {
   position: fixed;
   top: 0;
@@ -549,17 +625,23 @@ const ControlCenter: FunctionComponent<{
   return (
     <>
       <style>{styles(mergeWithDefault(config.theme))}</style>
+      <PinBubble
+        isActive={isNudgeVisible}
+        onClick={() => {
+          setIsNudgeVisible(false);
+        }}
+        content={config.nudgeContent ?? ""}
+      />
       <button
         className="pin"
         onClick={() => {
           setIsOpen((prev) => !prev);
         }}
       >
-        {isNudgeVisible && <div>{config.nudgeContent}</div>}
         <MultimodalIcon />
       </button>
       <div
-        className={`drawer ${isOpen ? "drawer-open" : ""}`}
+        className={`drawer ${isOpen ? "drawer-open" : ""} `}
         onClick={(event: any) => {
           if (
             event.target != null &&
@@ -728,3 +810,27 @@ export class JourneyManagerElement extends HTMLElement {
     }
   }
 }
+
+// PinBubble
+
+interface PinBubbleProps {
+  isActive: boolean;
+  content: string;
+  onClick: () => void;
+}
+// eslint-disable-next-line jsdoc/require-returns, jsdoc/require-param
+/** @hidden @internal */
+export const PinBubble: FunctionComponent<PinBubbleProps> = ({
+  isActive,
+  content,
+  onClick,
+}) => (
+  <div className={`pin-bubble-container ${isActive ? "active" : "inactive"}`}>
+    <div className="pin-bubble-content">{content}</div>
+    <button className="pin-bubble-button" onClick={onClick}>
+      <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+      </svg>
+    </button>
+  </div>
+);
