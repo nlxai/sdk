@@ -124,6 +124,7 @@ const runJourneyManager = async (): Promise<unknown> => {
         // eslint-disable-next-line no-console
         console.log("escalation");
       },
+      nudgeContent: "click me! click me!",
     },
     triggers: triggersForRun(),
     onStep: (stepId) => {
