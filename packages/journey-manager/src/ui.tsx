@@ -120,17 +120,18 @@ export interface UiConfig {
     onClick: () => void;
   }>;
   /**
-   * Content for the tooltip to show around the button
+   * If this is set, the journey manager will show a call-to-action tooltip to invite the user to interact with the overlay pin.
+   * it will be shown only if the user never interacts with the overlay pin, after `tooltipShowAfterMs` milliseconds.
    */
-  tooltipContent?: string;
+  nudgeContent?: string;
   /**
-   * Show tooltip after a set amount of time
+   * Show nudge tooltip after this many milliseconds
    */
-  tooltipShowAfter?: number;
+  nudgeShowAfterMs?: number;
   /**
-   * Hide tooltip after a set amount of time
+   * Hide nudge tooltip after it's been shown for this many milliseconds
    */
-  tooltipHideAfter?: number;
+  nudgeHideAfterMs?: number;
 }
 
 const defaultTheme: Theme = {
@@ -501,9 +502,39 @@ const ControlCenter: FunctionComponent<{
   highlightElements: HTMLElement[];
   onAction: (action: Action) => void;
 }> = ({ config, highlightElements, digression, onAction }) => {
+  const [hasBeenOpened, setHasBeenOpened] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [status, setStatus] = useState<ControlCenterStatus>(null);
   const drawerContentRef = useRef<HTMLDivElement | null>(null);
+  const [isNudgeVisible, setIsNudgeVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isOpen) setHasBeenOpened(true);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (hasBeenOpened || config.nudgeContent == null) {
+      setIsNudgeVisible(false);
+      return;
+    }
+
+    let hideTimeout: null | NodeJS.Timeout = null;
+    const showTimeout = setTimeout(() => {
+      setIsNudgeVisible(true);
+      hideTimeout = setTimeout(() => {
+        setIsNudgeVisible(false);
+      }, config.nudgeHideAfterMs ?? 20_000);
+    }, config.nudgeShowAfterMs ?? 3_000);
+    return () => {
+      clearTimeout(showTimeout);
+      if (hideTimeout) clearTimeout(hideTimeout);
+    };
+  }, [
+    config.nudgeContent,
+    config.nudgeShowAfterMs,
+    config.nudgeHideAfterMs,
+    hasBeenOpened,
+  ]);
 
   const successMessage = useMemo<string | null>(() => {
     if (status === "success-escalation") {
@@ -524,6 +555,7 @@ const ControlCenter: FunctionComponent<{
           setIsOpen((prev) => !prev);
         }}
       >
+        {isNudgeVisible && <div>{config.nudgeContent}</div>}
         <MultimodalIcon />
       </button>
       <div
