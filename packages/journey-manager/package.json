@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/journey-manager",
-  "version": "0.1.41",
+  "version": "0.1.42",
   "description": "Journey Manager",
   "type": "module",
   "main": "lib/index.cjs",
