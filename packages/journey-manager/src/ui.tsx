@@ -69,6 +69,10 @@ export interface UiConfig {
    */
   highlights?: boolean;
   /**
+   * URL for the button icon
+   */
+  iconUrl?: string;
+  /**
    * UI theme
    */
   theme?: PartialTheme;
@@ -77,9 +81,25 @@ export interface UiConfig {
    */
   onEscalation?: (config: { sendStep: Client["sendStep"] }) => void;
   /**
+   * Escalation button label
+   */
+  escalationButtonLabel?: string;
+  /**
+   * Escalation confirmation
+   */
+  escalationConfirmation?: string;
+  /**
    * End handler
    */
   onEnd?: (config: { sendStep: Client["sendStep"] }) => void;
+  /**
+   * End button label
+   */
+  endButtonLabel?: string;
+  /**
+   * End confirmation
+   */
+  endConfirmation?: string;
   /**
    * On previous step
    */
@@ -87,6 +107,30 @@ export interface UiConfig {
     sendStep: Client["sendStep"];
     triggeredSteps: Array<{ stepId: string; url: string }>;
   }) => void;
+  /**
+   * Previous step button label
+   */
+  previousStepButtonLabel?: string;
+  /**
+   * Custom buttons
+   */
+  customButtons?: Array<{
+    label: string;
+    iconUrl?: string;
+    onClick: () => void;
+  }>;
+  /**
+   * Content for the tooltip to show around the button
+   */
+  tooltipContent?: string;
+  /**
+   * Show tooltip after a set amount of time
+   */
+  tooltipShowAfter?: number;
+  /**
+   * Hide tooltip after a set amount of time
+   */
+  tooltipHideAfter?: number;
 }
 
 const defaultTheme: Theme = {
