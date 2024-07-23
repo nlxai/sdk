@@ -45,6 +45,7 @@
     "@testing-library/dom": "^10.1.0",
     "preact": "^10.22.0",
     "ramda": "^0.29.1",
+    "tinycolor2": "^1.6.0",
     "uuid": "^9.0.1"
   },
   "publishConfig": {

@@ -1,9 +1,10 @@
 /* eslint-disable accessor-pairs,  react/prop-types */
 
 import { type Client } from "@nlxai/multimodal";
-import { autoUpdate, computePosition } from "@floating-ui/dom";
+import { autoUpdate, platform } from "@floating-ui/dom";
 import { render, type FunctionComponent } from "preact";
 import { useEffect, useState, useRef, useMemo } from "preact/hooks";
+import tinycolor from "tinycolor2";
 
 /**
  * Theme colors
@@ -106,8 +107,10 @@ const mergeWithDefault = (partial?: PartialTheme): Theme => ({
   },
 });
 
-const styles = (theme: Theme): string => `
-* {
+const styles = (theme: Theme): string => {
+  const highlight = tinycolor(theme.colors.highlight).toRgb();
+
+  return `* {
   font-family: ${theme.fontFamily};
   font-size: 14px;
 }
@@ -122,7 +125,9 @@ p {
 .highlights {
   --primary: ${theme.colors.primary};
   --primary-hover: ${theme.colors.primaryHover};
-  --highlight: ${theme.colors.highlight};
+  --highlightR: ${highlight.r};
+  --highlightG: ${highlight.g};
+  --highlightB: ${highlight.b};
   z-index: 1000;
 }
 
@@ -320,34 +325,20 @@ button {
 /** Highlights */
 
 @keyframes ping {
-  75%,
-  100% {
-    transform: scale(2);
-    opacity: 0;
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--highlightR), var(--highlightG), var(--highlightB), 0.8);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(var(--highlightR), var(--highlightG), var(--highlightB), 0);
   }
 }
 
 .highlight {
-  width: 8px;
-  height: 8px;
-  border-radius: 100%;
-  transform: translate3d(50%, 50%, 0);
-  background-color: var(--highlight);
   position: absolute;
-}
-
-.highlight::after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  content: ' ';
-  border-radius: 100%;
-  background-color: var(--highlight);
-  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 `;
+};
 
 const MultimodalIcon: FunctionComponent<unknown> = () => (
   <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
@@ -393,22 +384,41 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
   element,
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
+  const [rect, setRect] = useState<{
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null>(null);
 
   useEffect(() => {
     if (ref.current != null) {
       const highlight = ref.current;
+
+      // copy over computed styles from element so drop shadow looks right
+      const computedStyles = window.getComputedStyle(element);
+
+      for (const property of computedStyles) {
+        if (!property.match(/^border/)) {
+          continue;
+        }
+
+        highlight.style.setProperty(
+          property,
+          computedStyles.getPropertyValue(property),
+        );
+      }
+
       const moveHighlight = (): void => {
-        computePosition(element, highlight, {
-          placement: "top-end",
-        })
-          .then((pos) => {
-            setPos(pos);
-          })
-          .catch((err) => {
-            // eslint-disable-next-line no-console
-            console.warn(err);
+        void (async (): Promise<void> => {
+          const { reference } = await platform.getElementRects({
+            reference: element,
+            floating: highlight,
+            strategy: "absolute",
           });
+          // platform.getElementRects is a `Promisable` rather than a `Promise` so we have to use await rather than .then
+          setRect(reference);
+        })();
       };
 
       return autoUpdate(element, highlight, moveHighlight);
@@ -418,7 +428,16 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
     <div
       className="highlight"
       ref={ref}
-      style={pos != null ? { top: `${pos.y}px`, left: `${pos.x}px` } : {}}
+      style={
+        rect != null
+          ? {
+              top: `${rect.y - 1}px`,
+              left: `${rect.x - 1}px`,
+              height: `${rect.height + 2}px`,
+              width: `${rect.width + 2}px`,
+            }
+          : {}
+      }
     ></div>
   );
 };
