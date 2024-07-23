@@ -133,12 +133,14 @@ const runJourneyManager = async (): Promise<unknown> => {
         fontFamily: "'Neue Haas Grotesk'",
         colors: { highlight: "#7dd3fc" },
       },
-      escalationButtonLabel: "Hand Off To Specialist",
       onEscalation: (args) => {
         // eslint-disable-next-line no-console
         console.log("escalation", args);
       },
-      nudgeContent: "click me! click me!",
+      escalationButtonLabel: "Hand Off To Specialist",
+      nudgeContent: "Control panel",
+      nudgeShowAfterMs: 2000,
+      nudgeHideAFterMs: 20000,
       buttons: [
         {
           label: "Google Chat",

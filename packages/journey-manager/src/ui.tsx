@@ -218,6 +218,8 @@ button {
   }
 }
 
+/** Pin */
+
 .pin {
   width: 48px;
   height: 48px;
@@ -298,20 +300,23 @@ button {
   border - radius: 6px;
   background: none;
 }
+
 .pin-bubble-button svg {
   width: 100 %;
   height: 100 %;
   fill: white;
 }
+
 .pin-bubble-button:hover {
   background - color: rgba(255, 255, 255, 0.1);
 }
+
 .pin-bubble-button:focus {
   outline: none;
   box - shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.2);
 }
 
-
+/** Drawer */
 
 .drawer {
   position: fixed;
@@ -894,6 +899,7 @@ interface PinBubbleProps {
   content: string;
   onClick: () => void;
 }
+
 // eslint-disable-next-line jsdoc/require-returns, jsdoc/require-param
 /** @hidden @internal */
 export const PinBubble: FunctionComponent<PinBubbleProps> = ({
