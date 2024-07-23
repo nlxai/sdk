@@ -120,11 +120,21 @@ const runJourneyManager = async (): Promise<unknown> => {
         fontFamily: "'Neue Haas Grotesk'",
         colors: { highlight: "#7dd3fc" },
       },
-      onEscalation: () => {
+      escalationButtonLabel: "Hand Off To Specialist",
+      onEscalation: (args) => {
         // eslint-disable-next-line no-console
-        console.log("escalation");
+        console.log("escalation", args);
       },
       nudgeContent: "click me! click me!",
+      buttons: [
+        {
+          label: "Google Chat",
+          onClick: () => {
+            // eslint-disable-next-line no-console
+            console.log("Google Chat button click");
+          },
+        },
+      ],
     },
     triggers: triggersForRun(),
     onStep: (stepId) => {

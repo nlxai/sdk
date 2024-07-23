@@ -38,6 +38,33 @@ export interface Theme {
   fontFamily: string;
 }
 
+interface HandlerArg {
+  sendStep: Client["sendStep"];
+  triggeredSteps: Array<{ stepId: string; url: string }>;
+}
+
+/**
+ * Button configuration
+ */
+export interface ButtonConfig {
+  /**
+   * Button label
+   */
+  label: string;
+  /**
+   * Button confirmation: if present, the button click handler only triggers after the confirmation button is hit
+   */
+  confirmation?: string;
+  /**
+   * Icon URL
+   */
+  iconUrl?: string;
+  /**
+   * Click handler
+   */
+  onClick: (config: HandlerArg) => void;
+}
+
 /**
  * Deep partial variant of the UI theme, input by the library user
  */
@@ -103,10 +130,7 @@ export interface UiConfig {
   /**
    * On previous step
    */
-  onPreviousStep?: (config: {
-    sendStep: Client["sendStep"];
-    triggeredSteps: Array<{ stepId: string; url: string }>;
-  }) => void;
+  onPreviousStep?: (config: HandlerArg) => void;
   /**
    * Previous step button label
    */
@@ -114,11 +138,7 @@ export interface UiConfig {
   /**
    * Custom buttons
    */
-  customButtons?: Array<{
-    label: string;
-    iconUrl?: string;
-    onClick: () => void;
-  }>;
+  buttons?: ButtonConfig[];
   /**
    * If this is set, the journey manager will show a call-to-action tooltip to invite the user to interact with the overlay pin.
    * it will be shown only if the user never interacts with the overlay pin, after `tooltipShowAfterMs` milliseconds.
@@ -563,8 +583,6 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
   );
 };
 
-type Action = "end" | "escalate" | "previous";
-
 type ControlCenterStatus =
   | null
   | "pending-escalation"
@@ -574,10 +592,11 @@ type ControlCenterStatus =
 
 const ControlCenter: FunctionComponent<{
   config: UiConfig;
+  client: Client;
+  triggeredSteps: TriggeredStep[];
   digression: boolean;
   highlightElements: HTMLElement[];
-  onAction: (action: Action) => void;
-}> = ({ config, highlightElements, digression, onAction }) => {
+}> = ({ config, client, triggeredSteps, highlightElements, digression }) => {
   const [hasBeenOpened, setHasBeenOpened] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [status, setStatus] = useState<ControlCenterStatus>(null);
@@ -621,6 +640,27 @@ const ControlCenter: FunctionComponent<{
     }
     return null;
   }, [status]);
+
+  const onPreviousStep = config.onPreviousStep
+    ? () => {
+        config.onPreviousStep?.({
+          sendStep: client.sendStep,
+          triggeredSteps,
+        });
+      }
+    : () => {
+        const lastTriggeredStep = triggeredSteps[triggeredSteps.length - 1];
+        if (lastTriggeredStep != null) {
+          client.sendStep(lastTriggeredStep.stepId).catch((err) => {
+            // eslint-disable-next-line no-console
+            console.warn(err);
+          });
+          // Redirect to previous page if the last triggered step occurred on it
+          if (lastTriggeredStep.url !== window.location.toString()) {
+            window.location.href = lastTriggeredStep.url;
+          }
+        }
+      };
 
   return (
     <>
@@ -673,19 +713,19 @@ const ControlCenter: FunctionComponent<{
             <div className="drawer-buttons">
               <button
                 onClick={() => {
-                  onAction("previous");
+                  onPreviousStep();
                   setIsOpen(false);
                 }}
               >
                 <ArrowBackIcon />
-                <span>Previous Screen</span>
+                {config.previousStepButtonLabel ?? "Previous Screen"}
               </button>
 
               {config.onEscalation != null ? (
                 <button
                   disabled={status === "pending-escalation"}
                   onClick={() => {
-                    onAction("escalate");
+                    config.onEscalation?.({ sendStep: client.sendStep });
                     setStatus("pending-escalation");
                     setTimeout(() => {
                       setStatus("success-escalation");
@@ -696,7 +736,7 @@ const ControlCenter: FunctionComponent<{
                   }}
                 >
                   <SupportAgentIcon />
-                  Escalate to Agent
+                  {config.escalationButtonLabel ?? "Escalate to Agent"}
                 </button>
               ) : null}
 
@@ -704,7 +744,7 @@ const ControlCenter: FunctionComponent<{
                 <button
                   disabled={status === "pending-end"}
                   onClick={() => {
-                    onAction("end");
+                    config.onEnd?.({ sendStep: client.sendStep });
                     setStatus("pending-end");
                     setTimeout(() => {
                       setStatus("success-end");
@@ -715,9 +755,22 @@ const ControlCenter: FunctionComponent<{
                   }}
                 >
                   <CallEndIcon />
-                  End Call
+                  {config.endButtonLabel ?? "End Call"}
                 </button>
               ) : null}
+              {(config.buttons ?? []).map((buttonConfig, buttonIndex) => (
+                <button
+                  key={buttonIndex}
+                  onClick={() => {
+                    buttonConfig.onClick({
+                      sendStep: client.sendStep,
+                      triggeredSteps,
+                    });
+                  }}
+                >
+                  {buttonConfig.label}
+                </button>
+              ))}
             </div>
           )}
           <div className="drawer-footer">
@@ -741,21 +794,30 @@ const ControlCenter: FunctionComponent<{
   );
 };
 
+interface TriggeredStep {
+  stepId: string;
+  url: string;
+}
+
 /**
  * @hidden @internal
  */
 export class JourneyManagerElement extends HTMLElement {
   _shadowRoot: ShadowRoot | null = null;
+  _client: Client | null = null;
+  _triggeredSteps: TriggeredStep[] | null = null;
   _config: UiConfig | null = null;
-  _digression?: boolean;
+  _digression: boolean = false;
   _highlightElements: HTMLElement[] = [];
 
   /**
    * Set digression attribute
    */
   set digression(value: boolean) {
-    this._digression = value;
-    this.render();
+    if (this._digression !== value) {
+      this._digression = value;
+      this.render();
+    }
   }
 
   /**
@@ -763,6 +825,22 @@ export class JourneyManagerElement extends HTMLElement {
    */
   set highlightElements(elements: HTMLElement[]) {
     this._highlightElements = elements;
+    this.render();
+  }
+
+  /**
+   * Set SDK client
+   */
+  set client(value: Client) {
+    this._client = value;
+    this.render();
+  }
+
+  /**
+   * Set triggered steps
+   */
+  set triggeredSteps(value: TriggeredStep[]) {
+    this._triggeredSteps = value;
     this.render();
   }
 
@@ -779,23 +857,20 @@ export class JourneyManagerElement extends HTMLElement {
    */
   render(): void {
     this._shadowRoot = this._shadowRoot ?? this.attachShadow({ mode: "open" });
-    if (this._config == null) {
+    if (
+      this._config == null ||
+      this._client == null ||
+      this._triggeredSteps == null
+    ) {
       return;
     }
     render(
       <ControlCenter
         config={this._config}
-        digression={this._digression ?? false}
+        digression={this._digression}
+        client={this._client}
+        triggeredSteps={this._triggeredSteps}
         highlightElements={this._highlightElements}
-        onAction={(action) => {
-          this.dispatchEvent(
-            new CustomEvent("action", {
-              detail: {
-                action,
-              },
-            }),
-          );
-        }}
       />,
       this._shadowRoot,
     );
