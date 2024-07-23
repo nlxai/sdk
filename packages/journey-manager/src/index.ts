@@ -355,7 +355,10 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
 
   await waitUntilDomContentLoaded();
 
-  const triggeredSteps = getTriggeredSteps(props.config.conversationId);
+  let triggeredSteps = getTriggeredSteps(props.config.conversationId);
+
+  // TODO: type this more accurately
+  let uiElement: any;
 
   /**
    * Digression detection
@@ -379,10 +382,6 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     },
   );
 
-  if (isDigressionDetectable && !urlConditions.some(matchesUrlCondition)) {
-    props.onDigression?.(client);
-  }
-
   const sendStep = (stepId: string, once: boolean): void => {
     if (
       triggeredSteps.some((triggeredStep) => triggeredStep.stepId === stepId)
@@ -391,7 +390,13 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
         return;
       }
     } else {
-      triggeredSteps.push({ stepId, url: window.location.toString() });
+      triggeredSteps = [
+        ...triggeredSteps,
+        { stepId, url: window.location.toString() },
+      ];
+      if (uiElement != null) {
+        uiElement.triggeredSteps = triggeredSteps;
+      }
       saveTriggeredSteps(props.config.conversationId, triggeredSteps);
     }
     props.onStep?.(stepId);
@@ -524,9 +529,6 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
    * UI management
    */
 
-  // TODO: type this more accurately
-  let uiElement: any;
-
   const setHighlights = debounce((): void => {
     const highlightElements = findActiveTriggers("click").flatMap(
       (activeTrigger) => activeTrigger.elements,
@@ -543,41 +545,10 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     uiElement.style.zIndex = 1000;
     uiElement.config = props.ui;
     uiElement.client = client;
-    const handleAction = (ev: any): void => {
-      const action = ev.detail?.action;
-      if (action == null) {
-        return;
-      }
-      if (action === "escalate" && props.ui?.onEscalation != null) {
-        props.ui.onEscalation({ sendStep: client.sendStep });
-        return;
-      }
-      if (action === "end" && props.ui?.onEnd != null) {
-        props.ui.onEnd({ sendStep: client.sendStep });
-        return;
-      }
-      if (action === "previous") {
-        if (props.ui?.onPreviousStep != null) {
-          props.ui.onPreviousStep({
-            sendStep: client.sendStep,
-            triggeredSteps,
-          });
-        } else {
-          const lastTriggeredStep = triggeredSteps[triggeredSteps.length - 1];
-          if (lastTriggeredStep != null) {
-            sendStep(lastTriggeredStep.stepId, false);
-            // Redirect to previous page if the last triggered step occurred on it
-            if (lastTriggeredStep.url !== window.location.toString()) {
-              window.location.href = lastTriggeredStep.url;
-            }
-          }
-        }
-      }
-    };
+    uiElement.triggeredSteps = triggeredSteps;
     if (props.ui.highlights ?? false) {
       setHighlights();
     }
-    uiElement.addEventListener("action", handleAction);
     document.body.appendChild(uiElement);
     teardownUiElement = () => {
       document.body.removeChild(uiElement);
@@ -621,7 +592,23 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
    * Change detection
    */
 
+  let digressionCallbackCalled = false;
+
   const documentObserver = new MutationObserver((mutations) => {
+    if (isDigressionDetectable) {
+      const userHasDigressed = !urlConditions.some(matchesUrlCondition);
+      if (userHasDigressed) {
+        // Avoid calling the digression callback multiple times after a digression has been detected
+        if (!digressionCallbackCalled) {
+          props.onDigression?.(client);
+        }
+        digressionCallbackCalled = true;
+        uiElement.digression = true;
+      } else {
+        digressionCallbackCalled = false;
+        uiElement.digression = false;
+      }
+    }
     // If any of the added nodes are inside matches on appear events, trigger those events
     const targets = withElementsSync(appearSteps);
     mutations.forEach((mutation) => {

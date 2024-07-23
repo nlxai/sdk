@@ -38,6 +38,33 @@ export interface Theme {
   fontFamily: string;
 }
 
+interface HandlerArg {
+  sendStep: Client["sendStep"];
+  triggeredSteps: Array<{ stepId: string; url: string }>;
+}
+
+/**
+ * Button configuration
+ */
+export interface ButtonConfig {
+  /**
+   * Button label
+   */
+  label: string;
+  /**
+   * Button confirmation: if present, the button click handler only triggers after the confirmation button is hit
+   */
+  confirmation?: string;
+  /**
+   * Icon URL
+   */
+  iconUrl?: string;
+  /**
+   * Click handler
+   */
+  onClick: (config: HandlerArg) => void;
+}
+
 /**
  * Deep partial variant of the UI theme, input by the library user
  */
@@ -69,6 +96,10 @@ export interface UiConfig {
    */
   highlights?: boolean;
   /**
+   * URL for the button icon
+   */
+  iconUrl?: string;
+  /**
    * UI theme
    */
   theme?: PartialTheme;
@@ -77,16 +108,50 @@ export interface UiConfig {
    */
   onEscalation?: (config: { sendStep: Client["sendStep"] }) => void;
   /**
+   * Escalation button label
+   */
+  escalationButtonLabel?: string;
+  /**
+   * Escalation confirmation
+   */
+  escalationConfirmation?: string;
+  /**
    * End handler
    */
   onEnd?: (config: { sendStep: Client["sendStep"] }) => void;
   /**
+   * End button label
+   */
+  endButtonLabel?: string;
+  /**
+   * End confirmation
+   */
+  endConfirmation?: string;
+  /**
    * On previous step
    */
-  onPreviousStep?: (config: {
-    sendStep: Client["sendStep"];
-    triggeredSteps: Array<{ stepId: string; url: string }>;
-  }) => void;
+  onPreviousStep?: (config: HandlerArg) => void;
+  /**
+   * Previous step button label
+   */
+  previousStepButtonLabel?: string;
+  /**
+   * Custom buttons
+   */
+  buttons?: ButtonConfig[];
+  /**
+   * If this is set, the journey manager will show a call-to-action tooltip to invite the user to interact with the overlay pin.
+   * it will be shown only if the user never interacts with the overlay pin, after `tooltipShowAfterMs` milliseconds.
+   */
+  nudgeContent?: string;
+  /**
+   * Show nudge tooltip after this many milliseconds
+   */
+  nudgeShowAfterMs?: number;
+  /**
+   * Hide nudge tooltip after it's been shown for this many milliseconds
+   */
+  nudgeHideAfterMs?: number;
 }
 
 const defaultTheme: Theme = {
@@ -171,6 +236,82 @@ button {
 .pin:hover {
   background-color: var(--primary-hover);
 }
+
+.pin-bubble-content {
+  line-height: 1.4;
+  padding: 4px 6px;
+}
+
+.pin-bubble-container {
+  position: fixed;
+  bottom: 66px;
+  right: 8px;
+  border-radius: 6px;
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: calc(100% - 38px);
+  box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  z-index: 1001;
+  padding: 4px;
+  background-color: ${tinycolor(theme.colors.primary).darken(10).toRgbString()};
+  color: #fff;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.pin-bubble-container::after {
+  position: absolute;
+  top: 100%;
+  right: 22px;
+  content: " ";
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid ${tinycolor(theme.colors.primary).darken(10).toRgbString()};
+}
+
+.pin-bubble-container.active {
+  transform: translate3d(0, 0, 0);
+  pointer-events: all;
+}
+
+.pin-bubble-container.inactive {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+  pointer-events: none;
+}
+
+.pin-bubble-button {
+  height: 32px;
+  flex: 0 0 32px;
+  border: 0;
+  color: white;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align - items: center;
+  justify - content: center;
+  border - radius: 6px;
+  background: none;
+}
+.pin-bubble-button svg {
+  width: 100 %;
+  height: 100 %;
+  fill: white;
+}
+.pin-bubble-button:hover {
+  background - color: rgba(255, 255, 255, 0.1);
+}
+.pin-bubble-button:focus {
+  outline: none;
+  box - shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+
 
 .drawer {
   position: fixed;
@@ -443,8 +584,6 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
   );
 };
 
-type Action = "end" | "escalate" | "previous";
-
 type ControlCenterStatus =
   | null
   | "pending-escalation"
@@ -454,13 +593,44 @@ type ControlCenterStatus =
 
 const ControlCenter: FunctionComponent<{
   config: UiConfig;
+  client: Client;
+  triggeredSteps: TriggeredStep[];
   digression: boolean;
   highlightElements: HTMLElement[];
-  onAction: (action: Action) => void;
-}> = ({ config, highlightElements, digression, onAction }) => {
+}> = ({ config, client, triggeredSteps, highlightElements, digression }) => {
+  const [hasBeenOpened, setHasBeenOpened] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [status, setStatus] = useState<ControlCenterStatus>(null);
   const drawerContentRef = useRef<HTMLDivElement | null>(null);
+  const [isNudgeVisible, setIsNudgeVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isOpen) setHasBeenOpened(true);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (hasBeenOpened || config.nudgeContent == null) {
+      setIsNudgeVisible(false);
+      return;
+    }
+
+    let hideTimeout: null | NodeJS.Timeout = null;
+    const showTimeout = setTimeout(() => {
+      setIsNudgeVisible(true);
+      hideTimeout = setTimeout(() => {
+        setIsNudgeVisible(false);
+      }, config.nudgeHideAfterMs ?? 20_000);
+    }, config.nudgeShowAfterMs ?? 3_000);
+    return () => {
+      clearTimeout(showTimeout);
+      if (hideTimeout) clearTimeout(hideTimeout);
+    };
+  }, [
+    config.nudgeContent,
+    config.nudgeShowAfterMs,
+    config.nudgeHideAfterMs,
+    hasBeenOpened,
+  ]);
 
   const successMessage = useMemo<string | null>(() => {
     if (status === "success-escalation") {
@@ -472,9 +642,37 @@ const ControlCenter: FunctionComponent<{
     return null;
   }, [status]);
 
+  const onPreviousStep = config.onPreviousStep
+    ? () => {
+        config.onPreviousStep?.({
+          sendStep: client.sendStep,
+          triggeredSteps,
+        });
+      }
+    : () => {
+        const lastTriggeredStep = triggeredSteps[triggeredSteps.length - 1];
+        if (lastTriggeredStep != null) {
+          client.sendStep(lastTriggeredStep.stepId).catch((err) => {
+            // eslint-disable-next-line no-console
+            console.warn(err);
+          });
+          // Redirect to previous page if the last triggered step occurred on it
+          if (lastTriggeredStep.url !== window.location.toString()) {
+            window.location.href = lastTriggeredStep.url;
+          }
+        }
+      };
+
   return (
     <>
       <style>{styles(mergeWithDefault(config.theme))}</style>
+      <PinBubble
+        isActive={isNudgeVisible}
+        onClick={() => {
+          setIsNudgeVisible(false);
+        }}
+        content={config.nudgeContent ?? ""}
+      />
       <button
         className="pin"
         onClick={() => {
@@ -484,7 +682,7 @@ const ControlCenter: FunctionComponent<{
         <MultimodalIcon />
       </button>
       <div
-        className={`drawer ${isOpen ? "drawer-open" : ""}`}
+        className={`drawer ${isOpen ? "drawer-open" : ""} `}
         onClick={(event: any) => {
           if (
             event.target != null &&
@@ -516,19 +714,19 @@ const ControlCenter: FunctionComponent<{
             <div className="drawer-buttons">
               <button
                 onClick={() => {
-                  onAction("previous");
+                  onPreviousStep();
                   setIsOpen(false);
                 }}
               >
                 <ArrowBackIcon />
-                <span>Previous Screen</span>
+                {config.previousStepButtonLabel ?? "Previous Screen"}
               </button>
 
               {config.onEscalation != null ? (
                 <button
                   disabled={status === "pending-escalation"}
                   onClick={() => {
-                    onAction("escalate");
+                    config.onEscalation?.({ sendStep: client.sendStep });
                     setStatus("pending-escalation");
                     setTimeout(() => {
                       setStatus("success-escalation");
@@ -539,7 +737,7 @@ const ControlCenter: FunctionComponent<{
                   }}
                 >
                   <SupportAgentIcon />
-                  Escalate to Agent
+                  {config.escalationButtonLabel ?? "Escalate to Agent"}
                 </button>
               ) : null}
 
@@ -547,7 +745,7 @@ const ControlCenter: FunctionComponent<{
                 <button
                   disabled={status === "pending-end"}
                   onClick={() => {
-                    onAction("end");
+                    config.onEnd?.({ sendStep: client.sendStep });
                     setStatus("pending-end");
                     setTimeout(() => {
                       setStatus("success-end");
@@ -558,9 +756,22 @@ const ControlCenter: FunctionComponent<{
                   }}
                 >
                   <CallEndIcon />
-                  End Call
+                  {config.endButtonLabel ?? "End Call"}
                 </button>
               ) : null}
+              {(config.buttons ?? []).map((buttonConfig, buttonIndex) => (
+                <button
+                  key={buttonIndex}
+                  onClick={() => {
+                    buttonConfig.onClick({
+                      sendStep: client.sendStep,
+                      triggeredSteps,
+                    });
+                  }}
+                >
+                  {buttonConfig.label}
+                </button>
+              ))}
             </div>
           )}
           <div className="drawer-footer">
@@ -584,21 +795,30 @@ const ControlCenter: FunctionComponent<{
   );
 };
 
+interface TriggeredStep {
+  stepId: string;
+  url: string;
+}
+
 /**
  * @hidden @internal
  */
 export class JourneyManagerElement extends HTMLElement {
   _shadowRoot: ShadowRoot | null = null;
+  _client: Client | null = null;
+  _triggeredSteps: TriggeredStep[] | null = null;
   _config: UiConfig | null = null;
-  _digression?: boolean;
+  _digression: boolean = false;
   _highlightElements: HTMLElement[] = [];
 
   /**
    * Set digression attribute
    */
   set digression(value: boolean) {
-    this._digression = value;
-    this.render();
+    if (this._digression !== value) {
+      this._digression = value;
+      this.render();
+    }
   }
 
   /**
@@ -606,6 +826,22 @@ export class JourneyManagerElement extends HTMLElement {
    */
   set highlightElements(elements: HTMLElement[]) {
     this._highlightElements = elements;
+    this.render();
+  }
+
+  /**
+   * Set SDK client
+   */
+  set client(value: Client) {
+    this._client = value;
+    this.render();
+  }
+
+  /**
+   * Set triggered steps
+   */
+  set triggeredSteps(value: TriggeredStep[]) {
+    this._triggeredSteps = value;
     this.render();
   }
 
@@ -622,23 +858,20 @@ export class JourneyManagerElement extends HTMLElement {
    */
   render(): void {
     this._shadowRoot = this._shadowRoot ?? this.attachShadow({ mode: "open" });
-    if (this._config == null) {
+    if (
+      this._config == null ||
+      this._client == null ||
+      this._triggeredSteps == null
+    ) {
       return;
     }
     render(
       <ControlCenter
         config={this._config}
-        digression={this._digression ?? false}
+        digression={this._digression}
+        client={this._client}
+        triggeredSteps={this._triggeredSteps}
         highlightElements={this._highlightElements}
-        onAction={(action) => {
-          this.dispatchEvent(
-            new CustomEvent("action", {
-              detail: {
-                action,
-              },
-            }),
-          );
-        }}
       />,
       this._shadowRoot,
     );
@@ -653,3 +886,27 @@ export class JourneyManagerElement extends HTMLElement {
     }
   }
 }
+
+// PinBubble
+
+interface PinBubbleProps {
+  isActive: boolean;
+  content: string;
+  onClick: () => void;
+}
+// eslint-disable-next-line jsdoc/require-returns, jsdoc/require-param
+/** @hidden @internal */
+export const PinBubble: FunctionComponent<PinBubbleProps> = ({
+  isActive,
+  content,
+  onClick,
+}) => (
+  <div className={`pin-bubble-container ${isActive ? "active" : "inactive"}`}>
+    <div className="pin-bubble-content">{content}</div>
+    <button className="pin-bubble-button" onClick={onClick}>
+      <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+      </svg>
+    </button>
+  </div>
+);
