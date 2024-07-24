@@ -2,8 +2,12 @@
 
 import { type Client } from "@nlxai/multimodal";
 import { autoUpdate, platform } from "@floating-ui/dom";
-import { render, type FunctionComponent } from "preact";
-import { useEffect, useState, useRef, useMemo } from "preact/hooks";
+import {
+  render,
+  type FunctionComponent as FC,
+  type ComponentChildren,
+} from "preact";
+import { useEffect, useState, useRef } from "preact/hooks";
 import tinycolor from "tinycolor2";
 
 /**
@@ -36,6 +40,10 @@ export interface Theme {
    * Font family
    */
   fontFamily: string;
+}
+
+interface SimpleHandlerArg {
+  sendStep: Client["sendStep"];
 }
 
 interface HandlerArg {
@@ -106,7 +114,7 @@ export interface UiConfig {
   /**
    * Escalation handler
    */
-  onEscalation?: (config: { sendStep: Client["sendStep"] }) => void;
+  onEscalation?: (config: SimpleHandlerArg) => void;
   /**
    * Escalation button label
    */
@@ -118,7 +126,7 @@ export interface UiConfig {
   /**
    * End handler
    */
-  onEnd?: (config: { sendStep: Client["sendStep"] }) => void;
+  onEnd?: (config: SimpleHandlerArg) => void;
   /**
    * End button label
    */
@@ -193,6 +201,8 @@ p {
   --highlightR: ${highlight.r};
   --highlightG: ${highlight.g};
   --highlightB: ${highlight.b};
+  --gray: #666;
+  --gray-hover: #444;
   z-index: 1000;
 }
 
@@ -217,6 +227,8 @@ button {
     transform: translateY(0px);
   }
 }
+
+/** Pin */
 
 .pin {
   width: 48px;
@@ -298,20 +310,23 @@ button {
   border - radius: 6px;
   background: none;
 }
+
 .pin-bubble-button svg {
   width: 100 %;
   height: 100 %;
   fill: white;
 }
+
 .pin-bubble-button:hover {
   background - color: rgba(255, 255, 255, 0.1);
 }
+
 .pin-bubble-button:focus {
   outline: none;
   box - shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.2);
 }
 
-
+/** Drawer */
 
 .drawer {
   position: fixed;
@@ -348,7 +363,25 @@ button {
   margin-right: auto;
 }
 
-.drawer-content > * + * {
+.drawer-dialog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: white;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  z-index: 20;
+  gap: 20px;
+}
+
+/** Only add spacing margins from the third child onwards (as the first child is the dialog container) */
+.drawer-content > * + * + * {
   margin-top: 25px;
 }
 
@@ -369,19 +402,19 @@ button {
 
 .drawer-header p {
   font-size: 14px;
-  color: #777;
+  color: var(--gray);
 }
 
 /* Buttons */
 
 .drawer-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
-.drawer-buttons > * + * {
-  margin-top: 10px;
-}
-
-.drawer-buttons button {
+.drawer-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -395,22 +428,22 @@ button {
   background-color: rgba(0,0,0,0.07);
 }
 
-.drawer-buttons button svg {
+.drawer-button svg {
   flex: 0 0 14px;
   height: 14px;
   display: inline-block;
   margin-right: 4px;
 }
 
-.drawer-buttons button:hover {
+.drawer-button:hover {
   background-color: rgba(0,0,0,0.10);
 }
 
-.drawer-buttons button:disabled {
+.drawer-button:disabled {
   opacity: 0.5;
 }
 
-.drawer-buttons button:disabled:hover {
+.drawer-button:disabled:hover {
   background-color: rgba(0,0,0,0.07);
 }
 
@@ -420,23 +453,25 @@ button {
   text-align: center;
 }
 
-.drawer-footer button {
+/** Discrete button */
+
+.discrete-button {
   display: inline-flex;
   align-items: center;
   border: none;
   background: none;
-  color: #777;
+  color: var(--gray);
 }
 
-.drawer-footer button svg {
+.discrete-button svg {
   flex: 0 0 14px;
   height: 14px;
   display: inline-block;
   margin-right: 4px;
 }
 
-.drawer-footer button:hover {
-  color: #000;
+.discrete-button:hover {
+  color: var(--gray-hover);
 }
 
 /* Success message */
@@ -462,6 +497,51 @@ button {
   color: red;
   text-align: center;
 }
+ 
+/** Confirmation */
+
+.confirmation {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.confirmation-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.confirmation-buttons > * {
+  border: none;
+}
+
+.confirm-button {
+  background-color: var(--primary);
+  color: white;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.confirm-button:disabled {
+  opacity: 0.5;
+}
+
+.confirm-button:hover {
+  background-color: var(--primary-hover);
+}
+
+.cancel-button {
+  background: none;
+  color: var(--gray);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.cancel-button {
+  color: var(--gray-hover);
+}
 
 /** Highlights */
 
@@ -482,49 +562,7 @@ button {
 `;
 };
 
-const MultimodalIcon: FunctionComponent<unknown> = () => (
-  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
-    <path d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C11.4477 20 11 20.4477 11 21C11 21.5523 11.4477 22 12 22C16.456 22 20.2313 19.0855 21.5236 15.0587C22.3766 14.8106 23 14.0231 23 13.09V11.09C23 10.1795 22.4064 9.40764 21.5851 9.14028C20.3549 5.01091 16.5291 2 12 2C7.47091 2 3.64506 5.01091 2.41488 9.14028C1.59358 9.40764 1 10.1795 1 11.09V13.09C1 14.1666 1.82988 15.0493 2.88483 15.1334C2.92262 15.1378 2.96105 15.14 3 15.14C3.55228 15.14 4 14.6923 4 14.14V12Z"></path>
-    <path d="M10.09 10.8L15.2453 6.27083L13.9005 13L8.74526 17.5292L10.09 10.8ZM12.8613 12.4C12.5851 12.8783 11.9735 13.0422 11.4953 12.766C11.017 12.4899 10.8531 11.8783 11.1292 11.4C11.4054 10.9217 12.017 10.7578 12.4953 11.034C12.9735 11.3101 13.1374 11.9217 12.8613 12.4Z"></path>
-  </svg>
-);
-
-const SupportAgentIcon: FunctionComponent<unknown> = () => (
-  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
-    <path d="M21 12.22C21 6.73 16.74 3 12 3c-4.69 0-9 3.65-9 9.28-.6.34-1 .98-1 1.72v2c0 1.1.9 2 2 2h1v-6.1c0-3.87 3.13-7 7-7s7 3.13 7 7V19h-8v2h8c1.1 0 2-.9 2-2v-1.22c.59-.31 1-.92 1-1.64v-2.3c0-.7-.41-1.31-1-1.62"></path>
-    <circle cx="9" cy="13" r="1"></circle>
-    <circle cx="15" cy="13" r="1"></circle>
-    <path d="M18 11.03C17.52 8.18 15.04 6 12.05 6c-3.03 0-6.29 2.51-6.03 6.45 2.47-1.01 4.33-3.21 4.86-5.89 1.31 2.63 4 4.44 7.12 4.47"></path>
-  </svg>
-);
-
-const ArrowBackIcon: FunctionComponent<unknown> = () => (
-  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
-    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z"></path>
-  </svg>
-);
-
-const CallEndIcon: FunctionComponent<unknown> = () => (
-  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
-    <path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9"></path>
-  </svg>
-);
-
-const CloseIcon: FunctionComponent<unknown> = () => (
-  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
-    <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
-  </svg>
-);
-
-const CheckIcon: FunctionComponent<unknown> = () => (
-  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
-    <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-  </svg>
-);
-
-const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
-  element,
-}) => {
+const Highlight: FC<{ element: HTMLElement }> = ({ element }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [rect, setRect] = useState<{
     x: number;
@@ -584,14 +622,182 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
   );
 };
 
-type ControlCenterStatus =
-  | null
-  | "pending-escalation"
-  | "pending-end"
-  | "success-escalation"
-  | "success-end";
+const SuccessMessage: FC<{ message: string }> = ({ message }) => {
+  return (
+    <p className="success-message">
+      <span>
+        <CheckIcon />
+      </span>
+      {message}
+    </p>
+  );
+};
 
-const ControlCenter: FunctionComponent<{
+const CloseButton: FC<{ onClose: () => void }> = ({ onClose }) => {
+  return (
+    <button className="discrete-button" onClick={onClose}>
+      <CloseIcon />
+      <span>Close</span>
+    </button>
+  );
+};
+
+const DrawerDialog: FC<{ children: ComponentChildren }> = ({ children }) => {
+  return <div className="drawer-dialog">{children}</div>;
+};
+
+const Confirmation: FC<{
+  content: string;
+  onConfirm: () => void;
+  pending?: boolean;
+  onCancel: () => void;
+}> = ({ content, onConfirm, onCancel, pending }) => {
+  return (
+    <div className="confirmation">
+      <p>{content}</p>
+      <div className="confirmation-buttons">
+        <button
+          className="confirm-button"
+          disabled={pending}
+          onClick={onConfirm}
+        >
+          Confirm
+        </button>
+        <button className="cancel-button" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const EscalationButton: FC<{
+  onEscalation: (config: SimpleHandlerArg) => void;
+  escalationButtonLabel?: string;
+  escalationConfirmation?: string;
+  client: Client;
+  onClose: () => void;
+}> = ({
+  onEscalation,
+  onClose,
+  client,
+  escalationButtonLabel,
+  escalationConfirmation,
+}) => {
+  const [status, setStatus] = useState<
+    "confirming" | "pending" | "success" | null
+  >(null);
+
+  const onSubmit = (): void => {
+    setStatus("pending");
+    onEscalation?.({ sendStep: client.sendStep });
+    setTimeout(() => {
+      setStatus("success");
+    }, 800);
+    setTimeout(() => {
+      onClose();
+    }, 5000);
+  };
+
+  return (
+    <>
+      {status === "confirming" ||
+      (status === "pending" && escalationConfirmation != null) ? (
+        <DrawerDialog>
+          <Confirmation
+            content={escalationConfirmation ?? ""}
+            onConfirm={onSubmit}
+            pending={status === "pending"}
+            onCancel={() => {
+              setStatus(null);
+            }}
+          />
+        </DrawerDialog>
+      ) : status === "success" ? (
+        <DrawerDialog>
+          <SuccessMessage message="Your call has been transferred to an agent." />
+          <CloseButton onClose={onClose} />
+        </DrawerDialog>
+      ) : null}
+      <button
+        className="drawer-button"
+        disabled={status === "pending"}
+        onClick={() => {
+          if (escalationConfirmation != null) {
+            setStatus("confirming");
+            return;
+          }
+          onSubmit();
+        }}
+      >
+        <SupportAgentIcon />
+        {escalationButtonLabel ?? "Escalate to Agent"}
+      </button>
+    </>
+  );
+};
+
+const EndButton: FC<{
+  onEnd: (config: SimpleHandlerArg) => void;
+  endButtonLabel?: string;
+  endConfirmation?: string;
+  client: Client;
+  onClose: () => void;
+}> = ({ onEnd, onClose, client, endButtonLabel, endConfirmation }) => {
+  const [status, setStatus] = useState<
+    "confirming" | "pending" | "success" | null
+  >(null);
+
+  const onSubmit = (): void => {
+    setStatus("pending");
+    onEnd?.({ sendStep: client.sendStep });
+    setTimeout(() => {
+      setStatus("success");
+    }, 800);
+    setTimeout(() => {
+      onClose();
+    }, 5000);
+  };
+
+  return (
+    <>
+      {status === "confirming" ||
+      (status === "pending" && endConfirmation != null) ? (
+        <DrawerDialog>
+          <Confirmation
+            content={endConfirmation ?? ""}
+            onConfirm={onSubmit}
+            pending={status === "pending"}
+            onCancel={() => {
+              setStatus(null);
+            }}
+          />
+        </DrawerDialog>
+      ) : status === "success" ? (
+        <DrawerDialog>
+          <SuccessMessage message="Your call has been transferred to an agent." />
+          <CloseButton onClose={onClose} />
+        </DrawerDialog>
+      ) : null}
+      <button
+        className="drawer-button"
+        disabled={status === "pending"}
+        onClick={() => {
+          if (endConfirmation != null) {
+            setStatus("confirming");
+            return;
+          }
+          onSubmit();
+        }}
+      >
+        <CallEndIcon />
+        {endButtonLabel ?? "End Call"}
+      </button>
+    </>
+  );
+};
+
+const ControlCenter: FC<{
   config: UiConfig;
   client: Client;
   triggeredSteps: TriggeredStep[];
@@ -600,8 +806,8 @@ const ControlCenter: FunctionComponent<{
 }> = ({ config, client, triggeredSteps, highlightElements, digression }) => {
   const [hasBeenOpened, setHasBeenOpened] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [status, setStatus] = useState<ControlCenterStatus>(null);
   const drawerContentRef = useRef<HTMLDivElement | null>(null);
+  const drawerDialogRef = useRef<HTMLDivElement | null>(null);
   const [isNudgeVisible, setIsNudgeVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -631,16 +837,6 @@ const ControlCenter: FunctionComponent<{
     config.nudgeHideAfterMs,
     hasBeenOpened,
   ]);
-
-  const successMessage = useMemo<string | null>(() => {
-    if (status === "success-escalation") {
-      return "Your call is being transferred to an agent.";
-    }
-    if (status === "success-end") {
-      return "Your call has ended.";
-    }
-    return null;
-  }, [status]);
 
   const onPreviousStep = config.onPreviousStep
     ? () => {
@@ -675,11 +871,20 @@ const ControlCenter: FunctionComponent<{
       />
       <button
         className="pin"
+        title="Toggle control center"
         onClick={() => {
           setIsOpen((prev) => !prev);
         }}
       >
-        <MultimodalIcon />
+        {config.iconUrl != null ? (
+          <img
+            src={config.iconUrl}
+            role="presentation"
+            className="block w-full h-full"
+          />
+        ) : (
+          <MultimodalIcon />
+        )}
       </button>
       <div
         className={`drawer ${isOpen ? "drawer-open" : ""} `}
@@ -689,11 +894,13 @@ const ControlCenter: FunctionComponent<{
             drawerContentRef.current != null &&
             !drawerContentRef.current.contains(event.target as Node)
           ) {
-            setIsOpen(false);
+            // Does not work due to portal component bubbling
+            // setIsOpen(false);
           }
         }}
       >
         <div className="drawer-content" ref={drawerContentRef}>
+          <div ref={drawerDialogRef} />
           <div className="drawer-header">
             <h1>{config.title}</h1>
             <p>{config.subtitle}</p>
@@ -701,88 +908,63 @@ const ControlCenter: FunctionComponent<{
           {digression ? (
             <p className="error-message">We detected a digression</p>
           ) : null}
-          {successMessage != null ? (
-            <div className="drawer-buttons">
-              <p className="success-message">
-                <span>
-                  <CheckIcon />
-                </span>
-                {successMessage}
-              </p>
-            </div>
-          ) : (
-            <div className="drawer-buttons">
-              <button
-                onClick={() => {
-                  onPreviousStep();
-                  setIsOpen(false);
-                }}
-              >
-                <ArrowBackIcon />
-                {config.previousStepButtonLabel ?? "Previous Screen"}
-              </button>
-
-              {config.onEscalation != null ? (
-                <button
-                  disabled={status === "pending-escalation"}
-                  onClick={() => {
-                    config.onEscalation?.({ sendStep: client.sendStep });
-                    setStatus("pending-escalation");
-                    setTimeout(() => {
-                      setStatus("success-escalation");
-                    }, 800);
-                    setTimeout(() => {
-                      setIsOpen(false);
-                    }, 5000);
-                  }}
-                >
-                  <SupportAgentIcon />
-                  {config.escalationButtonLabel ?? "Escalate to Agent"}
-                </button>
-              ) : null}
-
-              {config.onEnd != null ? (
-                <button
-                  disabled={status === "pending-end"}
-                  onClick={() => {
-                    config.onEnd?.({ sendStep: client.sendStep });
-                    setStatus("pending-end");
-                    setTimeout(() => {
-                      setStatus("success-end");
-                    }, 800);
-                    setTimeout(() => {
-                      setIsOpen(false);
-                    }, 5000);
-                  }}
-                >
-                  <CallEndIcon />
-                  {config.endButtonLabel ?? "End Call"}
-                </button>
-              ) : null}
-              {(config.buttons ?? []).map((buttonConfig, buttonIndex) => (
-                <button
-                  key={buttonIndex}
-                  onClick={() => {
-                    buttonConfig.onClick({
-                      sendStep: client.sendStep,
-                      triggeredSteps,
-                    });
-                  }}
-                >
-                  {buttonConfig.label}
-                </button>
-              ))}
-            </div>
-          )}
-          <div className="drawer-footer">
+          <div className="drawer-buttons">
             <button
+              className="drawer-button"
               onClick={() => {
+                onPreviousStep();
                 setIsOpen(false);
               }}
             >
-              <CloseIcon />
-              <span>Close</span>
+              <ArrowBackIcon />
+              {config.previousStepButtonLabel ?? "Previous Screen"}
             </button>
+
+            {config.onEscalation != null ? (
+              <EscalationButton
+                onEscalation={config.onEscalation}
+                client={client}
+                escalationButtonLabel={config.escalationButtonLabel}
+                escalationConfirmation={config.escalationConfirmation}
+                onClose={() => {
+                  setIsOpen(false);
+                }}
+              />
+            ) : null}
+
+            {config.onEnd != null ? (
+              <EndButton
+                onEnd={config.onEnd}
+                client={client}
+                endButtonLabel={config.endButtonLabel}
+                endConfirmation={config.endConfirmation}
+                onClose={() => {
+                  setIsOpen(false);
+                }}
+              />
+            ) : null}
+
+            {(config.buttons ?? []).map((buttonConfig, buttonIndex) => (
+              <button
+                className="drawer-button"
+                key={buttonIndex}
+                onClick={() => {
+                  buttonConfig.onClick({
+                    sendStep: client.sendStep,
+                    triggeredSteps,
+                  });
+                }}
+              >
+                {buttonConfig.label}
+              </button>
+            ))}
+          </div>
+          <div className="drawer-footer">
+            <CloseButton
+              onClose={() => {
+                setIsOpen(false);
+              }}
+            />
           </div>
         </div>
       </div>
@@ -894,13 +1076,8 @@ interface PinBubbleProps {
   content: string;
   onClick: () => void;
 }
-// eslint-disable-next-line jsdoc/require-returns, jsdoc/require-param
-/** @hidden @internal */
-export const PinBubble: FunctionComponent<PinBubbleProps> = ({
-  isActive,
-  content,
-  onClick,
-}) => (
+
+const PinBubble: FC<PinBubbleProps> = ({ isActive, content, onClick }) => (
   <div className={`pin-bubble-container ${isActive ? "active" : "inactive"}`}>
     <div className="pin-bubble-content">{content}</div>
     <button className="pin-bubble-button" onClick={onClick}>
@@ -909,4 +1086,46 @@ export const PinBubble: FunctionComponent<PinBubbleProps> = ({
       </svg>
     </button>
   </div>
+);
+
+/** Icons */
+
+const MultimodalIcon: FC<unknown> = () => (
+  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
+    <path d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C11.4477 20 11 20.4477 11 21C11 21.5523 11.4477 22 12 22C16.456 22 20.2313 19.0855 21.5236 15.0587C22.3766 14.8106 23 14.0231 23 13.09V11.09C23 10.1795 22.4064 9.40764 21.5851 9.14028C20.3549 5.01091 16.5291 2 12 2C7.47091 2 3.64506 5.01091 2.41488 9.14028C1.59358 9.40764 1 10.1795 1 11.09V13.09C1 14.1666 1.82988 15.0493 2.88483 15.1334C2.92262 15.1378 2.96105 15.14 3 15.14C3.55228 15.14 4 14.6923 4 14.14V12Z"></path>
+    <path d="M10.09 10.8L15.2453 6.27083L13.9005 13L8.74526 17.5292L10.09 10.8ZM12.8613 12.4C12.5851 12.8783 11.9735 13.0422 11.4953 12.766C11.017 12.4899 10.8531 11.8783 11.1292 11.4C11.4054 10.9217 12.017 10.7578 12.4953 11.034C12.9735 11.3101 13.1374 11.9217 12.8613 12.4Z"></path>
+  </svg>
+);
+
+const SupportAgentIcon: FC<unknown> = () => (
+  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
+    <path d="M21 12.22C21 6.73 16.74 3 12 3c-4.69 0-9 3.65-9 9.28-.6.34-1 .98-1 1.72v2c0 1.1.9 2 2 2h1v-6.1c0-3.87 3.13-7 7-7s7 3.13 7 7V19h-8v2h8c1.1 0 2-.9 2-2v-1.22c.59-.31 1-.92 1-1.64v-2.3c0-.7-.41-1.31-1-1.62"></path>
+    <circle cx="9" cy="13" r="1"></circle>
+    <circle cx="15" cy="13" r="1"></circle>
+    <path d="M18 11.03C17.52 8.18 15.04 6 12.05 6c-3.03 0-6.29 2.51-6.03 6.45 2.47-1.01 4.33-3.21 4.86-5.89 1.31 2.63 4 4.44 7.12 4.47"></path>
+  </svg>
+);
+
+const ArrowBackIcon: FC<unknown> = () => (
+  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
+    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z"></path>
+  </svg>
+);
+
+const CallEndIcon: FC<unknown> = () => (
+  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
+    <path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9"></path>
+  </svg>
+);
+
+const CloseIcon: FC<unknown> = () => (
+  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
+    <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+  </svg>
+);
+
+const CheckIcon: FC<unknown> = () => (
+  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
+    <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+  </svg>
 );
