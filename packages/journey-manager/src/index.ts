@@ -5,9 +5,9 @@ import { type UrlCondition, matchesUrlCondition } from "./url_condition";
 import { debounce } from "./utils/debounce";
 import { filterMap } from "./utils/filterMap";
 import { domContentLoaded } from "./utils/domContentLoaded";
-import { type Trigger, type Triggers, resolveTriggers } from "./trigger";
+import { type Triggers, resolveTriggers, type Trigger } from "./trigger";
 
-export { type Triggers } from "./trigger";
+export { type Triggers, type Trigger } from "./trigger";
 export {
   type Query,
   type EncodedQuery,

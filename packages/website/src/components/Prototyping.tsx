@@ -1,5 +1,5 @@
 import { type FC, useRef, useEffect, useState } from "react";
-import { type Trigger } from "@nlxai/journey-manager";
+import { type Triggers, type Trigger } from "@nlxai/journey-manager";
 
 // Add extra names for triggers for logging purposes
 const triggersWithNames: Record<string, { name: string; trigger: Trigger }> = {
@@ -107,8 +107,8 @@ const triggersWithNames: Record<string, { name: string; trigger: Trigger }> = {
   },
 };
 
-const triggersForRun = (): Record<string, Trigger> => {
-  const triggers: Record<string, Trigger> = {};
+const triggersForRun = (): Triggers => {
+  const triggers: Triggers = {};
   Object.entries(triggersWithNames).forEach(([stepId, { trigger }]) => {
     triggers[stepId] = trigger;
   });
