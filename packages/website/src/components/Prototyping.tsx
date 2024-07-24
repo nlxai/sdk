@@ -198,7 +198,6 @@ const ButtonHandlerForm: FC<unknown> = () => {
     useState<boolean>(true);
 
   const handleButtonPress = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    console.log("handleB", shouldPreventDefault, shouldStopPropagation);
     if (shouldPreventDefault) {
       e.preventDefault();
     }
