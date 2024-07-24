@@ -20,7 +20,7 @@
     "prepublish": "npm run build",
     "preview-docs": "npm run docs && comrak --unsafe --gfm -o docs/index.html docs/index.md && open docs/index.html",
     "publish-docs": "npm run docs && mv docs/index.md ../website/src/content/07-02-journey-manager-api-reference.md",
-    "test": "echo 'TBD'",
+    "test": "jest",
     "tsc": "tsc",
     "format": "prettier --write ."
   },
@@ -35,6 +35,8 @@
     "eslint-config-nlx": "*",
     "prettier": "^3.1.0",
     "rollup-config-nlx": "*",
+    "rollup-plugin-import-css": "^3.5.0",
+    "ts-jest": "^29.1.2",
     "typedoc": "^0.25.13",
     "typedoc-plugin-markdown": "^3.17.1",
     "typescript": "^5.2.2"

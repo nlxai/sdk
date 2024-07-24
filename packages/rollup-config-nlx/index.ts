@@ -5,7 +5,7 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import replace from "@rollup/plugin-replace";
 import typescript from "@rollup/plugin-typescript";
-import { RollupOptions } from "rollup";
+import { Plugin, RollupOptions } from "rollup";
 
 interface CommonConfig {
   pkg: {
@@ -14,6 +14,7 @@ interface CommonConfig {
   };
   externalDeps: string[];
   input: string;
+  plugins: Plugin[];
 }
 
 interface WithBrowserConfig {
@@ -37,6 +38,7 @@ export default function buildconfig({
   name,
   externalDeps,
   input,
+  plugins = [],
 }: Config): RollupOptions[] {
   const config: RollupOptions[] = [
     // Bundler/Node-friendly CommonJS and ESM builds
@@ -48,7 +50,7 @@ export default function buildconfig({
         { file: pkg.module, format: "es" },
       ],
       external: externalDeps,
-      plugins: [typescript(), json()],
+      plugins: [typescript(), json(), ...plugins],
     },
   ];
 
@@ -73,6 +75,7 @@ export default function buildconfig({
           "process.env.NODE_ENV": JSON.stringify("production"),
         }),
         typescript(),
+        ...plugins,
       ],
     });
   }

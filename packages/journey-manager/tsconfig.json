@@ -6,6 +6,7 @@
     "rootDir": "./src",
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
+    "noEmitOnError": false // consider enabling this when https://github.com/kulshekhar/ts-jest/issues/4198 is resolved
   },
   "include": ["./src/**/*"]
 }
