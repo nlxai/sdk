@@ -1,5 +1,5 @@
 import { type Config, type Client, create } from "@nlxai/multimodal";
-import { find, getAll, decode, type Query } from "./queries";
+import { getAll, decode, type Query } from "./queries";
 import { type UiConfig, JourneyManagerElement } from "./ui";
 import { type UrlCondition, matchesUrlCondition } from "./url_condition";
 import { debounce } from "./utils/debounce";
@@ -394,7 +394,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
           elements.includes(target),
         );
         if (trigger != null) {
-          sendStep(trigger.trigger.stepId, trigger.trigger.once ?? false);
+          sendStep(trigger.stepId, trigger.once ?? false);
         }
       });
     };

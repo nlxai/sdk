@@ -32,7 +32,6 @@ export type Triggers = Record<StepId, Trigger>;
 
 /**
  * Resolve triggers from CDN or use provided triggers
- *
  * @param config - Configuration
  * @param triggers - Triggers
  * @returns Resolved triggers
