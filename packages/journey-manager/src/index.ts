@@ -646,13 +646,17 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
-  document.addEventListener("click", handleGlobalClickForAnnotations);
+  document.addEventListener("click", handleGlobalClickForAnnotations, true);
 
   return {
     client,
     teardown: () => {
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
-      document.removeEventListener("click", handleGlobalClickForAnnotations);
+      document.removeEventListener(
+        "click",
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises --  initial eslint integration: disable all existing eslint errors
+        handleGlobalClickForAnnotations,
+        true,
+      );
       teardownIntersectionObserve?.();
       documentObserver.disconnect();
       teardownUiElement?.();
