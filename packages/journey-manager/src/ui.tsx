@@ -2,8 +2,15 @@
 
 import { type Client } from "@nlxai/multimodal";
 import { autoUpdate, platform } from "@floating-ui/dom";
-import { render, type FunctionComponent } from "preact";
-import { useEffect, useState, useRef, useMemo } from "preact/hooks";
+import { render, type FunctionComponent, type VNode } from "preact";
+import {
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+  type MutableRef,
+} from "preact/hooks";
+import { createPortal } from "preact/compat";
 import tinycolor from "tinycolor2";
 
 /**
@@ -36,6 +43,10 @@ export interface Theme {
    * Font family
    */
   fontFamily: string;
+}
+
+interface SimpleHandlerArg {
+  sendStep: Client["sendStep"];
 }
 
 interface HandlerArg {
@@ -106,7 +117,7 @@ export interface UiConfig {
   /**
    * Escalation handler
    */
-  onEscalation?: (config: { sendStep: Client["sendStep"] }) => void;
+  onEscalation?: (config: SimpleHandlerArg) => void;
   /**
    * Escalation button label
    */
@@ -118,7 +129,7 @@ export interface UiConfig {
   /**
    * End handler
    */
-  onEnd?: (config: { sendStep: Client["sendStep"] }) => void;
+  onEnd?: (config: SimpleHandlerArg) => void;
   /**
    * End button label
    */
@@ -353,7 +364,24 @@ button {
   margin-right: auto;
 }
 
-.drawer-content > * + * {
+.drawer-dialog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: white;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  z-index: 20;
+}
+
+/** Only add spacing margins from the third child onwards (as the first child is the dialog container) */
+.drawer-content > * + * + * {
   margin-top: 25px;
 }
 
@@ -596,6 +624,77 @@ type ControlCenterStatus =
   | "success-escalation"
   | "success-end";
 
+const SuccessMessage: FunctionComponent<{ message: string }> = ({
+  message,
+}) => {
+  return (
+    <p className="success-message">
+      <span>
+        <CheckIcon />
+      </span>
+      {message}
+    </p>
+  );
+};
+
+const DrawerDialog: FunctionComponent<{ children: VNode<any> }> = ({
+  children,
+}) => {
+  return <div className="drawer-dialog">{children}</div>;
+};
+
+const EscalationButton: FunctionComponent<{
+  onEscalation: (config: SimpleHandlerArg) => void;
+  escalationButtonLabel?: string;
+  client: Client;
+  onClose: () => void;
+  drawerDialogRef: MutableRef<HTMLDivElement | null>;
+}> = ({
+  onEscalation,
+  drawerDialogRef,
+  onClose,
+  client,
+  escalationButtonLabel,
+}) => {
+  const [status, setStatus] = useState<
+    "confirming" | "pending" | "success" | null
+  >(null);
+  return (
+    <>
+      {status === "confirming"
+        ? createPortal(
+            <DrawerDialog>
+              <p>abcd</p>
+            </DrawerDialog>,
+            drawerDialogRef.current!,
+          )
+        : null}
+      {status === "success" ? (
+        <SuccessMessage message="Your call is being transferred to an agent." />
+      ) : (
+        <button
+          disabled={status === "pending"}
+          onClick={() => {
+            setStatus("confirming");
+            return;
+            onEscalation?.({ sendStep: client.sendStep });
+            setStatus("pending");
+            setTimeout(() => {
+              setStatus("success");
+            }, 800);
+            setTimeout(() => {
+              onClose();
+            }, 5000);
+          }}
+        >
+          <SupportAgentIcon />
+          {escalationButtonLabel ?? "Escalate to Agent"}
+        </button>
+      )}
+    </>
+  );
+};
+
 const ControlCenter: FunctionComponent<{
   config: UiConfig;
   client: Client;
@@ -607,6 +706,7 @@ const ControlCenter: FunctionComponent<{
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [status, setStatus] = useState<ControlCenterStatus>(null);
   const drawerContentRef = useRef<HTMLDivElement | null>(null);
+  const drawerDialogRef = useRef<HTMLDivElement | null>(null);
   const [isNudgeVisible, setIsNudgeVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -680,11 +780,20 @@ const ControlCenter: FunctionComponent<{
       />
       <button
         className="pin"
+        title="Toggle control center"
         onClick={() => {
           setIsOpen((prev) => !prev);
         }}
       >
-        <MultimodalIcon />
+        {config.iconUrl != null ? (
+          <img
+            src={config.iconUrl}
+            role="presentation"
+            className="block w-full h-full"
+          />
+        ) : (
+          <MultimodalIcon />
+        )}
       </button>
       <div
         className={`drawer ${isOpen ? "drawer-open" : ""} `}
@@ -699,6 +808,7 @@ const ControlCenter: FunctionComponent<{
         }}
       >
         <div className="drawer-content" ref={drawerContentRef}>
+          <div ref={drawerDialogRef} />
           <div className="drawer-header">
             <h1>{config.title}</h1>
             <p>{config.subtitle}</p>
@@ -708,12 +818,7 @@ const ControlCenter: FunctionComponent<{
           ) : null}
           {successMessage != null ? (
             <div className="drawer-buttons">
-              <p className="success-message">
-                <span>
-                  <CheckIcon />
-                </span>
-                {successMessage}
-              </p>
+              <SuccessMessage message={successMessage} />
             </div>
           ) : (
             <div className="drawer-buttons">
@@ -728,22 +833,15 @@ const ControlCenter: FunctionComponent<{
               </button>
 
               {config.onEscalation != null ? (
-                <button
-                  disabled={status === "pending-escalation"}
-                  onClick={() => {
-                    config.onEscalation?.({ sendStep: client.sendStep });
-                    setStatus("pending-escalation");
-                    setTimeout(() => {
-                      setStatus("success-escalation");
-                    }, 800);
-                    setTimeout(() => {
-                      setIsOpen(false);
-                    }, 5000);
+                <EscalationButton
+                  onEscalation={config.onEscalation}
+                  client={client}
+                  escalationButtonLabel={config.escalationButtonLabel}
+                  onClose={() => {
+                    setIsOpen(false);
                   }}
-                >
-                  <SupportAgentIcon />
-                  {config.escalationButtonLabel ?? "Escalate to Agent"}
-                </button>
+                  drawerDialogRef={drawerDialogRef}
+                />
               ) : null}
 
               {config.onEnd != null ? (
