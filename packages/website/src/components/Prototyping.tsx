@@ -92,6 +92,19 @@ const triggersWithNames: Record<string, { name: string; trigger: Trigger }> = {
       },
     },
   },
+  "c773436a-b523-4871-b01d-06ce1f8e4c50": {
+    name: "Test custom click behaviors",
+    trigger: {
+      event: "click",
+      once: false,
+      query: {
+        parent: null,
+        options: { name: { regexp: "Test", flags: "i" } },
+        name: "Role",
+        target: "button",
+      },
+    },
+  },
 };
 
 const triggersForRun = (): Record<string, Trigger> => {
@@ -178,6 +191,60 @@ const LoremIpsumParagraph: FC<unknown> = () => {
   );
 };
 
+const ButtonHandlerForm: FC<unknown> = () => {
+  const [shouldPreventDefault, setShouldPreventDefault] =
+    useState<boolean>(false);
+  const [shouldStopPropagation, setShouldStopPropagation] =
+    useState<boolean>(true);
+
+  const handleButtonPress = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    console.log("handleB", shouldPreventDefault, shouldStopPropagation);
+    if (shouldPreventDefault) {
+      e.preventDefault();
+    }
+    if (shouldStopPropagation) {
+      e.stopPropagation();
+    }
+  };
+
+  return (
+    <div className="flex gap-2 items-start grow justify-around">
+      <button
+        className="bg-blueMain px-4 py-1 text-white rounded hover:bg-blueDarker"
+        onClick={handleButtonPress}
+      >
+        Test
+      </button>
+      <div className="flex flex-col">
+        <div className="flex grow items-center justify-start gap-2">
+          <input
+            type="checkbox"
+            className="shrink grow-0 basis-3"
+            id="preventDefault"
+            checked={shouldPreventDefault}
+            onChange={() => {
+              setShouldPreventDefault(!shouldPreventDefault);
+            }}
+          />
+          <label htmlFor="preventDefault">Prevent default</label>
+        </div>
+        <div className="flex grow items-center justify-start gap-2">
+          <input
+            type="checkbox"
+            className="shrink grow-0 basis-3"
+            id="stopPropagation"
+            checked={shouldStopPropagation}
+            onChange={() => {
+              setShouldStopPropagation(!shouldStopPropagation);
+            }}
+          />
+          <label htmlFor="stopPropagation">Stop propagation</label>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const Prototyping: FC<unknown> = () => {
   const isRun = useRef(false);
 
@@ -255,7 +322,7 @@ export const Prototyping: FC<unknown> = () => {
           onClick={() => {
             setTab("tab3");
           }}
-          label="Tab 3"
+          label="Custom buttons"
         />
       </div>
       {tab === "tab1" ? <div>tab 1</div> : null}
@@ -286,7 +353,7 @@ export const Prototyping: FC<unknown> = () => {
           <LoremIpsumParagraph />
         </div>
       ) : null}
-      {tab === "tab3" ? <div>tab 3</div> : null}
+      {tab === "tab3" ? <ButtonHandlerForm /> : null}
     </div>
   );
 };
