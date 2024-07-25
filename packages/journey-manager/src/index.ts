@@ -27,7 +27,6 @@ export type {
   Theme,
   ThemeColors,
   UiConfig,
-  DeepPartial,
   ButtonConfig,
   SimpleHandlerArg,
   HandlerArg,

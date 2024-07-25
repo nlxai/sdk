@@ -7,15 +7,15 @@ export interface ThemeColors {
   /**
    * Primary color
    */
-  primary: string;
+  primary?: string;
   /**
    * Primary color on hover
    */
-  primaryHover: string;
+  primaryHover?: string;
   /**
    * Color for trigger highlights
    */
-  highlight: string;
+  highlight?: string;
 }
 
 /**
@@ -25,11 +25,11 @@ export interface Theme {
   /**
    * UI colors
    */
-  colors: ThemeColors;
+  colors?: ThemeColors;
   /**
    * Font family
    */
-  fontFamily: string;
+  fontFamily?: string;
 }
 
 /** Represents a load step that has already been triggered. */
@@ -74,18 +74,6 @@ export interface ButtonConfig {
   onClick: (config: HandlerArg) => void;
 }
 
-/** Makes every property optional recursively. */
-export type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends Array<infer I>
-    ? Array<DeepPartial<I>>
-    : DeepPartial<T[P]>;
-};
-
-/**
- * Visual theme for the UI
- */
-export type PartialTheme = DeepPartial<Theme>;
-
 /**
  * Full UI configuration
  */
@@ -109,7 +97,7 @@ export interface UiConfig {
   /**
    * UI theme
    */
-  theme?: PartialTheme;
+  theme?: Theme;
   /**
    * Escalation handler
    */

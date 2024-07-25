@@ -15,14 +15,22 @@ import {
 import type {
   SimpleHandlerArg,
   UiConfig,
-  PartialTheme,
-  Theme,
+  Theme as PartialTheme,
   TriggeredStep,
 } from "../../configuration";
 
 import tinycolor from "tinycolor2";
 
 import style from "../style.css";
+
+/** Makes every property required recursively. */
+export type DeepRequired<T> = {
+  [P in keyof T]-?: T[P] extends Array<infer I>
+    ? Array<DeepRequired<I>>
+    : DeepRequired<T[P]>;
+};
+
+type Theme = DeepRequired<PartialTheme>;
 
 const mergeWithDefault = (partial?: PartialTheme): Theme => ({
   ...defaultTheme,
