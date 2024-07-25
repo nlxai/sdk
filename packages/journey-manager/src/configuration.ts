@@ -60,27 +60,25 @@ export interface Theme {
   fontFamily: string;
 }
 
-/**  */
+/** Represents a load step that has already been triggered. */
 export interface TriggeredStep {
-  /** */
+  /** step id */
   stepId: string;
-  /** */
+  /** the URL of the page it triggered on */
   url: string;
 }
 
-/**  */
+/** The argument for callbacks  */
 export interface SimpleHandlerArg {
-  /** */
+  /** A function to send steps to NLX. */
   sendStep: Client["sendStep"];
 }
 
-/**  */
-export interface HandlerArg {
-  /** */
-  sendStep: Client["sendStep"];
-  /** */
+/** Used for some more advanced callbacks  */
+export type HandlerArg = SimpleHandlerArg & {
+  /** The steps that have been triggered. */
   triggeredSteps: TriggeredStep[];
-}
+};
 
 /**
  * Button configuration
@@ -104,7 +102,8 @@ export interface ButtonConfig {
   onClick: (config: HandlerArg) => void;
 }
 
-type DeepPartial<T> = {
+/** Makes every property optional recursively. */
+export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer I>
     ? Array<DeepPartial<I>>
     : DeepPartial<T[P]>;

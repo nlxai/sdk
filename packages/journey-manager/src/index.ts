@@ -14,14 +14,24 @@ import type { RunProps } from "./configuration";
 import createUi from "./ui";
 import { triggerOnce } from "./triggerOnce";
 
-export { type Triggers, type Trigger } from "./trigger";
+export type { Triggers, Trigger, StepId } from "./trigger";
 export {
-  type Query,
   type EncodedQuery,
   type Method,
   type SerializedRegex,
 } from "./queries";
-export type * from "./configuration";
+export type {
+  RunProps,
+  Theme,
+  ThemeColors,
+  UiConfig,
+  DeepPartial,
+  ButtonConfig,
+  SimpleHandlerArg,
+  HandlerArg,
+  TriggeredStep,
+} from "./configuration";
+export type { UrlCondition } from "./UrlCondition";
 
 /**
  * Created by {@link run}.
@@ -181,7 +191,6 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
 
       const clickStep: StepWithQueryAndElements | undefined = targets.find(
         ({ elements }) =>
-           
           (elements ?? []).some((element: HTMLElement) =>
             element.contains(node),
           ),
