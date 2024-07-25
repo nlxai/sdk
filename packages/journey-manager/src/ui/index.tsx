@@ -2,8 +2,12 @@
 
 import { type Client } from "@nlxai/multimodal";
 import { autoUpdate, platform } from "@floating-ui/dom";
-import { render, type FunctionComponent } from "preact";
-import { useEffect, useState, useRef, useMemo } from "preact/hooks";
+import {
+  render,
+  type FunctionComponent as FC,
+  type ComponentChildren,
+} from "preact";
+import { useEffect, useState, useRef } from "preact/hooks";
 import tinycolor from "tinycolor2";
 import style from "./style.css";
 import {
@@ -45,6 +49,10 @@ export interface Theme {
    * Font family
    */
   fontFamily: string;
+}
+
+interface SimpleHandlerArg {
+  sendStep: Client["sendStep"];
 }
 
 interface HandlerArg {
@@ -115,7 +123,7 @@ export interface UiConfig {
   /**
    * Escalation handler
    */
-  onEscalation?: (config: { sendStep: Client["sendStep"] }) => void;
+  onEscalation?: (config: SimpleHandlerArg) => void;
   /**
    * Escalation button label
    */
@@ -127,7 +135,7 @@ export interface UiConfig {
   /**
    * End handler
    */
-  onEnd?: (config: { sendStep: Client["sendStep"] }) => void;
+  onEnd?: (config: SimpleHandlerArg) => void;
   /**
    * End button label
    */
@@ -196,9 +204,7 @@ const styles = (theme: Theme): string => {
 } ${style}`;
 };
 
-const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
-  element,
-}) => {
+const Highlight: FC<{ element: HTMLElement }> = ({ element }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [rect, setRect] = useState<{
     x: number;
@@ -258,14 +264,182 @@ const Highlight: FunctionComponent<{ element: HTMLElement }> = ({
   );
 };
 
-type ControlCenterStatus =
-  | null
-  | "pending-escalation"
-  | "pending-end"
-  | "success-escalation"
-  | "success-end";
+const SuccessMessage: FC<{ message: string }> = ({ message }) => {
+  return (
+    <p className="success-message">
+      <span>
+        <CheckIcon />
+      </span>
+      {message}
+    </p>
+  );
+};
 
-const ControlCenter: FunctionComponent<{
+const CloseButton: FC<{ onClose: () => void }> = ({ onClose }) => {
+  return (
+    <button className="discrete-button" onClick={onClose}>
+      <CloseIcon />
+      <span>Close</span>
+    </button>
+  );
+};
+
+const DrawerDialog: FC<{ children: ComponentChildren }> = ({ children }) => {
+  return <div className="drawer-dialog">{children}</div>;
+};
+
+const Confirmation: FC<{
+  content: string;
+  onConfirm: () => void;
+  pending?: boolean;
+  onCancel: () => void;
+}> = ({ content, onConfirm, onCancel, pending }) => {
+  return (
+    <div className="confirmation">
+      <p>{content}</p>
+      <div className="confirmation-buttons">
+        <button
+          className="confirm-button"
+          disabled={pending}
+          onClick={onConfirm}
+        >
+          Confirm
+        </button>
+        <button className="cancel-button" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const EscalationButton: FC<{
+  onEscalation: (config: SimpleHandlerArg) => void;
+  escalationButtonLabel?: string;
+  escalationConfirmation?: string;
+  client: Client;
+  onClose: () => void;
+}> = ({
+  onEscalation,
+  onClose,
+  client,
+  escalationButtonLabel,
+  escalationConfirmation,
+}) => {
+  const [status, setStatus] = useState<
+    "confirming" | "pending" | "success" | null
+  >(null);
+
+  const onSubmit = (): void => {
+    setStatus("pending");
+    onEscalation?.({ sendStep: client.sendStep });
+    setTimeout(() => {
+      setStatus("success");
+    }, 800);
+    setTimeout(() => {
+      onClose();
+    }, 5000);
+  };
+
+  return (
+    <>
+      {status === "confirming" ||
+      (status === "pending" && escalationConfirmation != null) ? (
+        <DrawerDialog>
+          <Confirmation
+            content={escalationConfirmation ?? ""}
+            onConfirm={onSubmit}
+            pending={status === "pending"}
+            onCancel={() => {
+              setStatus(null);
+            }}
+          />
+        </DrawerDialog>
+      ) : status === "success" ? (
+        <DrawerDialog>
+          <SuccessMessage message="Your call has been transferred to an agent." />
+          <CloseButton onClose={onClose} />
+        </DrawerDialog>
+      ) : null}
+      <button
+        className="drawer-button"
+        disabled={status === "pending"}
+        onClick={() => {
+          if (escalationConfirmation != null) {
+            setStatus("confirming");
+            return;
+          }
+          onSubmit();
+        }}
+      >
+        <SupportAgentIcon />
+        {escalationButtonLabel ?? "Escalate to Agent"}
+      </button>
+    </>
+  );
+};
+
+const EndButton: FC<{
+  onEnd: (config: SimpleHandlerArg) => void;
+  endButtonLabel?: string;
+  endConfirmation?: string;
+  client: Client;
+  onClose: () => void;
+}> = ({ onEnd, onClose, client, endButtonLabel, endConfirmation }) => {
+  const [status, setStatus] = useState<
+    "confirming" | "pending" | "success" | null
+  >(null);
+
+  const onSubmit = (): void => {
+    setStatus("pending");
+    onEnd?.({ sendStep: client.sendStep });
+    setTimeout(() => {
+      setStatus("success");
+    }, 800);
+    setTimeout(() => {
+      onClose();
+    }, 5000);
+  };
+
+  return (
+    <>
+      {status === "confirming" ||
+      (status === "pending" && endConfirmation != null) ? (
+        <DrawerDialog>
+          <Confirmation
+            content={endConfirmation ?? ""}
+            onConfirm={onSubmit}
+            pending={status === "pending"}
+            onCancel={() => {
+              setStatus(null);
+            }}
+          />
+        </DrawerDialog>
+      ) : status === "success" ? (
+        <DrawerDialog>
+          <SuccessMessage message="Your call has been transferred to an agent." />
+          <CloseButton onClose={onClose} />
+        </DrawerDialog>
+      ) : null}
+      <button
+        className="drawer-button"
+        disabled={status === "pending"}
+        onClick={() => {
+          if (endConfirmation != null) {
+            setStatus("confirming");
+            return;
+          }
+          onSubmit();
+        }}
+      >
+        <CallEndIcon />
+        {endButtonLabel ?? "End Call"}
+      </button>
+    </>
+  );
+};
+
+const ControlCenter: FC<{
   config: UiConfig;
   client: Client;
   triggeredSteps: TriggeredStep[];
@@ -274,8 +448,8 @@ const ControlCenter: FunctionComponent<{
 }> = ({ config, client, triggeredSteps, highlightElements, digression }) => {
   const [hasBeenOpened, setHasBeenOpened] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [status, setStatus] = useState<ControlCenterStatus>(null);
   const drawerContentRef = useRef<HTMLDivElement | null>(null);
+  const drawerDialogRef = useRef<HTMLDivElement | null>(null);
   const [isNudgeVisible, setIsNudgeVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -305,16 +479,6 @@ const ControlCenter: FunctionComponent<{
     config.nudgeHideAfterMs,
     hasBeenOpened,
   ]);
-
-  const successMessage = useMemo<string | null>(() => {
-    if (status === "success-escalation") {
-      return "Your call is being transferred to an agent.";
-    }
-    if (status === "success-end") {
-      return "Your call has ended.";
-    }
-    return null;
-  }, [status]);
 
   const onPreviousStep = config.onPreviousStep
     ? () => {
@@ -349,11 +513,20 @@ const ControlCenter: FunctionComponent<{
       />
       <button
         className="pin"
+        title="Toggle control center"
         onClick={() => {
           setIsOpen((prev) => !prev);
         }}
       >
-        <MultimodalIcon />
+        {config.iconUrl != null ? (
+          <img
+            src={config.iconUrl}
+            role="presentation"
+            className="block w-full h-full"
+          />
+        ) : (
+          <MultimodalIcon />
+        )}
       </button>
       <div
         className={`drawer ${isOpen ? "drawer-open" : ""} `}
@@ -363,11 +536,13 @@ const ControlCenter: FunctionComponent<{
             drawerContentRef.current != null &&
             !drawerContentRef.current.contains(event.target as Node)
           ) {
-            setIsOpen(false);
+            // Does not work due to portal component bubbling
+            // setIsOpen(false);
           }
         }}
       >
         <div className="drawer-content" ref={drawerContentRef}>
+          <div ref={drawerDialogRef} />
           <div className="drawer-header">
             <h1>{config.title}</h1>
             <p>{config.subtitle}</p>
@@ -375,88 +550,63 @@ const ControlCenter: FunctionComponent<{
           {digression ? (
             <p className="error-message">We detected a digression</p>
           ) : null}
-          {successMessage != null ? (
-            <div className="drawer-buttons">
-              <p className="success-message">
-                <span>
-                  <CheckIcon />
-                </span>
-                {successMessage}
-              </p>
-            </div>
-          ) : (
-            <div className="drawer-buttons">
-              <button
-                onClick={() => {
-                  onPreviousStep();
-                  setIsOpen(false);
-                }}
-              >
-                <ArrowBackIcon />
-                {config.previousStepButtonLabel ?? "Previous Screen"}
-              </button>
-
-              {config.onEscalation != null ? (
-                <button
-                  disabled={status === "pending-escalation"}
-                  onClick={() => {
-                    config.onEscalation?.({ sendStep: client.sendStep });
-                    setStatus("pending-escalation");
-                    setTimeout(() => {
-                      setStatus("success-escalation");
-                    }, 800);
-                    setTimeout(() => {
-                      setIsOpen(false);
-                    }, 5000);
-                  }}
-                >
-                  <SupportAgentIcon />
-                  {config.escalationButtonLabel ?? "Escalate to Agent"}
-                </button>
-              ) : null}
-
-              {config.onEnd != null ? (
-                <button
-                  disabled={status === "pending-end"}
-                  onClick={() => {
-                    config.onEnd?.({ sendStep: client.sendStep });
-                    setStatus("pending-end");
-                    setTimeout(() => {
-                      setStatus("success-end");
-                    }, 800);
-                    setTimeout(() => {
-                      setIsOpen(false);
-                    }, 5000);
-                  }}
-                >
-                  <CallEndIcon />
-                  {config.endButtonLabel ?? "End Call"}
-                </button>
-              ) : null}
-              {(config.buttons ?? []).map((buttonConfig, buttonIndex) => (
-                <button
-                  key={buttonIndex}
-                  onClick={() => {
-                    buttonConfig.onClick({
-                      sendStep: client.sendStep,
-                      triggeredSteps,
-                    });
-                  }}
-                >
-                  {buttonConfig.label}
-                </button>
-              ))}
-            </div>
-          )}
-          <div className="drawer-footer">
+          <div className="drawer-buttons">
             <button
+              className="drawer-button"
               onClick={() => {
+                onPreviousStep();
                 setIsOpen(false);
               }}
             >
-              <CloseIcon />
-              <span>Close</span>
+              <ArrowBackIcon />
+              {config.previousStepButtonLabel ?? "Previous Screen"}
             </button>
+
+            {config.onEscalation != null ? (
+              <EscalationButton
+                onEscalation={config.onEscalation}
+                client={client}
+                escalationButtonLabel={config.escalationButtonLabel}
+                escalationConfirmation={config.escalationConfirmation}
+                onClose={() => {
+                  setIsOpen(false);
+                }}
+              />
+            ) : null}
+
+            {config.onEnd != null ? (
+              <EndButton
+                onEnd={config.onEnd}
+                client={client}
+                endButtonLabel={config.endButtonLabel}
+                endConfirmation={config.endConfirmation}
+                onClose={() => {
+                  setIsOpen(false);
+                }}
+              />
+            ) : null}
+
+            {(config.buttons ?? []).map((buttonConfig, buttonIndex) => (
+              <button
+                className="drawer-button"
+                key={buttonIndex}
+                onClick={() => {
+                  buttonConfig.onClick({
+                    sendStep: client.sendStep,
+                    triggeredSteps,
+                  });
+                }}
+              >
+                {buttonConfig.label}
+              </button>
+            ))}
+          </div>
+          <div className="drawer-footer">
+            <CloseButton
+              onClose={() => {
+                setIsOpen(false);
+              }}
+            />
           </div>
         </div>
       </div>
@@ -568,13 +718,8 @@ interface PinBubbleProps {
   content: string;
   onClick: () => void;
 }
-// eslint-disable-next-line jsdoc/require-returns, jsdoc/require-param
-/** @hidden @internal */
-export const PinBubble: FunctionComponent<PinBubbleProps> = ({
-  isActive,
-  content,
-  onClick,
-}) => (
+
+const PinBubble: FC<PinBubbleProps> = ({ isActive, content, onClick }) => (
   <div className={`pin-bubble-container ${isActive ? "active" : "inactive"}`}>
     <div className="pin-bubble-content">{content}</div>
     <button className="pin-bubble-button" onClick={onClick}>

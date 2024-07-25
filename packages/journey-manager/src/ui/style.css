@@ -10,6 +10,8 @@ p {
 .pin,
 .drawer,
 .highlights {
+  --gray: #666;
+  --gray-hover: #444;
   z-index: 1000;
 }
 
@@ -34,6 +36,8 @@ button {
     transform: translateY(0px);
   }
 }
+
+/** Pin */
 
 .pin {
   width: 48px;
@@ -117,18 +121,23 @@ button {
   border-radius: 6px;
   background: none;
 }
+
 .pin-bubble-button svg {
   width: 100%;
   height: 100%;
   fill: white;
 }
+
 .pin-bubble-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
+
 .pin-bubble-button:focus {
   outline: none;
   box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.2);
 }
+
+/** Drawer */
 
 .drawer {
   position: fixed;
@@ -165,7 +174,25 @@ button {
   margin-right: auto;
 }
 
-.drawer-content > * + * {
+.drawer-dialog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: white;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  z-index: 20;
+  gap: 20px;
+}
+
+/** Only add spacing margins from the third child onwards (as the first child is the dialog container) */
+.drawer-content > * + * + * {
   margin-top: 25px;
 }
 
@@ -186,19 +213,19 @@ button {
 
 .drawer-header p {
   font-size: 14px;
-  color: #777;
+  color: var(--gray);
 }
 
 /* Buttons */
 
 .drawer-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
-.drawer-buttons > * + * {
-  margin-top: 10px;
-}
-
-.drawer-buttons button {
+.drawer-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -212,22 +239,22 @@ button {
   background-color: rgba(0, 0, 0, 0.07);
 }
 
-.drawer-buttons button svg {
+.drawer-button svg {
   flex: 0 0 14px;
   height: 14px;
   display: inline-block;
   margin-right: 4px;
 }
 
-.drawer-buttons button:hover {
+.drawer-button:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-.drawer-buttons button:disabled {
+.drawer-button:disabled {
   opacity: 0.5;
 }
 
-.drawer-buttons button:disabled:hover {
+.drawer-button:disabled:hover {
   background-color: rgba(0, 0, 0, 0.07);
 }
 
@@ -237,23 +264,25 @@ button {
   text-align: center;
 }
 
-.drawer-footer button {
+/** Discrete button */
+
+.discrete-button {
   display: inline-flex;
   align-items: center;
   border: none;
   background: none;
-  color: #777;
+  color: var(--gray);
 }
 
-.drawer-footer button svg {
+.discrete-button svg {
   flex: 0 0 14px;
   height: 14px;
   display: inline-block;
   margin-right: 4px;
 }
 
-.drawer-footer button:hover {
-  color: #000;
+.discrete-button:hover {
+  color: var(--gray-hover);
 }
 
 /* Success message */
@@ -278,6 +307,51 @@ button {
 .error-message {
   color: red;
   text-align: center;
+}
+
+/** Confirmation */
+
+.confirmation {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.confirmation-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.confirmation-buttons > * {
+  border: none;
+}
+
+.confirm-button {
+  background-color: var(--primary);
+  color: white;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.confirm-button:disabled {
+  opacity: 0.5;
+}
+
+.confirm-button:hover {
+  background-color: var(--primary-hover);
+}
+
+.cancel-button {
+  background: none;
+  color: var(--gray);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.cancel-button {
+  color: var(--gray-hover);
 }
 
 /** Highlights */

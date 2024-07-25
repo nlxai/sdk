@@ -134,6 +134,8 @@ const runJourneyManager = async (): Promise<unknown> => {
         colors: { highlight: "#7dd3fc" },
       },
       escalationButtonLabel: "Hand Off To Specialist",
+      escalationConfirmation:
+        "You are about to hand off to a specialist. Are you sure?",
       onEscalation: (args) => {
         // eslint-disable-next-line no-console
         console.log("escalation", args);
