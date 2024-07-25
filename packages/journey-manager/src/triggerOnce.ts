@@ -9,6 +9,7 @@ const saveTriggeredSteps = (
   conversationId: string,
   steps: TriggeredStep[],
 ): void => {
+  cache[conversationId] = steps;
   localStorage.setItem(localStorageKey(conversationId), JSON.stringify(steps));
 };
 
