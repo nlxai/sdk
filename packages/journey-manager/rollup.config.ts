@@ -14,5 +14,5 @@ export default rollupConfig({
     "preact/hooks",
   ],
   input: "src/index.ts",
-  plugins: [css()],
+  plugins: [css({ minify: true })],
 });
