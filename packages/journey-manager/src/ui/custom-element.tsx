@@ -1,18 +1,13 @@
-/* eslint-disable accessor-pairs,  react/prop-types */
-
 import { type Client } from "@nlxai/multimodal";
 import { render } from "preact";
 import { ControlCenter } from "./components";
 import type { UiConfig } from "../configuration";
-
-export interface TriggeredStep {
-  stepId: string;
-  url: string;
-}
+import { TriggeredStep } from ".";
 
 /**
  * @hidden @internal
  */
+
 export class JourneyManagerElement extends HTMLElement {
   _shadowRoot: ShadowRoot | null = null;
   _client: Client | null = null;

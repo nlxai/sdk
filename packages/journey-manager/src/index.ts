@@ -1,11 +1,12 @@
-import { type Config, type Client, create } from "@nlxai/multimodal";
+import { type Client, create } from "@nlxai/multimodal";
 import { getAll, decode, type Query } from "./queries";
-import { type UiConfig, JourneyManagerElement } from "./ui";
+import { JourneyManagerElement } from "./ui/custom-element";
 import { type UrlCondition, matchesUrlCondition } from "./url_condition";
 import { debounce } from "./utils/debounce";
 import { filterMap } from "./utils/filterMap";
 import { domContentLoaded } from "./utils/domContentLoaded";
 import { type Triggers, resolveTriggers, type Trigger } from "./trigger";
+import type { RunProps } from "./configuration";
 
 export { type Triggers, type Trigger } from "./trigger";
 export {
@@ -14,12 +15,7 @@ export {
   type Method,
   type SerializedRegex,
 } from "./queries";
-export {
-  type UiConfig,
-  type PartialTheme,
-  type Theme,
-  type ThemeColors,
-} from "./ui";
+export type * from "./configuration";
 
 customElements.define("journey-manager", JourneyManagerElement);
 
@@ -127,33 +123,6 @@ export interface RunOutput {
    * The regular multimodal SDK client
    */
   client: Client;
-}
-
-/**
- * Configuration for the run method
- */
-export interface RunProps {
-  /**
-   * The regular multimodal configuration
-   */
-  config: Config;
-  /**
-   * UI configuration
-   */
-  ui?: UiConfig;
-  /**
-   * The triggers dictionary, downloaded from the Dialog Studio desktop app.
-   * If triggers are not provided, they will be fetched from the CDN.
-   */
-  triggers?: Triggers;
-  /**
-   * Digression detection callback
-   */
-  onDigression?: (client: Client) => void;
-  /**
-   * Runs when a step is triggered, used primarily for debugging
-   */
-  onStep?: (stepId: string) => void;
 }
 
 /**
