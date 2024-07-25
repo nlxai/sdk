@@ -61,6 +61,14 @@ export interface Theme {
 }
 
 /**  */
+export interface TriggeredStep {
+  /** */
+  stepId: string;
+  /** */
+  url: string;
+}
+
+/**  */
 export interface SimpleHandlerArg {
   /** */
   sendStep: Client["sendStep"];
@@ -71,7 +79,7 @@ export interface HandlerArg {
   /** */
   sendStep: Client["sendStep"];
   /** */
-  triggeredSteps: Array<{ stepId: string; url: string }>;
+  triggeredSteps: TriggeredStep[];
 }
 
 /**

@@ -1,3 +1,7 @@
+/* eslint-disable jsdoc/require-jsdoc */
+import type { TriggeredStep } from "./configuration";
+import type { Ui } from "./ui";
+
 const localStorageKey = (conversationId: string): string =>
   `jb-triggered-steps-${conversationId}`;
 
@@ -7,11 +11,6 @@ const saveTriggeredSteps = (
 ): void => {
   localStorage.setItem(localStorageKey(conversationId), JSON.stringify(steps));
 };
-
-interface TriggeredStep {
-  stepId: string;
-  url: string;
-}
 
 const cache: Record<string, TriggeredStep[]> = {};
 
@@ -31,41 +30,35 @@ const getTriggeredSteps = (conversationId: string): TriggeredStep[] => {
   }
 };
 
-/**
- * Trigger a step only once
- *
- * @param conversationId - Conversation ID
- * @param stepId - Step ID
- * @param once - Whether to trigger only once
- * @param uiElement - UI element
- * @param callback - Callback
- */
 export const triggerOnce = (
   conversationId: string,
-  stepId: string,
-  once: boolean,
-  uiElement: any,
+  ui: Ui,
   callback: (stepId: string) => void,
-): void => {
+): ((stepId: string, once: boolean) => void) => {
   if (cache[conversationId] == null) {
     cache[conversationId] = getTriggeredSteps(conversationId);
   }
+  ui.setTriggeredSteps(cache[conversationId]);
 
-  let triggeredSteps = cache[conversationId];
+  return (stepId: string, once: boolean): void => {
+    let triggeredSteps = cache[conversationId];
 
-  if (triggeredSteps.some((triggeredStep) => triggeredStep.stepId === stepId)) {
-    if (once) {
-      return;
+    if (
+      triggeredSteps.some((triggeredStep) => triggeredStep.stepId === stepId)
+    ) {
+      if (once) {
+        return;
+      }
+    } else {
+      triggeredSteps = [
+        ...triggeredSteps,
+        { stepId, url: window.location.toString() },
+      ];
+
+      ui.setTriggeredSteps(triggeredSteps);
+
+      saveTriggeredSteps(conversationId, triggeredSteps);
     }
-  } else {
-    triggeredSteps = [
-      ...triggeredSteps,
-      { stepId, url: window.location.toString() },
-    ];
-    if (uiElement != null) {
-      uiElement.triggeredSteps = triggeredSteps;
-    }
-    saveTriggeredSteps(conversationId, triggeredSteps);
-  }
-  callback(stepId);
+    callback(stepId);
+  };
 };

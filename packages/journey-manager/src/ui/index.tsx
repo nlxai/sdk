@@ -1,98 +1,70 @@
-/* eslint-disable accessor-pairs,  react/prop-types */
+/* eslint-disable jsdoc/require-jsdoc */
+import type { Client } from "@nlxai/multimodal";
+import type { TriggeredStep, UiConfig } from "../configuration";
+import JourneyManagerElement from "./custom-element";
+import type {
+  ActiveTriggerEventType,
+  StepWithQueryAndElements,
+} from "../trigger";
 
-import { type Client } from "@nlxai/multimodal";
-import { render } from "preact";
-import { ControlCenter } from "./components";
-import type { UiConfig } from "../configuration";
+customElements.define("journey-manager", JourneyManagerElement);
 
-export interface TriggeredStep {
-  stepId: string;
-  url: string;
+export interface Ui {
+  teardown: () => void;
+  updateHighlights: () => void;
+  setTriggeredSteps: (steps: TriggeredStep[]) => void;
+  setDigression: (value: boolean) => void;
 }
 
-/**
- * @hidden @internal
- */
-export class JourneyManagerElement extends HTMLElement {
-  _shadowRoot: ShadowRoot | null = null;
-  _client: Client | null = null;
-  _triggeredSteps: TriggeredStep[] | null = null;
-  _config: UiConfig | null = null;
-  _digression: boolean = false;
-  _highlightElements: HTMLElement[] = [];
+const create = (
+  config: UiConfig | undefined,
+  client: Client,
+  findActiveTriggers: (
+    eventType: ActiveTriggerEventType,
+  ) => StepWithQueryAndElements[],
+): Ui => {
+  if (config == null) {
+    return {
+      teardown() {},
+      updateHighlights() {},
+      setTriggeredSteps() {},
+      setDigression() {},
+    };
+  } else {
+    const uiElement = document.createElement(
+      "journey-manager",
+    ) as JourneyManagerElement;
+    uiElement.style.zIndex = "1000";
+    uiElement.config = config;
+    uiElement.client = client;
+    document.body.appendChild(uiElement);
 
-  /**
-   * Set digression attribute
-   */
-  set digression(value: boolean) {
-    if (this._digression !== value) {
-      this._digression = value;
-      this.render();
-    }
-  }
+    const updateHighlights = config.highlights
+      ? () => {
+          const highlightElements = findActiveTriggers("click").flatMap(
+            (activeTrigger) => activeTrigger.elements,
+          );
+          if (uiElement != null) {
+            uiElement.highlightElements = highlightElements;
+          }
+        }
+      : () => {};
 
-  /**
-   * Add highlights to DOM elements
-   */
-  set highlightElements(elements: HTMLElement[]) {
-    this._highlightElements = elements;
-    this.render();
-  }
+    updateHighlights();
 
-  /**
-   * Set SDK client
-   */
-  set client(value: Client) {
-    this._client = value;
-    this.render();
+    return {
+      updateHighlights,
+      setTriggeredSteps: (steps) => {
+        uiElement.triggeredSteps = steps;
+      },
+      setDigression: (value) => {
+        uiElement.digression = value;
+      },
+      teardown() {
+        document.body.removeChild(uiElement);
+      },
+    };
   }
+};
 
-  /**
-   * Set triggered steps
-   */
-  set triggeredSteps(value: TriggeredStep[]) {
-    this._triggeredSteps = value;
-    this.render();
-  }
-
-  /**
-   * Set UI configuration
-   */
-  set config(config: UiConfig) {
-    this._config = config;
-    this.render();
-  }
-
-  /**
-   * Render UI
-   */
-  render(): void {
-    this._shadowRoot = this._shadowRoot ?? this.attachShadow({ mode: "open" });
-    if (
-      this._config == null ||
-      this._client == null ||
-      this._triggeredSteps == null
-    ) {
-      return;
-    }
-    render(
-      <ControlCenter
-        config={this._config}
-        digression={this._digression}
-        client={this._client}
-        triggeredSteps={this._triggeredSteps}
-        highlightElements={this._highlightElements}
-      />,
-      this._shadowRoot,
-    );
-  }
-
-  /**
-   * Teardown logic for custom element
-   */
-  disconnectedCallback(): void {
-    if (this._shadowRoot != null) {
-      render(null, this._shadowRoot);
-    }
-  }
-}
+export default create;

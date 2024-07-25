@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable jsdoc/require-jsdoc */
 import { type Client } from "@nlxai/multimodal";
 import { autoUpdate, platform } from "@floating-ui/dom";
 import { type FunctionComponent as FC, type ComponentChildren } from "preact";
@@ -10,12 +12,12 @@ import {
   CloseIcon,
   CheckIcon,
 } from "./icons";
-import type { TriggeredStep } from "..";
 import type {
   SimpleHandlerArg,
   UiConfig,
   PartialTheme,
   Theme,
+  TriggeredStep,
 } from "../../configuration";
 
 import tinycolor from "tinycolor2";

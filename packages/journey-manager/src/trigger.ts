@@ -1,7 +1,8 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import { type Config } from "@nlxai/multimodal";
-import { type StepId } from ".";
-import { type EncodedQuery } from "./queries";
-import { type UrlCondition } from "./url_condition";
+import { decode, getAll, type EncodedQuery, type Query } from "./queries";
+import { matchesUrlCondition, type UrlCondition } from "./UrlCondition";
+import { filterMap } from "./utils/filterMap";
 
 /**
  * A single trigger
@@ -52,4 +53,100 @@ export const resolveTriggers = async (
   );
   const triggersFromCdn = await triggersFromCdnRequest.json();
   return triggersFromCdn;
+};
+
+/**
+ * Step ID
+ */
+export type StepId = string;
+
+/** Step */
+export interface Step {
+  /**
+   * Step ID
+   */
+  stepId: StepId;
+  /**
+   * Controls whether the step should only trigger the first time it is clicked, or on all subsequent clicks as well
+   */
+  once?: boolean;
+  /**
+   * URL condition for the click
+   */
+  urlCondition?: UrlCondition;
+}
+
+/**
+ * Step with additional query
+ */
+export type StepWithQuery = Step & {
+  query: Query;
+};
+
+/**
+ * Step with query and found elements
+ */
+export type StepWithQueryAndElements = StepWithQuery & {
+  /**
+   * Elements found
+   */
+  elements: HTMLElement[];
+};
+
+export const ofLoadType = (triggers: Triggers): Step[] =>
+  filterMap(
+    Object.entries(triggers),
+    ([stepId, trigger]: [StepId, Trigger]) => {
+      if (trigger.event === "pageLoad") {
+        return {
+          stepId,
+          urlCondition: trigger.urlCondition,
+          once: trigger.once,
+        };
+      }
+    },
+  );
+
+/**
+ * Active trigger event type.
+ */
+export type ActiveTriggerEventType = "click" | "enterViewport" | "appear";
+
+const ofActiveType =
+  (eventType: ActiveTriggerEventType) =>
+  (triggers: Triggers): StepWithQuery[] =>
+    filterMap(
+      Object.entries(triggers),
+      ([stepId, trigger]: [StepId, Trigger]) => {
+        if (trigger.event === eventType && trigger.query != null) {
+          return {
+            stepId,
+            query: decode(trigger.query),
+            urlCondition: trigger.urlCondition,
+            once: trigger.once,
+          };
+        }
+      },
+    );
+
+export const ofClickType = ofActiveType("click");
+export const ofAppearType = ofActiveType("appear");
+export const ofEnterViewportType = ofActiveType("enterViewport");
+
+export const withElements = (
+  steps: StepWithQuery[],
+): StepWithQueryAndElements[] => {
+  return filterMap(steps, (step) => {
+    if (
+      step.urlCondition != null &&
+      !matchesUrlCondition(window.location, step.urlCondition)
+    ) {
+      return null;
+    }
+    const elements = getAll(step.query);
+    if (elements.length === 0) {
+      return null;
+    }
+    return { ...step, elements };
+  });
 };

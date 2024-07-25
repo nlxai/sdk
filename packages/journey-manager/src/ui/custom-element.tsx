@@ -1,20 +1,19 @@
+/* eslint-disable accessor-pairs */
 import { type Client } from "@nlxai/multimodal";
 import { render } from "preact";
 import { ControlCenter } from "./components";
-import type { UiConfig } from "../configuration";
-import { TriggeredStep } from ".";
+import type { UiConfig, TriggeredStep } from "../configuration";
 
 /**
  * @hidden @internal
  */
-
-export class JourneyManagerElement extends HTMLElement {
-  _shadowRoot: ShadowRoot | null = null;
-  _client: Client | null = null;
-  _triggeredSteps: TriggeredStep[] | null = null;
-  _config: UiConfig | null = null;
-  _digression: boolean = false;
-  _highlightElements: HTMLElement[] = [];
+export default class JourneyManagerElement extends HTMLElement {
+  private _shadowRoot: ShadowRoot | null = null;
+  private _client: Client | null = null;
+  private _triggeredSteps: TriggeredStep[] | null = null;
+  private _config: UiConfig | null = null;
+  private _digression: boolean = false;
+  private _highlightElements: HTMLElement[] = [];
 
   /**
    * Set digression attribute
@@ -61,7 +60,7 @@ export class JourneyManagerElement extends HTMLElement {
   /**
    * Render UI
    */
-  render(): void {
+  private render(): void {
     this._shadowRoot = this._shadowRoot ?? this.attachShadow({ mode: "open" });
     if (
       this._config == null ||
