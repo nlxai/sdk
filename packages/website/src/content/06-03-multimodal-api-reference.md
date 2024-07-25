@@ -46,7 +46,7 @@ client.sendStep("REPLACE_WITH_STEP_ID");
 
 #### Defined in
 
-[index.ts:26](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/multimodal/src/index.ts#L26)
+[index.ts:26](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/multimodal/src/index.ts#L26)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[index.ts:113](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/multimodal/src/index.ts#L113)
+[index.ts:113](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/multimodal/src/index.ts#L113)
 
 
 <a name="indexmd"></a>
@@ -115,7 +115,7 @@ sends a step to the voice bot
 
 ##### Defined in
 
-[index.ts:106](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/multimodal/src/index.ts#L106)
+[index.ts:106](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/multimodal/src/index.ts#L106)
 
 
 <a name="interfacesconfigmd"></a>
@@ -134,7 +134,7 @@ Initial configuration used when creating a journey manager
 
 ##### Defined in
 
-[index.ts:121](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/multimodal/src/index.ts#L121)
+[index.ts:121](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/multimodal/src/index.ts#L121)
 
 ___
 
@@ -146,7 +146,7 @@ the ID of the journey.
 
 ##### Defined in
 
-[index.ts:123](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/multimodal/src/index.ts#L123)
+[index.ts:123](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/multimodal/src/index.ts#L123)
 
 ___
 
@@ -158,7 +158,7 @@ your workspace id
 
 ##### Defined in
 
-[index.ts:126](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/multimodal/src/index.ts#L126)
+[index.ts:126](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/multimodal/src/index.ts#L126)
 
 ___
 
@@ -172,7 +172,7 @@ _Note: This must be dynamically set by the voice bot._
 
 ##### Defined in
 
-[index.ts:133](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/multimodal/src/index.ts#L133)
+[index.ts:133](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/multimodal/src/index.ts#L133)
 
 ___
 
@@ -184,7 +184,7 @@ the user's language code, consistent with the language codes defined on the jour
 
 ##### Defined in
 
-[index.ts:138](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/multimodal/src/index.ts#L138)
+[index.ts:138](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/multimodal/src/index.ts#L138)
 
 ___
 
@@ -196,4 +196,4 @@ set to true to help debug issues or errors. Defaults to false
 
 ##### Defined in
 
-[index.ts:141](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/multimodal/src/index.ts#L141)
+[index.ts:141](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/multimodal/src/index.ts#L141)

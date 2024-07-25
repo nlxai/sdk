@@ -31,7 +31,7 @@ full page refreshes.
 
 #### Defined in
 
-[packages/chat-widget/src/props.ts:45](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L45)
+[packages/chat-widget/src/props.ts:45](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L45)
 
 ___
 
@@ -44,7 +44,7 @@ See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode
 
 #### Defined in
 
-[packages/chat-widget/src/props.ts:51](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L51)
+[packages/chat-widget/src/props.ts:51](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L51)
 
 ## Variables
 
@@ -56,9 +56,33 @@ the default theme
 
 #### Defined in
 
-[packages/chat-widget/src/ui/constants.ts:16](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/ui/constants.ts#L16)
+[packages/chat-widget/src/ui/constants.ts:16](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/ui/constants.ts#L16)
 
 ## Functions
+
+### getCurrentExpirationTimestamp
+
+▸ **getCurrentExpirationTimestamp**(`responses`): ``null`` \| `number`
+
+Get current expiration timestamp from the current list of reponses
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `responses` | `Response`[] | the current list of user and bot responses (first argument in the subscribe callback) |
+
+#### Returns
+
+``null`` \| `number`
+
+an expiration timestamp in Unix Epoch (`new Date().getTime()`), or `null` if this is not known (typically occurs if the bot has not responded yet)
+
+#### Defined in
+
+packages/chat-core/lib/index.d.ts:484
+
+___
 
 ### create
 
@@ -80,7 +104,7 @@ the WidgetInstance to script widget behavior.
 
 #### Defined in
 
-[packages/chat-widget/src/index.tsx:102](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/index.tsx#L102)
+[packages/chat-widget/src/index.tsx:109](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/index.tsx#L109)
 
 ___
 
@@ -102,7 +126,7 @@ Clears stored session history.
 
 #### Defined in
 
-[packages/chat-widget/src/index.tsx:302](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/index.tsx#L302)
+[packages/chat-widget/src/index.tsx:309](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/index.tsx#L309)
 
 ___
 
@@ -122,7 +146,7 @@ the ConversationHandler if the widget has been created and its conversation has 
 
 #### Defined in
 
-[packages/chat-widget/src/index.tsx:370](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/index.tsx#L370)
+[packages/chat-widget/src/index.tsx:361](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/index.tsx#L361)
 
 ___
 
@@ -142,7 +166,7 @@ ___
 
 #### Defined in
 
-[packages/chat-widget/src/index.tsx:374](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/index.tsx#L374)
+[packages/chat-widget/src/index.tsx:365](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/index.tsx#L365)
 
 
 <a name="indexmd"></a>
@@ -171,7 +195,7 @@ The text content of the nudge. Markdown is supported.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:73](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L73)
+[packages/chat-widget/src/props.ts:73](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L73)
 
 ___
 
@@ -184,7 +208,7 @@ Defaults to 3000 (3s) if not set.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:78](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L78)
+[packages/chat-widget/src/props.ts:78](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L78)
 
 ___
 
@@ -197,7 +221,7 @@ Defaults to 20000 (20s) if not set.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:83](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L83)
+[packages/chat-widget/src/props.ts:83](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L83)
 
 
 <a name="interfacespropsmd"></a>
@@ -216,7 +240,7 @@ The configuration to create a conversation.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:93](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L93)
+[packages/chat-widget/src/props.ts:93](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L93)
 
 ___
 
@@ -228,7 +252,7 @@ The theme to apply to the chat widget.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:97](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L97)
+[packages/chat-widget/src/props.ts:97](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L97)
 
 ___
 
@@ -240,7 +264,7 @@ How to configure the title bar. When missing, the widget will not have a title b
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:101](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L101)
+[packages/chat-widget/src/props.ts:101](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L101)
 
 ___
 
@@ -252,7 +276,7 @@ If you want a custom chat icon, set this to the URL of an image to use.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:105](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L105)
+[packages/chat-widget/src/props.ts:105](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L105)
 
 ___
 
@@ -264,7 +288,7 @@ An optional [Nudge](#interfacesnudgemd) configuration object.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:109](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L109)
+[packages/chat-widget/src/props.ts:109](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L109)
 
 ___
 
@@ -276,7 +300,7 @@ The placeholder in the input field. When not set, the default placeholder is "Ty
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:113](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L113)
+[packages/chat-widget/src/props.ts:113](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L113)
 
 ___
 
@@ -288,7 +312,7 @@ A message to display to the user while the bot is still processing the previous 
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:117](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L117)
+[packages/chat-widget/src/props.ts:117](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L117)
 
 ___
 
@@ -300,7 +324,7 @@ How long to wait, in milliseconds, before the loader message is displayed. Defau
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:121](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L121)
+[packages/chat-widget/src/props.ts:121](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L121)
 
 ___
 
@@ -312,7 +336,7 @@ If set to true, previously selected choices in the chat can be changed.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:125](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L125)
+[packages/chat-widget/src/props.ts:125](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L125)
 
 ___
 
@@ -324,7 +348,7 @@ When set, chat history & conversation will be stored in the browser.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:129](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L129)
+[packages/chat-widget/src/props.ts:129](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L129)
 
 ___
 
@@ -350,7 +374,7 @@ Optional callback to be called when the chat is expanded.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:133](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L133)
+[packages/chat-widget/src/props.ts:133](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L133)
 
 ___
 
@@ -376,7 +400,7 @@ Optional callback to be called when the chat is collapsed. This is also called w
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:137](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L137)
+[packages/chat-widget/src/props.ts:137](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L137)
 
 ___
 
@@ -396,7 +420,7 @@ Optional callback to be called when the chat is closed via the close button.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:141](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L141)
+[packages/chat-widget/src/props.ts:141](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L141)
 
 ___
 
@@ -422,7 +446,7 @@ Optional callback to be called when the nudge element is closed explicitly by th
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:145](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L145)
+[packages/chat-widget/src/props.ts:145](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L145)
 
 ___
 
@@ -435,7 +459,7 @@ See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:151](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L151)
+[packages/chat-widget/src/props.ts:151](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L151)
 
 
 <a name="interfacesthememd"></a>
@@ -455,7 +479,7 @@ Primary color for interactive UI elements like buttons
 
 ##### Defined in
 
-[packages/chat-widget/src/theme.ts:7](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/theme.ts#L7)
+[packages/chat-widget/src/theme.ts:7](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/theme.ts#L7)
 
 ___
 
@@ -467,7 +491,7 @@ Background color for the dark chat bubbles (sent by the user)
 
 ##### Defined in
 
-[packages/chat-widget/src/theme.ts:9](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/theme.ts#L9)
+[packages/chat-widget/src/theme.ts:9](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/theme.ts#L9)
 
 ___
 
@@ -479,7 +503,7 @@ Background color for the light chat bubbles (sent by the bot)
 
 ##### Defined in
 
-[packages/chat-widget/src/theme.ts:11](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/theme.ts#L11)
+[packages/chat-widget/src/theme.ts:11](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/theme.ts#L11)
 
 ___
 
@@ -491,7 +515,7 @@ Customized shade of white
 
 ##### Defined in
 
-[packages/chat-widget/src/theme.ts:13](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/theme.ts#L13)
+[packages/chat-widget/src/theme.ts:13](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/theme.ts#L13)
 
 ___
 
@@ -503,7 +527,7 @@ Widget font family
 
 ##### Defined in
 
-[packages/chat-widget/src/theme.ts:15](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/theme.ts#L15)
+[packages/chat-widget/src/theme.ts:15](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/theme.ts#L15)
 
 ___
 
@@ -515,7 +539,7 @@ Main spacing unit
 
 ##### Defined in
 
-[packages/chat-widget/src/theme.ts:17](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/theme.ts#L17)
+[packages/chat-widget/src/theme.ts:17](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/theme.ts#L17)
 
 ___
 
@@ -527,7 +551,7 @@ Chat border radius
 
 ##### Defined in
 
-[packages/chat-widget/src/theme.ts:19](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/theme.ts#L19)
+[packages/chat-widget/src/theme.ts:19](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/theme.ts#L19)
 
 ___
 
@@ -539,7 +563,7 @@ Max height of the chat window
 
 ##### Defined in
 
-[packages/chat-widget/src/theme.ts:21](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/theme.ts#L21)
+[packages/chat-widget/src/theme.ts:21](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/theme.ts#L21)
 
 
 <a name="interfacestitlebarmd"></a>
@@ -559,7 +583,7 @@ Optional URL to a logo image to be displayed on to the left of the title.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:13](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L13)
+[packages/chat-widget/src/props.ts:13](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L13)
 
 ___
 
@@ -571,7 +595,7 @@ The title string.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:17](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L17)
+[packages/chat-widget/src/props.ts:17](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L17)
 
 ___
 
@@ -584,7 +608,7 @@ Pressing the collapse button will hide the chat overlay but keep it active.
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:22](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L22)
+[packages/chat-widget/src/props.ts:22](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L22)
 
 ___
 
@@ -600,7 +624,7 @@ Pressing the close button will
 
 ##### Defined in
 
-[packages/chat-widget/src/props.ts:30](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/props.ts#L30)
+[packages/chat-widget/src/props.ts:30](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/props.ts#L30)
 
 
 <a name="interfaceswidgetinstancemd"></a>
@@ -628,7 +652,7 @@ If you want to additionally clear a stored session, explicitly call [clearSessio
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:62](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/index.tsx#L62)
+[packages/chat-widget/src/index.tsx:69](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/index.tsx#L69)
 
 ___
 
@@ -648,7 +672,7 @@ Expand the widget and call the `onExpand` callback if present.
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:66](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/index.tsx#L66)
+[packages/chat-widget/src/index.tsx:73](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/index.tsx#L73)
 
 ___
 
@@ -668,7 +692,7 @@ Collapse the widget and call the `onCollapse` callback if present.
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:70](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/index.tsx#L70)
+[packages/chat-widget/src/index.tsx:77](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/index.tsx#L77)
 
 ___
 
@@ -690,7 +714,7 @@ See: https://developers.nlx.ai/headless-api-reference#interfacesconversationhand
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:76](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/index.tsx#L76)
+[packages/chat-widget/src/index.tsx:83](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/index.tsx#L83)
 
 
 <a name="interfaceswidgetrefmd"></a>
@@ -717,7 +741,7 @@ Expand the widget and call the `onExpand` callback if present.
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:86](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/index.tsx#L86)
+[packages/chat-widget/src/index.tsx:93](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/index.tsx#L93)
 
 ___
 
@@ -737,7 +761,7 @@ Collapse the widget and call the `onCollapse` callback if present.
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:90](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/index.tsx#L90)
+[packages/chat-widget/src/index.tsx:97](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/index.tsx#L97)
 
 ___
 
@@ -749,4 +773,4 @@ the ConversationHandler for the widget.
 
 ##### Defined in
 
-[packages/chat-widget/src/index.tsx:94](https://github.com/nlxai/sdk/blob/8f302c7bdb42bad8e0a35ed1d33e0459c109885f/packages/chat-widget/src/index.tsx#L94)
+[packages/chat-widget/src/index.tsx:101](https://github.com/nlxai/sdk/blob/863439319237806e5abef4a80554f78d51b6285d/packages/chat-widget/src/index.tsx#L101)
