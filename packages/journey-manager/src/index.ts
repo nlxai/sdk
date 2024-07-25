@@ -1,6 +1,13 @@
 import { type Config, type Client, create } from "@nlxai/multimodal";
-import { find, getAll, decode, type Query, type EncodedQuery } from "./queries";
+import { getAll, decode, type Query } from "./queries";
 import { type UiConfig, JourneyManagerElement } from "./ui";
+import { type UrlCondition, matchesUrlCondition } from "./url_condition";
+import { debounce } from "./utils/debounce";
+import { filterMap } from "./utils/filterMap";
+import { domContentLoaded } from "./utils/domContentLoaded";
+import { type Triggers, resolveTriggers, type Trigger } from "./trigger";
+
+export { type Triggers, type Trigger } from "./trigger";
 export {
   type Query,
   type EncodedQuery,
@@ -21,65 +28,12 @@ customElements.define("journey-manager", JourneyManagerElement);
  */
 export type StepId = string;
 
-/**
- * URL match condition
- */
-export interface UrlCondition {
-  /**
-   * Condition operator
-   */
-  operator: "contains" | "matches_regex" | "smart_match";
-  /**
-   * Condition value
-   */
-  value: string;
-}
-
-/**
- * A single trigger
- */
-export interface Trigger {
-  /**
-   * Event
-   */
-  event: "pageLoad" | "click" | "appear" | "enterViewport";
-  /**
-   * A query identifying the element
-   */
-  query?: EncodedQuery;
-  /**
-   * A flag specifying whether the trigger should only fire a single time
-   */
-  once?: boolean;
-  /**
-   * URL condition
-   */
-  urlCondition?: UrlCondition;
-}
-
-/**
- * A record of triggers
- */
-export type Triggers = Record<StepId, Trigger>;
-
-interface LoadStep {
-  stepId: StepId;
-  once?: boolean;
-  urlCondition?: UrlCondition;
-}
-
-/**
- * Step with additional query
- */
-export interface StepWithQuery {
+/** Step */
+export interface Step {
   /**
    * Step ID
    */
   stepId: StepId;
-  /**
-   * Element query
-   */
-  query: Query;
   /**
    * Controls whether the step should only trigger the first time it is clicked, or on all subsequent clicks as well
    */
@@ -91,114 +45,30 @@ export interface StepWithQuery {
 }
 
 /**
+ * Step with additional query
+ */
+export type StepWithQuery = Step & {
+  query: Query;
+};
+
+/**
  * Step with query and found elements
  */
 export type StepWithQueryAndElements = StepWithQuery & {
   /**
    * Elements found
    */
-  elements?: HTMLElement[];
+  elements: HTMLElement[];
 };
 
 type Fn = () => void;
 
-const debounce = (func: () => void, timeout = 300): (() => void) => {
-  let timer: NodeJS.Timer | null = null;
-  return () => {
-    if (timer != null) {
-      clearTimeout(timer);
-    }
-    timer = setTimeout(() => {
-      func();
-    }, timeout);
-  };
-};
-
-const matchesUrlCondition = (urlCondition: UrlCondition): boolean => {
-  const url = window.location.href;
-
-  if (urlCondition.operator === "contains") {
-    return url.includes(urlCondition.value);
-  }
-  if (urlCondition.operator === "matches_regex") {
-    return !!url.match(new RegExp(urlCondition.value));
-  }
-  if (urlCondition.operator === "smart_match") {
-    try {
-      const parsed = new URL(urlCondition.value, window.location.origin);
-
-      if (parsed.protocol !== window.location.protocol) {
-        return false;
-      }
-      if (parsed.host !== window.location.host) {
-        return false;
-      }
-
-      const pathUrl = normalizePathname(window.location);
-      const pathQuery = normalizePathname(parsed);
-
-      if (pathUrl.length !== pathQuery.length) {
-        return false;
-      }
-      for (let i = 0; i < pathUrl.length; i++) {
-        if (pathUrl[i] !== pathQuery[i] && pathQuery[i] !== "*") {
-          return false;
-        }
-      }
-
-      const params = new URLSearchParams(document.location.search);
-
-      for (const [key, value] of parsed.searchParams) {
-        if (!params.getAll(key).includes(value) && value !== "*") {
-          return false;
-        }
-      }
-
-      if (parsed.hash !== "" && parsed.hash !== window.location.hash) {
-        return false;
-      }
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-  return false;
-};
-
-const normalizePathname = (url: URL | Location): string[] =>
-  url.pathname
-    .split("/")
-    .filter(Boolean)
-    .map((str) => str.toLowerCase());
-
-const withElements = async (
-  steps: StepWithQuery[],
-): Promise<StepWithQueryAndElements[]> => {
-  const targets = await Promise.all(
-    steps
-      .filter(
-        ({ urlCondition }) =>
-          urlCondition == null || matchesUrlCondition(urlCondition),
-      )
-      .map(async (step) => {
-        try {
-          return {
-            ...step,
-            elements: await find(step.query),
-          };
-        } catch (e) {
-          return step;
-        }
-      }),
-  );
-  return targets;
-};
-
-const withElementsSync = (
-  steps: StepWithQuery[],
-): StepWithQueryAndElements[] => {
+const withElements = (steps: StepWithQuery[]): StepWithQueryAndElements[] => {
   return filterMap(steps, (step) => {
-    if (step.urlCondition != null && !matchesUrlCondition(step.urlCondition)) {
+    if (
+      step.urlCondition != null &&
+      !matchesUrlCondition(window.location, step.urlCondition)
+    ) {
       return null;
     }
     const elements = getAll(step.query);
@@ -246,16 +116,6 @@ const getTriggeredSteps = (conversationId: string): TriggeredStep[] => {
 export type ActiveTriggerEventType = "click" | "enterViewport";
 
 /**
- * Active trigger.
- */
-export interface ActiveTrigger {
-  /** The trigger associated with the elements. */
-  trigger: StepWithQuery;
-  /** The matched elements */
-  elements: HTMLElement[];
-}
-
-/**
  * Created by {@link run}.
  */
 export interface RunOutput {
@@ -296,50 +156,6 @@ export interface RunProps {
   onStep?: (stepId: string) => void;
 }
 
-function filterMap<X, Y>(
-  arr: X[],
-  fn: (value: X) => Y | null | undefined,
-): Y[] {
-  return arr.reduce<Y[]>((prev, curr) => {
-    const val = fn(curr);
-    if (val != null) {
-      prev.push(val);
-    }
-    return prev;
-  }, []);
-}
-
-const resolveTriggers = async (
-  config: Config,
-  triggers?: Triggers,
-): Promise<Triggers> => {
-  if (triggers != null) {
-    return triggers;
-  }
-  const baseUrl =
-    config.dev ?? false
-      ? "https://triggers.dev.mm.nlx.ai"
-      : "https://triggers.mm.nlx.ai";
-  const triggersFromCdnRequest = await fetch(
-    `${baseUrl}/${config.workspaceId}/${config.journeyId}.json`,
-  );
-  const triggersFromCdn = await triggersFromCdnRequest.json();
-  return triggersFromCdn;
-};
-
-// eslint-disable-next-line @typescript-eslint/promise-function-async
-const waitUntilDomContentLoaded = (): Promise<void> => {
-  if (document.readyState === "loading") {
-    return new Promise((resolve) => {
-      window.addEventListener("DOMContentLoaded", () => {
-        resolve();
-      });
-    });
-  } else {
-    return Promise.resolve();
-  }
-};
-
 /**
  * Run the multimodal journey
  * @param props - The run configuration object
@@ -353,7 +169,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     props.triggers,
   );
 
-  await waitUntilDomContentLoaded();
+  await domContentLoaded();
 
   let triggeredSteps = getTriggeredSteps(props.config.conversationId);
 
@@ -410,7 +226,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
    * Handle load steps
    */
 
-  const loadSteps: LoadStep[] = filterMap(
+  const loadSteps: Step[] = filterMap(
     Object.entries(triggers),
     ([stepId, trigger]: [StepId, Trigger]) => {
       if (trigger.event === "pageLoad") {
@@ -437,7 +253,10 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   const handleLoadSteps = (): void => {
     const matchingStepIds: string[] = [];
     loadSteps.forEach(({ stepId, urlCondition, once }) => {
-      if (urlCondition != null && !matchesUrlCondition(urlCondition)) {
+      if (
+        urlCondition != null &&
+        !matchesUrlCondition(window.location, urlCondition)
+      ) {
         return;
       }
       matchingStepIds.push(stepId);
@@ -496,7 +315,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   );
 
   const handleGlobalClickForAnnotations = async (ev: any): Promise<void> => {
-    const targets = await withElements(clickSteps);
+    const targets = withElements(clickSteps);
     const node = ev.target;
     const clickStep: StepWithQueryAndElements | undefined = targets.find(
       ({ elements }) =>
@@ -510,7 +329,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
 
   const findActiveTriggers = (
     eventType: ActiveTriggerEventType,
-  ): ActiveTrigger[] => {
+  ): StepWithQueryAndElements[] => {
     const steps =
       eventType === "click"
         ? clickSteps
@@ -520,9 +339,10 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     return steps
       .filter(
         ({ urlCondition }) =>
-          urlCondition == null || matchesUrlCondition(urlCondition),
+          urlCondition == null ||
+          matchesUrlCondition(window.location, urlCondition),
       )
-      .map((trigger) => ({ trigger, elements: getAll(trigger.query) }));
+      .map((trigger) => ({ ...trigger, elements: getAll(trigger.query) }));
   };
 
   /**
@@ -574,7 +394,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
           elements.includes(target),
         );
         if (trigger != null) {
-          sendStep(trigger.trigger.stepId, trigger.trigger.once ?? false);
+          sendStep(trigger.stepId, trigger.once ?? false);
         }
       });
     };
@@ -596,7 +416,9 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
 
   const documentObserver = new MutationObserver((mutations) => {
     if (isDigressionDetectable) {
-      const userHasDigressed = !urlConditions.some(matchesUrlCondition);
+      const userHasDigressed = !urlConditions.some((cond) =>
+        matchesUrlCondition(window.location, cond),
+      );
       if (userHasDigressed) {
         // Avoid calling the digression callback multiple times after a digression has been detected
         if (!digressionCallbackCalled) {
@@ -610,7 +432,7 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
       }
     }
     // If any of the added nodes are inside matches on appear events, trigger those events
-    const targets = withElementsSync(appearSteps);
+    const targets = withElements(appearSteps);
     mutations.forEach((mutation) => {
       targets.forEach(({ stepId, once, elements }) => {
         if (
