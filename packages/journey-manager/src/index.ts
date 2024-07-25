@@ -1,18 +1,21 @@
-import { type Client, create } from "@nlxai/multimodal";
+import {
+  type Client,
+  create as createMultimodalClient,
+  type Config,
+} from "@nlxai/multimodal";
 import { getAll } from "./queries";
-import { type UrlCondition, matchesUrlCondition } from "./UrlCondition";
-import { filterMap } from "./utils/filterMap";
+import { matchesUrlCondition } from "./UrlCondition";
 import * as dom from "./utils/dom";
 import * as trigger from "./trigger";
 import type {
   Triggers,
   ActiveTriggerEventType,
-  StepWithQuery,
   StepWithQueryAndElements,
 } from "./trigger";
-import type { RunProps } from "./configuration";
+import type { UiConfig } from "./configuration";
 import createUi from "./ui";
 import { triggerOnce } from "./triggerOnce";
+import prepareDigression from "./digression";
 
 export type { Triggers, Trigger, StepId } from "./trigger";
 export {
@@ -21,7 +24,6 @@ export {
   type SerializedRegex,
 } from "./queries";
 export type {
-  RunProps,
   Theme,
   ThemeColors,
   UiConfig,
@@ -32,6 +34,33 @@ export type {
   TriggeredStep,
 } from "./configuration";
 export type { UrlCondition } from "./UrlCondition";
+
+/**
+ * Configuration for the run method
+ */
+export interface RunProps {
+  /**
+   * The regular multimodal configuration
+   */
+  config: Config;
+  /**
+   * UI configuration
+   */
+  ui?: UiConfig;
+  /**
+   * The triggers dictionary, downloaded from the Dialog Studio desktop app.
+   * If triggers are not provided, they will be fetched from the CDN.
+   */
+  triggers?: Triggers;
+  /**
+   * Digression detection callback
+   */
+  onDigression?: (client: Client) => void;
+  /**
+   * Runs when a step is triggered, used primarily for debugging
+   */
+  onStep?: (stepId: string) => void;
+}
 
 /**
  * Created by {@link run}.
@@ -53,7 +82,7 @@ export interface RunOutput {
  * @returns an promise of an object containing a teardown function and the multimodal client.
  */
 export const run = async (props: RunProps): Promise<RunOutput> => {
-  const client = create(props.config);
+  const client = createMultimodalClient(props.config);
 
   // --- Set up  triggers ---
   const triggers: Triggers = await trigger.resolveTriggers(
@@ -66,23 +95,14 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   const appearSteps = trigger.ofAppearType(triggers);
   const enterViewportSteps = trigger.ofEnterViewportType(triggers);
 
-  const triggersByActiveType = (
-    eventType: ActiveTriggerEventType,
-  ): StepWithQuery[] => {
-    switch (eventType) {
-      case "click":
-        return clickSteps;
-      case "appear":
-        return appearSteps;
-      case "enterViewport":
-        return enterViewportSteps;
-    }
-  };
-
   const findActiveTriggers = (
     eventType: ActiveTriggerEventType,
   ): StepWithQueryAndElements[] =>
-    triggersByActiveType(eventType)
+    ({
+      click: clickSteps,
+      appear: appearSteps,
+      enterViewport: enterViewportSteps,
+    })[eventType]
       .filter(
         ({ urlCondition }) =>
           urlCondition == null ||
@@ -95,49 +115,10 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
 
   const ui = createUi(props.ui, client, findActiveTriggers);
 
-  // --- Digression detection ---
-  /**
-   * Digression detection
-   * - if all triggers have a URL constraint set and none match the current URL, fire a digression callback
-   * - notable exception: if the step is used as escalation or end as well, missing URL constraint is ok.
-   */
-
-  const urlConditions: UrlCondition[] = filterMap(
-    Object.values(triggers),
-    (trigger) => trigger.urlCondition,
-  );
-
-  // If there are any steps for which there is no URL condition while also not being used for escalation or end,
-  // the package assumes that a digression cannot be reliably detected.
-  const isDigressionDetectable = Object.entries(triggers).every(
-    ([_stepId, trigger]) => {
-      return (
-        // every step has a URL condition
-        trigger.urlCondition != null
-      );
-    },
-  );
-
-  let digressionCallbackCalled = false;
-
-  const checkForDigressions = (): void => {
-    if (isDigressionDetectable) {
-      const userHasDigressed = !urlConditions.some((cond) =>
-        matchesUrlCondition(window.location, cond),
-      );
-      if (userHasDigressed) {
-        // Avoid calling the digression callback multiple times after a digression has been detected
-        if (!digressionCallbackCalled) {
-          props.onDigression?.(client);
-        }
-        digressionCallbackCalled = true;
-        ui.setDigression(true);
-      } else {
-        digressionCallbackCalled = false;
-        ui.setDigression(false);
-      }
-    }
-  };
+  // --- Set up Digression detection ---
+  const checkForDigressions = prepareDigression(triggers, () => {
+    props.onDigression?.(client);
+  });
 
   // --- Send step function ---
 
@@ -219,7 +200,6 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   });
 
   const teardownMutationObserve = dom.observeMutations((mutations) => {
-    checkForDigressions();
     // If any of the added nodes are inside matches on appear events, trigger those events
     const targets = trigger.withElements(appearSteps);
     mutations.forEach((mutation) => {
@@ -236,6 +216,9 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
       });
     });
     ui.updateHighlights();
+    const userHasDigressed = checkForDigressions(window.location);
+    ui.setDigression(userHasDigressed);
+
     teardownIntersectionObserve = observeIntersections();
     // This timeout here seems to solve some timing issues on URL handling
     setTimeout(() => {
@@ -261,3 +244,5 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
     },
   };
 };
+
+export default run;

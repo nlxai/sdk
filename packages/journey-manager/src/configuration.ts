@@ -1,32 +1,4 @@
-import type { Config, Client } from "@nlxai/multimodal";
-import type { Triggers } from "./trigger";
-
-/**
- * Configuration for the run method
- */
-export interface RunProps {
-  /**
-   * The regular multimodal configuration
-   */
-  config: Config;
-  /**
-   * UI configuration
-   */
-  ui?: UiConfig;
-  /**
-   * The triggers dictionary, downloaded from the Dialog Studio desktop app.
-   * If triggers are not provided, they will be fetched from the CDN.
-   */
-  triggers?: Triggers;
-  /**
-   * Digression detection callback
-   */
-  onDigression?: (client: Client) => void;
-  /**
-   * Runs when a step is triggered, used primarily for debugging
-   */
-  onStep?: (stepId: string) => void;
-}
+import type { Client } from "@nlxai/multimodal";
 
 /**
  * Theme colors
