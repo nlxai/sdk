@@ -6,66 +6,35 @@
 ## Interfaces
 
 - [UrlCondition](#interfacesurlconditionmd)
-- [Trigger](#interfacestriggermd)
-- [StepWithQuery](#interfacesstepwithquerymd)
-- [ActiveTrigger](#interfacesactivetriggermd)
-- [RunOutput](#interfacesrunoutputmd)
-- [RunProps](#interfacesrunpropsmd)
-- [Query](#interfacesquerymd)
-- [SerializedRegex](#interfacesserializedregexmd)
-- [EncodedQuery](#interfacesencodedquerymd)
 - [ThemeColors](#interfacesthemecolorsmd)
 - [Theme](#interfacesthememd)
-- [PartialTheme](#interfacespartialthememd)
+- [TriggeredStep](#interfacestriggeredstepmd)
+- [SimpleHandlerArg](#interfacessimplehandlerargmd)
+- [ButtonConfig](#interfacesbuttonconfigmd)
 - [UiConfig](#interfacesuiconfigmd)
+- [RunProps](#interfacesrunpropsmd)
+- [RunOutput](#interfacesrunoutputmd)
+- [SerializedRegex](#interfacesserializedregexmd)
+- [EncodedQuery](#interfacesencodedquerymd)
+- [Trigger](#interfacestriggermd)
+
+## References
+
+### default
+
+Renames and re-exports [run](#run)
 
 ## Type Aliases
 
-### StepId
+### HandlerArg
 
-Ƭ **StepId**: `string`
+Ƭ **HandlerArg**: [`SimpleHandlerArg`](#interfacessimplehandlerargmd) & \{ `triggeredSteps`: [`TriggeredStep`](#interfacestriggeredstepmd)[]  }
 
-Step ID
-
-#### Defined in
-
-[journey-manager/src/index.ts:22](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L22)
-
-___
-
-### Triggers
-
-Ƭ **Triggers**: `Record`\<[`StepId`](#stepid), [`Trigger`](#interfacestriggermd)\>
-
-A record of triggers
+Used for some more advanced callbacks
 
 #### Defined in
 
-[journey-manager/src/index.ts:64](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L64)
-
-___
-
-### StepWithQueryAndElements
-
-Ƭ **StepWithQueryAndElements**: [`StepWithQuery`](#interfacesstepwithquerymd) & \{ `elements?`: `HTMLElement`[]  }
-
-Step with query and found elements
-
-#### Defined in
-
-[journey-manager/src/index.ts:97](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L97)
-
-___
-
-### ActiveTriggerEventType
-
-Ƭ **ActiveTriggerEventType**: ``"click"``
-
-Active trigger event type.
-
-#### Defined in
-
-[journey-manager/src/index.ts:211](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L211)
+[journey-manager/src/configuration.ts:50](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L50)
 
 ___
 
@@ -77,7 +46,31 @@ Matching method
 
 #### Defined in
 
-[journey-manager/src/queries.ts:10](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/queries.ts#L10)
+[journey-manager/src/queries.ts:10](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/queries.ts#L10)
+
+___
+
+### Triggers
+
+Ƭ **Triggers**: `Record`\<[`StepId`](#stepid), [`Trigger`](#interfacestriggermd)\>
+
+A record of triggers
+
+#### Defined in
+
+[journey-manager/src/trigger.ts:32](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/trigger.ts#L32)
+
+___
+
+### StepId
+
+Ƭ **StepId**: `string`
+
+Step ID
+
+#### Defined in
+
+[journey-manager/src/trigger.ts:61](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/trigger.ts#L61)
 
 ## Functions
 
@@ -101,7 +94,7 @@ an promise of an object containing a teardown function and the multimodal client
 
 #### Defined in
 
-[journey-manager/src/index.ts:309](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L309)
+[journey-manager/src/index.ts:83](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/index.ts#L83)
 
 
 <a name="indexmd"></a>
@@ -110,35 +103,73 @@ an promise of an object containing a teardown function and the multimodal client
 # Interfaces
 
 
-<a name="interfacesactivetriggermd"></a>
+<a name="interfacesbuttonconfigmd"></a>
 
-## Interface: ActiveTrigger
+## Interface: ButtonConfig
 
-Active trigger.
+Button configuration
 
 ### Properties
 
-#### trigger
+#### label
 
-• **trigger**: [`StepWithQuery`](#interfacesstepwithquerymd)
+• **label**: `string`
 
-The trigger associated with the elements.
+Button label
 
 ##### Defined in
 
-[journey-manager/src/index.ts:218](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L218)
+[journey-manager/src/configuration.ts:62](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L62)
 
 ___
 
-#### elements
+#### confirmation
 
-• **elements**: `HTMLElement`[]
+• `Optional` **confirmation**: `string`
 
-The matched elements
+Button confirmation: if present, the button click handler only triggers after the confirmation button is hit
 
 ##### Defined in
 
-[journey-manager/src/index.ts:220](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L220)
+[journey-manager/src/configuration.ts:66](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L66)
+
+___
+
+#### iconUrl
+
+• `Optional` **iconUrl**: `string`
+
+Icon URL
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:70](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L70)
+
+___
+
+#### onClick
+
+• **onClick**: (`config`: [`HandlerArg`](#handlerarg)) => `void`
+
+Click handler
+
+##### Type declaration
+
+▸ (`config`): `void`
+
+###### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `config` | [`HandlerArg`](#handlerarg) |
+
+###### Returns
+
+`void`
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:74](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L74)
 
 
 <a name="interfacesencodedquerymd"></a>
@@ -157,7 +188,7 @@ Query name
 
 ##### Defined in
 
-[journey-manager/src/queries.ts:60](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/queries.ts#L60)
+[journey-manager/src/queries.ts:60](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/queries.ts#L60)
 
 ___
 
@@ -169,7 +200,7 @@ Query target
 
 ##### Defined in
 
-[journey-manager/src/queries.ts:64](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/queries.ts#L64)
+[journey-manager/src/queries.ts:64](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/queries.ts#L64)
 
 ___
 
@@ -181,7 +212,7 @@ Query options
 
 ##### Defined in
 
-[journey-manager/src/queries.ts:68](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/queries.ts#L68)
+[journey-manager/src/queries.ts:68](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/queries.ts#L68)
 
 ___
 
@@ -193,81 +224,7 @@ Query parent
 
 ##### Defined in
 
-[journey-manager/src/queries.ts:72](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/queries.ts#L72)
-
-
-<a name="interfacespartialthememd"></a>
-
-## Interface: PartialTheme
-
-Deep partial variant of the UI theme, input by the library user
-
-### Properties
-
-#### colors
-
-• `Optional` **colors**: `Partial`\<[`ThemeColors`](#interfacesthemecolorsmd)\>
-
-UI colors
-
-##### Defined in
-
-[journey-manager/src/ui.tsx:47](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L47)
-
-___
-
-#### fontFamily
-
-• `Optional` **fontFamily**: `string`
-
-Font family
-
-##### Defined in
-
-[journey-manager/src/ui.tsx:51](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L51)
-
-
-<a name="interfacesquerymd"></a>
-
-## Interface: Query
-
-Query
-
-### Properties
-
-#### queryName
-
-• **queryName**: [`Method`](#method)
-
-Query name
-
-##### Defined in
-
-[journey-manager/src/queries.ts:28](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/queries.ts#L28)
-
-___
-
-#### queryArgs
-
-• **queryArgs**: [`string` \| `RegExp`, Record\<string, boolean \| RegExp\>?]
-
-Query arguments
-
-##### Defined in
-
-[journey-manager/src/queries.ts:32](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/queries.ts#L32)
-
-___
-
-#### parent
-
-• `Optional` **parent**: [`Query`](#interfacesquerymd)
-
-Parent query
-
-##### Defined in
-
-[journey-manager/src/queries.ts:36](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/queries.ts#L36)
+[journey-manager/src/queries.ts:72](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/queries.ts#L72)
 
 
 <a name="interfacesrunoutputmd"></a>
@@ -294,7 +251,7 @@ Stop running the journey, removing all event listeners
 
 ##### Defined in
 
-[journey-manager/src/index.ts:230](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L230)
+[journey-manager/src/index.ts:71](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/index.ts#L71)
 
 ___
 
@@ -306,7 +263,7 @@ The regular multimodal SDK client
 
 ##### Defined in
 
-[journey-manager/src/index.ts:234](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L234)
+[journey-manager/src/index.ts:75](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/index.ts#L75)
 
 
 <a name="interfacesrunpropsmd"></a>
@@ -325,7 +282,7 @@ The regular multimodal configuration
 
 ##### Defined in
 
-[journey-manager/src/index.ts:244](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L244)
+[journey-manager/src/index.ts:44](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/index.ts#L44)
 
 ___
 
@@ -337,7 +294,7 @@ UI configuration
 
 ##### Defined in
 
-[journey-manager/src/index.ts:248](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L248)
+[journey-manager/src/index.ts:48](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/index.ts#L48)
 
 ___
 
@@ -350,7 +307,7 @@ If triggers are not provided, they will be fetched from the CDN.
 
 ##### Defined in
 
-[journey-manager/src/index.ts:253](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L253)
+[journey-manager/src/index.ts:53](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/index.ts#L53)
 
 ___
 
@@ -376,7 +333,33 @@ Digression detection callback
 
 ##### Defined in
 
-[journey-manager/src/index.ts:257](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L257)
+[journey-manager/src/index.ts:57](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/index.ts#L57)
+
+___
+
+#### onStep
+
+• `Optional` **onStep**: (`stepId`: `string`) => `void`
+
+Runs when a step is triggered, used primarily for debugging
+
+##### Type declaration
+
+▸ (`stepId`): `void`
+
+###### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `stepId` | `string` |
+
+###### Returns
+
+`void`
+
+##### Defined in
+
+[journey-manager/src/index.ts:61](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/index.ts#L61)
 
 
 <a name="interfacesserializedregexmd"></a>
@@ -395,7 +378,7 @@ Regex body
 
 ##### Defined in
 
-[journey-manager/src/queries.ts:46](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/queries.ts#L46)
+[journey-manager/src/queries.ts:46](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/queries.ts#L46)
 
 ___
 
@@ -407,62 +390,41 @@ Regex flags
 
 ##### Defined in
 
-[journey-manager/src/queries.ts:50](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/queries.ts#L50)
+[journey-manager/src/queries.ts:50](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/queries.ts#L50)
 
 
-<a name="interfacesstepwithquerymd"></a>
+<a name="interfacessimplehandlerargmd"></a>
 
-## Interface: StepWithQuery
+## Interface: SimpleHandlerArg
 
-Step with additional query
+The argument for callbacks
 
 ### Properties
 
-#### stepId
+#### sendStep
 
-• **stepId**: `string`
+• **sendStep**: (`stepId`: `string`, `context?`: `Context`) => `Promise`\<`void`\>
 
-Step ID
+A function to send steps to NLX.
 
-##### Defined in
+##### Type declaration
 
-[journey-manager/src/index.ts:79](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L79)
+▸ (`stepId`, `context?`): `Promise`\<`void`\>
 
-___
+###### Parameters
 
-#### query
+| Name | Type |
+| :------ | :------ |
+| `stepId` | `string` |
+| `context?` | `Context` |
 
-• **query**: [`Query`](#interfacesquerymd)
+###### Returns
 
-Element query
-
-##### Defined in
-
-[journey-manager/src/index.ts:83](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L83)
-
-___
-
-#### once
-
-• `Optional` **once**: `boolean`
-
-Controls whether the step should only trigger the first time it is clicked, or on all subsequent clicks as well
+`Promise`\<`void`\>
 
 ##### Defined in
 
-[journey-manager/src/index.ts:87](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L87)
-
-___
-
-#### urlCondition
-
-• `Optional` **urlCondition**: [`UrlCondition`](#interfacesurlconditionmd)
-
-URL condition for the click
-
-##### Defined in
-
-[journey-manager/src/index.ts:91](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L91)
+[journey-manager/src/configuration.ts:46](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L46)
 
 
 <a name="interfacesthememd"></a>
@@ -475,25 +437,25 @@ Visual theme for the UI
 
 #### colors
 
-• **colors**: [`ThemeColors`](#interfacesthemecolorsmd)
+• `Optional` **colors**: [`ThemeColors`](#interfacesthemecolorsmd)
 
 UI colors
 
 ##### Defined in
 
-[journey-manager/src/ui.tsx:33](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L33)
+[journey-manager/src/configuration.ts:28](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L28)
 
 ___
 
 #### fontFamily
 
-• **fontFamily**: `string`
+• `Optional` **fontFamily**: `string`
 
 Font family
 
 ##### Defined in
 
-[journey-manager/src/ui.tsx:37](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L37)
+[journey-manager/src/configuration.ts:32](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L32)
 
 
 <a name="interfacesthemecolorsmd"></a>
@@ -506,37 +468,37 @@ Theme colors
 
 #### primary
 
-• **primary**: `string`
+• `Optional` **primary**: `string`
 
 Primary color
 
 ##### Defined in
 
-[journey-manager/src/ui.tsx:15](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L15)
+[journey-manager/src/configuration.ts:10](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L10)
 
 ___
 
 #### primaryHover
 
-• **primaryHover**: `string`
+• `Optional` **primaryHover**: `string`
 
 Primary color on hover
 
 ##### Defined in
 
-[journey-manager/src/ui.tsx:19](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L19)
+[journey-manager/src/configuration.ts:14](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L14)
 
 ___
 
 #### highlight
 
-• **highlight**: `string`
+• `Optional` **highlight**: `string`
 
 Color for trigger highlights
 
 ##### Defined in
 
-[journey-manager/src/ui.tsx:23](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L23)
+[journey-manager/src/configuration.ts:18](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L18)
 
 
 <a name="interfacestriggermd"></a>
@@ -555,7 +517,7 @@ Event
 
 ##### Defined in
 
-[journey-manager/src/index.ts:46](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L46)
+[journey-manager/src/trigger.ts:14](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/trigger.ts#L14)
 
 ___
 
@@ -567,7 +529,7 @@ A query identifying the element
 
 ##### Defined in
 
-[journey-manager/src/index.ts:50](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L50)
+[journey-manager/src/trigger.ts:18](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/trigger.ts#L18)
 
 ___
 
@@ -579,7 +541,7 @@ A flag specifying whether the trigger should only fire a single time
 
 ##### Defined in
 
-[journey-manager/src/index.ts:54](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L54)
+[journey-manager/src/trigger.ts:22](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/trigger.ts#L22)
 
 ___
 
@@ -591,7 +553,38 @@ URL condition
 
 ##### Defined in
 
-[journey-manager/src/index.ts:58](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L58)
+[journey-manager/src/trigger.ts:26](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/trigger.ts#L26)
+
+
+<a name="interfacestriggeredstepmd"></a>
+
+## Interface: TriggeredStep
+
+Represents a load step that has already been triggered.
+
+### Properties
+
+#### stepId
+
+• **stepId**: `string`
+
+step id
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:38](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L38)
+
+___
+
+#### url
+
+• **url**: `string`
+
+the URL of the page it triggered on
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:40](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L40)
 
 
 <a name="interfacesuiconfigmd"></a>
@@ -610,7 +603,7 @@ Drawer title
 
 ##### Defined in
 
-[journey-manager/src/ui.tsx:61](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L61)
+[journey-manager/src/configuration.ts:84](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L84)
 
 ___
 
@@ -622,7 +615,7 @@ Drawer subtitle
 
 ##### Defined in
 
-[journey-manager/src/ui.tsx:65](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L65)
+[journey-manager/src/configuration.ts:88](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L88)
 
 ___
 
@@ -634,25 +627,37 @@ Render highlights
 
 ##### Defined in
 
-[journey-manager/src/ui.tsx:69](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L69)
+[journey-manager/src/configuration.ts:92](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L92)
+
+___
+
+#### iconUrl
+
+• `Optional` **iconUrl**: `string`
+
+URL for the button icon
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:96](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L96)
 
 ___
 
 #### theme
 
-• `Optional` **theme**: [`PartialTheme`](#interfacespartialthememd)
+• `Optional` **theme**: [`Theme`](#interfacesthememd)
 
 UI theme
 
 ##### Defined in
 
-[journey-manager/src/ui.tsx:73](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L73)
+[journey-manager/src/configuration.ts:100](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L100)
 
 ___
 
 #### onEscalation
 
-• `Optional` **onEscalation**: (`config`: \{ `sendStep`: (`stepId`: `string`, `context?`: `Context`) => `Promise`\<`void`\>  }) => `void`
+• `Optional` **onEscalation**: (`config`: [`SimpleHandlerArg`](#interfacessimplehandlerargmd)) => `void`
 
 Escalation handler
 
@@ -664,8 +669,7 @@ Escalation handler
 
 | Name | Type |
 | :------ | :------ |
-| `config` | `Object` |
-| `config.sendStep` | (`stepId`: `string`, `context?`: `Context`) => `Promise`\<`void`\> |
+| `config` | [`SimpleHandlerArg`](#interfacessimplehandlerargmd) |
 
 ###### Returns
 
@@ -673,13 +677,37 @@ Escalation handler
 
 ##### Defined in
 
-[journey-manager/src/ui.tsx:77](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L77)
+[journey-manager/src/configuration.ts:104](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L104)
+
+___
+
+#### escalationButtonLabel
+
+• `Optional` **escalationButtonLabel**: `string`
+
+Escalation button label
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:108](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L108)
+
+___
+
+#### escalationConfirmation
+
+• `Optional` **escalationConfirmation**: `string`
+
+Escalation confirmation
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:112](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L112)
 
 ___
 
 #### onEnd
 
-• `Optional` **onEnd**: (`config`: \{ `sendStep`: (`stepId`: `string`, `context?`: `Context`) => `Promise`\<`void`\>  }) => `void`
+• `Optional` **onEnd**: (`config`: [`SimpleHandlerArg`](#interfacessimplehandlerargmd)) => `void`
 
 End handler
 
@@ -691,8 +719,7 @@ End handler
 
 | Name | Type |
 | :------ | :------ |
-| `config` | `Object` |
-| `config.sendStep` | (`stepId`: `string`, `context?`: `Context`) => `Promise`\<`void`\> |
+| `config` | [`SimpleHandlerArg`](#interfacessimplehandlerargmd) |
 
 ###### Returns
 
@@ -700,13 +727,37 @@ End handler
 
 ##### Defined in
 
-[journey-manager/src/ui.tsx:81](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L81)
+[journey-manager/src/configuration.ts:116](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L116)
+
+___
+
+#### endButtonLabel
+
+• `Optional` **endButtonLabel**: `string`
+
+End button label
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:120](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L120)
+
+___
+
+#### endConfirmation
+
+• `Optional` **endConfirmation**: `string`
+
+End confirmation
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:124](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L124)
 
 ___
 
 #### onPreviousStep
 
-• `Optional` **onPreviousStep**: (`config`: \{ `sendStep`: (`stepId`: `string`, `context?`: `Context`) => `Promise`\<`void`\> ; `triggeredSteps`: \{ `stepId`: `string` ; `url`: `string`  }[]  }) => `void`
+• `Optional` **onPreviousStep**: (`config`: [`HandlerArg`](#handlerarg)) => `void`
 
 On previous step
 
@@ -718,9 +769,7 @@ On previous step
 
 | Name | Type |
 | :------ | :------ |
-| `config` | `Object` |
-| `config.sendStep` | (`stepId`: `string`, `context?`: `Context`) => `Promise`\<`void`\> |
-| `config.triggeredSteps` | \{ `stepId`: `string` ; `url`: `string`  }[] |
+| `config` | [`HandlerArg`](#handlerarg) |
 
 ###### Returns
 
@@ -728,7 +777,68 @@ On previous step
 
 ##### Defined in
 
-[journey-manager/src/ui.tsx:85](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/ui.tsx#L85)
+[journey-manager/src/configuration.ts:128](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L128)
+
+___
+
+#### previousStepButtonLabel
+
+• `Optional` **previousStepButtonLabel**: `string`
+
+Previous step button label
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:132](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L132)
+
+___
+
+#### buttons
+
+• `Optional` **buttons**: [`ButtonConfig`](#interfacesbuttonconfigmd)[]
+
+Custom buttons
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:136](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L136)
+
+___
+
+#### nudgeContent
+
+• `Optional` **nudgeContent**: `string`
+
+If this is set, the journey manager will show a call-to-action tooltip to invite the user to interact with the overlay pin.
+it will be shown only if the user never interacts with the overlay pin, after `tooltipShowAfterMs` milliseconds.
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:141](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L141)
+
+___
+
+#### nudgeShowAfterMs
+
+• `Optional` **nudgeShowAfterMs**: `number`
+
+Show nudge tooltip after this many milliseconds
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:145](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L145)
+
+___
+
+#### nudgeHideAfterMs
+
+• `Optional` **nudgeHideAfterMs**: `number`
+
+Hide nudge tooltip after it's been shown for this many milliseconds
+
+##### Defined in
+
+[journey-manager/src/configuration.ts:149](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/configuration.ts#L149)
 
 
 <a name="interfacesurlconditionmd"></a>
@@ -741,13 +851,13 @@ URL match condition
 
 #### operator
 
-• **operator**: ``"contains"`` \| ``"prefix"`` \| ``"eq"`` \| ``"neq"`` \| ``"suffix"`` \| ``"not_contains"``
+• **operator**: ``"contains"`` \| ``"matches_regex"`` \| ``"smart_match"``
 
 Condition operator
 
 ##### Defined in
 
-[journey-manager/src/index.ts:31](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L31)
+[journey-manager/src/UrlCondition.ts:8](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/UrlCondition.ts#L8)
 
 ___
 
@@ -759,4 +869,4 @@ Condition value
 
 ##### Defined in
 
-[journey-manager/src/index.ts:35](https://github.com/nlxai/sdk/blob/71307264e396822939eca86ed156fc2cc45d48d3/packages/journey-manager/src/index.ts#L35)
+[journey-manager/src/UrlCondition.ts:12](https://github.com/nlxai/sdk/blob/922aa5c7812ed4301fd4239109cb9c788795bc09/packages/journey-manager/src/UrlCondition.ts#L12)

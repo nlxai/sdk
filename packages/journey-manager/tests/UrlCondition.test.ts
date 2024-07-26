@@ -1,4 +1,4 @@
-import { matchesUrlCondition, UrlCondition } from "../src/url_condition";
+import { matchesUrlCondition, UrlCondition } from "../src/UrlCondition";
 
 describe("matchesUrlCondition", () => {
   test.each([
