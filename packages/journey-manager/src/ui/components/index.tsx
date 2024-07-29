@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsdoc/require-jsdoc */
 import { type Client } from "@nlxai/multimodal";
-import { autoUpdate, platform } from "@floating-ui/dom";
 import { type FunctionComponent as FC, type ComponentChildren } from "preact";
 import { useEffect, useState, useRef } from "preact/hooks";
 import {
@@ -22,6 +21,7 @@ import type {
 import tinycolor from "tinycolor2";
 
 import style from "../style.css";
+import { Highlight } from "./HighlightOverlay";
 
 /** Makes every property required recursively. */
 export type DeepRequired<T> = {
@@ -64,65 +64,6 @@ const defaultTheme: Theme = {
   fontFamily: "sans-serif",
 };
 
-const Highlight: FC<{ element: HTMLElement }> = ({ element }) => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [rect, setRect] = useState<{
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  } | null>(null);
-
-  useEffect(() => {
-    if (ref.current != null) {
-      const highlight = ref.current;
-
-      // copy over computed styles from element so drop shadow looks right
-      const computedStyles = window.getComputedStyle(element);
-
-      for (const property of computedStyles) {
-        if (!property.match(/^border/)) {
-          continue;
-        }
-
-        highlight.style.setProperty(
-          property,
-          computedStyles.getPropertyValue(property),
-        );
-      }
-
-      const moveHighlight = (): void => {
-        void (async (): Promise<void> => {
-          const { reference } = await platform.getElementRects({
-            reference: element,
-            floating: highlight,
-            strategy: "absolute",
-          });
-          // platform.getElementRects is a `Promisable` rather than a `Promise` so we have to use await rather than .then
-          setRect(reference);
-        })();
-      };
-
-      return autoUpdate(element, highlight, moveHighlight);
-    }
-  }, [element]);
-  return (
-    <div
-      className="highlight"
-      ref={ref}
-      style={
-        rect != null
-          ? {
-              top: `${rect.y - 1}px`,
-              left: `${rect.x - 1}px`,
-              height: `${rect.height + 2}px`,
-              width: `${rect.width + 2}px`,
-            }
-          : {}
-      }
-    ></div>
-  );
-};
 const SuccessMessage: FC<{ message: string }> = ({ message }) => {
   return (
     <p className="success-message">
@@ -486,11 +427,13 @@ export const ControlCenter: FC<{
           </div>
         </div>
       </div>
-      <div className="highlights">
-        {highlightElements.map((element, index) => {
-          return <Highlight key={index} element={element} />;
-        })}
-      </div>
+      {config.highlightStrategy === "overlay" ? (
+        <div className="highlights">
+          {highlightElements.map((element, index) => {
+            return <Highlight key={index} element={element} />;
+          })}
+        </div>
+      ) : null}
     </>
   );
 };
