@@ -193,11 +193,35 @@ const LoremIpsumParagraph: FC<unknown> = () => {
   );
 };
 
+const Checkbox: FC<{
+  value: boolean;
+  onChange: (value: boolean) => void;
+  label: string;
+}> = ({ value, onChange, label }) => (
+  <label className="inline-flex grow gap-2">
+    <input
+      type="checkbox"
+      className="shrink grow-0 basis-3"
+      checked={value}
+      onChange={() => {
+        onChange(!value);
+      }}
+    />
+    {label}
+  </label>
+);
+
 const ButtonHandlerForm: FC<unknown> = () => {
   const [shouldPreventDefault, setShouldPreventDefault] =
     useState<boolean>(false);
   const [shouldStopPropagation, setShouldStopPropagation] =
     useState<boolean>(true);
+
+  const [hasBoxShadow, setHasBoxShadow] = useState<boolean>(true);
+  const [hasAnimation, setHasAnimation] = useState<boolean>(false);
+  const [hasZIndexUnderlay, setHasZIndexUnderlay] = useState<boolean>(false);
+  const [hasOverlay, setHasOverlay] = useState<boolean>(false);
+  const [hasBorder, setHasBorder] = useState<boolean>(true);
 
   const handleButtonPress = (e: React.MouseEvent<HTMLButtonElement>): void => {
     if (shouldPreventDefault) {
@@ -210,37 +234,61 @@ const ButtonHandlerForm: FC<unknown> = () => {
 
   return (
     <div className="flex gap-2 items-start grow justify-around">
-      <button
-        className="bg-blueMain px-4 py-1 text-white rounded hover:bg-blueDarker"
-        onClick={handleButtonPress}
+      <div
+        className={
+          hasZIndexUnderlay
+            ? "z-20 bg-white p-4 rounded relative"
+            : "bg-white p-4 rounded relative"
+        }
       >
-        Test
-      </button>
+        <button
+          className={`bg-blueMain px-4 py-1 text-white rounded hover:bg-blueDarker ${hasBoxShadow ? "shadow-md" : ""} ${hasAnimation ? "animate-pulse" : ""} ${hasBorder ? "border-4 border-red-300" : ""}`}
+          onClick={handleButtonPress}
+        >
+          Test
+        </button>
+        <div
+          className={
+            hasOverlay
+              ? "bg-gray-300 w-24 h-20 absolute top-2 -left-8"
+              : "hidden"
+          }
+        >
+          Ping should not be visible over this
+        </div>
+      </div>
       <div className="flex flex-col">
-        <div className="flex grow items-center justify-start gap-2">
-          <input
-            type="checkbox"
-            className="shrink grow-0 basis-3"
-            id="preventDefault"
-            checked={shouldPreventDefault}
-            onChange={() => {
-              setShouldPreventDefault(!shouldPreventDefault);
-            }}
-          />
-          <label htmlFor="preventDefault">Prevent default</label>
-        </div>
-        <div className="flex grow items-center justify-start gap-2">
-          <input
-            type="checkbox"
-            className="shrink grow-0 basis-3"
-            id="stopPropagation"
-            checked={shouldStopPropagation}
-            onChange={() => {
-              setShouldStopPropagation(!shouldStopPropagation);
-            }}
-          />
-          <label htmlFor="stopPropagation">Stop propagation</label>
-        </div>
+        <Checkbox
+          value={shouldPreventDefault}
+          onChange={setShouldPreventDefault}
+          label="Prevent default"
+        />
+        <Checkbox
+          value={shouldStopPropagation}
+          onChange={setShouldStopPropagation}
+          label="Stop propagation"
+        />
+        <Checkbox
+          value={hasBoxShadow}
+          onChange={setHasBoxShadow}
+          label="Box shadow"
+        />
+        <Checkbox
+          value={hasAnimation}
+          onChange={setHasAnimation}
+          label="Animation"
+        />
+        <Checkbox
+          value={hasZIndexUnderlay}
+          onChange={setHasZIndexUnderlay}
+          label="Z-index underlay"
+        />
+        <Checkbox
+          value={hasOverlay}
+          onChange={setHasOverlay}
+          label="Absolute overlay"
+        />
+        <Checkbox value={hasBorder} onChange={setHasBorder} label="Border" />
       </div>
     </div>
   );
