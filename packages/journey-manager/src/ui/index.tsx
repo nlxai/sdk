@@ -6,6 +6,9 @@ import type {
   ActiveTriggerEventType,
   StepWithQueryAndElements,
 } from "../trigger";
+import highlightBoxShadow, {
+  teardown as teardownBoxShadowHighlight,
+} from "./highlightBoxShadow";
 
 customElements.define("journey-manager", JourneyManagerElement);
 
@@ -44,8 +47,10 @@ const create = (
           const highlightElements = findActiveTriggers("click").flatMap(
             (activeTrigger) => activeTrigger.elements,
           );
-          if (uiElement != null) {
+          if (uiElement != null && config.highlightStrategy === "overlay") {
             uiElement.highlightElements = highlightElements;
+          } else {
+            highlightBoxShadow(config, highlightElements);
           }
         }
       : () => {};
@@ -62,6 +67,8 @@ const create = (
       },
       teardown() {
         document.body.removeChild(uiElement);
+        if (config.highlightStrategy !== "overlay")
+          teardownBoxShadowHighlight();
       },
     };
   }

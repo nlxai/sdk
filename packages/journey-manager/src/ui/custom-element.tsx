@@ -9,6 +9,7 @@ import type { UiConfig, TriggeredStep } from "../configuration";
  */
 export default class JourneyManagerElement extends HTMLElement {
   private _shadowRoot: ShadowRoot | null = null;
+  private readonly _globalCss: HTMLStyleElement | null = null;
   private _client: Client | null = null;
   private _triggeredSteps: TriggeredStep[] | null = null;
   private _config: UiConfig | null = null;
@@ -87,6 +88,9 @@ export default class JourneyManagerElement extends HTMLElement {
   disconnectedCallback(): void {
     if (this._shadowRoot != null) {
       render(null, this._shadowRoot);
+    }
+    if (this._globalCss != null) {
+      this._globalCss.remove();
     }
   }
 }

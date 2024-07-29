@@ -80,6 +80,7 @@ export const observeMutations = (callback: MutationCallback) => {
   documentObserver.observe(document, {
     childList: true,
     subtree: true,
+    attributes: true,
   });
 
   return () => {

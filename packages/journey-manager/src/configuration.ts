@@ -90,6 +90,11 @@ export interface UiConfig {
    * Render highlights
    */
   highlights?: boolean;
+
+  /**
+   * @hidden
+   */
+  highlightStrategy?: "overlay" | "box-shadow";
   /**
    * URL for the button icon
    */

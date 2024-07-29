@@ -1,0 +1,65 @@
+.nlx-highlight-no-shadow-no-animation {
+  animation: nlx-ping-no-shadow 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.nlx-highlight-no-shadow-existing-animation {
+  animation:
+    var(--nlx-existing-animation),
+    nlx-ping-no-shadow 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.nlx-highlight-existing-shadow-no-animation {
+  animation: nlx-ping-existing-shadow 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.nlx-highlight-existing-shadow-existing-animation {
+  animation:
+    var(--nlx-existing-animation),
+    nlx-ping-existing-shadow 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes nlx-ping-no-shadow {
+  0% {
+    box-shadow: 0 0 0 0
+      rgba(
+        var(--nlx-highlightR),
+        var(--nlx-highlightG),
+        var(--nlx-highlightB),
+        0.8
+      );
+  }
+  70% {
+    box-shadow: 0 0 0 8px
+      rgba(
+        var(--nlx-highlightR),
+        var(--nlx-highlightG),
+        var(--nlx-highlightB),
+        0
+      );
+  }
+}
+
+@keyframes nlx-ping-existing-shadow {
+  0% {
+    box-shadow:
+      var(--nlx-existing-box-shadow),
+      0 0 0 0
+        rgba(
+          var(--nlx-highlightR),
+          var(--nlx-highlightG),
+          var(--nlx-highlightB),
+          0.8
+        );
+  }
+  70% {
+    box-shadow:
+      var(--nlx-existing-box-shadow),
+      0 0 0 8px
+        rgba(
+          var(--nlx-highlightR),
+          var(--nlx-highlightG),
+          var(--nlx-highlightB),
+          0
+        );
+  }
+}

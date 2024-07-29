@@ -98,7 +98,12 @@ const triggersWithNames: Record<string, { name: string; trigger: Trigger }> = {
       event: "click",
       once: false,
       query: {
-        parent: null,
+        parent: {
+          name: "LabelText",
+          target: "Custom button form",
+          options: null,
+          parent: null,
+        },
         options: { name: { regexp: "Test", flags: "i" } },
         name: "Role",
         target: "button",
@@ -129,6 +134,7 @@ const runJourneyManager = async (): Promise<unknown> => {
       title: "Call Control Center",
       subtitle: "Manage your call experience with us",
       highlights: true,
+      // highlightStrategy: "overlay",
       theme: {
         fontFamily: "'Neue Haas Grotesk'",
         colors: { highlight: "#7dd3fc" },
@@ -223,6 +229,8 @@ const ButtonHandlerForm: FC<unknown> = () => {
   const [hasOverlay, setHasOverlay] = useState<boolean>(false);
   const [hasBorder, setHasBorder] = useState<boolean>(true);
 
+  const [shouldMatch, setShouldMatch] = useState<boolean>(true);
+
   const handleButtonPress = (e: React.MouseEvent<HTMLButtonElement>): void => {
     if (shouldPreventDefault) {
       e.preventDefault();
@@ -233,7 +241,10 @@ const ButtonHandlerForm: FC<unknown> = () => {
   };
 
   return (
-    <div className="flex gap-2 items-start grow justify-around">
+    <div
+      className="flex gap-2 items-start grow justify-around"
+      aria-label={shouldMatch ? "Custom button form" : ""}
+    >
       <div
         className={
           hasZIndexUnderlay
@@ -289,6 +300,12 @@ const ButtonHandlerForm: FC<unknown> = () => {
           label="Absolute overlay"
         />
         <Checkbox value={hasBorder} onChange={setHasBorder} label="Border" />
+
+        <Checkbox
+          value={shouldMatch}
+          onChange={setShouldMatch}
+          label="Trigger matches"
+        />
       </div>
     </div>
   );
