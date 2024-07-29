@@ -254,7 +254,7 @@ const ButtonHandlerForm: FC<unknown> = () => {
               : "hidden"
           }
         >
-          Ping shouldn't be visible over this
+          Ping should not be visible over this
         </div>
       </div>
       <div className="flex flex-col">
