@@ -10,6 +10,7 @@ import type { UiConfig, TriggeredStep } from "../configuration";
 export default class JourneyManagerElement extends HTMLElement {
   private _shadowRoot: ShadowRoot | null = null;
   private _client: Client | null = null;
+  private _conversationId: string | null = null;
   private _triggeredSteps: TriggeredStep[] | null = null;
   private _config: UiConfig | null = null;
   private _digression: boolean = false;
@@ -42,6 +43,14 @@ export default class JourneyManagerElement extends HTMLElement {
   }
 
   /**
+   * Conversation ID
+   */
+  set conversationId(value: string) {
+    this._conversationId = value;
+    this.render();
+  }
+
+  /**
    * Set triggered steps
    */
   set triggeredSteps(value: TriggeredStep[]) {
@@ -65,6 +74,7 @@ export default class JourneyManagerElement extends HTMLElement {
     if (
       this._config == null ||
       this._client == null ||
+      this._conversationId == null ||
       this._triggeredSteps == null
     ) {
       return;
@@ -74,6 +84,7 @@ export default class JourneyManagerElement extends HTMLElement {
         config={this._config}
         digression={this._digression}
         client={this._client}
+        conversationId={this._conversationId}
         triggeredSteps={this._triggeredSteps}
         highlightElements={this._highlightElements}
       />,

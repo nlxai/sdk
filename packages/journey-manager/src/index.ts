@@ -112,7 +112,12 @@ export const run = async (props: RunProps): Promise<RunOutput> => {
   // ----- Set up UI -----
   await dom.contentLoaded();
 
-  const ui = createUi(props.ui, client, findActiveTriggers);
+  const ui = createUi(
+    props.config.conversationId,
+    props.ui,
+    client,
+    findActiveTriggers,
+  );
 
   // --- Set up Digression detection ---
   const checkForDigressions = prepareDigression(triggers, () => {
