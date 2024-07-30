@@ -2,7 +2,13 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { type Client } from "@nlxai/multimodal";
 import { type FunctionComponent as FC, type ComponentChildren } from "preact";
-import { useEffect, useState, useRef } from "preact/hooks";
+import {
+  useEffect,
+  useState,
+  useRef,
+  type Dispatch,
+  type StateUpdater,
+} from "preact/hooks";
 import {
   MultimodalIcon,
   SupportAgentIcon,
@@ -248,13 +254,35 @@ interface PinBubbleProps {
 const PinBubble: FC<PinBubbleProps> = ({ isActive, content, onClick }) => (
   <div className={`pin-bubble-container ${isActive ? "active" : "inactive"}`}>
     <div className="pin-bubble-content">{content}</div>
-    <button className="pin-bubble-button" onClick={onClick}>
+    <button
+      className="pin-bubble-button"
+      onClick={onClick}
+      aria-label="Dismiss"
+    >
       <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
         <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
       </svg>
     </button>
   </div>
 );
+
+const useOpenStateWithHistory = (): [
+  boolean,
+  boolean,
+  Dispatch<StateUpdater<boolean>>,
+] => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const hasBeenOpened = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      hasBeenOpened.current = true;
+    }
+  }, [isOpen]);
+
+  return [isOpen, isOpen || hasBeenOpened.current, setIsOpen];
+};
 
 export const ControlCenter: FC<{
   config: UiConfig;
@@ -263,15 +291,10 @@ export const ControlCenter: FC<{
   digression: boolean;
   highlightElements: HTMLElement[];
 }> = ({ config, client, triggeredSteps, highlightElements, digression }) => {
-  const [hasBeenOpened, setHasBeenOpened] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, hasBeenOpened, setIsOpen] = useOpenStateWithHistory();
   const drawerContentRef = useRef<HTMLDivElement | null>(null);
   const drawerDialogRef = useRef<HTMLDivElement | null>(null);
   const [isNudgeVisible, setIsNudgeVisible] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (isOpen) setHasBeenOpened(true);
-  }, [isOpen]);
 
   useEffect(() => {
     if (hasBeenOpened || config.nudgeContent == null) {
