@@ -58,6 +58,12 @@ button {
   background-color: var(--primary-hover);
 }
 
+.pin img {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
 .pin-bubble-content {
   line-height: 1.4;
   padding: 4px 6px;

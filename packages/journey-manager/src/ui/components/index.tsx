@@ -284,6 +284,34 @@ const retrieveNudgeState = (conversationId: string): NudgeState => {
   return "hidden";
 };
 
+const PinIcon: FC<{ iconUrl?: string }> = ({ iconUrl }) => {
+  const [isIconUrlValid, setIsIconUrlValid] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (iconUrl == null) {
+      return;
+    }
+    const image = new Image();
+    image.onload = () => {
+      setIsIconUrlValid(true);
+    };
+    image.onerror = () => {
+      setIsIconUrlValid(false);
+    };
+    image.src = iconUrl;
+  }, [iconUrl, setIsIconUrlValid]);
+
+  if (iconUrl == null || isIconUrlValid === false) {
+    return <MultimodalIcon />;
+  }
+
+  if (isIconUrlValid == null) {
+    return null;
+  }
+
+  return <img src={iconUrl} role="presentation" />;
+};
+
 export const ControlCenter: FC<{
   config: UiConfig;
   conversationId: string;
@@ -384,15 +412,7 @@ export const ControlCenter: FC<{
           setIsOpen((prev) => !prev);
         }}
       >
-        {config.iconUrl != null ? (
-          <img
-            src={config.iconUrl}
-            role="presentation"
-            className="block w-full h-full"
-          />
-        ) : (
-          <MultimodalIcon />
-        )}
+        <PinIcon iconUrl={config.iconUrl} />
       </button>
       <div
         className={`drawer ${isOpen ? "drawer-open" : ""} `}
