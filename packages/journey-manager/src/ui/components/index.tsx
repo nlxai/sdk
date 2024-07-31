@@ -248,7 +248,11 @@ interface PinBubbleProps {
 const PinBubble: FC<PinBubbleProps> = ({ isActive, content, onClick }) => (
   <div className={`pin-bubble-container ${isActive ? "active" : "inactive"}`}>
     <div className="pin-bubble-content">{content}</div>
-    <button className="pin-bubble-button" onClick={onClick}>
+    <button
+      className="pin-bubble-button"
+      onClick={onClick}
+      aria-label="Dismiss"
+    >
       <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
         <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
       </svg>
@@ -256,45 +260,90 @@ const PinBubble: FC<PinBubbleProps> = ({ isActive, content, onClick }) => (
   </div>
 );
 
+const nudgeStateLocalStorageKey = (conversationId: string): string => {
+  return `jb-nudge-state-${conversationId}`;
+};
+
+type NudgeState = "visible" | "hidden" | "dismissed";
+
+const saveNudgeState = (
+  conversationId: string,
+  nudgeState: NudgeState,
+): void => {
+  localStorage.setItem(nudgeStateLocalStorageKey(conversationId), nudgeState);
+};
+
+const retrieveNudgeState = (conversationId: string): NudgeState => {
+  const val = localStorage.getItem(nudgeStateLocalStorageKey(conversationId));
+  if (val === "visible") {
+    return "visible";
+  }
+  if (val === "dismissed") {
+    return "dismissed";
+  }
+  return "hidden";
+};
+
 export const ControlCenter: FC<{
   config: UiConfig;
+  conversationId: string;
   client: Client;
   triggeredSteps: TriggeredStep[];
   digression: boolean;
   highlightElements: HTMLElement[];
-}> = ({ config, client, triggeredSteps, highlightElements, digression }) => {
-  const [hasBeenOpened, setHasBeenOpened] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+}> = ({
+  config,
+  client,
+  conversationId,
+  triggeredSteps,
+  highlightElements,
+  digression,
+}) => {
+  const [isOpen, setIsOpen] = useState<boolean>();
   const drawerContentRef = useRef<HTMLDivElement | null>(null);
   const drawerDialogRef = useRef<HTMLDivElement | null>(null);
-  const [isNudgeVisible, setIsNudgeVisible] = useState<boolean>(false);
+  const [nudgeState, setNudgeState] = useState<NudgeState>(
+    retrieveNudgeState(conversationId),
+  );
 
   useEffect(() => {
-    if (isOpen) setHasBeenOpened(true);
+    if (isOpen) {
+      setNudgeState("dismissed");
+    }
   }, [isOpen]);
 
   useEffect(() => {
-    if (hasBeenOpened || config.nudgeContent == null) {
-      setIsNudgeVisible(false);
+    saveNudgeState(conversationId, nudgeState);
+  }, [nudgeState, conversationId]);
+
+  useEffect(() => {
+    if (config.nudgeContent == null) {
       return;
     }
-
-    let hideTimeout: null | NodeJS.Timeout = null;
-    const showTimeout = setTimeout(() => {
-      setIsNudgeVisible(true);
-      hideTimeout = setTimeout(() => {
-        setIsNudgeVisible(false);
-      }, config.nudgeHideAfterMs ?? 20000);
-    }, config.nudgeShowAfterMs ?? 3000);
-    return () => {
-      clearTimeout(showTimeout);
-      if (hideTimeout) clearTimeout(hideTimeout);
-    };
+    if (nudgeState === "hidden") {
+      const showTimeout = setTimeout(() => {
+        setNudgeState("visible");
+      }, config.nudgeShowAfterMs ?? 3000);
+      return () => {
+        clearTimeout(showTimeout);
+      };
+    } else if (nudgeState === "visible") {
+      const hideTimeout = setTimeout(
+        () => {
+          setNudgeState("dismissed");
+        },
+        (config.nudgeHideAfterMs ?? 20000) - (config.nudgeShowAfterMs ?? 3000),
+      );
+      return () => {
+        clearTimeout(hideTimeout);
+      };
+    }
   }, [
     config.nudgeContent,
     config.nudgeShowAfterMs,
     config.nudgeHideAfterMs,
-    hasBeenOpened,
+    nudgeState,
+    setNudgeState,
   ]);
 
   const onPreviousStep = config.onPreviousStep
@@ -322,9 +371,9 @@ export const ControlCenter: FC<{
     <>
       <style>{styles(mergeWithDefault(config.theme))}</style>
       <PinBubble
-        isActive={isNudgeVisible}
+        isActive={nudgeState === "visible"}
         onClick={() => {
-          setIsNudgeVisible(false);
+          setNudgeState("dismissed");
         }}
         content={config.nudgeContent ?? ""}
       />

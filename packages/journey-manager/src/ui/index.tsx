@@ -20,6 +20,7 @@ export interface Ui {
 }
 
 const create = (
+  conversationId: string,
   config: UiConfig | undefined,
   client: Client,
   findActiveTriggers: (
@@ -40,6 +41,7 @@ const create = (
     uiElement.style.zIndex = "1000";
     uiElement.config = config;
     uiElement.client = client;
+    uiElement.conversationId = conversationId;
     document.body.appendChild(uiElement);
 
     const updateHighlights = config.highlights
