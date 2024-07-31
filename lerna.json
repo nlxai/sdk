@@ -17,6 +17,6 @@
     "packages/journey-manager",
     "packages/website"
   ],
-  "version": "0.1.44",
+  "version": "0.1.45",
   "$schema": "node_modules/lerna/schemas/lerna-schema.json"
 }
