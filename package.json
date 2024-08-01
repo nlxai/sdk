@@ -15,7 +15,7 @@
     "publish-docs": "lerna run publish-docs",
     "test": "lerna run test && cd test-repos/chat-core && npm install && npm run test",
     "tsc": "lerna run tsc",
-    "watch": "lerna watch -- lerna run build --since"
+    "watch": "lerna watch -- lerna run build --since HEAD"
   },
   "author": "Peter Szerzo <peter@nlx.ai>",
   "license": "MIT",
