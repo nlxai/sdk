@@ -66,6 +66,7 @@ button {
 
 .pin-bubble-content {
   line-height: 1.4;
+  width: fit-content;
   padding: 4px 6px;
 }
 

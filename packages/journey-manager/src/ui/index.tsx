@@ -38,7 +38,6 @@ const create = (
     const uiElement = document.createElement(
       "journey-manager",
     ) as JourneyManagerElement;
-    uiElement.style.zIndex = "1000";
     uiElement.config = config;
     uiElement.client = client;
     uiElement.conversationId = conversationId;
