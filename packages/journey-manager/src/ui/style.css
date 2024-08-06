@@ -12,7 +12,7 @@ p {
 .highlights {
   --gray: #666;
   --gray-hover: #444;
-  z-index: 1000;
+  z-index: 200001;
 }
 
 button {
@@ -66,6 +66,7 @@ button {
 
 .pin-bubble-content {
   line-height: 1.4;
+  width: fit-content;
   padding: 4px 6px;
 }
 
