@@ -3,7 +3,7 @@
   description = "nlx SDK dev env";
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
 
   outputs =
     { self
@@ -33,7 +33,7 @@
           # caddy is used to mimic github actions more closely than the vite dev server. Not used in production
           (assertVersion "2.7.6" caddy)
           # comrak is used to preview rendered markdown. Not used in production.
-          (assertVersion "0.19.0" comrak)
+          (assertVersion "0.23.0" comrak)
           # used for testing dead website links
           (assertVersion "1.21.4" wget)
         ];
