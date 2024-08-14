@@ -408,15 +408,44 @@ export interface StructuredRequest {
   poll?: boolean;
 }
 
-interface BotRequest {
+/**
+ * The request data actually sent to the bot, slightly different from {@link UserResponsePayload}, which includes some UI-specific information
+ */
+export interface BotRequest {
+  /**
+   * The current conversation ID
+   */
   conversationId?: string;
+  /**
+   * The current user ID
+   */
   userId?: string;
+  /**
+   * Request context, if applicable
+   */
   context?: Context;
+  /**
+   * Main request
+   */
   request: {
+    /**
+     * Unstructured request
+     */
     unstructured?: {
+      /**
+       * Request body text
+       */
       text: string;
     };
-    structured?: StructuredRequest & { slots?: SlotValue[] };
+    /**
+     * Structured request
+     */
+    structured?: StructuredRequest & {
+      /**
+       * Only array-form slots are allowed for the purposes of sending to the backend
+       */
+      slots?: SlotValue[];
+    };
   };
 }
 
@@ -446,6 +475,16 @@ export interface ChoiceRequestMetadata {
    */
   intentId?: string;
 }
+
+/**
+ * Instead of sending a request to the bot, handle it in a custom fashion
+ * @param botRequest - The {@link BotRequest} that is being overridden
+ * @param appendResponse - A method to append the {@link BotResponsePayload} to the message history
+ */
+export type BotRequestOverride = (
+  botRequest: BotRequest,
+  appendBotResponse: (res: BotResponsePayload) => void,
+) => void;
 
 /**
  * A bundle of functions to interact with a conversation, created by {@link createConversation}.
@@ -526,6 +565,10 @@ export interface ConversationHandler {
    * Removes all subscribers and, if using websockets, closes the connection.
    */
   destroy: () => void;
+  /**
+   * Optional {@link BotRequestOverride} function used to bypass the bot request and handle them in a custom fashion
+   */
+  setBotRequestOverride: (override: BotRequestOverride | undefined) => void;
 }
 
 interface InternalState {
@@ -661,12 +704,30 @@ export function createConversation(config: Config): ConversationHandler {
     }
   };
 
+  let botRequestOverride: BotRequestOverride | undefined;
+
   let socketMessageQueue: BotRequest[] = [];
 
   let socketMessageQueueCheckInterval: ReturnType<typeof setInterval> | null =
     null;
 
   const sendToBot = async (body: BotRequest): Promise<void> => {
+    if (botRequestOverride != null) {
+      botRequestOverride(body, (payload) => {
+        const newResponse: Response = {
+          type: "bot",
+          receivedAt: new Date().getTime(),
+          payload,
+        };
+        setState(
+          {
+            responses: [...state.responses, newResponse],
+          },
+          newResponse,
+        );
+      });
+      return;
+    }
     const bodyWithContext = {
       userId: state.userId,
       conversationId: state.conversationId,
@@ -938,6 +999,9 @@ export function createConversation(config: Config): ConversationHandler {
       if (isUsingWebSockets()) {
         teardownWebsocket();
       }
+    },
+    setBotRequestOverride: (val: BotRequestOverride | undefined) => {
+      botRequestOverride = val;
     },
   };
 }
