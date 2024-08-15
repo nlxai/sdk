@@ -29,7 +29,7 @@
       formatter = pkgs.nixpkgs-fmt;
       devShells.default = pkgs.mkShell {
         packages = with pkgs; [
-          (assertVersion (nixpkgs.lib.strings.fileContents "${self}/.node-version") nodejs_18)
+          (assertVersion (nixpkgs.lib.strings.fileContents "${self}/.node-version") nodejs_22)
           # caddy is used to mimic github actions more closely than the vite dev server. Not used in production
           (assertVersion "2.7.6" caddy)
           # comrak is used to preview rendered markdown. Not used in production.
