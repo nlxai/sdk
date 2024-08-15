@@ -154,6 +154,8 @@ const runJourneyManager = async (): Promise<unknown> => {
             // eslint-disable-next-line no-console
             console.log("Google Chat button click");
           },
+          confirmation:
+            "Are you sure you want to navigate to Google Chat? This will end the call.",
         },
       ],
     },
