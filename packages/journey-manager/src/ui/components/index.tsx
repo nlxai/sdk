@@ -13,6 +13,7 @@ import {
 } from "./icons";
 import type {
   SimpleHandlerArg,
+  ButtonConfig,
   UiConfig,
   Theme as PartialTheme,
   TriggeredStep,
@@ -109,6 +110,51 @@ const Confirmation: FC<{
         </button>
       </div>
     </div>
+  );
+};
+
+const CustomButton: FC<{
+  buttonConfig: ButtonConfig;
+  client: Client;
+  triggeredSteps: TriggeredStep[];
+}> = ({ buttonConfig, client, triggeredSteps }) => {
+  const [status, setStatus] = useState<"confirming" | null>(null);
+
+  return (
+    <>
+      {status === "confirming" && buttonConfig.confirmation != null ? (
+        <DrawerDialog>
+          <Confirmation
+            content={buttonConfig.confirmation}
+            onConfirm={() => {
+              buttonConfig.onClick({
+                sendStep: client.sendStep,
+                triggeredSteps,
+              });
+              setStatus(null);
+            }}
+            onCancel={() => {
+              setStatus(null);
+            }}
+          />
+        </DrawerDialog>
+      ) : null}
+      <button
+        className="drawer-button"
+        onClick={() => {
+          if (buttonConfig.confirmation != null) {
+            setStatus("confirming");
+          } else {
+            buttonConfig.onClick({
+              sendStep: client.sendStep,
+              triggeredSteps,
+            });
+          }
+        }}
+      >
+        {buttonConfig.label}
+      </button>
+    </>
   );
 };
 
@@ -473,18 +519,12 @@ export const ControlCenter: FC<{
             ) : null}
 
             {(config.buttons ?? []).map((buttonConfig, buttonIndex) => (
-              <button
-                className="drawer-button"
+              <CustomButton
                 key={buttonIndex}
-                onClick={() => {
-                  buttonConfig.onClick({
-                    sendStep: client.sendStep,
-                    triggeredSteps,
-                  });
-                }}
-              >
-                {buttonConfig.label}
-              </button>
+                buttonConfig={buttonConfig}
+                client={client}
+                triggeredSteps={triggeredSteps}
+              />
             ))}
           </div>
           <div className="drawer-footer">
