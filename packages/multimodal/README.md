@@ -4,7 +4,7 @@ The API for creating multi-modal integrations with a voice assistant.
 
 ## Installation
 
-`npm install --save @nlxai/multimodal
+`npm install --save @nlxai/multimodal`
 
 ## Usage
 
