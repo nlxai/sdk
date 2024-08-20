@@ -1,4 +1,4 @@
-/* eslint-disable accessor-pairs */
+ 
 import { type Client } from "@nlxai/multimodal";
 import { render } from "preact";
 import { ControlCenter } from "./components";

@@ -6,9 +6,6 @@ import type {
   ActiveTriggerEventType,
   StepWithQueryAndElements,
 } from "../trigger";
-import highlightBoxShadow, {
-  teardown as teardownBoxShadowHighlight,
-} from "./highlightBoxShadow";
 
 customElements.define("journey-manager", JourneyManagerElement);
 
