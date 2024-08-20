@@ -38,40 +38,10 @@ const create = (
     const uiElement = document.createElement(
       "journey-manager",
     ) as JourneyManagerElement;
-    uiElement.config = config;
-    uiElement.client = client;
-    uiElement.conversationId = conversationId;
+    uiElement.init({ config, client, conversationId, findActiveTriggers });
     document.body.appendChild(uiElement);
 
-    const updateHighlights = config.highlights
-      ? () => {
-          const highlightElements = findActiveTriggers("click").flatMap(
-            (activeTrigger) => activeTrigger.elements,
-          );
-          if (uiElement != null && config.highlightStrategy === "overlay") {
-            uiElement.highlightElements = highlightElements;
-          } else {
-            highlightBoxShadow(config, highlightElements);
-          }
-        }
-      : () => {};
-
-    updateHighlights();
-
-    return {
-      updateHighlights,
-      setTriggeredSteps: (steps) => {
-        uiElement.triggeredSteps = steps;
-      },
-      setDigression: (value) => {
-        uiElement.digression = value;
-      },
-      teardown() {
-        document.body.removeChild(uiElement);
-        if (config.highlightStrategy !== "overlay")
-          teardownBoxShadowHighlight();
-      },
-    };
+    return uiElement;
   }
 };
 
