@@ -21,6 +21,10 @@ export interface Trigger {
    */
   once?: boolean;
   /**
+   * A flag specifying whether the trigger should highlight. Only applicable to click triggers.
+   */
+  highlight?: boolean;
+  /**
    * URL condition
    */
   urlCondition?: UrlCondition;
@@ -81,6 +85,10 @@ export interface Step {
  */
 export type StepWithQuery = Step & {
   query: Query;
+  /**
+   * controls whether the step should highlight. Only applicable to click steps.
+   */
+  highlight: boolean;
 };
 
 /**
@@ -124,6 +132,7 @@ const ofActiveType =
             query: decode(trigger.query),
             urlCondition: trigger.urlCondition,
             once: trigger.once,
+            highlight: trigger.highlight ?? true,
           };
         }
       },

@@ -1,4 +1,3 @@
- 
 import { type Client } from "@nlxai/multimodal";
 import { render } from "preact";
 import { ControlCenter } from "./components";
@@ -79,10 +78,11 @@ export default class JourneyManagerElement extends HTMLElement {
       const highlightElements = this._findActiveTriggers("click")
         .filter(
           (step) =>
-            !step.once ||
-            !this._triggeredSteps.some(
-              (triggered) => triggered.stepId === step.stepId,
-            ),
+            step.highlight &&
+            (!step.once ||
+              !this._triggeredSteps.some(
+                (triggered) => triggered.stepId === step.stepId,
+              )),
         )
         .flatMap((activeTrigger) => activeTrigger.elements);
       if (this._config.highlightStrategy === "overlay") {
