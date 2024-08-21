@@ -67,6 +67,19 @@ const triggersWithNames: Record<string, { name: string; trigger: Trigger }> = {
       },
     },
   },
+  "2e652b0c-0b03-4a99-b5d1-1e3fdd77839b": {
+    name: "click on button (no highlight)",
+    trigger: {
+      event: "click",
+      highlight: false,
+      query: {
+        parent: null,
+        options: null,
+        name: "QuerySelector",
+        target: "#click-no-highlight",
+      },
+    },
+  },
   "5bfa7a7e-8869-4fb8-a105-c0a1aa6d9d45": {
     name: "scroll to heading",
     trigger: {
@@ -365,6 +378,12 @@ export const Prototyping: FC<unknown> = () => {
           className="bg-blueMain px-4 py-1 text-white rounded hover:bg-blueDarker"
         >
           Trigger click once
+        </button>
+        <button
+          id="click-no-highlight"
+          className="bg-blueMain px-4 py-1 text-white rounded hover:bg-blueDarker"
+        >
+          Trigger click no highlight
         </button>
       </div>
       <div className="flex gap-4 border-b border-gray-200">
