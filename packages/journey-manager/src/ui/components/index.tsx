@@ -152,6 +152,9 @@ const CustomButton: FC<{
           }
         }}
       >
+        {buttonConfig.iconUrl != null ? (
+          <img src={buttonConfig.iconUrl} role="presentation" />
+        ) : null}
         {buttonConfig.label}
       </button>
     </>
