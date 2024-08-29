@@ -10,7 +10,7 @@
     "tsc": "tsc index.ts --target ESNext --moduleResolution 'bundler'"
   },
   "devDependencies": {
-    "typescript": "^5.2.2"
+    "typescript": "^5.5.4"
   },
   "dependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
