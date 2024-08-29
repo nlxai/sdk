@@ -8,32 +8,37 @@ import typescript from "@rollup/plugin-typescript";
 import { Plugin, RollupOptions } from "rollup";
 
 interface CommonConfig {
-  pkg: {
-    main: string;
-    module: string;
-  };
   externalDeps: string[];
   input: string;
-  plugins: Plugin[];
+  plugins?: Plugin[];
+}
+
+interface CommonPackageJsonFields {
+  main: string;
+  module: string;
+}
+
+export interface PackageJsonWithBrowser extends CommonPackageJsonFields {
+  browser: string;
+}
+
+export interface PackageJsonWithoutBrowser extends CommonPackageJsonFields {
+  browser?: never;
 }
 
 interface WithBrowserConfig {
-  pkg: {
-    browser: string;
-  };
+  pkg: PackageJsonWithBrowser;
   name: string;
 }
 
 interface WithoutBrowserConfig {
-  pkg?: {
-    browser?: never;
-  };
+  pkg: PackageJsonWithoutBrowser;
   name?: never;
 }
 
 export type Config = (WithBrowserConfig | WithoutBrowserConfig) & CommonConfig;
 
-export default function buildconfig({
+export default function rollupConfig({
   pkg,
   name,
   externalDeps,
