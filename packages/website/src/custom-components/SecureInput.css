@@ -1,7 +1,6 @@
 .form-container,
 .success-container {
   font-size: 32px;
-  height: 168px;
   padding: 20px;
   background: #efefef;
 }
@@ -15,6 +14,7 @@
 
 .form-container form {
   margin: 0;
+  width: 100%;
 }
 
 .form-container form > input {
@@ -36,11 +36,13 @@
   fill: green;
 }
 
-input {
+.form-container input {
   width: 100%;
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  font-size: 0.75rem;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #dedede;
+  border-radius: 6px;
 }
 
 .form-container [type="submit"] {
