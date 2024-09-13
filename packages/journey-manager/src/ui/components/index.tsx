@@ -377,6 +377,7 @@ export const ControlCenter: FC<{
   digression,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>();
+  const drawerContainerRef = useRef<HTMLDivElement | null>(null);
   const drawerContentRef = useRef<HTMLDivElement | null>(null);
   const drawerDialogRef = useRef<HTMLDivElement | null>(null);
   const [nudgeState, setNudgeState] = useState<NudgeState>(
@@ -465,14 +466,15 @@ export const ControlCenter: FC<{
       </button>
       <div
         className={`drawer ${isOpen ? "drawer-open" : ""} `}
-        onClick={(event: any) => {
-          if (
-            event.target != null &&
-            drawerContentRef.current != null &&
-            !drawerContentRef.current.contains(event.target as Node)
-          ) {
-            // Does not work due to portal component bubbling
-            // setIsOpen(false);
+        ref={drawerContainerRef}
+        onClick={(event) => {
+          /*
+           * Detect click outside the drawer content (conventional `useClickAway` does not work because
+           * the event target is the custom element container itself when the click event is attached
+           * to the document).
+           */
+          if (event.target === drawerContainerRef.current) {
+            setIsOpen(false);
           }
         }}
       >
