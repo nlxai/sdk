@@ -11,7 +11,7 @@ p {
 .drawer,
 .highlights {
   --gray: #666;
-  --gray-hover: #444;
+  --gray-hover: #333;
   z-index: 200001;
 }
 
@@ -345,7 +345,7 @@ button {
   background-color: var(--primary);
   color: white;
   border-radius: 4px;
-  padding: 2px 6px;
+  padding: 4px 8px;
 }
 
 .confirm-button:disabled {
@@ -360,10 +360,10 @@ button {
   background: none;
   color: var(--gray);
   border-radius: 4px;
-  padding: 2px 6px;
+  padding: 4px 8px;
 }
 
-.cancel-button {
+.cancel-button:hover {
   color: var(--gray-hover);
 }
 
