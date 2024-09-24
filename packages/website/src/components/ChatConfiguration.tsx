@@ -106,7 +106,7 @@ export const ConfigEditor: FC<{
           className={inputClass}
           value={config.languageCode}
           onInput={(ev: any) => {
-            props.onChange({ headers: { languageCode: ev.target.value } });
+            props.onChange({ languageCode: ev.target.value });
           }}
         />
       </Labeled>
