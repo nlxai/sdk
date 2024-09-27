@@ -7,7 +7,11 @@ import type {
   StepWithQueryAndElements,
 } from "../trigger";
 
-customElements.define("journey-manager", JourneyManagerElement);
+// this is a workaround because most of JourneyManager we want to only use in the browser, but some of it we want to render server side.
+// where the customElements API is not available.
+if (typeof customElements !== "undefined") {
+  customElements.define("journey-manager", JourneyManagerElement);
+}
 
 export interface Ui {
   teardown: () => void;

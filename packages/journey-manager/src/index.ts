@@ -33,6 +33,7 @@ export type {
   TriggeredStep,
 } from "./configuration";
 export type { UrlCondition } from "./UrlCondition";
+export { iconUrls } from "./ui/components/icons";
 
 /**
  * Configuration for the run method

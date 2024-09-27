@@ -10,6 +10,14 @@ import highlightBoxShadow, {
   teardown as teardownBoxShadowHighlight,
 } from "./highlightBoxShadow";
 
+if (typeof HTMLElement === "undefined") {
+  // this is a workaround because most of JourneyManager we want to only use in the browser, but some of it we want to render server side.
+  // this shim exists just so this file can be parsed by node, but it can't be used in node.
+
+  // eslint-disable-next-line @typescript-eslint/no-extraneous-class
+  (global as any).HTMLElement = class {};
+}
+
 /**
  * @hidden @internal
  */

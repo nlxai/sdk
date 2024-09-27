@@ -1,5 +1,5 @@
 import { type FC, useRef, useEffect, useState } from "react";
-import { type Triggers, type Trigger } from "@nlxai/journey-manager";
+import { type Triggers, type Trigger, iconUrls } from "@nlxai/journey-manager";
 
 // Add extra names for triggers for logging purposes
 const triggersWithNames: Record<string, { name: string; trigger: Trigger }> = {
@@ -361,6 +361,10 @@ export const Prototyping: FC<unknown> = () => {
   return (
     <div className="space-y-4">
       <h1 className="text-xl">Test page</h1>
+      <div
+        className="w-10 h-10 bg-cover"
+        style={{ backgroundImage: `url(${iconUrls.supportAgent})` }}
+      ></div>
       {showError ? (
         <div className="p-2 rounded text-red-600 bg-red-50" id="error">
           Something went wrong
