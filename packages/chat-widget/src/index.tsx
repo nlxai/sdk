@@ -262,7 +262,6 @@ const MessageGroups: FC<{
       }
 
       if (response.type === "user") {
-        console.log(response);
         if (response.payload.type === "text") {
           return (
             <C.MessageGroup key={responseIndex}>
@@ -661,8 +660,6 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
   }, [chat.responses]);
 
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({});
-
-  console.log(uploadedFiles);
 
   const activeUpload = findActiveUpload(chat.responses);
 
