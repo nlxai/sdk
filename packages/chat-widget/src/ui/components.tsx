@@ -360,7 +360,7 @@ export const IconButton = styled.button<{
 
 export const UploadIconLabel = styled.label<{
   /** @hidden @internal */
-  disabled?: boolean;
+  children: React.ReactNode;
 }>`
   height: 35px;
   width: 35px;
@@ -368,13 +368,6 @@ export const UploadIconLabel = styled.label<{
   flex: none;
   padding: 8px;
   font-size: ${constants.fontSize}px;
-  ${(props) =>
-    props.disabled === true
-      ? `
-  opacity: 0.6;
-  `
-      : `
-  `}
   border: 0;
   box-shadow: none;
   color: ${(props) => props.theme.primaryColor};
@@ -411,7 +404,10 @@ export const UploadIconLabel = styled.label<{
   ${hoverBg}
 `;
 
-export const UploadSuccess = styled.div<{}>`
+export const UploadSuccess = styled.div<{
+  /** @hidden @internal */
+  children: React.ReactNode;
+}>`
   height: 35px;
   width: 35px;
   flex: none;
