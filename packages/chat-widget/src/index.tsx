@@ -172,6 +172,7 @@ marked.use(markdownRendererOverrides);
 const MessageGroups: FC<{
   chat: ChatHook;
   children?: ReactNode;
+  uploadedFiles: Record<string, File>;
   customModalities: Record<string, CustomModalityComponent>;
   allowChoiceReselection?: boolean;
 }> = (props) => (
@@ -260,18 +261,55 @@ const MessageGroups: FC<{
         );
       }
 
-      if (response.type === "user" && response.payload.type === "text") {
-        return (
-          <C.MessageGroup key={responseIndex}>
-            <C.Message type="user">
-              <C.MessageBody
-                dangerouslySetInnerHTML={{
-                  __html: marked(response.payload.text),
-                }}
-              />
-            </C.Message>
-          </C.MessageGroup>
-        );
+      if (response.type === "user") {
+        console.log(response);
+        if (response.payload.type === "text") {
+          return (
+            <C.MessageGroup key={responseIndex}>
+              <C.Message type="user">
+                <C.MessageBody
+                  dangerouslySetInnerHTML={{
+                    __html: marked(response.payload.text),
+                  }}
+                />
+              </C.Message>
+            </C.MessageGroup>
+          );
+        }
+
+        if (response.payload.type === "structured") {
+          const { uploadIds, utterance } = response.payload;
+          if (uploadIds == null) {
+            return null;
+          }
+          return (
+            <C.MessageGroup key={responseIndex}>
+              <C.Message type="user">
+                {utterance != null ? (
+                  <C.MessageBody
+                    dangerouslySetInnerHTML={{
+                      __html: marked(utterance),
+                    }}
+                  />
+                ) : null}
+              </C.Message>
+              {uploadIds.map((uploadId) => {
+                const file = props.uploadedFiles[uploadId];
+                if (file != null) {
+                  return (
+                    <img
+                      key={uploadId}
+                      style={{ width: "100%" }}
+                      src={URL.createObjectURL(file)}
+                      role="presentation"
+                    />
+                  );
+                }
+                return null;
+              })}
+            </C.MessageGroup>
+          );
+        }
       }
 
       return null;
@@ -370,6 +408,7 @@ const findActiveUpload = (responses: Response[]): UploadUrl | null => {
 
 interface ImageUploadProps {
   upload: UploadUrl;
+  onNewFile: (file: File) => void;
 }
 
 type UploadStatus = "empty" | "uploading" | "uploaded";
@@ -405,6 +444,7 @@ const ImageUpload: FC<ImageUploadProps> = (props) => {
         },
         body: file,
       });
+      props.onNewFile(file);
       setStatus("uploaded");
     } catch (_err) {
       // TODO: add error handling
@@ -620,6 +660,10 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
     scrollToBottom();
   }, [chat.responses]);
 
+  const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({});
+
+  console.log(uploadedFiles);
+
   const activeUpload = findActiveUpload(chat.responses);
 
   const submit =
@@ -700,6 +744,7 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
                 ) : null}
                 <MessageGroups
                   chat={chat}
+                  uploadedFiles={uploadedFiles}
                   customModalities={props.customModalities ?? {}}
                   allowChoiceReselection={props.allowChoiceReselection}
                 >
@@ -740,6 +785,12 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
                         <ImageUpload
                           key={activeUpload.uploadId}
                           upload={activeUpload}
+                          onNewFile={(file) => {
+                            setUploadedFiles((prev) => ({
+                              ...prev,
+                              [activeUpload.uploadId]: file,
+                            }));
+                          }}
                         />
                       )}
                       <C.IconButton
