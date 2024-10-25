@@ -397,15 +397,13 @@ const ImageUpload: FC<ImageUploadProps> = (props) => {
       return;
     }
     setStatus("uploading");
-    const formData = new FormData();
-    formData.append("file", file);
     try {
       await fetch(props.upload.url, {
         method: "PUT",
         headers: {
           "Content-Type": "image/jpeg",
         },
-        body: formData,
+        body: new Blob([file], { type: file.type }),
       });
       setStatus("uploaded");
     } catch (_err) {
