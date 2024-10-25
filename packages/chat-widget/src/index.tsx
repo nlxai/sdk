@@ -739,7 +739,10 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
                     />
                     <C.BottomButtonsContainer>
                       {activeUpload == null ? null : (
-                        <ImageUpload upload={activeUpload} />
+                        <ImageUpload
+                          key={activeUpload.uploadId}
+                          upload={activeUpload}
+                        />
                       )}
                       <C.IconButton
                         disabled={Boolean(submit === false)}
