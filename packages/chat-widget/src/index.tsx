@@ -2,6 +2,7 @@ import { marked, type MarkedExtension } from "marked";
 import {
   type FC,
   type ReactNode,
+  type ChangeEvent,
   createRef,
   useEffect,
   useCallback,
@@ -388,30 +389,38 @@ const ImageUpload: FC<ImageUploadProps> = (props) => {
     );
   }
 
+  const handleChange = async (
+    ev: ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const file = ev.target.files?.[0];
+    if (file == null) {
+      return;
+    }
+    setStatus("uploading");
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      await fetch(props.upload.url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "image/jpeg",
+        },
+        body: formData,
+      });
+      setStatus("uploaded");
+    } catch (_err) {
+      // TODO: add error handling
+      setStatus("empty");
+    }
+  };
+
   return (
     <C.UploadIconLabel>
       <input
         type="file"
-        onChange={async (ev) => {
-          const file = ev.target.files?.[0];
-          if (file == null) {
-            return;
-          }
-          setStatus("uploading");
-          const formData = new FormData();
-          formData.append("file", file);
-          try {
-            await fetch(props.upload.url, {
-              method: "PUT",
-              headers: {
-                "Content-Type": "image/jpeg",
-              },
-              body: formData,
-            });
-            setStatus("uploaded");
-          } catch (err) {
-            console.error(err);
-          }
+        onChange={(ev) => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          handleChange(ev);
         }}
       />
       <AddPhotoIcon />
