@@ -26,9 +26,25 @@ export const ChatIcon = (): ReactNode => (
 
 // eslint-disable-next-line jsdoc/require-returns
 /** @hidden @internal */
+export const CheckIcon = (): ReactNode => (
+  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
+    <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+  </svg>
+);
+
+// eslint-disable-next-line jsdoc/require-returns
+/** @hidden @internal */
 export const SendIcon = (): ReactNode => (
-  <svg viewBox="0 0 360 360" stroke="none" fill="currentColor">
+  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
     <path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z" />
+  </svg>
+);
+
+// eslint-disable-next-line jsdoc/require-returns
+/** @hidden @internal */
+export const AddPhotoIcon = (): ReactNode => (
+  <svg viewBox="0 0 24 24" stroke="none" fill="currentColor">
+    <path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8zM5 19l3-4 2 3 3-4 4 5z" />
   </svg>
 );
 

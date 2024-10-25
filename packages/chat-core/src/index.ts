@@ -128,6 +128,10 @@ export interface BotResponseMetadata {
    */
   incomprehension?: boolean;
   /**
+   * Upload URL's
+   */
+  uploadUrls: UploadUrl[];
+  /**
    * Whether the client should poll for more bot responses.
    */
   hasPendingDataRequest?: boolean;
@@ -174,6 +178,20 @@ export interface BotMessage {
    * This field is set locally and does not come from the bot.
    */
   selectedChoiceId?: string;
+}
+
+/**
+ * The upload destination for handling conversing with files
+ */
+export interface UploadUrl {
+  /**
+   * The URL of the upload
+   */
+  url: string;
+  /**
+   * The ID of the upload
+   */
+  uploadId: string;
 }
 
 /**
@@ -401,6 +419,14 @@ export interface StructuredRequest {
    * The slots to populate
    */
   slots?: SlotsRecordOrArray;
+  /**
+   * Upload ID
+   */
+  uploadIds?: string[];
+  /**
+   * Upload utterance
+   */
+  utterance?: string;
   /**
    * @hidden
    * This is used internally to indicate that the client is polling the bot for more data.

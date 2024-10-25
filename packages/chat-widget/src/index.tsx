@@ -2,6 +2,7 @@ import { marked, type MarkedExtension } from "marked";
 import {
   type FC,
   type ReactNode,
+  type ChangeEvent,
   createRef,
   useEffect,
   useCallback,
@@ -18,7 +19,9 @@ import { ThemeProvider } from "@emotion/react";
 import { useChat, type ChatHook } from "@nlxai/chat-react";
 import {
   type Response,
+  type BotResponse,
   type ConversationHandler,
+  type UploadUrl,
   getCurrentExpirationTimestamp,
 } from "@nlxai/chat-core";
 import {
@@ -26,9 +29,11 @@ import {
   MinimizeIcon,
   ChatIcon,
   SendIcon,
+  CheckIcon,
+  AddPhotoIcon,
   ErrorOutlineIcon,
 } from "./icons";
-import { last, equals } from "ramda";
+import { last, equals, findLast } from "ramda";
 import * as constants from "./ui/constants";
 import {
   type Props,
@@ -167,6 +172,7 @@ marked.use(markdownRendererOverrides);
 const MessageGroups: FC<{
   chat: ChatHook;
   children?: ReactNode;
+  uploadedFiles: Record<string, File>;
   customModalities: Record<string, CustomModalityComponent>;
   allowChoiceReselection?: boolean;
 }> = (props) => (
@@ -255,18 +261,54 @@ const MessageGroups: FC<{
         );
       }
 
-      if (response.type === "user" && response.payload.type === "text") {
-        return (
-          <C.MessageGroup key={responseIndex}>
-            <C.Message type="user">
-              <C.MessageBody
-                dangerouslySetInnerHTML={{
-                  __html: marked(response.payload.text),
-                }}
-              />
-            </C.Message>
-          </C.MessageGroup>
-        );
+      if (response.type === "user") {
+        if (response.payload.type === "text") {
+          return (
+            <C.MessageGroup key={responseIndex}>
+              <C.Message type="user">
+                <C.MessageBody
+                  dangerouslySetInnerHTML={{
+                    __html: marked(response.payload.text),
+                  }}
+                />
+              </C.Message>
+            </C.MessageGroup>
+          );
+        }
+
+        if (response.payload.type === "structured") {
+          const { uploadIds, utterance } = response.payload;
+          if (uploadIds == null) {
+            return null;
+          }
+          return (
+            <C.MessageGroup key={responseIndex}>
+              <C.Message type="user">
+                {utterance != null ? (
+                  <C.MessageBody
+                    dangerouslySetInnerHTML={{
+                      __html: marked(utterance),
+                    }}
+                  />
+                ) : null}
+              </C.Message>
+              {uploadIds.map((uploadId) => {
+                const file = props.uploadedFiles[uploadId];
+                if (file != null) {
+                  return (
+                    <img
+                      key={uploadId}
+                      style={{ maxWidth: "100%", borderRadius: "10px" }}
+                      src={URL.createObjectURL(file)}
+                      alt={file.name}
+                    />
+                  );
+                }
+                return null;
+              })}
+            </C.MessageGroup>
+          );
+        }
       }
 
       return null;
@@ -350,6 +392,77 @@ const isInputDisabled = (responses: Response[]): boolean => {
   }
   const payload = lastResponse.payload.payload ?? "";
   return new URLSearchParams(payload).get("nlx:input-disabled") === "true";
+};
+
+const findActiveUpload = (responses: Response[]): UploadUrl | null => {
+  const lastBotResponse = findLast(
+    (response): response is BotResponse => response.type === "bot",
+    responses,
+  );
+  if (lastBotResponse == null) {
+    return null;
+  }
+  return lastBotResponse.payload.metadata?.uploadUrls?.[0] ?? null;
+};
+
+interface ImageUploadProps {
+  upload: UploadUrl;
+  onNewFile: (file: File) => void;
+}
+
+type UploadStatus = "empty" | "uploading" | "uploaded";
+
+const ImageUpload: FC<ImageUploadProps> = (props) => {
+  const [status, setStatus] = useState<UploadStatus>("empty");
+
+  if (status === "uploading") {
+    return <C.PendingMessageDots />;
+  }
+
+  if (status === "uploaded") {
+    return (
+      <C.UploadSuccess>
+        <CheckIcon />
+      </C.UploadSuccess>
+    );
+  }
+
+  const handleChange = async (
+    ev: ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const file = ev.target.files?.[0];
+    if (file == null) {
+      return;
+    }
+    setStatus("uploading");
+    try {
+      await fetch(props.upload.url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "image/jpeg",
+        },
+        body: file,
+      });
+      props.onNewFile(file);
+      setStatus("uploaded");
+    } catch (_err) {
+      // TODO: add error handling
+      setStatus("empty");
+    }
+  };
+
+  return (
+    <C.UploadIconLabel>
+      <input
+        type="file"
+        onChange={(ev) => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          handleChange(ev);
+        }}
+      />
+      <AddPhotoIcon />
+    </C.UploadIconLabel>
+  );
 };
 
 /**
@@ -546,9 +659,26 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
     scrollToBottom();
   }, [chat.responses]);
 
+  const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({});
+
+  /**
+   * IMPORTANT: upload state will get wiped out if there is a newer bot response comes in with different upload configuration.
+   * This is generally the way conversations are intended to work (choice buttons also do not work by default after new messages come in),
+   * and it's worth keeping these limitations in mind when designing/maintaining state management.
+   */
+  const activeUpload = findActiveUpload(chat.responses);
+
   const submit =
     chat.inputValue.replace(/ /gi, "") !== "" &&
     (() => {
+      if (activeUpload !== null) {
+        chat.conversationHandler.sendStructured({
+          uploadIds: [activeUpload.uploadId],
+          utterance: chat.inputValue,
+        });
+        chat.setInputValue("");
+        return;
+      }
       chat.conversationHandler.sendText(chat.inputValue);
       chat.setInputValue("");
     });
@@ -616,6 +746,7 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
                 ) : null}
                 <MessageGroups
                   chat={chat}
+                  uploadedFiles={uploadedFiles}
                   customModalities={props.customModalities ?? {}}
                   allowChoiceReselection={props.allowChoiceReselection}
                 >
@@ -652,6 +783,18 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
                       }}
                     />
                     <C.BottomButtonsContainer>
+                      {activeUpload == null ? null : (
+                        <ImageUpload
+                          key={activeUpload.uploadId}
+                          upload={activeUpload}
+                          onNewFile={(file) => {
+                            setUploadedFiles((prev) => ({
+                              ...prev,
+                              [activeUpload.uploadId]: file,
+                            }));
+                          }}
+                        />
+                      )}
                       <C.IconButton
                         disabled={Boolean(submit === false)}
                         onClick={() => {
