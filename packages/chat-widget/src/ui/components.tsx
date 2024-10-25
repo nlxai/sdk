@@ -358,6 +358,68 @@ export const IconButton = styled.button<{
   ${hoverBg}
 `;
 
+export const UploadIconLabel = styled.label<{
+  /** @hidden @internal */
+  disabled?: boolean;
+}>`
+  height: 35px;
+  width: 35px;
+  border-radius: 18px;
+  flex: none;
+  padding: 8px;
+  font-size: ${constants.fontSize}px;
+  ${(props) =>
+    props.disabled === true
+      ? `
+  opacity: 0.6;
+  `
+      : `
+  `}
+  border: 0;
+  box-shadow: none;
+  color: ${(props) => props.theme.primaryColor};
+  background: none;
+  position: relative;
+  cursor: pointer;
+
+  :focus {
+    outline: none;
+    ${(props) => focusShadow(props.theme)}
+  }
+
+  :disabled {
+    cursor: auto;
+  }
+
+  svg {
+    fill: ${(props) => props.theme.primaryColor};
+  }
+
+  input {
+    /** Screen-reader-only implementation */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  ${hoverBg}
+`;
+
+export const UploadSuccess = styled.div<{}>`
+  height: 35px;
+  width: 35px;
+  flex: none;
+  padding: 8px;
+  font-size: ${constants.fontSize}px;
+  color: green;
+`;
+
 export const BottomButtonsContainer = styled.div<{
   /**
    *
@@ -368,6 +430,8 @@ export const BottomButtonsContainer = styled.div<{
   top: 50%;
   right: ${(props) => `${props.theme.spacing}px`};
   transform: translate3d(0, -50%, 0);
+  display: flex;
+  align-items: center;
 `;
 
 export const Input = styled.input<{
@@ -463,6 +527,7 @@ interface PinBubbleProps {
    */
   onClick: () => void;
 }
+
 // eslint-disable-next-line jsdoc/require-returns, jsdoc/require-param
 /** @hidden @internal */
 export const PinBubble: React.FunctionComponent<PinBubbleProps> = (

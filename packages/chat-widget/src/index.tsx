@@ -18,7 +18,9 @@ import { ThemeProvider } from "@emotion/react";
 import { useChat, type ChatHook } from "@nlxai/chat-react";
 import {
   type Response,
+  type BotResponse,
   type ConversationHandler,
+  type UploadUrl,
   getCurrentExpirationTimestamp,
 } from "@nlxai/chat-core";
 import {
@@ -26,9 +28,11 @@ import {
   MinimizeIcon,
   ChatIcon,
   SendIcon,
+  CheckIcon,
+  AddPhotoIcon,
   ErrorOutlineIcon,
 } from "./icons";
-import { last, equals } from "ramda";
+import { last, equals, findLast } from "ramda";
 import * as constants from "./ui/constants";
 import {
   type Props,
@@ -352,6 +356,69 @@ const isInputDisabled = (responses: Response[]): boolean => {
   return new URLSearchParams(payload).get("nlx:input-disabled") === "true";
 };
 
+const findActiveUpload = (responses: Response[]): UploadUrl | null => {
+  const lastBotResponse = findLast(
+    (response): response is BotResponse => response.type === "bot",
+    responses,
+  );
+  if (lastBotResponse == null) {
+    return null;
+  }
+  return lastBotResponse.payload.metadata?.uploadUrls?.[0] ?? null;
+};
+
+interface ImageUploadProps {
+  upload: UploadUrl;
+}
+
+type UploadStatus = "empty" | "uploading" | "uploaded";
+
+const ImageUpload: FC<ImageUploadProps> = (props) => {
+  const [status, setStatus] = useState<UploadStatus>("empty");
+
+  if (status === "uploading") {
+    return <C.PendingMessageDots />;
+  }
+
+  if (status === "uploaded") {
+    return (
+      <C.UploadSuccess>
+        <CheckIcon />
+      </C.UploadSuccess>
+    );
+  }
+
+  return (
+    <C.UploadIconLabel>
+      <input
+        type="file"
+        onChange={async (ev) => {
+          const file = ev.target.files?.[0];
+          if (file == null) {
+            return;
+          }
+          setStatus("uploading");
+          const formData = new FormData();
+          formData.append("file", file);
+          try {
+            await fetch(props.upload.url, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "image/jpeg",
+              },
+              body: formData,
+            });
+            setStatus("uploaded");
+          } catch (err) {
+            console.error(err);
+          }
+        }}
+      />
+      <AddPhotoIcon />
+    </C.UploadIconLabel>
+  );
+};
+
 /**
  * Hook to get the ConversationHandler for the widget.
  * This may be called before the Widget has been created.
@@ -546,9 +613,18 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
     scrollToBottom();
   }, [chat.responses]);
 
+  const activeUpload = findActiveUpload(chat.responses);
+
   const submit =
     chat.inputValue.replace(/ /gi, "") !== "" &&
     (() => {
+      if (activeUpload !== null) {
+        chat.conversationHandler.sendStructured({
+          uploadId: activeUpload.uploadId,
+          utterance: chat.inputValue,
+        });
+        return;
+      }
       chat.conversationHandler.sendText(chat.inputValue);
       chat.setInputValue("");
     });
@@ -652,6 +728,9 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
                       }}
                     />
                     <C.BottomButtonsContainer>
+                      {activeUpload == null ? null : (
+                        <ImageUpload upload={activeUpload} />
+                      )}
                       <C.IconButton
                         disabled={Boolean(submit === false)}
                         onClick={() => {
