@@ -403,7 +403,7 @@ const ImageUpload: FC<ImageUploadProps> = (props) => {
         headers: {
           "Content-Type": "image/jpeg",
         },
-        body: new Blob([file], { type: file.type }),
+        body: file,
       });
       setStatus("uploaded");
     } catch (_err) {
