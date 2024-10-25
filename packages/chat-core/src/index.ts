@@ -422,7 +422,7 @@ export interface StructuredRequest {
   /**
    * Upload ID
    */
-  uploadId?: string;
+  uploadIds?: string[];
   /**
    * Upload utterance
    */

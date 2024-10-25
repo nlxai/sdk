@@ -620,9 +620,10 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
     (() => {
       if (activeUpload !== null) {
         chat.conversationHandler.sendStructured({
-          uploadId: activeUpload.uploadId,
+          uploadIds: [activeUpload.uploadId],
           utterance: chat.inputValue,
         });
+        chat.setInputValue("");
         return;
       }
       chat.conversationHandler.sendText(chat.inputValue);
