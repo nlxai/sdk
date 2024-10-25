@@ -300,7 +300,7 @@ const MessageGroups: FC<{
                       key={uploadId}
                       style={{ maxWidth: "100%", borderRadius: "10px" }}
                       src={URL.createObjectURL(file)}
-                      role="presentation"
+                      alt={file.name}
                     />
                   );
                 }
@@ -394,11 +394,6 @@ const isInputDisabled = (responses: Response[]): boolean => {
   return new URLSearchParams(payload).get("nlx:input-disabled") === "true";
 };
 
-/**
- * IMPORTANT: upload state will get wiped out if there is a newer bot response comes in with different upload configuration.
- * This is generally the way conversations are intended to work (choice buttons also do not work by default after new messages come in),
- * and it's worth keeping these limitations in mind when designing/maintaining state management.
- */
 const findActiveUpload = (responses: Response[]): UploadUrl | null => {
   const lastBotResponse = findLast(
     (response): response is BotResponse => response.type === "bot",
@@ -666,6 +661,11 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
 
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({});
 
+  /**
+   * IMPORTANT: upload state will get wiped out if there is a newer bot response comes in with different upload configuration.
+   * This is generally the way conversations are intended to work (choice buttons also do not work by default after new messages come in),
+   * and it's worth keeping these limitations in mind when designing/maintaining state management.
+   */
   const activeUpload = findActiveUpload(chat.responses);
 
   const submit =
