@@ -298,7 +298,7 @@ const MessageGroups: FC<{
                   return (
                     <img
                       key={uploadId}
-                      style={{ width: "100%" }}
+                      style={{ width: "100%", borderRadius: "10px" }}
                       src={URL.createObjectURL(file)}
                       role="presentation"
                     />
