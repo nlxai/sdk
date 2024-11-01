@@ -397,6 +397,16 @@ const normalizeSlots = (
   }));
 };
 
+const normalizeStructuredRequest = (
+  structured: StructuredRequest,
+): NormalizedStructuredRequest => ({
+  ...structured,
+  slots:
+    structured.slots != null
+      ? normalizeSlots(structured.slots)
+      : structured.slots,
+});
+
 /**
  * The body of `sendStructured`
  * Includes a combination of choice, slots, and intent in one request.
@@ -433,6 +443,16 @@ export interface StructuredRequest {
    */
   poll?: boolean;
 }
+
+/**
+ * Normalized structured request with a single way to represent slots
+ */
+export type NormalizedStructuredRequest = StructuredRequest & {
+  /**
+   * Only array-form slots are allowed for the purposes of sending to the backend
+   */
+  slots?: SlotValue[];
+};
 
 /**
  * The request data actually sent to the bot, slightly different from {@link UserResponsePayload}, which includes some UI-specific information
@@ -855,7 +875,7 @@ export function createConversation(config: Config): ConversationHandler {
       receivedAt: new Date().getTime(),
       payload: {
         type: "structured",
-        ...structured,
+        ...normalizeStructuredRequest(structured),
         context,
       },
     };
@@ -924,10 +944,7 @@ export function createConversation(config: Config): ConversationHandler {
       void sendToBot({
         context,
         request: {
-          structured: {
-            ...structured,
-            slots: normalizeSlots(structured.slots ?? []),
-          },
+          structured: normalizeStructuredRequest(structured),
         },
       });
     },
