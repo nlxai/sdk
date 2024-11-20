@@ -6,7 +6,7 @@ import { create } from "xmlbuilder2";
 import type { XMLBuilder } from "xmlbuilder2/lib/interfaces";
 // @ts-expect-error we need to build this before usage to ensure cache-busted assets are included, but building right now doesn't build .d.ts files
 import { render as untypedRender } from "./dist/static/static-renderer.js";
-const render: (url: string) => string = untypedRender;
+const render: (url: string) => { head: string; body: string } = untypedRender;
 
 /* this script statically renders the website, and generates a sitemap */
 
@@ -57,7 +57,9 @@ const template = (
 async function renderTo(url: string, destination: string): Promise<void> {
   const rendered = render(url);
 
-  const html = template.replace(`<!--app-html-->`, rendered ?? "");
+  const html = template
+    .replace("<!--app-body-->", rendered.body ?? "")
+    .replace("<!--app-head-->", rendered.head);
 
   await fs.mkdir(dirname(destination), { recursive: true });
   await fs.writeFile(destination, html);
