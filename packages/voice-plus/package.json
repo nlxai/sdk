@@ -34,7 +34,7 @@
     "@rollup/plugin-typescript": "^11.1.5",
     "@types/isomorphic-fetch": "^0.0.36",
     "@types/jest": "^29.5.12",
-    "@types/node": "^11.15.11",
+    "@types/node": "^22.10.1",
     "@types/ramda": "0.29.1",
     "concat-md": "^0.5.1",
     "eslint-config-nlx": "*",
