@@ -1,7 +1,7 @@
 import { stepIdRegex } from "../src";
 import fc from "fast-check";
 
-describe("multimodal library", () => {
+describe("Voice+ library", () => {
   describe("stepIdRegex", () => {
     it("should not match non-uuid-like strings", () => {
       [

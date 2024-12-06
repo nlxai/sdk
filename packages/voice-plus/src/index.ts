@@ -4,14 +4,14 @@ import fetch from "isomorphic-fetch";
 const Console = console;
 
 /**
- * The starting point of the package. Call create to create a multimodal client.
+ * The starting point of the package. Call create to create a Voice+ client.
  * @example
  * ```typescript
- *  const client = nlxai.multimodal.create({
+ *  const client = nlxai.voicePlus.create({
  *  // hard-coded params
  *  apiKey: "REPLACE_WITH_API_KEY",
  *  workspaceId: "REPLACE_WITH_WORKSPACE_ID",
- *  journeyId: "REPLACE_WITH_JOURNEY_ID",
+ *  scriptId: "REPLACE_WITH_SCRIPT_ID",
  *  // dynamic params
  *  conversationId: "REPLACE_WITH_CONVERSATION_ID",
  *  languageCode: "en-US",
@@ -21,20 +21,28 @@ const Console = console;
  * ```
  * @category Setup
  * @param options - configuration options for the client
- * @returns a multimodal client
+ * @returns a Voice+ client
  */
 export const create = ({
   apiKey,
   workspaceId,
   conversationId,
   journeyId,
+  scriptId,
   languageCode,
   debug = false,
   dev = false,
 }: Config): Client => {
+  if (journeyId != null && scriptId == null) {
+    Console.warn("The 'journeyId' field is deprecated, use 'scriptId' instead");
+  }
+  const resolvedJourneyId = scriptId ?? journeyId;
+  if (resolvedJourneyId == null) {
+    Console.warn("You must provide a 'scriptId' parameter");
+  }
   if (typeof conversationId !== "string" || conversationId.length === 0) {
     Console.warn(
-      'No conversation ID provided. Please call the multimodal client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`',
+      'No conversation ID provided. Please call the Voice+ client `create` method with a `conversationId` field extracted from the URL. Example code: `new URLSearchParams(window.location.search).get("cid")`',
     );
   }
   return {
@@ -47,7 +55,7 @@ export const create = ({
         stepId,
         context,
         conversationId,
-        journeyId,
+        journeyId: resolvedJourneyId,
         languageCode,
       };
 
@@ -76,7 +84,7 @@ export const create = ({
 };
 
 /**
- * The multimodal client
+ * The Voice+ client
  * @category Client
  */
 export interface Client {
@@ -84,11 +92,11 @@ export interface Client {
    *
    * @example
    * ```typescript
-   *  const client = nlxai.multimodal.create({
+   *  const client = nlxai.voicePlus.create({
    *  // hard-coded params
    *  apiKey: "REPLACE_WITH_API_KEY",
    *  workspaceId: "REPLACE_WITH_WORKSPACE_ID",
-   *  journeyId: "REPLACE_WITH_JOURNEY_ID",
+   *  scriptId: "REPLACE_WITH_SCRIPT_ID",
    *  // dynamic params
    *  conversationId: "REPLACE_WITH_CONVERSATION_ID",
    *  languageCode: "en-US",
@@ -119,8 +127,13 @@ export type Context = Record<string, any>;
 export interface Config {
   /** * the API key generated for the journey.  */
   apiKey: string;
-  /** the ID of the journey.  */
-  journeyId: string;
+  /**
+   * The ID of the journey.
+   *  @deprecated use `scriptId` instead
+   */
+  journeyId?: string;
+  /** the ID of the script.  */
+  scriptId?: string;
 
   /** your workspace id */
   workspaceId: string;

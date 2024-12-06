@@ -1,8 +1,8 @@
 import {
   type Client,
-  create as createMultimodalClient,
+  create as createVoicePlusClient,
   type Config,
-} from "@nlxai/multimodal";
+} from "@nlxai/voice-plus";
 import { getAll } from "./queries";
 import { matchesUrlCondition } from "./UrlCondition";
 import * as dom from "./utils/dom";
@@ -40,7 +40,7 @@ export { iconUrls } from "./ui/components/icons";
  */
 export interface RunProps {
   /**
-   * The regular multimodal configuration
+   * The regular Voice+ configuration
    */
   config: Config;
   /**
@@ -71,18 +71,18 @@ export interface RunOutput {
    */
   teardown: () => void;
   /**
-   * The regular multimodal SDK client
+   * The regular Voice+ SDK client
    */
   client: Client;
 }
 
 /**
- * Run the multimodal journey
+ * Run the Voice+ script
  * @param props - The run configuration object
- * @returns an promise of an object containing a teardown function and the multimodal client.
+ * @returns an promise of an object containing a teardown function and the Voice+ client.
  */
 export const run = async (props: RunProps): Promise<RunOutput> => {
-  const client = createMultimodalClient(props.config);
+  const client = createVoicePlusClient(props.config);
 
   // --- Set up  triggers ---
   const triggers: Triggers = await trigger.resolveTriggers(

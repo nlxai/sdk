@@ -32,10 +32,10 @@ import { CustomWidgetsOther } from "./content/04-05-custom-widgets-other";
 import { HeadlessGettingStarted } from "./content/05-01-headless-getting-started";
 import { HeadlessApi } from "./content/05-02-headless-api-reference";
 // 6
-import { MultimodalGettingStarted } from "./content/06-01-multimodal-getting-started";
-import { MultimodalUsage } from "./content/06-02-multimodal-usage";
-import { MultimodalApiReference } from "./content/06-03-multimodal-api-reference";
-import { MultimodalTryLive } from "./content/06-04-multimodal-try-live";
+import { VoicePlusGettingStarted } from "./content/06-01-voice-plus-getting-started";
+import { VoicePlusUsage } from "./content/06-02-voice-plus-usage";
+import { VoicePlusApiReference } from "./content/06-03-voice-plus-api-reference";
+import { VoicePlusTryLive } from "./content/06-04-voice-plus-try-live";
 // 7
 import { JourneyManagerGettingStarted } from "./content/07-01-journey-manager-getting-started";
 import { JourneyManagerApiReference } from "./content/07-02-journey-manager-api-reference";
@@ -200,27 +200,27 @@ export const routes: Array<{
     ],
   },
   {
-    heading: "Multimodal",
+    heading: "Voice+",
     items: [
       {
         label: "Getting started",
-        url: "/multimodal-getting-started",
-        element: <MultimodalGettingStarted />,
+        url: "/voice-plus-getting-started",
+        element: <VoicePlusGettingStarted />,
       },
       {
         label: "Usage",
-        url: "/multimodal-usage",
-        element: <MultimodalUsage />,
+        url: "/voice-plus-usage",
+        element: <VoicePlusUsage />,
       },
       {
         label: "API reference",
-        url: "/multimodal-api-reference",
-        element: <MultimodalApiReference />,
+        url: "/voice-plus-api-reference",
+        element: <VoicePlusApiReference />,
       },
       {
         label: "Try live",
-        url: "/multimodal-try-live",
-        element: <MultimodalTryLive />,
+        url: "/voice-plus-try-live",
+        element: <VoicePlusTryLive />,
       },
     ],
   },

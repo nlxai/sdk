@@ -138,7 +138,7 @@ const runJourneyManager = async (): Promise<unknown> => {
   await run({
     config: {
       apiKey: "",
-      journeyId: "",
+      scriptId: "",
       workspaceId: "",
       conversationId: String(new Date().getTime()),
       languageCode: "en-US",

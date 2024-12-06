@@ -1,7 +1,7 @@
 {
-  "name": "@nlxai/multimodal",
+  "name": "@nlxai/voice-plus",
   "version": "0.1.51",
-  "description": "NLX SDK for multimodal experiences with",
+  "description": "NLX SDK for Voice+ experiences",
   "type": "module",
   "main": "lib/index.cjs",
   "module": "lib/index.esm.js",
@@ -19,7 +19,7 @@
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
     "prepublish": "npm run build",
     "preview-docs": "npm run docs && comrak --unsafe --gfm  -o docs/index.html docs/index.md && open docs/index.html",
-    "publish-docs": "npm run docs && mv docs/index.md ../website/src/content/06-03-multimodal-api-reference.md",
+    "publish-docs": "npm run docs && mv docs/index.md ../website/src/content/06-03-voice-plus-api-reference.md",
     "test": "jest && typedoc --emit none",
     "tsc": "tsc"
   },

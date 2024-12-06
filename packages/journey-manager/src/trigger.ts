@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type Config } from "@nlxai/multimodal";
+import { type Config } from "@nlxai/voice-plus";
 import { decode, getAll, type EncodedQuery, type Query } from "./queries";
 import { matchesUrlCondition, type UrlCondition } from "./UrlCondition";
 import { filterMap } from "./utils/filterMap";
@@ -53,7 +53,7 @@ export const resolveTriggers = async (
       ? "https://triggers.dev.mm.nlx.ai"
       : "https://triggers.mm.nlx.ai";
   const triggersFromCdnRequest = await fetch(
-    `${baseUrl}/${config.workspaceId}/${config.journeyId}.json`,
+    `${baseUrl}/${config.workspaceId}/${config.scriptId}.json`,
   );
   const triggersFromCdn = await triggersFromCdnRequest.json();
   return triggersFromCdn;

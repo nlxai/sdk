@@ -1,7 +1,7 @@
 import { type Config } from "@nlxai/chat-core";
 import { type TitleBar, type Theme } from "@nlxai/chat-widget";
 import { umdScriptSrc } from "./constants";
-import { type Config as MMConfig } from "./components/MultimodalConfiguration";
+import { type Config as VoicePlusConfig } from "./components/VoicePlusConfiguration";
 
 export enum Behavior {
   Simple,
@@ -217,11 +217,11 @@ convo.subscribe((responses, newResponse) => {
 // Send a message from the user's end
 convo.sendText("hello");`;
 
-export const multimodalSnippet = ({
+export const voicePlusSnippet = ({
   config,
   environment,
 }: {
-  config?: Partial<MMConfig>;
+  config?: Partial<VoicePlusConfig>;
   environment?: Environment;
 }): string => {
   const conversationId = (() => {
@@ -254,11 +254,11 @@ export const multimodalSnippet = ({
 
   return `const client = ${
     environment === Environment.Html ? "nlxai." : ""
-  }multimodal.create({
+  }voicePlus.create({
   // hard-coded params
   apiKey: "${defaultTo(config?.apiKey, "REPLACE_WITH_API_KEY")}",
   workspaceId: "${defaultTo(config?.workspaceId, "REPLACE_WITH_WORKSPACE_ID")}",
-  journeyId: "${defaultTo(config?.journeyId, "REPLACE_WITH_JOURNEY_ID")}",
+  scriptId: "${defaultTo(config?.scriptId, "REPLACE_WITH_SCRIPT_ID")}",
   // dynamic params
   conversationId: ${conversationId},
   languageCode: ${languageCode},
@@ -374,7 +374,7 @@ export const journeyManagerSnippet = ({
             // hard-coded params
             apiKey: "REPLACE_WITH_API_KEY",
             workspaceId: "REPLACE_WITH_WORKSPACE_ID",
-            journeyId: "REPLACE_WITH_JOURNEY_ID",
+            scriptId: "REPLACE_WITH_SCRIPT_ID",
             // dynamic params
             conversationId: getCid(),
             languageCode: "REPLACE_WITH_LANGUAGE_CODE",
@@ -404,18 +404,18 @@ ${
 </html>
 `;
 
-export const multimodalSetupSnippet = (cfg: {
-  config?: Partial<MMConfig>;
+export const voicePlusSetupSnippet = (cfg: {
+  config?: Partial<VoicePlusConfig>;
   environment?: Environment;
 }): string => {
   if (cfg.environment === Environment.Html) {
-    return `${umdScriptTags.multimodal}
+    return `${umdScriptTags.voicePlus}
 <script>
-  ${indentBy("  ", multimodalSnippet(cfg))}
+  ${indentBy("  ", voicePlusSnippet(cfg))}
 </script>`;
   }
 
-  return `import * as multimodal from "@nlxai/multimodal";
+  return `import * as voicePlus from "@nlxai/voice-plus";
 
-${multimodalSnippet(cfg)}`;
+${voicePlusSnippet(cfg)}`;
 };

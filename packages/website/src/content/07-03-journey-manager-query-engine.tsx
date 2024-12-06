@@ -2,10 +2,9 @@ import { type FC } from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 
-
 export const content = `
 At the heart of [@nlxai/journey-manager](https://www.npmjs.com/package/@nlxai/journey-manager) are Triggers,
-which allow users to annotate various interactions on a page with multimodal capabilities without writing any code.
+which allow users to annotate various interactions on a page with Voice+ capabilities without writing any code.
 
 For most of these, there needs to be a way to specify a particular element of interest on the target webpage 
 (as for instance clicking "Buy now" is different from "Log out"). This is where the query engine comes in.
@@ -163,7 +162,10 @@ All queries support a \`parent\` option, which will restrict the search to only 
 export const JourneyManagerQueryEngine: FC<unknown> = () => {
   return (
     <>
-      <PageTitle pretitle="Journey manager" title="Understanding the query engine" />
+      <PageTitle
+        pretitle="Journey manager"
+        title="Understanding the query engine"
+      />
       <PageContent md={content} />
     </>
   );

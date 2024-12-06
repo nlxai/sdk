@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsdoc/require-jsdoc */
-import { type Client } from "@nlxai/multimodal";
+import { type Client } from "@nlxai/voice-plus";
 import { type FunctionComponent as FC, type ComponentChildren } from "preact";
 import { useEffect, useState, useRef } from "preact/hooks";
 import {
