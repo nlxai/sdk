@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type Config } from "@nlxai/voice-plus";
+import { type Config } from "@nlxai/voice-plus-core";
 import { decode, getAll, type EncodedQuery, type Query } from "./queries";
 import { matchesUrlCondition, type UrlCondition } from "./UrlCondition";
 import { filterMap } from "./utils/filterMap";

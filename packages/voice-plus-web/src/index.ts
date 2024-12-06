@@ -2,7 +2,7 @@ import {
   type Client,
   create as createVoicePlusClient,
   type Config,
-} from "@nlxai/voice-plus";
+} from "@nlxai/voice-plus-core";
 import { getAll } from "./queries";
 import { matchesUrlCondition } from "./UrlCondition";
 import * as dom from "./utils/dom";

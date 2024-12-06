@@ -254,7 +254,7 @@ export const voicePlusSnippet = ({
 
   return `const client = ${
     environment === Environment.Html ? "nlxai." : ""
-  }voicePlus.create({
+  }voicePlusCore.create({
   // hard-coded params
   apiKey: "${defaultTo(config?.apiKey, "REPLACE_WITH_API_KEY")}",
   workspaceId: "${defaultTo(config?.workspaceId, "REPLACE_WITH_WORKSPACE_ID")}",
@@ -281,7 +281,7 @@ export const umdScriptTags: ScriptTagsType = (
   {} as ScriptTagsType,
 );
 
-export const journeyManagerSnippet = ({
+export const voicePlusWebSnippet = ({
   digressionButton,
 }: {
   digressionButton: boolean;
@@ -331,12 +331,12 @@ export const journeyManagerSnippet = ({
     </style>`
       : ""
   }
-    ${umdScriptTags.journeyManager}
+    ${umdScriptTags.voicePlusWeb}
     <script>
       // Get conversation ID from the URL, assuming it is included as a 'cid' search param (and save in session storage)
       // On subsequent page loads, retrieve from session storage assuming it was saved in the past half an hour
       const getCid = () => {
-        const localStorageKey = "nlx-multimodal-session";
+        const localStorageKey = "nlx-voice-plus-web-session";
         const saveToSessionStorage = (conversationId) => {
           sessionStorage.setItem(localStorageKey, JSON.stringify({
             conversationId,
@@ -369,7 +369,7 @@ export const journeyManagerSnippet = ({
       const triggers = {};
 
       window.addEventListener("DOMContentLoaded", () => {
-        nlxai.journeyManager.run({
+        nlxai.voicePlusWeb.run({
           config: {
             // hard-coded params
             apiKey: "REPLACE_WITH_API_KEY",
@@ -409,13 +409,13 @@ export const voicePlusSetupSnippet = (cfg: {
   environment?: Environment;
 }): string => {
   if (cfg.environment === Environment.Html) {
-    return `${umdScriptTags.voicePlus}
+    return `${umdScriptTags.voicePlusCore}
 <script>
   ${indentBy("  ", voicePlusSnippet(cfg))}
 </script>`;
   }
 
-  return `import * as voicePlus from "@nlxai/voice-plus";
+  return `import * as voicePlusCore from "@nlxai/voice-plus-core";
 
 ${voicePlusSnippet(cfg)}`;
 };

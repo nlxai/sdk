@@ -71,7 +71,7 @@ ${voicePlusSnippet({
 })}`;
     if (environment === Environment.Html) {
       return `~~~html
-${umdScriptTags.voicePlus}
+${umdScriptTags.voicePlusCore}
 <script>
 ${content
   .split("\n")
@@ -82,7 +82,7 @@ ${content
     }
 
     return `~~~typescript
-import * as voicePlus from "@nlxai/voice-plus"
+import * as voicePlus from "@nlxai/voice-plus-core"
 
 ${content}
 ~~~`;

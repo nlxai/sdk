@@ -4,7 +4,7 @@ import { PageContent } from "../components/PageContent";
 import { Environment, voicePlusSetupSnippet } from "../snippets";
 
 export const content = `
-The [@nlxai/voice-plus](https://www.npmjs.com/package/@nlxai/voice-plus) package is used to implement multimodal conversational applications. By installing the SDK and creating a client instance specific to a journey, you can send steps in response to any user interaction, triggering voice feedback on a second channel (e.g. voice).
+The [@nlxai/voice-plus-core](https://www.npmjs.com/package/@nlxai/voice-plus-core) package is used to implement Voice+ conversational applications. By installing the SDK and creating a client instance specific to a journey, you can send steps in response to any user interaction, triggering voice feedback on a second channel (e.g. voice).
 
 ## Setup
 

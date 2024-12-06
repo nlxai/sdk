@@ -31,7 +31,7 @@
 
 #### Defined in
 
-[index.ts:13](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L13)
+[index.ts:13](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L13)
 
 ___
 
@@ -50,7 +50,7 @@ A `SlotsRecord` is equivalent to an array of [SlotValue](#interfacesslotvaluemd)
 
 #### Defined in
 
-[index.ts:42](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L42)
+[index.ts:42](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L42)
 
 ___
 
@@ -64,7 +64,7 @@ Supports either a [SlotsRecord](#slotsrecord) or an array of [SlotValue](#interf
 
 #### Defined in
 
-[index.ts:49](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L49)
+[index.ts:49](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L49)
 
 ___
 
@@ -76,7 +76,7 @@ The payload of the user response
 
 #### Defined in
 
-[index.ts:242](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L242)
+[index.ts:242](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L242)
 
 ___
 
@@ -88,7 +88,7 @@ A response from the bot or the user.
 
 #### Defined in
 
-[index.ts:311](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L311)
+[index.ts:311](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L311)
 
 ___
 
@@ -100,7 +100,7 @@ The time value in milliseconds since midnight, January 1, 1970 UTC.
 
 #### Defined in
 
-[index.ts:316](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L316)
+[index.ts:316](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L316)
 
 ___
 
@@ -112,7 +112,7 @@ Normalized structured request with a single way to represent slots
 
 #### Defined in
 
-[index.ts:450](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L450)
+[index.ts:450](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L450)
 
 ___
 
@@ -139,7 +139,7 @@ Instead of sending a request to the bot, handle it in a custom fashion
 
 #### Defined in
 
-[index.ts:530](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L530)
+[index.ts:530](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L530)
 
 ___
 
@@ -166,7 +166,7 @@ The callback function for listening to all responses.
 
 #### Defined in
 
-[index.ts:641](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L641)
+[index.ts:641](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L641)
 
 ## Functions
 
@@ -194,7 +194,7 @@ true if `createConversation` should be called again
 
 #### Defined in
 
-[index.ts:652](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L652)
+[index.ts:652](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L652)
 
 ___
 
@@ -218,7 +218,7 @@ The [ConversationHandler](#interfacesconversationhandlermd) is a bundle of funct
 
 #### Defined in
 
-[index.ts:664](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L664)
+[index.ts:664](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L664)
 
 ___
 
@@ -242,7 +242,7 @@ an expiration timestamp in Unix Epoch (`new Date().getTime()`), or `null` if thi
 
 #### Defined in
 
-[index.ts:1057](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L1057)
+[index.ts:1057](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L1057)
 
 ___
 
@@ -302,7 +302,7 @@ sendTextWrapped("Hello").then((response) => {
 
 #### Defined in
 
-[index.ts:1094](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L1094)
+[index.ts:1094](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L1094)
 
 
 <a name="indexmd"></a>
@@ -327,7 +327,7 @@ A unique identifier for the message.
 
 ##### Defined in
 
-[index.ts:158](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L158)
+[index.ts:158](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L158)
 
 ___
 
@@ -340,7 +340,7 @@ This is must be sent with a choice when the user is changing a previously sent c
 
 ##### Defined in
 
-[index.ts:163](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L163)
+[index.ts:163](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L163)
 
 ___
 
@@ -352,7 +352,7 @@ The body of the message. Show this to the user.
 
 ##### Defined in
 
-[index.ts:167](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L167)
+[index.ts:167](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L167)
 
 ___
 
@@ -364,7 +364,7 @@ A selection of choices to show to the user. They may choose one of them.
 
 ##### Defined in
 
-[index.ts:171](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L171)
+[index.ts:171](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L171)
 
 ___
 
@@ -376,7 +376,7 @@ Metadata
 
 ##### Defined in
 
-[index.ts:175](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L175)
+[index.ts:175](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L175)
 
 ___
 
@@ -389,7 +389,7 @@ This field is set locally and does not come from the bot.
 
 ##### Defined in
 
-[index.ts:180](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L180)
+[index.ts:180](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L180)
 
 
 <a name="interfacesbotmessagemetadatamd"></a>
@@ -409,7 +409,7 @@ The message node's intent
 
 ##### Defined in
 
-[index.ts:148](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L148)
+[index.ts:148](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L148)
 
 
 <a name="interfacesbotrequestmd"></a>
@@ -428,7 +428,7 @@ The current conversation ID
 
 ##### Defined in
 
-[index.ts:464](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L464)
+[index.ts:464](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L464)
 
 ___
 
@@ -440,7 +440,7 @@ The current user ID
 
 ##### Defined in
 
-[index.ts:468](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L468)
+[index.ts:468](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L468)
 
 ___
 
@@ -452,7 +452,7 @@ Request context, if applicable
 
 ##### Defined in
 
-[index.ts:472](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L472)
+[index.ts:472](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L472)
 
 ___
 
@@ -472,7 +472,7 @@ Main request
 
 ##### Defined in
 
-[index.ts:476](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L476)
+[index.ts:476](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L476)
 
 
 <a name="interfacesbotresponsemd"></a>
@@ -496,7 +496,7 @@ The type of the response is `"bot"` for bot and `"user"` for user, and "failure"
 
 ##### Defined in
 
-[index.ts:63](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L63)
+[index.ts:63](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L63)
 
 ___
 
@@ -508,7 +508,7 @@ When the response was received
 
 ##### Defined in
 
-[index.ts:67](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L67)
+[index.ts:67](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L67)
 
 ___
 
@@ -520,7 +520,7 @@ The payload of the response
 
 ##### Defined in
 
-[index.ts:71](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L71)
+[index.ts:71](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L71)
 
 
 <a name="interfacesbotresponsemetadatamd"></a>
@@ -540,7 +540,7 @@ The conversation's intent
 
 ##### Defined in
 
-[index.ts:117](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L117)
+[index.ts:117](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L117)
 
 ___
 
@@ -552,7 +552,7 @@ Whether the current conversation has been marked as incomprehension.
 
 ##### Defined in
 
-[index.ts:121](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L121)
+[index.ts:121](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L121)
 
 ___
 
@@ -564,7 +564,7 @@ Whether the current conversation has been marked frustrated
 
 ##### Defined in
 
-[index.ts:125](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L125)
+[index.ts:125](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L125)
 
 ___
 
@@ -576,7 +576,7 @@ Whether the current conversation has been marked as incomprehension.
 
 ##### Defined in
 
-[index.ts:129](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L129)
+[index.ts:129](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L129)
 
 ___
 
@@ -588,7 +588,7 @@ Upload URL's
 
 ##### Defined in
 
-[index.ts:133](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L133)
+[index.ts:133](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L133)
 
 ___
 
@@ -600,7 +600,7 @@ Whether the client should poll for more bot responses.
 
 ##### Defined in
 
-[index.ts:137](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L137)
+[index.ts:137](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L137)
 
 
 <a name="interfacesbotresponsepayloadmd"></a>
@@ -619,7 +619,7 @@ If there isn't some interaction by this time, the conversation will expire.
 
 ##### Defined in
 
-[index.ts:81](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L81)
+[index.ts:81](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L81)
 
 ___
 
@@ -631,7 +631,7 @@ The active conversation ID. If not set, a new conversation will be started.
 
 ##### Defined in
 
-[index.ts:85](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L85)
+[index.ts:85](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L85)
 
 ___
 
@@ -643,7 +643,7 @@ Any messages from the bot.
 
 ##### Defined in
 
-[index.ts:89](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L89)
+[index.ts:89](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L89)
 
 ___
 
@@ -656,7 +656,7 @@ as well as whether the client should poll for more bot responses.
 
 ##### Defined in
 
-[index.ts:94](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L94)
+[index.ts:94](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L94)
 
 ___
 
@@ -668,7 +668,7 @@ If configured, the [node's payload.](#add-functionality)
 
 ##### Defined in
 
-[index.ts:98](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L98)
+[index.ts:98](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L98)
 
 ___
 
@@ -680,7 +680,7 @@ If configured, the node's modalities and their payloads.
 
 ##### Defined in
 
-[index.ts:102](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L102)
+[index.ts:102](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L102)
 
 ___
 
@@ -692,7 +692,7 @@ If the node is set to send context, the whole context associated with the conver
 
 ##### Defined in
 
-[index.ts:106](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L106)
+[index.ts:106](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L106)
 
 
 <a name="interfaceschoicemd"></a>
@@ -711,7 +711,7 @@ A choices to show to the user.
 
 ##### Defined in
 
-[index.ts:204](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L204)
+[index.ts:204](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L204)
 
 ___
 
@@ -723,7 +723,7 @@ The text of the choice
 
 ##### Defined in
 
-[index.ts:208](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L208)
+[index.ts:208](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L208)
 
 ___
 
@@ -735,7 +735,7 @@ An optional, schemaless payload for the choice.
 
 ##### Defined in
 
-[index.ts:212](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L212)
+[index.ts:212](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L212)
 
 
 <a name="interfaceschoicerequestmetadatamd"></a>
@@ -756,7 +756,7 @@ It is not sent to the bot.
 
 ##### Defined in
 
-[index.ts:507](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L507)
+[index.ts:507](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L507)
 
 ___
 
@@ -770,7 +770,7 @@ It is not sent to the bot.
 
 ##### Defined in
 
-[index.ts:513](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L513)
+[index.ts:513](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L513)
 
 ___
 
@@ -783,7 +783,7 @@ The `nodeId` can be found in the corresponding [BotMessage](#interfacesbotmessag
 
 ##### Defined in
 
-[index.ts:518](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L518)
+[index.ts:518](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L518)
 
 ___
 
@@ -795,7 +795,7 @@ Intent ID, used for sending to the NLU to allow it to double-check
 
 ##### Defined in
 
-[index.ts:522](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L522)
+[index.ts:522](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L522)
 
 
 <a name="interfacesconfigmd"></a>
@@ -814,7 +814,7 @@ Fetch this from the bot's Deployment page.
 
 ##### Defined in
 
-[index.ts:332](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L332)
+[index.ts:332](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L332)
 
 ___
 
@@ -826,7 +826,7 @@ Headers to forward to the NLX API.
 
 ##### Defined in
 
-[index.ts:336](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L336)
+[index.ts:336](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L336)
 
 ___
 
@@ -838,7 +838,7 @@ Set `conversationId` to continue an existing conversation. If not set, a new con
 
 ##### Defined in
 
-[index.ts:346](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L346)
+[index.ts:346](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L346)
 
 ___
 
@@ -850,7 +850,7 @@ Setting the `userID` allows it to be searchable in bot history, as well as usabl
 
 ##### Defined in
 
-[index.ts:350](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L350)
+[index.ts:350](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L350)
 
 ___
 
@@ -862,7 +862,7 @@ When `responses` is set, initialize the chatHandler with historical messages.
 
 ##### Defined in
 
-[index.ts:354](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L354)
+[index.ts:354](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L354)
 
 ___
 
@@ -874,7 +874,7 @@ When set, this overrides the default failure message ("We encountered an issue. 
 
 ##### Defined in
 
-[index.ts:358](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L358)
+[index.ts:358](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L358)
 
 ___
 
@@ -887,7 +887,7 @@ If you don't have translations, hard-code this to the language code you support.
 
 ##### Defined in
 
-[index.ts:363](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L363)
+[index.ts:363](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L363)
 
 ___
 
@@ -906,7 +906,7 @@ Experimental settings
 
 ##### Defined in
 
-[index.ts:372](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L372)
+[index.ts:372](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L372)
 
 
 <a name="interfacesconversationhandlermd"></a>
@@ -940,7 +940,7 @@ Send user's message
 
 ##### Defined in
 
-[index.ts:544](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L544)
+[index.ts:544](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L544)
 
 ___
 
@@ -967,7 +967,7 @@ Send [slots](https://docs.studio.nlx.ai/workspacesettings/introduction-to-settin
 
 ##### Defined in
 
-[index.ts:550](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L550)
+[index.ts:550](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L550)
 
 ___
 
@@ -995,7 +995,7 @@ Respond to [a choice](https://docs.studio.nlx.ai/intentflows/documentation-flows
 
 ##### Defined in
 
-[index.ts:557](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L557)
+[index.ts:557](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L557)
 
 ___
 
@@ -1021,7 +1021,7 @@ Trigger the welcome [intent](https://docs.studio.nlx.ai/intents/introduction-to-
 
 ##### Defined in
 
-[index.ts:567](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L567)
+[index.ts:567](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L567)
 
 ___
 
@@ -1048,7 +1048,7 @@ Trigger a specific [intent](https://docs.studio.nlx.ai/intents/introduction-to-i
 
 ##### Defined in
 
-[index.ts:574](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L574)
+[index.ts:574](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L574)
 
 ___
 
@@ -1075,7 +1075,7 @@ Send a combination of choice, slots, and intent in one request.
 
 ##### Defined in
 
-[index.ts:581](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L581)
+[index.ts:581](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L581)
 
 ___
 
@@ -1107,7 +1107,7 @@ Subscribe a callback to the conversation. On subscribe, the subscriber will rece
 
 ##### Defined in
 
-[index.ts:586](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L586)
+[index.ts:586](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L586)
 
 ___
 
@@ -1133,7 +1133,7 @@ Unsubscribe a callback from the conversation.
 
 ##### Defined in
 
-[index.ts:591](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L591)
+[index.ts:591](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L591)
 
 ___
 
@@ -1153,7 +1153,7 @@ Unsubscribe all callback from the conversation.
 
 ##### Defined in
 
-[index.ts:595](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L595)
+[index.ts:595](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L595)
 
 ___
 
@@ -1173,7 +1173,7 @@ Get the current conversation ID if it's set, or undefined if there is no convers
 
 ##### Defined in
 
-[index.ts:599](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L599)
+[index.ts:599](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L599)
 
 ___
 
@@ -1201,7 +1201,7 @@ Retains all existing subscribers.
 
 ##### Defined in
 
-[index.ts:604](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L604)
+[index.ts:604](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L604)
 
 ___
 
@@ -1221,7 +1221,7 @@ Removes all subscribers and, if using websockets, closes the connection.
 
 ##### Defined in
 
-[index.ts:613](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L613)
+[index.ts:613](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L613)
 
 ___
 
@@ -1247,7 +1247,7 @@ Optional [BotRequestOverride](#botrequestoverride) function used to bypass the b
 
 ##### Defined in
 
-[index.ts:617](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L617)
+[index.ts:617](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L617)
 
 
 <a name="interfacesfailuremessagemd"></a>
@@ -1266,7 +1266,7 @@ The type of the response is `"bot"` for bot and `"user"` for user.
 
 ##### Defined in
 
-[index.ts:292](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L292)
+[index.ts:292](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L292)
 
 ___
 
@@ -1284,7 +1284,7 @@ The payload only includes an error message.
 
 ##### Defined in
 
-[index.ts:296](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L296)
+[index.ts:296](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L296)
 
 ___
 
@@ -1296,7 +1296,7 @@ When the failure occurred.
 
 ##### Defined in
 
-[index.ts:305](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L305)
+[index.ts:305](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L305)
 
 
 <a name="interfacesslotvaluemd"></a>
@@ -1317,7 +1317,7 @@ The attached slot's name
 
 ##### Defined in
 
-[index.ts:24](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L24)
+[index.ts:24](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L24)
 
 ___
 
@@ -1330,7 +1330,7 @@ for custom slots, this can optionally be the value's ID.
 
 ##### Defined in
 
-[index.ts:29](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L29)
+[index.ts:29](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L29)
 
 
 <a name="interfacesstructuredrequestmd"></a>
@@ -1350,7 +1350,7 @@ The `choiceId` is in the [BotResponse](#interfacesbotresponsemd)'s `.payload.mes
 
 ##### Defined in
 
-[index.ts:418](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L418)
+[index.ts:418](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L418)
 
 ___
 
@@ -1363,7 +1363,7 @@ The `nodeId` can be found in the corresponding [BotMessage](#interfacesbotmessag
 
 ##### Defined in
 
-[index.ts:423](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L423)
+[index.ts:423](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L423)
 
 ___
 
@@ -1375,7 +1375,7 @@ The intent to trigger. The `intentId` is the name under the Bot's _Intents_.
 
 ##### Defined in
 
-[index.ts:427](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L427)
+[index.ts:427](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L427)
 
 ___
 
@@ -1387,7 +1387,7 @@ The slots to populate
 
 ##### Defined in
 
-[index.ts:431](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L431)
+[index.ts:431](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L431)
 
 ___
 
@@ -1399,7 +1399,7 @@ Upload ID
 
 ##### Defined in
 
-[index.ts:435](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L435)
+[index.ts:435](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L435)
 
 ___
 
@@ -1411,7 +1411,7 @@ Upload utterance
 
 ##### Defined in
 
-[index.ts:439](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L439)
+[index.ts:439](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L439)
 
 
 <a name="interfacesuploadurlmd"></a>
@@ -1430,7 +1430,7 @@ The URL of the upload
 
 ##### Defined in
 
-[index.ts:190](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L190)
+[index.ts:190](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L190)
 
 ___
 
@@ -1442,7 +1442,7 @@ The ID of the upload
 
 ##### Defined in
 
-[index.ts:194](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L194)
+[index.ts:194](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L194)
 
 
 <a name="interfacesuserresponsemd"></a>
@@ -1466,7 +1466,7 @@ The type of the response is `"bot"` for bot and `"user"` for user, and "failure"
 
 ##### Defined in
 
-[index.ts:228](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L228)
+[index.ts:228](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L228)
 
 ___
 
@@ -1478,7 +1478,7 @@ When the response was received
 
 ##### Defined in
 
-[index.ts:232](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L232)
+[index.ts:232](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L232)
 
 ___
 
@@ -1490,4 +1490,4 @@ The payload of the response
 
 ##### Defined in
 
-[index.ts:236](https://github.com/nlxai/sdk/blob/2d81365e8dc49dd1f75bb88523aafc9a97feb6e3/packages/chat-core/src/index.ts#L236)
+[index.ts:236](https://github.com/nlxai/sdk/blob/b52061d925d1fdd1d112517d34be6d60e9acb27f/packages/chat-core/src/index.ts#L236)

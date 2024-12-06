@@ -1,5 +1,5 @@
 import { type FC, useRef, useEffect, useState } from "react";
-import { type Triggers, type Trigger, iconUrls } from "@nlxai/journey-manager";
+import { type Triggers, type Trigger, iconUrls } from "@nlxai/voice-plus-web";
 
 // Add extra names for triggers for logging purposes
 const triggersWithNames: Record<string, { name: string; trigger: Trigger }> = {
@@ -134,7 +134,7 @@ const triggersForRun = (): Triggers => {
 };
 
 const runJourneyManager = async (): Promise<unknown> => {
-  const { run } = await import("@nlxai/journey-manager");
+  const { run } = await import("@nlxai/voice-plus-web");
   await run({
     config: {
       apiKey: "",

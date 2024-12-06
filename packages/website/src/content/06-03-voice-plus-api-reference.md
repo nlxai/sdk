@@ -1,7 +1,7 @@
 
 <a name="readmemd"></a>
 
-# @nlxai/voice-plus
+# @nlxai/voice-plus-core
 
 ## Interfaces
 

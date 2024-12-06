@@ -4,9 +4,9 @@ import css from "rollup-plugin-import-css";
 
 export default rollupConfig({
   pkg: pkg,
-  name: "nlxai.journeyManager",
+  name: "nlxai.voicePlusWeb",
   externalDeps: [
-    "@nlxai/voice-plus",
+    "@nlxai/voice-plus-core",
     "@testing-library/dom",
     "preact/jsx-runtime",
     "@floating-ui/dom",

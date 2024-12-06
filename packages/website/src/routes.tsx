@@ -37,9 +37,9 @@ import { VoicePlusUsage } from "./content/06-02-voice-plus-usage";
 import { VoicePlusApiReference } from "./content/06-03-voice-plus-api-reference";
 import { VoicePlusTryLive } from "./content/06-04-voice-plus-try-live";
 // 7
-import { JourneyManagerGettingStarted } from "./content/07-01-journey-manager-getting-started";
-import { JourneyManagerApiReference } from "./content/07-02-journey-manager-api-reference";
-import { JourneyManagerQueryEngine } from "./content/07-03-journey-manager-query-engine";
+import { ScriptManagerGettingStarted } from "./content/07-01-script-manager-getting-started";
+import { ScriptManagerApiReference } from "./content/07-02-script-manager-api-reference";
+import { ScriptManagerQueryEngine } from "./content/07-03-script-manager-query-engine";
 
 interface Item {
   label: string;
@@ -225,22 +225,22 @@ export const routes: Array<{
     ],
   },
   {
-    heading: "Journey manager",
+    heading: "Script manager",
     items: [
       {
         label: "Getting started",
-        url: "/journey-manager-getting-started",
-        element: <JourneyManagerGettingStarted />,
+        url: "/script-manager-getting-started",
+        element: <ScriptManagerGettingStarted />,
       },
       {
         label: "Query engine",
-        url: "/journey-manager-query-engine",
-        element: <JourneyManagerQueryEngine />,
+        url: "/script-manager-query-engine",
+        element: <ScriptManagerQueryEngine />,
       },
       {
         label: "API reference",
-        url: "/journey-manager-api-reference",
-        element: <JourneyManagerApiReference />,
+        url: "/script-manager-api-reference",
+        element: <ScriptManagerApiReference />,
       },
     ],
   },

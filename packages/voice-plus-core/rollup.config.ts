@@ -3,7 +3,7 @@ import pkg from "./package.json" assert { type: "json" };
 
 export default rollupConfig({
   pkg: pkg,
-  name: "nlxai.voicePlus",
+  name: "nlxai.voicePlusCore",
   externalDeps: ["isomorphic-fetch"],
   input: "src/index.ts",
 });

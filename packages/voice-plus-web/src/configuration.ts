@@ -1,4 +1,4 @@
-import type { Client } from "@nlxai/voice-plus";
+import type { Client } from "@nlxai/voice-plus-core";
 
 /**
  * Theme colors
