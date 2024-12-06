@@ -5,11 +5,11 @@ import { RadioList } from "../components/RadioList";
 import { journeyManagerSnippet } from "../snippets";
 
 export const content = `
-The [@nlxai/journey-manager](https://www.npmjs.com/package/@nlxai/journey-manager) package is used to manage multimodal journeys without writing dedicated frontend code.
+The [@nlxai/journey-manager](https://www.npmjs.com/package/@nlxai/journey-manager) package is used to manage Voice+ scripts without writing dedicated frontend code.
 
-In contrast to the conventional multimodal setup, where developers would use the [barebones multimodal API](/multimodal-getting-started) to attach explicit event handling code to clicks and page loads, the journey manager works by pre-annotating your visual asset's interactive elements using the Dialog Studio desktop application.
+In contrast to the conventional Voice+ setup, where developers would use the [barebones multimodal API](/multimodal-getting-started) to attach explicit event handling code to clicks and page loads, the journey manager works by pre-annotating your visual asset's interactive elements using the Dialog Studio desktop application.
 
-Once you are ready, download a single code snippet and included on your page. Your asset is now enhanced with multimodal capabilities.
+Once you are ready, download a single code snippet and included on your page. Your asset is now enhanced with Voice+ capabilities.
 
 ## Setup
 
@@ -24,9 +24,9 @@ ${journeyManagerSnippet(config)}
 
 export const postContent = `
 The \`nlxai.journeyManager.run\` method takes an object argument with the following fields:
-- \`config\`: a journey configuration identical to that of [the regular multimodal API](/multimodal-getting-started).
+- \`config\`: a script configuration identical to that of [the regular Voice+ API](/multimodal-getting-started).
 - \`triggers\`: an object containing triggers that map step ID's to specific interactions or events such as page loads or clicks.
-- \`onDigression\`: a callback used to handle digression, with the multimodal client as an argument in case you are sending steps as a response.
+- \`onDigression\`: a callback used to handle digression, with the Voice+ client as an argument in case you are sending steps as a response.
 `;
 
 export const JourneyManagerGettingStarted: FC<unknown> = () => {

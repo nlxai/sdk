@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import type { Client } from "@nlxai/multimodal";
+import type { Client } from "@nlxai/voice-plus";
 import type { TriggeredStep, UiConfig } from "../configuration";
 import JourneyManagerElement from "./custom-element";
 import type {

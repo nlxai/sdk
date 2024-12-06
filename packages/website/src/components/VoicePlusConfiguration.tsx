@@ -5,7 +5,7 @@ import { isNil, mergeRight, reject } from "ramda";
 interface HardCodedConfig {
   workspaceId: string;
   apiKey: string;
-  journeyId: string;
+  scriptId: string;
   testStepId: string;
 }
 
@@ -27,7 +27,7 @@ const defaultConfigAsStrings: ConfigAsStrings = {
   workspaceId: "",
   apiKey: "",
   languageCode: "en-US",
-  journeyId: "",
+  scriptId: "",
   conversationId: "",
   testStepId: "",
 };
@@ -44,7 +44,7 @@ export const getInitialConfig = (): ConfigAsStrings => {
       workspaceId: searchParams.get("workspaceId"),
       apiKey: searchParams.get("apiKey"),
       languageCode: searchParams.get("languageCode"),
-      journeyId: searchParams.get("journeyId"),
+      scriptId: searchParams.get("scriptId") ?? searchParams.get("journeyId"),
       conversationId: searchParams.get("conversationId"),
       testStepId: searchParams.get("testStepId"),
     }),
@@ -82,9 +82,9 @@ export const ConfigEditor: FC<{
         <input
           placeholder="Enter journey ID"
           className={inputClass}
-          value={config.journeyId}
+          value={config.scriptId}
           onInput={(ev: any) => {
-            props.onChange({ journeyId: ev.target.value });
+            props.onChange({ scriptId: ev.target.value });
           }}
         />
       </Labeled>

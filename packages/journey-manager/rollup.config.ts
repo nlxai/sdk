@@ -6,7 +6,7 @@ export default rollupConfig({
   pkg: pkg,
   name: "nlxai.journeyManager",
   externalDeps: [
-    "@nlxai/multimodal",
+    "@nlxai/voice-plus",
     "@testing-library/dom",
     "preact/jsx-runtime",
     "@floating-ui/dom",

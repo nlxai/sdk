@@ -13,7 +13,7 @@
     "packages/chat-react",
     "packages/chat-preact",
     "packages/chat-widget",
-    "packages/multimodal",
+    "packages/voice-plus",
     "packages/journey-manager",
     "packages/website"
   ],

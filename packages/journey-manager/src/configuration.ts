@@ -1,4 +1,4 @@
-import type { Client } from "@nlxai/multimodal";
+import type { Client } from "@nlxai/voice-plus";
 
 /**
  * Theme colors

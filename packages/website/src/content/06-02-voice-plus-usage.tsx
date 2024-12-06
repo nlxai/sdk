@@ -1,31 +1,31 @@
-import { useState } from "react";
+import { type FC, useState } from "react";
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { RadioList } from "../components/RadioList";
 import {
   Environment,
   umdScriptTags,
-  multimodalSetupSnippet,
-  multimodalSnippet,
+  voicePlusSetupSnippet,
+  voicePlusSnippet,
 } from "../snippets";
 
 const header = `
-The Multimodal client is initiated with _dynamic_ params and _hard-coded_ parameters.
+The Voice+ client is initiated with _dynamic_ params and _hard-coded_ parameters.
 
 ### Hard-Coded params
 
-Hard-coded params should be simply copied and pasted from the NLX console. They are
+Hard-coded params should be simply copied and pasted from the NLX console. They are:
 
-- \`workspaceId\` for your workspace
-- \`journeyId\` where the step(s) exists
-- \`apiKey\` every journey has a correlated api key
+- \`workspaceId\`: the ID of the Dialog Studio workspace.
+- \`scriptId\`: the ID of the Voice+ script inside the workspace.
+- \`apiKey\`: the API key generated on the script.
 
 ### Dynamic Params
 
 Dynamic params should be set based on the user's context. They are
 
-- \`conversationId\` should be passed to your multimodal from the intent (via, for instance, a URL param)
-- \`languageCode\` should be set based on the user's language. If you don't support internationalization you can hard-code this to the language you support.
+- \`conversationId\`: should be passed to your Voice+ client upon initialization (via, for instance, a URL param)
+- \`languageCode\`: should be set based on the user's language. If you don't support internationalization you can hard-code this to the language you support.
 
 ## Examples
 Here are some examples for different usages:
@@ -62,7 +62,7 @@ if(conversationId != null) {
   conversationId = localStorage.getItem(MULTIMODAL_SESSION_KEY);
 }
 
-${multimodalSnippet({
+${voicePlusSnippet({
   environment,
   config: {
     conversationIdSnippet: "conversationId",
@@ -71,7 +71,7 @@ ${multimodalSnippet({
 })}`;
     if (environment === Environment.Html) {
       return `~~~html
-${umdScriptTags.multimodal}
+${umdScriptTags.voicePlus}
 <script>
 ${content
   .split("\n")
@@ -82,7 +82,7 @@ ${content
     }
 
     return `~~~typescript
-import * as multimodal from "@nlxai/multimodal"
+import * as voicePlus from "@nlxai/voice-plus"
 
 ${content}
 ~~~`;
@@ -103,7 +103,7 @@ _Note: When using this approach, pass \`conversationId\` in the URL as a search 
 For an alternative, see the next example._
 
 ~~~html
-${multimodalSetupSnippet({
+${voicePlusSetupSnippet({
   environment: Environment.Html,
   config: {
     conversationIdSnippet:
@@ -137,20 +137,18 @@ The \`conversationID\` and the \`languageCode\` must be set dynamically.
 When not using web, you'll have to determine how to fetch these on a case-by-case basis.
 
 ~~~typescript
-${multimodalSetupSnippet({ environment: Environment.Node })}
+${voicePlusSetupSnippet({ environment: Environment.Node })}
 ~~~`;
     default:
       assertNever(usageFrom); // exhaustiveness checking
   }
 }
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const MultimodalUsage = () => {
+export const VoicePlusUsage: FC<unknown> = () => {
   const [usageFrom, setUsageFrom] = useState<Usage>(Usage.SimpleHTML);
   return (
     <>
-      <PageTitle pretitle="Multimodal" title="Usage" />
+      <PageTitle pretitle="Voice+" title="Usage" />
       <PageContent md={header} />
       <RadioList
         selected={usageFrom}

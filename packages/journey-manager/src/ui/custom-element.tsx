@@ -1,4 +1,4 @@
-import { type Client } from "@nlxai/multimodal";
+import { type Client } from "@nlxai/voice-plus";
 import { render } from "preact";
 import { ControlCenter } from "./components";
 import type { UiConfig, TriggeredStep } from "../configuration";

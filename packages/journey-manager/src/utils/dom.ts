@@ -31,7 +31,7 @@ export const observeViewportIntersections = (
     onIntersection: (target: HTMLElement) => void;
   },
 ) => {
-  let timer: NodeJS.Timer | null = null;
+  let timer: NodeJS.Timeout | null = null;
 
   return () => {
     if (timer != null) {
