@@ -22,10 +22,10 @@ ${umdScriptTags.chatWidget}
 ${umdScriptTags.chatCore}
 ~~~
 
-* [@nlxai/multimodal](${packageUrls.multimodal}) - add multimodal capabilities to a plain HTML page:
+* [@nlxai/voice-plus-core](${packageUrls.voicePlusCore}) - add Voice+ capabilities to a plain HTML page:
 
 ~~~html
-${umdScriptTags.multimodal}
+${umdScriptTags.voicePlusCore}
 ~~~
 
 ## Using npm
@@ -45,8 +45,8 @@ npm install @nlxai/chat-preact preact
 # Core chat SDK
 npm install @nlxai/chat-core
 
-# Multimodal
-npm install @nlxai/multimodal
+# Voice+
+npm install @nlxai/voice-plus-core
 ~~~
 `;
 

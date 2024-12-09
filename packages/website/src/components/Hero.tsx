@@ -32,7 +32,7 @@ export const Hero = () => {
                 &reg;
               </p>
               <p className="mt-3 text-2xl text-white65">
-                Add chat and multimodal capabilities to your page in minutes.
+                Add chat and Voice+ capabilities to your page in minutes.
                 Introduce fully custom components with only a dozen lines of
                 code, or engineer from the ground up yourself.
               </p>

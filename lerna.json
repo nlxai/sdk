@@ -13,8 +13,8 @@
     "packages/chat-react",
     "packages/chat-preact",
     "packages/chat-widget",
-    "packages/multimodal",
-    "packages/journey-manager",
+    "packages/voice-plus-core",
+    "packages/voice-plus-web",
     "packages/website"
   ],
   "version": "0.1.54",

@@ -1,7 +1,7 @@
 import { type Config } from "@nlxai/chat-core";
 import { type TitleBar, type Theme } from "@nlxai/chat-widget";
 import { umdScriptSrc } from "./constants";
-import { type Config as MMConfig } from "./components/MultimodalConfiguration";
+import { type Config as VoicePlusConfig } from "./components/VoicePlusConfiguration";
 
 export enum Behavior {
   Simple,
@@ -217,11 +217,11 @@ convo.subscribe((responses, newResponse) => {
 // Send a message from the user's end
 convo.sendText("hello");`;
 
-export const multimodalSnippet = ({
+export const voicePlusSnippet = ({
   config,
   environment,
 }: {
-  config?: Partial<MMConfig>;
+  config?: Partial<VoicePlusConfig>;
   environment?: Environment;
 }): string => {
   const conversationId = (() => {
@@ -254,11 +254,11 @@ export const multimodalSnippet = ({
 
   return `const client = ${
     environment === Environment.Html ? "nlxai." : ""
-  }multimodal.create({
+  }voicePlusCore.create({
   // hard-coded params
   apiKey: "${defaultTo(config?.apiKey, "REPLACE_WITH_API_KEY")}",
   workspaceId: "${defaultTo(config?.workspaceId, "REPLACE_WITH_WORKSPACE_ID")}",
-  journeyId: "${defaultTo(config?.journeyId, "REPLACE_WITH_JOURNEY_ID")}",
+  scriptId: "${defaultTo(config?.scriptId, "REPLACE_WITH_SCRIPT_ID")}",
   // dynamic params
   conversationId: ${conversationId},
   languageCode: ${languageCode},
@@ -281,7 +281,7 @@ export const umdScriptTags: ScriptTagsType = (
   {} as ScriptTagsType,
 );
 
-export const journeyManagerSnippet = ({
+export const voicePlusWebSnippet = ({
   digressionButton,
 }: {
   digressionButton: boolean;
@@ -331,12 +331,12 @@ export const journeyManagerSnippet = ({
     </style>`
       : ""
   }
-    ${umdScriptTags.journeyManager}
+    ${umdScriptTags.voicePlusWeb}
     <script>
       // Get conversation ID from the URL, assuming it is included as a 'cid' search param (and save in session storage)
       // On subsequent page loads, retrieve from session storage assuming it was saved in the past half an hour
       const getCid = () => {
-        const localStorageKey = "nlx-multimodal-session";
+        const localStorageKey = "nlx-voice-plus-web-session";
         const saveToSessionStorage = (conversationId) => {
           sessionStorage.setItem(localStorageKey, JSON.stringify({
             conversationId,
@@ -369,12 +369,12 @@ export const journeyManagerSnippet = ({
       const triggers = {};
 
       window.addEventListener("DOMContentLoaded", () => {
-        nlxai.journeyManager.run({
+        nlxai.voicePlusWeb.run({
           config: {
             // hard-coded params
             apiKey: "REPLACE_WITH_API_KEY",
             workspaceId: "REPLACE_WITH_WORKSPACE_ID",
-            journeyId: "REPLACE_WITH_JOURNEY_ID",
+            scriptId: "REPLACE_WITH_SCRIPT_ID",
             // dynamic params
             conversationId: getCid(),
             languageCode: "REPLACE_WITH_LANGUAGE_CODE",
@@ -404,18 +404,18 @@ ${
 </html>
 `;
 
-export const multimodalSetupSnippet = (cfg: {
-  config?: Partial<MMConfig>;
+export const voicePlusSetupSnippet = (cfg: {
+  config?: Partial<VoicePlusConfig>;
   environment?: Environment;
 }): string => {
   if (cfg.environment === Environment.Html) {
-    return `${umdScriptTags.multimodal}
+    return `${umdScriptTags.voicePlusCore}
 <script>
-  ${indentBy("  ", multimodalSnippet(cfg))}
+  ${indentBy("  ", voicePlusSnippet(cfg))}
 </script>`;
   }
 
-  return `import * as multimodal from "@nlxai/multimodal";
+  return `import * as voicePlusCore from "@nlxai/voice-plus-core";
 
-${multimodalSnippet(cfg)}`;
+${voicePlusSnippet(cfg)}`;
 };
