@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/voice-plus-core",
-  "version": "0.1.51",
+  "version": "1.0.0-alpha.0",
   "description": "NLX SDK for Voice+ experiences",
   "type": "module",
   "main": "lib/index.cjs",
