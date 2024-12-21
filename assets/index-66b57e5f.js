@@ -1122,7 +1122,21 @@ ${e?`            const container = document.createElement("div");
 </html>
 `,Ql=e=>e.environment===0?`${mi.voicePlusCore}
 <script>
-  ${na("  ",OT(e))}
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  contentLoaded().then(() => {
+    ${na("    ",OT(e))}
+  });
 <\/script>`:`import * as voicePlusCore from "@nlxai/voice-plus-core";
 
 ${OT(e)}`,vwe=`
