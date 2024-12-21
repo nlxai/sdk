@@ -435,7 +435,21 @@ export const voicePlusSetupSnippet = (cfg: {
   if (cfg.environment === Environment.Html) {
     return `${umdScriptTags.voicePlusCore}
 <script>
-  ${indentBy("  ", voicePlusSnippet(cfg))}
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  contentLoaded().then(() => {
+    ${indentBy("    ", voicePlusSnippet(cfg))}
+  });
 </script>`;
   }
 
