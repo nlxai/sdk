@@ -59,7 +59,19 @@ export const setupSnippet = ({
         : ""
     }
     <script>
-      window.addEventListener("DOMContentLoaded", () => {${
+      const contentLoaded = () => {
+        if (document.readyState === "loading") {
+          return new Promise((resolve) => {
+            window.addEventListener("DOMContentLoaded", () => {
+              resolve();
+            });
+          });
+        } else {
+          return Promise.resolve();
+        }
+      };
+
+      contentLoaded().then(() => {${
         customModalitiesExample != null
           ? `
 
@@ -368,7 +380,19 @@ export const voicePlusWebSnippet = ({
 
       const triggers = {};
 
-      window.addEventListener("DOMContentLoaded", () => {
+      const contentLoaded = () => {
+        if (document.readyState === "loading") {
+          return new Promise((resolve) => {
+            window.addEventListener("DOMContentLoaded", () => {
+              resolve();
+            });
+          });
+        } else {
+          return Promise.resolve();
+        }
+      };
+
+      contentLoaded().then(() => {
         nlxai.voicePlusWeb.run({
           config: {
             // hard-coded params
