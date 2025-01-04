@@ -944,7 +944,7 @@ export function createConversation(config: Config): ConversationHandler {
     choiceId: string,
     context?: Context,
     metadata?: ChoiceRequestMetadata,
-  ) => {
+  ): void => {
     let newResponses: Response[] = [...state.responses];
 
     const choiceResponse: Response = {
@@ -1045,6 +1045,7 @@ export function createConversation(config: Config): ConversationHandler {
     },
     setLanguageCode: (languageCode: string) => {
       if (languageCode === state.languageCode) {
+        // eslint-disable-next-line no-console
         console.warn(
           "Attempted to set language code to the one already active.",
         );
