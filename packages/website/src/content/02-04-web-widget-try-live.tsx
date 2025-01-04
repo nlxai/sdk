@@ -1,4 +1,5 @@
 import { type FC, useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { PageTitle } from "../components/PageTitle";
 import { type Config } from "@nlxai/chat-core";
 import {
@@ -45,8 +46,45 @@ ${setupSnippet({ config, titleBar, theme, behavior })}
 \`\`\`
 `;
 
+const loadTouchpointUi = async (): Promise<any> => {
+  const touchpointUi = (window as any).touchpointUi;
+  if (touchpointUi != null) {
+    return await Promise.resolve(touchpointUi);
+  }
+  return await new Promise((resolve, reject) => {
+    const scriptTag = document.createElement("script");
+    scriptTag.src = "/touchpoint-alpha.umd.cjs";
+    scriptTag.addEventListener("load", () => {
+      resolve((window as any).touchpointUi);
+    });
+    scriptTag.addEventListener("error", (err) => {
+      reject(new Error(err.message));
+    });
+    document.head.appendChild(scriptTag);
+  });
+};
+
 export const WebWidgetTryLive: FC<unknown> = () => {
   const [config, setConfig] = useState<Config>(getInitialConfig());
+
+  const [searchParams] = useSearchParams();
+
+  const isTouchpoint = searchParams.get("touchpoint") === "true";
+
+  useEffect(() => {
+    if (isTouchpoint) {
+      loadTouchpointUi()
+        .then((touchpointUi) => {
+          touchpointUi.create({
+            config,
+          });
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn(err);
+        });
+    }
+  }, [isTouchpoint, config]);
 
   const [theme, setTheme] = useState<Partial<Theme>>(
     retrieveTheme() ?? defaultTheme,
@@ -110,17 +148,19 @@ export const WebWidgetTryLive: FC<unknown> = () => {
           })}
         />
       </div>
-      <Widget
-        config={config}
-        theme={theme}
-        titleBar={titleBar}
-        onExpand={(handler) => {
-          if (config.botUrl !== "" && !welcomeIntentSent.current) {
-            handler.sendWelcomeIntent();
-            welcomeIntentSent.current = true;
-          }
-        }}
-      />
+      {isTouchpoint ? null : (
+        <Widget
+          config={config}
+          theme={theme}
+          titleBar={titleBar}
+          onExpand={(handler) => {
+            if (config.botUrl !== "" && !welcomeIntentSent.current) {
+              handler.sendWelcomeIntent();
+              welcomeIntentSent.current = true;
+            }
+          }}
+        />
+      )}
     </>
   );
 };
