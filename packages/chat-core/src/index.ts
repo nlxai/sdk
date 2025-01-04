@@ -360,7 +360,7 @@ export interface Config {
    * The language code to use for the bot. In the browser this can be fetched with `navigator.language`.
    * If you don't have translations, hard-code this to the language code you support.
    */
-  languageCode: string;
+  languageCode: LanguageCode;
   /**
    * @hidden
    * this should only be used for NLX internal testing.
@@ -523,6 +523,11 @@ export interface ChoiceRequestMetadata {
 }
 
 /**
+ * Language code named for clarity, may restrict it to a finite list
+ */
+export type LanguageCode = string;
+
+/**
  * Instead of sending a request to the bot, handle it in a custom fashion
  * @param botRequest - The {@link BotRequest} that is being overridden
  * @param appendResponse - A method to append the {@link BotResponsePayload} to the message history
@@ -598,6 +603,14 @@ export interface ConversationHandler {
    */
   currentConversationId: () => string | undefined;
   /**
+   * Get the current language code
+   */
+  currentLanguageCode: () => string;
+  /**
+   * Set the language code
+   */
+  setLanguageCode: (languageCode: LanguageCode) => void;
+  /**
    * Forces a new conversation. If `clearResponses` is set to true, will also clear historical responses passed to subscribers.
    * Retains all existing subscribers.
    */
@@ -619,6 +632,7 @@ export interface ConversationHandler {
 
 interface InternalState {
   responses: Response[];
+  languageCode: string;
   conversationId: string;
   userId?: string;
 }
@@ -675,6 +689,7 @@ export function createConversation(config: Config): ConversationHandler {
 
   let state: InternalState = {
     responses: config.responses ?? [],
+    languageCode: config.languageCode,
     userId: config.userId,
     conversationId: initialConversationId,
   };
@@ -778,7 +793,7 @@ export function createConversation(config: Config): ConversationHandler {
       userId: state.userId,
       conversationId: state.conversationId,
       ...body,
-      languageCode: config.languageCode,
+      languageCode: state.languageCode,
       channelType: config.experimental?.channelType,
       environment: config.environment,
     };
@@ -793,7 +808,7 @@ export function createConversation(config: Config): ConversationHandler {
         `${config.botUrl}${
           config.experimental?.completeBotUrl === true
             ? ""
-            : `-${config.languageCode}`
+            : `-${state.languageCode}`
         }`,
         {
           method: "POST",
@@ -833,10 +848,10 @@ export function createConversation(config: Config): ConversationHandler {
   const setupWebsocket = (): void => {
     const url = new URL(config.botUrl);
     if (config.experimental?.completeBotUrl !== true) {
-      url.searchParams.set("languageCode", config.languageCode);
+      url.searchParams.set("languageCode", state.languageCode);
       url.searchParams.set(
         "channelKey",
-        `${url.searchParams.get("channelKey") ?? ""}-${config.languageCode}`,
+        `${url.searchParams.get("channelKey") ?? ""}-${state.languageCode}`,
       );
     }
     url.searchParams.set("conversationId", state.conversationId);
@@ -925,6 +940,67 @@ export function createConversation(config: Config): ConversationHandler {
     });
   };
 
+  const sendChoice = (
+    choiceId: string,
+    context?: Context,
+    metadata?: ChoiceRequestMetadata,
+  ) => {
+    let newResponses: Response[] = [...state.responses];
+
+    const choiceResponse: Response = {
+      type: "user",
+      receivedAt: new Date().getTime(),
+      payload: {
+        type: "choice",
+        choiceId,
+      },
+    };
+
+    const responseIndex = metadata?.responseIndex ?? -1;
+    const messageIndex = metadata?.messageIndex ?? -1;
+
+    if (responseIndex > -1 && messageIndex > -1) {
+      newResponses = adjust(
+        responseIndex,
+        (response) =>
+          response.type === "bot"
+            ? {
+                ...response,
+                payload: {
+                  ...response.payload,
+                  messages: adjust(
+                    messageIndex,
+                    (message) => ({ ...message, selectedChoiceId: choiceId }),
+                    response.payload.messages,
+                  ),
+                },
+              }
+            : response,
+        newResponses,
+      );
+    }
+
+    newResponses = [...newResponses, choiceResponse];
+
+    setState(
+      {
+        responses: newResponses,
+      },
+      choiceResponse,
+    );
+
+    void sendToBot({
+      context,
+      request: {
+        structured: {
+          nodeId: metadata?.nodeId,
+          intentId: metadata?.intentId,
+          choiceId,
+        },
+      },
+    });
+  };
+
   const unsubscribe = (subscriber: Subscriber): void => {
     subscribers = subscribers.filter((fn) => fn !== subscriber);
   };
@@ -963,64 +1039,25 @@ export function createConversation(config: Config): ConversationHandler {
     sendWelcomeIntent: (context) => {
       sendIntent(welcomeIntent, context);
     },
-    sendChoice: (choiceId, context, metadata) => {
-      let newResponses: Response[] = [...state.responses];
-
-      const choiceResponse: Response = {
-        type: "user",
-        receivedAt: new Date().getTime(),
-        payload: {
-          type: "choice",
-          choiceId,
-        },
-      };
-
-      const responseIndex = metadata?.responseIndex ?? -1;
-      const messageIndex = metadata?.messageIndex ?? -1;
-
-      if (responseIndex > -1 && messageIndex > -1) {
-        newResponses = adjust(
-          responseIndex,
-          (response) =>
-            response.type === "bot"
-              ? {
-                  ...response,
-                  payload: {
-                    ...response.payload,
-                    messages: adjust(
-                      messageIndex,
-                      (message) => ({ ...message, selectedChoiceId: choiceId }),
-                      response.payload.messages,
-                    ),
-                  },
-                }
-              : response,
-          newResponses,
-        );
-      }
-
-      newResponses = [...newResponses, choiceResponse];
-
-      setState(
-        {
-          responses: newResponses,
-        },
-        choiceResponse,
-      );
-
-      void sendToBot({
-        context,
-        request: {
-          structured: {
-            nodeId: metadata?.nodeId,
-            intentId: metadata?.intentId,
-            choiceId,
-          },
-        },
-      });
-    },
+    sendChoice,
     currentConversationId: () => {
       return state.conversationId;
+    },
+    setLanguageCode: (languageCode: string) => {
+      if (languageCode === state.languageCode) {
+        console.warn(
+          "Attempted to set language code to the one already active.",
+        );
+        return;
+      }
+      if (isUsingWebSockets()) {
+        teardownWebsocket();
+        setupWebsocket();
+      }
+      setState({ languageCode });
+    },
+    currentLanguageCode: () => {
+      return state.languageCode;
     },
     subscribe,
     unsubscribe,
