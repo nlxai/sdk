@@ -46,7 +46,7 @@ client.sendStep("REPLACE_WITH_STEP_ID");
 
 #### Defined in
 
-[index.ts:26](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-core/src/index.ts#L26)
+[index.ts:26](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-core/src/index.ts#L26)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[index.ts:121](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-core/src/index.ts#L121)
+[index.ts:121](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-core/src/index.ts#L121)
 
 
 <a name="indexmd"></a>
@@ -115,7 +115,7 @@ sends a step to the voice bot
 
 ##### Defined in
 
-[index.ts:114](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-core/src/index.ts#L114)
+[index.ts:114](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-core/src/index.ts#L114)
 
 
 <a name="interfacesconfigmd"></a>
@@ -134,7 +134,7 @@ Initial configuration used when creating a journey manager
 
 ##### Defined in
 
-[index.ts:129](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-core/src/index.ts#L129)
+[index.ts:129](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-core/src/index.ts#L129)
 
 ___
 
@@ -150,7 +150,7 @@ use `scriptId` instead
 
 ##### Defined in
 
-[index.ts:134](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-core/src/index.ts#L134)
+[index.ts:134](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-core/src/index.ts#L134)
 
 ___
 
@@ -162,7 +162,7 @@ the ID of the script.
 
 ##### Defined in
 
-[index.ts:136](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-core/src/index.ts#L136)
+[index.ts:136](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-core/src/index.ts#L136)
 
 ___
 
@@ -174,7 +174,7 @@ your workspace id
 
 ##### Defined in
 
-[index.ts:139](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-core/src/index.ts#L139)
+[index.ts:139](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-core/src/index.ts#L139)
 
 ___
 
@@ -188,7 +188,7 @@ _Note: This must be dynamically set by the voice bot._
 
 ##### Defined in
 
-[index.ts:146](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-core/src/index.ts#L146)
+[index.ts:146](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-core/src/index.ts#L146)
 
 ___
 
@@ -200,7 +200,7 @@ the user's language code, consistent with the language codes defined on the jour
 
 ##### Defined in
 
-[index.ts:151](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-core/src/index.ts#L151)
+[index.ts:151](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-core/src/index.ts#L151)
 
 ___
 
@@ -212,4 +212,4 @@ set to true to help debug issues or errors. Defaults to false
 
 ##### Defined in
 
-[index.ts:154](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-core/src/index.ts#L154)
+[index.ts:154](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-core/src/index.ts#L154)

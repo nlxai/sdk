@@ -34,7 +34,7 @@ Used for some more advanced callbacks
 
 #### Defined in
 
-[voice-plus-web/src/configuration.ts:50](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L50)
+[voice-plus-web/src/configuration.ts:50](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L50)
 
 ___
 
@@ -46,7 +46,7 @@ Matching method
 
 #### Defined in
 
-[voice-plus-web/src/queries.ts:10](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/queries.ts#L10)
+[voice-plus-web/src/queries.ts:10](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/queries.ts#L10)
 
 ___
 
@@ -58,7 +58,7 @@ A record of triggers
 
 #### Defined in
 
-[voice-plus-web/src/trigger.ts:36](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/trigger.ts#L36)
+[voice-plus-web/src/trigger.ts:36](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/trigger.ts#L36)
 
 ___
 
@@ -70,7 +70,7 @@ Step ID
 
 #### Defined in
 
-[voice-plus-web/src/trigger.ts:65](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/trigger.ts#L65)
+[voice-plus-web/src/trigger.ts:65](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/trigger.ts#L65)
 
 ## Variables
 
@@ -90,7 +90,7 @@ Icon URL's
 
 #### Defined in
 
-[voice-plus-web/src/ui/components/icons.tsx:12](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/ui/components/icons.tsx#L12)
+[voice-plus-web/src/ui/components/icons.tsx:12](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/ui/components/icons.tsx#L12)
 
 ## Functions
 
@@ -114,7 +114,7 @@ an promise of an object containing a teardown function and the Voice+ client.
 
 #### Defined in
 
-[voice-plus-web/src/index.ts:84](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/index.ts#L84)
+[voice-plus-web/src/index.ts:84](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/index.ts#L84)
 
 
 <a name="indexmd"></a>
@@ -139,7 +139,7 @@ Button label
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:62](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L62)
+[voice-plus-web/src/configuration.ts:62](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L62)
 
 ___
 
@@ -151,7 +151,7 @@ Button confirmation: if present, the button click handler only triggers after th
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:66](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L66)
+[voice-plus-web/src/configuration.ts:66](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L66)
 
 ___
 
@@ -163,7 +163,7 @@ Icon URL
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:70](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L70)
+[voice-plus-web/src/configuration.ts:70](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L70)
 
 ___
 
@@ -189,7 +189,7 @@ Click handler
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:74](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L74)
+[voice-plus-web/src/configuration.ts:74](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L74)
 
 
 <a name="interfacesencodedquerymd"></a>
@@ -208,7 +208,7 @@ Query name
 
 ##### Defined in
 
-[voice-plus-web/src/queries.ts:60](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/queries.ts#L60)
+[voice-plus-web/src/queries.ts:60](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/queries.ts#L60)
 
 ___
 
@@ -220,7 +220,7 @@ Query target
 
 ##### Defined in
 
-[voice-plus-web/src/queries.ts:64](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/queries.ts#L64)
+[voice-plus-web/src/queries.ts:64](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/queries.ts#L64)
 
 ___
 
@@ -232,7 +232,7 @@ Query options
 
 ##### Defined in
 
-[voice-plus-web/src/queries.ts:68](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/queries.ts#L68)
+[voice-plus-web/src/queries.ts:68](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/queries.ts#L68)
 
 ___
 
@@ -244,7 +244,7 @@ Query parent
 
 ##### Defined in
 
-[voice-plus-web/src/queries.ts:72](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/queries.ts#L72)
+[voice-plus-web/src/queries.ts:72](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/queries.ts#L72)
 
 
 <a name="interfacesrunoutputmd"></a>
@@ -271,7 +271,7 @@ Stop running the journey, removing all event listeners
 
 ##### Defined in
 
-[voice-plus-web/src/index.ts:72](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/index.ts#L72)
+[voice-plus-web/src/index.ts:72](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/index.ts#L72)
 
 ___
 
@@ -283,7 +283,7 @@ The regular Voice+ SDK client
 
 ##### Defined in
 
-[voice-plus-web/src/index.ts:76](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/index.ts#L76)
+[voice-plus-web/src/index.ts:76](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/index.ts#L76)
 
 
 <a name="interfacesrunpropsmd"></a>
@@ -302,7 +302,7 @@ The regular Voice+ configuration
 
 ##### Defined in
 
-[voice-plus-web/src/index.ts:45](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/index.ts#L45)
+[voice-plus-web/src/index.ts:45](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/index.ts#L45)
 
 ___
 
@@ -314,7 +314,7 @@ UI configuration
 
 ##### Defined in
 
-[voice-plus-web/src/index.ts:49](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/index.ts#L49)
+[voice-plus-web/src/index.ts:49](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/index.ts#L49)
 
 ___
 
@@ -327,7 +327,7 @@ If triggers are not provided, they will be fetched from the CDN.
 
 ##### Defined in
 
-[voice-plus-web/src/index.ts:54](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/index.ts#L54)
+[voice-plus-web/src/index.ts:54](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/index.ts#L54)
 
 ___
 
@@ -353,7 +353,7 @@ Digression detection callback
 
 ##### Defined in
 
-[voice-plus-web/src/index.ts:58](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/index.ts#L58)
+[voice-plus-web/src/index.ts:58](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/index.ts#L58)
 
 ___
 
@@ -379,7 +379,7 @@ Runs when a step is triggered, used primarily for debugging
 
 ##### Defined in
 
-[voice-plus-web/src/index.ts:62](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/index.ts#L62)
+[voice-plus-web/src/index.ts:62](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/index.ts#L62)
 
 
 <a name="interfacesserializedregexmd"></a>
@@ -398,7 +398,7 @@ Regex body
 
 ##### Defined in
 
-[voice-plus-web/src/queries.ts:46](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/queries.ts#L46)
+[voice-plus-web/src/queries.ts:46](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/queries.ts#L46)
 
 ___
 
@@ -410,7 +410,7 @@ Regex flags
 
 ##### Defined in
 
-[voice-plus-web/src/queries.ts:50](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/queries.ts#L50)
+[voice-plus-web/src/queries.ts:50](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/queries.ts#L50)
 
 
 <a name="interfacessimplehandlerargmd"></a>
@@ -444,7 +444,7 @@ A function to send steps to NLX.
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:46](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L46)
+[voice-plus-web/src/configuration.ts:46](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L46)
 
 
 <a name="interfacesthememd"></a>
@@ -463,7 +463,7 @@ UI colors
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:28](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L28)
+[voice-plus-web/src/configuration.ts:28](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L28)
 
 ___
 
@@ -475,7 +475,7 @@ Font family
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:32](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L32)
+[voice-plus-web/src/configuration.ts:32](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L32)
 
 
 <a name="interfacesthemecolorsmd"></a>
@@ -494,7 +494,7 @@ Primary color
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:10](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L10)
+[voice-plus-web/src/configuration.ts:10](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L10)
 
 ___
 
@@ -506,7 +506,7 @@ Primary color on hover
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:14](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L14)
+[voice-plus-web/src/configuration.ts:14](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L14)
 
 ___
 
@@ -518,7 +518,7 @@ Color for trigger highlights
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:18](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L18)
+[voice-plus-web/src/configuration.ts:18](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L18)
 
 
 <a name="interfacestriggermd"></a>
@@ -537,7 +537,7 @@ Event
 
 ##### Defined in
 
-[voice-plus-web/src/trigger.ts:14](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/trigger.ts#L14)
+[voice-plus-web/src/trigger.ts:14](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/trigger.ts#L14)
 
 ___
 
@@ -549,7 +549,7 @@ A query identifying the element
 
 ##### Defined in
 
-[voice-plus-web/src/trigger.ts:18](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/trigger.ts#L18)
+[voice-plus-web/src/trigger.ts:18](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/trigger.ts#L18)
 
 ___
 
@@ -561,7 +561,7 @@ A flag specifying whether the trigger should only fire a single time
 
 ##### Defined in
 
-[voice-plus-web/src/trigger.ts:22](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/trigger.ts#L22)
+[voice-plus-web/src/trigger.ts:22](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/trigger.ts#L22)
 
 ___
 
@@ -573,7 +573,7 @@ A flag specifying whether the trigger should highlight. Only applicable to click
 
 ##### Defined in
 
-[voice-plus-web/src/trigger.ts:26](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/trigger.ts#L26)
+[voice-plus-web/src/trigger.ts:26](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/trigger.ts#L26)
 
 ___
 
@@ -585,7 +585,7 @@ URL condition
 
 ##### Defined in
 
-[voice-plus-web/src/trigger.ts:30](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/trigger.ts#L30)
+[voice-plus-web/src/trigger.ts:30](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/trigger.ts#L30)
 
 
 <a name="interfacestriggeredstepmd"></a>
@@ -604,7 +604,7 @@ step id
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:38](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L38)
+[voice-plus-web/src/configuration.ts:38](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L38)
 
 ___
 
@@ -616,7 +616,7 @@ the URL of the page it triggered on
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:40](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L40)
+[voice-plus-web/src/configuration.ts:40](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L40)
 
 
 <a name="interfacesuiconfigmd"></a>
@@ -635,7 +635,7 @@ Drawer title
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:84](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L84)
+[voice-plus-web/src/configuration.ts:84](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L84)
 
 ___
 
@@ -647,7 +647,7 @@ Drawer subtitle
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:88](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L88)
+[voice-plus-web/src/configuration.ts:88](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L88)
 
 ___
 
@@ -659,7 +659,7 @@ Render highlights
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:92](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L92)
+[voice-plus-web/src/configuration.ts:92](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L92)
 
 ___
 
@@ -671,7 +671,7 @@ URL for the button icon
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:101](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L101)
+[voice-plus-web/src/configuration.ts:101](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L101)
 
 ___
 
@@ -683,7 +683,7 @@ UI theme
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:105](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L105)
+[voice-plus-web/src/configuration.ts:105](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L105)
 
 ___
 
@@ -709,7 +709,7 @@ Escalation handler
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:109](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L109)
+[voice-plus-web/src/configuration.ts:109](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L109)
 
 ___
 
@@ -721,7 +721,7 @@ Escalation button label
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:113](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L113)
+[voice-plus-web/src/configuration.ts:113](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L113)
 
 ___
 
@@ -733,7 +733,7 @@ Escalation confirmation
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:117](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L117)
+[voice-plus-web/src/configuration.ts:117](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L117)
 
 ___
 
@@ -759,7 +759,7 @@ End handler
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:121](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L121)
+[voice-plus-web/src/configuration.ts:121](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L121)
 
 ___
 
@@ -771,7 +771,7 @@ End button label
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:125](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L125)
+[voice-plus-web/src/configuration.ts:125](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L125)
 
 ___
 
@@ -783,7 +783,7 @@ End confirmation
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:129](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L129)
+[voice-plus-web/src/configuration.ts:129](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L129)
 
 ___
 
@@ -809,7 +809,7 @@ On previous step
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:133](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L133)
+[voice-plus-web/src/configuration.ts:133](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L133)
 
 ___
 
@@ -821,7 +821,7 @@ Previous step button label
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:137](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L137)
+[voice-plus-web/src/configuration.ts:137](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L137)
 
 ___
 
@@ -833,7 +833,7 @@ Custom buttons
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:141](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L141)
+[voice-plus-web/src/configuration.ts:141](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L141)
 
 ___
 
@@ -846,7 +846,7 @@ it will be shown only if the user never interacts with the overlay pin, after `t
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:146](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L146)
+[voice-plus-web/src/configuration.ts:146](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L146)
 
 ___
 
@@ -858,7 +858,7 @@ Show nudge tooltip after this many milliseconds
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:150](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L150)
+[voice-plus-web/src/configuration.ts:150](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L150)
 
 ___
 
@@ -870,7 +870,7 @@ Hide nudge tooltip after it's been shown for this many milliseconds
 
 ##### Defined in
 
-[voice-plus-web/src/configuration.ts:154](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/configuration.ts#L154)
+[voice-plus-web/src/configuration.ts:154](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/configuration.ts#L154)
 
 
 <a name="interfacesurlconditionmd"></a>
@@ -889,7 +889,7 @@ Condition operator
 
 ##### Defined in
 
-[voice-plus-web/src/UrlCondition.ts:8](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/UrlCondition.ts#L8)
+[voice-plus-web/src/UrlCondition.ts:8](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/UrlCondition.ts#L8)
 
 ___
 
@@ -901,4 +901,4 @@ Condition value
 
 ##### Defined in
 
-[voice-plus-web/src/UrlCondition.ts:12](https://github.com/nlxai/sdk/blob/d54dc67b3b91a8c2588e49c7317a659da0c47812/packages/voice-plus-web/src/UrlCondition.ts#L12)
+[voice-plus-web/src/UrlCondition.ts:12](https://github.com/nlxai/sdk/blob/4e955cfe47540d811508dbfc6f5480f2c4521d7a/packages/voice-plus-web/src/UrlCondition.ts#L12)
