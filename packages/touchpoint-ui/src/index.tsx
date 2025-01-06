@@ -6,6 +6,10 @@ import { type ConversationHandler } from "@nlxai/chat-core";
 import App, { type Props, type AppRef } from "./App";
 import cssRaw from "./index.css?inline";
 
+export { useTouchpointContext } from "./context";
+export { html } from "htm/react";
+export { default as React } from "react";
+
 class NlxTouchpointElement extends HTMLElement {
   _root: Root | null = null;
   _shadowRoot: ShadowRoot | null = null;

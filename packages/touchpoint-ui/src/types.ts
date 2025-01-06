@@ -1,3 +1,15 @@
+import { type FC } from "react";
+
+/**
+ * Various component overrides
+ */
+export interface Overrides {
+  /**
+   * Override the loader animation
+   */
+  loader?: FC<unknown>;
+}
+
 /**
  * Window size configuration
  */

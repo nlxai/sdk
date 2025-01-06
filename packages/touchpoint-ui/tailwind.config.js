@@ -16,10 +16,6 @@ module.exports = {
         launchButton: 100,
       },
       colors: {
-        main: "#006CE4",
-        brand: "#003B95",
-        "tender-blue": "#F0F6FF",
-        yellow: "#FFB700",
         "primary-80": "rgb(var(--primary-80))",
         "primary-60": "rgb(var(--primary-60))",
         "primary-40": "rgb(var(--primary-40))",

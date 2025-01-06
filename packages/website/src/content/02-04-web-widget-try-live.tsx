@@ -59,8 +59,7 @@ export const WebWidgetTryLive: FC<unknown> = () => {
     }
     import("@nlxai/touchpoint-ui/lib/index.js")
       .then(({ create }) => {
-        const ui = create({ config });
-        ui.expand();
+        create({ config });
       })
       .catch((err) => {
         // eslint-disable-next-line no-console

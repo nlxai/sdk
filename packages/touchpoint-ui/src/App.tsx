@@ -1,5 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import {
+  type FC,
   useRef,
   useEffect,
   useState,
@@ -33,6 +34,9 @@ export interface Props {
   windowSize?: WindowSize;
   colorMode?: ColorMode;
   logoUrl?: LogoUrl;
+  overrides?: {
+    loader?: FC<unknown>;
+  };
 }
 
 export interface AppRef {
@@ -157,7 +161,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   }
 
   return (
-    <Context.Provider value={{ mode: colorMode }}>
+    <Context.Provider value={{ colorMode: colorMode, windowSize, handler }}>
       {isExpanded ? (
         <div
           data-theme={colorMode}
