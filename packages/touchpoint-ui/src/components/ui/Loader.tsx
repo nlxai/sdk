@@ -1,6 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
 import { useEffect, useRef, useState, type FC } from "react";
+import vid from "./loader-assets/loader-dark.mp4";
 
 export interface LoaderProps {
   label: string;
@@ -70,7 +71,7 @@ export const Loader: FC<LoaderProps> = ({ label }) => {
   return (
     <div className={clsx("h-full w-full flex items-center justify-center")}>
       <div className="flex flex-col items-center justify-center gap-3">
-        <div className={clsx("w-8 h-8 block text-accent")}>
+        <div className={clsx("w-16 h-16 block text-accent")}>
           <svg
             viewBox="0 0 100 100"
             stroke="none"
@@ -86,9 +87,9 @@ export const Loader: FC<LoaderProps> = ({ label }) => {
             </g>
           </svg>
         </div>
-        {/* <video className={clsx("w-16 h-16 block")} autoPlay muted loop>
+        <video className={clsx("w-16 h-16 block")} autoPlay muted loop>
           <source src={vid} type="video/mp4" />
-        </video> */}
+        </video>
         <p className="text-primary-60">{label}</p>
       </div>
     </div>
