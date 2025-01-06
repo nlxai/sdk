@@ -99,7 +99,10 @@ export const ChatMessages: FC<ChatMessagesProps> = ({ responses }) => {
         // Failure
         if (response.type === "failure") {
           return (
-            <p key={responseIndex} className="text-error-primary text-base">
+            <p
+              key={responseIndex}
+              className="text-error-primary text-base max-w-content mx-auto"
+            >
               {response.payload.text}
             </p>
           );

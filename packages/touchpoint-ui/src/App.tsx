@@ -25,13 +25,14 @@ import ChatHeader from "./components/ChatHeader";
 import { ChatSettings } from "./components/ChatSettings";
 import { MessageChoices, ChatMessages } from "./components/ChatMessages";
 import ChatInput from "./components/ChatInput";
-import { type ColorMode, type WindowSize } from "./types";
+import { type ColorMode, type WindowSize, type LogoUrl } from "./types";
 import { Context } from "./context";
 
 export interface Props {
   config: Config;
   windowSize?: WindowSize;
   colorMode?: ColorMode;
+  logoUrl?: LogoUrl;
 }
 
 export interface AppRef {
@@ -189,6 +190,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               <>
                 <ChatHeader
                   windowSize={windowSize}
+                  colorMode={colorMode}
+                  logoUrl={props.logoUrl}
                   openSettings={() => {
                     setSettingsOpen(true);
                   }}

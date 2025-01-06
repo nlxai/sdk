@@ -3,12 +3,14 @@ import { type FC } from "react";
 import { clsx } from "clsx";
 
 import { IconButton, type IconButtonType } from "./ui/IconButton";
-import { type WindowSize } from "../types";
+import { type WindowSize, type LogoUrl, type ColorMode } from "../types";
 import { useTailwindMediaQuery } from "../hooks";
 import { Close, Settings, Undo } from "./ui/Icons";
 
 interface ChatHeaderProps {
   windowSize: WindowSize;
+  colorMode: ColorMode;
+  logoUrl?: LogoUrl;
   collapse: () => void;
   reset: () => void;
   openSettings?: () => void;
@@ -16,7 +18,9 @@ interface ChatHeaderProps {
 
 export const ChatHeader: FC<ChatHeaderProps> = ({
   windowSize,
+  colorMode,
   collapse,
+  logoUrl,
   openSettings,
   reset,
 }) => {
@@ -33,10 +37,16 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
           : "md:absolute md:left-0 md:right-0 md:top-0",
       )}
     >
+      {logoUrl != null ? (
+        <img
+          className="w-10 h-10 block"
+          src={typeof logoUrl === "string" ? logoUrl : logoUrl[colorMode]}
+        />
+      ) : null}
       <IconButton
         label="Reset"
         type={iconButtonType}
-        className={clsx()}
+        className={logoUrl == null ? "" : "ml-auto"}
         onClick={() => {
           reset();
         }}
@@ -44,7 +54,7 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
       />
       {openSettings != null ? (
         <IconButton
-          className={clsx("ml-auto")}
+          className={logoUrl != null ? "" : "ml-auto"}
           Icon={Settings}
           label="Settings"
           type={iconButtonType}
@@ -56,7 +66,7 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
       <IconButton
         label="Collapse"
         type={iconButtonType}
-        className={clsx(openSettings == null ? "ml-auto" : "")}
+        className={openSettings == null ? "ml-auto" : ""}
         onClick={() => {
           collapse();
         }}
