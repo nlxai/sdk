@@ -3,10 +3,15 @@ import { clsx } from "clsx";
 import { type FC } from "react";
 
 import { useContextValue } from "../../context";
+import loaderDark from "./loader-assets/loader-dark.mp4?base64";
+import loaderLight from "./loader-assets/loader-light.mp4?base64";
 
 export interface LoaderProps {
   label: string;
 }
+
+const toBase64ImageUrl = (encoded: string): string =>
+  `data:image/mp4;base64,${encoded}`;
 
 export const Loader: FC<LoaderProps> = ({ label }) => {
   const { mode } = useContextValue();
@@ -24,7 +29,11 @@ export const Loader: FC<LoaderProps> = ({ label }) => {
           loop
         >
           <source
-            src={mode === "dark" ? "/loader-dark.mp4" : "/loader-light.mp4"}
+            src={
+              mode === "dark"
+                ? toBase64ImageUrl(loaderDark)
+                : toBase64ImageUrl(loaderLight)
+            }
             type="video/mp4"
           />
         </video>

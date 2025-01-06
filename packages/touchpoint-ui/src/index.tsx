@@ -64,14 +64,30 @@ export const create = (props: Props): TouchpointInstance => {
     refValue = event.detail;
   };
   element.addEventListener("reactRef", handleRef);
+  // Since the React ref instance might not be synchronously set exactly when the experience is initialized, this helper allows the user
+  // to use methods, either immediately or with a setTimeout. Only applicable to methods that don't return anything.
+  // (for example, conversation handler availability is not guaranteed anyway)
+  const handleRefWithDelay = (fn: (appRef: AppRef) => void) => {
+    if (refValue != null) {
+      fn(refValue);
+      return;
+    }
+    setTimeout(() => {
+      if (refValue != null) {
+        fn(refValue);
+      }
+    });
+  };
   return {
     expand: () => {
-      // TODO: if the ref value is not yet available, setTimeout so it is
-      refValue?.expand();
+      handleRefWithDelay((appRef) => {
+        appRef.expand();
+      });
     },
     collapse: () => {
-      // TODO: if the ref value is not yet available, setTimeout so it is
-      refValue?.collapse();
+      handleRefWithDelay((appRef) => {
+        appRef.collapse();
+      });
     },
     getConversationHandler: () => {
       return refValue?.getConversationHandler() ?? null;
