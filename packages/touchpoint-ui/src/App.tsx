@@ -161,7 +161,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   }
 
   return (
-    <Context.Provider value={{ colorMode: colorMode, windowSize, handler }}>
+    <Context.Provider value={{ colorMode, windowSize, handler }}>
       {isExpanded ? (
         <div
           data-theme={colorMode}

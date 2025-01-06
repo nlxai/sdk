@@ -71,7 +71,7 @@ export const create = (props: Props): TouchpointInstance => {
   // Since the React ref instance might not be synchronously set exactly when the experience is initialized, this helper allows the user
   // to use methods, either immediately or with a setTimeout. Only applicable to methods that don't return anything.
   // (for example, conversation handler availability is not guaranteed anyway)
-  const handleRefWithDelay = (fn: (appRef: AppRef) => void) => {
+  const handleRefWithDelay = (fn: (appRef: AppRef) => void): void => {
     if (refValue != null) {
       fn(refValue);
       return;

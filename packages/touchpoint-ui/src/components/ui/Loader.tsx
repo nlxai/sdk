@@ -1,7 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
 import { useEffect, useRef, useState, type FC } from "react";
-/* import vid from "./loader-assets/loader-dark.mp4"; */
 
 export interface LoaderProps {
   label: string;
@@ -10,9 +9,7 @@ export interface LoaderProps {
 const r = 28;
 const rc = 15;
 
-/**
- * A pair of circles a dynamic distance apart, with a connecting goop if they are close enough
- */
+// A pair of circles a dynamic distance apart, with a connecting goop if they are close enough
 const Pair: FC<{ d: number }> = ({ d }) => {
   const halfPi = Math.PI / 2;
   const limitRatio = d / rc / 2.8;
@@ -50,7 +47,7 @@ export const Loader: FC<LoaderProps> = ({ label }) => {
   );
   const stop = useRef<boolean>(false);
   useEffect(() => {
-    const animate = () => {
+    const animate = (): void => {
       setTime((prev) => {
         const time = new Date().getTime();
         return prev == null
