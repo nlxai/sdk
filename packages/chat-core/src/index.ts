@@ -605,7 +605,7 @@ export interface ConversationHandler {
   /**
    * Get the current language code
    */
-  currentLanguageCode: () => string;
+  currentLanguageCode: () => LanguageCode;
   /**
    * Set the language code
    */
