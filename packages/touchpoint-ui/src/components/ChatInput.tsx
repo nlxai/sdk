@@ -18,6 +18,7 @@ interface ChatInputProps {
   className?: string;
   handler: ConversationHandler;
   uploadUrl?: UploadUrl;
+  onFileUpload: (val: { uploadId: string; file: File }) => void;
 }
 
 interface FileInfo {
@@ -28,7 +29,12 @@ interface FileInfo {
 
 const MAX_INPUT_FILE_SIZE_IN_MB = 8;
 
-const ChatInput: FC<ChatInputProps> = ({ className, handler, uploadUrl }) => {
+const ChatInput: FC<ChatInputProps> = ({
+  className,
+  handler,
+  uploadUrl,
+  onFileUpload,
+}) => {
   // Text state
   const [isTextAreaInFocus, setIsTextAreaInFocus] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -54,7 +60,14 @@ const ChatInput: FC<ChatInputProps> = ({ className, handler, uploadUrl }) => {
     if (isInputEmpty) {
       return;
     }
-    handler.sendText(inputValue);
+    if (uploadUrl != null && fileInfo != null) {
+      handler.sendStructured({
+        uploadIds: [uploadUrl.uploadId],
+        utterance: inputValue,
+      });
+    } else {
+      handler.sendText(inputValue);
+    }
     setInputValue("");
     setFileInfo(null);
   };
@@ -96,6 +109,7 @@ const ChatInput: FC<ChatInputProps> = ({ className, handler, uploadUrl }) => {
     })
       .then(() => {
         setUploadErrorMessage(null);
+        onFileUpload({ uploadId: uploadUrl.uploadId, file });
       })
       .catch(() => {
         setGenericUploadError();
@@ -190,7 +204,8 @@ const ChatInput: FC<ChatInputProps> = ({ className, handler, uploadUrl }) => {
               setInputValue(e.target.value);
             }}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
                 submit();
               }
             }}

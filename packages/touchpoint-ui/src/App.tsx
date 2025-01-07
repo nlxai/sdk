@@ -156,6 +156,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     };
   }, [lastBotResponse]);
 
+  const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({});
+
   if (handler == null) {
     return null;
   }
@@ -207,7 +209,11 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                     handler.sendWelcomeIntent();
                   }}
                 />
-                <ChatMessages responses={responses} handler={handler} />
+                <ChatMessages
+                  responses={responses}
+                  handler={handler}
+                  uploadedFiles={uploadedFiles}
+                />
                 {choiceMessage != null ? (
                   <MessageChoices {...choiceMessage} handler={handler} />
                 ) : null}
@@ -221,6 +227,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                   uploadUrl={
                     lastBotResponse?.response.payload.metadata?.uploadUrls?.[0]
                   }
+                  onFileUpload={({ uploadId, file }) => {
+                    setUploadedFiles((prev) => ({ ...prev, [uploadId]: file }));
+                  }}
                 />
               </>
             )}

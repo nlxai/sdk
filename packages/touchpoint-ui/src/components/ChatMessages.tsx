@@ -15,6 +15,7 @@ import { ArrowForward } from "./ui/Icons";
 export interface ChatMessagesProps {
   handler: ConversationHandler;
   responses: Response[];
+  uploadedFiles: Record<string, File>;
 }
 
 export const MessageChoices: FC<{
@@ -59,15 +60,32 @@ export const MessageChoices: FC<{
   ) : null;
 };
 
-const UserMessage: FC<{ text: string }> = ({ text }) => {
+const UserMessage: FC<{ text: string; files?: File[] }> = ({ text, files }) => {
   return (
-    <div className="flex justify-end pl-10 text-base max-w-content mx-auto">
-      <div className="text-primary-60 whitespace-pre-wrap">{text}</div>
-    </div>
+    <>
+      <div className="flex justify-end pl-10 text-base max-w-content mx-auto">
+        <div className="text-primary-60 whitespace-pre-wrap">{text}</div>
+      </div>
+      {files != null ? (
+        <div className="flex justify-end max-w-content grid">
+          {files.map((file, index) => (
+            // TODO: style, add file name as alt text
+            <img
+              className="rounded-base"
+              key={index}
+              src={URL.createObjectURL(file)}
+            />
+          ))}
+        </div>
+      ) : null}
+    </>
   );
 };
 
-export const ChatMessages: FC<ChatMessagesProps> = ({ responses }) => {
+export const ChatMessages: FC<ChatMessagesProps> = ({
+  responses,
+  uploadedFiles,
+}) => {
   const isWaiting = responses[responses.length - 1]?.type === "user";
 
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -84,6 +102,12 @@ export const ChatMessages: FC<ChatMessagesProps> = ({ responses }) => {
     <div
       className="h-full p-3 overflow-y-auto no-scrollbar space-y-8"
       ref={containerRef}
+      onClick={() => {
+        const node = containerRef.current;
+        if (node != null) {
+          node.scrollTop = node.scrollHeight;
+        }
+      }}
     >
       {responses.map((response, responseIndex) => {
         // User response
@@ -91,6 +115,20 @@ export const ChatMessages: FC<ChatMessagesProps> = ({ responses }) => {
           if (response.payload.type === "text") {
             return (
               <UserMessage key={responseIndex} text={response.payload.text} />
+            );
+          } else if (
+            response.payload.type === "structured" &&
+            response.payload.utterance != null &&
+            response.payload.uploadIds != null
+          ) {
+            return (
+              <UserMessage
+                key={responseIndex}
+                text={response.payload.utterance}
+                files={response.payload.uploadIds
+                  .map((uploadId) => uploadedFiles[uploadId])
+                  .filter((file) => file != null)}
+              />
             );
           } else {
             return null;
