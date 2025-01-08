@@ -16,17 +16,21 @@ import {
   type Response,
   type Config,
   type BotResponse,
-  type BotMessage,
 } from "@nlxai/chat-core";
 import { clsx } from "clsx";
 import { findLastIndex } from "ramda";
 
 import { LaunchButton } from "./components/ui/LaunchButton";
-import ChatHeader from "./components/ChatHeader";
+import { ChatHeader } from "./components/ChatHeader";
 import { ChatSettings } from "./components/ChatSettings";
-import { MessageChoices, ChatMessages } from "./components/ChatMessages";
+import { ChatMessages } from "./components/ChatMessages";
 import ChatInput from "./components/ChatInput";
-import { type ColorMode, type WindowSize, type LogoUrl } from "./types";
+import {
+  type ColorMode,
+  type WindowSize,
+  type LogoUrl,
+  type ChoiceMessage,
+} from "./types";
 import { Context } from "./context";
 
 export interface Props {
@@ -61,7 +65,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const [isExpanded, setIsExpanded] = useState(isDev);
 
-  const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
   const expand = useCallback(() => {
     setIsExpanded(true);
@@ -130,24 +134,20 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     return { index, response };
   }, [responses]);
 
-  const choiceMessage = useMemo<{
-    message: BotMessage;
-    responseIndex: number;
-    messageIndex: number;
-  } | null>(() => {
+  const choiceMessage = useMemo<ChoiceMessage | undefined>(() => {
     if (lastBotResponse == null) {
-      return null;
+      return;
     }
     const choiceMessageIndex = findLastIndex((message) => {
       return message.choices.length > 0;
     }, lastBotResponse.response.payload.messages);
     if (choiceMessageIndex === -1) {
-      return null;
+      return;
     }
     const choiceMessage =
       lastBotResponse.response.payload.messages[choiceMessageIndex];
     if (choiceMessage == null) {
-      return null;
+      return;
     }
     return {
       message: choiceMessage,
@@ -163,28 +163,49 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   }
 
   return (
-    <Context.Provider value={{ colorMode, windowSize, handler }}>
+    <Context.Provider value={{ handler }}>
       {isExpanded ? (
         <div
           data-theme={colorMode}
-          className="grid grid-cols-2 fixed inset-0 z-touchpoint font-sans"
+          className="grid grid-cols-2 xl:grid-cols-[1fr_632px] fixed inset-0 z-touchpoint font-sans"
         >
           {windowSize === "half" ? (
-            <div className="hidden md:block bg-overlay" />
+            <div className="hidden md:block bg-overlay"></div>
           ) : null}
           <div
             className={clsx(
-              "w-full bg-background text-primary-80 flex relative flex-col backdrop-blur-overlay",
+              "w-full bg-background text-primary-80 flex relative flex-col h-full backdrop-blur-overlay",
               {
-                "col-span-2 md:col-span-1 h-full": windowSize === "half",
+                "col-span-2 md:col-span-1": windowSize === "half",
                 "col-span-2": windowSize === "full",
               },
             )}
           >
-            {settingsOpen ? (
+            <ChatHeader
+              windowSize={windowSize}
+              colorMode={colorMode}
+              logoUrl={props.logoUrl}
+              isSettingsOpen={isSettingsOpen}
+              toggleSettings={() => {
+                setIsSettingsOpen((prev) => !prev);
+              }}
+              collapse={() => {
+                setIsExpanded(false);
+              }}
+              reset={() => {
+                handler.reset({ clearResponses: true });
+                handler.sendWelcomeIntent();
+              }}
+            />
+            {isSettingsOpen ? (
               <ChatSettings
+                className={
+                  windowSize === "full"
+                    ? "w-full md:max-w-content md:mx-auto"
+                    : ""
+                }
                 onClose={() => {
-                  setSettingsOpen(false);
+                  setIsSettingsOpen(false);
                 }}
                 colorMode={colorMode}
                 windowSize={windowSize}
@@ -194,35 +215,23 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               />
             ) : (
               <>
-                <ChatHeader
-                  windowSize={windowSize}
-                  colorMode={colorMode}
-                  logoUrl={props.logoUrl}
-                  openSettings={() => {
-                    setSettingsOpen(true);
-                  }}
-                  collapse={() => {
-                    setIsExpanded(false);
-                  }}
-                  reset={() => {
-                    handler.reset({ clearResponses: true });
-                    handler.sendWelcomeIntent();
-                  }}
-                />
                 <ChatMessages
                   responses={responses}
                   handler={handler}
                   uploadedFiles={uploadedFiles}
-                />
-                {choiceMessage != null ? (
-                  <MessageChoices {...choiceMessage} handler={handler} />
-                ) : null}
-                <ChatInput
                   className={
-                    choiceMessage?.message.selectedChoiceId != null
-                      ? "hidden"
+                    windowSize === "full"
+                      ? "w-full md:max-w-content md:mx-auto"
                       : ""
                   }
+                />
+                <ChatInput
+                  className={clsx(
+                    windowSize === "full"
+                      ? "w-full md:max-w-content md:mx-auto"
+                      : "",
+                  )}
+                  choiceMessage={choiceMessage}
                   handler={handler}
                   uploadUrl={
                     lastBotResponse?.response.payload.metadata?.uploadUrls?.[0]

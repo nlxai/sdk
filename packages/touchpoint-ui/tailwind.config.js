@@ -8,7 +8,7 @@ module.exports = {
     },
     extend: {
       backdropBlur: {
-        overlay: "48px"
+        overlay: "48px",
       },
       maxWidth: {
         content: "608px",

@@ -200,9 +200,7 @@ const Container: FC<{ children: ReactNode; mode: ColorMode }> = ({
   mode,
 }) => {
   return (
-    <Context.Provider
-      value={{ colorMode: mode, windowSize: "half", handler: null }}
-    >
+    <Context.Provider value={{ handler: null }}>
       <div
         className="bg-background p-4 rounded-plus space-y-4"
         data-theme={mode}

@@ -13,7 +13,8 @@ interface ChatHeaderProps {
   logoUrl?: LogoUrl;
   collapse: () => void;
   reset: () => void;
-  openSettings?: () => void;
+  toggleSettings?: () => void;
+  isSettingsOpen: boolean;
 }
 
 export const ChatHeader: FC<ChatHeaderProps> = ({
@@ -21,7 +22,8 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
   colorMode,
   collapse,
   logoUrl,
-  openSettings,
+  toggleSettings,
+  isSettingsOpen,
   reset,
 }) => {
   const isHalf = windowSize === "half";
@@ -31,7 +33,7 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
     <div
       className={clsx(
         "flex",
-        "p-2 items-center justify-between gap-2",
+        "p-2 md:p-3 items-center justify-between gap-2",
         isHalf
           ? "md:absolute md:w-fit md:flex-col md:left-0 md:-translate-x-full"
           : "md:absolute md:left-0 md:right-0 md:top-0",
@@ -52,22 +54,20 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
         }}
         Icon={Undo}
       />
-      {openSettings != null ? (
+      {toggleSettings != null ? (
         <IconButton
           className={logoUrl != null ? "" : "ml-auto"}
           Icon={Settings}
           label="Settings"
-          type={iconButtonType}
-          onClick={() => {
-            openSettings();
-          }}
+          type={isSettingsOpen ? "activated" : iconButtonType}
+          onClick={toggleSettings}
         />
       ) : null}
       <IconButton
         label="Collapse"
         type={iconButtonType}
         className={clsx(
-          openSettings == null ? "ml-auto" : "",
+          toggleSettings == null ? "ml-auto" : "",
           isHalf ? "md:-order-1" : "",
         )}
         onClick={() => {
@@ -78,5 +78,3 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
     </div>
   );
 };
-
-export default ChatHeader;

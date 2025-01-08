@@ -13,12 +13,15 @@ import { clsx } from "clsx";
 
 import { IconButton } from "./ui/IconButton";
 import { ArrowForward, Attachment, Delete, Check, Error } from "./ui/Icons";
+import { type ChoiceMessage } from "../types";
+import { MessageChoices } from "./ChatMessages";
 
 interface ChatInputProps {
   className?: string;
   handler: ConversationHandler;
   uploadUrl?: UploadUrl;
   onFileUpload: (val: { uploadId: string; file: File }) => void;
+  choiceMessage?: ChoiceMessage;
 }
 
 interface FileInfo {
@@ -31,6 +34,7 @@ const MAX_INPUT_FILE_SIZE_IN_MB = 8;
 
 const ChatInput: FC<ChatInputProps> = ({
   className,
+  choiceMessage,
   handler,
   uploadUrl,
   onFileUpload,
@@ -117,115 +121,128 @@ const ChatInput: FC<ChatInputProps> = ({
   };
 
   return (
-    <div className="p-2">
-      <div
-        className={clsx(
-          "bg-primary-5 transition-colors duration-200 p-2 rounded-plus text-base font-normal max-w-content mx-auto",
-          isTextAreaInFocus || isUploadEnabled ? "" : "hover:bg-secondary-20",
-          className,
-        )}
-      >
-        {uploadErrorMessage != null && (
-          <div className="flex items-center py-1 mb-2 w-full bg-error-secondary rounded-base">
-            <Error size={16} />
-            <span className="truncate ml-1">{uploadErrorMessage}</span>
-          </div>
-        )}
-        {fileInfo && (
-          <>
-            <div className="flex items-center justify-between mb-2 w-full">
-              <p className="flex items-center truncate mx-2">
-                {uploadErrorMessage != null ? (
-                  <Error size={16} className="text-error-primary" />
-                ) : (
-                  <Check size={16} />
-                )}
-                <span className="truncate ml-3">{fileInfo.name}</span>
-              </p>
+    <div className={clsx("p-2 md:p-3 relative", className)}>
+      {choiceMessage != null ? (
+        <MessageChoices
+          {...choiceMessage}
+          handler={handler}
+          className={clsx(
+            "absolute inset-x-0 z-10 top-0 transform -translate-y-full px-2 md:px-3",
+            choiceMessage.message.selectedChoiceId != null
+              ? "md:top-2"
+              : "md:top-1",
+          )}
+        />
+      ) : null}
+      {choiceMessage?.message.selectedChoiceId != null ? null : (
+        <div
+          className={clsx(
+            "bg-primary-5 transition-colors duration-200 p-2 rounded-plus text-base font-normal",
+            isTextAreaInFocus || isUploadEnabled ? "" : "hover:bg-secondary-20",
+          )}
+        >
+          {uploadErrorMessage != null && (
+            <div className="flex items-center py-1 mb-2 w-full bg-error-secondary rounded-base">
+              <Error size={16} />
+              <span className="truncate ml-1">{uploadErrorMessage}</span>
+            </div>
+          )}
+          {fileInfo && (
+            <>
+              <div className="flex items-center justify-between mb-2 w-full">
+                <p className="flex items-center truncate mx-2">
+                  {uploadErrorMessage != null ? (
+                    <Error size={16} className="text-error-primary" />
+                  ) : (
+                    <Check size={16} />
+                  )}
+                  <span className="truncate ml-3">{fileInfo.name}</span>
+                </p>
+                <IconButton
+                  className="flex-none"
+                  Icon={Delete}
+                  label="Delete"
+                  onClick={
+                    isUploadEnabled
+                      ? () => {
+                          setFileInfo(null);
+                          setUploadErrorMessage(null);
+                          if (fileInputRef.current != null) {
+                            fileInputRef.current.value = "";
+                          }
+                        }
+                      : undefined
+                  }
+                  type="ghost"
+                />
+              </div>
+              <hr className="border-b-px border-background mb-2 -mx-2" />
+            </>
+          )}
+          <div className={clsx("flex items-end")}>
+            {isUploadEnabled ? (
+              <>
+                <label
+                  htmlFor="file-upload"
+                  className="p-3 w-10 h-10 flex-none block transition-colors rounded-base bg-primary-80 hover:bg-primary-80 text-secondary-80 cursor-pointer"
+                >
+                  <Attachment />
+                </label>
+                <input
+                  type="file"
+                  id="file-upload"
+                  className="sr-only"
+                  accept=".jpg, .jpeg, .png, .webp, .mp4, .mpeg4, .avi, .mov, .pdf"
+                  onChange={uploadFile}
+                  ref={fileInputRef}
+                />
+              </>
+            ) : (
               <IconButton
                 className="flex-none"
-                Icon={Delete}
-                label="Delete"
-                onClick={
-                  isUploadEnabled
-                    ? () => {
-                        setFileInfo(null);
-                        setUploadErrorMessage(null);
-                        if (fileInputRef.current != null) {
-                          fileInputRef.current.value = "";
-                        }
-                      }
-                    : undefined
-                }
+                Icon={Attachment}
+                label="Upload file"
                 type="ghost"
               />
-            </div>
-            <hr className="border-b-px border-background mb-2 -mx-2" />
-          </>
-        )}
-        <div className={clsx("flex items-end")}>
-          {isUploadEnabled ? (
-            <>
-              <label
-                htmlFor="file-upload"
-                className="p-3 w-10 h-10 flex-none block transition-colors rounded-base bg-primary-80 hover:bg-primary-80 text-secondary-80 cursor-pointer"
-              >
-                <Attachment />
-              </label>
-              <input
-                type="file"
-                id="file-upload"
-                className="sr-only"
-                accept=".jpg, .jpeg, .png, .webp, .mp4, .mpeg4, .avi, .mov, .pdf"
-                onChange={uploadFile}
-                ref={fileInputRef}
-              />
-            </>
-          ) : (
+            )}
+            <TextareaAutosize
+              className="h-10 w-full resize-none mr-2 px-2 py-2 bg-transparent text-primary-80 placeholder:text-primary-40 outline-none caret-accent"
+              placeholder="Type something"
+              maxRows={10}
+              onFocus={() => {
+                setIsTextAreaInFocus(true);
+              }}
+              onBlur={() => {
+                setIsTextAreaInFocus(false);
+              }}
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  submit();
+                }
+              }}
+              ref={textInputRef}
+            />
             <IconButton
               className="flex-none"
-              Icon={Attachment}
-              label="Upload file"
-              type="ghost"
-            />
-          )}
-          <TextareaAutosize
-            className="h-10 w-full resize-none mr-2 px-2 py-2 bg-transparent text-primary-80 placeholder:text-primary-40 outline-none caret-accent"
-            placeholder="Type something"
-            maxRows={10}
-            onFocus={() => {
-              setIsTextAreaInFocus(true);
-            }}
-            onBlur={() => {
-              setIsTextAreaInFocus(false);
-            }}
-            value={inputValue}
-            onChange={(e) => {
-              setInputValue(e.target.value);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                submit();
+              label="Send message"
+              onClick={
+                isInputEmpty
+                  ? undefined
+                  : () => {
+                      submit();
+                    }
               }
-            }}
-            ref={textInputRef}
-          />
-          <IconButton
-            className="flex-none"
-            label="Send message"
-            onClick={
-              isInputEmpty
-                ? undefined
-                : () => {
-                    submit();
-                  }
-            }
-            type="main"
-            Icon={ArrowForward}
-          />
+              type="main"
+              Icon={ArrowForward}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
