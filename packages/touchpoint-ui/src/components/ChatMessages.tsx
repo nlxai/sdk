@@ -95,8 +95,10 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
     if (containerNode == null) {
       return;
     }
-    containerNode.scrollTop = containerNode.scrollHeight;
-  }, [responses.length]);
+    setTimeout(() => {
+      containerNode.scrollTop = containerNode.scrollHeight;
+    });
+  }, [responses]);
 
   return (
     <div

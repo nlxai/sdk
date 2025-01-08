@@ -168,7 +168,7 @@ const ChatInput: FC<ChatInputProps> = ({
             <>
               <label
                 htmlFor="file-upload"
-                className="p-3 w-10 h-10 block transition-colors rounded-base bg-primary-80 hover:bg-primary-80 text-secondary-80 cursor-pointer"
+                className="p-3 w-10 h-10 flex-none block transition-colors rounded-base bg-primary-80 hover:bg-primary-80 text-secondary-80 cursor-pointer"
               >
                 <Attachment />
               </label>
@@ -190,7 +190,7 @@ const ChatInput: FC<ChatInputProps> = ({
             />
           )}
           <TextareaAutosize
-            className="h-10 w-full mr-2 px-2 py-2 bg-transparent text-primary-80 placeholder:text-primary-40 outline-none caret-accent"
+            className="h-10 w-full resize-none mr-2 px-2 py-2 bg-transparent text-primary-80 placeholder:text-primary-40 outline-none caret-accent"
             placeholder="Type something"
             maxRows={10}
             onFocus={() => {

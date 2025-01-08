@@ -167,14 +167,14 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       {isExpanded ? (
         <div
           data-theme={colorMode}
-          className="grid grid-cols-2 fixed inset-0 z-touchpoint"
+          className="grid grid-cols-2 fixed inset-0 z-touchpoint font-sans"
         >
           {windowSize === "half" ? (
             <div className="hidden md:block bg-overlay" />
           ) : null}
           <div
             className={clsx(
-              "w-full bg-background text-primary-80 flex relative flex-col backdrop-blur",
+              "w-full bg-background text-primary-80 flex relative flex-col backdrop-blur-overlay",
               {
                 "col-span-2 md:col-span-1 h-full": windowSize === "half",
                 "col-span-2": windowSize === "full",
@@ -236,7 +236,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           </div>
         </div>
       ) : (
-        <div data-theme={colorMode}>
+        <div data-theme={colorMode} className="font-sans">
           <LaunchButton
             className="fixed z-100 bottom-2 right-2 backdrop-blur z-launchButton"
             onClick={() => {

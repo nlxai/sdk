@@ -3,7 +3,13 @@ module.exports = {
   content: ["./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
+    fontFamily: {
+      sans: ["var(--font-family)"],
+    },
     extend: {
+      backdropBlur: {
+        overlay: "48px"
+      },
       maxWidth: {
         content: "608px",
       },

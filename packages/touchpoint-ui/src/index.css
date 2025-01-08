@@ -4,6 +4,8 @@
 
 @layer base {
   div[data-theme="light"] {
+    --font-family: "Neue Haas Grotesk", sans-serif;
+
     --primary-80: 0 2 9 / 0.8;
     --primary-60: 0 2 9 / 0.6;
     --primary-40: 0 2 9 / 0.4;
@@ -32,6 +34,8 @@
   }
 
   div[data-theme="dark"] {
+    --font-family: "Neue Haas Grotesk", sans-serif;
+
     --primary-80: 255 255 255 / 0.85;
     --primary-60: 255 255 255 / 0.65;
     --primary-40: 255 255 255 / 0.45;

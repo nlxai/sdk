@@ -66,7 +66,10 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
       <IconButton
         label="Collapse"
         type={iconButtonType}
-        className={openSettings == null ? "ml-auto" : ""}
+        className={clsx(
+          openSettings == null ? "ml-auto" : "",
+          isHalf ? "md:-order-1" : "",
+        )}
         onClick={() => {
           collapse();
         }}
