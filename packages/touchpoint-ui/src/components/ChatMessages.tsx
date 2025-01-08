@@ -15,6 +15,8 @@ import { ArrowForward } from "./ui/Icons";
 export interface ChatMessagesProps {
   handler: ConversationHandler;
   responses: Response[];
+  uploadedFiles: Record<string, File>;
+  className?: string;
 }
 
 export const MessageChoices: FC<{
@@ -22,19 +24,15 @@ export const MessageChoices: FC<{
   message: BotMessage;
   responseIndex: number;
   messageIndex: number;
-}> = ({ handler, message, responseIndex, messageIndex }) => {
+  className?: string;
+}> = ({ handler, message, responseIndex, messageIndex, className }) => {
   return message.choices.length > 0 ? (
-    <div
-      className={clsx(
-        "absolute inset-x-2 pb-2 z-10",
-        message.selectedChoiceId != null ? "bottom-0" : "bottom-16",
-      )}
-    >
-      <ul className={"max-w-content mx-auto"}>
+    <div className={className}>
+      <ul className="space-y-2">
         {message.choices.map((choice, key) =>
           message.selectedChoiceId == null ||
           choice.choiceId === message.selectedChoiceId ? (
-            <li key={key} className="mt-2 w-full">
+            <li key={key} className="w-full">
               <TextButton
                 type="ghost"
                 Icon={ArrowForward}
@@ -59,15 +57,33 @@ export const MessageChoices: FC<{
   ) : null;
 };
 
-const UserMessage: FC<{ text: string }> = ({ text }) => {
+const UserMessage: FC<{ text: string; files?: File[] }> = ({ text, files }) => {
   return (
-    <div className="flex justify-end pl-10 text-base max-w-content mx-auto">
-      <div className="text-primary-60 whitespace-pre-wrap">{text}</div>
-    </div>
+    <>
+      <div className="flex justify-end pl-10 text-base">
+        <div className="text-primary-60 whitespace-pre-wrap">{text}</div>
+      </div>
+      {files != null ? (
+        <div className="flex flex-wrap justify-end gap-2">
+          {files.map((file, index) => (
+            // TODO: style, add file name as alt text
+            <img
+              className="rounded-base h-20"
+              key={index}
+              src={URL.createObjectURL(file)}
+            />
+          ))}
+        </div>
+      ) : null}
+    </>
   );
 };
 
-export const ChatMessages: FC<ChatMessagesProps> = ({ responses }) => {
+export const ChatMessages: FC<ChatMessagesProps> = ({
+  responses,
+  uploadedFiles,
+  className,
+}) => {
   const isWaiting = responses[responses.length - 1]?.type === "user";
 
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -77,12 +93,17 @@ export const ChatMessages: FC<ChatMessagesProps> = ({ responses }) => {
     if (containerNode == null) {
       return;
     }
-    containerNode.scrollTop = containerNode.scrollHeight;
-  }, [responses.length]);
+    setTimeout(() => {
+      containerNode.scrollTop = containerNode.scrollHeight;
+    });
+  }, [responses]);
 
   return (
     <div
-      className="h-full p-3 overflow-y-auto no-scrollbar space-y-8"
+      className={clsx(
+        "h-full p-2 md:p-3 overflow-y-auto no-scrollbar space-y-8",
+        className,
+      )}
       ref={containerRef}
     >
       {responses.map((response, responseIndex) => {
@@ -92,6 +113,20 @@ export const ChatMessages: FC<ChatMessagesProps> = ({ responses }) => {
             return (
               <UserMessage key={responseIndex} text={response.payload.text} />
             );
+          } else if (
+            response.payload.type === "structured" &&
+            response.payload.utterance != null &&
+            response.payload.uploadIds != null
+          ) {
+            return (
+              <UserMessage
+                key={responseIndex}
+                text={response.payload.utterance}
+                files={response.payload.uploadIds
+                  .map((uploadId) => uploadedFiles[uploadId])
+                  .filter((file) => file != null)}
+              />
+            );
           } else {
             return null;
           }
@@ -99,10 +134,7 @@ export const ChatMessages: FC<ChatMessagesProps> = ({ responses }) => {
         // Failure
         if (response.type === "failure") {
           return (
-            <p
-              key={responseIndex}
-              className="text-error-primary text-base max-w-content mx-auto"
-            >
+            <p key={responseIndex} className="text-error-primary text-base">
               {response.payload.text}
             </p>
           );
@@ -114,10 +146,7 @@ export const ChatMessages: FC<ChatMessagesProps> = ({ responses }) => {
             <div className={clsx("space-y-2", isLast ? "min-h-full" : "")}>
               {response.payload.messages.map((message, messageIndex) => {
                 return (
-                  <div
-                    key={messageIndex}
-                    className="text-base max-w-content mx-auto"
-                  >
+                  <div key={messageIndex} className="text-base">
                     <div
                       className="pr-10"
                       dangerouslySetInnerHTML={{

@@ -2,10 +2,10 @@
 import { type FC, type Dispatch, type SetStateAction } from "react";
 import { type ConversationHandler } from "@nlxai/chat-core";
 
-import { IconButton } from "./ui/IconButton";
-import { ArrowForward, ArrowLeft, Escalate, Restart } from "./ui/Icons";
+import { ArrowForward, Escalate, Restart } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
 import { type ColorMode, type WindowSize } from "../types";
+import { clsx } from "clsx";
 
 interface ChatSettingsProps {
   onClose: () => void;
@@ -14,6 +14,7 @@ interface ChatSettingsProps {
   windowSize: WindowSize;
   setColorModeOverride: Dispatch<SetStateAction<ColorMode | null>>;
   setWindowSizeOverride: Dispatch<SetStateAction<WindowSize | null>>;
+  className?: string;
 }
 
 export const ChatSettings: FC<ChatSettingsProps> = ({
@@ -23,71 +24,69 @@ export const ChatSettings: FC<ChatSettingsProps> = ({
   windowSize,
   setColorModeOverride,
   setWindowSizeOverride,
+  className,
 }) => {
   return (
-    <div className="absolute inset-0 p-2 flex flex-col">
-      <div className="flex items-center justify-start flex-none">
-        <IconButton
-          type="ghost"
-          label="Back"
-          onClick={onClose}
-          Icon={ArrowLeft}
+    <div
+      className={clsx(
+        "p-2 md:p-3 flex flex-col flex-grow justify-center gap-2",
+        className,
+      )}
+    >
+      <TextButton
+        label="Restart conversation"
+        Icon={Restart}
+        type="ghost"
+        onClick={() => {
+          handler.reset();
+          onClose();
+        }}
+      />
+      <TextButton
+        label="Talk to an agent"
+        Icon={Escalate}
+        type="ghost"
+        onClick={() => {
+          // TODO: avoid hard-coding default intent by exposing from the SDK
+          handler.sendIntent("NLX.Escalation");
+          onClose();
+        }}
+      />
+      <div className="grid grid-cols-2 gap-2">
+        <TextButton
+          label="Dark mode"
+          Icon={ArrowForward}
+          type={colorMode === "dark" ? "main" : "ghost"}
+          onClick={() => {
+            setColorModeOverride("dark");
+          }}
+        />
+        <TextButton
+          label="Light mode"
+          Icon={ArrowForward}
+          type={colorMode === "light" ? "main" : "ghost"}
+          onClick={() => {
+            setColorModeOverride("light");
+          }}
         />
       </div>
-      <div className="flex-grow flex flex-col gap-2 justify-center">
+      <div className="grid grid-cols-2 gap-2">
         <TextButton
-          label="Restart conversation"
-          Icon={Restart}
-          type="ghost"
+          label="Half width"
+          Icon={ArrowForward}
+          type={windowSize === "half" ? "main" : "ghost"}
           onClick={() => {
-            handler.reset();
+            setWindowSizeOverride("half");
           }}
         />
         <TextButton
-          label="Talk to an agent"
-          Icon={Escalate}
-          type="ghost"
+          label="Full width"
+          Icon={ArrowForward}
+          type={windowSize === "full" ? "main" : "ghost"}
           onClick={() => {
-            // TODO: avoid hard-coding default intent by exposing from the SDK
-            handler.sendIntent("NLX.Escalation");
+            setWindowSizeOverride("full");
           }}
         />
-        <div className="grid grid-cols-2 gap-2">
-          <TextButton
-            label="Dark mode"
-            Icon={ArrowForward}
-            type={colorMode === "dark" ? "main" : "ghost"}
-            onClick={() => {
-              setColorModeOverride("dark");
-            }}
-          />
-          <TextButton
-            label="Light mode"
-            Icon={ArrowForward}
-            type={colorMode === "light" ? "main" : "ghost"}
-            onClick={() => {
-              setColorModeOverride("light");
-            }}
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          <TextButton
-            label="Half width"
-            Icon={ArrowForward}
-            type={windowSize === "half" ? "main" : "ghost"}
-            onClick={() => {
-              setWindowSizeOverride("half");
-            }}
-          />
-          <TextButton
-            label="Full width"
-            Icon={ArrowForward}
-            type={windowSize === "full" ? "main" : "ghost"}
-            onClick={() => {
-              setWindowSizeOverride("full");
-            }}
-          />
-        </div>
       </div>
     </div>
   );

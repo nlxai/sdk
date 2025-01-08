@@ -1,13 +1,28 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
 import { useEffect, useRef, useState, type FC } from "react";
+// import vid from "./loader-assets/loader-dark.mp4";
 
 export interface LoaderProps {
   label: string;
 }
 
-const r = 28;
-const rc = 15;
+const r = 30;
+const rc = 17;
+
+const ease = (
+  t: number,
+  [x1, y1]: [number, number],
+  [x2, y2]: [number, number],
+): number => {
+  // TODO: use control points
+  return (
+    (1 - t) ** 3 * 0 +
+    3 * (1 - t) ** 2 * t * y1 +
+    3 * (1 - t) * t ** 2 * y2 +
+    t ** 3
+  );
+};
 
 // A pair of circles a dynamic distance apart, with a connecting goop if they are close enough
 const Pair: FC<{ d: number }> = ({ d }) => {
@@ -41,6 +56,35 @@ const Pair: FC<{ d: number }> = ({ d }) => {
   );
 };
 
+const getDistance = (t: number, quarter: number): number => {
+  const pt1: [number, number] = [0, 0.2];
+  const pt2: [number, number] = [0.7, 1];
+  const easeD = ease(t, pt1, pt2);
+  const easeD2 = ease(1 - t, pt1, pt2);
+
+  return quarter === 0
+    ? easeD
+    : quarter === 1
+      ? easeD2
+      : quarter === 2
+        ? easeD
+        : easeD2;
+};
+
+const getRotation = (t: number, quarter: number): number => {
+  const pt1: [number, number] = [0.9, 0];
+  const pt2: [number, number] = [0.1, 1];
+  const easeR = ease(t, pt1, pt2);
+  const easeR2 = ease(1 - t, pt1, pt2);
+  return quarter === 0
+    ? 45 * easeR
+    : quarter === 1
+      ? 45 + 45 * (1 - easeR2)
+      : quarter === 2
+        ? 90 + 45 * easeR
+        : 135 + 45 * (1 - easeR2);
+};
+
 export const Loader: FC<LoaderProps> = ({ label }) => {
   const [time, setTime] = useState<{ start: number; current: number } | null>(
     null,
@@ -64,9 +108,17 @@ export const Loader: FC<LoaderProps> = ({ label }) => {
     return null;
   }
   const diff = time.current - time.start;
-  const phase = diff / 225;
-  const dFactor = 0.5 + 0.5 * Math.sin(phase);
-  const dropShadowRadius = dFactor > 0.2 ? 0 : (4 * (0.2 - dFactor)) / 0.2;
+
+  const adjustedTime = diff / 500;
+  const unit = Math.floor(adjustedTime);
+  const quarter = unit % 4;
+  const t = adjustedTime - unit;
+
+  const dFactor = getDistance(t, quarter);
+  const rotation = getRotation(t, quarter);
+
+  const dropShadowRadius = dFactor > 0.2 ? 0 : (8 * (0.2 - dFactor)) / 0.2;
+
   return (
     <div className={clsx("h-full w-full flex items-center justify-center")}>
       <div className="flex flex-col items-center justify-center gap-3">
@@ -79,9 +131,7 @@ export const Loader: FC<LoaderProps> = ({ label }) => {
               filter: `drop-shadow(0 0 ${dropShadowRadius}px rgb(var(--accent)))`,
             }}
           >
-            <g
-              transform={`translate(50 50) rotate(${90 - 90 * (0.5 + 0.5 * Math.cos(phase))})`}
-            >
+            <g transform={`translate(50 50) rotate(${rotation})`}>
               <Pair d={r * dFactor} />
             </g>
           </svg>
