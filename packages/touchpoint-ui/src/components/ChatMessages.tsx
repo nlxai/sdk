@@ -105,12 +105,6 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
         className,
       )}
       ref={containerRef}
-      onClick={() => {
-        const node = containerRef.current;
-        if (node != null) {
-          node.scrollTop = node.scrollHeight;
-        }
-      }}
     >
       {responses.map((response, responseIndex) => {
         // User response
