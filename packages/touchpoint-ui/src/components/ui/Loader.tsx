@@ -10,18 +10,8 @@ export interface LoaderProps {
 const r = 30;
 const rc = 17;
 
-const ease = (
-  t: number,
-  [x1, y1]: [number, number],
-  [x2, y2]: [number, number],
-): number => {
-  // TODO: use control points
-  return (
-    (1 - t) ** 3 * 0 +
-    3 * (1 - t) ** 2 * t * y1 +
-    3 * (1 - t) * t ** 2 * y2 +
-    t ** 3
-  );
+const ease = (t: number): number => {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 };
 
 // A pair of circles a dynamic distance apart, with a connecting goop if they are close enough
@@ -56,33 +46,36 @@ const Pair: FC<{ d: number }> = ({ d }) => {
   );
 };
 
-const getDistance = (t: number, quarter: number): number => {
-  const pt1: [number, number] = [0, 0.2];
-  const pt2: [number, number] = [0.7, 1];
-  const easeD = ease(t, pt1, pt2);
-  const easeD2 = ease(1 - t, pt1, pt2);
-
-  return quarter === 0
-    ? easeD
-    : quarter === 1
-      ? easeD2
-      : quarter === 2
-        ? easeD
-        : easeD2;
+const getDistance = (t: number, stage: number): number => {
+  if (stage === 0) {
+    return ease(t);
+  }
+  if (stage === 1) {
+    return 1;
+  }
+  if (stage === 2) {
+    return ease(1 - t);
+  }
+  if (stage === 3) {
+    return 0;
+  }
+  return getDistance(t, stage - 4);
 };
 
-const getRotation = (t: number, quarter: number): number => {
-  const pt1: [number, number] = [0.9, 0];
-  const pt2: [number, number] = [0.1, 1];
-  const easeR = ease(t, pt1, pt2);
-  const easeR2 = ease(1 - t, pt1, pt2);
-  return quarter === 0
-    ? 45 * easeR
-    : quarter === 1
-      ? 45 + 45 * (1 - easeR2)
-      : quarter === 2
-        ? 90 + 45 * easeR
-        : 135 + 45 * (1 - easeR2);
+const getSpin = (t: number, stage: number): number => {
+  if (stage === 0) {
+    return 0;
+  }
+  if (stage === 1) {
+    return ease(t);
+  }
+  if (stage === 2) {
+    return 1;
+  }
+  if (stage === 3) {
+    return 1;
+  }
+  return getSpin(t, stage - 4) + 1;
 };
 
 export const Loader: FC<LoaderProps> = ({ label }) => {
@@ -109,15 +102,15 @@ export const Loader: FC<LoaderProps> = ({ label }) => {
   }
   const diff = time.current - time.start;
 
-  const adjustedTime = diff / 500;
+  const adjustedTime = diff / 333.333;
   const unit = Math.floor(adjustedTime);
-  const quarter = unit % 4;
+  const stage = unit % 8;
   const t = adjustedTime - unit;
 
-  const dFactor = getDistance(t, quarter);
-  const rotation = getRotation(t, quarter);
+  const dFactor = getDistance(t, stage);
+  const spin = getSpin(t, stage);
 
-  const dropShadowRadius = dFactor > 0.2 ? 0 : (8 * (0.2 - dFactor)) / 0.2;
+  const dropShadowRadius = dFactor > 0.2 ? 0 : (5 * (0.2 - dFactor)) / 0.2;
 
   return (
     <div className={clsx("h-full w-full flex items-center justify-center")}>
@@ -131,14 +124,11 @@ export const Loader: FC<LoaderProps> = ({ label }) => {
               filter: `drop-shadow(0 0 ${dropShadowRadius}px rgb(var(--accent)))`,
             }}
           >
-            <g transform={`translate(50 50) rotate(${rotation})`}>
+            <g transform={`translate(50 50) rotate(${spin * 90})`}>
               <Pair d={r * dFactor} />
             </g>
           </svg>
         </div>
-        {/* <video className={clsx("w-16 h-16 block")} autoPlay muted loop>
-          <source src={vid} type="video/mp4" />
-        </video> */}
         <p className="text-primary-60">{label}</p>
       </div>
     </div>

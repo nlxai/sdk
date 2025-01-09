@@ -15,6 +15,7 @@ import { IconButton } from "./ui/IconButton";
 import { ArrowForward, Attachment, Delete, Check, Error } from "./ui/Icons";
 import { type ChoiceMessage } from "../types";
 import { MessageChoices } from "./ChatMessages";
+import { useTailwindMediaQuery } from "../hooks";
 
 interface ChatInputProps {
   className?: string;
@@ -47,14 +48,21 @@ const ChatInput: FC<ChatInputProps> = ({
   const [uploadErrorMessage, setUploadErrorMessage] = useState<string | null>(
     null,
   );
-  const [fileInfo, setFileInfo] = useState<FileInfo | null>(null);
+  const [uploadedFileInfo, setUploadedFileInfo] = useState<FileInfo | null>(
+    null,
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const textInputRef = useRef<HTMLTextAreaElement>(null);
 
+  const isMd = useTailwindMediaQuery("md");
+
+  // Autofocus input on desktop only
   useEffect(() => {
-    textInputRef.current?.focus();
-  }, []);
+    if (isMd) {
+      textInputRef.current?.focus();
+    }
+  }, [isMd]);
 
   const isInputEmpty = useMemo(() => {
     return inputValue.trim() === "";
@@ -64,7 +72,7 @@ const ChatInput: FC<ChatInputProps> = ({
     if (isInputEmpty) {
       return;
     }
-    if (uploadUrl != null && fileInfo != null) {
+    if (uploadUrl != null && uploadedFileInfo != null) {
       handler.sendStructured({
         uploadIds: [uploadUrl.uploadId],
         utterance: inputValue,
@@ -73,7 +81,7 @@ const ChatInput: FC<ChatInputProps> = ({
       handler.sendText(inputValue);
     }
     setInputValue("");
-    setFileInfo(null);
+    setUploadedFileInfo(null);
   };
 
   const isUploadEnabled = uploadUrl != null;
@@ -94,7 +102,7 @@ const ChatInput: FC<ChatInputProps> = ({
     }
 
     const { name, size, type } = file;
-    setFileInfo({ name, size, type });
+    setUploadedFileInfo({ name, size, type });
 
     if (size / 1024 ** 2 > MAX_INPUT_FILE_SIZE_IN_MB) {
       setUploadErrorMessage(
@@ -138,7 +146,7 @@ const ChatInput: FC<ChatInputProps> = ({
         <div
           className={clsx(
             "bg-primary-5 transition-colors duration-200 p-2 rounded-plus text-base font-normal",
-            isTextAreaInFocus || isUploadEnabled ? "" : "hover:bg-secondary-20",
+            isTextAreaInFocus ? "" : "hover:bg-secondary-20",
           )}
         >
           {uploadErrorMessage != null && (
@@ -147,16 +155,16 @@ const ChatInput: FC<ChatInputProps> = ({
               <span className="truncate ml-1">{uploadErrorMessage}</span>
             </div>
           )}
-          {fileInfo && (
+          {uploadedFileInfo && (
             <>
               <div className="flex items-center justify-between mb-2 w-full">
                 <p className="flex items-center truncate mx-2">
                   {uploadErrorMessage != null ? (
                     <Error size={16} className="text-error-primary" />
                   ) : (
-                    <Check size={16} />
+                    <Check size={16} className="text-primary-60" />
                   )}
-                  <span className="truncate ml-3">{fileInfo.name}</span>
+                  <span className="truncate ml-3">{uploadedFileInfo.name}</span>
                 </p>
                 <IconButton
                   className="flex-none"
@@ -165,7 +173,7 @@ const ChatInput: FC<ChatInputProps> = ({
                   onClick={
                     isUploadEnabled
                       ? () => {
-                          setFileInfo(null);
+                          setUploadedFileInfo(null);
                           setUploadErrorMessage(null);
                           if (fileInputRef.current != null) {
                             fileInputRef.current.value = "";
@@ -180,7 +188,7 @@ const ChatInput: FC<ChatInputProps> = ({
             </>
           )}
           <div className={clsx("flex items-end")}>
-            {isUploadEnabled ? (
+            {isUploadEnabled && uploadedFileInfo == null ? (
               <>
                 <label
                   htmlFor="file-upload"
@@ -198,6 +206,7 @@ const ChatInput: FC<ChatInputProps> = ({
                 />
               </>
             ) : (
+              /* Disabled attachment button */
               <IconButton
                 className="flex-none"
                 Icon={Attachment}
