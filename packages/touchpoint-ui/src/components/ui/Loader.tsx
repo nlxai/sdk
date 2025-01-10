@@ -20,7 +20,7 @@ const pauseDuration = 300;
 
 const totalDuration = moveDuration + pauseDuration;
 
-// A pair of circles a dynamic distance apart, with a connecting goop if they are close enough
+// A pair of circles a dynamic distance apart (the 'd' prop denotes the half-distance), with a connecting goop if they are close enough
 const Pair: FC<{ d: number }> = ({ d }) => {
   const halfPi = Math.PI / 2;
   const limitRatio = d / rc / 2.8;
@@ -118,6 +118,13 @@ export const Loader: FC<LoaderProps> = ({ label }) => {
 
   const dropShadowRadius = dFactor > 0.2 ? 0 : (5 * (0.2 - dFactor)) / 0.2;
 
+  const opacityThreshold = 0.3;
+
+  const opacity =
+    dFactor > opacityThreshold
+      ? 1 - (0.25 * (dFactor - opacityThreshold)) / (1 - opacityThreshold)
+      : 1;
+
   return (
     <div className={clsx("h-full w-full flex items-center justify-center")}>
       <div className="flex flex-col items-center justify-center gap-3">
@@ -130,7 +137,10 @@ export const Loader: FC<LoaderProps> = ({ label }) => {
               filter: `drop-shadow(0 0 ${dropShadowRadius}px rgb(var(--accent)))`,
             }}
           >
-            <g transform={`translate(50 50) rotate(${spin * 90})`}>
+            <g
+              transform={`translate(50 50) rotate(${spin * 90})`}
+              opacity={opacity}
+            >
               <Pair d={r * dFactor} />
             </g>
           </svg>
