@@ -217,6 +217,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               <>
                 <ChatMessages
                   responses={responses}
+                  colorMode={colorMode}
                   handler={handler}
                   uploadedFiles={uploadedFiles}
                   className={
