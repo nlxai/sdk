@@ -61,9 +61,11 @@ export const MessageChoices: FC<{
 
 const UserMessage: FC<{ text: string; files?: File[] }> = ({ text, files }) => {
   return (
-    <>
+    <div className="space-y-2">
       <div className="flex justify-end pl-10 text-base">
-        <div className="text-primary-60 whitespace-pre-wrap">{text}</div>
+        <div className="text-primary-60 p-3 rounded-base bg-primary-5 whitespace-pre-wrap">
+          {text}
+        </div>
       </div>
       {files != null ? (
         <div className="flex flex-wrap justify-end gap-2">
@@ -77,7 +79,7 @@ const UserMessage: FC<{ text: string; files?: File[] }> = ({ text, files }) => {
           ))}
         </div>
       ) : null}
-    </>
+    </div>
   );
 };
 
@@ -105,14 +107,12 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
 
   return (
     <div className={clsx("h-full relative", className)}>
-      {isWaiting || scrollAtBottom || responses.length < 3 ? null : (
-        <div
-          data-theme={colorMode === "dark" ? "light" : "dark"}
-          className={clsx(
-            "absolute inset-x-0 h-[1px] top-0 bg-background opacity-[0.01] backdrop-blur-md",
-          )}
-        />
-      )}
+      <div
+        data-theme={colorMode === "dark" ? "light" : "dark"}
+        className={clsx(
+          "absolute inset-x-0 h-[1px] top-0 bg-background opacity-[0.01] backdrop-blur-md",
+        )}
+      />
       <div
         className="h-full p-2 md:p-3 overflow-y-auto no-scrollbar space-y-8"
         ref={containerRef}
