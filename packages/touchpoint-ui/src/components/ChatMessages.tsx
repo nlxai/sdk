@@ -14,6 +14,7 @@ import { ArrowForward } from "./ui/Icons";
 import { type ColorMode } from "../types";
 
 export interface ChatMessagesProps {
+  isWaiting: boolean;
   handler: ConversationHandler;
   responses: Response[];
   colorMode: ColorMode;
@@ -87,23 +88,21 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
   responses,
   colorMode,
   uploadedFiles,
+  isWaiting,
   className,
 }) => {
-  const isWaiting = responses[responses.length - 1]?.type === "user";
-
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const [scrollAtBottom, setScrollAtBottom] = useState<boolean>(false);
+  const lastBotMessageRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const containerNode = containerRef.current;
-    if (containerNode == null) {
-      return;
+    if (!isWaiting) {
+      // TODO: the smooth scrolling consistently scrolls from the top of the conversation, looks like the scroll position is lost
+      setTimeout(() => {
+        lastBotMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+      });
     }
-    setTimeout(() => {
-      containerNode.scrollTop = containerNode.scrollHeight;
-    });
-  }, [responses]);
+  }, [isWaiting]);
 
   return (
     <div className={clsx("h-full relative", className)}>
@@ -113,24 +112,15 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
           "absolute inset-x-0 h-[1px] top-0 bg-background opacity-[0.01] backdrop-blur-md",
         )}
       />
+      {isWaiting ? (
+        <Loader label="Thinking" className="absolute inset-0" />
+      ) : null}
       <div
-        className="h-full p-2 md:p-3 overflow-y-auto no-scrollbar space-y-8"
+        className={clsx(
+          "h-full p-2 md:p-3 overflow-y-auto no-scrollbar space-y-8",
+          isWaiting ? "opacity-0" : "opacity-100",
+        )}
         ref={containerRef}
-        onScroll={() => {
-          const containerNode = containerRef.current;
-          if (containerNode == null) {
-            return;
-          }
-          const isAtBottom =
-            containerNode.scrollHeight - containerNode.scrollTop ===
-            containerNode.clientHeight;
-          if (!isAtBottom && scrollAtBottom) {
-            setScrollAtBottom(false);
-          }
-          if (isAtBottom && !scrollAtBottom) {
-            setScrollAtBottom(true);
-          }
-        }}
       >
         {responses.map((response, responseIndex) => {
           // User response
@@ -169,7 +159,10 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
           const isLast = responseIndex === responses.length - 1;
           return (
             <Fragment key={responseIndex}>
-              <div className={clsx("space-y-2", isLast ? "min-h-full" : "")}>
+              <div
+                className={clsx("space-y-2", isLast ? "min-h-full" : "")}
+                ref={isLast ? lastBotMessageRef : undefined}
+              >
                 {response.payload.messages.map((message, messageIndex) => {
                   return (
                     <div key={messageIndex} className="text-base">
@@ -204,7 +197,6 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
             </Fragment>
           );
         })}
-        {isWaiting ? <Loader label="Thinking" /> : null}
       </div>
     </div>
   );

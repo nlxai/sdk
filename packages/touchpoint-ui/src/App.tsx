@@ -56,6 +56,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const [responses, setResponses] = useState<Response[]>([]);
 
+  const isWaiting = responses[responses.length - 1]?.type === "user";
+
   const [colorModeOverride, setColorModeOverride] = useState<ColorMode | null>(
     null,
   );
@@ -216,6 +218,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             ) : (
               <>
                 <ChatMessages
+                  isWaiting={isWaiting}
                   responses={responses}
                   colorMode={colorMode}
                   handler={handler}

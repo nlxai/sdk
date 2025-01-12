@@ -8,7 +8,11 @@ import {
   useEffect,
 } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import { type ConversationHandler, type UploadUrl } from "@nlxai/chat-core";
+import {
+  type ConversationHandler,
+  type UploadUrl,
+  type Subscriber,
+} from "@nlxai/chat-core";
 import { clsx } from "clsx";
 
 import { IconButton } from "./ui/IconButton";
@@ -68,10 +72,31 @@ const ChatInput: FC<ChatInputProps> = ({
     return inputValue.trim() === "";
   }, [inputValue]);
 
+  const [isWaiting, setIsWaiting] = useState<boolean>(false);
+
   const submit = (): void => {
-    if (isInputEmpty) {
+    if (isInputEmpty || isWaiting) {
       return;
     }
+
+    // Before sending a bot message, subscribe to its response and clear the input only then
+    const subscriber: Subscriber = (_responses, newResponse) => {
+      if (newResponse?.type === "bot") {
+        setIsWaiting(false);
+        handler.unsubscribe(subscriber);
+        setInputValue("");
+        setUploadedFileInfo(null);
+        if (isMd) {
+          setTimeout(() => {
+            textInputRef.current?.focus();
+          });
+        }
+      }
+    };
+    handler.subscribe(subscriber);
+
+    setIsWaiting(true);
+
     if (uploadUrl != null && uploadedFileInfo != null) {
       handler.sendStructured({
         uploadIds: [uploadUrl.uploadId],
@@ -80,8 +105,6 @@ const ChatInput: FC<ChatInputProps> = ({
     } else {
       handler.sendText(inputValue);
     }
-    setInputValue("");
-    setUploadedFileInfo(null);
   };
 
   const isUploadEnabled = uploadUrl != null;
@@ -215,7 +238,12 @@ const ChatInput: FC<ChatInputProps> = ({
               />
             )}
             <TextareaAutosize
-              className="h-10 w-full resize-none mr-2 px-2 py-2 bg-transparent text-primary-80 placeholder:text-primary-40 outline-none caret-accent"
+              disabled={isWaiting}
+              className={clsx(
+                "h-10 w-full resize-none mr-2 px-2 py-2 outline-none",
+                "bg-transparent text-primary-80 placeholder:text-primary-40 caret-accent",
+                "disabled:text-primary-40",
+              )}
               placeholder="Type something"
               maxRows={10}
               onFocus={() => {
@@ -240,7 +268,7 @@ const ChatInput: FC<ChatInputProps> = ({
               className="flex-none"
               label="Send message"
               onClick={
-                isInputEmpty
+                isInputEmpty || isWaiting
                   ? undefined
                   : () => {
                       submit();

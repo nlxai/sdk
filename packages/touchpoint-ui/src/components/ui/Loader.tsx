@@ -7,6 +7,7 @@ import { useEffect, useRef, useState, type FC } from "react";
 
 export interface LoaderProps {
   label: string;
+  className?: string;
 }
 
 const r = 30;
@@ -73,7 +74,7 @@ const getSpin = (t: number): number => {
   return 1;
 };
 
-export const Loader: FC<LoaderProps> = ({ label }) => {
+export const Loader: FC<LoaderProps> = ({ label, className }) => {
   const [time, setTime] = useState<{ start: number; current: number } | null>(
     null,
   );
@@ -126,7 +127,12 @@ export const Loader: FC<LoaderProps> = ({ label }) => {
       : 1;
 
   return (
-    <div className={clsx("h-full w-full flex items-center justify-center")}>
+    <div
+      className={clsx(
+        "h-full w-full flex items-center justify-center",
+        className,
+      )}
+    >
       <div className="flex flex-col items-center justify-center gap-3">
         <div className={clsx("w-8 h-8 block text-accent")}>
           <svg
