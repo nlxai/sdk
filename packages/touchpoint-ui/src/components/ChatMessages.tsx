@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type FC, Fragment, useEffect, useRef, useState } from "react";
+import { type FC, Fragment, useEffect, useRef } from "react";
 import {
   type Response,
   type ConversationHandler,

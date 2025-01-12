@@ -7,39 +7,43 @@ import { NextPrevPage } from "./components/NextPrevPage";
 import { GettingStarted } from "./content/01-01-getting-started";
 import { Installation } from "./content/01-02-installation";
 // 2
-import { WebWidgetSetup } from "./content/02-01-web-widget-setup";
-import { WebWidgetTheming } from "./content/02-02-web-widget-theming";
-import { WebWidgetCustomBehaviors } from "./content/02-03-web-widget-custom-behaviors";
-import { WebWidgetTryLive } from "./content/02-04-web-widget-try-live";
-import { WebWidgetApi } from "./content/02-05-web-widget-api-reference";
+import { TouchpointUiSetup } from "./content/02-01-touchpoint-ui-setup";
+import { TouchpointUiTheming } from "./content/02-02-touchpoint-ui-theming";
+import { TouchpointUiTryLive } from "./content/02-03-touchpoint-ui-try-live";
 // 3
-import { WebWidgetComponentsGettingStarted } from "./content/03-01-web-widget-components-getting-started";
-import { WebWidgetComponentsAddressInput } from "./content/03-02-address-input";
-import { WebWidgetComponentsDisclaimer } from "./content/03-03-disclaimer";
-import { WebWidgetComponentsCarousel } from "./content/03-04-carousel";
-import { WebWidgetComponentsDatePicker } from "./content/03-05-datepicker";
-import { WebWidgetComponentsFeedbackForm } from "./content/03-06-feedback-form";
-import { WebWidgetComponentsFileUpload } from "./content/03-07-file-upload";
-import { WebWidgetComponentsVideoPlayer } from "./content/03-08-video-player";
-import { WebWidgetComponentsSecureInput } from "./content/03-09-secure-input";
+import { WebWidgetSetup } from "./content/03-01-web-widget-setup";
+import { WebWidgetTheming } from "./content/03-02-web-widget-theming";
+import { WebWidgetCustomBehaviors } from "./content/03-03-web-widget-custom-behaviors";
+import { WebWidgetTryLive } from "./content/03-04-web-widget-try-live";
+import { WebWidgetApi } from "./content/03-05-web-widget-api-reference";
 // 4
-import { CustomWidgetsGettingStarted } from "./content/04-01-custom-widgets-getting-started";
-import { CustomWidgetsReact } from "./content/04-02-custom-widgets-react";
-import { ReactApi } from "./content/04-03-react-api-reference";
-import { PreactApi } from "./content/04-04-preact-api-reference";
-import { CustomWidgetsOther } from "./content/04-05-custom-widgets-other";
+import { WebWidgetComponentsGettingStarted } from "./content/04-01-web-widget-components-getting-started";
+import { WebWidgetComponentsAddressInput } from "./content/04-02-address-input";
+import { WebWidgetComponentsDisclaimer } from "./content/04-03-disclaimer";
+import { WebWidgetComponentsCarousel } from "./content/04-04-carousel";
+import { WebWidgetComponentsDatePicker } from "./content/04-05-datepicker";
+import { WebWidgetComponentsFeedbackForm } from "./content/04-06-feedback-form";
+import { WebWidgetComponentsFileUpload } from "./content/04-07-file-upload";
+import { WebWidgetComponentsVideoPlayer } from "./content/04-08-video-player";
+import { WebWidgetComponentsSecureInput } from "./content/04-09-secure-input";
 // 5
-import { HeadlessGettingStarted } from "./content/05-01-headless-getting-started";
-import { HeadlessApi } from "./content/05-02-headless-api-reference";
+import { CustomWidgetsGettingStarted } from "./content/05-01-custom-widgets-getting-started";
+import { CustomWidgetsReact } from "./content/05-02-custom-widgets-react";
+import { ReactApi } from "./content/05-03-react-api-reference";
+import { PreactApi } from "./content/05-04-preact-api-reference";
+import { CustomWidgetsOther } from "./content/05-05-custom-widgets-other";
 // 6
-import { VoicePlusGettingStarted } from "./content/06-01-voice-plus-getting-started";
-import { VoicePlusUsage } from "./content/06-02-voice-plus-usage";
-import { VoicePlusApiReference } from "./content/06-03-voice-plus-api-reference";
-import { VoicePlusTryLive } from "./content/06-04-voice-plus-try-live";
+import { HeadlessGettingStarted } from "./content/06-01-headless-getting-started";
+import { HeadlessApi } from "./content/06-02-headless-api-reference";
 // 7
-import { ScriptManagerGettingStarted } from "./content/07-01-script-manager-getting-started";
-import { ScriptManagerApiReference } from "./content/07-02-script-manager-api-reference";
-import { ScriptManagerQueryEngine } from "./content/07-03-script-manager-query-engine";
+import { VoicePlusGettingStarted } from "./content/07-01-voice-plus-getting-started";
+import { VoicePlusUsage } from "./content/07-02-voice-plus-usage";
+import { VoicePlusApiReference } from "./content/07-03-voice-plus-api-reference";
+import { VoicePlusTryLive } from "./content/07-04-voice-plus-try-live";
+// 8
+import { ScriptManagerGettingStarted } from "./content/08-01-script-manager-getting-started";
+import { ScriptManagerApiReference } from "./content/08-02-script-manager-api-reference";
+import { ScriptManagerQueryEngine } from "./content/08-03-script-manager-query-engine";
 
 interface Item {
   label: string;
@@ -59,6 +63,7 @@ function throwIfUnsorted(items: Item[]): Item[] {
 
 export const routes: Array<{
   heading: string;
+  disabled?: boolean;
   items: Item[];
 }> = [
   {
@@ -73,6 +78,27 @@ export const routes: Array<{
         label: "Installation",
         url: "/installation",
         element: <Installation />,
+      },
+    ],
+  },
+  {
+    heading: "Touchpoint",
+    disabled: true,
+    items: [
+      {
+        label: "Setup",
+        url: "/touchpoint-ui-setup",
+        element: <TouchpointUiSetup />,
+      },
+      {
+        label: "Theming",
+        url: "/touchpoint-ui-theming",
+        element: <TouchpointUiTheming />,
+      },
+      {
+        label: "Try live",
+        url: "/touchpoint-ui-try-live",
+        element: <TouchpointUiTryLive />,
       },
     ],
   },
@@ -254,7 +280,9 @@ interface RouteInfo {
 }
 
 const flattenedRoutes: RouteInfo[] = flatten(
-  routes.map((r) => r.items.map((item) => ({ ...item, heading: r.heading }))),
+  routes.map((r) =>
+    r.disabled ? [] : r.items.map((item) => ({ ...item, heading: r.heading })),
+  ),
 );
 
 export const urls: string[] = flattenedRoutes.map(({ url }) => url);
@@ -273,20 +301,20 @@ export const ContentRoutes: FC<unknown> = () => {
                 {element}
                 <NextPrevPage
                   prev={
-                    // initial eslint integration
-                    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-                    prev && {
-                      label: `${prev.heading}: ${prev.label}`,
-                      url: prev.url,
-                    }
+                    prev != null
+                      ? {
+                          label: `${prev.heading}: ${prev.label}`,
+                          url: prev.url,
+                        }
+                      : undefined
                   }
                   next={
-                    // initial eslint integration
-                    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-                    next && {
-                      label: `${next.heading}: ${next.label}`,
-                      url: next.url,
-                    }
+                    next != null
+                      ? {
+                          label: `${next.heading}: ${next.label}`,
+                          url: next.url,
+                        }
+                      : undefined
                   }
                 />
               </>

@@ -19,7 +19,7 @@
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
     "prepublish": "npm run build",
     "preview-docs": "npm run docs && comrak --unsafe --gfm -o docs/index.html docs/index.md && open docs/index.html",
-    "publish-docs": "npm run docs && mv docs/index.md ../website/src/content/07-02-script-manager-api-reference.md",
+    "publish-docs": "npm run docs && mv docs/index.md ../website/src/content/script-manager-api-reference.md",
     "test": "jest",
     "tsc": "tsc",
     "format": "prettier --write ."
