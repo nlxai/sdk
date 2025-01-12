@@ -201,11 +201,12 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             />
             {isSettingsOpen ? (
               <ChatSettings
-                className={
+                className={clsx(
+                  "flex-none",
                   windowSize === "full"
                     ? "w-full md:max-w-content md:mx-auto"
-                    : ""
-                }
+                    : "",
+                )}
                 onClose={() => {
                   setIsSettingsOpen(false);
                 }}
@@ -219,18 +220,21 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               <>
                 <ChatMessages
                   isWaiting={isWaiting}
+                  lastBotResponseIndex={lastBotResponse?.index}
                   responses={responses}
                   colorMode={colorMode}
                   handler={handler}
                   uploadedFiles={uploadedFiles}
-                  className={
+                  className={clsx(
+                    "flex-grow",
                     windowSize === "full"
                       ? "w-full md:max-w-content md:mx-auto"
-                      : ""
-                  }
+                      : "",
+                  )}
                 />
                 <ChatInput
                   className={clsx(
+                    "flex-none",
                     windowSize === "full"
                       ? "w-full md:max-w-content md:mx-auto"
                       : "",

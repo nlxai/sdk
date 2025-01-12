@@ -19,6 +19,7 @@ export interface ChatMessagesProps {
   responses: Response[];
   colorMode: ColorMode;
   uploadedFiles: Record<string, File>;
+  lastBotResponseIndex?: number;
   className?: string;
 }
 
@@ -88,6 +89,7 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
   responses,
   colorMode,
   uploadedFiles,
+  lastBotResponseIndex,
   isWaiting,
   className,
 }) => {
@@ -105,7 +107,7 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
   }, [isWaiting]);
 
   return (
-    <div className={clsx("h-full relative", className)}>
+    <div className={clsx("relative", className)}>
       <div
         data-theme={colorMode === "dark" ? "light" : "dark"}
         className={clsx(
@@ -116,8 +118,9 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
         <Loader label="Thinking" className="absolute inset-0" />
       ) : null}
       <div
+        key="messages"
         className={clsx(
-          "h-full p-2 md:p-3 overflow-y-auto no-scrollbar space-y-8",
+          "absolute inset-0 p-2 md:p-3 overflow-y-auto no-scrollbar space-y-8",
           isWaiting ? "opacity-0" : "opacity-100",
         )}
         ref={containerRef}
@@ -156,7 +159,9 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
             );
           }
           // Bot response
-          const isLast = responseIndex === responses.length - 1;
+          const isLast =
+            lastBotResponseIndex != null &&
+            responseIndex === lastBotResponseIndex;
           return (
             <Fragment key={responseIndex}>
               <div
