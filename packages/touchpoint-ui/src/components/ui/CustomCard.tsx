@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { type FC, type ReactNode } from "react";
