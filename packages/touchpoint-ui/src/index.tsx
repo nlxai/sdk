@@ -9,6 +9,8 @@ import cssRaw from "./index.css?inline";
 export { useTouchpointContext } from "./context";
 export { html } from "htm/react";
 export { default as React } from "react";
+export { TextButton } from "./components/ui/TextButton";
+export { IconButton } from "./components/ui/IconButton";
 
 class NlxTouchpointElement extends HTMLElement {
   _root: Root | null = null;

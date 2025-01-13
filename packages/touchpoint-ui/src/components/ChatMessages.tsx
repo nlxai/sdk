@@ -10,7 +10,7 @@ import { marked } from "marked";
 
 import { Loader } from "./ui/Loader";
 import { TextButton } from "./ui/TextButton";
-import { ArrowForward } from "./ui/Icons";
+import { ArrowForward, Warning } from "./ui/Icons";
 import { type ColorMode } from "../types";
 
 export interface ChatMessagesProps {
@@ -85,6 +85,15 @@ const UserMessage: FC<{ text: string; files?: File[] }> = ({ text, files }) => {
   );
 };
 
+const ErrorMessage: FC<{ message: string }> = ({ message }) => {
+  return (
+    <div className="bg-error-secondary text-error-primary text-base p-3 rounded-base flex items-center gap-2">
+      <Warning className="w-4 h-4 flex-none" />
+      <p className="text-primary-80">{message}</p>
+    </div>
+  );
+};
+
 export const ChatMessages: FC<ChatMessagesProps> = ({
   responses,
   colorMode,
@@ -153,9 +162,10 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
           // Failure
           if (response.type === "failure") {
             return (
-              <p key={responseIndex} className="text-error-primary text-base">
-                {response.payload.text}
-              </p>
+              <ErrorMessage
+                key={responseIndex}
+                message={response.payload.text}
+              />
             );
           }
           // Bot response
