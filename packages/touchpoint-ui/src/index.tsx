@@ -6,11 +6,18 @@ import { type ConversationHandler } from "@nlxai/chat-core";
 import App, { type Props, type AppRef } from "./App";
 import cssRaw from "./index.css?inline";
 
+export * as Icons from "./components/ui/Icons";
 export { useTouchpointContext } from "./context";
 export { html } from "htm/react";
 export { default as React } from "react";
 export { TextButton } from "./components/ui/TextButton";
 export { IconButton } from "./components/ui/IconButton";
+export { BaseText, SmallText } from "./components/ui/Typography";
+export {
+  CustomCards,
+  CustomCard,
+  CustomCardRow,
+} from "./components/ui/CustomCard";
 
 class NlxTouchpointElement extends HTMLElement {
   _root: Root | null = null;
