@@ -14,9 +14,7 @@ import {
   type PicturesProps,
 } from "./components/ui/PicturesContainer";
 import { ArrowRight, Close } from "./components/ui/Icons";
-import { Icons, BaseText, SmallText } from "./index";
-
-import url from "./components/ui/loader-assets/loader-dark.mp4";
+import { DateInput } from "./components/ui/DateInput";
 
 const TextButtonInstances: FC<unknown> = () => {
   return (
@@ -235,7 +233,13 @@ const Container: FC<{ children: ReactNode; mode: ColorMode }> = ({
   );
 };
 
-type Tab = "text-buttons" | "icon-buttons" | "icons" | "carousels" | "loader";
+type Tab =
+  | "text-buttons"
+  | "icon-buttons"
+  | "date-input"
+  | "icons"
+  | "carousels"
+  | "loader";
 
 const tabs: Array<{ tab: Tab; title: string; component: FC<unknown> }> = [
   {
