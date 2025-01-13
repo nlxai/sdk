@@ -1,7 +1,9 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
 import { useEffect, useRef, useState, type FC } from "react";
-// import vid from "./loader-assets/loader-dark.mp4";
+
+// Note: Understanding and debugging this code can be made easier using this
+// notebook: https://observablehq.com/@gampleman/touchpoint-animation-debugging
 
 export interface LoaderProps {
   label: string;
@@ -10,9 +12,13 @@ export interface LoaderProps {
 const r = 30;
 const rc = 17;
 
-const ease = (t: number): number => {
-  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-};
+const ease = (x: number): number =>
+  x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+
+const moveDuration = 990;
+const pauseDuration = 300;
+
+const totalDuration = moveDuration + pauseDuration;
 
 // A pair of circles a dynamic distance apart, with a connecting goop if they are close enough
 const Pair: FC<{ d: number }> = ({ d }) => {
@@ -46,36 +52,25 @@ const Pair: FC<{ d: number }> = ({ d }) => {
   );
 };
 
-const getDistance = (t: number, stage: number): number => {
-  if (stage === 0) {
-    return ease(t);
+const getDistance = (t: number): number => {
+  if (t < 1 / 3) {
+    return t * 3;
   }
-  if (stage === 1) {
+  if (t < 2 / 3) {
     return 1;
   }
-  if (stage === 2) {
-    return ease(1 - t);
-  }
-  if (stage === 3) {
-    return 0;
-  }
-  return getDistance(t, stage - 4);
+
+  return 3 - t * 3;
 };
 
-const getSpin = (t: number, stage: number): number => {
-  if (stage === 0) {
+const getSpin = (t: number): number => {
+  if (t < 1 / 3) {
     return 0;
   }
-  if (stage === 1) {
-    return ease(t);
+  if (t < 2 / 3) {
+    return (t - 1 / 3) * 3;
   }
-  if (stage === 2) {
-    return 1;
-  }
-  if (stage === 3) {
-    return 1;
-  }
-  return getSpin(t, stage - 4) + 1;
+  return 1;
 };
 
 export const Loader: FC<LoaderProps> = ({ label }) => {
@@ -84,9 +79,8 @@ export const Loader: FC<LoaderProps> = ({ label }) => {
   );
   const stop = useRef<boolean>(false);
   useEffect(() => {
-    const animate = (): void => {
+    const animate = (time: number): void => {
       setTime((prev) => {
-        const time = new Date().getTime();
         return prev == null
           ? { start: time, current: time }
           : { ...prev, current: time };
@@ -95,20 +89,32 @@ export const Loader: FC<LoaderProps> = ({ label }) => {
         requestAnimationFrame(animate);
       }
     };
-    animate();
+    if (!stop.current) {
+      requestAnimationFrame(animate);
+    }
   }, [stop, setTime]);
   if (time == null) {
     return null;
   }
+  let dFactor, spin;
+
   const diff = time.current - time.start;
+  const elapsed = diff % totalDuration;
+  const count = Math.floor(diff / totalDuration);
 
-  const adjustedTime = diff / 333.333;
-  const unit = Math.floor(adjustedTime);
-  const stage = unit % 8;
-  const t = adjustedTime - unit;
+  if (elapsed < moveDuration) {
+    const adjustedTime = diff / totalDuration;
 
-  const dFactor = getDistance(t, stage);
-  const spin = getSpin(t, stage);
+    const unit = Math.floor(adjustedTime);
+
+    const t = ease((adjustedTime - unit) * (totalDuration / moveDuration));
+
+    dFactor = getDistance(t);
+    spin = count % 2 ? getSpin(t) : 1 + getSpin(t);
+  } else {
+    dFactor = 0;
+    spin = 0;
+  }
 
   const dropShadowRadius = dFactor > 0.2 ? 0 : (5 * (0.2 - dFactor)) / 0.2;
 

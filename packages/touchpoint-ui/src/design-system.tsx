@@ -19,6 +19,8 @@ import {
 import * as icons from "./components/ui/Icons";
 import { ArrowRight, Close } from "./components/ui/Icons";
 
+import url from "./components/ui/loader-assets/loader-dark.mp4";
+
 const TextButtonInstances: FC<unknown> = () => {
   return (
     <>
@@ -184,9 +186,20 @@ const Carousels: FC<unknown> = () => {
 
 const Loaders: FC<unknown> = () => {
   return (
-    <div className="grid h-[360px] grid-cols-2 gap-2">
+    <div className="grid h-[360px] grid-cols-2 gap-2 relative">
       <Container mode="dark">
         <Loader label="Thinking" />
+
+        <div>
+          <video
+            autoPlay
+            loop
+            muted
+            className="w-8 absolute top-24 left-[250px]"
+          >
+            <source src={url} type="video/mp4" />
+          </video>
+        </div>
       </Container>
       <Container mode="light">
         <Loader label="Thinking" />
