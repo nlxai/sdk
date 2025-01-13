@@ -30,6 +30,7 @@ import {
   type WindowSize,
   type LogoUrl,
   type ChoiceMessage,
+  type CustomModalityComponent,
 } from "./types";
 import { Context } from "./context";
 
@@ -41,6 +42,7 @@ export interface Props {
   overrides?: {
     loader?: FC<unknown>;
   };
+  customModalities?: Record<string, CustomModalityComponent>;
 }
 
 export interface AppRef {
@@ -225,6 +227,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                   colorMode={colorMode}
                   handler={handler}
                   uploadedFiles={uploadedFiles}
+                  customModalities={props.customModalities}
                   className={clsx(
                     "flex-grow",
                     windowSize === "full"

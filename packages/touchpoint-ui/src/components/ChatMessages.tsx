@@ -11,7 +11,7 @@ import { marked } from "marked";
 import { Loader } from "./ui/Loader";
 import { TextButton } from "./ui/TextButton";
 import { ArrowForward, Warning } from "./ui/Icons";
-import { type ColorMode } from "../types";
+import { type CustomModalityComponent, type ColorMode } from "../types";
 
 export interface ChatMessagesProps {
   isWaiting: boolean;
@@ -20,6 +20,7 @@ export interface ChatMessagesProps {
   colorMode: ColorMode;
   uploadedFiles: Record<string, File>;
   lastBotResponseIndex?: number;
+  customModalities?: Record<string, CustomModalityComponent>;
   className?: string;
 }
 
@@ -100,6 +101,7 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
   uploadedFiles,
   lastBotResponseIndex,
   isWaiting,
+  customModalities,
   className,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -190,6 +192,21 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
                     </div>
                   );
                 })}
+                {customModalities != null
+                  ? Object.entries(response.payload.modalities ?? {}).map(
+                      ([key, value]) => {
+                        const Component = customModalities[key];
+                        if (Component == null) {
+                          // eslint-disable-next-line no-console
+                          console.warn(
+                            `Custom component implementation missing for the ${key} modality.`,
+                          );
+                          return null;
+                        }
+                        return <Component key={key} data={value} />;
+                      },
+                    )
+                  : null}
               </div>
               {/* Render the selected choice text as a user message */}
               {response.payload.messages.map((message, messageIndex) => {
