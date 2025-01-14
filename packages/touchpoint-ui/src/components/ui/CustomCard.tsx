@@ -38,8 +38,11 @@ export const CustomCard: FC<CustomCardProps> = ({
   );
 };
 
-export const CustomCardImage: FC<{ src: string }> = ({ src }) => {
-  return <img src={src} alt="" className="w-full h-52 object-cover" />;
+export const CustomCardImageRow: FC<{ src: string; alt?: string }> = ({
+  src,
+  alt,
+}) => {
+  return <img src={src} alt={alt} className="w-full h-52 object-cover" />;
 };
 
 export interface CustomCardRowProps {

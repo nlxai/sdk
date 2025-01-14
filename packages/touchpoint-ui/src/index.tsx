@@ -14,6 +14,7 @@ import {
   CustomCards,
   CustomCard,
   CustomCardRow,
+  CustomCardImageRow,
 } from "./components/ui/CustomCard";
 
 import { createElement, type FC } from "react";
@@ -36,6 +37,7 @@ export const html = createHtml({
   CustomCards,
   CustomCard,
   CustomCardRow,
+  CustomCardImageRow,
   ...Icons,
 });
 
@@ -47,6 +49,7 @@ export {
   CustomCards,
   CustomCard,
   CustomCardRow,
+  CustomCardImageRow,
   Icons,
 };
 
