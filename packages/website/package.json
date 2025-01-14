@@ -13,7 +13,7 @@
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx --fix",
     "tsc": "tsc",
     "caddy": "caddy run --config Caddyfile",
-    "test": "npm run build && scripts/check-for-broken-links.sh"
+    "test": "npm run build"
   },
   "dependencies": {
     "@docsearch/css": "^3.6.0",

@@ -1,4 +1,5 @@
 #! /bin/bash
+# Script currently not used as it does not terminate and blocks CI
 set -euo pipefail
 
 export CADDY_PORT=9999
