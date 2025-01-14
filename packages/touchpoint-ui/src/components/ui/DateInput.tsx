@@ -43,9 +43,9 @@ export const DateInput: FC<DateInputProps> = ({ onSubmit }) => {
             const [month, day, year] = value.split(" / ");
             if (
               month != null &&
-              month.length == 2 &&
+              month.length === 2 &&
               day != null &&
-              day.length == 2 &&
+              day.length === 2 &&
               year != null &&
               year.length === 4
             ) {

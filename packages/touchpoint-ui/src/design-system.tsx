@@ -201,6 +201,7 @@ const DateInputs: FC<unknown> = () => {
         <DateInput />
         <DateInput
           onSubmit={(date) => {
+            // eslint-disable-next-line no-console
             console.log(date);
           }}
         />
@@ -209,6 +210,7 @@ const DateInputs: FC<unknown> = () => {
         <DateInput />
         <DateInput
           onSubmit={(date) => {
+            // eslint-disable-next-line no-console
             console.log(date);
           }}
         />
