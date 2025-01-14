@@ -178,7 +178,7 @@ const Carousels: FC<unknown> = () => {
                 <SmallText>efgh</SmallText>
               </>
             }
-            Icon={Icons.ArrowForward}
+            icon={Icons.ArrowForward}
           />
           <CustomCardRow
             left={<BaseText>abcd</BaseText>}

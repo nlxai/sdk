@@ -48,13 +48,9 @@ export interface ChoiceMessage {
  * Custom Modalities allow rendering of rich components from nodes.
  * See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/advanced-messaging-+-functionality#modalities
  */
-export type CustomModalityComponent = FC<{
-  /**
-   * The name of the Modality as defined in Dialog Studio settings.
-   */
-  key: string;
+export type CustomModalityComponent<Data> = FC<{
   /**
    * The payload of the Custom Modality. The schema is defined in Dialog Studio settings.
    */
-  data: any;
+  data: Data;
 }>;

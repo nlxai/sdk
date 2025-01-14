@@ -42,7 +42,7 @@ export interface Props {
   overrides?: {
     loader?: FC<unknown>;
   };
-  customModalities?: Record<string, CustomModalityComponent>;
+  customModalities?: Record<string, CustomModalityComponent<any>>;
 }
 
 export interface AppRef {
@@ -162,6 +162,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({});
 
+  const customModalities = props.customModalities ?? {};
+
   if (handler == null) {
     return null;
   }
@@ -227,7 +229,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                   colorMode={colorMode}
                   handler={handler}
                   uploadedFiles={uploadedFiles}
-                  customModalities={props.customModalities}
+                  customModalities={customModalities}
                   className={clsx(
                     "flex-grow",
                     windowSize === "full"

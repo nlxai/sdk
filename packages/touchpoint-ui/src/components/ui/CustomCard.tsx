@@ -45,13 +45,13 @@ export const CustomCardImage: FC<{ src: string }> = ({ src }) => {
 export interface CustomCardRowProps {
   left: ReactNode;
   right: ReactNode;
-  Icon?: Icon;
+  icon?: Icon;
 }
 
 export const CustomCardRow: FC<CustomCardRowProps> = ({
   left,
   right,
-  Icon,
+  icon: Icon,
 }) => {
   return (
     <div className="flex items-center relative justify-between gap-2 bg-primary-5 px-3 py-4">

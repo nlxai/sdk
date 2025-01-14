@@ -20,7 +20,7 @@ export interface ChatMessagesProps {
   colorMode: ColorMode;
   uploadedFiles: Record<string, File>;
   lastBotResponseIndex?: number;
-  customModalities?: Record<string, CustomModalityComponent>;
+  customModalities: Record<string, CustomModalityComponent<any>>;
   className?: string;
 }
 
@@ -192,21 +192,19 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
                     </div>
                   );
                 })}
-                {customModalities != null
-                  ? Object.entries(response.payload.modalities ?? {}).map(
-                      ([key, value]) => {
-                        const Component = customModalities[key];
-                        if (Component == null) {
-                          // eslint-disable-next-line no-console
-                          console.warn(
-                            `Custom component implementation missing for the ${key} modality.`,
-                          );
-                          return null;
-                        }
-                        return <Component key={key} data={value} />;
-                      },
-                    )
-                  : null}
+                {Object.entries(response.payload.modalities ?? {}).map(
+                  ([key, value]) => {
+                    const Component = customModalities[key];
+                    if (Component == null) {
+                      // eslint-disable-next-line no-console
+                      console.warn(
+                        `Custom component implementation missing for the ${key} modality.`,
+                      );
+                      return null;
+                    }
+                    return <Component key={key} data={value} />;
+                  },
+                )}
               </div>
               {/* Render the selected choice text as a user message */}
               {response.payload.messages.map((message, messageIndex) => {
