@@ -1,6 +1,6 @@
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
-import content from "./04-03-react-api-reference.md?raw";
+import content from "./react-api-reference.md?raw";
 
 export const ReactApi = (): JSX.Element => {
   return (

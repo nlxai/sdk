@@ -2,13 +2,53 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { type Root, createRoot } from "react-dom/client";
 import { type ConversationHandler } from "@nlxai/chat-core";
+import htm from "htm";
 
 import App, { type Props, type AppRef } from "./App";
 import cssRaw from "./index.css?inline";
+import * as Icons from "./components/ui/Icons";
+import { TextButton } from "./components/ui/TextButton";
+import { IconButton } from "./components/ui/IconButton";
+import { BaseText, SmallText } from "./components/ui/Typography";
+import {
+  CustomCards,
+  CustomCard,
+  CustomCardRow,
+} from "./components/ui/CustomCard";
+
+import { createElement, type FC } from "react";
 
 export { useTouchpointContext } from "./context";
-export { html } from "htm/react";
 export { default as React } from "react";
+
+// Create a htm instance where components can be used
+const createHtml = (
+  components: Record<string, FC<any>>,
+): ReturnType<typeof htm.bind> =>
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  htm.bind((type, ...rest) => createElement(components[type] ?? type, ...rest));
+
+export const html = createHtml({
+  TextButton,
+  IconButton,
+  BaseText,
+  SmallText,
+  CustomCards,
+  CustomCard,
+  CustomCardRow,
+  ...Icons,
+});
+
+export {
+  TextButton,
+  IconButton,
+  BaseText,
+  SmallText,
+  CustomCards,
+  CustomCard,
+  CustomCardRow,
+  Icons,
+};
 
 class NlxTouchpointElement extends HTMLElement {
   _root: Root | null = null;

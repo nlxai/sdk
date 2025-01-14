@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type FC, Fragment, useEffect, useRef, useState } from "react";
+import { type FC, Fragment, useEffect, useRef } from "react";
 import {
   type Response,
   type ConversationHandler,
@@ -10,14 +10,17 @@ import { marked } from "marked";
 
 import { Loader } from "./ui/Loader";
 import { TextButton } from "./ui/TextButton";
-import { ArrowForward } from "./ui/Icons";
-import { type ColorMode } from "../types";
+import { ArrowForward, Warning } from "./ui/Icons";
+import { type CustomModalityComponent, type ColorMode } from "../types";
 
 export interface ChatMessagesProps {
+  isWaiting: boolean;
   handler: ConversationHandler;
   responses: Response[];
   colorMode: ColorMode;
   uploadedFiles: Record<string, File>;
+  lastBotResponseIndex?: number;
+  customModalities: Record<string, CustomModalityComponent<any>>;
   className?: string;
 }
 
@@ -61,9 +64,11 @@ export const MessageChoices: FC<{
 
 const UserMessage: FC<{ text: string; files?: File[] }> = ({ text, files }) => {
   return (
-    <>
+    <div className="space-y-2">
       <div className="flex justify-end pl-10 text-base">
-        <div className="text-primary-60 whitespace-pre-wrap">{text}</div>
+        <div className="text-primary-60 p-3 rounded-base bg-primary-5 whitespace-pre-wrap">
+          {text}
+        </div>
       </div>
       {files != null ? (
         <div className="flex flex-wrap justify-end gap-2">
@@ -77,7 +82,16 @@ const UserMessage: FC<{ text: string; files?: File[] }> = ({ text, files }) => {
           ))}
         </div>
       ) : null}
-    </>
+    </div>
+  );
+};
+
+const ErrorMessage: FC<{ message: string }> = ({ message }) => {
+  return (
+    <div className="bg-error-secondary text-error-primary text-base p-3 rounded-base flex items-center gap-2">
+      <Warning className="w-4 h-4 flex-none" />
+      <p className="text-primary-80">{message}</p>
+    </div>
   );
 };
 
@@ -85,52 +99,42 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
   responses,
   colorMode,
   uploadedFiles,
+  lastBotResponseIndex,
+  isWaiting,
+  customModalities,
   className,
 }) => {
-  const isWaiting = responses[responses.length - 1]?.type === "user";
-
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const [scrollAtBottom, setScrollAtBottom] = useState<boolean>(false);
+  const lastBotMessageRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const containerNode = containerRef.current;
-    if (containerNode == null) {
-      return;
+    if (!isWaiting) {
+      // TODO: the smooth scrolling consistently scrolls from the top of the conversation, looks like the scroll position is lost
+      setTimeout(() => {
+        lastBotMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+      });
     }
-    setTimeout(() => {
-      containerNode.scrollTop = containerNode.scrollHeight;
-    });
-  }, [responses]);
+  }, [isWaiting]);
 
   return (
-    <div className={clsx("h-full relative", className)}>
-      {isWaiting || scrollAtBottom || responses.length < 3 ? null : (
-        <div
-          data-theme={colorMode === "dark" ? "light" : "dark"}
-          className={clsx(
-            "absolute inset-x-0 h-[1px] top-0 bg-background opacity-[0.01] backdrop-blur-md",
-          )}
-        />
-      )}
+    <div className={clsx("relative", className)}>
       <div
-        className="h-full p-2 md:p-3 overflow-y-auto no-scrollbar space-y-8"
+        data-theme={colorMode === "dark" ? "light" : "dark"}
+        className={clsx(
+          "absolute inset-x-0 h-[1px] top-0 bg-background opacity-[0.01] backdrop-blur-md",
+        )}
+      />
+      {isWaiting ? (
+        <Loader label="Thinking" className="absolute inset-0" />
+      ) : null}
+      <div
+        key="messages"
+        className={clsx(
+          "absolute inset-0 p-2 md:p-3 overflow-y-auto no-scrollbar space-y-8",
+          isWaiting ? "opacity-0" : "opacity-100",
+        )}
         ref={containerRef}
-        onScroll={() => {
-          const containerNode = containerRef.current;
-          if (containerNode == null) {
-            return;
-          }
-          const isAtBottom =
-            containerNode.scrollHeight - containerNode.scrollTop ===
-            containerNode.clientHeight;
-          if (!isAtBottom && scrollAtBottom) {
-            setScrollAtBottom(false);
-          }
-          if (isAtBottom && !scrollAtBottom) {
-            setScrollAtBottom(true);
-          }
-        }}
       >
         {responses.map((response, responseIndex) => {
           // User response
@@ -160,16 +164,22 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
           // Failure
           if (response.type === "failure") {
             return (
-              <p key={responseIndex} className="text-error-primary text-base">
-                {response.payload.text}
-              </p>
+              <ErrorMessage
+                key={responseIndex}
+                message={response.payload.text}
+              />
             );
           }
           // Bot response
-          const isLast = responseIndex === responses.length - 1;
+          const isLast =
+            lastBotResponseIndex != null &&
+            responseIndex === lastBotResponseIndex;
           return (
             <Fragment key={responseIndex}>
-              <div className={clsx("space-y-2", isLast ? "min-h-full" : "")}>
+              <div
+                className={clsx("space-y-2", isLast ? "min-h-full" : "")}
+                ref={isLast ? lastBotMessageRef : undefined}
+              >
                 {response.payload.messages.map((message, messageIndex) => {
                   return (
                     <div key={messageIndex} className="text-base">
@@ -182,6 +192,19 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
                     </div>
                   );
                 })}
+                {Object.entries(response.payload.modalities ?? {}).map(
+                  ([key, value]) => {
+                    const Component = customModalities[key];
+                    if (Component == null) {
+                      // eslint-disable-next-line no-console
+                      console.warn(
+                        `Custom component implementation missing for the ${key} modality.`,
+                      );
+                      return null;
+                    }
+                    return <Component key={key} data={value} />;
+                  },
+                )}
               </div>
               {/* Render the selected choice text as a user message */}
               {response.payload.messages.map((message, messageIndex) => {
@@ -204,7 +227,6 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
             </Fragment>
           );
         })}
-        {isWaiting ? <Loader label="Thinking" /> : null}
       </div>
     </div>
   );

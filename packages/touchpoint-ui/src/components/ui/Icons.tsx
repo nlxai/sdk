@@ -6,13 +6,15 @@ export interface IconProps {
   size?: number;
 }
 
+export type Icon = FC<IconProps>;
+
 const iconSvgProps = (props: IconProps): SVGProps<SVGSVGElement> => ({
   width: props.size != null ? `${props.size}px` : "100%",
   height: props.size != null ? `${props.size}px` : "100%",
   className: props.className,
 });
 
-export const Action: FC<IconProps> = (props) => {
+export const Action: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -23,7 +25,7 @@ export const Action: FC<IconProps> = (props) => {
   );
 };
 
-export const Assistant: FC<IconProps> = (props) => {
+export const Assistant: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -50,7 +52,7 @@ export const Assistant: FC<IconProps> = (props) => {
   );
 };
 
-export const AssistantOld: FC<IconProps> = (props) => {
+export const AssistantOld: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -61,7 +63,7 @@ export const AssistantOld: FC<IconProps> = (props) => {
   );
 };
 
-export const Add: FC<IconProps> = (props) => {
+export const Add: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="currentColor" />
@@ -69,7 +71,7 @@ export const Add: FC<IconProps> = (props) => {
   );
 };
 
-export const ArrowDown: FC<IconProps> = (props) => {
+export const ArrowDown: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -80,7 +82,7 @@ export const ArrowDown: FC<IconProps> = (props) => {
   );
 };
 
-export const ArrowLeft: FC<IconProps> = (props) => {
+export const ArrowLeft: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -91,7 +93,7 @@ export const ArrowLeft: FC<IconProps> = (props) => {
   );
 };
 
-export const ArrowRight: FC<IconProps> = (props) => {
+export const ArrowRight: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -102,7 +104,7 @@ export const ArrowRight: FC<IconProps> = (props) => {
   );
 };
 
-export const ArrowUp: FC<IconProps> = (props) => {
+export const ArrowUp: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -113,7 +115,7 @@ export const ArrowUp: FC<IconProps> = (props) => {
   );
 };
 
-export const ArrowForward: FC<IconProps> = (props) => {
+export const ArrowForward: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -124,7 +126,7 @@ export const ArrowForward: FC<IconProps> = (props) => {
   );
 };
 
-export const Attachment: FC<IconProps> = (props) => {
+export const Attachment: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -135,7 +137,7 @@ export const Attachment: FC<IconProps> = (props) => {
   );
 };
 
-export const Camera: FC<IconProps> = (props) => {
+export const Camera: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -150,7 +152,7 @@ export const Camera: FC<IconProps> = (props) => {
   );
 };
 
-export const Check: FC<IconProps> = (props) => {
+export const Check: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -161,7 +163,7 @@ export const Check: FC<IconProps> = (props) => {
   );
 };
 
-export const Close: FC<IconProps> = (props) => {
+export const Close: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -172,7 +174,7 @@ export const Close: FC<IconProps> = (props) => {
   );
 };
 
-export const Copy: FC<IconProps> = (props) => {
+export const Copy: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -183,7 +185,7 @@ export const Copy: FC<IconProps> = (props) => {
   );
 };
 
-export const Date: FC<IconProps> = (props) => {
+export const Date: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -194,7 +196,7 @@ export const Date: FC<IconProps> = (props) => {
   );
 };
 
-export const Delete: FC<IconProps> = (props) => {
+export const Delete: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -208,7 +210,7 @@ export const Delete: FC<IconProps> = (props) => {
   );
 };
 
-export const Escalate: FC<IconProps> = (props) => {
+export const Escalate: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -231,7 +233,7 @@ export const Escalate: FC<IconProps> = (props) => {
   );
 };
 
-export const Error: FC<IconProps> = (props) => {
+export const Error: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -242,7 +244,7 @@ export const Error: FC<IconProps> = (props) => {
   );
 };
 
-export const FullScreen: FC<IconProps> = (props) => {
+export const FullScreen: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -253,7 +255,7 @@ export const FullScreen: FC<IconProps> = (props) => {
   );
 };
 
-export const Mic: FC<IconProps> = (props) => {
+export const Mic: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -264,7 +266,7 @@ export const Mic: FC<IconProps> = (props) => {
   );
 };
 
-export const MicOff: FC<IconProps> = (props) => {
+export const MicOff: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -275,7 +277,7 @@ export const MicOff: FC<IconProps> = (props) => {
   );
 };
 
-export const Location: FC<IconProps> = (props) => {
+export const Location: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -286,7 +288,7 @@ export const Location: FC<IconProps> = (props) => {
   );
 };
 
-export const Volume: FC<IconProps> = (props) => {
+export const Volume: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -297,7 +299,7 @@ export const Volume: FC<IconProps> = (props) => {
   );
 };
 
-export const VolumeOff: FC<IconProps> = (props) => {
+export const VolumeOff: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -308,7 +310,7 @@ export const VolumeOff: FC<IconProps> = (props) => {
   );
 };
 
-export const Translate: FC<IconProps> = (props) => {
+export const Translate: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -319,7 +321,7 @@ export const Translate: FC<IconProps> = (props) => {
   );
 };
 
-export const OpenInNew: FC<IconProps> = (props) => {
+export const OpenInNew: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -330,7 +332,7 @@ export const OpenInNew: FC<IconProps> = (props) => {
   );
 };
 
-export const Play: FC<IconProps> = (props) => {
+export const Play: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
@@ -338,7 +340,7 @@ export const Play: FC<IconProps> = (props) => {
   );
 };
 
-export const Preview: FC<IconProps> = (props) => {
+export const Preview: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -355,7 +357,7 @@ export const Preview: FC<IconProps> = (props) => {
   );
 };
 
-export const Reorder: FC<IconProps> = (props) => {
+export const Reorder: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -366,7 +368,7 @@ export const Reorder: FC<IconProps> = (props) => {
   );
 };
 
-export const Restart: FC<IconProps> = (props) => {
+export const Restart: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -377,7 +379,7 @@ export const Restart: FC<IconProps> = (props) => {
   );
 };
 
-export const Settings: FC<IconProps> = (props) => {
+export const Settings: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -388,7 +390,7 @@ export const Settings: FC<IconProps> = (props) => {
   );
 };
 
-export const Search: FC<IconProps> = (props) => {
+export const Search: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -399,7 +401,7 @@ export const Search: FC<IconProps> = (props) => {
   );
 };
 
-export const Share: FC<IconProps> = (props) => {
+export const Share: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -410,7 +412,7 @@ export const Share: FC<IconProps> = (props) => {
   );
 };
 
-export const Warning: FC<IconProps> = (props) => {
+export const Warning: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -421,7 +423,7 @@ export const Warning: FC<IconProps> = (props) => {
   );
 };
 
-export const ThumbDown: FC<IconProps> = (props) => {
+export const ThumbDown: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -432,7 +434,7 @@ export const ThumbDown: FC<IconProps> = (props) => {
   );
 };
 
-export const ThumbUp: FC<IconProps> = (props) => {
+export const ThumbUp: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -443,7 +445,7 @@ export const ThumbUp: FC<IconProps> = (props) => {
   );
 };
 
-export const Time: FC<IconProps> = (props) => {
+export const Time: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -460,7 +462,7 @@ export const Time: FC<IconProps> = (props) => {
   );
 };
 
-export const Undo: FC<IconProps> = (props) => {
+export const Undo: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -471,7 +473,7 @@ export const Undo: FC<IconProps> = (props) => {
   );
 };
 
-export const Refresh: FC<IconProps> = (props) => {
+export const Refresh: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path
@@ -482,7 +484,7 @@ export const Refresh: FC<IconProps> = (props) => {
   );
 };
 
-export const Help: FC<IconProps> = (props) => {
+export const Help: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path

@@ -31,6 +31,52 @@ function defaultTo(
   return value != null && value !== "" ? value : defaultValue;
 }
 
+export const touchpointUiSetupSnippet = ({
+  config,
+}: {
+  config: Config;
+}): string => {
+  return `<!-- Touchpoint sample HTML -->
+<!-- Downloaded from https://developers.nlx.ai -->
+<html lang="en">
+  <head>
+    <title>Touchpoint Sample HTML</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.cjs"></script>
+    <script>
+      const contentLoaded = () => {
+        if (document.readyState === "loading") {
+          return new Promise((resolve) => {
+            window.addEventListener("DOMContentLoaded", () => {
+              resolve();
+            });
+          });
+        } else {
+          return Promise.resolve();
+        }
+      };
+
+      contentLoaded().then(() => {
+        const touchpointInstance = nlxai.touchpointUi.create({
+          config: {
+            botUrl: "${defaultTo(config.botUrl, "REPLACE_WITH_BOT_URL")}",
+            headers: {
+              "nlx-api-key": "${defaultTo(
+                config.headers?.["nlx-api-key"],
+                "REPLACE_WITH_API_KEY",
+              )}"
+            },
+            languageCode: "${config.languageCode}"
+          }
+        });
+      });
+    </script>
+  </body>
+</html>`;
+};
+
 export const setupSnippet = ({
   config,
   titleBar,
@@ -45,7 +91,7 @@ export const setupSnippet = ({
   customModalitiesExample?: boolean;
 }): string => {
   return `<!-- Chat widget sample HTML -->
-<!-- Downloaded from https://nlxai.github.io/chat-sdk -->
+<!-- Downloaded from https://developers.nlx.ai -->
 <html lang="en">
   <head>
     <title>NLX Widget Sample HTML</title>

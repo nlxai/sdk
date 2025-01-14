@@ -30,6 +30,7 @@ import {
   type WindowSize,
   type LogoUrl,
   type ChoiceMessage,
+  type CustomModalityComponent,
 } from "./types";
 import { Context } from "./context";
 
@@ -41,6 +42,7 @@ export interface Props {
   overrides?: {
     loader?: FC<unknown>;
   };
+  customModalities?: Record<string, CustomModalityComponent<any>>;
 }
 
 export interface AppRef {
@@ -55,6 +57,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   const [handler, setHandler] = useState<ConversationHandler | null>(null);
 
   const [responses, setResponses] = useState<Response[]>([]);
+
+  const isWaiting = responses[responses.length - 1]?.type === "user";
 
   const [colorModeOverride, setColorModeOverride] = useState<ColorMode | null>(
     null,
@@ -158,6 +162,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({});
 
+  const customModalities = props.customModalities ?? {};
+
   if (handler == null) {
     return null;
   }
@@ -199,11 +205,12 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             />
             {isSettingsOpen ? (
               <ChatSettings
-                className={
+                className={clsx(
+                  "flex-none",
                   windowSize === "full"
                     ? "w-full md:max-w-content md:mx-auto"
-                    : ""
-                }
+                    : "",
+                )}
                 onClose={() => {
                   setIsSettingsOpen(false);
                 }}
@@ -216,18 +223,23 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             ) : (
               <>
                 <ChatMessages
+                  isWaiting={isWaiting}
+                  lastBotResponseIndex={lastBotResponse?.index}
                   responses={responses}
                   colorMode={colorMode}
                   handler={handler}
                   uploadedFiles={uploadedFiles}
-                  className={
+                  customModalities={customModalities}
+                  className={clsx(
+                    "flex-grow",
                     windowSize === "full"
                       ? "w-full md:max-w-content md:mx-auto"
-                      : ""
-                  }
+                      : "",
+                  )}
                 />
                 <ChatInput
                   className={clsx(
+                    "flex-none",
                     windowSize === "full"
                       ? "w-full md:max-w-content md:mx-auto"
                       : "",

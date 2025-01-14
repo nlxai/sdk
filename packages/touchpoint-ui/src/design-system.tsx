@@ -8,16 +8,13 @@ import { Context } from "./context";
 import { TextButton } from "./components/ui/TextButton";
 import { IconButton } from "./components/ui/IconButton";
 import { Loader } from "./components/ui/Loader";
-import {
-  CardsContainer,
-  type CardContent,
-} from "./components/modules/CardsContainer";
+import { CustomCard, CustomCardRow } from "./components/ui/CustomCard";
 import {
   PicturesContainer,
   type PicturesProps,
-} from "./components/modules/PicturesContainer";
-import * as icons from "./components/ui/Icons";
+} from "./components/ui/PicturesContainer";
 import { ArrowRight, Close } from "./components/ui/Icons";
+import { Icons, BaseText, SmallText } from "./index";
 
 import url from "./components/ui/loader-assets/loader-dark.mp4";
 
@@ -148,11 +145,11 @@ const IconButtons: FC<unknown> = () => {
   );
 };
 
-const Icons: FC<unknown> = () => {
+const IconInstances: FC<unknown> = () => {
   return (
     <Container mode="light">
       <div className="grid grid-cols-4 gap-4">
-        {Object.entries(icons).map(([name, Icon]) => {
+        {Object.entries(Icons).map(([name, Icon]) => {
           return (
             <div
               key={name}
@@ -172,12 +169,26 @@ const Carousels: FC<unknown> = () => {
   return (
     <div className="space-y-4">
       <Container mode="dark">
+        <CustomCard>
+          <CustomCardRow
+            left={<BaseText faded>abcd</BaseText>}
+            right={
+              <>
+                <BaseText>abcd</BaseText>
+                <SmallText>efgh</SmallText>
+              </>
+            }
+            icon={Icons.ArrowForward}
+          />
+          <CustomCardRow
+            left={<BaseText>abcd</BaseText>}
+            right={<BaseText>abcd</BaseText>}
+          />
+        </CustomCard>
+      </Container>
+      <Container mode="dark">
         <div className="max-w-content mx-auto">
           <PicturesContainer payload={examplePicturesPayload} />
-        </div>
-
-        <div className="max-w-content mx-auto">
-          <CardsContainer payload={exampleCardsPayload} type="lg" />
         </div>
       </Container>
     </div>
@@ -237,7 +248,7 @@ const tabs: Array<{ tab: Tab; title: string; component: FC<unknown> }> = [
     title: "Icon buttons",
     component: IconButtons,
   },
-  { tab: "icons", title: "Icons", component: Icons },
+  { tab: "icons", title: "Icons", component: IconInstances },
   { tab: "carousels", title: "Carousels", component: Carousels },
   { tab: "loader", title: "Loader", component: Loaders },
 ];
@@ -295,33 +306,6 @@ const DesignSystem: FC<unknown> = () => {
     </div>
   );
 };
-
-const exampleCardsPayload: CardContent[] = [
-  {
-    imgSrc:
-      "https://s3-alpha-sig.figma.com/img/b00d/c6c1/1ff64663da245bd22ec1a8191c21a050?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=aVmzwN59arzrH1aRqF~jSicGqH0zEPPCH762JbOTBP66ubQT7EqreplRoAlrBzBq006rRu0AuI5SCaWV6kzI0Zos9FWLTdbgLr9pzuDruqL08qhS6rEUaTR6uLCjLbfZ5AwWKXo4juMEcetR-75y0oL6jx4bcS-icOHy1c17OJ8ikYtbMy-4g69c2mJkOpB~O8~Nmt6Hmv0AeBMc~pcE6eMADnZWQUFnHnzao063Y5vyKlzOPCPsAJZ~lpqq7pUrSwekvhz~wBGmK8Sg04JDeR74bKn4iISZRh4ExKPBkFZnRjFoExjudMQFo~vx0hItHxN9lfAcvDp28yhrlYsg2Q__",
-    titleLeftText: "St Moritz",
-    bottomLeftText: "March 11 - 15",
-    bottomRightText: "$4679",
-    choiceId: "1",
-  },
-  {
-    imgSrc:
-      "https://s3-alpha-sig.figma.com/img/01bf/644f/fb38de40bc1d110bd8c1707588701f1b?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dOdOnzvAn350cJrKSnHyvMT7ln6LOjz4ehVZdT4En9czjfGkOwLaLFhw-IcirMB9ztsZrbpI-ovsCTkARJxEm1silscbizWhmB4trABHWlgRTvQDAzojyRgGjYM31UvUI0zW9I6E6qJurDJYtpH74pAWPonRoYGwRgLF7aimR9lpVL5-8SalwiO3OjRPIq5rw4hzzDjpMxL4YCjswO-CrOvGO61axTNxvKhElCU4XvaEDk2VrreLEMXzIjQIoE4rzqLE5fcdBuaqnBx9qyeQQ31DlDiOIrnVIAf~gJDDhtdgiyb2fcUeEKSyfrcjPGash7aH5Y9o~QbdMajctYKVxg__",
-    titleLeftText: "Zurich",
-    bottomLeftText: "March 11 - 13",
-    bottomRightText: "$3000",
-    choiceId: "2",
-  },
-  {
-    imgSrc:
-      "https://s3-alpha-sig.figma.com/img/01bf/644f/fb38de40bc1d110bd8c1707588701f1b?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dOdOnzvAn350cJrKSnHyvMT7ln6LOjz4ehVZdT4En9czjfGkOwLaLFhw-IcirMB9ztsZrbpI-ovsCTkARJxEm1silscbizWhmB4trABHWlgRTvQDAzojyRgGjYM31UvUI0zW9I6E6qJurDJYtpH74pAWPonRoYGwRgLF7aimR9lpVL5-8SalwiO3OjRPIq5rw4hzzDjpMxL4YCjswO-CrOvGO61axTNxvKhElCU4XvaEDk2VrreLEMXzIjQIoE4rzqLE5fcdBuaqnBx9qyeQQ31DlDiOIrnVIAf~gJDDhtdgiyb2fcUeEKSyfrcjPGash7aH5Y9o~QbdMajctYKVxg__",
-    titleLeftText: "Geneva",
-    bottomLeftText: "March 10 - 16",
-    bottomRightText: "$5911",
-    choiceId: "3",
-  },
-];
 
 const examplePicturesPayload: PicturesProps[] = [
   {
