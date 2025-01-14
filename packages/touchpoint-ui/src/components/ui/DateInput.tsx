@@ -1,7 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
-import {type FC, useState} from "react";
-import { InputMask, unformat } from '@react-input/mask';
+import { type FC, useState } from "react";
+import { InputMask, unformat } from "@react-input/mask";
 import { ArrowForward, Calendar } from "./Icons";
 import { IconButton } from "./IconButton";
 
@@ -17,12 +17,14 @@ const options = {
 
 export const DateInput: FC<DateInputProps> = ({
   onSubmit,
-  isDisabled = false
+  isDisabled = false,
 }) => {
   const [isInputEmpty, setIsInputEmpty] = useState(true);
 
   return (
-    <div className={`relative bg-primary-5 flex items-center justify-between pl-4 py-2 pr-2 rounded-plus transition-colors duration-500 before:content-[''] before:absolute before:transition-colors before:-z-10 before:inset-0 before:bg-transparent ${isDisabled ? "" : "hover:bg-secondary-20"}`}>
+    <div
+      className={`relative bg-primary-5 flex items-center justify-between pl-4 py-2 pr-2 rounded-plus transition-colors duration-500 before:content-[''] before:absolute before:transition-colors before:-z-10 before:inset-0 before:bg-transparent ${isDisabled ? "" : "hover:bg-secondary-20"}`}
+    >
       <div className="flex items-center">
         <Calendar className="w-4 h-4 text-primary-60" />
         <InputMask
@@ -50,8 +52,8 @@ export const DateInput: FC<DateInputProps> = ({
           isInputEmpty
             ? undefined
             : () => {
-              onSubmit();
-            }
+                onSubmit();
+              }
         }
         type="main"
         Icon={ArrowForward}
