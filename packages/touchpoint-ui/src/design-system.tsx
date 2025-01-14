@@ -14,6 +14,7 @@ import {
   type PicturesProps,
 } from "./components/ui/PicturesContainer";
 import { ArrowRight, Close } from "./components/ui/Icons";
+import { Icons, BaseText, SmallText } from "./index";
 import { DateInput } from "./components/ui/DateInput";
 
 const TextButtonInstances: FC<unknown> = () => {
@@ -193,22 +194,34 @@ const Carousels: FC<unknown> = () => {
   );
 };
 
+const DateInputs: FC<unknown> = () => {
+  return (
+    <div className="grid h-[360px] grid-cols-2 gap-2 relative">
+      <Container mode="dark">
+        <DateInput />
+        <DateInput
+          onSubmit={(date) => {
+            console.log(date);
+          }}
+        />
+      </Container>
+      <Container mode="light">
+        <DateInput />
+        <DateInput
+          onSubmit={(date) => {
+            console.log(date);
+          }}
+        />
+      </Container>
+    </div>
+  );
+};
+
 const Loaders: FC<unknown> = () => {
   return (
     <div className="grid h-[360px] grid-cols-2 gap-2 relative">
       <Container mode="dark">
         <Loader label="Thinking" />
-
-        <div>
-          <video
-            autoPlay
-            loop
-            muted
-            className="w-8 absolute top-24 left-[250px]"
-          >
-            <source src={url} type="video/mp4" />
-          </video>
-        </div>
       </Container>
       <Container mode="light">
         <Loader label="Thinking" />
@@ -251,6 +264,11 @@ const tabs: Array<{ tab: Tab; title: string; component: FC<unknown> }> = [
     tab: "icon-buttons",
     title: "Icon buttons",
     component: IconButtons,
+  },
+  {
+    tab: "date-input",
+    title: "Date input",
+    component: DateInputs,
   },
   { tab: "icons", title: "Icons", component: IconInstances },
   { tab: "carousels", title: "Carousels", component: Carousels },
