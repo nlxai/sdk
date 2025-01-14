@@ -36,6 +36,7 @@ export const html = createHtml({
   CustomCards,
   CustomCard,
   CustomCardRow,
+  CustomCardImageRow,
   ...Icons,
 });
 
@@ -47,6 +48,7 @@ export {
   CustomCards,
   CustomCard,
   CustomCardRow,
+  CustomCardImageRow,
   Icons,
 };
 
