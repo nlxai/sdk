@@ -14,6 +14,7 @@ import {
   CustomCards,
   CustomCard,
   CustomCardRow,
+  CustomCardImageRow,
 } from "./components/ui/CustomCard";
 
 import { createElement, type FC } from "react";
