@@ -1,6 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import {
-  type FC,
   useRef,
   useEffect,
   useState,
@@ -31,17 +30,17 @@ import {
   type LogoUrl,
   type ChoiceMessage,
   type CustomModalityComponent,
+  type ThemeSetting,
 } from "./types";
 import { Context } from "./context";
+import { CustomPropertiesContainer } from "./components/Theme";
 
 export interface Props {
   config: Config;
   windowSize?: WindowSize;
   colorMode?: ColorMode;
   logoUrl?: LogoUrl;
-  overrides?: {
-    loader?: FC<unknown>;
-  };
+  theme?: ThemeSetting;
   customModalities?: Record<string, CustomModalityComponent<any>>;
 }
 
@@ -171,12 +170,13 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   return (
     <Context.Provider value={{ handler }}>
       {isExpanded ? (
-        <div
-          data-theme={colorMode}
-          className="grid grid-cols-2 xl:grid-cols-[1fr_632px] fixed inset-0 z-touchpoint font-sans"
+        <CustomPropertiesContainer
+          theme={props.theme}
+          colorMode={colorMode}
+          className="grid grid-cols-2 xl:grid-cols-[1fr_632px] fixed inset-0 z-touchpoint"
         >
           {windowSize === "half" ? (
-            <div className="hidden md:block bg-overlay"></div>
+            <div className="hidden md:block bg-overlay" />
           ) : null}
           <div
             className={clsx(
@@ -256,7 +256,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               </>
             )}
           </div>
-        </div>
+        </CustomPropertiesContainer>
       ) : (
         <div data-theme={colorMode} className="font-sans">
           <LaunchButton

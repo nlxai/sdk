@@ -16,6 +16,7 @@ import {
 import { ArrowRight, Close } from "./components/ui/Icons";
 import { Icons, BaseText, SmallText } from "./index";
 import { DateInput } from "./components/ui/DateInput";
+import { CustomPropertiesContainer } from "./components/Theme";
 
 const TextButtonInstances: FC<unknown> = () => {
   return (
@@ -238,12 +239,16 @@ const Container: FC<{ children: ReactNode; mode: ColorMode }> = ({
 }) => {
   return (
     <Context.Provider value={{ handler: null }}>
-      <div
+      <CustomPropertiesContainer
         className="bg-background p-4 rounded-plus space-y-4"
-        data-theme={mode}
+        theme={{
+          light: { "--font-family": "monospace", "--accent": "purple" },
+          dark: { "--font-family": "monospace", "--accent": "pink" },
+        }}
+        colorMode={mode}
       >
         {children}
-      </div>
+      </CustomPropertiesContainer>
     </Context.Provider>
   );
 };
@@ -301,14 +306,14 @@ const DesignSystem: FC<unknown> = () => {
 
   return (
     <div className="grid grid-cols-[320px,1fr]">
-      <div className="space-y-2">
+      <CustomPropertiesContainer colorMode="light" className="space-y-2">
         {tabs.map(({ tab, title }) => {
           const isActive = tab === activeTab;
           return (
             <a
               className={clsx(
-                "block text-primary-60 hover:text-primary-80",
-                isActive ? "text-primary-80" : null,
+                "block hover:text-primary-80",
+                isActive ? "text-primary-80" : "text-primary-40",
               )}
               aria-current={isActive ? "page" : undefined}
               key={tab}
@@ -325,7 +330,7 @@ const DesignSystem: FC<unknown> = () => {
             </a>
           );
         })}
-      </div>
+      </CustomPropertiesContainer>
       {ActiveTabComponent == null ? null : <ActiveTabComponent />}
     </div>
   );

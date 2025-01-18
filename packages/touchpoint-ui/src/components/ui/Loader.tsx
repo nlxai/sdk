@@ -140,7 +140,7 @@ export const Loader: FC<LoaderProps> = ({ label, className }) => {
             stroke="none"
             fill="currentColor"
             style={{
-              filter: `drop-shadow(0 0 ${dropShadowRadius}px rgb(var(--accent)))`,
+              filter: `drop-shadow(0 0 ${dropShadowRadius}px var(--accent))`,
             }}
           >
             <g
