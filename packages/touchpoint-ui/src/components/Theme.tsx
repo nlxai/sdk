@@ -101,9 +101,9 @@ export const CustomPropertiesContainer: FC<{
       ? darkModeCustomProperties
       : lightModeCustomProperties),
     ...override,
-  } as CSSProperties;
+  };
   return (
-    <div className={clsx(className)} style={style}>
+    <div className={clsx(className)} style={style as CSSProperties}>
       {children}
     </div>
   );
