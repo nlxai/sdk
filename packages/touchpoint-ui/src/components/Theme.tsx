@@ -69,19 +69,33 @@ const darkModeCustomProperties: Theme = {
   "--error-secondary": "rgb(94, 4, 4)",
 };
 
+const isThemeSettingByColorMode = (
+  theme: ThemeSetting,
+  colorMode: ColorMode,
+): theme is ThemeSettingByColorMode => {
+  return (theme as ThemeSettingByColorMode)[colorMode] != null;
+};
+
+const toOverride = (
+  colorMode: ColorMode,
+  theme?: ThemeSetting,
+): Partial<Theme> => {
+  if (theme == null) {
+    return {};
+  }
+  if (isThemeSettingByColorMode(theme, colorMode)) {
+    return theme[colorMode];
+  }
+  return theme;
+};
+
 export const CustomPropertiesContainer: FC<{
   colorMode: ColorMode;
   className?: string;
   theme?: ThemeSetting;
   children?: ReactNode;
 }> = ({ colorMode, children, theme, className }) => {
-  // TODO: figure out how to sort out the types without all the casting
-  const override: Partial<Theme> =
-    theme == null
-      ? {}
-      : (theme as ThemeSettingByColorMode)[colorMode] != null
-        ? (theme as ThemeSettingByColorMode)[colorMode]
-        : (theme as Partial<Theme>);
+  const override = toOverride(colorMode, theme);
   const style = {
     ...(colorMode === "dark"
       ? darkModeCustomProperties
