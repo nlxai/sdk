@@ -8,6 +8,7 @@ export const umdScriptSrc = {
 };
 
 export const packageUrls = {
+  touchpointUi: "https://github.com/nlxai/sdk/tree/main/packages/touchpoint-ui",
   chatCore: "https://github.com/nlxai/sdk/tree/main/packages/chat-core",
   chatReact: "https://github.com/nlxai/sdk/tree/main/packages/chat-react",
   chatPreact: "https://github.com/nlxai/sdk/tree/main/packages/chat-preact",
