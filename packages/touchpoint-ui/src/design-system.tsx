@@ -242,8 +242,8 @@ const Container: FC<{ children: ReactNode; mode: ColorMode }> = ({
       <CustomPropertiesContainer
         className="bg-background p-4 rounded-plus space-y-4"
         theme={{
-          light: { "--font-family": "monospace", "--accent": "purple" },
-          dark: { "--font-family": "monospace", "--accent": "pink" },
+          fontFamily: "monospace",
+          accent: "light-dark(purple, pink)",
         }}
         colorMode={mode}
       >

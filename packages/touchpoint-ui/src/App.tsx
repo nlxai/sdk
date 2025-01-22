@@ -29,8 +29,8 @@ import {
   type WindowSize,
   type LogoUrl,
   type ChoiceMessage,
+  type Theme,
   type CustomModalityComponent,
-  type ThemeSetting,
 } from "./types";
 import { Context } from "./context";
 import { CustomPropertiesContainer } from "./components/Theme";
@@ -40,7 +40,7 @@ export interface Props {
   windowSize?: WindowSize;
   colorMode?: ColorMode;
   logoUrl?: LogoUrl;
-  theme?: ThemeSetting;
+  theme?: Partial<Theme>;
   customModalities?: Record<string, CustomModalityComponent<any>>;
 }
 
@@ -59,9 +59,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const isWaiting = responses[responses.length - 1]?.type === "user";
 
-  const [colorModeOverride, setColorModeOverride] = useState<ColorMode | null>(
-    null,
-  );
+  const colorMode = props.colorMode ?? "dark";
 
   const [windowSizeOverride, setWindowSizeOverride] =
     useState<WindowSize | null>(null);
@@ -119,8 +117,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const windowSize: WindowSize =
     windowSizeOverride ?? props.windowSize ?? "half";
-
-  const colorMode: ColorMode = colorModeOverride ?? props.colorMode ?? "dark";
 
   const lastBotResponse = useMemo<{
     index: number;
@@ -214,9 +210,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                 onClose={() => {
                   setIsSettingsOpen(false);
                 }}
-                colorMode={colorMode}
                 windowSize={windowSize}
-                setColorModeOverride={setColorModeOverride}
                 setWindowSizeOverride={setWindowSizeOverride}
                 handler={handler}
               />
@@ -258,7 +252,11 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           </div>
         </CustomPropertiesContainer>
       ) : (
-        <div data-theme={colorMode} className="font-sans">
+        <CustomPropertiesContainer
+          className="font-sans"
+          theme={props.theme}
+          colorMode={colorMode}
+        >
           <LaunchButton
             className="fixed z-100 bottom-2 right-2 backdrop-blur z-launchButton"
             onClick={() => {
@@ -266,7 +264,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             }}
             label="Expand chat"
           />
-        </div>
+        </CustomPropertiesContainer>
       )}
     </Context.Provider>
   );

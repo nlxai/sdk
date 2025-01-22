@@ -46,113 +46,103 @@ export type CustomModalityComponent<Data> = FC<{
 }>;
 
 /**
- * Theme setting by color mode
- */
-export type ThemeSettingByColorMode = Record<ColorMode, Partial<Theme>>;
-
-/**
- * Theme setting as specified by the user
- */
-export type ThemeSetting = Partial<Theme> | ThemeSettingByColorMode;
-
-/**
  * The full theme expressed as CSS custom properties
  */
 export interface Theme {
   /**
    * Font family
    */
-  "--font-family": string;
+  fontFamily: string;
 
   /**
    * Primary color with 80% opacity
    */
-  "--primary-80": string;
+  primary80: string;
   /**
    * Primary color with 60% opacity
    */
-  "--primary-60": string;
+  primary60: string;
   /**
    * Primary color with 40% opacity
    */
-  "--primary-40": string;
+  primary40: string;
   /**
    * Primary color with 20% opacity
    */
-  "--primary-20": string;
+  primary20: string;
   /**
    * Primary color with 10% opacity
    */
-  "--primary-10": string;
+  primary10: string;
   /**
    * Primary color with 5% opacity
    */
-  "--primary-5": string;
+  primary5: string;
   /**
    * Primary color with 1% opacity
    */
-  "--primary-1": string;
+  primary1: string;
 
   /**
    * Secondary color with 80% opacity
    */
-  "--secondary-80": string;
+  secondary80: string;
   /**
    * Secondary color with 60% opacity
    */
-  "--secondary-60": string;
+  secondary60: string;
   /**
    * Secondary color with 40% opacity
    */
-  "--secondary-40": string;
+  secondary40: string;
   /**
    * Secondary color with 20% opacity
    */
-  "--secondary-20": string;
+  secondary20: string;
   /**
    * Secondary color with 10% opacity
    */
-  "--secondary-10": string;
+  secondary10: string;
   /**
    * Secondary color with 5% opacity
    */
-  "--secondary-5": string;
+  secondary5: string;
   /**
    * Secondary color with 1% opacity
    */
-  "--secondary-1": string;
+  secondary1: string;
 
   /**
-   * Accent color
+   * Accent color used e.g. for prominent buttons, the loader animation as well as selected card outlines
    */
-  "--accent": string;
+  accent: string;
   /**
    * Accent color with 20% opacity
    */
-  "--accent-20": string;
+  accent20: string;
   /**
-   * Background color
+   * The background color of the main Touchpoint interface
    */
-  "--background": string;
+  background: string;
   /**
-   * Overlay color
+   * The color of the overlay covering the visible portion of the website when the Touchpoint interface does not cover the full screen
    */
-  "--overlay": string;
+  overlay: string;
 
   /**
    * Primary warning color
    */
-  "--warning-primary": string;
+  warningPrimary: string;
   /**
    * Secondary warning color
    */
-  "--warning-secondary": string;
+  warningSecondary: string;
   /**
    * Primary error color
    */
-  "--error-primary": string;
+  errorPrimary: string;
   /**
    * Secondary error color
    */
-  "--error-secondary": string;
+  errorSecondary: string;
 }
