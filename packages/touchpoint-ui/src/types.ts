@@ -46,16 +46,6 @@ export type CustomModalityComponent<Data> = FC<{
 }>;
 
 /**
- * Theme setting by color mode
- */
-export type ThemeSettingByColorMode = Record<ColorMode, Partial<Theme>>;
-
-/**
- * Theme setting as specified by the user
- */
-export type ThemeSetting = Partial<Theme> | ThemeSettingByColorMode;
-
-/**
  * The full theme expressed as CSS custom properties
  */
 export interface Theme {

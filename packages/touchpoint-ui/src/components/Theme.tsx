@@ -2,12 +2,7 @@
 import { type FC, type ReactNode, type CSSProperties } from "react";
 import { clsx } from "clsx";
 
-import {
-  type ColorMode,
-  type Theme,
-  type ThemeSetting,
-  type ThemeSettingByColorMode,
-} from "../types";
+import { type ColorMode, type Theme } from "../types";
 
 const toCustomProperties = (theme: Theme): CSSProperties => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -102,38 +97,17 @@ const darkModeCustomProperties: Theme = {
   errorSecondary: "rgb(94, 4, 4)",
 };
 
-const isThemeSettingByColorMode = (
-  theme: ThemeSetting,
-  colorMode: ColorMode,
-): theme is ThemeSettingByColorMode => {
-  return (theme as ThemeSettingByColorMode)[colorMode] != null;
-};
-
-const toOverride = (
-  colorMode: ColorMode,
-  theme?: ThemeSetting,
-): Partial<Theme> => {
-  if (theme == null) {
-    return {};
-  }
-  if (isThemeSettingByColorMode(theme, colorMode)) {
-    return theme[colorMode];
-  }
-  return theme;
-};
-
 export const CustomPropertiesContainer: FC<{
   colorMode: ColorMode;
   className?: string;
-  theme?: ThemeSetting;
+  theme?: Partial<Theme>;
   children?: ReactNode;
 }> = ({ colorMode, children, theme, className }) => {
-  const override = toOverride(colorMode, theme);
   const themeWithOverrides: Theme = {
     ...(colorMode === "dark"
       ? darkModeCustomProperties
       : lightModeCustomProperties),
-    ...override,
+    ...(theme ?? {}),
   };
   return (
     <div
