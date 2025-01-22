@@ -10,6 +10,7 @@ import {
 } from "../types";
 
 const toCustomProperties = (theme: Theme): CSSProperties => {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return {
     "--font-family": theme.fontFamily,
 
