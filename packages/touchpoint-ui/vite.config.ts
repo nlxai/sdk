@@ -2,6 +2,7 @@ import { resolve } from "path";
 import react from "@vitejs/plugin-react";
 import replace from "@rollup/plugin-replace";
 import { defineConfig } from "vite";
+import dts from "vite-plugin-dts";
 
 /**
  * Adjust the JS entry point if the app is run in prototype or review modes
@@ -32,13 +33,14 @@ export default defineConfig(({ mode, command }) => ({
           },
     ),
     adjustJsEntryPoint({ mode }),
+    dts(),
   ],
   resolve: {},
   build: {
     outDir: "lib",
     lib: {
       entry: resolve(__dirname, "./src/index.tsx"),
-      name: "touchpointUi",
+      name: "nlxai.touchpointUi",
       fileName: "index",
     },
   },

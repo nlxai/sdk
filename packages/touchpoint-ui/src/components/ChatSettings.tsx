@@ -4,15 +4,13 @@ import { type ConversationHandler } from "@nlxai/chat-core";
 
 import { ArrowForward, Escalate, Restart } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
-import { type ColorMode, type WindowSize } from "../types";
+import { type WindowSize } from "../types";
 import { clsx } from "clsx";
 
 interface ChatSettingsProps {
   onClose: () => void;
   handler: ConversationHandler;
-  colorMode: ColorMode;
   windowSize: WindowSize;
-  setColorModeOverride: Dispatch<SetStateAction<ColorMode | null>>;
   setWindowSizeOverride: Dispatch<SetStateAction<WindowSize | null>>;
   className?: string;
 }
@@ -20,9 +18,7 @@ interface ChatSettingsProps {
 export const ChatSettings: FC<ChatSettingsProps> = ({
   onClose,
   handler,
-  colorMode,
   windowSize,
-  setColorModeOverride,
   setWindowSizeOverride,
   className,
 }) => {
@@ -52,24 +48,6 @@ export const ChatSettings: FC<ChatSettingsProps> = ({
           onClose();
         }}
       />
-      <div className="grid grid-cols-2 gap-2">
-        <TextButton
-          label="Dark mode"
-          Icon={ArrowForward}
-          type={colorMode === "dark" ? "main" : "ghost"}
-          onClick={() => {
-            setColorModeOverride("dark");
-          }}
-        />
-        <TextButton
-          label="Light mode"
-          Icon={ArrowForward}
-          type={colorMode === "light" ? "main" : "ghost"}
-          onClick={() => {
-            setColorModeOverride("light");
-          }}
-        />
-      </div>
       <div className="grid grid-cols-2 gap-2">
         <TextButton
           label="Half width"

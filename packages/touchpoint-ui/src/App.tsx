@@ -1,6 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import {
-  type FC,
   useRef,
   useEffect,
   useState,
@@ -30,18 +29,18 @@ import {
   type WindowSize,
   type LogoUrl,
   type ChoiceMessage,
+  type Theme,
   type CustomModalityComponent,
 } from "./types";
 import { Context } from "./context";
+import { CustomPropertiesContainer } from "./components/Theme";
 
 export interface Props {
   config: Config;
   windowSize?: WindowSize;
   colorMode?: ColorMode;
   logoUrl?: LogoUrl;
-  overrides?: {
-    loader?: FC<unknown>;
-  };
+  theme?: Partial<Theme>;
   customModalities?: Record<string, CustomModalityComponent<any>>;
 }
 
@@ -60,9 +59,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const isWaiting = responses[responses.length - 1]?.type === "user";
 
-  const [colorModeOverride, setColorModeOverride] = useState<ColorMode | null>(
-    null,
-  );
+  const colorMode = props.colorMode ?? "dark";
 
   const [windowSizeOverride, setWindowSizeOverride] =
     useState<WindowSize | null>(null);
@@ -121,8 +118,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   const windowSize: WindowSize =
     windowSizeOverride ?? props.windowSize ?? "half";
 
-  const colorMode: ColorMode = colorModeOverride ?? props.colorMode ?? "dark";
-
   const lastBotResponse = useMemo<{
     index: number;
     response: BotResponse;
@@ -171,12 +166,13 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   return (
     <Context.Provider value={{ handler }}>
       {isExpanded ? (
-        <div
-          data-theme={colorMode}
-          className="grid grid-cols-2 xl:grid-cols-[1fr_632px] fixed inset-0 z-touchpoint font-sans"
+        <CustomPropertiesContainer
+          theme={props.theme}
+          colorMode={colorMode}
+          className="grid grid-cols-2 xl:grid-cols-[1fr_632px] fixed inset-0 z-touchpoint"
         >
           {windowSize === "half" ? (
-            <div className="hidden md:block bg-overlay"></div>
+            <div className="hidden md:block bg-overlay" />
           ) : null}
           <div
             className={clsx(
@@ -214,9 +210,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                 onClose={() => {
                   setIsSettingsOpen(false);
                 }}
-                colorMode={colorMode}
                 windowSize={windowSize}
-                setColorModeOverride={setColorModeOverride}
                 setWindowSizeOverride={setWindowSizeOverride}
                 handler={handler}
               />
@@ -256,9 +250,13 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               </>
             )}
           </div>
-        </div>
+        </CustomPropertiesContainer>
       ) : (
-        <div data-theme={colorMode} className="font-sans">
+        <CustomPropertiesContainer
+          className="font-sans"
+          theme={props.theme}
+          colorMode={colorMode}
+        >
           <LaunchButton
             className="fixed z-100 bottom-2 right-2 backdrop-blur z-launchButton"
             onClick={() => {
@@ -266,7 +264,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             }}
             label="Expand chat"
           />
-        </div>
+        </CustomPropertiesContainer>
       )}
     </Context.Provider>
   );

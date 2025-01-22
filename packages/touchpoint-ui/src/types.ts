@@ -2,16 +2,6 @@ import { type BotMessage } from "@nlxai/chat-core";
 import { type FC } from "react";
 
 /**
- * Various component overrides
- */
-export interface Overrides {
-  /**
-   * Override the loader animation
-   */
-  loader?: FC<unknown>;
-}
-
-/**
  * Window size configuration
  */
 export type WindowSize = "half" | "full";
@@ -54,3 +44,105 @@ export type CustomModalityComponent<Data> = FC<{
    */
   data: Data;
 }>;
+
+/**
+ * The full theme expressed as CSS custom properties
+ */
+export interface Theme {
+  /**
+   * Font family
+   */
+  fontFamily: string;
+
+  /**
+   * Primary color with 80% opacity
+   */
+  primary80: string;
+  /**
+   * Primary color with 60% opacity
+   */
+  primary60: string;
+  /**
+   * Primary color with 40% opacity
+   */
+  primary40: string;
+  /**
+   * Primary color with 20% opacity
+   */
+  primary20: string;
+  /**
+   * Primary color with 10% opacity
+   */
+  primary10: string;
+  /**
+   * Primary color with 5% opacity
+   */
+  primary5: string;
+  /**
+   * Primary color with 1% opacity
+   */
+  primary1: string;
+
+  /**
+   * Secondary color with 80% opacity
+   */
+  secondary80: string;
+  /**
+   * Secondary color with 60% opacity
+   */
+  secondary60: string;
+  /**
+   * Secondary color with 40% opacity
+   */
+  secondary40: string;
+  /**
+   * Secondary color with 20% opacity
+   */
+  secondary20: string;
+  /**
+   * Secondary color with 10% opacity
+   */
+  secondary10: string;
+  /**
+   * Secondary color with 5% opacity
+   */
+  secondary5: string;
+  /**
+   * Secondary color with 1% opacity
+   */
+  secondary1: string;
+
+  /**
+   * Accent color used e.g. for prominent buttons, the loader animation as well as selected card outlines
+   */
+  accent: string;
+  /**
+   * Accent color with 20% opacity
+   */
+  accent20: string;
+  /**
+   * The background color of the main Touchpoint interface
+   */
+  background: string;
+  /**
+   * The color of the overlay covering the visible portion of the website when the Touchpoint interface does not cover the full screen
+   */
+  overlay: string;
+
+  /**
+   * Primary warning color
+   */
+  warningPrimary: string;
+  /**
+   * Secondary warning color
+   */
+  warningSecondary: string;
+  /**
+   * Primary error color
+   */
+  errorPrimary: string;
+  /**
+   * Secondary error color
+   */
+  errorSecondary: string;
+}
