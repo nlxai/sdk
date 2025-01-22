@@ -112,7 +112,10 @@ export const CustomPropertiesContainer: FC<{
   return (
     <div
       className={clsx(className)}
-      style={toCustomProperties(themeWithOverrides)}
+      style={{
+        ...toCustomProperties(themeWithOverrides),
+        colorScheme: colorMode,
+      }}
     >
       {children}
     </div>
