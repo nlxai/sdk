@@ -1,5 +1,6 @@
 import { type FC, useState, useEffect } from "react";
 import { type Config } from "@nlxai/chat-core";
+import { create } from "@nlxai/touchpoint-ui";
 
 import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
@@ -27,19 +28,9 @@ export const TouchpointUiTryLive: FC<unknown> = () => {
   const [config, setConfig] = useState<Config>(getInitialConfig());
 
   useEffect(() => {
-    let instance: any;
-    import("@nlxai/touchpoint-ui/lib/index.js")
-      .then(({ create }) => {
-        instance = create({ config });
-      })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.warn(err);
-      });
+    const instance = create({ config });
     return () => {
-      if (instance != null) {
-        instance.teardown();
-      }
+      instance.teardown();
     };
   }, [config]);
 

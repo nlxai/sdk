@@ -74,8 +74,11 @@ const ChatInput: FC<ChatInputProps> = ({
 
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
+  const inputMessageSendDisabled =
+    (isInputEmpty && uploadedFileInfo == null) || isWaiting;
+
   const submit = (): void => {
-    if (isInputEmpty || isWaiting) {
+    if (inputMessageSendDisabled) {
       return;
     }
 
@@ -268,7 +271,7 @@ const ChatInput: FC<ChatInputProps> = ({
               className="flex-none"
               label="Send message"
               onClick={
-                isInputEmpty || isWaiting
+                inputMessageSendDisabled
                   ? undefined
                   : () => {
                       submit();
