@@ -29,7 +29,7 @@ interface RouteGroup {
 const getRoutes = (): RouteGroup[] => {
   const sortedPages = sortBy((entry) => entry[0], Object.entries(pages));
   // TODO: improve types (Object.entries seems to assume that values can be `undefined`)
-  const pageEntries: [string, [string, Page][]][] = Object.entries(
+  const pageEntries: Array<[string, Array<[string, Page]>]> = Object.entries(
     groupBy((entry: [string, Page]) => entry[1].navGroup, sortedPages),
   ) as any;
   return pageEntries.map(([heading, pages]) => {
