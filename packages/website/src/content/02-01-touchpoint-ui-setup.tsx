@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import { PageTitle } from "../components/PageTitle";
+
 import { PageContent } from "../components/PageContent";
 import { setupSnippet } from "../snippets";
 
@@ -17,11 +17,10 @@ In this snippet, the script is deferred in order to reduce impact on page speed.
 - \`config\`: the [bot configuration](/headless-api-reference#interfacesconfigmd), including the bot URL obtained and headers obtained from the deployment of your bot.
 `;
 
-export const TouchpointUiSetup: FC<unknown> = () => {
-  return (
-    <>
-      <PageTitle pretitle="Touchpoint" title="Setup" />
-      <PageContent md={content} />
-    </>
-  );
+export const navGroup: string = "Touchpoint";
+
+export const title: string = "Setup";
+
+export const Content: FC<unknown> = () => {
+  return <PageContent md={content} />;
 };

@@ -1,12 +1,15 @@
 import { type FC } from "react";
-import { PageTitle } from "../components/PageTitle";
+
 import { PageContent } from "../components/PageContent";
 import content from "./voice-plus-api-reference.md?raw";
 
-export const VoicePlusApiReference: FC<unknown> = () => {
+export const navGroup: string = "Voice+";
+
+export const title: string = "API reference";
+
+export const Content: FC<unknown> = () => {
   return (
     <>
-      <PageTitle pretitle="Voice+" title="API reference" />
       <PageContent md={content} />
     </>
   );

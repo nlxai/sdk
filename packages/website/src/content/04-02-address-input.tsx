@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { PageTitle } from "../components/PageTitle";
+import { useState, type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 import { InlineWidget, type Item } from "../components/InlineWidget";
 import AddressInput from "../custom-components/Address";
 
-export const content = `
+const content = `
 The address input component is used to collect a user's address. It uses Google Maps to autocomplete the address.
 
 ~~~js
@@ -103,7 +103,11 @@ const AddressInput = ({ onAddressChange, address, onSubmit, submitted }) => {
 ~~~
 `;
 
-export const WebWidgetComponentsAddressInput = (): JSX.Element => {
+export const navGroup: string = "Web widget components";
+
+export const title: string = "Address input";
+
+export const Content: FC<unknown> = () => {
   const [formattedAddress, setFormattedAddress] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -141,7 +145,6 @@ export const WebWidgetComponentsAddressInput = (): JSX.Element => {
 
   return (
     <>
-      <PageTitle pretitle="Web widget components" title="Address input" />
       <InlineWidget className="mb-8" items={items} />
       <PageContent md={content} />
     </>

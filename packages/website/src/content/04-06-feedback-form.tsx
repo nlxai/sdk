@@ -1,4 +1,5 @@
-import { PageTitle } from "../components/PageTitle";
+import { type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 import { Note } from "../components/Note";
 import { FeedbackForm } from "../custom-components/FeedbackForm";
@@ -78,10 +79,13 @@ const FeedbackForm = () => {
 ~~~
 `;
 
-export const WebWidgetComponentsFeedbackForm = (): JSX.Element => {
+export const navGroup: string = "Web widget components";
+
+export const title: string = "Feedback form";
+
+export const Content: FC<unknown> = () => {
   return (
     <>
-      <PageTitle pretitle="Web widget components" title="Feedback form" />
       <InlineWidget
         className="mb-8"
         items={[

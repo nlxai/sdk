@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { PageTitle } from "../components/PageTitle";
+import { useState, type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 import { DatePicker } from "../custom-components/DatePicker";
 import { InlineWidget, type Item } from "../components/InlineWidget";
@@ -40,7 +40,11 @@ const DatePicker = ({ submitted, onSubmit }) => {
 ~~~
 `;
 
-export const WebWidgetComponentsDatePicker = (): JSX.Element => {
+export const navGroup: string = "Web widget components";
+
+export const title: string = "Date picker";
+
+export const Content: FC<unknown> = () => {
   const [submitted, setSubmitted] = useState(false);
   const [date, setDate] = useState<Date | null>(null);
 
@@ -76,7 +80,6 @@ export const WebWidgetComponentsDatePicker = (): JSX.Element => {
 
   return (
     <>
-      <PageTitle pretitle="Web widget components" title="Date picker" />
       <InlineWidget className="mb-8" items={items} />
       <PageContent md={content} />
     </>

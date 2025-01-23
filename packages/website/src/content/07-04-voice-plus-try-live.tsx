@@ -1,5 +1,5 @@
 import { type FC, useState } from "react";
-import { PageTitle } from "../components/PageTitle";
+
 import { PageContent } from "../components/PageContent";
 import {
   type Config,
@@ -22,12 +22,15 @@ ${voicePlusSetupSnippet({ config, environment: Environment.Html })}
 ~~~
 `;
 
-export const VoicePlusTryLive: FC<unknown> = () => {
+export const navGroup: string = "Voice+";
+
+export const title: string = "Try live";
+
+export const Content: FC<unknown> = () => {
   const [config, setConfig] = useState<ConfigAsStrings>(getInitialConfig());
 
   return (
     <>
-      <PageTitle pretitle="Voice+" title="Try live" />
       <PageContent md={content} />
       <div className="mt-6 space-y-4">
         <ConfigEditor

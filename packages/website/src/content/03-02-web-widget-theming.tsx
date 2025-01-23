@@ -1,4 +1,5 @@
-import { PageTitle } from "../components/PageTitle";
+import { type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 
 export const content = `
@@ -13,13 +14,10 @@ The chat widget exposes a number of style theme parameters that can be customize
 - \`chatWindowMaxHeight\`: the maximum height of the chat box, relevant for large screens.
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const WebWidgetTheming = () => {
-  return (
-    <>
-      <PageTitle pretitle="Web widget" title="Theming" />
-      <PageContent md={content} />
-    </>
-  );
+export const navGroup: string = "Web widget";
+
+export const title: string = "Theming";
+
+export const Content: FC<unknown> = () => {
+  return <PageContent md={content} />;
 };

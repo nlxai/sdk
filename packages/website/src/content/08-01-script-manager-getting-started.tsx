@@ -1,5 +1,4 @@
 import { type FC, useState } from "react";
-import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { RadioList } from "../components/RadioList";
 import { voicePlusWebSnippet } from "../snippets";
@@ -29,12 +28,15 @@ The \`nlxai.voicePlusWeb.run\` method takes an object argument with the followin
 - \`onDigression\`: a callback used to handle digression, with the Voice+ client as an argument in case you are sending steps as a response.
 `;
 
-export const ScriptManagerGettingStarted: FC<unknown> = () => {
+export const navGroup: string = "Script manager";
+
+export const title: string = "Getting started";
+
+export const Content: FC<unknown> = () => {
   const [digressionButton, setDigressionButton] = useState<boolean>(false);
 
   return (
     <>
-      <PageTitle pretitle="Script manager" title="Getting started" />
       <PageContent md={content} />
       <div className="py-4">
         <RadioList

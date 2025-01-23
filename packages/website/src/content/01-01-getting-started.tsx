@@ -1,4 +1,5 @@
-import { PageTitle } from "../components/PageTitle";
+import { type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 import { packageUrls } from "../constants";
 
@@ -11,13 +12,10 @@ This is the official JavaScript SDK to communicate with conversational bots crea
 * [@nlxai/voice-plus-core](${packageUrls.voicePlusCore}): Voice+ capabilities.
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const GettingStarted = () => {
-  return (
-    <>
-      <PageTitle pretitle="Introduction" title="Getting started" />
-      <PageContent md={content} />
-    </>
-  );
+export const navGroup: string = "Introduction";
+
+export const title: string = "Getting started";
+
+export const Content: FC<unknown> = () => {
+  return <PageContent md={content} />;
 };

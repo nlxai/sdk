@@ -1,4 +1,5 @@
-import { PageTitle } from "../components/PageTitle";
+import { type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 import { InlineWidget, type Item } from "../components/InlineWidget";
 import VideoPlayer from "../custom-components/VideoPlayer";
@@ -22,7 +23,11 @@ const VideoPlayer = ({ videoId }) => {
 ~~~
 `;
 
-export const WebWidgetComponentsVideoPlayer = (): JSX.Element => {
+export const navGroup: string = "Web widget components";
+
+export const title: string = "Video player";
+
+export const Content: FC<unknown> = () => {
   const items: Item[][] = [
     [
       {
@@ -33,7 +38,6 @@ export const WebWidgetComponentsVideoPlayer = (): JSX.Element => {
   ];
   return (
     <>
-      <PageTitle pretitle="Web widget components" title="Video player" />
       <InlineWidget className="mb-8" items={items} />
       <PageContent md={content} />
     </>

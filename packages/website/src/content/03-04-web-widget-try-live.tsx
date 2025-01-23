@@ -1,6 +1,4 @@
 import { type FC, useState, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
-import { PageTitle } from "../components/PageTitle";
 import { type Config } from "@nlxai/chat-core";
 import {
   Widget,
@@ -8,6 +6,8 @@ import {
   type TitleBar,
   defaultTheme,
 } from "@nlxai/chat-widget";
+import { omit } from "ramda";
+
 import { PageContent } from "../components/PageContent";
 import {
   ThemeEditor,
@@ -21,7 +21,6 @@ import {
 } from "../components/ChatConfiguration";
 import { Note } from "../components/Note";
 import { setupSnippet, Behavior } from "../snippets";
-import { omit } from "ramda";
 
 export const content = `
 You can try your bots directly on this configuration widget.
@@ -46,26 +45,12 @@ ${setupSnippet({ config, titleBar, theme, behavior })}
 \`\`\`
 `;
 
-export const WebWidgetTryLive: FC<unknown> = () => {
+export const navGroup: string = "Web widget";
+
+export const title: string = "Try live";
+
+export const Content: FC<unknown> = () => {
   const [config, setConfig] = useState<Config>(getInitialConfig());
-
-  const [searchParams] = useSearchParams();
-
-  const isTouchpoint = searchParams.get("touchpoint") === "true";
-
-  useEffect(() => {
-    if (!isTouchpoint) {
-      return;
-    }
-    import("@nlxai/touchpoint-ui/lib/index.js")
-      .then(({ create }) => {
-        create({ config });
-      })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.warn(err);
-      });
-  }, [isTouchpoint, config]);
 
   const [theme, setTheme] = useState<Partial<Theme>>(
     retrieveTheme() ?? defaultTheme,
@@ -91,7 +76,6 @@ export const WebWidgetTryLive: FC<unknown> = () => {
 
   return (
     <>
-      <PageTitle pretitle="Web widget" title="Try live" />
       <PageContent md={content} />
       <Note
         title="Important"
@@ -129,19 +113,17 @@ export const WebWidgetTryLive: FC<unknown> = () => {
           })}
         />
       </div>
-      {isTouchpoint ? null : (
-        <Widget
-          config={config}
-          theme={theme}
-          titleBar={titleBar}
-          onExpand={(handler) => {
-            if (config.botUrl !== "" && !welcomeIntentSent.current) {
-              handler.sendWelcomeIntent();
-              welcomeIntentSent.current = true;
-            }
-          }}
-        />
-      )}
+      <Widget
+        config={config}
+        theme={theme}
+        titleBar={titleBar}
+        onExpand={(handler) => {
+          if (config.botUrl !== "" && !welcomeIntentSent.current) {
+            handler.sendWelcomeIntent();
+            welcomeIntentSent.current = true;
+          }
+        }}
+      />
     </>
   );
 };

@@ -1,5 +1,5 @@
 import { useState, type FC } from "react";
-import { PageTitle } from "../components/PageTitle";
+
 import { PageContent } from "../components/PageContent";
 import { BehaviorEditor } from "../components/ChatConfiguration";
 import { Behavior, setupSnippet } from "../snippets";
@@ -18,16 +18,17 @@ ${setupSnippet({
 ~~~
 `;
 
-export const WebWidgetCustomBehaviors: FC<unknown> = () => {
+export const navGroup: string = "Web widget";
+
+export const title: string = "Custom behaviors";
+
+export const Content: FC<unknown> = () => {
   const [behavior, setBehavior] = useState<Behavior>(Behavior.Simple);
   return (
-    <>
-      <PageTitle pretitle="Web widget" title="Custom behaviors" />
-      <div className="space-y-4">
-        <PageContent md={content} />
-        <BehaviorEditor behavior={behavior} setBehavior={setBehavior} />
-        <PageContent md={codeContent(behavior)} />
-      </div>
-    </>
+    <div className="space-y-4">
+      <PageContent md={content} />
+      <BehaviorEditor behavior={behavior} setBehavior={setBehavior} />
+      <PageContent md={codeContent(behavior)} />
+    </div>
   );
 };

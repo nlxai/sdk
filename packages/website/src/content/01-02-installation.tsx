@@ -1,4 +1,5 @@
-import { PageTitle } from "../components/PageTitle";
+import { type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 import { packageUrls } from "../constants";
 import { umdScriptTags } from "../snippets";
@@ -50,13 +51,10 @@ npm install @nlxai/voice-plus-core
 ~~~
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const Installation = () => {
-  return (
-    <>
-      <PageTitle pretitle="Install" title="Installation" />
-      <PageContent md={content} />
-    </>
-  );
+export const navGroup: string = "Introduction";
+
+export const title: string = "Installation";
+
+export const Content: FC<unknown> = () => {
+  return <PageContent md={content} />;
 };

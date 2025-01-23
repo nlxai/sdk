@@ -78,9 +78,9 @@ export const ConfigEditor: FC<{
           }}
         />
       </Labeled>
-      <Labeled label="Journey ID">
+      <Labeled label="Script ID">
         <input
-          placeholder="Enter journey ID"
+          placeholder="Enter script ID"
           className={inputClass}
           value={config.scriptId}
           onInput={(ev: any) => {
