@@ -1,5 +1,4 @@
 import { type FC, useState } from "react";
-import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { RadioList } from "../components/RadioList";
 import { voicePlusWebSnippet } from "../snippets";
@@ -38,7 +37,6 @@ export const Content: FC<unknown> = () => {
 
   return (
     <>
-      <PageTitle pretitle="Script manager" title="Getting started" />
       <PageContent md={content} />
       <div className="py-4">
         <RadioList

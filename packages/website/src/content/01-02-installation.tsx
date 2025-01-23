@@ -1,6 +1,5 @@
 import { type FC } from "react";
 
-import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import { packageUrls } from "../constants";
 import { umdScriptTags } from "../snippets";

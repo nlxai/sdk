@@ -1,7 +1,8 @@
-import { type FC } from "react";
-import { flatten, groupBy, sortBy, uniq } from "ramda";
+import { type FC, Fragment } from "react";
+import { flatten, groupBy, sortBy } from "ramda";
 import { Routes, Route } from "react-router-dom";
 import { Prototyping } from "./components/Prototyping";
+import { PageTitle } from "./components/PageTitle";
 import { NextPrevPage } from "./components/NextPrevPage";
 
 interface Page {
@@ -67,37 +68,40 @@ export const urls: string[] = flattenedRoutes.map(({ url }) => url);
 export const ContentRoutes: FC<unknown> = () => {
   return (
     <Routes>
-      {flattenedRoutes.map(({ url, element }, index) => {
+      {flattenedRoutes.map(({ url, heading, label, element }, index) => {
         const prev: RouteInfo | undefined = flattenedRoutes[index - 1];
         const next: RouteInfo | undefined = flattenedRoutes[index + 1];
+        const elementWithPageNav = (
+          <>
+            <PageTitle pretitle={heading} title={label} />
+            {element}
+            <NextPrevPage
+              prev={
+                prev != null
+                  ? {
+                      label: `${prev.heading}: ${prev.label}`,
+                      url: prev.url,
+                    }
+                  : undefined
+              }
+              next={
+                next != null
+                  ? {
+                      label: `${next.heading}: ${next.label}`,
+                      url: next.url,
+                    }
+                  : undefined
+              }
+            />
+          </>
+        );
         return (
-          <Route
-            path={url.slice(1)}
-            element={
-              <>
-                {element}
-                <NextPrevPage
-                  prev={
-                    prev != null
-                      ? {
-                          label: `${prev.heading}: ${prev.label}`,
-                          url: prev.url,
-                        }
-                      : undefined
-                  }
-                  next={
-                    next != null
-                      ? {
-                          label: `${next.heading}: ${next.label}`,
-                          url: next.url,
-                        }
-                      : undefined
-                  }
-                />
-              </>
-            }
-            key={index}
-          />
+          <Fragment key={index}>
+            {index === 0 ? (
+              <Route element={elementWithPageNav} path={"/"} />
+            ) : null}
+            <Route path={url.slice(1)} element={elementWithPageNav} />
+          </Fragment>
         );
       })}
       <Route path="*" element={<p>Not found</p>} />
