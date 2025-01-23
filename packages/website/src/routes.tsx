@@ -23,7 +23,6 @@ interface Item {
 
 interface RouteGroup {
   heading: string;
-  disabled?: boolean;
   items: Item[];
 }
 
@@ -58,9 +57,7 @@ interface RouteInfo {
 }
 
 const flattenedRoutes: RouteInfo[] = flatten(
-  routes.map((r) =>
-    r.disabled ? [] : r.items.map((item) => ({ ...item, heading: r.heading })),
-  ),
+  routes.map((r) => r.items.map((item) => ({ ...item, heading: r.heading }))),
 );
 
 export const urls: string[] = flattenedRoutes.map(({ url }) => url);

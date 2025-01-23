@@ -51,7 +51,7 @@ export const Nav: FC<unknown> = () => (
       <nav className="text-base lg:text-sm">
         <ul role="list" className="space-y-9">
           {routes.map((route, index) =>
-            route.disabled ? null : (
+            route.heading === "Touchpoint" ? null : (
               <MenuListItem
                 key={index}
                 heading={route.heading}
@@ -111,7 +111,7 @@ export const MobileNav: FC<{
             <nav className="text-base lg:text-sm mt-5 px-1">
               <ul role="list" className="space-y-9">
                 {routes.map((route, routeIndex) =>
-                  route.disabled ? null : (
+                  route.heading === "Touchpoint" ? null : (
                     <li key={routeIndex}>
                       <h2 className="font-display font-medium text-slate-900 ">
                         {route.heading}

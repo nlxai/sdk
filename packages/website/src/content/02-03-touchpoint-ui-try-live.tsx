@@ -1,6 +1,5 @@
 import { type FC, useState, useEffect } from "react";
 import { type Config } from "@nlxai/chat-core";
-import { create } from "@nlxai/touchpoint-ui";
 
 import { PageContent } from "../components/PageContent";
 import {
@@ -31,9 +30,20 @@ export const Content: FC<unknown> = () => {
   const [config, setConfig] = useState<Config>(getInitialConfig());
 
   useEffect(() => {
-    const instance = create({ config });
+    let instance: any;
+    // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
+    import("@nlxai/touchpoint-ui/lib/index.js")
+      .then(({ create }) => {
+        instance = create({ config });
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.warn(err);
+      });
     return () => {
-      instance.teardown();
+      if (instance != null) {
+        instance.teardown();
+      }
     };
   }, [config]);
 
