@@ -34,7 +34,8 @@ export const ChatSettings: FC<ChatSettingsProps> = ({
         Icon={Restart}
         type="ghost"
         onClick={() => {
-          handler.reset();
+          handler.reset({ clearResponses: true });
+          handler.sendWelcomeIntent();
           onClose();
         }}
       />
