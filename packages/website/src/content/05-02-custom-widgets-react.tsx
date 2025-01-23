@@ -1,7 +1,8 @@
-import { PageTitle } from "../components/PageTitle";
+import { type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 
-export const content = `
+const content = `
 The React and Preact packages expose a single custom hook called \`useChat\`.
 
 The following code snippet shows a few features easily implemented using this hook:
@@ -47,10 +48,13 @@ const CustomWidget = () => {
 ~~~
 `;
 
-export const CustomWidgetsReact = (): JSX.Element => {
+export const navGroup: string = "Custom widgets";
+
+export const title: string = "React & Preact";
+
+export const Content: FC<unknown> = () => {
   return (
     <>
-      <PageTitle pretitle="Custom widgets" title="React & Preact" />
       <PageContent md={content} />
     </>
   );

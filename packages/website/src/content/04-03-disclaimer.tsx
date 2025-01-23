@@ -1,4 +1,5 @@
-import { PageTitle } from "../components/PageTitle";
+import { type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 import { Note } from "../components/Note";
 import { Disclaimer } from "../custom-components/Disclaimer";
@@ -53,10 +54,13 @@ const Disclaimer = () => {
 ~~~
 `;
 
-export const WebWidgetComponentsDisclaimer = (): JSX.Element => {
+export const navGroup: string = "Web widget components";
+
+export const title: string = "Disclaimer";
+
+export const Content: FC<unknown> = () => {
   return (
     <>
-      <PageTitle pretitle="Web widget components" title="Disclaimer" />
       <InlineWidget
         className="mb-8"
         items={[[{ type: "custom", element: <Disclaimer /> }]]}

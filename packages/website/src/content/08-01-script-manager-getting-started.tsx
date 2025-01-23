@@ -29,7 +29,11 @@ The \`nlxai.voicePlusWeb.run\` method takes an object argument with the followin
 - \`onDigression\`: a callback used to handle digression, with the Voice+ client as an argument in case you are sending steps as a response.
 `;
 
-export const ScriptManagerGettingStarted: FC<unknown> = () => {
+export const navGroup: string = "Script manager";
+
+export const title: string = "Getting started";
+
+export const Content: FC<unknown> = () => {
   const [digressionButton, setDigressionButton] = useState<boolean>(false);
 
   return (

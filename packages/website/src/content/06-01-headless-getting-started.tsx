@@ -1,4 +1,5 @@
-import { PageTitle } from "../components/PageTitle";
+import { type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 import { headlessSetupSnippet } from "../snippets";
 
@@ -18,12 +19,13 @@ ${headlessSetupSnippet}
 ~~~
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const HeadlessGettingStarted = () => {
+export const navGroup: string = "Headless API";
+
+export const title: string = "Getting started";
+
+export const Content: FC<unknown> = () => {
   return (
     <>
-      <PageTitle pretitle="Headless API" title="Getting started" />
       <PageContent md={content} />
     </>
   );

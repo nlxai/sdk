@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { PageTitle } from "../components/PageTitle";
+import { useState, type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 import { FileUpload } from "../custom-components/FileUpload";
 import { InlineWidget, type Item } from "../components/InlineWidget";
@@ -80,7 +80,11 @@ const FileUpload = ({ onUploadComplete }) => {
 ~~~
 `;
 
-export const WebWidgetComponentsFileUpload = (): JSX.Element => {
+export const navGroup: string = "Web widget components";
+
+export const title: string = "File upload";
+
+export const Content: FC<unknown> = () => {
   const [uploaded, setUploaded] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
 
@@ -111,7 +115,6 @@ export const WebWidgetComponentsFileUpload = (): JSX.Element => {
 
   return (
     <>
-      <PageTitle pretitle="Web widget components" title="File upload" />
       <InlineWidget className="mb-8" items={items} />
       <PageContent md={content} />
     </>

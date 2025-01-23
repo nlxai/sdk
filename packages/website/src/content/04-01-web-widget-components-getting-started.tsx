@@ -1,4 +1,5 @@
-import { PageTitle } from "../components/PageTitle";
+import { type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 import { setupSnippet } from "../snippets";
 
@@ -18,13 +19,10 @@ ${setupSnippet({
 ~~~
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const WebWidgetComponentsGettingStarted = () => {
-  return (
-    <>
-      <PageTitle pretitle="Web widget components" title="Getting started" />
-      <PageContent md={content} />
-    </>
-  );
+export const navGroup: string = "Web widget components";
+
+export const title: string = "Getting started";
+
+export const Content: FC<unknown> = () => {
+  return <PageContent md={content} />;
 };

@@ -1,5 +1,4 @@
 import { type FC } from "react";
-import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 
 export const content = `
@@ -14,11 +13,10 @@ The chat widget exposes a number of style theme parameters that can be customize
 - \`chatWindowMaxHeight\`: the maximum height of the chat box, relevant for large screens.
 `;
 
-export const TouchpointUiTheming: FC<unknown> = () => {
-  return (
-    <>
-      <PageTitle pretitle="Touchpoint" title="Theming" />
-      <PageContent md={content} />
-    </>
-  );
+export const navGroup: string = "Touchpoint";
+
+export const title: string = "Theming";
+
+export const Content: FC<unknown> = () => {
+  return <PageContent md={content} />;
 };

@@ -1,11 +1,15 @@
-import { PageTitle } from "../components/PageTitle";
+import { type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 import content from "./react-api-reference.md?raw";
 
-export const ReactApi = (): JSX.Element => {
+export const navGroup: string = "Custom widgets";
+
+export const title: string = "React API reference";
+
+export const Content: FC<unknown> = () => {
   return (
     <>
-      <PageTitle pretitle="React API" title="API reference" />
       <PageContent md={content} />
     </>
   );

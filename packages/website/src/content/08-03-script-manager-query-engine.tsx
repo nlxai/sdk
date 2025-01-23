@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import { PageTitle } from "../components/PageTitle";
+
 import { PageContent } from "../components/PageContent";
 
 export const content = `
@@ -159,13 +159,13 @@ Keep in mind some of the warnings above.
 All queries support a \`parent\` option, which will restrict the search to only children of the parent query. This can be useful to disambiguate between multiple elements that match the query.
 `;
 
-export const ScriptManagerQueryEngine: FC<unknown> = () => {
+export const navGroup: string = "Script manager";
+
+export const title: string = "Understanding the query engine";
+
+export const Content: FC<unknown> = () => {
   return (
     <>
-      <PageTitle
-        pretitle="Script manager"
-        title="Understanding the query engine"
-      />
       <PageContent md={content} />
     </>
   );

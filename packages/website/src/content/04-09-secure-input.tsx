@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { PageTitle } from "../components/PageTitle";
+import { useState, type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 import { InlineWidget, type Item } from "../components/InlineWidget";
 import SecureInput from "../custom-components/SecureInput";
@@ -74,7 +74,11 @@ const SecureInput = () => {
 ~~~
 `;
 
-export const WebWidgetComponentsSecureInput = (): JSX.Element => {
+export const navGroup: string = "Web widget components";
+
+export const title: string = "Secure input";
+
+export const Content: FC<unknown> = () => {
   const [submitted] = useState(false);
 
   const items: Item[][] = [
@@ -97,7 +101,6 @@ export const WebWidgetComponentsSecureInput = (): JSX.Element => {
 
   return (
     <>
-      <PageTitle pretitle="Web widget components" title="Secure input" />
       <InlineWidget className="mb-8" items={items} />
       <PageContent md={content} />
     </>

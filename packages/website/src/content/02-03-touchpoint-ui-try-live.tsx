@@ -2,7 +2,6 @@ import { type FC, useState, useEffect } from "react";
 import { type Config } from "@nlxai/chat-core";
 import { create } from "@nlxai/touchpoint-ui";
 
-import { PageTitle } from "../components/PageTitle";
 import { PageContent } from "../components/PageContent";
 import {
   ConfigEditor,
@@ -24,7 +23,11 @@ ${touchpointUiSetupSnippet({ config })}
 \`\`\`
 `;
 
-export const TouchpointUiTryLive: FC<unknown> = () => {
+export const navGroup: string = "Touchpoint";
+
+export const title: string = "Try live";
+
+export const Content: FC<unknown> = () => {
   const [config, setConfig] = useState<Config>(getInitialConfig());
 
   useEffect(() => {
@@ -36,7 +39,6 @@ export const TouchpointUiTryLive: FC<unknown> = () => {
 
   return (
     <>
-      <PageTitle pretitle="Touchpoint" title="Try live" />
       <PageContent md={content} />
       <Note
         title="Important"

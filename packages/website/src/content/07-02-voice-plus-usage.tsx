@@ -1,5 +1,5 @@
 import { type FC, useState } from "react";
-import { PageTitle } from "../components/PageTitle";
+
 import { PageContent } from "../components/PageContent";
 import { RadioList } from "../components/RadioList";
 import {
@@ -144,11 +144,14 @@ ${voicePlusSetupSnippet({ environment: Environment.Node })}
   }
 }
 
-export const VoicePlusUsage: FC<unknown> = () => {
+export const navGroup: string = "Voice+";
+
+export const title: string = "Usage";
+
+export const Content: FC<unknown> = () => {
   const [usageFrom, setUsageFrom] = useState<Usage>(Usage.SimpleHTML);
   return (
     <>
-      <PageTitle pretitle="Voice+" title="Usage" />
       <PageContent md={header} />
       <RadioList
         selected={usageFrom}

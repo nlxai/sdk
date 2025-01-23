@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import { PageTitle } from "../components/PageTitle";
+
 import { PageContent } from "../components/PageContent";
 import { Environment, voicePlusSetupSnippet } from "../snippets";
 
@@ -21,10 +21,13 @@ ${voicePlusSetupSnippet({ environment: Environment.Bundle })}
 ~~~
 `;
 
-export const VoicePlusGettingStarted: FC<unknown> = () => {
+export const navGroup: string = "Voice+";
+
+export const title: string = "Getting started";
+
+export const Content: FC<unknown> = () => {
   return (
     <>
-      <PageTitle pretitle="Voice+" title="Getting started" />
       <PageContent md={content} />
     </>
   );

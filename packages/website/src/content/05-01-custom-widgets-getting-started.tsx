@@ -1,4 +1,5 @@
-import { PageTitle } from "../components/PageTitle";
+import { type FC } from "react";
+
 import { PageContent } from "../components/PageContent";
 
 export const content = `
@@ -7,12 +8,13 @@ The [@nlxai/chat-react](https://www.npmjs.com/package/@nlxai/chat-react) and [@n
 The [@nlxai/chat-core](https://www.npmjs.com/package/@nlxai/chat-core) framework-agnostic package is available for widget authors working in other frameworks.
 `;
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const CustomWidgetsGettingStarted = () => {
+export const navGroup: string = "Custom widgets";
+
+export const title: string = "Getting started";
+
+export const Content: FC<unknown> = () => {
   return (
     <>
-      <PageTitle pretitle="Custom widgets" title="Getting started" />
       <PageContent md={content} />
     </>
   );
