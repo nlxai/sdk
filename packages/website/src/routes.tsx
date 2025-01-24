@@ -49,7 +49,11 @@ const getRoutes = (): RouteGroup[] => {
 
 export const routes: RouteGroup[] = getRoutes();
 
-export const getFilteredRoutes = ({ touchpoint }: { touchpoint: boolean }) =>
+export const getFilteredRoutes = ({
+  touchpoint,
+}: {
+  touchpoint: boolean;
+}): RouteGroup[] =>
   routes.filter(
     (route) =>
       !(!touchpoint && route.heading === "Touchpoint") &&

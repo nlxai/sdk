@@ -1,7 +1,7 @@
 import { type FC } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, Link } from "react-router-dom";
-import { getFilteredRoutes, routes } from "../routes";
+import { getFilteredRoutes } from "../routes";
 import { Logo } from "./Logo";
 
 const MenuListItem: FC<{
