@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/touchpoint-ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -20,7 +20,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@nlxai/chat-core": "^1.0.1",
+    "@nlxai/chat-core": "^1.0.2",
     "@react-hookz/web": "^25.0.1",
     "@react-input/mask": "^2.0.4",
     "clsx": "^2.1.1",
