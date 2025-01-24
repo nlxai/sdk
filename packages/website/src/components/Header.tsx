@@ -5,8 +5,11 @@ import { Logo } from "./Logo";
 import { DocSearch } from "@docsearch/react";
 import "@docsearch/css";
 import "./Header.css";
+import { Toggle } from "./Toggle";
 
 export const Header: FC<{
+  touchpoint: boolean;
+  setTouchpoint: (val: boolean) => void;
   mobileMenuExpanded: boolean;
   setMobileMenuExpanded: (val: boolean) => void;
 }> = (props) => (
@@ -46,6 +49,16 @@ export const Header: FC<{
       </Link>
     </div>
     <div className="relative flex basis-0 justify-end gap-4 md:flex-grow items-center">
+      <Toggle
+        value={props.touchpoint}
+        options={[
+          { value: true, label: "Touchpoint" },
+          { value: false, label: "Chat Widget" },
+        ]}
+        onChange={(val) => {
+          props.setTouchpoint(val);
+        }}
+      />
       <DocSearch
         appId={import.meta.env.VITE_ALGOLIA_APP_ID}
         indexName={import.meta.env.VITE_ALGOLIA_INDEX_NAME}

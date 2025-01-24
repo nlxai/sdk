@@ -1,7 +1,7 @@
 import { type FC } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, Link } from "react-router-dom";
-import { routes } from "../routes";
+import { getFilteredRoutes, routes } from "../routes";
 import { Logo } from "./Logo";
 
 const MenuListItem: FC<{
@@ -42,7 +42,9 @@ const MenuListItem: FC<{
   );
 };
 
-export const Nav: FC<unknown> = () => (
+export const Nav: FC<{
+  touchpoint: boolean;
+}> = ({ touchpoint }) => (
   <div className="hidden lg:relative lg:block lg:flex-none">
     <div className="absolute inset-y-0 right-0 w-[50vw] bg-gray-50"></div>
     <div className="absolute bottom-0 right-0 top-16 hidden h-12 w-px bg-gradient-to-t from-slate-800"></div>
@@ -50,15 +52,13 @@ export const Nav: FC<unknown> = () => (
     <div className="sticky top-[4.75rem] -ml-0.5 h-[calc(100vh-4.75rem)] w-64 overflow-y-auto overflow-x-hidden py-16 pl-0.5 pr-8 xl:w-72 xl:pr-16">
       <nav className="text-base lg:text-sm">
         <ul role="list" className="space-y-9">
-          {routes.map((route, index) =>
-            route.heading === "Touchpoint" ? null : (
-              <MenuListItem
-                key={index}
-                heading={route.heading}
-                items={route.items}
-              />
-            ),
-          )}
+          {getFilteredRoutes({ touchpoint }).map((route, index) => (
+            <MenuListItem
+              key={index}
+              heading={route.heading}
+              items={route.items}
+            />
+          ))}
         </ul>
       </nav>
     </div>
@@ -66,6 +66,7 @@ export const Nav: FC<unknown> = () => (
 );
 
 export const MobileNav: FC<{
+  touchpoint: boolean;
   setMobileMenuExpanded: (val: boolean) => void;
 }> = (props) => {
   const location = useLocation();
@@ -110,8 +111,8 @@ export const MobileNav: FC<{
             </div>
             <nav className="text-base lg:text-sm mt-5 px-1">
               <ul role="list" className="space-y-9">
-                {routes.map((route, routeIndex) =>
-                  route.heading === "Touchpoint" ? null : (
+                {getFilteredRoutes({ touchpoint: props.touchpoint }).map(
+                  (route, routeIndex) => (
                     <li key={routeIndex}>
                       <h2 className="font-display font-medium text-slate-900 ">
                         {route.heading}

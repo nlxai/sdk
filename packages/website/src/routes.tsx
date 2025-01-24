@@ -49,6 +49,17 @@ const getRoutes = (): RouteGroup[] => {
 
 export const routes: RouteGroup[] = getRoutes();
 
+export const getFilteredRoutes = ({ touchpoint }: { touchpoint: boolean }) =>
+  routes.filter(
+    (route) =>
+      !(!touchpoint && route.heading === "Touchpoint") &&
+      !(
+        touchpoint &&
+        (route.heading === "Web widget" ||
+          route.heading === "Web widget components")
+      ),
+  );
+
 interface RouteInfo {
   heading: string;
   label: string;
