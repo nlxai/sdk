@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { useLocation, Link } from "react-router-dom";
 import { getFilteredRoutes } from "../routes";
 import { Logo } from "./Logo";
+import { Toggle } from "./Toggle";
 
 const MenuListItem: FC<{
   heading: string;
@@ -67,6 +68,7 @@ export const Nav: FC<{
 
 export const MobileNav: FC<{
   touchpoint: boolean;
+  setTouchpoint: (val: boolean) => void;
   setMobileMenuExpanded: (val: boolean) => void;
 }> = (props) => {
   const location = useLocation();
@@ -109,6 +111,17 @@ export const MobileNav: FC<{
                 <Logo size={32} />
               </a>
             </div>
+            <Toggle
+              className="mt-4"
+              value={props.touchpoint}
+              options={[
+                { value: true, label: "Touchpoint" },
+                { value: false, label: "Chat Widget" },
+              ]}
+              onChange={(val) => {
+                props.setTouchpoint(val);
+              }}
+            />
             <nav className="text-base lg:text-sm mt-5 px-1">
               <ul role="list" className="space-y-9">
                 {getFilteredRoutes({ touchpoint: props.touchpoint }).map(
