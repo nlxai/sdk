@@ -21,6 +21,7 @@ export const App: FC<unknown> = () => {
           <MobileNav
             setMobileMenuExpanded={setMobileMenuExpanded}
             touchpoint={touchpoint}
+            setTouchpoint={setTouchpoint}
           />
         )}
         <Hero />

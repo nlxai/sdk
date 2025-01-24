@@ -36,7 +36,7 @@ export const touchpointUiSetupSnippet = ({
   theme,
 }: {
   config: Config;
-  theme: {
+  theme?: {
     fontFamily: string;
     accent: string;
   };
@@ -74,8 +74,12 @@ export const touchpointUiSetupSnippet = ({
               )}"
             },
             languageCode: "${config.languageCode}"
-          },
-          theme: ${JSON.stringify(theme)}
+          },${
+            theme != null
+              ? `
+          theme: ${JSON.stringify(theme)}`
+              : ""
+          }
         });
       });
     </script>

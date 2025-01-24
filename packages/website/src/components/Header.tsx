@@ -50,9 +50,10 @@ export const Header: FC<{
     </div>
     <div className="relative flex basis-0 justify-end gap-4 md:flex-grow items-center">
       <Toggle
+        className="hidden md:block"
         value={props.touchpoint}
         options={[
-          { value: true, label: "Touchpoint" },
+          { value: true, label: "Touchpoint (beta)" },
           { value: false, label: "Chat Widget" },
         ]}
         onChange={(val) => {

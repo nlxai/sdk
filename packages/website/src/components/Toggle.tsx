@@ -5,6 +5,7 @@ interface Props<T> {
   value: T;
   options: Array<{ value: T; label: string }>;
   onChange?: (newValue: T) => void;
+  className?: string;
 }
 
 export const Toggle = <T,>(props: Props<T>): ReactNode => {
@@ -16,6 +17,7 @@ export const Toggle = <T,>(props: Props<T>): ReactNode => {
         {
           "opacity-70": disabled,
         },
+        props.className,
       )}
     >
       {props.options.map((option) => (
