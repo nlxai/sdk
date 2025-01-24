@@ -1,6 +1,7 @@
 import { type FC, useState, useEffect } from "react";
 import { type Config } from "@nlxai/chat-core";
 
+import { Labeled, inputClass } from "../components/Ui";
 import { PageContent } from "../components/PageContent";
 import {
   ConfigEditor,
@@ -13,12 +14,18 @@ export const content = `
 You can try your bots directly on this configuration widget.
 `;
 
-export const snippetContent = ({ config }: { config: Config }): string => `
+export const snippetContent = ({
+  config,
+  theme,
+}: {
+  config: Config;
+  theme: EditableTheme;
+}): string => `
 
 ### Setup snippet
 
 \`\`\`html
-${touchpointUiSetupSnippet({ config })}
+${touchpointUiSetupSnippet({ config, theme })}
 \`\`\`
 `;
 
@@ -26,15 +33,72 @@ export const navGroup: string = "Touchpoint";
 
 export const title: string = "Try live";
 
+interface EditableTheme {
+  fontFamily: string;
+  accent: string;
+}
+
+const defaultFont = '"Neue Haas Grotesk", sans-serif';
+
+const ThemeEditor: FC<{
+  value: EditableTheme;
+  onChange: (val: EditableTheme) => void;
+}> = (props) => {
+  const theme = props.value;
+  return (
+    <div className="space-y-4">
+      <Labeled label="Font">
+        <select
+          className={inputClass}
+          value={theme.fontFamily}
+          onChange={(ev: any) => {
+            props.onChange({
+              ...theme,
+              fontFamily: ev.target.value ?? theme.fontFamily,
+            });
+          }}
+        >
+          {[
+            defaultFont,
+            "Helvetica",
+            "Arial",
+            "Monaco",
+            "Georgia",
+            "monospace",
+          ].map((val) => (
+            <option key={val} value={val}>
+              {val}
+            </option>
+          ))}
+        </select>
+      </Labeled>
+      <Labeled label="Accent color">
+        <input
+          type="color"
+          value={theme.accent}
+          onInput={(ev: any) => {
+            props.onChange({ ...theme, accent: ev.target.value });
+          }}
+        />
+      </Labeled>
+    </div>
+  );
+};
+
 export const Content: FC<unknown> = () => {
   const [config, setConfig] = useState<Config>(getInitialConfig());
+
+  const [theme, setTheme] = useState<EditableTheme>({
+    fontFamily: defaultFont,
+    accent: "#2663DA",
+  });
 
   useEffect(() => {
     let instance: any;
     // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
     import("@nlxai/touchpoint-ui/lib/index.js")
       .then(({ create }) => {
-        instance = create({ config });
+        instance = create({ config, theme });
       })
       .catch((err) => {
         // eslint-disable-next-line no-console
@@ -45,7 +109,7 @@ export const Content: FC<unknown> = () => {
         instance.teardown();
       }
     };
-  }, [config]);
+  }, [config, theme]);
 
   return (
     <>
@@ -61,9 +125,11 @@ export const Content: FC<unknown> = () => {
             setConfig((prev) => ({ ...prev, ...val }));
           }}
         />
+        <ThemeEditor value={theme} onChange={setTheme} />
         <PageContent
           md={snippetContent({
             config,
+            theme,
           })}
         />
       </div>

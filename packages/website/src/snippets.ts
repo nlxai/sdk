@@ -33,8 +33,13 @@ function defaultTo(
 
 export const touchpointUiSetupSnippet = ({
   config,
+  theme,
 }: {
   config: Config;
+  theme: {
+    fontFamily: string;
+    accent: string;
+  };
 }): string => {
   return `<!-- Touchpoint sample HTML -->
 <!-- Downloaded from https://developers.nlx.ai -->
@@ -69,7 +74,8 @@ export const touchpointUiSetupSnippet = ({
               )}"
             },
             languageCode: "${config.languageCode}"
-          }
+          },
+          theme: ${JSON.stringify(theme)}
         });
       });
     </script>
