@@ -115,7 +115,7 @@ export const MobileNav: FC<{
               className="mt-4"
               value={props.touchpoint}
               options={[
-                { value: true, label: "Touchpoint" },
+                { value: true, label: "Touchpoint (beta)" },
                 { value: false, label: "Chat Widget" },
               ]}
               onChange={(val) => {

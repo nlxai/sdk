@@ -53,7 +53,7 @@ export const Header: FC<{
         className="hidden md:block"
         value={props.touchpoint}
         options={[
-          { value: true, label: "Touchpoint" },
+          { value: true, label: "Touchpoint (beta)" },
           { value: false, label: "Chat Widget" },
         ]}
         onChange={(val) => {

@@ -1,15 +1,14 @@
 import { type FC } from "react";
 
 import { PageContent } from "../components/PageContent";
-import { setupSnippet } from "../snippets";
+import { touchpointUiSetupSnippet } from "../snippets";
 
 export const content = `
-The simplest way to talk to a bot is to include an out-of-the-box chat widget on your existing website.
+The simplest way to talk to an application is to include an out-of-the-box Touchpoint widget on your existing website.
 
 ~~~html
-${setupSnippet({
+${touchpointUiSetupSnippet({
   config: { botUrl: "", languageCode: "en-US", headers: { "nlx-api-key": "" } },
-  titleBar: { title: "Support chat" },
 })}
 ~~~
 
