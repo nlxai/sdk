@@ -1,8 +1,11 @@
 {
   "name": "@nlxai/touchpoint-ui",
   "version": "1.0.3",
+  "description": "Web UI for Touchpoint",
   "type": "module",
   "main": "lib/index.js",
+  "license": "MIT",
+  "author": "Peter Szerzo <peter@nlx.ai>",
   "module": "lib/index.js",
   "browser": "lib/index.umd.js",
   "types": "lib/index.d.ts",
@@ -48,6 +51,9 @@
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
     "vite-plugin-dts": "^4.5.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "gitHead": "52817ba637a5d33ccf2ab6b3efd7e446bec7b7f8"
 }
