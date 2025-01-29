@@ -46,7 +46,7 @@ export const create = ({
     );
   }
   return {
-    sendStep: async (stepId: string, context?: Context) => {
+    sendStep: async (stepId: string, context?: Context, stepTriggerDescription?: string) => {
       if (!stepIdRegex.test(stepId)) {
         throw new Error("Invalid stepId. It should be formatted as a UUID.");
       }
@@ -57,6 +57,7 @@ export const create = ({
         conversationId,
         journeyId: resolvedJourneyId,
         languageCode,
+        stepTriggerDescription
       };
 
       await fetch(`https://${dev ? "dev." : ""}mm.nlx.ai/v1/track`, {
