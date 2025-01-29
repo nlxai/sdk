@@ -94,7 +94,16 @@ export const create = ({
  */
 export type StepInfo =
   | string
-  | { stepId: string; stepTriggerDescription?: string };
+  | {
+      /**
+       * Step ID
+       */
+      stepId: string;
+      /**
+       * Step trigger description
+       */
+      stepTriggerDescription?: string;
+    };
 
 /**
  * The Voice+ client
