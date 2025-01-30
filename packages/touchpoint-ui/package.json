@@ -15,6 +15,7 @@
     "build": "tsc && vite build",
     "docs": "echo \"todo\"",
     "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0",
+    "prepublish": "npm run build",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
     "format": "git ls-files | grep -E '\\.(js|jsx|ts|tsx|css|html)$' | xargs prettier --write",
     "preview-docs": "echo \"todo\"",
