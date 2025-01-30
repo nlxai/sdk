@@ -803,7 +803,7 @@ This is the official JavaScript SDK to communicate with conversational bots crea
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.cjs"><\/script>
+    <script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"><\/script>
     <script>
       const contentLoaded = () => {
         if (document.readyState === "loading") {
