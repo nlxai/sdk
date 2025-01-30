@@ -46,7 +46,12 @@ export const create = ({
     );
   }
   return {
-    sendStep: async (stepId: string, context?: Context) => {
+    sendStep: async (step: StepInfo, context?: Context) => {
+      const [stepId, stepTriggerDescription]: [string, string | undefined] =
+        typeof step === "string"
+          ? [step, undefined]
+          : [step.stepId, step.stepTriggerDescription];
+
       if (!stepIdRegex.test(stepId)) {
         throw new Error("Invalid stepId. It should be formatted as a UUID.");
       }
@@ -57,6 +62,7 @@ export const create = ({
         conversationId,
         journeyId: resolvedJourneyId,
         languageCode,
+        stepTriggerDescription,
       };
 
       await fetch(`https://${dev ? "dev." : ""}mm.nlx.ai/v1/track`, {
@@ -84,6 +90,22 @@ export const create = ({
 };
 
 /**
+ * Step information, either a step ID as a single string or an object
+ */
+export type StepInfo =
+  | string
+  | {
+      /**
+       * Step ID
+       */
+      stepId: string;
+      /**
+       * Step trigger description
+       */
+      stepTriggerDescription?: string;
+    };
+
+/**
  * The Voice+ client
  * @category Client
  */
@@ -105,13 +127,13 @@ export interface Client {
    * client.sendStep("REPLACE_WITH_STEP_ID", {selectedSeat: "4a"});
    * ```
    * sends a step to the voice bot
-   * @param stepId - the next step to transition to.
+   * @param step - the next step to transition to, either a UUID as string or an object containing stepId.
    *
    *
-   *   _Note: Must be a valid UUID_
+   *   _Note: The step ID must be a valid UUID_
    * @param context - [context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) to send back to the voice bot, for usage later in the intent.
    */
-  sendStep: (stepId: string, context?: Context) => Promise<void>;
+  sendStep: (step: StepInfo, context?: Context) => Promise<void>;
 }
 
 /**
