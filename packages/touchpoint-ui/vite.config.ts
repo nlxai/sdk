@@ -40,8 +40,9 @@ export default defineConfig(({ mode, command }) => ({
     outDir: "lib",
     lib: {
       entry: resolve(__dirname, "./src/index.tsx"),
+      type: ["umd", "es"],
       name: "nlxai.touchpointUi",
-      fileName: "index",
+      fileName: (format) => (format === "umd" ? "index.umd.js" : "index.js"),
     },
   },
 }));
