@@ -11,7 +11,13 @@ SDK packages can be installed as follows:
 
 The following packages are available as direct script tags:
 
-* [@nlxai/chat-widget](${packageUrls.chatWidget}) - add a chat widget to your website with only HTML:
+* [@nlxai/touchpoint-ui](${packageUrls.touchpointUi}) - the modern and themeable chat widget:
+
+~~~html
+${umdScriptTags.touchpointUi}
+~~~
+
+* [@nlxai/chat-widget](${packageUrls.chatWidget}) - add a chat widget to your website with only HTML ( Chat Widget will be deprecated in Q1 2025 - use Touchpoint UI for new projects):
 
 ~~~html
 ${umdScriptTags.chatWidget}
@@ -34,7 +40,10 @@ ${umdScriptTags.voicePlusCore}
 All packages are available on npm as CommonJS modules. They are written in TypeScript and include comprehensive type definitions.
 
 ~~~bash
-# The Chat widget
+# The Touchpoint UI widget
+npm install @nlxai/touchpoint-ui
+
+# The Chat widget - will be deprecated in Q1 2025 - use Touchpoint UI for new projects.
 npm install @nlxai/chat-widget
 
 # React hooks, along with peer dependencies
