@@ -8,6 +8,7 @@ export interface LaunchButtonProps {
   className?: string;
   showLabel?: boolean;
   onClick?: () => void;
+  iconUrl?: string;
 }
 
 export const LaunchButton: FC<LaunchButtonProps> = (props) => {
@@ -23,7 +24,11 @@ export const LaunchButton: FC<LaunchButtonProps> = (props) => {
       onClick={props.onClick}
     >
       <span className="block flex-none w-8 h-8">
-        <Assistant />
+        {props.iconUrl == null ? (
+          <Assistant />
+        ) : (
+          <img src={props.iconUrl} className="w-8 h-8" />
+        )}
       </span>
       {props.showLabel ?? false ? <span>{props.label}</span> : null}
     </button>

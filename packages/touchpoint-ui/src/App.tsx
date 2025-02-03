@@ -259,6 +259,13 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         >
           <LaunchButton
             className="fixed z-100 bottom-2 right-2 backdrop-blur z-launchButton"
+            iconUrl={
+              props.logoUrl == null
+                ? undefined
+                : typeof props.logoUrl === "string"
+                  ? props.logoUrl
+                  : props.logoUrl[colorMode]
+            }
             onClick={() => {
               setIsExpanded(true);
             }}
