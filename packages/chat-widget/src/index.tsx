@@ -325,7 +325,7 @@ interface SessionData {
 }
 
 interface SessionIdentifier {
-  botUrl: string;
+  applicationUrl: string;
   languageCode: string;
 }
 
@@ -496,7 +496,8 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
       props.storeIn != null
         ? retrieveSession(
             {
-              botUrl: props.config.botUrl,
+              applicationUrl:
+                props.config.applicationUrl ?? props.config.botUrl ?? "",
               languageCode: props.config.languageCode,
             },
             props.storeIn,
@@ -525,7 +526,8 @@ export const Widget = forwardRef<WidgetRef, Props>(function Widget(props, ref) {
     if (props.storeIn != null) {
       saveSession(
         {
-          botUrl: props.config.botUrl,
+          applicationUrl:
+            props.config.applicationUrl ?? props.config.botUrl ?? "",
           languageCode: props.config.languageCode,
         },
         {
