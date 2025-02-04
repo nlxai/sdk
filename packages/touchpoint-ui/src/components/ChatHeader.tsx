@@ -11,6 +11,7 @@ interface ChatHeaderProps {
   windowSize: WindowSize;
   colorMode: ColorMode;
   logoUrl?: LogoUrl;
+  brandIcon?: string;
   collapse: () => void;
   reset: () => void;
   toggleSettings?: () => void;
@@ -24,11 +25,19 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
   logoUrl,
   toggleSettings,
   isSettingsOpen,
+  brandIcon,
   reset,
 }) => {
   const isHalf = windowSize === "half";
   const isMd = useTailwindMediaQuery("md");
   const iconButtonType: IconButtonType = isHalf && isMd ? "overlay" : "ghost";
+  const brandIconWithDeprecated =
+    brandIcon ??
+    (logoUrl != null
+      ? typeof logoUrl === "string"
+        ? logoUrl
+        : logoUrl[colorMode]
+      : undefined);
   return (
     <div
       className={clsx(
@@ -39,10 +48,17 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
           : "md:absolute md:left-0 md:right-0 md:top-0",
       )}
     >
-      {logoUrl != null ? (
-        <img
-          className="w-10 h-10 block"
-          src={typeof logoUrl === "string" ? logoUrl : logoUrl[colorMode]}
+      {brandIconWithDeprecated != null ? (
+        <IconButton
+          label=""
+          type={iconButtonType}
+          Icon={() => (
+            <img
+              className="absolute inset-0 block"
+              src={brandIconWithDeprecated}
+            />
+          )}
+          onClick={() => {}}
         />
       ) : null}
       <IconButton

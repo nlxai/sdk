@@ -39,7 +39,19 @@ export interface Props {
   config: Config;
   windowSize?: WindowSize;
   colorMode?: ColorMode;
+  /**
+   * Logo URL
+   * @deprecated - use brandIcon and launchIcon intead
+   */
   logoUrl?: LogoUrl;
+  /**
+   * Icon used to display the brand in the chat header
+   */
+  brandIcon?: string;
+  /**
+   * Icon used on the launch icon in the bottom right when the experience is collapsed
+   */
+  launchIcon?: string;
   theme?: Partial<Theme>;
   customModalities?: Record<string, CustomModalityComponent<any>>;
 }
@@ -60,9 +72,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   const isWaiting = responses[responses.length - 1]?.type === "user";
 
   const colorMode = props.colorMode ?? "dark";
-
-  const [windowSizeOverride, setWindowSizeOverride] =
-    useState<WindowSize | null>(null);
 
   const [isExpanded, setIsExpanded] = useState(isDev);
 
@@ -115,8 +124,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     handler.sendWelcomeIntent();
   }, [handler, isExpanded]);
 
-  const windowSize: WindowSize =
-    windowSizeOverride ?? props.windowSize ?? "half";
+  const windowSize: WindowSize = props.windowSize ?? "half";
 
   const lastBotResponse = useMemo<{
     index: number;
@@ -187,6 +195,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               windowSize={windowSize}
               colorMode={colorMode}
               logoUrl={props.logoUrl}
+              brandIcon={props.brandIcon}
               isSettingsOpen={isSettingsOpen}
               toggleSettings={() => {
                 setIsSettingsOpen((prev) => !prev);
@@ -210,8 +219,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                 onClose={() => {
                   setIsSettingsOpen(false);
                 }}
-                windowSize={windowSize}
-                setWindowSizeOverride={setWindowSizeOverride}
                 handler={handler}
               />
             ) : (
@@ -259,13 +266,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         >
           <LaunchButton
             className="fixed z-100 bottom-2 right-2 backdrop-blur z-launchButton"
-            iconUrl={
-              props.logoUrl == null
-                ? undefined
-                : typeof props.logoUrl === "string"
-                  ? props.logoUrl
-                  : props.logoUrl[colorMode]
-            }
+            iconUrl={props.launchIcon}
             onClick={() => {
               setIsExpanded(true);
             }}
