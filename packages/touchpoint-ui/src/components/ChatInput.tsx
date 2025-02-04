@@ -171,12 +171,12 @@ const ChatInput: FC<ChatInputProps> = ({
       {choiceMessage?.message.selectedChoiceId != null ? null : (
         <div
           className={clsx(
-            "bg-primary-5 transition-colors duration-200 p-2 rounded-plus text-base font-normal",
+            "bg-primary-5 transition-colors duration-200 p-2 rounded-outer text-base font-normal",
             isTextAreaInFocus ? "" : "hover:bg-secondary-20",
           )}
         >
           {uploadErrorMessage != null && (
-            <div className="flex items-center py-1 mb-2 w-full bg-error-secondary rounded-base">
+            <div className="flex items-center py-1 mb-2 w-full bg-error-secondary rounded-inner">
               <Error size={16} />
               <span className="truncate ml-1">{uploadErrorMessage}</span>
             </div>
@@ -218,7 +218,7 @@ const ChatInput: FC<ChatInputProps> = ({
               <>
                 <label
                   htmlFor="file-upload"
-                  className="p-3 w-10 h-10 flex-none block transition-colors rounded-base bg-primary-80 hover:bg-primary-80 text-secondary-80 cursor-pointer"
+                  className="p-3 w-10 h-10 flex-none block transition-colors rounded-inner bg-primary-80 hover:bg-primary-80 text-secondary-80 cursor-pointer"
                 >
                   <Attachment />
                 </label>

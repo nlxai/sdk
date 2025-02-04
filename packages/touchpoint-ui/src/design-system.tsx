@@ -240,7 +240,7 @@ const Container: FC<{ children: ReactNode; mode: ColorMode }> = ({
   return (
     <Context.Provider value={{ handler: null }}>
       <CustomPropertiesContainer
-        className="bg-background p-4 rounded-plus space-y-4"
+        className="bg-background p-4 rounded-outer space-y-4"
         theme={{
           fontFamily: "monospace",
           accent: "light-dark(purple, pink)",

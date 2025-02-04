@@ -14,8 +14,8 @@ module.exports = {
         content: "608px",
       },
       borderRadius: {
-        base: "12px",
-        plus: "20px",
+        inner: "var(--inner-border-radius)",
+        outer: "var(--outer-border-radius)",
       },
       zIndex: {
         touchpoint: 1000,

@@ -8,6 +8,8 @@ const toCustomProperties = (theme: Theme): CSSProperties => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return {
     "--font-family": theme.fontFamily,
+    "--inner-border-radius": theme.innerBorderRadius,
+    "--outer-border-radius": theme.outerBorderRadius,
 
     "--primary-80": theme.primary80,
     "--primary-60": theme.primary60,
@@ -39,6 +41,8 @@ const toCustomProperties = (theme: Theme): CSSProperties => {
 
 const lightModeCustomProperties: Theme = {
   fontFamily: '"Neue Haas Grotesk", sans-serif',
+  innerBorderRadius: "12px",
+  outerBorderRadius: "20px",
 
   primary80: "rgba(0, 2, 9, 0.8)",
   primary60: "rgba(0, 2, 9, 0.6)",
@@ -69,6 +73,8 @@ const lightModeCustomProperties: Theme = {
 
 const darkModeCustomProperties: Theme = {
   fontFamily: '"Neue Haas Grotesk", sans-serif',
+  innerBorderRadius: "12px",
+  outerBorderRadius: "20px",
 
   primary80: "rgba(255, 255, 255, 0.85)",
   primary60: "rgba(255, 255, 255, 0.65)",

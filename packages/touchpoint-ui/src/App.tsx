@@ -27,7 +27,6 @@ import ChatInput from "./components/ChatInput";
 import {
   type ColorMode,
   type WindowSize,
-  type LogoUrl,
   type ChoiceMessage,
   type Theme,
   type CustomModalityComponent,
@@ -40,16 +39,11 @@ export interface Props {
   windowSize?: WindowSize;
   colorMode?: ColorMode;
   /**
-   * Logo URL
-   * @deprecated - use brandIcon and launchIcon intead
-   */
-  logoUrl?: LogoUrl;
-  /**
-   * Icon used to display the brand in the chat header
+   * URL of icon used to display the brand in the chat header
    */
   brandIcon?: string;
   /**
-   * Icon used on the launch icon in the bottom right when the experience is collapsed
+   * URL of icon used on the launch icon in the bottom right when the experience is collapsed
    */
   launchIcon?: string;
   theme?: Partial<Theme>;
@@ -194,7 +188,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             <ChatHeader
               windowSize={windowSize}
               colorMode={colorMode}
-              logoUrl={props.logoUrl}
               brandIcon={props.brandIcon}
               isSettingsOpen={isSettingsOpen}
               toggleSettings={() => {

@@ -13,7 +13,7 @@ const ViewMediaModal: FC<ViewMediaModalProps> = ({ onClose, src, type }) => {
   return (
     <div className="absolute inset-0 bg-black/50 z-10" onClick={onClose}>
       {type === "picture" && (
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-72 w-72 rounded-base overflow-hidden">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-72 w-72 rounded-inner overflow-hidden">
           <IconButton
             type="ghost"
             Icon={Close}

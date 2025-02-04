@@ -27,7 +27,7 @@ export const CustomCard: FC<CustomCardProps> = ({
   return (
     <div
       className={clsx(
-        "block shrink-0 rounded-base overflow-hidden",
+        "block shrink-0 rounded-inner overflow-hidden",
         "w-80 space-y-px",
         selected ? "outline outline-2 outline-accent" : "",
       )}

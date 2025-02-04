@@ -66,7 +66,7 @@ const UserMessage: FC<{ text: string; files?: File[] }> = ({ text, files }) => {
   return (
     <div className="space-y-2">
       <div className="flex justify-end pl-10 text-base">
-        <div className="text-primary-60 p-3 rounded-base bg-primary-5 whitespace-pre-wrap">
+        <div className="text-primary-60 p-3 rounded-inner bg-primary-5 whitespace-pre-wrap">
           {text}
         </div>
       </div>
@@ -75,7 +75,7 @@ const UserMessage: FC<{ text: string; files?: File[] }> = ({ text, files }) => {
           {files.map((file, index) => (
             // TODO: style, add file name as alt text
             <img
-              className="rounded-base h-20"
+              className="rounded-inner h-20"
               key={index}
               src={URL.createObjectURL(file)}
             />
@@ -88,7 +88,7 @@ const UserMessage: FC<{ text: string; files?: File[] }> = ({ text, files }) => {
 
 const ErrorMessage: FC<{ message: string }> = ({ message }) => {
   return (
-    <div className="bg-error-secondary text-error-primary text-base p-3 rounded-base flex items-center gap-2">
+    <div className="bg-error-secondary text-error-primary text-base p-3 rounded-inner flex items-center gap-2">
       <Warning className="w-4 h-4 flex-none" />
       <p className="text-primary-80">{message}</p>
     </div>
