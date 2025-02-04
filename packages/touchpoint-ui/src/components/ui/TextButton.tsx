@@ -23,7 +23,7 @@ export const TextButton: FC<TextButtonProps> = ({
       onClick={onClick}
       disabled={onClick == null}
       className={clsx(
-        "relative z-10 w-full px-5 py-4 transition-colors rounded-plus flex justify-between items-center focus:outline-0 overflow-hidden before:content-[''] before:absolute before:transition-colors before:-z-10 before:inset-0 before:bg-transparent",
+        "relative z-10 w-full px-5 py-4 transition-colors rounded-outer flex justify-between items-center focus:outline-0 overflow-hidden before:content-[''] before:absolute before:transition-colors before:-z-10 before:inset-0 before:bg-transparent",
         {
           "bg-primary-80 text-secondary-80 enabled:hover:before:bg-primary-80 focus:before:bg-primary-80 enabled:active:before:bg-secondary-10 disabled:bg-primary-10 disabled:text-secondary-40":
             type === "main",

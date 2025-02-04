@@ -48,7 +48,7 @@ export const IconButton: FC<IconButtonProps> = ({
       disabled={isDisabled}
       aria-label={label}
       className={clsx(
-        "p-3 w-10 h-10 transition-colors rounded-base relative z-10 overflow-hidden before:content-[''] before:absolute before:transition-colors before:-z-10 before:inset-0 before:bg-transparent focus:outline-0",
+        "p-3 w-10 h-10 transition-colors rounded-inner relative z-10 overflow-hidden before:content-[''] before:absolute before:transition-colors before:-z-10 before:inset-0 before:bg-transparent focus:outline-0",
         type === "main" ? mainClass : null,
         type === "ghost" ? ghostClass : null,
         type === "activated" ? activatedClass : null,

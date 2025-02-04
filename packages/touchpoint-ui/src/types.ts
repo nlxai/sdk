@@ -12,11 +12,6 @@ export type WindowSize = "half" | "full";
 export type ColorMode = "light" | "dark";
 
 /**
- * Logo URL if applicable. May be specified as a single image URL or as an object by color mode (light/dark)
- */
-export type LogoUrl = string | Record<ColorMode, string>;
-
-/**
  * Choice message with metadata
  */
 export interface ChoiceMessage {
@@ -145,4 +140,13 @@ export interface Theme {
    * Secondary error color
    */
   errorSecondary: string;
+
+  /**
+   * Inner border radius: used for most buttons
+   */
+  innerBorderRadius: string;
+  /**
+   * Outer border radius: generally used for elements that contain buttons that have inner border radius. Also used by the launch button.
+   */
+  outerBorderRadius: string;
 }

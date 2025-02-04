@@ -15,7 +15,7 @@ export const PicturesContainer: FC<PicturesContainerProps> = ({ payload }) => {
     <ScrollContainer className="flex gap-x-2 overflow-x-auto no-scrollbar">
       {payload.map(({ imgSrc }, key) => (
         <div className="block shrink-0 relative" key={key}>
-          <img src={imgSrc} alt="" className="h-64 rounded-base" />
+          <img src={imgSrc} alt="" className="h-64 rounded-inner" />
         </div>
       ))}
     </ScrollContainer>
