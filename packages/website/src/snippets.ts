@@ -34,13 +34,16 @@ function defaultTo(
 export const touchpointUiSetupSnippet = ({
   config,
   theme,
+  customModalitiesExample = false,
 }: {
   config: Config;
   theme?: {
     fontFamily: string;
     accent: string;
   };
+  customModalitiesExample?: boolean;
 }): string => {
+  const renderCustomModalitiesExample = customModalitiesExample != null && customModalitiesExample === true;
   return `<!-- Touchpoint sample HTML -->
 <!-- Downloaded from https://developers.nlx.ai -->
 <html lang="en">
@@ -79,6 +82,11 @@ export const touchpointUiSetupSnippet = ({
               ? `
           theme: ${JSON.stringify(theme)}`
               : ""
+          }${
+            renderCustomModalitiesExample?
+            `
+          customModalities: { REPLACE_WITH_CUSTOM_MODALITIES }`
+            : ""
           }
         });
       });
