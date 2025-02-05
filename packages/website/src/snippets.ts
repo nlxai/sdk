@@ -43,7 +43,7 @@ export const touchpointUiSetupSnippet = ({
   };
   customModalitiesExample?: boolean;
 }): string => {
-  const renderCustomModalitiesExample = customModalitiesExample != null && customModalitiesExample === true;
+  const renderCustomModalitiesExample = customModalitiesExample ?? false;
   return `<!-- Touchpoint sample HTML -->
 <!-- Downloaded from https://developers.nlx.ai -->
 <html lang="en">
@@ -83,10 +83,10 @@ export const touchpointUiSetupSnippet = ({
           theme: ${JSON.stringify(theme)}`
               : ""
           }${
-            renderCustomModalitiesExample?
-            `
+            renderCustomModalitiesExample
+              ? `
           customModalities: { REPLACE_WITH_CUSTOM_MODALITIES }`
-            : ""
+              : ""
           }
         });
       });
