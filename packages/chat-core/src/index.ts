@@ -49,7 +49,7 @@ export type SlotsRecord = Record<string, any>;
 export type SlotsRecordOrArray = SlotsRecord | SlotValue[];
 
 /**
- * A message from the bot
+ * A message from the application
  *
  * See also:
  * - {@link UserResponse}
@@ -89,7 +89,7 @@ export interface BotResponsePayload {
   messages: BotMessage[];
   /**
    * Global state about the current conversation
-   * as well as whether the client should poll for more bot responses.
+   * as well as whether the client should poll for more application responses.
    */
   metadata?: BotResponseMetadata;
   /**
@@ -108,7 +108,7 @@ export interface BotResponsePayload {
 
 /**
  * Global state about the current conversation
- * as well as whether the client should poll for more bot responses.
+ * as well as whether the client should poll for more application responses.
  */
 export interface BotResponseMetadata {
   /**
@@ -132,14 +132,14 @@ export interface BotResponseMetadata {
    */
   uploadUrls: UploadUrl[];
   /**
-   * Whether the client should poll for more bot responses.
+   * Whether the client should poll for more application responses.
    */
   hasPendingDataRequest?: boolean;
 }
 
 /**
- * Metadata for the individual bot message
- * as well as whether the client should poll for more bot responses.
+ * Metadata for the individual application message
+ * as well as whether the client should poll for more application responses.
  */
 export interface BotMessageMetadata {
   /**
@@ -149,7 +149,7 @@ export interface BotMessageMetadata {
 }
 
 /**
- * A message from the bot, as well as any choices the user can make.
+ * A message from the application, as well as any choices the user can make.
  */
 export interface BotMessage {
   /**
@@ -175,7 +175,7 @@ export interface BotMessage {
   metadata?: BotMessageMetadata;
   /**
    * After a choice has been made by the user, this will be updated locally to the selected choice id.
-   * This field is set locally and does not come from the bot.
+   * This field is set locally and does not come from the application.
    */
   selectedChoiceId?: string;
 }
@@ -306,7 +306,7 @@ export interface FailureMessage {
 }
 
 /**
- * A response from the bot or the user.
+ * A response from the application or the user.
  */
 export type Response = BotResponse | UserResponse | FailureMessage;
 
@@ -327,15 +327,20 @@ export type Environment = "production" | "development";
  */
 export interface Config {
   /**
-   * Fetch this from the bot's Deployment page.
+   * Fetch this from the application's Deployment page.
    */
-  botUrl: string;
+  applicationUrl?: string;
+  /**
+   * Legacy name for application URL
+   * @deprecated use the applicationUrl field instead
+   */
+  botUrl?: string;
   /**
    * Headers to forward to the NLX API.
    */
   headers: Record<string, string> & {
     /**
-     * The `nlx-api-key` is required. Fetch this from the bot's Deployment page.
+     * The `nlx-api-key` is required. Fetch this from the application's Deployment page.
      */
     "nlx-api-key": string;
   };
@@ -345,7 +350,7 @@ export interface Config {
    */
   conversationId?: string;
   /**
-   * Setting the `userID` allows it to be searchable in bot history, as well as usable via `{System.userId}` in the intent.
+   * Setting the `userID` allows it to be searchable in application history, as well as usable via `{System.userId}` in the intent.
    */
   userId?: string;
   /**
@@ -357,7 +362,7 @@ export interface Config {
    */
   failureMessage?: string;
   /**
-   * The language code to use for the bot. In the browser this can be fetched with `navigator.language`.
+   * The language code to use for the application. In the browser this can be fetched with `navigator.language`.
    * If you don't have translations, hard-code this to the language code you support.
    */
   languageCode: LanguageCode;
@@ -375,7 +380,7 @@ export interface Config {
      */
     channelType?: string;
     /**
-     * Prevent the `languageCode` parameter to be appended to the bot URL - used in special deployment environments such as the sandbox chat inside Dialog Studio
+     * Prevent the `languageCode` parameter to be appended to the application URL - used in special deployment environments such as the sandbox chat inside Dialog Studio
      */
     completeBotUrl?: boolean;
   };
@@ -422,7 +427,7 @@ export interface StructuredRequest {
    */
   nodeId?: string;
   /**
-   * The intent to trigger. The `intentId` is the name under the Bot's _Intents_.
+   * The intent to trigger. The `intentId` is the name under the application's _Intents_.
    */
   intentId?: string;
   /**
@@ -439,7 +444,7 @@ export interface StructuredRequest {
   utterance?: string;
   /**
    * @hidden
-   * This is used internally to indicate that the client is polling the bot for more data.
+   * This is used internally to indicate that the client is polling the application for more data.
    */
   poll?: boolean;
 }
@@ -455,7 +460,7 @@ export type NormalizedStructuredRequest = StructuredRequest & {
 };
 
 /**
- * The request data actually sent to the bot, slightly different from {@link UserResponsePayload}, which includes some UI-specific information
+ * The request data actually sent to the application, slightly different from {@link UserResponsePayload}, which includes some UI-specific information
  */
 export interface BotRequest {
   /**
@@ -502,13 +507,13 @@ export interface ChoiceRequestMetadata {
   /**
    * The index of the {@link Response} associated with this choice.
    * Setting this ensures that local state's `selectedChoiceId` on the corresponding {@link BotResponse} is set.
-   * It is not sent to the bot.
+   * It is not sent to the application.
    */
   responseIndex?: number;
   /**
    * The index of the {@link BotMessage} associated with this choice.
    * Setting this ensures that local state's `selectedChoiceId` on the corresponding {@link BotResponse} is set.
-   * It is not sent to the bot.
+   * It is not sent to the application.
    */
   messageIndex?: number;
   /**
@@ -528,7 +533,7 @@ export interface ChoiceRequestMetadata {
 export type LanguageCode = string;
 
 /**
- * Instead of sending a request to the bot, handle it in a custom fashion
+ * Instead of sending a request to the application, handle it in a custom fashion
  * @param botRequest - The {@link BotRequest} that is being overridden
  * @param appendResponse - A method to append the {@link BotResponsePayload} to the message history
  */
@@ -548,13 +553,13 @@ export interface ConversationHandler {
    */
   sendText: (text: string, context?: Context) => void;
   /**
-   * Send [slots](https://docs.studio.nlx.ai/workspacesettings/introduction-to-settings) to the bot.
+   * Send [slots](https://docs.studio.nlx.ai/workspacesettings/introduction-to-settings) to the application.
    * @param slots - The slots to populate
    * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
    */
   sendSlots: (slots: SlotsRecordOrArray, context?: Context) => void;
   /**
-   * Respond to [a choice](https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/nodes#user-choice) from the bot.
+   * Respond to [a choice](https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/nodes#user-choice) from the application.
    * @param choidId - The `choiceId` is in the {@link BotResponse}'s `.payload.messages[].choices[].choiceId` fields
    * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
    * @param metadata - links the choice to the specific message and node in the conversation.
@@ -573,7 +578,7 @@ export interface ConversationHandler {
 
   /**
    * Trigger a specific [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents).
-   * @param intentId - the intent to trigger. The id is the name under the Bot's _Intents_.
+   * @param intentId - the intent to trigger. The id is the name under the application's _Intents_.
    * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
    */
   sendIntent: (intentId: string, context?: Context) => void;
@@ -678,10 +683,12 @@ export const shouldReinitialize = (
 export function createConversation(config: Config): ConversationHandler {
   let socket: ReconnectingWebSocket | undefined;
 
+  const applicationUrl = config.applicationUrl ?? config.botUrl ?? "";
+
   // Check if the bot URL has a language code appended to it
-  if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(config.botUrl)) {
+  if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(applicationUrl)) {
     Console.warn(
-      "Since v1.0.0, the language code is no longer added at the end of the bot URL. Please remove the modifier (e.g. '-en-US') from the URL, and specify it in the `languageCode` parameter instead.",
+      "Since v1.0.0, the language code is no longer added at the end of the application URL. Please remove the modifier (e.g. '-en-US') from the URL, and specify it in the `languageCode` parameter instead.",
     );
   }
 
@@ -805,7 +812,7 @@ export function createConversation(config: Config): ConversationHandler {
       }
     } else {
       await fetch(
-        `${config.botUrl}${
+        `${applicationUrl}${
           config.experimental?.completeBotUrl === true
             ? ""
             : `-${state.languageCode}`
@@ -833,7 +840,7 @@ export function createConversation(config: Config): ConversationHandler {
   };
 
   const isUsingWebSockets = (): boolean => {
-    return config.botUrl.indexOf("wss://") === 0;
+    return applicationUrl.indexOf("wss://") === 0;
   };
 
   let subscribers: Subscriber[] = [];
@@ -846,7 +853,7 @@ export function createConversation(config: Config): ConversationHandler {
   };
 
   const setupWebsocket = (): void => {
-    const url = new URL(config.botUrl);
+    const url = new URL(applicationUrl);
     if (config.experimental?.completeBotUrl !== true) {
       url.searchParams.set("languageCode", state.languageCode);
       url.searchParams.set(

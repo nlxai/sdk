@@ -1,6 +1,6 @@
-# Chat SDK for NLX bots
+# SDK for NLX applications
 
-The official JavaScript SDK to communicate with conversational bots created using NLX Dialog Studio. It contains the following packages:
+The official JavaScript SDK to communicate with conversational applications created using NLX Dialog Studio. It contains the following packages:
 * [@nlxai/chat-widget](https://www.npmjs.com/package/@nlxai/chat-widget): the official out-of-the-box, lightly themeable NLX widget.
 * [@nlxai/chat-core](https://www.npmjs.com/package/@nlxai/chat-core): vanilla JavaScript SDK for creating fully custom chat widgets.
 * [@nlxai/chat-react](https://www.npmjs.com/package/@nlxai/chat-react): React custom hook for building chat widgets.

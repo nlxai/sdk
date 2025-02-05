@@ -7,7 +7,7 @@ export interface Theme {
   primaryColor: string;
   /** Background color for the dark chat bubbles (sent by the user) */
   darkMessageColor: string;
-  /** Background color for the light chat bubbles (sent by the bot) */
+  /** Background color for the light chat bubbles (sent by the application) */
   lightMessageColor: string;
   /** Customized shade of white */
   white: string;
