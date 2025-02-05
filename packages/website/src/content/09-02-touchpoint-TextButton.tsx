@@ -1,7 +1,6 @@
 import { type FC } from "react";
 
 import { PageContent } from "../components/PageContent";
-import { touchpointUiSetupSnippet } from "../snippets";
 
 export const content = `
 * TextButton
