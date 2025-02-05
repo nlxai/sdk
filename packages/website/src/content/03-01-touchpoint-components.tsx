@@ -28,17 +28,17 @@ The building blocks are used together to create a an embeddable component that c
 
 ~~~html
 ${touchpointUiSetupSnippet({
-  config: { 
+  config: {
     botUrl: "",
     languageCode: "en-US",
-    headers: { "nlx-api-key": "" }
-    },
-  customModalitiesExample: true
+    headers: { "nlx-api-key": "" },
+  },
+  customModalitiesExample: true,
 })}
 ~~~
 `;
 
-export const navGroup: string = "Touchpoint Components";
+export const navGroup: string = "Touchpoint components";
 
 export const title: string = "Getting started with Touchpoint components";
 

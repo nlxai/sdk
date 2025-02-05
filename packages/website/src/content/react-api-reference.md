@@ -1,4 +1,3 @@
-
 <a name="readmemd"></a>
 
 # @nlxai/chat-react
@@ -24,8 +23,8 @@ used to create fully custom chat widgets for web and mobile.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name     | Type     | Description                               |
+| :------- | :------- | :---------------------------------------- |
 | `config` | `Config` | The configuration object for the chatbot. |
 
 #### Returns
@@ -38,12 +37,9 @@ the hook object containing the chat state and methods.
 
 [index.ts:53](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/chat-react/src/index.ts#L53)
 
-
 <a name="indexmd"></a>
 
-
 # Interfaces
-
 
 <a name="interfaceschathookmd"></a>
 
@@ -65,7 +61,7 @@ handled by the hook automatically.
 
 [index.ts:22](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/chat-react/src/index.ts#L22)
 
-___
+---
 
 #### inputValue
 
@@ -79,7 +75,7 @@ Using this field is optional and you can hold input state separately.
 
 [index.ts:28](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/chat-react/src/index.ts#L28)
 
-___
+---
 
 #### setInputValue
 
@@ -93,8 +89,8 @@ Modify the value of the chat input field.
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name  | Type     | Description                       |
+| :---- | :------- | :-------------------------------- |
 | `val` | `string` | The new value of the input field. |
 
 ###### Returns
@@ -105,7 +101,7 @@ Modify the value of the chat input field.
 
 [index.ts:33](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/chat-react/src/index.ts#L33)
 
-___
+---
 
 #### responses
 
@@ -119,7 +115,7 @@ Please refer to [the type definitions](https://developers.nlx.ai/headless-api-re
 
 [index.ts:39](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/chat-react/src/index.ts#L39)
 
-___
+---
 
 #### waiting
 

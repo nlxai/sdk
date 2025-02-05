@@ -56,7 +56,11 @@ export const getFilteredRoutes = ({
 }): RouteGroup[] =>
   routes.filter(
     (route) =>
-      !(!touchpoint && route.heading === "Touchpoint") &&
+      !(
+        !touchpoint &&
+        (route.heading === "Touchpoint" ||
+          route.heading === "Touchpoint components")
+      ) &&
       !(
         touchpoint &&
         (route.heading === "Web widget" ||

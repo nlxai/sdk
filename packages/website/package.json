@@ -13,7 +13,8 @@
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx --fix",
     "tsc": "tsc",
     "caddy": "caddy run --config Caddyfile",
-    "test": "npm run build"
+    "test": "npm run build",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@docsearch/css": "^3.6.0",

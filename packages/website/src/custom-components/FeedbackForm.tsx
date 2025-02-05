@@ -26,7 +26,7 @@ export const FeedbackForm = () => {
           firstName,
           lastName,
           email,
-          feedback
+          feedback,
         });
       }}
     >
@@ -75,10 +75,7 @@ export const FeedbackForm = () => {
           setFeedback(ev.target.value);
         }}
       />
-      ${!submitted &&
-        html`
-          <button type="submit">Submit</button>
-        `}
+      ${!submitted && html` <button type="submit">Submit</button> `}
     </form>
   `;
 };
