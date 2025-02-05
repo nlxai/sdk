@@ -10,7 +10,7 @@ export const content = `
 ~~~
 `;
 
-export const navGroup: string = "Touchpoint Components";
+export const navGroup: string = "Touchpoint components";
 
 export const title: string = "Touchpoint TextButton";
 

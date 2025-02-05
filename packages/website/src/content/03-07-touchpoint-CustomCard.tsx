@@ -28,7 +28,7 @@ A \`<CustomCard>\` will be composed of at least one \`<CustomCardRow>\` to rende
 ~~~
 `;
 
-export const navGroup: string = "Touchpoint Components";
+export const navGroup: string = "Touchpoint components";
 
 export const title: string = "Touchpoint CustomCard";
 

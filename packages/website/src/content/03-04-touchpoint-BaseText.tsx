@@ -3,16 +3,16 @@ import { type FC } from "react";
 import { PageContent } from "../components/PageContent";
 
 export const content = `
-* CustomCards
+* BaseText
 
 ~~~html
 <HelloWorld />
 ~~~
 `;
 
-export const navGroup: string = "Touchpoint Components";
+export const navGroup: string = "Touchpoint components";
 
-export const title: string = "Touchpoint CustomCards";
+export const title: string = "Touchpoint BaseText";
 
 export const Content: FC<unknown> = () => {
   return <PageContent md={content} />;
