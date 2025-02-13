@@ -1,18 +1,13 @@
 import { type FC } from "react";
 
 import { PageContent } from "../components/PageContent";
+import customCardContent from "./03-05-touchpoint-CustomCards.md?raw";
 
-export const content = `
-* CustomCards
-
-~~~html
-<HelloWorld />
-~~~
-`;
+export const content = customCardContent;
 
 export const navGroup: string = "Touchpoint components";
 
-export const title: string = "Touchpoint CustomCards";
+export const title: string = "Using Custom Cards";
 
 export const Content: FC<unknown> = () => {
   return <PageContent md={content} />;
