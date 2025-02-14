@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import { type FC, type ReactNode } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 
