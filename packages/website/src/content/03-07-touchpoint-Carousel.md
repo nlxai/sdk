@@ -30,14 +30,15 @@ The carousel works with an array of document objects. When NLX sends a message c
 Here's a complete implementation of the interactive document carousel:
 
 ```typescript
-import React, { useState } from 'react';
+import { type FC, useState } from 'react';
 import {
   CustomCards,
   CustomCard,
   CustomCardRow,
   CustomCardImageRow,
   BaseText,
-  SmallText
+  SmallText,
+  Preview
 } from '@nlxai/touchpoint-ui';
 
 interface Document {
@@ -51,7 +52,7 @@ interface CarouselProps {
   data: Document[];
 }
 
-const Carousel: React.FC<CarouselProps> = ({ data }) => {
+const Carousel: FC<CarouselProps> = ({ data }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   return (
@@ -67,6 +68,7 @@ const Carousel: React.FC<CarouselProps> = ({ data }) => {
           }`}
         >
           <CustomCardRow>
+            <Preview className="w-5 h-5 mr-2" />
             <BaseText>{document.name}</BaseText>
           </CustomCardRow>
 

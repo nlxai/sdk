@@ -25,7 +25,9 @@ import {
 Icons enhance button clarity and visual appeal:
 
 ```javascript
-import { TextButton, IconButton, Settings, ArrowForward } from '@nlxai/touchpoint-ui';
+import { TextButton } from '@nlxai/touchpoint-ui/components/ui/TextButton';
+import { IconButton } from '@nlxai/touchpoint-ui/components/ui/IconButton';
+import { Settings, ArrowForward } from '@nlxai/touchpoint-ui/components/ui/Icons';
 
 // IconButton for toolbar actions
 <IconButton
