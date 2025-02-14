@@ -1,10 +1,10 @@
 
-The Custom Cards system provides a structured way to present information in your chat interface. The system consists of four components that work together: CustomCards (a container for multiple cards), CustomCard (individual content cards), CustomCardRow (horizontal layouts within cards), and CustomCardImageRow (specialized image layouts).
+The Custom Cards system provides a structured way to present information in your chat interface. The system consists of four components that work together: Carousel (a container for multiple cards), CustomCard (individual content cards), CustomCardRow (horizontal layouts within cards), and CustomCardImageRow (specialized image layouts).
 
 ## Import
 ```javascript
 import { 
-  CustomCards,
+  Carousel,
   CustomCard,
   CustomCardRow,
   CustomCardImageRow
@@ -13,10 +13,10 @@ import {
 
 ## Component Structure
 
-The Custom Cards system follows a nested structure where components build upon each other to create rich layouts. A CustomCards container holds one or more CustomCard components. Each CustomCard contains CustomCardRow or CustomCardImageRow components that organize the content within the card.
+The Custom Cards system follows a nested structure where components build upon each other to create rich layouts. A Carousel container holds one or more CustomCard components. Each CustomCard contains CustomCardRow or CustomCardImageRow components that organize the content within the card.
 
 ```javascript
-<CustomCards>                        // Container for all cards
+<Carousel>                        // Container for all cards
   <CustomCard>                       // First card
     <CustomCardImageRow>...</CustomCardImageRow>   // Image content
     <CustomCardRow>...</CustomCardRow>             // Text content
@@ -25,7 +25,7 @@ The Custom Cards system follows a nested structure where components build upon e
   <CustomCard>                       // Second card
     ...
   </CustomCard>
-</CustomCards>
+</Carousel>
 ```
 
 ## Usage with customModalities
@@ -34,7 +34,7 @@ The Custom Cards system is particularly powerful when used within custom modalit
 
 ```javascript
 import { 
-  CustomCards,
+  Carousel,
   CustomCard,
   CustomCardRow,
   CustomCardImageRow,
@@ -45,7 +45,7 @@ import {
 } from '@nlxai/touchpoint-ui';
 
 const ProductCatalog = ({ data }) => (
-  <CustomCards>
+  <Carousel>
     {data.products.map(product => (
       <CustomCard key={product.id}>
         <CustomCardImageRow>
@@ -64,7 +64,7 @@ const ProductCatalog = ({ data }) => (
         </CustomCardRow>
       </CustomCard>
     ))}
-  </CustomCards>
+  </Carousel>
 );
 
 // Register with Touchpoint
@@ -77,15 +77,15 @@ const touchpoint = TouchpointUI.create({
 
 ## Individual Components
 
-### CustomCards Container
+### Carousel Container
 The outer container that manages card collection layout and scrolling behavior.
 
 ```javascript
-<CustomCards>
+<Carousel>
   {/* Cards are arranged horizontally and scroll when needed */}
   <CustomCard>...</CustomCard>
   <CustomCard>...</CustomCard>
-</CustomCards>
+</Carousel>
 ```
 
 ### CustomCard

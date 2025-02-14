@@ -1,24 +1,4 @@
 
-Touchpoint provides built-in icons that integrate with buttons and custom components. Each icon maintains consistent styling and accessibility features.
-
-## Available Icons
-
-Import icons individually to optimize bundle size:
-
-```javascript
-import { 
-  ArrowForward,
-  Attachment,
-  Close,
-  Delete,
-  Check,
-  Error,
-  Escalate,
-  Restart,
-  Settings,
-  Warning
-} from '@nlxai/touchpoint-ui/Icons';
-```
 
 ## Using with Buttons
 

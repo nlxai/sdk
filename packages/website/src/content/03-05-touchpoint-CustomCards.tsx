@@ -7,7 +7,7 @@ export const content = customCardContent;
 
 export const navGroup: string = "Touchpoint components";
 
-export const title: string = "Using Custom Cards";
+export const title: string = "Custom Cards";
 
 export const Content: FC<unknown> = () => {
   return <PageContent md={content} />;

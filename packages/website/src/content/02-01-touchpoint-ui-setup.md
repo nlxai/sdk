@@ -39,7 +39,7 @@ These components can be imported and used within your custom modality components
 #### Layout Components
 | Component          | Import Path              | Description                                |
 |-------------------|-------------------------|--------------------------------------------|
-| `CustomCards`      | '@nlxai/touchpoint-ui' | Container for multiple card elements       |
+| `Carousel`      | '@nlxai/touchpoint-ui' | Container for multiple card elements       |
 | `CustomCard`       | '@nlxai/touchpoint-ui' | Individual card component                  |
 | `CustomCardRow`    | '@nlxai/touchpoint-ui' | Horizontal layout within cards            |
 | `CustomCardImageRow`| '@nlxai/touchpoint-ui'| Specialized row for image content         |

@@ -6,16 +6,7 @@ Touchpoint components work together to create rich chat experiences. The system 
 When your bot sends a message with a specific modality, Touchpoint renders your corresponding component. This connection happens through the customModalities configuration:
 
 ```javascript
-import { TouchpointUI, CustomCard, BaseText, TextButton, ShoppingCart } from '@nlxai/touchpoint-ui';
-
-// Register components with specific modality keys
-const touchpoint = TouchpointUI.create({
-  customModalities: {
-    "product-card": ProductCardComponent,
-    "welcome-message": WelcomeComponent
-  }
-});
-
+import { create, CustomCard, BaseText, TextButton } from '@nlxai/touchpoint-ui';
 // Your component receives data from the bot
 const ProductCardComponent = ({ data }) => (
   <CustomCard>
@@ -29,6 +20,23 @@ const ProductCardComponent = ({ data }) => (
     </CustomCardRow>
   </CustomCard>
 );
+
+const touchpointOptions = {
+  config: {
+    botUrl: "YOUR_BOT_URL",
+    headers: {
+      "nlx-api-key": "YOUR_API_KEY"
+    },
+    languageCode: "en-US"
+  },
+  theme: {"fontFamily":"\"Neue Haas Grotesk\", sans-serif","accent":"#2663DA"},
+  customModalities: {
+    "productCard": ProductCardComponent,
+  }
+};
+
+// Register components with specific modality keys
+const touchpoint = create(touchpointOptions);
 ```
 
 ## Component Categories

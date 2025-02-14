@@ -32,7 +32,7 @@ Here's a complete implementation of the interactive document carousel:
 ```typescript
 import { type FC, useState } from 'react';
 import {
-  CustomCards,
+  Carousel,
   CustomCard,
   CustomCardRow,
   CustomCardImageRow,
@@ -56,7 +56,7 @@ const Carousel: FC<CarouselProps> = ({ data }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   return (
-    <CustomCards>
+    <Carousel>
       {data.map(document => (
         <CustomCard 
           key={document.id}
@@ -86,7 +86,7 @@ const Carousel: FC<CarouselProps> = ({ data }) => {
           </CustomCardRow>
         </CustomCard>
       ))}
-    </CustomCards>
+    </Carousel>
   );
 };
 
@@ -112,7 +112,7 @@ const touchpoint = TouchpointUI.create({
 
 The carousel uses Touchpoint's component system to create an interactive document viewer:
 
-CustomCards provides a horizontally scrolling container that holds all the document cards. Each document is rendered as a CustomCard, which contains three main sections arranged vertically:
+Carousel provides a horizontally scrolling container that holds all the document cards. Each document is rendered as a CustomCard, which contains three main sections arranged vertically:
 
 1. A title section using BaseText for the document name
 2. An image section using CustomCardImageRow for the document's visual
@@ -143,7 +143,7 @@ When implementing or extending this carousel:
 4. Image Handling: Always provide proper aria-labels for images and maintain consistent aspect ratios.
 
 ## Related Components
-- [CustomCards](/touchpoint-CustomCards)
+- [Carousel](/touchpoint-CustomCards)
 - [CustomCard](/touchpoint-CustomCards#customcard)
 - [BaseText](/touchpoint-BaseText)
 - [SmallText](/touchpoint-SmallText)
