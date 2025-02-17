@@ -11,11 +11,12 @@ import { TextButton } from "./components/ui/TextButton";
 import { IconButton } from "./components/ui/IconButton";
 import { BaseText, SmallText } from "./components/ui/Typography";
 import {
-  CustomCards,
   CustomCard,
   CustomCardRow,
   CustomCardImageRow,
 } from "./components/ui/CustomCard";
+import { Carousel } from "./components/ui/Carousel";
+import { DateInput } from "./components/ui/DateInput";
 
 import { createElement, type FC } from "react";
 
@@ -34,7 +35,8 @@ export const html = createHtml({
   IconButton,
   BaseText,
   SmallText,
-  CustomCards,
+  DateInput,
+  Carousel,
   CustomCard,
   CustomCardRow,
   CustomCardImageRow,
@@ -46,7 +48,8 @@ export {
   IconButton,
   BaseText,
   SmallText,
-  CustomCards,
+  DateInput,
+  Carousel,
   CustomCard,
   CustomCardRow,
   CustomCardImageRow,
