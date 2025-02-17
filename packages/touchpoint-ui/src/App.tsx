@@ -11,6 +11,7 @@ import {
 import {
   type ConversationHandler,
   createConversation,
+  isConfigValid,
   type Subscriber,
   type Response,
   type Config,
@@ -33,6 +34,7 @@ import {
 } from "./types";
 import { Context } from "./context";
 import { CustomPropertiesContainer } from "./components/Theme";
+import { Assistant } from "./components/ui/Icons";
 
 export interface Props {
   config: Config;
@@ -68,6 +70,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   const colorMode = props.colorMode ?? "dark";
 
   const [isExpanded, setIsExpanded] = useState(isDev);
+
+  const configValid = isConfigValid(props.config);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
@@ -216,21 +220,32 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               />
             ) : (
               <>
-                <ChatMessages
-                  isWaiting={isWaiting}
-                  lastBotResponseIndex={lastBotResponse?.index}
-                  responses={responses}
-                  colorMode={colorMode}
-                  handler={handler}
-                  uploadedFiles={uploadedFiles}
-                  customModalities={customModalities}
-                  className={clsx(
-                    "flex-grow",
-                    windowSize === "full"
-                      ? "w-full md:max-w-content md:mx-auto"
-                      : "",
-                  )}
-                />
+                {configValid ? (
+                  <ChatMessages
+                    isWaiting={isWaiting}
+                    lastBotResponseIndex={lastBotResponse?.index}
+                    responses={responses}
+                    colorMode={colorMode}
+                    handler={handler}
+                    uploadedFiles={uploadedFiles}
+                    customModalities={customModalities}
+                    className={clsx(
+                      "flex-grow",
+                      windowSize === "full"
+                        ? "w-full md:max-w-content md:mx-auto"
+                        : "",
+                    )}
+                  />
+                ) : (
+                  <div className="flex-grow flex flex-col items-center justify-center gap-2">
+                    <Assistant className="w-20 h-20 text-primary-20" />
+                    <h3 className="text-xl">Oops!</h3>
+                    <div className="text-center">
+                      <p>Something went wrong.</p>
+                      <p>Try again later.</p>
+                    </div>
+                  </div>
+                )}
                 <ChatInput
                   className={clsx(
                     "flex-none",
