@@ -677,8 +677,8 @@ export const shouldReinitialize = (
 
 /**
  * Check whether a configuration is value.
- * @param config
- * @returns true if valid
+ * @param config - Chat configuration
+ * @returns isValid - Whether the configuration is valid
  */
 export const isConfigValid = (config: Config): boolean => {
   const applicationUrl = config.applicationUrl ?? config.botUrl ?? "";
