@@ -37,6 +37,9 @@ Touchpoint automatically adapts your theme for both light and dark modes. Set yo
 
 ```javascript
 const touchpointInstance = nlxai.touchpointUi.create({
+  config: {
+    // Your base configuration
+  },
   colorMode: "dark",  // or "light"
   theme: {
     accent: "rgb(28, 99, 218)",

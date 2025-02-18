@@ -50,18 +50,6 @@ These components can be imported and used within your custom modality components
 | `TextButton` | '@nlxai/touchpoint-ui' | Text-based button with optional icon      |
 | `IconButton` | '@nlxai/touchpoint-ui' | Icon-only button for compact actions      |
 
-#### Visual Components
-| Component      | Import Path                  | Description                           |
-|---------------|-----------------------------|-----------------------------------------|
-| `ArrowForward` | '@nlxai/touchpoint-ui/Icons'| Forward/next action indicator         |
-| `Check`        | '@nlxai/touchpoint-ui/Icons'| Success/completion indicator          |
-| `Close`        | '@nlxai/touchpoint-ui/Icons'| Close/dismiss action indicator        |
-| `Delete`       | '@nlxai/touchpoint-ui/Icons'| Delete/remove action indicator        |
-| `Error`        | '@nlxai/touchpoint-ui/Icons'| Error state indicator                 |
-| `Warning`      | '@nlxai/touchpoint-ui/Icons'| Warning state indicator               |
-| `Settings`     | '@nlxai/touchpoint-ui/Icons'| Settings/configuration indicator      |
-| `Attachment`   | '@nlxai/touchpoint-ui/Icons'| File attachment indicator             |
-
 ## Instance Methods
 
 The `create()` function returns a `TouchpointInstance` with these methods:
