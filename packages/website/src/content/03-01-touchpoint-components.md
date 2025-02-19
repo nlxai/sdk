@@ -1,23 +1,46 @@
 
-Touchpoint components work together to create rich chat experiences. The system uses customModalities to connect your components with bot responses, letting you create dynamic, interactive interfaces.
+Touchpoint components work together with each other to create rich chat experiences. Touchpoint relies on [modalities](https://docs.studio.nlx.ai/1-build/resources/modalities) defined within the NLX application to send structured data from the NLX conversation flow to touchpoint. For each Modality defined in your conversational application that you wish to use with Touchpoint, you must create a component and explicitly enable that modality when creating your touchpoint instance.
+
+Remember! Start Small - create a simple component first with a simple Modality schema in order to understand how data flows between touchpoint and NLX before building larger components.
+
+### For User Input Components
+
+All end-user input requests (button, card, date, etc...) must send the user-input back to NLX to continue the conversation. Touchpoint provides the `useTouchpointContext` function to access the [ConversationHandler](/headless-api-reference#interfacesconversationhandlermd) which contains the methods to send information back to NLX. 
 
 ## Understanding customModalities
 
-When your bot sends a message with a specific modality, Touchpoint renders your corresponding component. This connection happens through the customModalities configuration:
+When your bot sends a message with a specific modality, Touchpoint renders your corresponding component. This connection happens through the customModalities configuration.
+
+For example, a Modality named "ProductCard" with schema: 
+
+```json
+{
+  "name": "Product Name",
+  "id": "Product UUID",
+  "price": "Product Price"
+}
+```
+
+Could be rendered as a [CustomCard](/touchpoint-CustomCards) within the conversation.
 
 ```javascript
-import { create, CustomCard, BaseText, TextButton } from '@nlxai/touchpoint-ui';
-// Your component receives data from the bot
+import { create, CustomCard, BaseText, TextButton, useTouchpointContext, SmallText } from '@nlxai/touchpoint-ui';
+// Get the ConversationHandler to sendChoice back to NLX
+const { handler } = useTouchpointContext();
+
+// Your component receives data that matches the schema define in the Modality
 const ProductCardComponent = ({ data }) => (
   <CustomCard>
-    <CustomCardRow>
-      <BaseText>{data.name}</BaseText>
-      <TextButton 
+    <CustomCardRow
+      left = {<BaseText>{data.name}</BaseText>}
+      right = {<SmallText>{data.price}</SmallText>}
+    />
+    <CustomCardRow
+      {<TextButton 
         label="Buy Now" 
-        Icon={ShoppingCart}
-        onClick={() => handlePurchase(data.id)} 
-      />
-    </CustomCardRow>
+        onClick={() => handler.sendChoice(data.id)}
+      />}
+    />
   </CustomCard>
 );
 
@@ -31,7 +54,7 @@ const touchpointOptions = {
   },
   theme: {"fontFamily":"\"Neue Haas Grotesk\", sans-serif","accent":"#2663DA"},
   customModalities: {
-    "productCard": ProductCardComponent,
+    "ProductCard": ProductCardComponent,
   }
 };
 
@@ -41,75 +64,8 @@ const touchpoint = create(touchpointOptions);
 
 ## Component Categories
 
-Touchpoint provides four types of components that work together:
-
-### Display Components
-Create consistent text presentation:
-- [BaseText](/touchpoint-BaseText) - Primary content
-- [SmallText](/touchpoint-SmallText) - Supporting information
-
-### Layout Components
-Structure your content:
-- [CustomCards](/touchpoint-CustomCards) - Card collections
-- [CustomCard](/touchpoint-CustomCards) - Individual cards
-- [CustomCardRow](/touchpoint-CustomCards) - Horizontal layouts
-- [CustomCardImageRow](/touchpoint-CustomCards) - Image containers
-
-### Interactive Components
-Handle user actions:
-- [TextButton](/touchpoint-Buttons) - Text-based buttons
-- [IconButton](/touchpoint-Buttons) - Icon-only buttons
-
-### Visual Components
-Add graphical elements:
-- [Icons](/touchpoint-Icons) - Consistent iconography
-
-## Creating Custom Components
-
-Here's a practical example combining multiple components:
-
-```javascript
-import { 
-  CustomCard, 
-  CustomCardRow, 
-  BaseText, 
-  SmallText,
-  TextButton,
-  ArrowForward 
-} from '@nlxai/touchpoint-ui';
-
-const ProductComponent = ({ data }) => (
-  <CustomCard>
-    <CustomCardRow>
-      <BaseText>{data.name}</BaseText>
-      <SmallText>{data.price}</SmallText>
-    </CustomCardRow>
-    <CustomCardRow>
-      <TextButton 
-        label="View Details"
-        Icon={ArrowForward}
-        onClick={() => showDetails(data.id)}
-      />
-    </CustomCardRow>
-  </CustomCard>
-);
-
-// Register with Touchpoint
-const touchpoint = TouchpointUI.create({
-  customModalities: {
-    "product": ProductComponent
-  }
-});
-```
-
-## Best Practices
-
-1. Component Organization: Keep components focused on a single purpose and compose them together for complex interfaces.
-
-2. Data Handling: Components receive data through the modality system. Structure your bot responses to match your component needs.
-
-3. Consistent Patterns: Use similar patterns across your components for a cohesive experience. Use BaseText for primary content, SmallText for supporting details, CustomCardRow for consistent layouts, and Icons with buttons for clear actions.
-
-4. Performance: Register only the components you need in customModalities to keep your application efficient.
-
-See individual component documentation for detailed usage information.
+Touchpoint provides different types of components that work together:
+- [Typography](/touchpoint-Typography) - Text components to create consistent text presentation:
+- [Carousel & CustomCards](/touchpoint-CustomCards) - Structure your content with Card collections
+- [Buttons](/touchpoint-Buttons) - Handle user actions with text or icon based buttons
+- [Icons](/touchpoint-Icons) - Add graphical elements with consistent iconography

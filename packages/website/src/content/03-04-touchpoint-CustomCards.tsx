@@ -1,13 +1,13 @@
 import { type FC } from "react";
 
 import { PageContent } from "../components/PageContent";
-import carouselContent from "./03-07-touchpoint-Carousel.md?raw";
+import customCardContent from "./03-04-touchpoint-CustomCards.md?raw";
 
-export const content = carouselContent;
+export const content = customCardContent;
 
 export const navGroup: string = "Touchpoint components";
 
-export const title: string = "Carousel with Touchpoint";
+export const title: string = "Custom Cards";
 
 export const Content: FC<unknown> = () => {
   return <PageContent md={content} />;

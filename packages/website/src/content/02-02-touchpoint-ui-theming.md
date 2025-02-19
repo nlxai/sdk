@@ -3,7 +3,7 @@ NLX Touchpoint provides powerful theming capabilities that let you match your br
 
 ## Quick Customization
 
-For most applications, customizing `accent` and `fontFammily` properties will create a branded experience:
+For most applications, customizing `accent` and `fontFamily` properties will create a branded experience:
 
 * Example: **accent** to `rgb(28, 99, 218)`
 * Example: **fontFamily** to `"Helvetica Neue", sans-serif`
@@ -55,48 +55,49 @@ For applications needing more detailed control, Touchpoint provides extensive cu
 ### Primary Colors
 Primary colors control text and interactive elements, with variants for different opacity levels:
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `primary80` | string | Primary color at 80% opacity |
-| `primary60` | string | Primary color at 60% opacity |
-| `primary40` | string | Primary color at 40% opacity |
-| `primary20` | string | Primary color at 20% opacity |
-| `primary10` | string | Primary color at 10% opacity |
-| `primary5` | string | Primary color at 5% opacity |
-| `primary1` | string | Primary color at 1% opacity |
+| Property    | Description                  |
+|-------------|------------------------------|
+| `primary80` | Primary color at 80% opacity |
+| `primary60` | Primary color at 60% opacity |
+| `primary40` | Primary color at 40% opacity |
+| `primary20` | Primary color at 20% opacity |
+| `primary10` | Primary color at 10% opacity |
+| `primary5`  | Primary color at 5% opacity  |
+| `primary1`  | Primary color at 1% opacity  |
 
 ### Secondary Colors
 Secondary colors are used for backgrounds and supporting elements:
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `secondary80` | string | Secondary color at 80% opacity |
-| `secondary60` | string | Secondary color at 60% opacity |
-| `secondary40` | string | Secondary color at 40% opacity |
-| `secondary20` | string | Secondary color at 20% opacity |
-| `secondary10` | string | Secondary color at 10% opacity |
-| `secondary5` | string | Secondary color at 5% opacity |
-| `secondary1` | string | Secondary color at 1% opacity |
+| Property      | Description                    |
+|---------------|--------------------------------|
+| `secondary80` | Secondary color at 80% opacity |
+| `secondary60` | Secondary color at 60% opacity |
+| `secondary40` | Secondary color at 40% opacity |
+| `secondary20` | Secondary color at 20% opacity |
+| `secondary10` | Secondary color at 10% opacity |
+| `secondary5`  | Secondary color at 5% opacity  |
+| `secondary1`  | Secondary color at 1% opacity  |
 
 ### Additional Colors
-| Property | Type | Description |
-|----------|------|-------------|
-| `accent20` | string | Accent color at 20% opacity |
-| `background` | string | Main background color |
-| `overlay` | string | Color for the overlay behind the chat window |
+| Property     | Description                                  |
+|--------------|----------------------------------------------|
+| `accent20`   | Accent color at 20% opacity                  |
+| `background` | Main background color                        |
+| `overlay`    | Color for the overlay behind the chat window |
 
 ### Status Colors
-| Property | Type | Description |
-|----------|------|-------------|
-| `warningPrimary` | string | Primary warning color |
-| `warningSecondary` | string | Secondary warning color |
-| `errorPrimary` | string | Primary error color |
-| `errorSecondary` | string | Secondary error color |
+| Property           | Description             |
+|--------------------|-------------------------|
+| `warningPrimary`   | Primary warning color   |
+| `warningSecondary` | Secondary warning color |
+| `errorPrimary`     | Primary error color     |
+| `errorSecondary`   | Secondary error color   |
 
 ### Layout
-| Property | Type | Description |
-|----------|------|-------------|
-| `innerBorderRadius` | string | Border radius for inner elements (buttons) |
-| `outerBorderRadius` | string | Border radius for outer elements (cards) |
+
+| Property            | Description                                |
+|---------------------|--------------------------------------------|
+| `innerBorderRadius` | Border radius for inner elements (buttons) |
+| `outerBorderRadius` | Border radius for outer elements (cards)   |
 
 See the [Setup Documentation](/touchpoint-ui-setup) for more information about configuration options.# Theming Your Touchpoint Interface

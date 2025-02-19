@@ -1,7 +1,7 @@
 import { type FC } from "react";
 
 import { PageContent } from "../components/PageContent";
-import buttonContent from "./03-04-touchpoint-Buttons.md?raw";
+import buttonContent from "./03-03-touchpoint-Buttons.md?raw";
 
 export const content = buttonContent;
 

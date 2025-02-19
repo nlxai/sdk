@@ -7,7 +7,7 @@ export const content = touchpointComponentContent;
 
 export const navGroup: string = "Touchpoint components";
 
-export const title: string = "Getting started with Touchpoint components";
+export const title: string = "Getting started";
 
 export const Content: FC<unknown> = () => {
   return <PageContent md={content} />;
