@@ -5,6 +5,14 @@ import iconsContent from "./03-05-touchpoint-Icons.md?raw";
 import type { Icon } from "@nlxai/touchpoint-ui/src/components/ui/Icons";
 import { Icons } from "@nlxai/touchpoint-ui";
 
+interface PathProps {
+  d: string;
+}
+
+interface SvgChild {
+  props: PathProps;
+}
+
 
 /**
  * Generates an HTML table of icons.
@@ -28,7 +36,7 @@ import { Icons } from "@nlxai/touchpoint-ui";
 const generateIconTable = (icons: Record<string, Icon>): string => {
   const skipEntries = ['iconSvgProps', 'Icon', 'IconProps'];
 
-  const createTableHeader = () => `
+  const createTableHeader = () : string => `
 <table>
 <thead>
   <tr>
@@ -38,40 +46,42 @@ const generateIconTable = (icons: Record<string, Icon>): string => {
 </thead>
 <tbody>`;
 
-  const createTableFooter = () => `
+  const createTableFooter = (): string => `
 </tbody>
 </table>`;
 
-  const createSvgElement = (paths: string[]) => 
+  const createSvgElement = (paths: string[]): string =>
     `<svg viewBox="0 0 24 24" width="24" height="24">${paths.join('\n')}</svg>`;
 
-  const createTableRow = (name: string, svgElement: string) => `
+  const createTableRow = (name: string, svgElement: string): string => `
   <tr>
     <td>${name}</td>
     <td>${svgElement}</td>
   </tr>`;
 
-  const createPath = (d: string) => 
+  const createPath = (d: string): string =>
     `<path d="${d}" fill="currentColor"/>`;
 
 
-  const getPathsFromIcon = (IconComponent: Icon) => {
+  const getPathsFromIcon = (IconComponent: Icon): string[] => {
     const rendered = IconComponent({});
     if (!isValidElement(rendered)) {
       return [];
     }
 
     const children = rendered.props.children;
-    
+    const isString = (c : any) : boolean => typeof (c as SvgChild)?.props?.d === 'string'
+
     // Handle single path
-    if (!Array.isArray(children) && children?.props?.d) {
-      return [createPath(children.props.d)];
+    const isSinglePath: boolean = !Array.isArray(children) && children?.props?.d;
+    if (isSinglePath && isString(children)) {
+      return [createPath((children as SvgChild).props.d)];
     }
     
     // Handle multiple paths
     if (Array.isArray(children)) {
       return children
-        .filter(child => child?.props?.d)
+        .filter((child): child is SvgChild => isString(child))
         .map(child => createPath(child.props.d));
     }
     
