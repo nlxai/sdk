@@ -22,16 +22,17 @@
 
 The `customModalities` field connects your custom components to specific bot responses. Each key in this object maps to a component that handles that modality type.
 
-| Field              | Default | Description                                     |
+| Field               | Description                                     |
 |----------------------------|-------------------------------------------------|
-| `customModalities` | {}      | Maps modality types to their handling components |
+| `customModalities` | Maps modality types to their handling components |
 
 ### Available Components
 
 These components can be imported and used within your custom modality components:
 
 #### Display Components
-| Component      Description                               |
+
+| Component   |   Description                               |
 |--------------|-------------------------------------------|
 | `BaseText`    |   Primary text component for main content   |
 | `SmallText`   |  Secondary text for supporting information |
