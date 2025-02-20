@@ -17,7 +17,8 @@ For example, a Modality named "ProductCard" with schema:
 {
   "name": "Product Name",
   "id": "Product UUID",
-  "price": "Product Price"
+  "price": "Product Price",
+  "productImageUrl": "Product Image URL"
 }
 ```
 
@@ -29,20 +30,29 @@ import { create, CustomCard, BaseText, TextButton, useTouchpointContext, SmallTe
 const { handler } = useTouchpointContext();
 
 // Your component receives data that matches the schema define in the Modality
-const ProductCardComponent = ({ data }) => (
-  <CustomCard>
-    <CustomCardRow
-      left = {<BaseText>{data.name}</BaseText>}
-      right = {<SmallText>{data.price}</SmallText>}
+const ProductCardComponent = ({ data }) => {
+  const [selected, setSelected] = React.useState(null);
+  console.log(data);
+  return (
+  <CustomCard
+      key="0"
+      selected=${selected === 0}
+      onClick={() => {
+        setSelected(0);
+        handler.sendChoice(data.id);
+      }}  
+  >
+    <CustomCardImageRow
+      src=${data.productImageUrl}
+      alt=${data.name}
     />
     <CustomCardRow
-      {<TextButton 
-        label="Buy Now" 
-        onClick={() => handler.sendChoice(data.id)}
-      />}
+      left=${<BaseText>${data.name}</BaseText>}
+      right=${<BaseText>${data.price}</BaseText>}
     />
   </CustomCard>
-);
+  );
+};
 
 const touchpointOptions = {
   config: {

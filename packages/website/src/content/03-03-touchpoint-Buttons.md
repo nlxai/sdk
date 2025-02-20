@@ -10,12 +10,12 @@ Both TextButton and IconButton have required properties to render the elements c
 
 ### TextButton Properties 
 
-| Property | Type                                                                                                                           | Required | Description             |
-|----------|--------------------------------------------------------------------------------------------------------------------------------|----------|-------------------------|
-| label    | string                                                                                                                         | Yes      | Button text             |
-| onClick  | function                                                                                                                       | No       | Click handler           |
-| Icon     | Component                                                                                                                      | No       | Optional icon component |
-| type     | <ul><li>main: Primary action button with full background</li><li>ghost: Secondary action with transparent background</li></ul> | No       | Button style variant    |
+| Property | Type                                                                                                                           | Required | Description          |
+|----------|--------------------------------------------------------------------------------------------------------------------------------|----------|----------------------|
+| label    | string                                                                                                                         | Yes      | Button text          |
+| Icon     | [Icon](/touchpoint-Icons)                                                                                                      | Yes      | Icon component       |
+| onClick  | function                                                                                                                       | No       | Click handler        |
+| type     | <ul><li>main: Primary action button with full background</li><li>ghost: Secondary action with transparent background</li></ul> | No       | Button style variant |
 
 
 ### IconButton Properties
@@ -24,8 +24,9 @@ Both TextButton and IconButton have required properties to render the elements c
 |----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|---------------------------------------|
 | Icon     | [Icon](/touchpoint-Icons)                                                                                                                                                                                                                                                                                                                                           | Yes      | Icon component to render              |
 | label    | string                                                                                                                                                                                                                                                                                                                                                              | Yes      | Accessible label (for screen readers) |
+| type     | <ul><li>main: Primary action button with full background color.</li><li>ghost: Secondary action with transparent background.</li><li>activated: Accent colored background with light text.</li><li>coverup: Semi-transparent button with backdrop blur effect.</li><li>overlay: Similar to coverup but with background color matching the app background.</li></ul> | Yes      | Button style variant                  |
 | onClick  | function                                                                                                                                                                                                                                                                                                                                                            | No       | Click handler                         |
-| type     | <ul><li>main: Primary action button with full background color.</li><li>ghost: Secondary action with transparent background.</li><li>activated: Accent colored background with light text.</li><li>coverup: Semi-transparent button with backdrop blur effect.</li><li>overlay: Similar to coverup but with background color matching the app background.</li></ul> | No       | Button style variant                  |
+
 
 ## Import and Basic Usage
 
@@ -54,20 +55,28 @@ The snippet below:
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
   const { html, useTouchpointContext, Icons } = nlxai.touchpointUi;
-  const showButtonExampleWithContext = ({ data }) => {
+  const showTextButtonExampleWithContext = ({ data }) => {
     const { handler } = useTouchpointContext();
     return html`
       <TextButton
-        label=${data.buttonLabel}
-        onClick=${() => handler.sendChoice(data.buttonId)}
+          label=${data.buttonLabel}
+          Icon=${Icons.ArrowForward}
+          onClick=${() => handler.sendChoice(data.buttonId)}
       />
-      <IconButton
-        label=${data.buttonLabel}
-        icon=${Icons.ThumbUp}
-        onClick=${handler.sendChoice(data.buttonId)}
-      /> 
     `; 
   };
+  
+  const showIconButtonExampleWithContext = ({ data }) => {
+  const { handler } = useTouchpointContext();
+  console.log(data);
+  return html`
+  <IconButton
+      label=${data.buttonLabel}
+      Icon=${Icons.ArrowForward}
+      onClick=${() => handler.sendChoice(data.buttonId)}
+      type="main"
+  />`;
+};
 </script>
 ```
 
@@ -84,19 +93,27 @@ The snippet below:
 ```javascript
 import { useTouchpointContext, TextButton, IconButton, Icons } from '@nlxai/touchpoint-ui';
 
-const showButtonExampleWithContext = ({ data }) => {
+const showTextButtonExampleWithContext = ({ data }) => {
   const { handler } = useTouchpointContext();
   return(
     <TextButton
       label=${data.buttonLabel}
+      Icon=${Icons.ArrowForward}
       onClick=${() => handler.sendChoice(data.buttonId)}
     />
-    <IconButton
-      label=${data.buttonLabel}
-      icon=${Icons.ThumbUp}
-      onClick=${() => handler.sendChoice(data.buttonId)}
-    /> 
   ); 
+};
+
+const showIconButtonExampleWithContext = ({ data }) => {
+  const { handler } = useTouchpointContext();
+  console.log(data);
+  return(
+  <IconButton
+      label=${data.buttonLabel}
+      Icon=${Icons.ArrowForward}
+      onClick=${() => handler.sendChoice(data.buttonId)}
+      type="main"
+  />);
 };
 ```
 

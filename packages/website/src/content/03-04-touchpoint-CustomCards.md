@@ -1,8 +1,8 @@
 
 The Custom Cards system provides a structured way to present information in your chat interface. The system consists of four components that work together: Carousel, CustomCard, CustomCardRow, and CustomCardImageRow..
 
-* **Carousel** - Top Level component, acts as a container for multiple horizontally scrolled cards. A Carousel has at least 1 CustomCard.
-* **CustomCard** - Primary component, is a 'card' made up of multiple rows. A CustomCard has at least 1 of CustomCardRow or CustomCardImageRow.
+* **Carousel** - Top Level component, acts as a container for multiple horizontally scrolled cards. A Carousel has at least 1 CustomCard. 
+* **CustomCard** - Primary component, is a 'card' made up of multiple rows. A CustomCard has at least 1 of CustomCardRow or CustomCardImageRow. CustomCard can be used outside Carousel.
 * **CustomCardRow** - Basic component for horizontal layouts within cards. Can have multiple rows in a CustomCard.
 * **CustomCardImageRow** - Basic component for specialized image layouts within a CustomCard.
 
@@ -57,6 +57,23 @@ Each component in the CustomCard system has specific properties that control its
 
 You can import the CustomCard components from touchpoint once the package has been installed or made available in your project.
 
+### Example Modality Schema
+
+In order to use the Carousel and CustomCard components you will need to have a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities)  defined in your NLX application that is a list of objects.
+
+Here is an example leveraged in the code-snips below. 
+
+```json
+[
+  {
+    "id": "uuid",
+    "imageUrl": "imageUrl",
+    "leftText": "leftAlignedText",
+    "rightText": "rightAlignedText"
+  }
+]
+```
+
 ### Define onClick
 
 The CustomCard component expects a function passed via `onClick` to define the actions to take when a user clicks the button.
@@ -67,20 +84,19 @@ Read more details about building Custom Components with Touchpoint in the [Getti
 
 ### Import using `<script>`
 
-Import the elements via `html` from Touchpoint. Useful when adding touchpoint to your project via `<script>`
+Import the elements via `html` from Touchpoint. Useful when adding touchpoint to your project via `<script>` tags.
 
 The snippet below: 
 
 * Uses `html` to import and create the Carousel and CustomCard.
 * Leverages `useTouchpointContext` to set the onClick behavior.
 * Imports React from the Touchpoint package to track user selection state.
-* Assumes a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) defined in your NLX application as a list of objects like `[{id: "uuid", imageUrl: "imageUrl", leftText: "leftAlignedText", rightText: "rightAlignedText"}]`
 
 ```javascript
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
 const { useTouchpointContext, html, React } = nlxai.touchpointUi;
-const showButtonExampleWithContext = ({ data }) => {
+const carouselExample = ({ data }) => {
   const { handler } = useTouchpointContext();
   const [selected, setSelected] = React.useState(null);
   return html`
@@ -122,7 +138,6 @@ The snippet below:
 * Uses `import` to import the components to construct the Carousel.
 * Leverages `useTouchpointContext` to set the onClick behavior.
 * Imports React from the Touchpoint package to track user selection state.
-* Assumes a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) defined in your NLX application as a list of objects like `[{id: "uuid", imageUrl: "imageUrl", leftText: "leftAlignedText", rightText: "rightAlignedText"}]`
 
 ```javascript
 import { 

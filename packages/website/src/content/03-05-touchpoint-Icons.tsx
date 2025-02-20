@@ -13,7 +13,6 @@ interface SvgChild {
   props: PathProps;
 }
 
-
 /**
  * Generates an HTML table of icons.
  * 
