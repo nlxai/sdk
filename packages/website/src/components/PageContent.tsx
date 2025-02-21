@@ -54,6 +54,10 @@ export const PageContent: FC<{ md: string }> = ({ md }) => (
       rehypePlugins={[rehypeRaw, rehypeSlug]}
       components={{
         a(props) {
+          if (props.href == null) {
+            return <a href={props.href}>{props.children}</a>;
+          }
+          // TODO: when using a react-router redirect, scroll to heading ID if available
           return <Link to={props.href}>{props.children}</Link>;
         },
         pre(props) {
