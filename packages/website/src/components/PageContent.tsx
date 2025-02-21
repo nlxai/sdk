@@ -54,10 +54,13 @@ export const PageContent: FC<{ md: string }> = ({ md }) => (
       rehypePlugins={[rehypeRaw, rehypeSlug]}
       components={{
         a(props) {
+          // eslint-disable-next-line react/prop-types
           if (props.href == null) {
+            // eslint-disable-next-line react/prop-types
             return <a href={props.href}>{props.children}</a>;
           }
           // TODO: when using a react-router redirect, scroll to heading ID if available
+          // eslint-disable-next-line react/prop-types
           return <Link to={props.href}>{props.children}</Link>;
         },
         pre(props) {
