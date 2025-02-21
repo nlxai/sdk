@@ -55,7 +55,7 @@ The snippet below:
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
   const { html, useTouchpointContext, Icons } = nlxai.touchpointUi;
-  const showTextButtonExampleWithContext = ({ data }) => {
+  const TextButtonExample = ({ data }) => {
     const { handler } = useTouchpointContext();
     return html`
       <TextButton
@@ -66,7 +66,7 @@ The snippet below:
     `; 
   };
   
-  const showIconButtonExampleWithContext = ({ data }) => {
+  const IconButtonExample = ({ data }) => {
   const { handler } = useTouchpointContext();
   console.log(data);
   return html`
@@ -93,7 +93,7 @@ The snippet below:
 ```javascript
 import { useTouchpointContext, TextButton, IconButton, Icons } from '@nlxai/touchpoint-ui';
 
-const showTextButtonExampleWithContext = ({ data }) => {
+const TextButtonExample = ({ data }) => {
   const { handler } = useTouchpointContext();
   return(
     <TextButton
@@ -104,7 +104,7 @@ const showTextButtonExampleWithContext = ({ data }) => {
   ); 
 };
 
-const showIconButtonExampleWithContext = ({ data }) => {
+const IconButtonExample = ({ data }) => {
   const { handler } = useTouchpointContext();
   console.log(data);
   return(
@@ -120,8 +120,6 @@ const showIconButtonExampleWithContext = ({ data }) => {
 
 ## Related Components
 
-- [CustomCard](/touchpoint-CustomCards) for button containers
-- [CustomCardRow](/touchpoint-CustomCards#customcardrow) for button layouts
-- [Typography](/touchpoint-Typography) for button labels
+- [Icons](/touchpoint-Icons) for list of Icons available in Touchpoint
 
-For theme customization options, see the [Theming Documentation](/touchpoint-ui-themeing).
+For theme customization options, see the [Theming Documentation](/touchpoint-ui-theming).

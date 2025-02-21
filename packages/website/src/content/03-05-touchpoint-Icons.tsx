@@ -1,9 +1,9 @@
 import { type FC } from "react";
-import customCardContent from "./03-05-touchpoint-Icons.md?raw";
+import iconContent from "./03-05-touchpoint-Icons.md?raw";
 
 import { PageContent } from "../components/PageContent";
 
-export const content = customCardContent;
+export const content = iconContent;
 
 export const navGroup: string = "Touchpoint components";
 

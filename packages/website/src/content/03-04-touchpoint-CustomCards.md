@@ -1,4 +1,4 @@
-The Custom Cards system provides a structured way to present information in your chat interface. The system consists of four components that work together: Carousel, CustomCard, CustomCardRow, and CustomCardImageRow..
+The Custom Cards system provides a structured way to present information in your chat interface. The system consists of four components that work together: 
 
 - **Carousel** - Top Level component, acts as a container for multiple horizontally scrolled cards. A Carousel has at least 1 CustomCard.
 - **CustomCard** - Primary component, is a 'card' made up of multiple rows. A CustomCard has at least 1 of CustomCardRow or CustomCardImageRow. CustomCard can be used outside Carousel.
@@ -99,7 +99,7 @@ The snippet below:
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
   const { useTouchpointContext, html, React } = nlxai.touchpointUi;
-  const carouselExample = ({ data }) => {
+  const CarouselExample = ({ data }) => {
     const { handler } = useTouchpointContext();
     const [selected, setSelected] = React.useState(null);
     return html`<Carousel>
@@ -145,7 +145,7 @@ import {
   React,
 } from "@nlxai/touchpoint-ui";
 
-const showButtonExampleWithContext = ({ data }) => {
+const CarouselExample = ({ data }) => {
   const { handler } = useTouchpointContext();
   const [selected, setSelected] = React.useState(null);
   return (
@@ -174,7 +174,6 @@ const showButtonExampleWithContext = ({ data }) => {
 ## Related Components
 
 - [Typography](/touchpoint-Typography) for Typography components
-- [TextButton](/touchpoint-Buttons) for card actions
 - [Icons](/touchpoint-Icons) for visual elements
 
-For theme customization options, see the [Theming Documentation](/touchpoint-ui-themeing).
+For theme customization options, see the [Theming Documentation](/touchpoint-ui-theming).

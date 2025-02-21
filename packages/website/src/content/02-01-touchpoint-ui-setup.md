@@ -34,23 +34,24 @@ These components can be imported and used within your custom modality components
 
 | Component   |   Description                               |
 |--------------|-------------------------------------------|
-| `BaseText`    |   Primary text component for main content   |
-| `SmallText`   |  Secondary text for supporting information |
+| [`BaseText`](/touchpoint-Typography)    |   Primary text component for main content   |
+| [`SmallText`](/touchpoint-Typography)   |  Secondary text for supporting information |
+| [`Icons`](/touchpoint-Icons) | Stylized Icons |
 
 #### Layout Components
 | Component            |  Description                          |
 |----------------------|---------------------------------------|
-| `Carousel`           |  Container for multiple card elements |
-| `CustomCard`         |  Individual card component            |
-| `CustomCardRow`      |  Horizontal layout within cards       |
-| `CustomCardImageRow` |  Specialized row for image content    |
+| [`Carousel`](/touchpoint-CustomCards)          |  Container for multiple card elements |
+| [`CustomCard`](/touchpoint-CustomCards)         |  Individual card component            |
+| [`CustomCardRow`](/touchpoint-CustomCards)      |  Horizontal layout within cards       |
+| [`CustomCardImageRow`](/touchpoint-CustomCards) |  Specialized row for image content    |
 
 #### Interactive Components
 
 | Component    | Description                          |
 |--------------|--------------------------------------|
-| `TextButton` | Text-based button with optional icon |
-| `IconButton` | Icon-only button for compact actions |
+| [`TextButton`](/touchpoint-Buttons) | Text-based button with optional icon |
+| [`IconButton`](/touchpoint-Buttons) | Icon-only button for compact actions |
 
 ## Instance Methods
 
@@ -62,10 +63,3 @@ The `create()` function returns a `TouchpointInstance` with these methods:
 | `collapse()`               | Collapses the chat widget                | void                |
 | `getConversationHandler()` | Returns the current conversation handler | ConversationHandler |
 | `teardown()`               | Removes the widget from the DOM          | void                |
-
-See the component-specific documentation for detailed usage information:
-- [Getting Started with Components](/touchpoint-ComponentsIntro)
-- [Typography](/touchpoint-Typography)
-- [Custom Cards](/touchpoint-CustomCards)
-- [Button Components](/touchpoint-Buttons)
-- [Icons](/touchpoint-Icons)

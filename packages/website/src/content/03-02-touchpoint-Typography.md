@@ -6,36 +6,47 @@ Touchpoint provides two typography elements, BaseText and SmallText, to provide 
 
 ## Import and Basic Usage
 
-You can import the typography elements from touchpoint once the package has been installed or made available in your project.
+You can import the typography elements from touchpoint once the package has been installed or made available in your project. 
+
+The following examples use both the BaseText and SmallText typography components to construct a [CustomCard](/touchpoint-CustomCards) with the "primary" (BaseText) information left aligned and "secondary" (SmallText) right aligned.
 
 ### Import using `<script>`
 
-Import the elements via `html` from Touchpoint. Useful when adding touchpoint to your project via `<script>`:
+Import the elements via `html` from Touchpoint. Useful when adding touchpoint to your project via `<script>`.
 
 ```html
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
   const { html } = nlxai.touchpointUi;
-  const showHtmlTextUsageExample = () => {
+  const ProductDetails = ({data}) => {
     return html`
-      <BaseText>PRIMARY_INFORMATION</BaseText>
-      <SmallText>secondary_information</SmallText>
-    `; 
+    <CustomCard>
+      <CustomCardRow
+        left=${html`<BaseText>${data.PrimaryInformation}</BaseText>`}
+        right=${html`<SmallText>${data.SecondaryInformation}</SmallText>`}
+      />
+    </CustomCard>`; 
   };
 </script>
 ```
 
 ### Import using `import`
 
-Import the elements to your project using import statements
+Import the elements to your project using import statements.
 
 ```javascript
-import { BaseText, SmallText } from '@nlxai/touchpoint-ui';
-
-<BaseText>PRIMARY_INFORMATION</BaseText>
-<SmallText>secondary_information</SmallText>
+import { BaseText, SmallText, CustomCard, CustomCardRow } from '@nlxai/touchpoint-ui';
+const ProductDetails = ({data}) => {
+  return (
+  <CustomCard>
+    <CustomCardRow
+      left={<BaseText>{data.PrimaryInformation}</BaseText>}
+      right={<SmallText>{data.SecondaryInformation}</SmallText>}
+    />
+  </CustomCard>); 
+};
 ```
 
 ## Related Components
-- [CustomCardRow](/touchpoint-CustomCards) for text layout
-- [TextButton](/touchpoint-Buttons) for interactive text
+- [CustomCards](/touchpoint-CustomCards) 
+- [Buttons](/touchpoint-Buttons)

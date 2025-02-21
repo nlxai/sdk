@@ -100,4 +100,4 @@ Secondary colors are used for backgrounds and supporting elements:
 | `innerBorderRadius` | Border radius for inner elements (buttons) |
 | `outerBorderRadius` | Border radius for outer elements (cards)   |
 
-See the [Setup Documentation](/touchpoint-ui-setup) for more information about configuration options.# Theming Your Touchpoint Interface
+See the [Setup Documentation](/touchpoint-ui-setup) for more information about configuration options.
