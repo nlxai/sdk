@@ -4,11 +4,11 @@ Touchpoint provides built-in icons that integrate with buttons and custom compon
 
 Each icon accepts these properties:
 
-| Property | Type | Description |
-|----------|------|-------------|
-| size | number | Icon size in pixels (default: 24) |
-| color | string | Icon color (inherits from parent) |
-| className | string | Additional CSS classes |
+| Property  | Type   | Description                       |
+| --------- | ------ | --------------------------------- |
+| size      | number | Icon size in pixels (default: 24) |
+| color     | string | Icon color (inherits from parent) |
+| className | string | Additional CSS classes            |
 
 ## Import and Basic Usage
 
@@ -18,11 +18,11 @@ You can import the Icons from touchpoint once the package has been installed or 
 
 Import the Icons from Touchpoint. Useful when adding touchpoint to your project via `<script>`:
 
-```javascript
+```html
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
   const { Icons } = nlxai.touchpointUi;
-  const myArrowForward = Icons.ArrowForward
+  const myArrowForward = Icons.ArrowForward;
 </script>
 ```
 
@@ -31,14 +31,14 @@ Import the Icons from Touchpoint. Useful when adding touchpoint to your project 
 Import the elements to your project using import statements.
 
 ```javascript
-import { Icons } from '@nlxai/touchpoint-ui';
-const myArrowForward = Icons.ArrowForward
+import { Icons } from "@nlxai/touchpoint-ui";
+const myArrowForward = Icons.ArrowForward;
 ```
 
-
 ## Related Components
+
 - [IconButton](/touchpoint-Buttons#iconbutton)
 - [TextButton](/touchpoint-Buttons#textbutton)
 - [CustomCardRow](/touchpoint-CustomCards#customcardrow)
 
-For styling options, see [Theming Documentation](/touchpoint-ui-themeing).
+For styling options, see [Theming Documentation](/touchpoint-ui-theming).

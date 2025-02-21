@@ -1,4 +1,5 @@
 import { type FC, type ReactNode, useState } from "react";
+import { Link } from "react-router-dom";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { CheckIcon, ContentCopyIcon } from "./Icons";
@@ -52,6 +53,9 @@ export const PageContent: FC<{ md: string }> = ({ md }) => (
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeRaw, rehypeSlug]}
       components={{
+        a(props) {
+          return <Link to={props.href}>{props.children}</Link>;
+        },
         pre(props) {
           return (
             <pre className="relative group !font-mono">{props.children}</pre>

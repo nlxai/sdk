@@ -25,6 +25,10 @@
   src: url("/fonts/neue-haas-grotesk/NHaasGroteskDSPro-75Bd.otf");
 }
 
+.prose th {
+  @apply text-left font-medium text-gray-500;
+}
+
 /* Carousel example */
 
 .slides-container {
@@ -279,6 +283,8 @@
 .chat-consent button:hover {
   color: var(--primaryColorLighter);
 }
+
+/* Syntax highlighting */
 
 .token.class-name,
 .token.function,

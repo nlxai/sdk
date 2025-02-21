@@ -12,7 +12,7 @@ You can import the typography elements from touchpoint once the package has been
 
 Import the elements via `html` from Touchpoint. Useful when adding touchpoint to your project via `<script>`:
 
-```javascript
+```html
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
   const { html } = nlxai.touchpointUi;

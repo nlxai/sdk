@@ -51,7 +51,7 @@ The snippet below:
 * Imports Touchpoint Icons to use in the IconButton.
 * Assumes a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) defined in your NLX application as an object with at least `buttonLabel` and `buttonId` properties.
 
-```javascript
+```html
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
   const { html, useTouchpointContext, Icons } = nlxai.touchpointUi;
