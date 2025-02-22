@@ -1,5 +1,7 @@
-import { type FC, Fragment } from "react";
+import { type FC, Fragment, useEffect } from "react";
 import { flatten, groupBy, sortBy } from "ramda";
+import { useLocation } from "react-router-dom";
+
 import { Routes, Route } from "react-router-dom";
 import { Prototyping } from "./components/Prototyping";
 import { PageTitle } from "./components/PageTitle";
@@ -82,6 +84,18 @@ const flattenedRoutes: RouteInfo[] = flatten(
 export const urls: string[] = flattenedRoutes.map(({ url }) => url);
 
 export const ContentRoutes: FC<unknown> = () => {
+  const location = useLocation();
+
+  // Scroll down to hash route if available
+  useEffect(() => {
+    setTimeout(() => {
+      const node = document.querySelector(location.hash);
+      if (node != null) {
+        node.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  }, [location.hash]);
+
   return (
     <Routes>
       {flattenedRoutes.map(({ url, heading, label, element }, index) => {
