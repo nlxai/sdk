@@ -26,7 +26,7 @@ export const App: FC<unknown> = () => {
       <Hero />
       <div className="relative mx-auto flex w-full max-w-8xl flex-auto justify-center">
         <Nav touchpoint={touchpoint} />
-        <div className="min-w-0 max-w-2xl flex-auto px-4 lg:px-8 py-16 lg:max-w-none xl:px-16 bg-background-docs">
+        <div className="min-w-0 max-w-2xl flex-auto px-4 lg:px-8 py-16 lg:max-w-none xl:px-16">
           <article>
             <ContentRoutes />
           </article>

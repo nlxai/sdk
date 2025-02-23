@@ -2,8 +2,8 @@ import { type FC } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, Link } from "react-router-dom";
 import { getFilteredRoutes } from "../routes";
-import { Logo } from "./Logo";
 import { Toggle } from "./Toggle";
+import { clsx } from "clsx";
 
 const MenuListItem: FC<{
   heading: string;
@@ -14,20 +14,19 @@ const MenuListItem: FC<{
     location.pathname === "/" ? "/getting-started" : location.pathname;
   return (
     <li>
-      <h2 className="font-display font-medium text-primary-80">
-        {props.heading}
-      </h2>
+      <h2 className="text-primary-90">{props.heading}</h2>
       <ul role="list" className="mt-2 space-y-2 lg:mt-4 lg:space-y-4">
         {props.items.map((item, index) => {
           const active = pathname === item.url;
           return (
             <li className="relative" key={index}>
               <Link
-                className={`block ${
+                className={clsx(
+                  "block",
                   active
                     ? "font-medium text-accent"
-                    : "text-primary-60 hover:text-primary-80"
-                }`}
+                    : "text-primary-60 hover:text-primary-80",
+                )}
                 to={item.url}
               >
                 {item.label}
@@ -43,7 +42,7 @@ const MenuListItem: FC<{
 export const Nav: FC<{
   touchpoint: boolean;
 }> = ({ touchpoint }) => (
-  <div className="hidden bg-background-docs lg:relative lg:block lg:flex-none">
+  <div className="hidden lg:relative lg:block lg:flex-none">
     <div className="sticky top-[4.75rem] -ml-0.5 h-[calc(100vh-4.75rem)] w-64 overflow-y-auto overflow-x-hidden px-4 py-16">
       <nav className="text-base lg:text-sm">
         <ul role="list" className="space-y-9">
@@ -69,94 +68,80 @@ export const MobileNav: FC<{
   const pathname =
     location.pathname === "/" ? "/getting-started" : location.pathname;
   return createPortal(
-    <div>
-      <div>
-        <div
-          className="fixed inset-0 z-50 flex items-start overflow-y-auto bg-slate-900/50 pr-10 backdrop-blur lg:hidden"
-          aria-label="Navigation"
-          role="dialog"
-          aria-modal="true"
+    <div
+      className="fixed inset-0 z-50 items-start overflow-y-auto bg-background-docs backdrop-blur lg:hidden p-4"
+      aria-label="Navigation"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div className="flex items-center justify-between p-2">
+        <button
+          type="button"
+          aria-label="Close navigation"
+          className="text-primary-60 hover:text-primary-80"
+          tabIndex={0}
+          onClick={() => {
+            props.setMobileMenuExpanded(false);
+          }}
         >
-          <div
-            className="min-h-full w-full max-w-xs bg-white px-4 pb-12 pt-5 sm:px-6"
-            data-headlessui-state="open"
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            strokeWidth="2"
+            strokeLinecap="round"
+            stroke="currentColor"
+            className="h-6 w-6"
           >
-            <div className="flex items-center">
-              <button
-                type="button"
-                aria-label="Close navigation"
-                tabIndex={0}
-                onClick={() => {
-                  props.setMobileMenuExpanded(false);
-                }}
-              >
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  className="h-6 w-6 stroke-slate-500"
-                >
-                  <path d="M5 5l14 14M19 5l-14 14"></path>
-                </svg>
-              </button>
-              <a className="ml-6" aria-label="Home page" href="/">
-                <Logo size={32} />
-              </a>
-            </div>
-            <Toggle
-              className="mt-4"
-              value={props.touchpoint}
-              options={[
-                { value: true, label: "Touchpoint (beta)" },
-                { value: false, label: "Chat Widget" },
-              ]}
-              onChange={(val) => {
-                props.setTouchpoint(val);
-              }}
-            />
-            <nav className="text-base lg:text-sm mt-5 px-1">
-              <ul role="list" className="space-y-9">
-                {getFilteredRoutes({ touchpoint: props.touchpoint }).map(
-                  (route, routeIndex) => (
-                    <li key={routeIndex}>
-                      <h2 className="font-display font-medium text-slate-900 ">
-                        {route.heading}
-                      </h2>
-                      <ul
-                        role="list"
-                        className="mt-2 space-y-2 border-l-2 border-slate-100 lg:mt-4 lg:space-y-4 lg:border-slate-200"
-                      >
-                        {route.items.map((item, itemIndex) => {
-                          const active = pathname === item.url;
-                          return (
-                            <li className="relative" key={itemIndex}>
-                              <Link
-                                className={`block w-full pl-3.5 before:pointer-events-none before:absolute before:-left-1 before:top-1/2 before:h-1.5 before:w-1.5 before:-translate-y-1/2 before:rounded-full ${
-                                  active
-                                    ? "font-medium text-blueMain before:bg-blueMain"
-                                    : "text-slate-500 before:hidden before:bg-slate-300 hover:text-slate-600 hover:before:block"
-                                }`}
-                                to={item.url}
-                                onClick={() => {
-                                  props.setMobileMenuExpanded(false);
-                                }}
-                              >
-                                {item.label}
-                              </Link>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </li>
-                  ),
-                )}
-              </ul>
-            </nav>
-          </div>
-        </div>
+            <path d="M5 5l14 14M19 5l-14 14"></path>
+          </svg>
+        </button>
+        <Toggle
+          value={props.touchpoint}
+          options={[
+            { value: true, label: "Touchpoint (beta)" },
+            { value: false, label: "Chat Widget" },
+          ]}
+          onChange={(val) => {
+            props.setTouchpoint(val);
+          }}
+        />
       </div>
+
+      <nav className="text-base lg:text-sm mt-5 px-1">
+        <ul role="list" className="space-y-9">
+          {getFilteredRoutes({ touchpoint: props.touchpoint }).map(
+            (route, routeIndex) => (
+              <li key={routeIndex}>
+                <h2 className="text-primary-90">{route.heading}</h2>
+                <ul role="list" className="mt-2 space-y-2 lg:mt-4 lg:space-y-4">
+                  {route.items.map((item, itemIndex) => {
+                    const active = pathname === item.url;
+                    return (
+                      <li className="relative" key={itemIndex}>
+                        <Link
+                          className={clsx(
+                            "block",
+                            active
+                              ? "font-medium text-accent"
+                              : "text-primary-60 hover:text-primary-80",
+                          )}
+                          to={item.url}
+                          onClick={() => {
+                            props.setMobileMenuExpanded(false);
+                          }}
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </li>
+            ),
+          )}
+        </ul>
+      </nav>
     </div>,
     // initial eslint integration
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

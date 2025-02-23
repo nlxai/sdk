@@ -17,7 +17,7 @@ export const Header: FC<{
     <div className="mr-6 flex lg:hidden">
       <button
         type="button"
-        className="relative"
+        className="relative text-primary-60 hover:text-primary-80"
         aria-label="Open navigation"
         onClick={() => {
           props.setMobileMenuExpanded(true);
@@ -29,28 +29,26 @@ export const Header: FC<{
           fill="none"
           strokeWidth="2"
           strokeLinecap="round"
-          className="h-6 w-6 stroke-slate-500"
+          stroke="currentColor"
+          className="h-6 w-6"
         >
           <path d="M4 7h16M4 12h16M4 17h16"></path>
         </svg>
       </button>
     </div>
-    <div>
-      <Link
-        className="relative flex flex-grow basis-0 items-center gap-3 text-primary-80"
-        to="/"
-        aria-label="Home page"
-      >
-        <span className="relative -top-[1px]">
-          <Logo size={26} />
-        </span>
-        <span className="h-5 border-l border-primary-40 inline-block"></span>
-        <span className="block" aria-label="Home page">
-          <span className="text-primary-60">Developer</span>{" "}
-          <span className="text-primary-80">Docs</span>
-        </span>
-      </Link>
-    </div>
+    <Link
+      className="relative flex flex-grow basis-0 items-center gap-3 text-primary-80"
+      to="/"
+    >
+      <span className="relative -top-[1px]">
+        <Logo size={26} />
+      </span>
+      <span className="h-5 border-l border-primary-40 inline-block"></span>
+      <span className="block" aria-label="Home page">
+        <span className="text-primary-60">Developer</span>{" "}
+        <span className="text-primary-80">Docs</span>
+      </span>
+    </Link>
     <div className="relative flex basis-0 justify-end gap-4 md:flex-grow items-center">
       <Toggle
         className="hidden md:inline-flex"

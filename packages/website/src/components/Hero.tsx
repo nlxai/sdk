@@ -34,7 +34,7 @@ export const Hero: FC<unknown> = () => {
               </p>
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
                 <button
-                  className="rounded-xl bg-accent hover:bg-lightBlueDarker text-secondary-80 py-1.5 px-8 text-sm focus:outline-none"
+                  className="rounded-xl bg-accent text-secondary-80 py-1.5 px-8 text-sm focus:outline-none"
                   onClick={() => {
                     document.querySelector("article")?.scrollIntoView({
                       block: "start",
@@ -45,7 +45,7 @@ export const Hero: FC<unknown> = () => {
                   Get started
                 </button>
                 <a
-                  className="rounded-xl bg-accent-20 hover:bg-lightBlueDarker text-accent py-1.5 px-8 text-sm focus:outline-none"
+                  className="rounded-xl bg-accent-20 text-accent py-1.5 px-8 text-sm focus:outline-none"
                   href="https://github.com/nlxai/sdk"
                 >
                   View on GitHub
