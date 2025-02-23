@@ -6,13 +6,13 @@ import { Escalate, Restart } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
 import { clsx } from "clsx";
 
-interface ChatSettingsProps {
+interface SettingsProps {
   onClose: () => void;
   handler: ConversationHandler;
   className?: string;
 }
 
-export const ChatSettings: FC<ChatSettingsProps> = ({
+export const Settings: FC<SettingsProps> = ({
   onClose,
   handler,
   className,

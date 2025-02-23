@@ -18,10 +18,10 @@ import { clsx } from "clsx";
 import { IconButton } from "./ui/IconButton";
 import { ArrowForward, Attachment, Delete, Check, Error } from "./ui/Icons";
 import { type ChoiceMessage } from "../types";
-import { MessageChoices } from "./ChatMessages";
+import { MessageChoices } from "./Messages";
 import { useTailwindMediaQuery } from "../hooks";
 
-interface ChatInputProps {
+interface InputProps {
   className?: string;
   handler: ConversationHandler;
   uploadUrl?: UploadUrl;
@@ -37,7 +37,7 @@ interface FileInfo {
 
 const MAX_INPUT_FILE_SIZE_IN_MB = 8;
 
-const ChatInput: FC<ChatInputProps> = ({
+export const Input: FC<InputProps> = ({
   className,
   choiceMessage,
   handler,
@@ -286,5 +286,3 @@ const ChatInput: FC<ChatInputProps> = ({
     </div>
   );
 };
-
-export default ChatInput;

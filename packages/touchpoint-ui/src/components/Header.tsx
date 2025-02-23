@@ -7,7 +7,7 @@ import { type WindowSize, type ColorMode } from "../types";
 import { useTailwindMediaQuery } from "../hooks";
 import { Close, Settings, Undo } from "./ui/Icons";
 
-interface ChatHeaderProps {
+interface HeaderProps {
   windowSize: WindowSize;
   colorMode: ColorMode;
   brandIcon?: string;
@@ -17,7 +17,7 @@ interface ChatHeaderProps {
   isSettingsOpen: boolean;
 }
 
-export const ChatHeader: FC<ChatHeaderProps> = ({
+export const Header: FC<HeaderProps> = ({
   windowSize,
   collapse,
   toggleSettings,

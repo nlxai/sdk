@@ -1,11 +1,8 @@
 import { type FC } from "react";
 import { PageContent } from "../components/PageContent";
+import themeContent from "./02-02-touchpoint-ui-theming.md?raw";
 
-export const content = `
-Touchpoint exposes a number of style theme parameters that can be customized under the \`theme\` configuration option:
-- \`fontFamily\`: the font setting for the widget.
-- \`accent\`: the general accent color, used for the loading animation or selected cards.
-`;
+export const content = themeContent;
 
 export const navGroup: string = "Touchpoint";
 

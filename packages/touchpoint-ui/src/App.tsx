@@ -11,6 +11,7 @@ import {
 import {
   type ConversationHandler,
   createConversation,
+  isConfigValid,
   type Subscriber,
   type Response,
   type Config,
@@ -20,10 +21,11 @@ import { clsx } from "clsx";
 import { findLastIndex } from "ramda";
 
 import { LaunchButton } from "./components/ui/LaunchButton";
-import { ChatHeader } from "./components/ChatHeader";
-import { ChatSettings } from "./components/ChatSettings";
-import { ChatMessages } from "./components/ChatMessages";
-import ChatInput from "./components/ChatInput";
+import { Header } from "./components/Header";
+import { Settings } from "./components/Settings";
+import { Messages } from "./components/Messages";
+import { FullscreenError } from "./components/FullscreenError";
+import { Input } from "./components/Input";
 import {
   type ColorMode,
   type WindowSize,
@@ -68,6 +70,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   const colorMode = props.colorMode ?? "dark";
 
   const [isExpanded, setIsExpanded] = useState(isDev);
+
+  const configValid = isConfigValid(props.config);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
@@ -185,7 +189,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               },
             )}
           >
-            <ChatHeader
+            <Header
               windowSize={windowSize}
               colorMode={colorMode}
               brandIcon={props.brandIcon}
@@ -202,7 +206,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               }}
             />
             {isSettingsOpen ? (
-              <ChatSettings
+              <Settings
                 className={clsx(
                   "flex-none",
                   windowSize === "full"
@@ -216,22 +220,26 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               />
             ) : (
               <>
-                <ChatMessages
-                  isWaiting={isWaiting}
-                  lastBotResponseIndex={lastBotResponse?.index}
-                  responses={responses}
-                  colorMode={colorMode}
-                  handler={handler}
-                  uploadedFiles={uploadedFiles}
-                  customModalities={customModalities}
-                  className={clsx(
-                    "flex-grow",
-                    windowSize === "full"
-                      ? "w-full md:max-w-content md:mx-auto"
-                      : "",
-                  )}
-                />
-                <ChatInput
+                {configValid ? (
+                  <Messages
+                    isWaiting={isWaiting}
+                    lastBotResponseIndex={lastBotResponse?.index}
+                    responses={responses}
+                    colorMode={colorMode}
+                    handler={handler}
+                    uploadedFiles={uploadedFiles}
+                    customModalities={customModalities}
+                    className={clsx(
+                      "flex-grow",
+                      windowSize === "full"
+                        ? "w-full md:max-w-content md:mx-auto"
+                        : "",
+                    )}
+                  />
+                ) : (
+                  <FullscreenError />
+                )}
+                <Input
                   className={clsx(
                     "flex-none",
                     windowSize === "full"

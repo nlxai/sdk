@@ -26,8 +26,6 @@ export const npmUrls = {
   chatReact: "https://www.npmjs.com/package/@nlxai/chat-react",
   chatPreact: "https://www.npmjs.com/package/@nlxai/chat-preact",
   chatWidget: "https://www.npmjs.com/package/@nlxai/chat-widget",
-  voicePlusCore:
-    "https://www.npmjs.com/package/@nlxai/voice-plus-core",
-  voicePlusWeb:
-    "https://www.npmjs.com/package/@nlxai/voice-plus-web",
-}
+  voicePlusCore: "https://www.npmjs.com/package/@nlxai/voice-plus-core",
+  voicePlusWeb: "https://www.npmjs.com/package/@nlxai/voice-plus-web",
+};

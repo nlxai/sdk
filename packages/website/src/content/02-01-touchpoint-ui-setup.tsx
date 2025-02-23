@@ -2,18 +2,20 @@ import { type FC } from "react";
 
 import { PageContent } from "../components/PageContent";
 import { touchpointUiSetupSnippet } from "../snippets";
+import configOptions from "./02-01-touchpoint-ui-setup.md?raw";
 
 export const content = `
-The simplest way to talk to an application is to include an out-of-the-box Touchpoint widget on your existing website.
+The NLX Touchpoint widget provides a customizable chat interface that you can embed in your web applications. This widget allows users to interact with your bot and provides a seamless conversational experience.
 
+## Quick Start
+
+Add the following code to your HTML file:
 ~~~html
 ${touchpointUiSetupSnippet({
   config: { botUrl: "", languageCode: "en-US", headers: { "nlx-api-key": "" } },
 })}
 ~~~
-
-In this snippet, the script is deferred in order to reduce impact on page speed. After the script is initialized, we use the \`nlxai.touchpointUi\` global to instantiate the widget. The following parameters are used:
-- \`config\`: the [bot configuration](/headless-api-reference#interfacesconfigmd), including the bot URL obtained and headers obtained from the deployment of your bot.
+${configOptions}
 `;
 
 export const navGroup: string = "Touchpoint";
