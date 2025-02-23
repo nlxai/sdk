@@ -51,8 +51,11 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
   </div>
 );
 
-export const PageContent: FC<{ md: string }> = ({ md }) => (
-  <Prose>
+export const PageContent: FC<{ md: string; className?: string }> = ({
+  md,
+  className,
+}) => (
+  <Prose className={className}>
     <Markdown
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeRaw, rehypeSlug]}

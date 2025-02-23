@@ -114,25 +114,29 @@ export const Content: FC<unknown> = () => {
   return (
     <>
       <PageContent md={content} />
-      <Note
-        title="Important"
-        body="In order for the bot communication to work (i.e., not trigger CORS errors), make sure that the URL of your webpage is added to the whitelisted URL list of your API channel in Dialog Studio."
-      />
-      <div className="mt-6 space-y-4">
-        <ConfigEditor
-          value={config}
-          onChange={(val: any) => {
-            setConfig((prev) => ({ ...prev, ...val }));
-          }}
-        />
-        <ThemeEditor value={theme} onChange={setTheme} />
-        <PageContent
-          md={snippetContent({
-            config,
-            theme,
-          })}
-        />
+      <div className="mt-6 grid lg:grid-cols-2 gap-8">
+        <div className="space-y-4">
+          <h3 className="text-xl">Setup</h3>
+          <Note body="In order for the bot communication to work (i.e., not trigger CORS errors), make sure that the URL of your webpage is added to the whitelisted URL list of your API channel in Dialog Studio." />
+          <ConfigEditor
+            value={config}
+            onChange={(val: any) => {
+              setConfig((prev) => ({ ...prev, ...val }));
+            }}
+          />
+        </div>
+        <div className="space-y-4">
+          <h3 className="text-xl">Theme</h3>
+          <ThemeEditor value={theme} onChange={setTheme} />
+        </div>
       </div>
+      <PageContent
+        className="mt-8"
+        md={snippetContent({
+          config,
+          theme,
+        })}
+      />
     </>
   );
 };

@@ -68,10 +68,7 @@ export const Content: FC<unknown> = () => {
         ]}
       />
       <PageContent md={content} />
-      <Note
-        title="Note"
-        body="Compatible data must be sent from the bot configuration along with the 'Carousel' modality in order for the presentation layer to work."
-      />
+      <Note body="Compatible data must be sent from the bot configuration along with the 'Carousel' modality in order for the presentation layer to work." />
     </>
   );
 };

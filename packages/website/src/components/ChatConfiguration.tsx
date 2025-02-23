@@ -191,7 +191,7 @@ export const ThemeEditor: FC<{
             props.onChange({ spacing: Number(ev.target.value) });
           }}
         />
-        <span className="text-xs text-gray-700">{theme.spacing}px</span>
+        <span className="text-xs text-primary-60">{theme.spacing}px</span>
       </Labeled>
       <Labeled label="Border radius">
         <input
@@ -204,7 +204,7 @@ export const ThemeEditor: FC<{
             props.onChange({ borderRadius: Number(ev.target.value) });
           }}
         />
-        <span className="text-xs text-gray-700">{theme.borderRadius}px</span>
+        <span className="text-xs text-primary-60">{theme.borderRadius}px</span>
       </Labeled>
     </div>
   );
