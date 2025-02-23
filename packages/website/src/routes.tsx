@@ -1,8 +1,7 @@
 import { type FC, Fragment, useEffect } from "react";
 import { flatten, groupBy, sortBy } from "ramda";
-import { useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
-import { Routes, Route } from "react-router-dom";
 import { Prototyping } from "./components/Prototyping";
 import { PageTitle } from "./components/PageTitle";
 import { NextPrevPage } from "./components/NextPrevPage";
