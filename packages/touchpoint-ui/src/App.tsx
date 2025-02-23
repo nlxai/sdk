@@ -21,10 +21,11 @@ import { clsx } from "clsx";
 import { findLastIndex } from "ramda";
 
 import { LaunchButton } from "./components/ui/LaunchButton";
-import { ChatHeader } from "./components/ChatHeader";
-import { ChatSettings } from "./components/ChatSettings";
-import { ChatMessages } from "./components/ChatMessages";
-import ChatInput from "./components/ChatInput";
+import { Header } from "./components/Header";
+import { Settings } from "./components/Settings";
+import { Messages } from "./components/Messages";
+import { FullscreenError } from "./components/FullscreenError";
+import { Input } from "./components/Input";
 import {
   type ColorMode,
   type WindowSize,
@@ -34,7 +35,6 @@ import {
 } from "./types";
 import { Context } from "./context";
 import { CustomPropertiesContainer } from "./components/Theme";
-import { Assistant } from "./components/ui/Icons";
 
 export interface Props {
   config: Config;
@@ -189,7 +189,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               },
             )}
           >
-            <ChatHeader
+            <Header
               windowSize={windowSize}
               colorMode={colorMode}
               brandIcon={props.brandIcon}
@@ -206,7 +206,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               }}
             />
             {isSettingsOpen ? (
-              <ChatSettings
+              <Settings
                 className={clsx(
                   "flex-none",
                   windowSize === "full"
@@ -221,7 +221,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             ) : (
               <>
                 {configValid ? (
-                  <ChatMessages
+                  <Messages
                     isWaiting={isWaiting}
                     lastBotResponseIndex={lastBotResponse?.index}
                     responses={responses}
@@ -237,16 +237,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                     )}
                   />
                 ) : (
-                  <div className="flex-grow flex flex-col items-center justify-center gap-2">
-                    <Assistant className="w-20 h-20 text-primary-20" />
-                    <h3 className="text-xl">Oops!</h3>
-                    <div className="text-center">
-                      <p>Something went wrong.</p>
-                      <p>Try again later.</p>
-                    </div>
-                  </div>
+                  <FullscreenError />
                 )}
-                <ChatInput
+                <Input
                   className={clsx(
                     "flex-none",
                     windowSize === "full"
