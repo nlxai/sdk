@@ -90,7 +90,7 @@ export const Content: FC<unknown> = () => {
 
   const [theme, setTheme] = useState<EditableTheme>({
     fontFamily: defaultFont,
-    accent: "#2663DA",
+    accent: "#AECAFF",
   });
 
   useEffect(() => {
