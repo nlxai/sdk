@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import { type FC } from "react";
 import { clsx } from "clsx";
 
