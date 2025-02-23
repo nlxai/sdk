@@ -1,11 +1,13 @@
 import { type FC, type ReactNode, useState } from "react";
+import { clsx } from "clsx";
 import { Link } from "react-router-dom";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { CheckIcon, ContentCopyIcon } from "./Icons";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
+
+import { CheckIcon, ContentCopyIcon } from "./Icons";
 
 const CopyToClipboardButton: FC<{ text: string; className?: string }> = ({
   text,
@@ -39,9 +41,11 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
   className,
 }) => (
   <div
-    className={`prose prose-slate max-w-none prose-headings:scroll-mt-28 prose-headings:font-display prose-headings:font-normal lg:prose-headings:scroll-mt-[8.5rem] prose-lead:text-slate-500 prose-a:font-medium prose-a:no-underline prose-a:shadow-[inset_0_-2px_0_0_var(--tw-prose-background,#fff),inset_0_calc(-1*(var(--tw-prose-underline-size,4px)+2px))_0_0_var(--tw-prose-underline,theme(colors.blue.300))] hover:prose-a:[--tw-prose-underline-size:6px]] prose-pre:rounded-xl prose-pre:bg-slate-900 prose-pre:shadow-lg ${
-      className ?? ""
-    }`}
+    className={clsx(
+      "prose prose-docs max-w-none prose-headings:scroll-mt-28 prose-headings:font-display prose-headings:font-normal lg:prose-headings:scroll-mt-[8.5rem]",
+      "prose-a:font-medium prose-a:no-underline prose-pre:rounded-xl prose-pre:bg-secondary-40 prose-pre:shadow-lg",
+      className,
+    )}
   >
     {children}
   </div>
@@ -82,15 +86,14 @@ export const PageContent: FC<{ md: string }> = ({ md }) => (
               />
               {match ? (
                 <SyntaxHighlighter
-                  // initial eslint integration
-                  // eslint-disable-next-line react/no-children-prop
-                  children={lines}
                   style={{}}
                   useInlineStyles={false}
                   showLineNumbers={true}
                   language={match[1]}
                   PreTag="div"
-                />
+                >
+                  {lines}
+                </SyntaxHighlighter>
               ) : (
                 <code {...rest} className={className}>
                   {children}

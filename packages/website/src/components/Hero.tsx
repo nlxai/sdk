@@ -1,12 +1,12 @@
+import { type FC } from "react";
 import { useLocation } from "react-router-dom";
+
 import { Disclaimer } from "../custom-components/Disclaimer";
 import { FeedbackForm } from "../custom-components/FeedbackForm";
 import { Carousel, carouselExampleData } from "../custom-components/Carousel";
 import { InlineWidget } from "../components/InlineWidget";
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const Hero = () => {
+export const Hero: FC<unknown> = () => {
   const location = useLocation();
   const pathname =
     location.pathname === "/" ? "/getting-started" : location.pathname;
@@ -21,24 +21,20 @@ export const Hero = () => {
       }}
     >
       <div className="py-16 sm:px-2 lg:relative lg:px-0 lg:py-20">
-        <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 lg:max-w-8xl lg:grid-cols-2 lg:px-8 xl:gap-x-16 xl:px-12">
-          <div className="relative z-10 md:text-center lg:text-left">
+        <div className="mx-auto grid max-w-4xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 lg:max-w-8xl lg:grid-cols-2 lg:px-8 xl:gap-x-16 xl:px-12">
+          <div className="relative z-10 md:text-center lg:text-left text-primary-90">
             <div className="relative">
-              <p className="inline text-white font-display text-5xl">
-                SDK for rich conversational experiences powered by{" "}
-                <a href="https://nlx.ai" target="_blank" rel="noreferrer">
-                  NLX
-                </a>
-                &reg;
+              <p className="inline text-white font-display text-4xl">
+                SDK for rich conversational experiences powered by NLX®
               </p>
-              <p className="mt-3 text-2xl text-white65">
+              <p className="mt-3 text-base">
                 Add chat and Voice+ capabilities to your page in minutes.
                 Introduce fully custom components with only a dozen lines of
                 code, or engineer from the ground up yourself.
               </p>
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
                 <button
-                  className="rounded-xl bg-lightBlueMain hover:bg-lightBlueDarker text-black80 py-2 px-6 text-sm hover:bg-gray-900 focus:outline-none"
+                  className="rounded-xl bg-accent hover:bg-lightBlueDarker text-secondary-80 py-1.5 px-8 text-sm focus:outline-none"
                   onClick={() => {
                     document.querySelector("article")?.scrollIntoView({
                       block: "start",
@@ -46,13 +42,13 @@ export const Hero = () => {
                     });
                   }}
                 >
-                  get started
+                  Get started
                 </button>
                 <a
-                  className="rounded-xl bg-lightBlueMain hover:bg-lightBlueDarker text-black80 py-2 px-6 text-sm hover:bg-gray-900 focus:outline-none"
+                  className="rounded-xl bg-accent-20 hover:bg-lightBlueDarker text-accent py-1.5 px-8 text-sm focus:outline-none"
                   href="https://github.com/nlxai/sdk"
                 >
-                  view on GitHub
+                  View on GitHub
                 </a>
               </div>
             </div>

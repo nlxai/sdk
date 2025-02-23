@@ -1,9 +1,9 @@
 import { type FC } from "react";
 import { Link } from "react-router-dom";
-import { Logo } from "./Logo";
-
 import { DocSearch } from "@docsearch/react";
 import "@docsearch/css";
+
+import { Logo } from "./Logo";
 import "./Header.css";
 import { Toggle } from "./Toggle";
 
@@ -13,7 +13,7 @@ export const Header: FC<{
   mobileMenuExpanded: boolean;
   setMobileMenuExpanded: (val: boolean) => void;
 }> = (props) => (
-  <header className="sticky top-0 z-50 flex flex-none flex-wrap items-center justify-between bg-white px-4 py-5 shadow-md shadow-slate-900/5 transition duration-500 sm:px-6 lg:px-8">
+  <header className="sticky top-0 z-50 flex flex-none flex-wrap items-center justify-between bg-background-docs border-b border-primary-10 text-primary-80 px-4 py-5 sm:px-6 lg:px-8">
     <div className="mr-6 flex lg:hidden">
       <button
         type="button"
@@ -37,20 +37,23 @@ export const Header: FC<{
     </div>
     <div>
       <Link
-        className="relative flex flex-grow basis-0 items-center text-black space-x-3"
+        className="relative flex flex-grow basis-0 items-center gap-3 text-primary-80"
         to="/"
         aria-label="Home page"
       >
-        <Logo />
-        <span className="h-6 mx-3 border-l border-gray-300 inline-block"></span>
+        <span className="relative -top-[1px]">
+          <Logo size={26} />
+        </span>
+        <span className="h-5 border-l border-primary-40 inline-block"></span>
         <span className="block" aria-label="Home page">
-          Developers
+          <span className="text-primary-60">Developer</span>{" "}
+          <span className="text-primary-80">Docs</span>
         </span>
       </Link>
     </div>
     <div className="relative flex basis-0 justify-end gap-4 md:flex-grow items-center">
       <Toggle
-        className="hidden md:block"
+        className="hidden md:inline-flex"
         value={props.touchpoint}
         options={[
           { value: true, label: "Touchpoint (beta)" },

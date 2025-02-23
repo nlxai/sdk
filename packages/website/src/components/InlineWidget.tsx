@@ -1,14 +1,13 @@
 import { type FC, type ReactNode, useEffect, useState, useRef } from "react";
 import { last, flatten } from "ramda";
+import { clsx } from "clsx";
 
 export type Item =
   | { type: "user"; message: string }
   | { type: "bot"; message: string }
   | { type: "custom"; element: ReactNode };
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-const Loader: FC<{}> = () => (
+const Loader: FC<unknown> = () => (
   <div className="inline-flex items-center py-1 space-x-1">
     <div className="w-1.5 h-1.5 animate-bounce rounded-full bg-current"></div>
     <div
@@ -110,11 +109,10 @@ export const InlineWidget: FC<{
 
   return (
     <div
-      className={`rounded-xl max-w-sm max-h-[440px] shadow-lg overflow-hidden flex flex-col ${
-        // initial eslint integration
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-        props.className || ""
-      }`}
+      className={clsx(
+        "rounded-xl max-w-sm max-h-[440px] shadow-lg overflow-hidden flex flex-col text-gray-900",
+        props.className,
+      )}
     >
       <div className="bg-blueMain text-white text-sm flex-none px-4 py-3">
         Support chat

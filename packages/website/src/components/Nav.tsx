@@ -14,22 +14,19 @@ const MenuListItem: FC<{
     location.pathname === "/" ? "/getting-started" : location.pathname;
   return (
     <li>
-      <h2 className="font-display font-medium text-slate-700">
+      <h2 className="font-display font-medium text-primary-80">
         {props.heading}
       </h2>
-      <ul
-        role="list"
-        className="mt-2 space-y-2 border-l-2 border-slate-100 lg:mt-4 lg:space-y-4 lg:border-slate-200"
-      >
+      <ul role="list" className="mt-2 space-y-2 lg:mt-4 lg:space-y-4">
         {props.items.map((item, index) => {
           const active = pathname === item.url;
           return (
             <li className="relative" key={index}>
               <Link
-                className={`block w-full pl-3.5 before:pointer-events-none before:absolute before:-left-1 before:top-1/2 before:h-1.5 before:w-1.5 before:-translate-y-1/2 before:rounded-full ${
+                className={`block ${
                   active
-                    ? "font-medium text-blueMain before:bg-blueMain"
-                    : "text-slate-500 before:hidden before:bg-slate-300 hover:text-slate-600 hover:before:block"
+                    ? "font-medium text-accent"
+                    : "text-primary-60 hover:text-primary-80"
                 }`}
                 to={item.url}
               >
@@ -46,11 +43,8 @@ const MenuListItem: FC<{
 export const Nav: FC<{
   touchpoint: boolean;
 }> = ({ touchpoint }) => (
-  <div className="hidden lg:relative lg:block lg:flex-none">
-    <div className="absolute inset-y-0 right-0 w-[50vw] bg-gray-50"></div>
-    <div className="absolute bottom-0 right-0 top-16 hidden h-12 w-px bg-gradient-to-t from-slate-800"></div>
-    <div className="absolute bottom-0 right-0 top-28 hidden w-px bg-slate-800"></div>
-    <div className="sticky top-[4.75rem] -ml-0.5 h-[calc(100vh-4.75rem)] w-64 overflow-y-auto overflow-x-hidden py-16 pl-0.5 pr-8 xl:w-72 xl:pr-16">
+  <div className="hidden bg-background-docs lg:relative lg:block lg:flex-none">
+    <div className="sticky top-[4.75rem] -ml-0.5 h-[calc(100vh-4.75rem)] w-64 overflow-y-auto overflow-x-hidden px-4 py-16">
       <nav className="text-base lg:text-sm">
         <ul role="list" className="space-y-9">
           {getFilteredRoutes({ touchpoint }).map((route, index) => (
