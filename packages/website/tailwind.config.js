@@ -23,8 +23,8 @@ export default {
             "--tw-prose-quote-borders": "var(--color-pink-300)",
             "--tw-prose-captions": "var(--color-pink-700)",
             "--tw-prose-code": "var(--color-pink-900)",
-            "--tw-prose-pre-code": "var(--primary-80)",
-            "--tw-prose-pre-bg": "var(--color-pink-900)",
+            "--tw-prose-pre-code": "var(--primary-20)",
+            "--tw-prose-pre-bg": "var(--primary-20)",
             "--tw-prose-th-borders": "var(--primary-20)",
             "--tw-prose-td-borders": "var(--primary-20)",
             "--tw-prose-invert-body": "var(--color-pink-200)",
@@ -40,7 +40,7 @@ export default {
             "--tw-prose-invert-captions": "var(--color-pink-400)",
             "--tw-prose-invert-code": "var(--color-white)",
             "--tw-prose-invert-pre-code": "var(--color-pink-300)",
-            "--tw-prose-invert-pre-bg": "rgb(0 0 0 / 50%)",
+            "--tw-prose-invert-pre-bg": "var(--primary-20)",
             "--tw-prose-invert-th-borders": "var(--color-pink-600)",
             "--tw-prose-invert-td-borders": "var(--color-pink-700)",
           },
@@ -85,6 +85,7 @@ export default {
         "error-secondary": "var(--error-secondary)",
         // Not part of the regular Touchpoint theme
         "primary-90": "rgba(255, 255, 255, 0.9)",
+        "accent-50": "rgba(174, 202, 255, 0.50)",
         "background-docs": "#26282D",
 
         // Legacy colors

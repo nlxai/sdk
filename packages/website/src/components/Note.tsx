@@ -1,9 +1,17 @@
 import { type FC } from "react";
 import Markdown from "react-markdown";
+import { clsx } from "clsx";
 
-export const Note: FC<{ title?: string; body: string }> = (props) => {
+export const Note: FC<{ title?: string; body: string; className?: string }> = (
+  props,
+) => {
   return (
-    <div className="flex gap-2 rounded-lg p-2 bg-primary-10 text-primary-60">
+    <div
+      className={clsx(
+        "flex gap-2 rounded-lg p-2 bg-primary-10 text-primary-60",
+        props.className,
+      )}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"

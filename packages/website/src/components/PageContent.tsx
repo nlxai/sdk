@@ -43,7 +43,7 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
   <div
     className={clsx(
       "prose prose-docs max-w-none prose-headings:scroll-mt-28 prose-headings:font-display prose-headings:font-normal lg:prose-headings:scroll-mt-[8.5rem]",
-      "prose-a:font-medium prose-a:no-underline prose-pre:rounded-xl prose-pre:bg-secondary-40 prose-pre:shadow-lg",
+      "prose-a:no-underline prose-pre:rounded-xl prose-pre:bg-secondary-40 prose-pre:shadow-lg",
       className,
     )}
   >

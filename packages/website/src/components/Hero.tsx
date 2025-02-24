@@ -1,10 +1,14 @@
 import { type FC } from "react";
 import { useLocation } from "react-router-dom";
+import { clsx } from "clsx";
 
 import { Disclaimer } from "../custom-components/Disclaimer";
 import { FeedbackForm } from "../custom-components/FeedbackForm";
 import { Carousel, carouselExampleData } from "../custom-components/Carousel";
 import { InlineWidget } from "../components/InlineWidget";
+
+const buttonBaseClass =
+  "rounded-xl py-1.5 px-8 text-sm focus:outline focus:outline-accent-50 focus:outline-2";
 
 export const Hero: FC<unknown> = () => {
   const location = useLocation();
@@ -21,10 +25,10 @@ export const Hero: FC<unknown> = () => {
       }}
     >
       <div className="py-16 sm:px-2 lg:relative lg:px-0 lg:py-20">
-        <div className="mx-auto grid max-w-4xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 lg:max-w-8xl lg:grid-cols-2 lg:px-8 xl:gap-x-16 xl:px-12">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 lg:max-w-8xl lg:grid-cols-2 lg:px-8 xl:gap-x-16 xl:px-12">
           <div className="relative z-10 md:text-center lg:text-left text-primary-90">
             <div className="relative">
-              <p className="inline text-white font-display text-4xl">
+              <p className="inline text-primary-90 font-display text-4xl">
                 SDK for rich conversational experiences powered by NLX®
               </p>
               <p className="mt-3 text-base">
@@ -34,7 +38,10 @@ export const Hero: FC<unknown> = () => {
               </p>
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
                 <button
-                  className="rounded-xl bg-accent text-secondary-80 py-1.5 px-8 text-sm focus:outline-none"
+                  className={clsx(
+                    buttonBaseClass,
+                    "bg-accent text-secondary-80 hover:bg-accent-20 hover:text-accent",
+                  )}
                   onClick={() => {
                     document.querySelector("article")?.scrollIntoView({
                       block: "start",
@@ -45,7 +52,10 @@ export const Hero: FC<unknown> = () => {
                   Get started
                 </button>
                 <a
-                  className="rounded-xl bg-accent-20 text-accent py-1.5 px-8 text-sm focus:outline-none"
+                  className={clsx(
+                    buttonBaseClass,
+                    "bg-accent-20 text-accent hover:bg-accent hover:text-secondary-80",
+                  )}
                   href="https://github.com/nlxai/sdk"
                 >
                   View on GitHub

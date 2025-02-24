@@ -58,7 +58,7 @@
 }
 
 .prose th {
-  @apply text-left font-medium text-gray-500;
+  @apply text-left font-medium text-primary-60;
 }
 
 /* Carousel example */
@@ -360,4 +360,8 @@
 .token.comment,
 .token.operator {
   color: #94a3b8;
+}
+
+.linenumber {
+  @apply text-primary-40;
 }

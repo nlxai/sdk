@@ -14,7 +14,7 @@ const MenuListItem: FC<{
     location.pathname === "/" ? "/getting-started" : location.pathname;
   return (
     <li>
-      <h2 className="text-primary-90">{props.heading}</h2>
+      <h2 className="text-primary-90 font-medium">{props.heading}</h2>
       <ul role="list" className="mt-2 space-y-2 lg:mt-4 lg:space-y-4">
         {props.items.map((item, index) => {
           const active = pathname === item.url;
@@ -24,7 +24,7 @@ const MenuListItem: FC<{
                 className={clsx(
                   "block",
                   active
-                    ? "font-medium text-accent"
+                    ? "text-accent"
                     : "text-primary-60 hover:text-primary-80",
                 )}
                 to={item.url}
