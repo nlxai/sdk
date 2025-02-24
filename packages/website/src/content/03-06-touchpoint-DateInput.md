@@ -41,7 +41,6 @@ The snippet below:
     const { handler } = useTouchpointContext();
     return html`
       <DateInput
-        label=${data.label}
         onSubmit=${(date) => handler.sendText(date)}
       />
     `;
@@ -64,7 +63,6 @@ const DateInputExample = ({ data }) => {
   const { handler } = useTouchpointContext();
   return(
     <DateInput
-      label=${data.label}
       onSubmit=${(date) => handler.sendText(date)}
     />
   );
