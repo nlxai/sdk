@@ -17,7 +17,7 @@ export const Hero: FC<unknown> = () => {
     <div
       className="overflow-hidden bg-black bg-cover"
       style={{
-        backgroundImage: "url(./banner.jpeg)",
+        backgroundImage: "url(/DevDocsHeroBG.webp)",
       }}
     >
       <div className="py-16 sm:px-2 lg:relative lg:px-0 lg:py-20">

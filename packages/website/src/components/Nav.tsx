@@ -43,7 +43,7 @@ export const Nav: FC<{
   touchpoint: boolean;
 }> = ({ touchpoint }) => (
   <div className="hidden lg:relative lg:block lg:flex-none">
-    <div className="sticky top-[4.75rem] -ml-0.5 h-[calc(100vh-4.75rem)] w-64 overflow-y-auto overflow-x-hidden px-4 py-16">
+    <div className="sticky top-[4.75rem] -ml-0.5 h-[calc(100vh-4.75rem)] w-64 overflow-y-auto overflow-x-hidden px-6 py-16">
       <nav className="text-base lg:text-sm">
         <ul role="list" className="space-y-9">
           {getFilteredRoutes({ touchpoint }).map((route, index) => (
