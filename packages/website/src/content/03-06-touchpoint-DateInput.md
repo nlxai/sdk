@@ -14,7 +14,7 @@ You can import the DateInput component once the package has been installed or ma
 
 ### Define the Modality in NLX
 
-The DateInput component is best triggered in a UserSelection Node on NLX with a specific modality attached to trigger the DateInput component. The userchoice will be sent back to NLX as text and **NOT** as a choice. This is different than the typical [CustomCard](/touchpoint-CustomCards) or [Button](/touchpoint-Buttons) components where the choice back to NLX it typically a 'choice'.
+The DateInput component is best triggered in a UserSelection Node on NLX with a specific modality attached to trigger the DateInput component. The date selection should be sent back to NLX as text and **NOT** as a choice. This is different than the typical [CustomCard](/touchpoint-CustomCards) or [Button](/touchpoint-Buttons) components where the choice back to NLX it typically a 'choice'.
 
 In the examples below, the modality is named `DateInputExample` with a single string as the schema.
 
@@ -23,8 +23,6 @@ In the examples below, the modality is named `DateInputExample` with a single st
 The Date Input Component expect a function passed via `onSubmit` that be called when the user finalizes their date selection.
 
 In order to send the data back to NLX, you need to leverage the `useTouchpointContext` function to access the [ConversationHandler](/headless-api-reference#interfacesconversationhandlermd) method `sendText` to properly relay the user's choice back to NLX to continue the conversation.
-
-Read more details about building Custom Components with Touchpoint in the [Getting started with Touchpoint components](/touchpoint-components) documentation page.
 
 ### Import using `<script>`
 
@@ -72,3 +70,5 @@ const DateInputExample = ({ data }) => {
   );
 };
 ```
+
+Read more details about building Custom Components with Touchpoint in the [Getting started with Touchpoint components](/touchpoint-components) documentation page.
