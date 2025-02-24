@@ -24,7 +24,7 @@ export default {
             "--tw-prose-captions": "var(--color-pink-700)",
             "--tw-prose-code": "var(--color-pink-900)",
             "--tw-prose-pre-code": "var(--primary-20)",
-            "--tw-prose-pre-bg": "var(--primary-20)",
+            "--tw-prose-pre-bg": "var(--secondary-20)",
             "--tw-prose-th-borders": "var(--primary-20)",
             "--tw-prose-td-borders": "var(--primary-20)",
             "--tw-prose-invert-body": "var(--color-pink-200)",
