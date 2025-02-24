@@ -57,6 +57,11 @@
   --errorSecondary: rgb(94, 4, 4);
 }
 
+html,
+body {
+  @apply h-full;
+}
+
 .prose th {
   @apply text-left font-medium text-primary-60;
 }
@@ -318,6 +323,10 @@
 
 /* Syntax highlighting */
 
+.prismjs {
+  @apply text-primary-80;
+}
+
 .token.class-name,
 .token.function,
 .token.selector,
@@ -332,7 +341,7 @@
 .token.keyword,
 .token.pseudo-class,
 .token.rule {
-  color: #cbd5e1;
+  @apply text-accent;
 }
 
 .token.module {

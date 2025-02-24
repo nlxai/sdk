@@ -37,7 +37,7 @@ export const NextPrevPage: FC<{ prev?: LinkData; next?: LinkData }> = (
         <dt className={headingClass}>Previous</dt>
         <dd className="mt-1">
           <Link
-            className="flex items-center gap-x-1 text-base text-primary-90 flex-row-reverse"
+            className="flex items-center gap-x-1 text-base text-primary-90 hover:text-white flex-row-reverse"
             to={props.prev.url}
           >
             {props.prev.label}
@@ -52,7 +52,7 @@ export const NextPrevPage: FC<{ prev?: LinkData; next?: LinkData }> = (
         <dd className="mt-1">
           <Link
             to={props.next.url}
-            className="flex items-center gap-x-1 text-base text-primary-90"
+            className="flex items-center gap-x-1 text-base text-primary-90 hover:text-white"
           >
             {props.next.label}
             <NextArrow />

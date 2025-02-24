@@ -98,7 +98,10 @@ export const Content: FC<unknown> = () => {
         ]}
       />
       <PageContent md={content} />
-      <Note body="This code presents an example of how the feedback form can be implemented. In order for this to work in production, you must make sure the slot names match the ones defined in Dialog Studio." />
+      <Note
+        className="mt-6"
+        body="This code presents an example of how the feedback form can be implemented. In order for this to work in production, you must make sure the slot names match the ones defined in Dialog Studio."
+      />
     </>
   );
 };
