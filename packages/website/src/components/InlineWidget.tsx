@@ -1,6 +1,6 @@
-import { type FC, type ReactNode, useEffect, useState } from "react";
-import { last } from "ramda";
+import { type FC, type ReactNode, useEffect, useState, useRef } from "react";
 import { clsx } from "clsx";
+import { last, flatten } from "ramda";
 
 export type Item =
   | { type: "user"; message: string }
@@ -44,20 +44,77 @@ export const InlineWidget: FC<{
   const loader: "user" | "bot" | undefined =
     displayedItems.length === props.items.length
       ? undefined
-      : // initial eslint integration
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        last(last(displayedItems) || [])?.type === "user"
+      : last(last(displayedItems) ?? [])?.type === "user"
         ? "bot"
         : "user";
+
+  const messagesContainer = useRef<HTMLDivElement | null>(null);
+
+  const isFullyVisible = useRef(true);
+
+  useEffect(() => {
+    const callback: MutationCallback = (ch) => {
+      const addedNodes = flatten(
+        ch.map((entry) => Array.from(entry.addedNodes)),
+      );
+      const firstContentNode: Node | undefined = addedNodes[0];
+      if (
+        isFullyVisible.current &&
+        firstContentNode != null &&
+        firstContentNode instanceof HTMLElement
+      ) {
+        firstContentNode.scrollIntoView({
+          block: "end",
+          behavior: "smooth",
+        });
+      }
+    };
+    const observer = new MutationObserver(callback);
+
+    if (messagesContainer.current) {
+      observer.observe(messagesContainer.current, {
+        childList: true,
+      });
+    }
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (event) => {
+        if (event[0] != null) {
+          isFullyVisible.current = event[0].intersectionRatio > 0.95;
+        }
+      },
+      {
+        threshold: 0.95,
+      },
+    );
+
+    if (messagesContainer.current) {
+      observer.observe(messagesContainer.current);
+    }
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   return (
     <div
       className={clsx(
-        "rounded-3xl shadow-lg bg-secondary-80 overflow-hidden flex flex-col text-gray-900 backdrop-blur-xl",
+        "rounded-xl text-secondary-80 max-w-sm max-h-[440px] shadow-lg overflow-hidden flex flex-col",
         props.className,
       )}
     >
-      <div className="space-y-4 flex-grow flex flex-col p-3 overflow-x-hidden overflow-y-auto">
+      <div className="bg-blueMain text-white text-sm flex-none px-4 py-3">
+        Support chat
+      </div>
+      <div
+        className="space-y-4 flex-grow flex flex-col py-4 bg-white overflow-x-hidden overflow-y-auto"
+        ref={messagesContainer}
+      >
         {displayedItems.map((items: Item[], index: number) => {
           return (
             <div key={index} className="space-y-2 flex flex-col">
@@ -65,7 +122,7 @@ export const InlineWidget: FC<{
                 if (item.type === "user") {
                   return (
                     <div
-                      className={`w-fit self-end text-sm text-primary-60 ${
+                      className={`w-fit self-end bg-blueMain text-white p-2 text-sm rounded-lg mx-4 ${
                         props.animated ? "animate-slideInFromRight" : ""
                       }`}
                       key={itemIndex}
@@ -76,7 +133,12 @@ export const InlineWidget: FC<{
                 }
                 if (item.type === "bot") {
                   return (
-                    <div className="text-primary-90 text-base" key={itemIndex}>
+                    <div
+                      className={`w-fit self-start bg-gray-100 p-2 text-sm rounded-lg mx-4 ${
+                        props.animated ? "animate-slideInFromLeft" : ""
+                      }`}
+                      key={itemIndex}
+                    >
                       {item.message}
                     </div>
                   );
@@ -101,28 +163,22 @@ export const InlineWidget: FC<{
         {loader &&
           (loader === "user" ? (
             <div
-              className={
-                "bg-accent w-fit self-end mx-4 px-2 py-2 rounded-lg text-secondary-80"
-              }
+              className={`bg-blueMain w-fit self-end mx-4 px-2 py-2 rounded-lg text-white`}
             >
               <Loader />
             </div>
           ) : (
             <div
-              className={
-                "bg-secondary-20 w-fit mx-4 px-2 py-2 rounded-lg text-primary-80"
-              }
+              className={`bg-gray-100 w-fit mx-4 px-2 py-2 rounded-lg text-gray-600`}
             >
               <Loader />
             </div>
           ))}
       </div>
-      <div className="p-2">
-        <input
-          className="text-base flex-none w-full px-4 py-4 bg-primary-5 focus:outline-none rounded-outer"
-          placeholder="Type your message..."
-        />
-      </div>
+      <input
+        className="text-sm flex-none px-4 py-3 focus:outline-none border-t border-gray-200"
+        placeholder="Type your message..."
+      />
     </div>
   );
 };

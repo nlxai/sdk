@@ -22,6 +22,12 @@
 
 /** Fullscreen error animation styling */
 
+@property --glow-opacity {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
 .fullscreen-error svg {
   animation: error-glow 3s ease infinite;
   --glow-opacity: 0%;

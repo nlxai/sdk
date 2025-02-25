@@ -2,36 +2,10 @@ import { type FC } from "react";
 import { useLocation } from "react-router-dom";
 import { clsx } from "clsx";
 
-import { Carousel } from "../custom-components/Carousel";
-import { InlineWidget } from "../components/InlineWidget";
+import { TouchpointExampleWidget } from "../components/TouchpointExampleWidget";
 
 const buttonBaseClass =
   "rounded-xl py-1.5 px-8 text-sm focus:outline focus:outline-accent-50 focus:outline-2";
-
-interface Document {
-  id: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-  url: string;
-}
-
-const carouselExampleData: Document[] = [
-  {
-    id: "1",
-    name: "Swiss Alps 1",
-    description: "For those looking to cover some serious distance.",
-    imageUrl: "/images/swiss-alps-1.png",
-    url: "",
-  },
-  {
-    id: "2",
-    name: "Swiss Alps 2",
-    description: "For those looking to cover some serious distance.",
-    imageUrl: "/images/swiss-alps-2.png",
-    url: "",
-  },
-];
 
 export const Hero: FC<unknown> = () => {
   const location = useLocation();
@@ -87,48 +61,28 @@ export const Hero: FC<unknown> = () => {
             </div>
           </div>
           <div className="relative lg:static">
-            <InlineWidget
+            <TouchpointExampleWidget
               className="w-full h-[360px] lg:h-[calc(100vh-4.75rem-80px)]"
-              animated
               items={[
                 [
                   {
                     type: "user",
-                    message: "I would like to buy a new bike.",
+                    message: "What is a good mountain holiday destination?",
                   },
                 ],
+                [{ type: "loader" }],
                 [
                   {
                     type: "bot",
                     message:
-                      "Sure, do any of these options look interesting to you?",
+                      "The Swiss Alps are a stunning holiday destination, offering snow-capped peaks, scenic trails, and world-class ski resorts like Zermatt and St. Moritz. Visitors can enjoy activities such as hiking, skiing, or relaxing in cozy alpine villages. With breathtaking views, charming chalets, and Swiss hospitality, it's perfect for adventure or relaxation.",
                   },
                   {
-                    type: "custom",
-                    element: <Carousel data={carouselExampleData} />,
-                  },
-                ],
-                [
-                  {
-                    type: "user",
-                    message: "I would like the sporty one",
-                  },
-                ],
-                [
-                  {
-                    type: "bot",
-                    message: "Great, I noted that to your account.",
-                  },
-                  {
-                    type: "bot",
-                    message:
-                      "Would you like to take a moment to give us feedback on your experience with us?",
-                  },
-                ],
-                [
-                  {
-                    type: "user",
-                    message: "Yes",
+                    type: "images",
+                    images: [
+                      "/images/swiss-alps-1.png",
+                      "/images/swiss-alps-2.png",
+                    ],
                   },
                 ],
               ]}
