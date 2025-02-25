@@ -1,5 +1,5 @@
-import { type FC, type ReactNode, useEffect, useState, useRef } from "react";
-import { last, flatten } from "ramda";
+import { type FC, type ReactNode, useEffect, useState } from "react";
+import { last } from "ramda";
 import { clsx } from "clsx";
 
 export type Item =
@@ -50,75 +50,14 @@ export const InlineWidget: FC<{
         ? "bot"
         : "user";
 
-  const messagesContainer = useRef<HTMLDivElement | null>(null);
-
-  const isFullyVisible = useRef(true);
-
-  useEffect(() => {
-    const callback: MutationCallback = (ch) => {
-      const addedNodes = flatten(
-        ch.map((entry) => Array.from(entry.addedNodes)),
-      );
-      const firstContentNode: Node | undefined = addedNodes[0];
-      if (
-        isFullyVisible.current &&
-        // initial eslint integration
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        firstContentNode &&
-        firstContentNode instanceof HTMLElement
-      ) {
-        firstContentNode.scrollIntoView({
-          block: "end",
-          behavior: "smooth",
-        });
-      }
-    };
-    const observer = new MutationObserver(callback);
-
-    if (messagesContainer.current) {
-      observer.observe(messagesContainer.current, {
-        childList: true,
-      });
-    }
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (event) => {
-        if (event[0] != null) {
-          isFullyVisible.current = event[0].intersectionRatio > 0.95;
-        }
-      },
-      {
-        threshold: 0.95,
-      },
-    );
-
-    if (messagesContainer.current) {
-      observer.observe(messagesContainer.current);
-    }
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
   return (
     <div
       className={clsx(
-        "rounded-xl shadow-lg overflow-hidden flex flex-col text-gray-900",
+        "rounded-3xl shadow-lg bg-secondary-80 overflow-hidden flex flex-col text-gray-900 backdrop-blur-xl",
         props.className,
       )}
     >
-      <div className="bg-blueMain text-white text-sm flex-none px-4 py-3">
-        Support chat
-      </div>
-      <div
-        className="space-y-4 flex-grow flex flex-col py-4 bg-white overflow-x-hidden overflow-y-auto"
-        ref={messagesContainer}
-      >
+      <div className="space-y-4 flex-grow flex flex-col p-3 overflow-x-hidden overflow-y-auto">
         {displayedItems.map((items: Item[], index: number) => {
           return (
             <div key={index} className="space-y-2 flex flex-col">
@@ -126,7 +65,7 @@ export const InlineWidget: FC<{
                 if (item.type === "user") {
                   return (
                     <div
-                      className={`w-fit self-end bg-blueMain text-white p-2 text-sm rounded-lg mx-4 ${
+                      className={`w-fit self-end text-sm text-primary-60 ${
                         props.animated ? "animate-slideInFromRight" : ""
                       }`}
                       key={itemIndex}
@@ -137,12 +76,7 @@ export const InlineWidget: FC<{
                 }
                 if (item.type === "bot") {
                   return (
-                    <div
-                      className={`w-fit self-start bg-gray-100 p-2 text-sm rounded-lg mx-4 ${
-                        props.animated ? "animate-slideInFromLeft" : ""
-                      }`}
-                      key={itemIndex}
-                    >
+                    <div className="text-primary-90 text-base" key={itemIndex}>
                       {item.message}
                     </div>
                   );
@@ -167,22 +101,28 @@ export const InlineWidget: FC<{
         {loader &&
           (loader === "user" ? (
             <div
-              className={`bg-blueMain w-fit self-end mx-4 px-2 py-2 rounded-lg text-white`}
+              className={
+                "bg-accent w-fit self-end mx-4 px-2 py-2 rounded-lg text-secondary-80"
+              }
             >
               <Loader />
             </div>
           ) : (
             <div
-              className={`bg-gray-100 w-fit mx-4 px-2 py-2 rounded-lg text-gray-600`}
+              className={
+                "bg-secondary-20 w-fit mx-4 px-2 py-2 rounded-lg text-primary-80"
+              }
             >
               <Loader />
             </div>
           ))}
       </div>
-      <input
-        className="text-sm flex-none px-4 py-3 focus:outline-none border-t border-gray-200"
-        placeholder="Type your message..."
-      />
+      <div className="p-2">
+        <input
+          className="text-base flex-none w-full px-4 py-4 bg-primary-5 focus:outline-none rounded-outer"
+          placeholder="Type your message..."
+        />
+      </div>
     </div>
   );
 };

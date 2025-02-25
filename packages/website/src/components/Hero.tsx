@@ -2,13 +2,36 @@ import { type FC } from "react";
 import { useLocation } from "react-router-dom";
 import { clsx } from "clsx";
 
-import { Disclaimer } from "../custom-components/Disclaimer";
-import { FeedbackForm } from "../custom-components/FeedbackForm";
-import { Carousel, carouselExampleData } from "../custom-components/Carousel";
+import { Carousel } from "../custom-components/Carousel";
 import { InlineWidget } from "../components/InlineWidget";
 
 const buttonBaseClass =
   "rounded-xl py-1.5 px-8 text-sm focus:outline focus:outline-accent-50 focus:outline-2";
+
+interface Document {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  url: string;
+}
+
+const carouselExampleData: Document[] = [
+  {
+    id: "1",
+    name: "Swiss Alps 1",
+    description: "For those looking to cover some serious distance.",
+    imageUrl: "/images/swiss-alps-1.png",
+    url: "",
+  },
+  {
+    id: "2",
+    name: "Swiss Alps 2",
+    description: "For those looking to cover some serious distance.",
+    imageUrl: "/images/swiss-alps-2.png",
+    url: "",
+  },
+];
 
 export const Hero: FC<unknown> = () => {
   const location = useLocation();
@@ -70,12 +93,6 @@ export const Hero: FC<unknown> = () => {
               items={[
                 [
                   {
-                    type: "custom",
-                    element: <Disclaimer />,
-                  },
-                ],
-                [
-                  {
                     type: "user",
                     message: "I would like to buy a new bike.",
                   },
@@ -112,16 +129,6 @@ export const Hero: FC<unknown> = () => {
                   {
                     type: "user",
                     message: "Yes",
-                  },
-                ],
-                [
-                  {
-                    type: "bot",
-                    message: "Amazing, please fill out the following form:",
-                  },
-                  {
-                    type: "custom",
-                    element: <FeedbackForm />,
                   },
                 ],
               ]}
