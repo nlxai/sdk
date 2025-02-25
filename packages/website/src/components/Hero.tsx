@@ -24,8 +24,8 @@ export const Hero: FC<unknown> = () => {
         backgroundImage: "url(/DevDocsHeroBG.webp)",
       }}
     >
-      <div className="py-16 sm:px-2 lg:relative lg:px-0 lg:py-20">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 lg:max-w-8xl lg:grid-cols-2 lg:px-8 xl:gap-x-16 xl:px-12">
+      <div className="py-4 sm:px-2 lg:relative lg:px-0 lg:py-8">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-end gap-x-8 gap-y-16 px-4 lg:max-w-8xl lg:grid-cols-2 lg:h-full lg:px-8 xl:gap-x-16 xl:px-12">
           <div className="relative z-10 md:text-center lg:text-left text-primary-90">
             <div className="relative">
               <p className="inline text-primary-90 font-display text-4xl">
@@ -63,9 +63,9 @@ export const Hero: FC<unknown> = () => {
               </div>
             </div>
           </div>
-          <div className="relative lg:static xl:pl-10">
+          <div className="relative lg:static">
             <InlineWidget
-              className="mx-auto h-[480px]"
+              className="w-full h-[360px] lg:h-[calc(100vh-4.75rem-80px)]"
               animated
               items={[
                 [

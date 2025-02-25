@@ -88,9 +88,7 @@ export const InlineWidget: FC<{
   useEffect(() => {
     const observer = new IntersectionObserver(
       (event) => {
-        // initial eslint integration
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        if (event[0]) {
+        if (event[0] != null) {
           isFullyVisible.current = event[0].intersectionRatio > 0.95;
         }
       },
@@ -110,7 +108,7 @@ export const InlineWidget: FC<{
   return (
     <div
       className={clsx(
-        "rounded-xl max-w-sm max-h-[440px] shadow-lg overflow-hidden flex flex-col text-gray-900",
+        "rounded-xl shadow-lg overflow-hidden flex flex-col text-gray-900",
         props.className,
       )}
     >
@@ -124,8 +122,6 @@ export const InlineWidget: FC<{
         {displayedItems.map((items: Item[], index: number) => {
           return (
             <div key={index} className="space-y-2 flex flex-col">
-              {/* initial eslint integration */}
-              {/* eslint-disable-next-line array-callback-return */}
               {items.map((item, itemIndex) => {
                 if (item.type === "user") {
                   return (
@@ -163,12 +159,11 @@ export const InlineWidget: FC<{
                     </div>
                   );
                 }
+                return null;
               })}
             </div>
           );
         })}
-        {/* initial eslint integration */}
-        {}
         {loader &&
           (loader === "user" ? (
             <div
