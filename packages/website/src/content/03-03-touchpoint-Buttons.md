@@ -34,7 +34,7 @@ You can import the buttons elements from touchpoint once the package has been in
 
 ### Define onClick
 
-The Button Elements expect a function passed via `onClick` to define the actions to take when a user clicks the button.
+The Button Component expect a function passed via `onClick` to define the actions to take when a user clicks the button.
 
 In order to send the data back to NLX, you need to leverage the `useTouchpointContext` function to access the [ConversationHandler](/headless-api-reference#interfacesconversationhandlermd) method `sendChoice` to properly relay the user's choice back to NLX to continue the conversation.
 
