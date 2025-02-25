@@ -87,6 +87,7 @@ export default {
         "primary-90": "rgba(255, 255, 255, 0.9)",
         "accent-50": "rgba(174, 202, 255, 0.50)",
         "background-docs": "#26282D",
+        "accent-darker": "#8BA2CC", // Accent + secondary-20
 
         // Legacy colors
         gray: colors.neutral,
