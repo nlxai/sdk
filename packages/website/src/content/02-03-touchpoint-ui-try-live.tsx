@@ -1,6 +1,7 @@
-import { type FC, useState, useEffect } from "react";
-import { type Config } from "@nlxai/chat-core";
+import { type FC, useState, useEffect, useRef, type ReactNode } from "react";
+import { type Config, isConfigValid } from "@nlxai/chat-core";
 
+import { TouchpointIcon } from "../components/Icons";
 import { Labeled, inputClass } from "../components/Ui";
 import { PageContent } from "../components/PageContent";
 import {
@@ -9,6 +10,7 @@ import {
 } from "../components/ChatConfiguration";
 import { Note } from "../components/Note";
 import { touchpointUiSetupSnippet } from "../snippets";
+import { clsx } from "clsx";
 
 export const content = `
 You can try your bots directly on this configuration widget.
@@ -85,6 +87,29 @@ const ThemeEditor: FC<{
   );
 };
 
+const FullscreenButton: FC<{
+  onClick?: () => void;
+  icon?: ReactNode;
+  label: string;
+}> = (props) => {
+  return (
+    <button
+      className={clsx(
+        "w-full flex items-center justify-center gap-2 py-3 bg-accent text-base rounded-2xl",
+        "bg-accent text-secondary-80 enabled:hover:bg-accent-20 enabled:hover:text-accent",
+        "disabled:bg-primary-10 disabled:text-secondary-80",
+      )}
+      disabled={props.onClick == null}
+      onClick={props.onClick}
+    >
+      {props.icon != null ? (
+        <span className="w-6 h-6 block flex-none">{props.icon}</span>
+      ) : null}
+      {props.label}
+    </button>
+  );
+};
+
 export const Content: FC<unknown> = () => {
   const [config, setConfig] = useState<Config>(getInitialConfig());
 
@@ -93,20 +118,25 @@ export const Content: FC<unknown> = () => {
     accent: "#AECAFF",
   });
 
+  const touchpointInstance = useRef<any>();
+
   useEffect(() => {
-    let instance: any;
     // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
     import("@nlxai/touchpoint-ui/lib/index.js")
       .then(({ create }) => {
-        instance = create({ config, theme });
+        touchpointInstance.current = create({
+          config,
+          theme,
+          externalLaunchButton: true,
+        });
       })
       .catch((err) => {
         // eslint-disable-next-line no-console
         console.warn(err);
       });
     return () => {
-      if (instance != null) {
-        instance.teardown();
+      if (touchpointInstance.current != null) {
+        touchpointInstance.current.teardown();
       }
     };
   }, [config, theme]);
@@ -114,21 +144,34 @@ export const Content: FC<unknown> = () => {
   return (
     <>
       <PageContent md={content} />
-      <div className="mt-6 grid lg:grid-cols-2 gap-8">
-        <div className="space-y-4">
-          <h3 className="text-xl">Setup</h3>
-          <Note body="In order for the bot communication to work (i.e., not trigger CORS errors), make sure that the URL of your webpage is added to the whitelisted URL list of your API channel in Dialog Studio." />
-          <ConfigEditor
-            value={config}
-            onChange={(val: any) => {
-              setConfig((prev) => ({ ...prev, ...val }));
-            }}
-          />
+      <div className="space-y-6">
+        <div className="mt-6 grid lg:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <h3 className="text-xl">Setup</h3>
+            <Note body="In order for the bot communication to work (i.e., not trigger CORS errors), make sure that the URL of your webpage is added to the whitelisted URL list of your API channel in Dialog Studio." />
+            <ConfigEditor
+              value={config}
+              onChange={(val: any) => {
+                setConfig((prev) => ({ ...prev, ...val }));
+              }}
+            />
+          </div>
+          <div className="space-y-4">
+            <h3 className="text-xl">Theme</h3>
+            <ThemeEditor value={theme} onChange={setTheme} />
+          </div>
         </div>
-        <div className="space-y-4">
-          <h3 className="text-xl">Theme</h3>
-          <ThemeEditor value={theme} onChange={setTheme} />
-        </div>
+        <FullscreenButton
+          onClick={
+            isConfigValid(config)
+              ? () => {
+                  touchpointInstance.current?.expand();
+                }
+              : undefined
+          }
+          icon={<TouchpointIcon />}
+          label="Try live"
+        />
       </div>
       <PageContent
         className="mt-8"

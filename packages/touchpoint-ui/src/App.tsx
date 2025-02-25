@@ -48,6 +48,10 @@ export interface Props {
    * URL of icon used on the launch icon in the bottom right when the experience is collapsed
    */
   launchIcon?: string;
+  /**
+   * When set to true, the launch icon is completely hidden, and expanding the widget is handled externally
+   */
+  externalLaunchButton?: boolean;
   theme?: Partial<Theme>;
   customModalities?: Record<string, CustomModalityComponent<any>>;
 }
@@ -259,7 +263,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             )}
           </div>
         </CustomPropertiesContainer>
-      ) : (
+      ) : props.externalLaunchButton !== true ? (
         <CustomPropertiesContainer
           className="font-sans"
           theme={props.theme}
@@ -274,7 +278,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             label="Expand chat"
           />
         </CustomPropertiesContainer>
-      )}
+      ) : null}
     </Context.Provider>
   );
 });
