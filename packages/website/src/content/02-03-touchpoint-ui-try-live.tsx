@@ -97,7 +97,7 @@ const FullscreenButton: FC<{
       className={clsx(
         "w-full flex items-center justify-center gap-2 py-3 bg-accent text-base rounded-2xl",
         "bg-accent text-secondary-80 enabled:hover:bg-accent-20 enabled:hover:text-accent",
-        "disabled:bg-primary-10 disabled:text-secondary-80",
+        "disabled:bg-secondary-10 disabled:text-primary-20",
       )}
       disabled={props.onClick == null}
       onClick={props.onClick}
