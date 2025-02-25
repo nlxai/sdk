@@ -33,7 +33,6 @@ import {
   type Theme,
   type CustomModalityComponent,
 } from "./types";
-import { Context } from "./context";
 import { CustomPropertiesContainer } from "./components/Theme";
 
 export interface Props {
@@ -174,7 +173,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   }
 
   return (
-    <Context.Provider value={{ handler }}>
+    <>
       {isExpanded ? (
         <CustomPropertiesContainer
           theme={props.theme}
@@ -279,7 +278,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           />
         </CustomPropertiesContainer>
       ) : null}
-    </Context.Provider>
+    </>
   );
 });
 

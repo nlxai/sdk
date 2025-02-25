@@ -1,4 +1,4 @@
-import { type BotMessage } from "@nlxai/chat-core";
+import { type BotMessage, type ConversationHandler } from "@nlxai/chat-core";
 import { type FC } from "react";
 
 /**
@@ -38,6 +38,10 @@ export type CustomModalityComponent<Data> = FC<{
    * The payload of the Custom Modality. The schema is defined in Dialog Studio settings.
    */
   data: Data;
+  /**
+   * Conversation handler instance
+   */
+  conversationHandler: ConversationHandler | null;
 }>;
 
 /**

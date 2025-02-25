@@ -20,7 +20,6 @@ import { DateInput } from "./components/ui/DateInput";
 
 import { createElement, type FC } from "react";
 
-export { useTouchpointContext } from "./context";
 export { default as React } from "react";
 
 // Create a htm instance where components can be used
