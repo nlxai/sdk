@@ -61,5 +61,5 @@ The `create()` function returns a `TouchpointInstance` with these methods:
 |----------------------------|------------------------------------------|---------------------|
 | `expand()`                 | Expands the chat widget                  | void                |
 | `collapse()`               | Collapses the chat widget                | void                |
-| `getConversationHandler()` | Returns the current conversation handler | [ConversationHandler](/headless-api-reference#interfacesconversationhandlermd) |
+| `getConversationHandler()` | Returns the current conversation handler | [ConversationHandler](/headless-api-reference#interface-conversationhandler) |
 | `teardown()`               | Removes the widget from the DOM          | void                |

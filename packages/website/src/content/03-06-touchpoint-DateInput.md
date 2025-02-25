@@ -22,7 +22,7 @@ In the examples below, the modality is named `DateInputExample` with a single st
 
 The Date Input Component expect a function passed via `onSubmit` that be called when the user finalizes their date selection.
 
-In order to send the data back to NLX, you need to leverage the `useTouchpointContext` function to access the [ConversationHandler](/headless-api-reference#interfacesconversationhandlermd) method [sendSlots](/headless-api-reference#sendslots) to properly relay the user's choice back to NLX to continue the conversation.
+In order to send the data back to NLX, you need to leverage the `useTouchpointContext` function to access the [ConversationHandler](/headless-api-reference#interface-conversationhandler) method [sendSlots](/headless-api-reference#sendslots) to properly relay the user's choice back to NLX to continue the conversation.
 
 The `sendSlots` method expects the Slot to previously be defined within NLX. For example, when the User Choice node is resolving a slot named "TouchpointDateInputResult" with the DatePicker, the SlotResponse should be `{"TouchpointDateInputResult": date}`.
 

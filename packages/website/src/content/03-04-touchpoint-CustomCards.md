@@ -81,7 +81,7 @@ Here is an example leveraged in the code-snips below.
 
 The CustomCard component expects a function passed via `onClick` to define the actions to take when a user clicks the button.
 
-In order to send the data back to NLX, you need to leverage the `useTouchpointContext` function to access the [ConversationHandler](/headless-api-reference#interfacesconversationhandlermd) method `sendChoice` to properly relay the user's choice back to NLX to continue the conversation.
+In order to send the data back to NLX, you need to leverage the `useTouchpointContext` function to access the [ConversationHandler](/headless-api-reference#interface-conversationhandler) method `sendChoice` to properly relay the user's choice back to NLX to continue the conversation.
 
 Read more details about building Custom Components with Touchpoint in the [Getting started with Touchpoint components](/touchpoint-components) documentation page.
 

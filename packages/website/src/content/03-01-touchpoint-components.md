@@ -4,7 +4,7 @@ Remember! Start Small - create a simple component first with a simple Modality s
 
 ### For User Input Components
 
-All end-user input requests (button, card, date, etc...) must send the user-input back to NLX to continue the conversation. Touchpoint provides the `useTouchpointContext` function to access the [ConversationHandler](/headless-api-reference#interfacesconversationhandlermd) which contains the methods to send information back to NLX.
+All end-user input requests (button, card, date, etc...) must send the user-input back to NLX to continue the conversation. Touchpoint provides the `useTouchpointContext` function to access the [ConversationHandler](/headless-api-reference#interface-conversationhandler) which contains the methods to send information back to NLX.
 
 ## Understanding customModalities
 
