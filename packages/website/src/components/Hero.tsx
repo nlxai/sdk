@@ -19,7 +19,7 @@ export const Hero: FC<unknown> = () => {
   }
   return (
     <div
-      className="overflow-hidden bg-black bg-cover"
+      className="overflow-hidden bg-black bg-cover min-h-[calc(100vh-4.75rem)]"
       style={{
         backgroundImage: "url(/DevDocsHeroBG.webp)",
       }}

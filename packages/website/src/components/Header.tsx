@@ -13,7 +13,7 @@ export const Header: FC<{
   mobileMenuExpanded: boolean;
   setMobileMenuExpanded: (val: boolean) => void;
 }> = (props) => (
-  <header className="sticky top-0 z-50 flex flex-none flex-wrap items-center justify-between bg-background-docs border-b border-primary-10 text-primary-80 px-4 py-5 sm:px-6 lg:px-8">
+  <header className="sticky top-0 z-50 flex flex-none flex-wrap items-center justify-between bg-background-docs border-b border-primary-10 text-primary-80 px-4 py-5 sm:px-6 lg:px-8 h-[4.75rem]">
     <div className="mr-6 flex lg:hidden">
       <button
         type="button"
