@@ -22,7 +22,7 @@ In the examples below, the modality is named `DateInputExample` with a single st
 
 The Date Input Component expect a function passed via `onSubmit` that be called when the user finalizes their date selection.
 
-In order to send the data back to NLX, you need to leverage the `useTouchpointContext` function to access the [ConversationHandler](/headless-api-reference#interface-conversationhandler) method [sendSlots](/headless-api-reference#sendslots) to properly relay the user's choice back to NLX to continue the conversation.
+The [ConversationHandler](/headless-api-reference#interface-conversationhandler) method [sendSlots](/headless-api-reference#sendslots) is available through the `handler.sendSlots` to send the user's choice back to NLX.
 
 The `sendSlots` method expects the Slot to previously be defined within NLX. For example, when the User Choice node is resolving a slot named "TouchpointDateInputResult" with the DatePicker, the SlotResponse should be `{"TouchpointDateInputResult": date}`.
 
@@ -34,15 +34,13 @@ Import the elements via `html` from Touchpoint. Useful when adding touchpoint to
 The snippet below: 
 
 * Uses `html` to create the Date Input component.
-* Leverages `useTouchpointContext` to set the onSubmit behavior.
 * Assumes the User Choice node is resolving the slot named "TouchpointDateInputResult"
 
 ```html
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
-  const { html, useTouchpointContext, Icons } = nlxai.touchpointUi;
-  const DateInputExample = ({ data }) => {
-    const { handler } = useTouchpointContext();
+  const { html, Icons } = nlxai.touchpointUi;
+  const DateInputExample = ({ data, handler }) => {
     return html`
       <DateInput
         onSubmit=${(date) => handler.sendSlots({TouchpointDateInputResult: date)}
@@ -56,15 +54,10 @@ The snippet below:
 
 Import the elements to your project using import statements. 
 
-The snippet below: 
-
-* Leverages `useTouchpointContext` to set the onClick behavior.
-
 ```javascript
-import { useTouchpointContext, DateInput } from '@nlxai/touchpoint-ui';
+import { DateInput } from '@nlxai/touchpoint-ui';
 
-const DateInputExample = ({ data }) => {
-  const { handler } = useTouchpointContext();
+const DateInputExample = ({data, handler}) => {
   return(
     <DateInput
       onSubmit=${(date) => handler.sendText(date)}

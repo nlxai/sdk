@@ -23,9 +23,8 @@ Import the Icons from Touchpoint. Useful when adding touchpoint to your project 
 ```html
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
-  const { html, useTouchpointContext, Icons } = nlxai.touchpointUi;
-  const IconButtonExample = ({ data }) => {
-  const { handler } = useTouchpointContext();
+  const { html, Icons } = nlxai.touchpointUi;
+  const IconButtonExample = ({data, handler}) => {
   console.log(data);
   return html`
   <IconButton
@@ -44,8 +43,7 @@ Import the elements to your project using import statements.
 
 ```javascript
 import { useTouchpointContext, IconButton, Icons } from '@nlxai/touchpoint-ui';
-const IconButtonExample = ({ data }) => {
-  const { handler } = useTouchpointContext();
+const IconButtonExample = ({data, handler}) => {
   console.log(data);
   return(
   <IconButton

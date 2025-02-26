@@ -32,11 +32,20 @@ Both TextButton and IconButton have required properties to render the elements c
 
 You can import the buttons elements from touchpoint once the package has been installed or made available in your project.
 
+The examples below require a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) defined in your NLX application as an object with at least `buttonLabel` and `buttonId` properties.
+
+```json
+{
+  "buttonLabel": "Label passed to button Component",
+  "buttonId": "Id of the 'choice' to send back to NLX"
+}
+```
+
 ### Define onClick
 
 The Button Component expect a function passed via `onClick` to define the actions to take when a user clicks the button.
 
-In order to send the data back to NLX, you need to leverage the `useTouchpointContext` function to access the [ConversationHandler](/headless-api-reference#interface-conversationhandler) method `sendChoice` to properly relay the user's choice back to NLX to continue the conversation.
+Access the [ConversationHandler](/headless-api-reference#interface-conversationhandler) method `sendChoice` via `handler.sendChoice` to send the user's choice back to NLX.
 
 Read more details about building Custom Components with Touchpoint in the [Getting started with Touchpoint components](/touchpoint-components) documentation page.
 
@@ -47,16 +56,13 @@ Import the elements via `html` from Touchpoint. Useful when adding touchpoint to
 The snippet below: 
 
 * Uses `html` to create the buttons.
-* Leverages `useTouchpointContext` to set the onClick behavior.
 * Imports Touchpoint Icons to use in the IconButton.
-* Assumes a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) defined in your NLX application as an object with at least `buttonLabel` and `buttonId` properties.
 
 ```html
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
-  const { html, useTouchpointContext, Icons } = nlxai.touchpointUi;
-  const TextButtonExample = ({ data }) => {
-    const { handler } = useTouchpointContext();
+  const { html, Icons } = nlxai.touchpointUi;
+  const TextButtonExample = ({ data, handler }) => {
     return html`
       <TextButton
           label=${data.buttonLabel}
@@ -66,8 +72,7 @@ The snippet below:
     `; 
   };
   
-  const IconButtonExample = ({ data }) => {
-  const { handler } = useTouchpointContext();
+  const IconButtonExample = ({data, handler}) => {
   console.log(data);
   return html`
   <IconButton
@@ -86,15 +91,12 @@ Import the elements to your project using import statements.
 
 The snippet below: 
 
-* Leverages `useTouchpointContext` to set the onClick behavior.
 * Imports Touchpoint, Icons, and Context to use in the IconButton.
-* Assumes a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) defined in your NLX application as an object with at least `buttonLabel` and `buttonId` properties.
 
 ```javascript
-import { useTouchpointContext, TextButton, IconButton, Icons } from '@nlxai/touchpoint-ui';
+import { TextButton, IconButton, Icons } from '@nlxai/touchpoint-ui';
 
-const TextButtonExample = ({ data }) => {
-  const { handler } = useTouchpointContext();
+const TextButtonExample = ({data, handler}) => {
   return(
     <TextButton
       label=${data.buttonLabel}
@@ -104,8 +106,7 @@ const TextButtonExample = ({ data }) => {
   ); 
 };
 
-const IconButtonExample = ({ data }) => {
-  const { handler } = useTouchpointContext();
+const IconButtonExample = ({data, handler}) => {
   console.log(data);
   return(
   <IconButton

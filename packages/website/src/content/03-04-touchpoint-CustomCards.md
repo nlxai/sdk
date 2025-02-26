@@ -81,7 +81,7 @@ Here is an example leveraged in the code-snips below.
 
 The CustomCard component expects a function passed via `onClick` to define the actions to take when a user clicks the button.
 
-In order to send the data back to NLX, you need to leverage the `useTouchpointContext` function to access the [ConversationHandler](/headless-api-reference#interface-conversationhandler) method `sendChoice` to properly relay the user's choice back to NLX to continue the conversation.
+Access the [ConversationHandler](/headless-api-reference#interface-conversationhandler) method `sendChoice` via `handler.sendChoice` to send the user's choice back to NLX to continue the conversation.
 
 Read more details about building Custom Components with Touchpoint in the [Getting started with Touchpoint components](/touchpoint-components) documentation page.
 
@@ -92,15 +92,13 @@ Import the elements via `html` from Touchpoint. Useful when adding touchpoint to
 The snippet below:
 
 - Uses `html` to import and create the Carousel and CustomCard.
-- Leverages `useTouchpointContext` to set the onClick behavior.
 - Imports React from the Touchpoint package to track user selection state.
 
 ```html
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
-  const { useTouchpointContext, html, React } = nlxai.touchpointUi;
-  const CarouselExample = ({ data }) => {
-    const { handler } = useTouchpointContext();
+  const { html, React } = nlxai.touchpointUi;
+  const CarouselExample = ({ data, handler }) => {
     const [selected, setSelected] = React.useState(null);
     return html`<Carousel>
       ${data.map(
@@ -132,7 +130,6 @@ Import the elements to your project using import statements.
 The snippet below:
 
 - Uses `import` to import the components to construct the Carousel.
-- Leverages `useTouchpointContext` to set the onClick behavior.
 - Imports React from the Touchpoint package to track user selection state.
 
 ```javascript
@@ -141,12 +138,10 @@ import {
   CustomCard,
   CustomCardRow,
   CustomCardImageRow,
-  useTouchpointContext,
   React,
 } from "@nlxai/touchpoint-ui";
 
-const CarouselExample = ({ data }) => {
-  const { handler } = useTouchpointContext();
+const CarouselExample = ({data, handler}) => {
   const [selected, setSelected] = React.useState(null);
   return (
     <Carousel>
