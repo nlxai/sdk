@@ -31,7 +31,6 @@ export const DateInput: FC<DateInputProps> = ({ onSubmit }) => {
         <Date className="w-4 h-4 text-primary-60" />
         <InputMask
           {...options}
-          separate
           className={clsx(
             "bg-transparent text-primary-80 outline-0 ml-2 py-2.5",
             isDisabled
