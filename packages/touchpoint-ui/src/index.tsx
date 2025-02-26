@@ -125,3 +125,5 @@ export const create = (props: Props): Promise<TouchpointInstance> => {
     document.body.appendChild(element);
   });
 };
+
+export { Container as PreviewContainer } from "./preview";
