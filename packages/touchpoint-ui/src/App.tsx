@@ -58,13 +58,15 @@ export interface Props {
 export interface AppRef {
   expand: () => void;
   collapse: () => void;
-  getConversationHandler: () => ConversationHandler | null;
+  getConversationHandler: () => ConversationHandler;
 }
 
 const isDev = import.meta.env.DEV;
 
 const App = forwardRef<AppRef, Props>((props, ref) => {
-  const [handler, setHandler] = useState<ConversationHandler | null>(null);
+  const handler = useMemo(() => {
+    return createConversation(props.config);
+  }, [props.config]);
 
   const [responses, setResponses] = useState<Response[]>([]);
 
@@ -99,26 +101,19 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   );
 
   useEffect(() => {
-    setHandler(createConversation(props.config));
-  }, [props.config, setHandler]);
-
-  useEffect(() => {
-    if (handler == null) {
-      return;
-    }
     const fn: Subscriber = (responses) => {
       setResponses(responses);
     };
     handler.subscribe(fn);
     return () => {
-      handler?.unsubscribe(fn);
+      handler.unsubscribe(fn);
     };
   }, [handler, setResponses]);
 
   const initialWelcomeIntentSent = useRef<boolean>(false);
 
   useEffect(() => {
-    if (handler == null || !isExpanded || initialWelcomeIntentSent.current) {
+    if (!isExpanded || initialWelcomeIntentSent.current) {
       return;
     }
     initialWelcomeIntentSent.current = true;

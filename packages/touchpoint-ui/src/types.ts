@@ -41,7 +41,7 @@ export type CustomModalityComponent<Data> = FC<{
   /**
    * Conversation handler instance
    */
-  conversationHandler: ConversationHandler | null;
+  conversationHandler: ConversationHandler;
 }>;
 
 /**
