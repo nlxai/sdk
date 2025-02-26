@@ -99,20 +99,19 @@ import { TextButton, IconButton, Icons } from '@nlxai/touchpoint-ui';
 const TextButtonExample = ({data, handler}) => {
   return(
     <TextButton
-      label=${data.buttonLabel}
-      Icon=${Icons.ArrowForward}
-      onClick=${() => handler.sendChoice(data.buttonId)}
+      label={data.buttonLabel}
+      Icon={Icons.ArrowForward}
+      onClick={() => handler.sendChoice(data.buttonId)}
     />
   ); 
 };
 
 const IconButtonExample = ({data, handler}) => {
-  console.log(data);
   return(
   <IconButton
-      label=${data.buttonLabel}
-      Icon=${Icons.ArrowForward}
-      onClick=${() => handler.sendChoice(data.buttonId)}
+      label={data.buttonLabel}
+      Icon={Icons.ArrowForward}
+      onClick={() => handler.sendChoice(data.buttonId)}
       type="main"
   />);
 };

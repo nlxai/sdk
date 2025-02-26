@@ -70,9 +70,9 @@ import { create, TextButton } from '@nlxai/touchpoint-ui';
  */
 const MyFirstButtonComponent = ({data, handler}) => {
   const myTextButton = <TextButton
-      label=${data.buttonLabel}
-      Icon=${Icons.ArrowForward}
-      onClick=${() => handler.sendChoice(data.buttonId)}
+      label={data.buttonLabel}
+      Icon={Icons.ArrowForward}
+      onClick={() => handler.sendChoice(data.buttonId)}
     />
   ); 
   return myTextButton;
@@ -132,23 +132,22 @@ import { create, CustomCard, BaseText, TextButton, SmallText } from '@nlxai/touc
  */
 const ProductCardComponent = ({ data, handler }) => {
   const [selected, setSelected] = React.useState(null);
-  console.log(data);
   return (
   <CustomCard
       key="0"
-      selected=${selected === 0}
+      selected={selected === 0}
       onClick={() => {
         setSelected(0);
         handler.sendChoice(data.id);
       }}
   >
     <CustomCardImageRow
-      src=${data.productImageUrl}
-      alt=${data.name}
+      src={data.productImageUrl}
+      alt={data.name}
     />
     <CustomCardRow
-      left=${<BaseText>${data.name}</BaseText>}
-      right=${<BaseText>${data.price}</BaseText>}
+      left={<BaseText>{data.name}</BaseText>}
+      right={<BaseText>{data.price}</BaseText>}
     />
   </CustomCard>
   );

@@ -5,7 +5,7 @@ import { touchpointUiSetupSnippet } from "../snippets";
 import configOptions from "./02-01-touchpoint-ui-setup.md?raw";
 
 export const content = `
-The NLX Touchpoint widget provides a customizable chat interface that you can embed in your web applications. This widget allows users to interact with your bot and provides a seamless conversational experience.
+The NLX Touchpoint widget provides a customizable chat interface that you can embed in your web applications. This widget allows users to interact with your application and provides a seamless conversational experience.
 
 ## Quick Start
 

@@ -60,7 +60,7 @@ import { DateInput } from '@nlxai/touchpoint-ui';
 const DateInputExample = ({data, handler}) => {
   return(
     <DateInput
-      onSubmit=${(date) => handler.sendText(date)}
+      onSubmit={(date) => handler.sendText(date)}
     />
   );
 };
