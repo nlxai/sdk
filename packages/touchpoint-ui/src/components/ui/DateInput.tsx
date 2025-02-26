@@ -12,6 +12,7 @@ interface DateInputProps {
 const options = {
   mask: "MM / DD / YYYY",
   replacement: { D: /\d/, M: /\d/, Y: /\d/ },
+  showMask: true,
 };
 
 export const DateInput: FC<DateInputProps> = ({ onSubmit }) => {
