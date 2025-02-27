@@ -1,5 +1,6 @@
 /** @type { import('typedoc').TypeDocOptions & { hideInPageTOC?: boolean, hideBreadcrumbs?: boolean} } */
 module.exports = {
+  excludeExternals: true,
   entryPoints: ["./src/index.tsx"],
   hideBreadcrumbs: true,
   hideInPageTOC: true,
