@@ -1,5 +1,5 @@
 
-NLX Touchpoint provides powerful theming capabilities that let you match your brand's visual identity. While the system offers comprehensive customization options, most applications can achieve a cohesive look by adjusting just two key properties.
+Touchpoint provides powerful theming capabilities that let you match your brand's visual identity. While the system offers comprehensive customization options, most applications can achieve a cohesive look by adjusting just two key properties.
 
 ## Quick Customization
 
