@@ -4,7 +4,6 @@ import {
   useEffect,
   useState,
   useImperativeHandle,
-  useCallback,
   forwardRef,
   useMemo,
 } from "react";
@@ -56,8 +55,8 @@ export interface Props {
 }
 
 export interface AppRef {
-  expand: () => void;
-  collapse: () => void;
+  setExpanded: (val: boolean) => void;
+  getExpanded: () => boolean;
   getConversationHandler: () => ConversationHandler;
 }
 
@@ -80,24 +79,26 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
-  const expand = useCallback(() => {
-    setIsExpanded(true);
-  }, [setIsExpanded]);
+  const isExpandedRef = useRef<boolean>(isDev);
 
-  const collapse = useCallback(() => {
-    setIsExpanded(false);
-  }, [setIsExpanded]);
+  useEffect(() => {
+    isExpandedRef.current = isExpanded;
+  }, [isExpanded]);
 
   useImperativeHandle(
     ref,
     () => {
       return {
-        expand,
-        collapse,
-        getConversationHandler: () => handler,
+        setExpanded: setIsExpanded,
+        getExpanded() {
+          return isExpandedRef.current;
+        },
+        getConversationHandler() {
+          return handler;
+        },
       };
     },
-    [expand, collapse, handler],
+    [handler, setIsExpanded],
   );
 
   useEffect(() => {
