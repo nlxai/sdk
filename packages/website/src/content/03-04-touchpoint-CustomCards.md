@@ -81,7 +81,7 @@ Here is an example leveraged in the code-snips below.
 
 The CustomCard component expects a function passed via `onClick` to define the actions to take when a user clicks the button.
 
-Access the [ConversationHandler](/headless-api-reference#interface-conversationhandler) method `sendChoice` via `handler.sendChoice` to send the user's choice back to NLX to continue the conversation.
+Access the [ConversationHandler](/headless-api-reference#interface-conversationhandler) method `sendChoice` via `conversationHandler.sendChoice` to send the user's choice back to NLX to continue the conversation.
 
 Read more details about building Custom Components with Touchpoint in the [Getting started with Touchpoint components](/touchpoint-components) documentation page.
 
@@ -98,7 +98,7 @@ The snippet below:
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
   const { html, React } = nlxai.touchpointUi;
-  const CarouselExample = ({ data, handler }) => {
+  const CarouselExample = ({ data, conversationHandler }) => {
     const [selected, setSelected] = React.useState(null);
     return html`<Carousel>
       ${data.map(
@@ -108,7 +108,7 @@ The snippet below:
             selected=${selected === cardIndex}
             onClick=${() => {
               setSelected(cardIndex);
-              handler.sendChoice(cardData.id);
+              conversationHandler.sendChoice(cardData.id);
             }}
           >
             <CustomCardImageRow src=${cardData.imageUrl} alt="Alt Text" />
@@ -141,7 +141,7 @@ import {
   React,
 } from "@nlxai/touchpoint-ui";
 
-const CarouselExample = ({data, handler}) => {
+const CarouselExample = ({data, conversationHandler}) => {
   const [selected, setSelected] = React.useState(null);
   return (
     <Carousel>
@@ -151,7 +151,7 @@ const CarouselExample = ({data, handler}) => {
           selected={selected === cardIndex}
           onClick={() => {
             setSelected(cardIndex);
-            handler.sendChoice(cardData.id);
+            conversationHandler.sendChoice(cardData.id);
           }}
         >
           <CustomCardImageRow src={cardData.imageUrl} alt="Alt Text" />

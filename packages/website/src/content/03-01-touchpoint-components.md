@@ -5,7 +5,7 @@ Touchpoint components work together with each other to create rich chat experien
 Basic context for custom components is available through the `data` and `handler` objects.
 
 * `data`: Can be any type. It will match the schema set in the modality within NLX once set in the Node.
-* `handler`: The [ConversationHandler](/headless-api-reference#interface-conversationhandler). Functions to access the conversational context and send data back to NLX.
+* `conversationHandler`: The [ConversationHandler](/headless-api-reference#interface-conversationhandler). Functions to access the conversational context and send data back to NLX.
 
 Add the Component to the `customModalities` configuration option paired with the name of Modality in NLX. In the example below the [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) is named "MyComponentModality".
 
@@ -15,11 +15,11 @@ Add the Component to the `customModalities` configuration option paired with the
 /**
  * @param {Object} props - The properties object.
  * @param {Object} props.data - The data object - Defined in NLX as a modality and set within the Node
- * @param {Function} props.handler - The ConversationHandler
+ * @param {Function} props.conversationHandler - The ConversationHandler
  *
  * @returns {JSX.Element} The rendered component.
  */
-const Component = ({data, handler}) => {
+const Component = ({data, conversationHandler}) => {
   const myComponent = ();
   return myComponent;
 }
@@ -39,7 +39,7 @@ const touchpointOptions = {
 };
 
 // Register components with specific modality keys
-const touchpoint = create(touchpointOptions);
+const touchpoint = await create(touchpointOptions);
 ```
 
 ### Example Button Modality
@@ -64,17 +64,16 @@ import { create, TextButton } from '@nlxai/touchpoint-ui';
  * @param {Object} props.data - The data object - Defined in NLX as a modality and set within the Node
  * @param {string} props.data.buttonLabel - Label to be displayed on the button
  * @param {string} props.data.buttonId - Id of the 'choice' to send back to NLX.
- * @param {Function} props.handler - The handler object that contains the function sendChoice to be called on button click
+ * @param {Function} props.conversationHandler - The handler object that contains the function sendChoice to be called on button click
  *
  * @returns {JSX.Element} The rendered TextButton component.
  */
-const MyFirstButtonComponent = ({data, handler}) => {
-  const myTextButton = <TextButton
+const MyFirstButtonComponent = ({data, conversationHandler}) => {
+  const myTextButton = (<TextButton
       label={data.buttonLabel}
       Icon={Icons.ArrowForward}
-      onClick={() => handler.sendChoice(data.buttonId)}
-    />
-  ); 
+      onClick={() => conversationHandler.sendChoice(data.buttonId)}
+    />);
   return myTextButton;
 }
 
@@ -93,7 +92,7 @@ const touchpointOptions = {
 };
 
 // Register components with specific modality keys
-const touchpoint = create(touchpointOptions);
+const touchpoint = await create(touchpointOptions);
 ```
 
 ### Example CustomCard Modality
@@ -126,11 +125,11 @@ import { create, CustomCard, BaseText, TextButton, SmallText } from '@nlxai/touc
  * @param {string} props.data.productImageUrl - The URL of the product image.
  * @param {string} props.data.name - The name of the product.
  * @param {string} props.data.price - The price of the product.
- * @param {Function} props.handler - The handler object with a sendChoice method.
+ * @param {Function} props.conversationHandler - The handler object with a sendChoice method.
  * 
  * @returns {JSX.Element} A custom card component displaying product details.
  */
-const ProductCardComponent = ({ data, handler }) => {
+const ProductCardComponent = ({ data, conversationHandler }) => {
   const [selected, setSelected] = React.useState(null);
   return (
   <CustomCard
@@ -138,7 +137,7 @@ const ProductCardComponent = ({ data, handler }) => {
       selected={selected === 0}
       onClick={() => {
         setSelected(0);
-        handler.sendChoice(data.id);
+        conversationHandler.sendChoice(data.id);
       }}
   >
     <CustomCardImageRow
@@ -168,7 +167,7 @@ const touchpointOptions = {
 };
 
 // Register components with specific modality keys
-const touchpoint = create(touchpointOptions);
+const touchpoint = await create(touchpointOptions);
 ```
 
 ## Component Categories

@@ -9,7 +9,7 @@ For most applications, customizing `accent` and `fontFamily` properties will cre
 * Example: **fontFamily** to `"Helvetica Neue", sans-serif`
 
 ```javascript
-const touchpointInstance = nlxai.touchpointUi.create({
+const touchpointInstance = await nlxai.touchpointUi.create({
   config: {
     // Your base configuration
   },
@@ -36,7 +36,7 @@ The font family affects all text in the interface, ensuring consistent typograph
 Touchpoint automatically adapts your theme for both light and dark modes. Set your preferred mode using the `colorMode` prop:
 
 ```javascript
-const touchpointInstance = nlxai.touchpointUi.create({
+const touchpointInstance = await nlxai.touchpointUi.create({
   config: {
     // Your base configuration
   },

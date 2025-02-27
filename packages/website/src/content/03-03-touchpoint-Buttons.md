@@ -45,7 +45,7 @@ The examples below require a [modality](https://docs.studio.nlx.ai/1-build/resou
 
 The Button Component expect a function passed via `onClick` to define the actions to take when a user clicks the button.
 
-Access the [ConversationHandler](/headless-api-reference#interface-conversationhandler) method `sendChoice` via `handler.sendChoice` to send the user's choice back to NLX.
+Access the [ConversationHandler](/headless-api-reference#interface-conversationhandler) method `sendChoice` via `conversationHandler.sendChoice` to send the user's choice back to NLX.
 
 Read more details about building Custom Components with Touchpoint in the [Getting started with Touchpoint components](/touchpoint-components) documentation page.
 
@@ -62,23 +62,23 @@ The snippet below:
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
   const { html, Icons } = nlxai.touchpointUi;
-  const TextButtonExample = ({ data, handler }) => {
+  const TextButtonExample = ({ data, conversationHandler }) => {
     return html`
       <TextButton
           label=${data.buttonLabel}
           Icon=${Icons.ArrowForward}
-          onClick=${() => handler.sendChoice(data.buttonId)}
+          onClick=${() => conversationHandler.sendChoice(data.buttonId)}
       />
     `; 
   };
   
-  const IconButtonExample = ({data, handler}) => {
+  const IconButtonExample = ({data, conversationHandler}) => {
   console.log(data);
   return html`
   <IconButton
       label=${data.buttonLabel}
       Icon=${Icons.ArrowForward}
-      onClick=${() => handler.sendChoice(data.buttonId)}
+      onClick=${() => conversationHandler.sendChoice(data.buttonId)}
       type="main"
   />`;
 };
@@ -96,22 +96,22 @@ The snippet below:
 ```javascript
 import { TextButton, IconButton, Icons } from '@nlxai/touchpoint-ui';
 
-const TextButtonExample = ({data, handler}) => {
+const TextButtonExample = ({data, conversationHandler}) => {
   return(
     <TextButton
       label={data.buttonLabel}
       Icon={Icons.ArrowForward}
-      onClick={() => handler.sendChoice(data.buttonId)}
+      onClick={() => conversationHandler.sendChoice(data.buttonId)}
     />
   ); 
 };
 
-const IconButtonExample = ({data, handler}) => {
+const IconButtonExample = ({data, conversationHandler}) => {
   return(
   <IconButton
       label={data.buttonLabel}
       Icon={Icons.ArrowForward}
-      onClick={() => handler.sendChoice(data.buttonId)}
+      onClick={() => conversationHandler.sendChoice(data.buttonId)}
       type="main"
   />);
 };

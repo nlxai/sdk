@@ -65,9 +65,9 @@ export const touchpointUiSetupSnippet = ({
           return Promise.resolve();
         }
       };
-
+      let touchpointInstance;
       contentLoaded().then(() => {
-        const touchpointInstance = nlxai.touchpointUi.create({
+        return nlxai.touchpointUi.create({
           config: {
             botUrl: "${defaultTo(config.botUrl, "REPLACE_WITH_BOT_URL")}",
             headers: {
@@ -88,7 +88,10 @@ export const touchpointUiSetupSnippet = ({
           customModalities: { REPLACE_WITH_CUSTOM_MODALITIES }`
               : ""
           }
-        });
+        })
+      }) 
+      .then((instance) => {
+        touchpointInstance = instance;
       });
     </script>
   </body>

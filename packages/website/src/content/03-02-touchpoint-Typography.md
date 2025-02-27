@@ -18,7 +18,7 @@ Import the elements via `html` from Touchpoint. Useful when adding touchpoint to
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
   const { html } = nlxai.touchpointUi;
-  const ProductDetails = ({data, handler}) => {
+  const ProductDetails = ({data, conversationHandler}) => {
     return html`
     <CustomCard>
       <CustomCardRow
@@ -36,7 +36,7 @@ Import the elements to your project using import statements.
 
 ```javascript
 import { BaseText, SmallText, CustomCard, CustomCardRow } from '@nlxai/touchpoint-ui';
-const ProductDetails = ({data, handler}) => {
+const ProductDetails = ({data, conversationHandler}) => {
   return (
   <CustomCard>
     <CustomCardRow

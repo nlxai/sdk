@@ -55,11 +55,11 @@ These components can be imported and used within your custom modality components
 
 ## Instance Methods
 
-The `create()` function returns a `TouchpointInstance` with these methods:
+The async `create()` function returns promise that will be fulfilled with a `TouchpointInstance` with these methods:
 
 | Method                     | Description                              | Returns             |
 |----------------------------|------------------------------------------|---------------------|
 | `expand()`                 | Expands the chat widget                  | void                |
 | `collapse()`               | Collapses the chat widget                | void                |
-| `getConversationHandler()` | Returns the current conversation handler | [ConversationHandler](/headless-api-reference#interface-conversationhandler) |
+| `conversationHandler` | Returns the current conversation handler | [ConversationHandler](/headless-api-reference#interface-conversationhandler) |
 | `teardown()`               | Removes the widget from the DOM          | void                |
