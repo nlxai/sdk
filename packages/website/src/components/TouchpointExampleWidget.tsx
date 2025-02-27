@@ -54,7 +54,7 @@ export const TouchpointExampleWidget: FC<{
             }
             if (item.type === "images") {
               return (
-                <div className="flex gap-2">
+                <div className="flex gap-2" key={itemIndex}>
                   {item.images.map((imageUrl, index) => (
                     <img key={index} src={imageUrl} className="h-48" />
                   ))}
