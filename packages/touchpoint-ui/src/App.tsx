@@ -4,7 +4,6 @@ import {
   useEffect,
   useState,
   useImperativeHandle,
-  useCallback,
   forwardRef,
   useMemo,
 } from "react";
@@ -33,7 +32,6 @@ import {
   type Theme,
   type CustomModalityComponent,
 } from "./types";
-import { Context } from "./context";
 import { CustomPropertiesContainer } from "./components/Theme";
 
 export interface Props {
@@ -45,27 +43,27 @@ export interface Props {
    */
   brandIcon?: string;
   /**
-   * URL of icon used on the launch icon in the bottom right when the experience is collapsed
+   * URL of icon used on the launch icon in the bottom right when the experience is collapsed.
+   *
+   * When set to `false`, no launch button is shown at all. When not set or set to `true`, the default launch icon is rendered.
    */
-  launchIcon?: string;
-  /**
-   * When set to true, the launch icon is completely hidden, and expanding the widget is handled externally
-   */
-  externalLaunchButton?: boolean;
+  launchIcon?: string | boolean;
   theme?: Partial<Theme>;
   customModalities?: Record<string, CustomModalityComponent<any>>;
 }
 
 export interface AppRef {
-  expand: () => void;
-  collapse: () => void;
-  getConversationHandler: () => ConversationHandler | null;
+  setExpanded: (val: boolean) => void;
+  getExpanded: () => boolean;
+  getConversationHandler: () => ConversationHandler;
 }
 
 const isDev = import.meta.env.DEV;
 
 const App = forwardRef<AppRef, Props>((props, ref) => {
-  const [handler, setHandler] = useState<ConversationHandler | null>(null);
+  const handler = useMemo(() => {
+    return createConversation(props.config);
+  }, [props.config]);
 
   const [responses, setResponses] = useState<Response[]>([]);
 
@@ -79,47 +77,42 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
-  const expand = useCallback(() => {
-    setIsExpanded(true);
-  }, [setIsExpanded]);
+  const isExpandedRef = useRef<boolean>(isDev);
 
-  const collapse = useCallback(() => {
-    setIsExpanded(false);
-  }, [setIsExpanded]);
+  useEffect(() => {
+    isExpandedRef.current = isExpanded;
+  }, [isExpanded]);
 
   useImperativeHandle(
     ref,
     () => {
       return {
-        expand,
-        collapse,
-        getConversationHandler: () => handler,
+        setExpanded: setIsExpanded,
+        getExpanded() {
+          return isExpandedRef.current;
+        },
+        getConversationHandler() {
+          return handler;
+        },
       };
     },
-    [expand, collapse, handler],
+    [handler, setIsExpanded],
   );
 
   useEffect(() => {
-    setHandler(createConversation(props.config));
-  }, [props.config, setHandler]);
-
-  useEffect(() => {
-    if (handler == null) {
-      return;
-    }
     const fn: Subscriber = (responses) => {
       setResponses(responses);
     };
     handler.subscribe(fn);
     return () => {
-      handler?.unsubscribe(fn);
+      handler.unsubscribe(fn);
     };
   }, [handler, setResponses]);
 
   const initialWelcomeIntentSent = useRef<boolean>(false);
 
   useEffect(() => {
-    if (handler == null || !isExpanded || initialWelcomeIntentSent.current) {
+    if (!isExpanded || initialWelcomeIntentSent.current) {
       return;
     }
     initialWelcomeIntentSent.current = true;
@@ -174,7 +167,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   }
 
   return (
-    <Context.Provider value={{ handler }}>
+    <>
       {isExpanded ? (
         <CustomPropertiesContainer
           theme={props.theme}
@@ -263,7 +256,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             )}
           </div>
         </CustomPropertiesContainer>
-      ) : props.externalLaunchButton !== true ? (
+      ) : props.launchIcon !== false ? (
         <CustomPropertiesContainer
           className="font-sans"
           theme={props.theme}
@@ -271,7 +264,11 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         >
           <LaunchButton
             className="fixed z-100 bottom-2 right-2 backdrop-blur z-launchButton"
-            iconUrl={props.launchIcon}
+            iconUrl={
+              typeof props.launchIcon === "string"
+                ? props.launchIcon
+                : undefined
+            }
             onClick={() => {
               setIsExpanded(true);
             }}
@@ -279,7 +276,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           />
         </CustomPropertiesContainer>
       ) : null}
-    </Context.Provider>
+    </>
   );
 });
 

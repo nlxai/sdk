@@ -4,7 +4,6 @@ import { clsx } from "clsx";
 
 import "./index.css";
 import { type ColorMode } from "./types";
-import { Context } from "./context";
 import { TextButton } from "./components/ui/TextButton";
 import { IconButton } from "./components/ui/IconButton";
 import { Loader } from "./components/ui/Loader";
@@ -238,18 +237,16 @@ const Container: FC<{ children: ReactNode; mode: ColorMode }> = ({
   mode,
 }) => {
   return (
-    <Context.Provider value={{ handler: null }}>
-      <CustomPropertiesContainer
-        className="bg-background p-4 rounded-outer space-y-4"
-        theme={{
-          fontFamily: "monospace",
-          accent: "light-dark(purple, pink)",
-        }}
-        colorMode={mode}
-      >
-        {children}
-      </CustomPropertiesContainer>
-    </Context.Provider>
+    <CustomPropertiesContainer
+      className="bg-background p-4 rounded-outer space-y-4"
+      theme={{
+        fontFamily: "monospace",
+        accent: "light-dark(purple, pink)",
+      }}
+      colorMode={mode}
+    >
+      {children}
+    </CustomPropertiesContainer>
   );
 };
 

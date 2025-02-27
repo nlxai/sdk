@@ -123,12 +123,17 @@ export const Content: FC<unknown> = () => {
   useEffect(() => {
     // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
     import("@nlxai/touchpoint-ui/lib/index.js")
-      .then(({ create }) => {
-        touchpointInstance.current = create({
+      .then(async ({ create }) => {
+        touchpointInstance.current = await create({
           config,
           theme,
-          externalLaunchButton: true,
+          windowSize: "full",
+          // externalLaunchButton: true,
         });
+        touchpointInstance.current.expanded = true;
+        setTimeout(() => {
+          console.log(touchpointInstance.current.expanded);
+        }, 100);
       })
       .catch((err) => {
         // eslint-disable-next-line no-console

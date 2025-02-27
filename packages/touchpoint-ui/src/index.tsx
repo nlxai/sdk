@@ -1,8 +1,8 @@
 /* eslint-disable accessor-pairs */
 /* eslint-disable jsdoc/require-jsdoc */
 import { type Root, createRoot } from "react-dom/client";
-import { type ConversationHandler } from "@nlxai/chat-core";
 import htm from "htm";
+import { type ConversationHandler } from "@nlxai/chat-core";
 
 import App, { type Props, type AppRef } from "./App";
 import cssRaw from "./index.css?inline";
@@ -20,7 +20,6 @@ import { DateInput } from "./components/ui/DateInput";
 
 import { createElement, type FC } from "react";
 
-export { useTouchpointContext } from "./context";
 export { default as React } from "react";
 
 // Create a htm instance where components can be used
@@ -59,6 +58,7 @@ export {
 class NlxTouchpointElement extends HTMLElement {
   _root: Root | null = null;
   _shadowRoot: ShadowRoot | null = null;
+  onRef: ((ref: AppRef) => void) | null = null;
 
   set props(value: Props) {
     this._shadowRoot =
@@ -70,11 +70,9 @@ class NlxTouchpointElement extends HTMLElement {
         <App
           {...value}
           ref={(ref) => {
-            this.dispatchEvent(
-              new CustomEvent("reactRef", {
-                detail: ref,
-              }),
-            );
+            if (ref != null) {
+              this.onRef?.(ref);
+            }
           }}
         />
       </>,
@@ -99,52 +97,31 @@ const customElementsDefine: typeof customElements.define = (
 customElementsDefine("nlx-touchpoint", NlxTouchpointElement);
 
 export interface TouchpointInstance {
-  expand: () => void;
-  collapse: () => void;
-  getConversationHandler: () => ConversationHandler | null;
+  expanded: boolean;
+  conversationHandler: ConversationHandler;
   teardown: () => void;
 }
 
-export const create = (props: Props): TouchpointInstance => {
-  const element: any = document.createElement("nlx-touchpoint");
-  element.props = props;
-  document.body.appendChild(element);
-  let refValue: AppRef | null = null;
-  const handleRef = (event: CustomEvent<AppRef>): void => {
-    refValue = event.detail;
-  };
-  element.addEventListener("reactRef", handleRef);
-  // Since the React ref instance might not be synchronously set exactly when the experience is initialized, this helper allows the user
-  // to use methods, either immediately or with a setTimeout. Only applicable to methods that don't return anything.
-  // (for example, conversation handler availability is not guaranteed anyway)
-  const handleRefWithDelay = (fn: (appRef: AppRef) => void): void => {
-    if (refValue != null) {
-      fn(refValue);
-      return;
-    }
-    setTimeout(() => {
-      if (refValue != null) {
-        fn(refValue);
-      }
-    });
-  };
-  return {
-    expand: () => {
-      handleRefWithDelay((appRef) => {
-        appRef.expand();
+export const create = (props: Props): Promise<TouchpointInstance> => {
+  return new Promise((resolve) => {
+    const element: any = document.createElement("nlx-touchpoint");
+    element.onRef = (ref: AppRef) => {
+      resolve({
+        set expanded(val) {
+          ref.setExpanded(val);
+        },
+        get expanded() {
+          return ref.getExpanded();
+        },
+        get conversationHandler() {
+          return ref.getConversationHandler();
+        },
+        teardown: () => {
+          document.body.removeChild(element);
+        },
       });
-    },
-    collapse: () => {
-      handleRefWithDelay((appRef) => {
-        appRef.collapse();
-      });
-    },
-    getConversationHandler: () => {
-      return refValue?.getConversationHandler() ?? null;
-    },
-    teardown: () => {
-      element.removeEventListener("reactRef", handleRef);
-      document.body.removeChild(element);
-    },
-  };
+    };
+    element.props = props;
+    document.body.appendChild(element);
+  });
 };

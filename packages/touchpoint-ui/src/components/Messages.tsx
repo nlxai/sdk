@@ -102,6 +102,7 @@ export const Messages: FC<MessagesProps> = ({
   lastBotResponseIndex,
   isWaiting,
   customModalities,
+  handler,
   className,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -202,7 +203,13 @@ export const Messages: FC<MessagesProps> = ({
                       );
                       return null;
                     }
-                    return <Component key={key} data={value} />;
+                    return (
+                      <Component
+                        key={key}
+                        data={value}
+                        conversationHandler={handler}
+                      />
+                    );
                   },
                 )}
               </div>
