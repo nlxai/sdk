@@ -102,6 +102,7 @@ export interface TouchpointInstance {
   teardown: () => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/promise-function-async
 export const create = (props: Props): Promise<TouchpointInstance> => {
   return new Promise((resolve) => {
     const element: any = document.createElement("nlx-touchpoint");
