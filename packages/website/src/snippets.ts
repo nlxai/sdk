@@ -65,7 +65,6 @@ export const touchpointUiSetupSnippet = ({
           return Promise.resolve();
         }
       };
-      let touchpointInstance;
       contentLoaded().then(() => {
         return nlxai.touchpointUi.create({
           config: {
@@ -89,10 +88,7 @@ export const touchpointUiSetupSnippet = ({
               : ""
           }
         })
-      }) 
-      .then((instance) => {
-        touchpointInstance = instance;
-      });
+      }); 
     </script>
   </body>
 </html>`;
