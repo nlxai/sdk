@@ -127,13 +127,8 @@ export const Content: FC<unknown> = () => {
         touchpointInstance.current = await create({
           config,
           theme,
-          windowSize: "full",
-          // externalLaunchButton: true,
+          launchIcon: false,
         });
-        touchpointInstance.current.expanded = true;
-        setTimeout(() => {
-          console.log(touchpointInstance.current.expanded);
-        }, 100);
       })
       .catch((err) => {
         // eslint-disable-next-line no-console
@@ -170,7 +165,10 @@ export const Content: FC<unknown> = () => {
           onClick={
             isConfigValid(config)
               ? () => {
-                  touchpointInstance.current?.expand();
+                  const instance = touchpointInstance.current;
+                  if (instance != null) {
+                    instance.expanded = true;
+                  }
                 }
               : undefined
           }
