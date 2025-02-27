@@ -43,13 +43,11 @@ export interface Props {
    */
   brandIcon?: string;
   /**
-   * URL of icon used on the launch icon in the bottom right when the experience is collapsed
+   * URL of icon used on the launch icon in the bottom right when the experience is collapsed.
+   *
+   * When set to `false`, no launch button is shown at all. When not set or set to `true`, the default launch icon is rendered.
    */
-  launchIcon?: string;
-  /**
-   * When set to true, the launch icon is completely hidden, and expanding the widget is handled externally
-   */
-  externalLaunchButton?: boolean;
+  launchIcon?: string | boolean;
   theme?: Partial<Theme>;
   customModalities?: Record<string, CustomModalityComponent<any>>;
 }
@@ -258,7 +256,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             )}
           </div>
         </CustomPropertiesContainer>
-      ) : props.externalLaunchButton !== true ? (
+      ) : props.launchIcon !== false ? (
         <CustomPropertiesContainer
           className="font-sans"
           theme={props.theme}
@@ -266,7 +264,11 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         >
           <LaunchButton
             className="fixed z-100 bottom-2 right-2 backdrop-blur z-launchButton"
-            iconUrl={props.launchIcon}
+            iconUrl={
+              typeof props.launchIcon === "string"
+                ? props.launchIcon
+                : undefined
+            }
             onClick={() => {
               setIsExpanded(true);
             }}
