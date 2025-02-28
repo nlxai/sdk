@@ -62,6 +62,10 @@ body {
   @apply h-full;
 }
 
+body {
+  @apply bg-background-docs;
+}
+
 .prose th {
   @apply text-left font-medium text-primary-60;
 }
