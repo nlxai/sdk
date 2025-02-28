@@ -2,7 +2,7 @@ import { type FC } from "react";
 import { useLocation } from "react-router-dom";
 import { clsx } from "clsx";
 
-import { TouchpointExampleWidget } from "../components/TouchpointExampleWidget";
+import { TouchpointExampleWidget } from "./TouchpointExampleWidget";
 
 const buttonBaseClass =
   "rounded-xl py-1.5 px-8 text-sm focus:outline focus:outline-accent-50 focus:outline-2";
@@ -64,27 +64,29 @@ export const Hero: FC<unknown> = () => {
             <TouchpointExampleWidget
               className="w-full h-[360px] lg:h-[calc(100vh-4.75rem-80px)]"
               items={[
-                [
-                  {
-                    type: "user",
-                    message: "What is a good mountain holiday destination?",
-                  },
-                ],
-                [{ type: "loader" }],
-                [
-                  {
-                    type: "bot",
-                    message:
-                      "The Swiss Alps are a stunning holiday destination, offering snow-capped peaks, scenic trails, and world-class ski resorts like Zermatt and St. Moritz. Visitors can enjoy activities such as hiking, skiing, or relaxing in cozy alpine villages. With breathtaking views, charming chalets, and Swiss hospitality, it's perfect for adventure or relaxation.",
-                  },
-                  {
-                    type: "images",
-                    images: [
-                      "/images/swiss-alps-1.png",
-                      "/images/swiss-alps-2.png",
-                    ],
-                  },
-                ],
+                {
+                  type: "user",
+                  previousBotMessage: "Hello! How may I help you today?",
+                  message: "What is a good mountain holiday destination?",
+                },
+                { type: "loader" },
+                {
+                  type: "bot",
+                  messages: [
+                    {
+                      type: "text",
+                      message:
+                        "The Swiss Alps are a stunning holiday destination, offering snow-capped peaks, scenic trails, and world-class ski resorts like Zermatt and St. Moritz. Visitors can enjoy activities such as hiking, skiing, or relaxing in cozy alpine villages. With breathtaking views, charming chalets, and Swiss hospitality, it's perfect for adventure or relaxation.",
+                    },
+                    {
+                      type: "images",
+                      images: [
+                        "/images/swiss-alps-1.png",
+                        "/images/swiss-alps-2.png",
+                      ],
+                    },
+                  ],
+                },
               ]}
             />
           </div>
