@@ -77,7 +77,7 @@ export const Content: FC<unknown> = () => {
   return (
     <>
       <PageContent md={content} />
-      <div className="mt-6 grid lg:grid-cols-2 gap-8">
+      <div className="mt-6 space-y-8">
         <div className="space-y-4">
           <h3 className="text-xl">Setup</h3>
           <Note body="In order for the bot communication to work (i.e., not trigger CORS errors), make sure that the URL of your webpage is added to the whitelisted URL list of your API channel in Dialog Studio." />

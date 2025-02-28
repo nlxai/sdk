@@ -57,7 +57,6 @@ export const Content: FC<unknown> = () => {
   return (
     <>
       <InlineWidget
-        className="mb-8"
         items={[
           [
             {
@@ -68,10 +67,7 @@ export const Content: FC<unknown> = () => {
         ]}
       />
       <PageContent md={content} />
-      <Note
-        className="mt-6"
-        body="Compatible data must be sent from the bot configuration along with the 'Carousel' modality in order for the presentation layer to work."
-      />
+      <Note body="Compatible data must be sent from the bot configuration along with the 'Carousel' modality in order for the presentation layer to work." />
     </>
   );
 };

@@ -87,7 +87,6 @@ export const Content: FC<unknown> = () => {
   return (
     <>
       <InlineWidget
-        className="mb-8"
         items={[
           [
             {
@@ -98,10 +97,7 @@ export const Content: FC<unknown> = () => {
         ]}
       />
       <PageContent md={content} />
-      <Note
-        className="mt-6"
-        body="This code presents an example of how the feedback form can be implemented. In order for this to work in production, you must make sure the slot names match the ones defined in Dialog Studio."
-      />
+      <Note body="This code presents an example of how the feedback form can be implemented. In order for this to work in production, you must make sure the slot names match the ones defined in Dialog Studio." />
     </>
   );
 };

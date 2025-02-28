@@ -80,7 +80,7 @@ export const Content: FC<unknown> = () => {
 
   return (
     <>
-      <InlineWidget className="mb-8" items={items} />
+      <InlineWidget items={items} />
       <PageContent md={content} />
     </>
   );

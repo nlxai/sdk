@@ -1,16 +1,19 @@
 import { type ReactNode } from "react";
+import { clsx } from "clsx";
 
 export const RadioList = <T,>({
+  className,
   selected,
   options,
   onChange,
 }: {
+  className?: string;
   selected: T;
   options: Array<{ id: string; value: T; label: string }>;
   onChange: (val: T) => void;
 }): ReactNode => {
   return (
-    <div className="space-y-2">
+    <div className={clsx("space-y-2", className)}>
       {options.map((option) => (
         <div className="flex items-center" key={option.id}>
           <input

@@ -102,8 +102,10 @@ export const ContentRoutes: FC<unknown> = () => {
         const next: RouteInfo | undefined = flattenedRoutes[index + 1];
         const elementWithPageNav = (
           <>
-            <PageTitle pretitle={heading} title={label} />
-            {element}
+            <main className="max-w-3xl mx-auto space-y-8">
+              <PageTitle pretitle={heading} title={label} />
+              {element}
+            </main>
             <NextPrevPage
               prev={
                 prev != null

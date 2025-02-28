@@ -177,7 +177,6 @@ export const Content: FC<unknown> = () => {
         />
       </div>
       <PageContent
-        className="mt-8"
         md={snippetContent({
           config,
           theme,

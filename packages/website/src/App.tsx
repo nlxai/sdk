@@ -1,4 +1,5 @@
 import { type FC, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Nav, MobileNav } from "./components/Nav";
@@ -6,7 +7,10 @@ import { ContentRoutes } from "./routes";
 
 export const App: FC<unknown> = () => {
   const [mobileMenuExpanded, setMobileMenuExpanded] = useState<boolean>(false);
-  const [touchpoint, setTouchpoint] = useState<boolean>(false);
+  const location = useLocation();
+  const [touchpoint, setTouchpoint] = useState<boolean>(
+    location.pathname.includes("touchpoint"),
+  );
 
   return (
     <div className="flex w-full flex-col text-primary-80">

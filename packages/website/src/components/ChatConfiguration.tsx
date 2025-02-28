@@ -32,7 +32,8 @@ export const getInitialConfig = (): Config => {
   }
   const searchParams = new URLSearchParams(window.location.search);
   return defaultInitialConfig({
-    applicationUrl: searchParams.get("botUrl"),
+    applicationUrl:
+      searchParams.get("applicationUrl") ?? searchParams.get("botUrl"),
     apiKey: searchParams.get("apiKey"),
     languageCode: searchParams.get("languageCode"),
   });
@@ -213,9 +214,11 @@ export const ThemeEditor: FC<{
 export const BehaviorEditor: FC<{
   behavior: Behavior;
   setBehavior: (val: Behavior) => void;
-}> = ({ behavior, setBehavior }) => {
+  className?: string;
+}> = ({ behavior, setBehavior, className }) => {
   return (
     <RadioList
+      className={className}
       selected={behavior}
       onChange={setBehavior}
       options={[

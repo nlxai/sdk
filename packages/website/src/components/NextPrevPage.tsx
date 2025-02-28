@@ -31,34 +31,36 @@ const headingClass = "text-base text-primary-60";
 export const NextPrevPage: FC<{ prev?: LinkData; next?: LinkData }> = (
   props,
 ) => (
-  <dl className="mt-12 flex border-t border-primary-10 pt-6">
-    {props.prev && (
-      <div>
-        <dt className={headingClass}>Previous</dt>
-        <dd className="mt-1">
-          <Link
-            className="flex items-center gap-x-1 text-base text-primary-90 hover:text-white flex-row-reverse"
-            to={props.prev.url}
-          >
-            {props.prev.label}
-            <PrevArrow />
-          </Link>
-        </dd>
-      </div>
-    )}
-    {props.next && (
-      <div className="ml-auto text-right">
-        <dt className={headingClass}>Next</dt>
-        <dd className="mt-1">
-          <Link
-            to={props.next.url}
-            className="flex items-center gap-x-1 text-base text-primary-90 hover:text-white"
-          >
-            {props.next.label}
-            <NextArrow />
-          </Link>
-        </dd>
-      </div>
-    )}
+  <dl className="mt-12 border-t border-primary-10 pt-6">
+    <div className="flex max-w-3xl mx-auto">
+      {props.prev && (
+        <div>
+          <dt className={headingClass}>Previous</dt>
+          <dd className="mt-1">
+            <Link
+              className="flex items-center gap-x-1 text-base text-primary-90 hover:text-white flex-row-reverse"
+              to={props.prev.url}
+            >
+              {props.prev.label}
+              <PrevArrow />
+            </Link>
+          </dd>
+        </div>
+      )}
+      {props.next && (
+        <div className="ml-auto text-right">
+          <dt className={headingClass}>Next</dt>
+          <dd className="mt-1">
+            <Link
+              to={props.next.url}
+              className="flex items-center gap-x-1 text-base text-primary-90 hover:text-white"
+            >
+              {props.next.label}
+              <NextArrow />
+            </Link>
+          </dd>
+        </div>
+      )}
+    </div>
   </dl>
 );
