@@ -195,7 +195,7 @@ const { html, BaseText } = nlxai.touchpointUi;
 // Use html to create components with template literals
 const myComponent = ({ data, conversationHandler }) => {
   // Basic syntax
-  return html` <BaseText>Hello, ${data.name}!</BaseText> `;
+  return html` <BaseText>Hello</BaseText> `;
 };
 ```
 
