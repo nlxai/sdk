@@ -1,38 +1,56 @@
-The Touchpoint SDK provides access to the underlying [ConversationHandler](/headless-api-reference#interface-conversationhandler) outside of Custom Components via the Touchpoint Instance returned from the top-level create method.
-
-### Use Cases
-
-- Send custom intent after a period of inactivity
-- Interact with existing elements on your webpage
-
-## Accessing the ConversationHandler
+The Touchpoint SDK provides access to the [ConversationHandler](/headless-api-reference#interface-conversationhandler) through the Touchpoint Instance returned from the top-level create method.
 
 ```js
 import { create } from "@nlxai/touchpoint-ui";
-
-const touchpointOptions = {
-  config: {
-    applicationUrl: "YOUR_APPLICATION_URL",
-    headers: {
-      "nlx-api-key": "YOUR_API_KEY",
-    },
-    languageCode: "en-US",
-  },
-  theme: { fontFamily: '"Neue Haas Grotesk", sans-serif', accent: "#2663DA" },
-};
-
-// Instantiate touchpoint
+// Instantiate touchpoint with your configuration options
+const touchpointOptions = {}
 const touchpoint = await create(touchpointOptions);
 
-// Access the Conversation Handler from the TouchpointInstance
+// Access conversationHandler
+const conversationHandler = touchpoint.conversationHandler;
+```
 
-// CUSTOM BEHAVIOR SNIPPET
-setTimeout(() => {
-  const conversationHandler = touchpoint.conversationHandler;
-  if (conversationHandler) {
-    conversationHandler.sendIntent("MyCustomIntent");
-    touchpoint.expand();
-  }
-}, 16000);
-// CUSTOM BEHAVIOR SNIPPET END
+## Examples
+
+Touchpoint can be configured with a number of custom behaviors with the [ConversationHandler](/headless-api-reference#interface-conversationhandler).
+
+### Example 1: Open Touchpoint after user inactivity
+
+```js
+// Simple countdown to show Touchpoint
+const showTouchpointAfterInactivity = (seconds) => {
+  let remaining = seconds;
+  
+  const countdown = setInterval(() => {
+    remaining--;
+    
+    if (remaining <= 0) {
+      // Clear the interval
+      clearInterval(countdown);
+      
+      // Open Touchpoint
+      touchpoint.expanded = true;
+    }
+  }, 1000);
+};
+
+// Start a 30 second countdown
+showTouchpointAfterInactivity(30);
+```
+
+### Example 2: Detecting Modalities in Conversation Responses
+
+Uses [subscribe](/headless-api-reference#subscribe) to listen for a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) named "MapDirections".
+
+```js
+const myListenerFunction = (history, message) => {
+  // Only process if we have a new bot message
+  if (!message || message.type !== 'bot') return;
+  const modalities = message.payload?.modalities;
+  if (!modalities) return;
+  if (modalities.MapDirections) console.log(modalities.MapDirections);
+};
+
+// Start listening to the conversation
+conversationHandler.subscribe(myListenerFunction);
 ```
