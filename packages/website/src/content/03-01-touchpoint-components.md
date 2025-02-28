@@ -2,7 +2,7 @@ Touchpoint components work together with each other to create rich chat experien
 
 ## Building Custom Components
 
-Basic context for custom components is available through the `data` and `handler` objects.
+Basic context for custom components is available through the `data` and `conversationHandler` objects.
 
 - `data`: Can be any type. It will match the schema set in the modality within NLX once set in the Node.
 - `conversationHandler`: The [ConversationHandler](/headless-api-reference#interface-conversationhandler). Functions to access the conversational context and send data back to NLX.
@@ -170,6 +170,66 @@ const touchpointOptions = {
 
 // Register components with specific modality keys
 const touchpoint = await create(touchpointOptions);
+```
+
+## Building HTML Components without Transpiling
+
+Touchpoint provides a way to create components without requiring a build step or JSX transpilation through the `html` template literal tag. Touchpoint uses the [htm](https://github.com/developit/htm) library to enable the html functionality.
+
+This is useful when:
+
+- Creating Components in `<Script>` tags
+- Creating Components in an existing JS codebase (no JSX)
+- Adding Touchpoint to a project without a existing build system
+
+### Import and Basic Usage
+
+- Access the `html` tag function directly from the Touchpoint object
+- When nesting components, wrap them in `${html`...`}` syntax
+- Use `${array.map(...)}` for rendering arrays of components
+- Template strings must maintain proper nesting and structure
+
+```javascript
+const { html, Icons } = nlxai.touchpointUi;
+
+// Use html to create components with template literals
+const myComponent = ({ data, conversationHandler }) => {
+  // Basic syntax
+  return html` <BaseText>Hello, ${data.name}!</BaseText> `;
+};
+```
+
+### Example: Creating a Carousel with CustomCards
+
+Refactor the example Carousel from the [CustomCards Documentation](/touchpoint-CustomCards).
+
+```html
+<script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script>
+  const { html, React } = nlxai.touchpointUi;
+  const CarouselExample = ({ data, conversationHandler }) => {
+    const [selected, setSelected] = React.useState(null);
+    return html`<Carousel>
+      ${data.map(
+        (cardData, cardIndex) =>
+          html`<CustomCard
+            key=${cardIndex}
+            selected=${selected === cardIndex}
+            onClick=${() => {
+              setSelected(cardIndex);
+              conversationHandler.sendChoice(cardData.id);
+            }}
+          >
+            <CustomCardImageRow src=${cardData.imageUrl} alt="Alt Text" />
+            <CustomCardRow
+              left=${html`<BaseText>${cardData.leftText}</BaseText>`}
+              right=${html`<BaseText>${cardData.rightText}</BaseText>`}
+            />
+          </CustomCard>`,
+      )}
+    </Carousel>`;
+  };
+</script>
 ```
 
 ## Component Categories

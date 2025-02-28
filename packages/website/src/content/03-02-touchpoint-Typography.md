@@ -7,30 +7,9 @@ Touchpoint provides two typography elements, BaseText and SmallText, to provide 
 
 You can import the typography elements from touchpoint once the package has been installed or made available in your project.
 
-The following examples use both the BaseText and SmallText typography components to construct a [CustomCard](/touchpoint-CustomCards) with the "primary" (BaseText) information left aligned and "secondary" (SmallText) right aligned.
+### Example
 
-### Import using `<script>`
-
-Import the elements via `html` from Touchpoint. Useful when adding touchpoint to your project via `<script>`.
-
-```html
-<script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
-<script>
-  const { html } = nlxai.touchpointUi;
-  const ProductDetails = ({ data, conversationHandler }) => {
-    return html` <CustomCard>
-      <CustomCardRow
-        left=${html`<BaseText>${data.PrimaryInformation}</BaseText>`}
-        right=${html`<SmallText>${data.SecondaryInformation}</SmallText>`}
-      />
-    </CustomCard>`;
-  };
-</script>
-```
-
-### Import using `import`
-
-Import the elements to your project using import statements.
+- Uses both the BaseText and SmallText typography components to construct a [CustomCard](/touchpoint-CustomCards) with the "primary" (BaseText) information left aligned and "secondary" (SmallText) right aligned.
 
 ```javascript
 import {

@@ -10,12 +10,6 @@ The Date Input component provides a user-friendly interface for entering and sub
 
 You can import the DateInput component once the package has been installed or made available in your project.
 
-### Define the Modality in NLX
-
-The DateInput component is best triggered in a [User Choice Node](https://docs.studio.nlx.ai/1-build/intents/flows/nodes#user-choice) on NLX with a modality attached to trigger the DateInput component. The date selection should be sent back to NLX to fill the [slot in the User Choice Node](https://docs.studio.nlx.ai/1-build/intents/attach-slots) and **NOT** as a choice. This is different than the typical [CustomCard](/touchpoint-CustomCards) or [Button](/touchpoint-Buttons) components where the choice back to NLX it typically a 'choice'.
-
-In the examples below, the modality is named `DateInputExample` with a single string as the schema.
-
 ### Define onSumbit
 
 The Date Input Component expect a function passed via `onSubmit` that be called when the user finalizes their date selection.
@@ -24,33 +18,15 @@ The [ConversationHandler](/headless-api-reference#interface-conversationhandler)
 
 The `sendSlots` method expects the Slot to previously be defined within NLX. For example, when the User Choice node is resolving a slot named "TouchpointDateInputResult" with the DatePicker, the SlotResponse should be `{"TouchpointDateInputResult": date}`.
 
-### Import using `<script>`
+## Example
 
-Import the elements via `html` from Touchpoint. Useful when adding touchpoint to your project via `<script>`
+The DateInput component is best triggered in a [User Choice Node](https://docs.studio.nlx.ai/1-build/intents/flows/nodes#user-choice) on NLX with a modality attached to trigger the DateInput component. The date selection should be sent back to NLX to fill the [slot in the User Choice Node](https://docs.studio.nlx.ai/1-build/intents/attach-slots) and **NOT** as a choice. This is different than the typical [CustomCard](/touchpoint-CustomCards) or [Button](/touchpoint-Buttons) components where the choice back to NLX it typically a 'choice'.
 
-The snippet below:
+### Example Modality
 
-- Uses `html` to create the Date Input component.
-- Assumes the User Choice node is resolving the slot named "TouchpointDateInputResult"
+In the examples below, the modality is named `DateInputExample` with a single string as the schema.
 
-```html
-<script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
-<script>
-  const { html, Icons } = nlxai.touchpointUi;
-  const DateInputExample = ({ data, conversationHandler }) => {
-    return html`
-      <DateInput
-        onSubmit=${(date) =>
-          conversationHandler.sendSlots({ TouchpointDateInputResult: date })}
-      />
-    `;
-  };
-</script>
-```
-
-### Import using `import`
-
-Import the elements to your project using import statements.
+### Example Date Input Component
 
 ```javascript
 import { DateInput } from "@nlxai/touchpoint-ui";

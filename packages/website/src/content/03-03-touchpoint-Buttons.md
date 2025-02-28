@@ -29,15 +29,6 @@ Both TextButton and IconButton have required properties to render the elements c
 
 You can import the buttons elements from touchpoint once the package has been installed or made available in your project.
 
-The examples below require a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) defined in your NLX application as an object with at least `buttonLabel` and `buttonId` properties.
-
-```json
-{
-  "buttonLabel": "Label passed to button Component",
-  "buttonId": "Id of the 'choice' to send back to NLX"
-}
-```
-
 ### Define onClick
 
 The Button Component expect a function passed via `onClick` to define the actions to take when a user clicks the button.
@@ -46,47 +37,20 @@ Access the [ConversationHandler](/headless-api-reference#interface-conversationh
 
 Read more details about building Custom Components with Touchpoint in the [Getting started with Touchpoint components](/touchpoint-components) documentation page.
 
-### Import using `<script>`
+## Example
 
-Import the elements via `html` from Touchpoint. Useful when adding touchpoint to your project via `<script>`
+The examples below require a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) defined in your NLX application as an object with at least `buttonLabel` and `buttonId` properties.
 
-The snippet below:
+### Example Modality Schema
 
-- Uses `html` to create the buttons.
-- Imports Touchpoint Icons to use in the IconButton.
-
-```html
-<script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
-<script>
-  const { html, Icons } = nlxai.touchpointUi;
-  const TextButtonExample = ({ data, conversationHandler }) => {
-    return html`
-      <TextButton
-        label=${data.buttonLabel}
-        Icon=${Icons.ArrowForward}
-        onClick=${() => conversationHandler.sendChoice(data.buttonId)}
-      />
-    `;
-  };
-
-  const IconButtonExample = ({ data, conversationHandler }) => {
-    return html` <IconButton
-      label=${data.buttonLabel}
-      Icon=${Icons.ArrowForward}
-      onClick=${() => conversationHandler.sendChoice(data.buttonId)}
-      type="main"
-    />`;
-  };
-</script>
+```json
+{
+  "buttonLabel": "Label passed to button Component",
+  "buttonId": "Id of the 'choice' to send back to NLX"
+}
 ```
 
-### Import using `import`
-
-Import the elements to your project using import statements.
-
-The snippet below:
-
-- Imports Touchpoint, Icons, and Context to use in the IconButton.
+### Example Button Components
 
 ```javascript
 import { TextButton, IconButton, Icons } from "@nlxai/touchpoint-ui";

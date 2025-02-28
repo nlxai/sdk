@@ -16,28 +16,9 @@ You can import the Icons from touchpoint once the package has been installed or 
 
 The following examples use the Icons available from Touchpoint to construct an [IconButton](/touchpoint-Buttons).
 
-### Import using `<script>`
+## Example
 
-Import the Icons from Touchpoint. Useful when adding touchpoint to your project via `<script>`:
-
-```html
-<script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
-<script>
-  const { html, Icons } = nlxai.touchpointUi;
-  const IconButtonExample = ({ data, conversationHandler }) => {
-    return html` <IconButton
-      label=${data.buttonLabel}
-      Icon=${Icons.ArrowForward}
-      onClick=${() => conversationHandler.sendChoice(data.buttonId)}
-      type="main"
-    />`;
-  };
-</script>
-```
-
-### Import using `import`
-
-Import the elements to your project using import statements.
+Example IconButton using the Icons from Touchpoint
 
 ```javascript
 import { useTouchpointContext, IconButton, Icons } from "@nlxai/touchpoint-ui";
