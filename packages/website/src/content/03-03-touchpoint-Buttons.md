@@ -73,7 +73,6 @@ The snippet below:
   };
   
   const IconButtonExample = ({data, conversationHandler}) => {
-  console.log(data);
   return html`
   <IconButton
       label=${data.buttonLabel}

@@ -33,7 +33,7 @@ The font family affects all text in the interface, ensuring consistent typograph
 
 ## Dark Mode Support
 
-Touchpoint automatically adapts your theme for both light and dark modes. Set your preferred mode using the `colorMode` prop:
+Touchpoint automatically adapts your theme for both light and dark modes. Use the `light-dark()` method for accent colors to provide accents for either mode. Set your preferred mode using the `colorMode` prop:
 
 ```javascript
 const touchpointInstance = await nlxai.touchpointUi.create({
@@ -42,7 +42,7 @@ const touchpointInstance = await nlxai.touchpointUi.create({
   },
   colorMode: "dark",  // or "light"
   theme: {
-    accent: "rgb(28, 99, 218)",
+    accent: "light-dark(rgb(28, 99, 218), rgb(38, 99, 118))", // provide accent for both dark and light mode.
     fontFamily: '"Helvetica Neue", sans-serif'
   }
 });
