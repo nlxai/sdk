@@ -9,8 +9,9 @@
     "build:static": "vite build --ssr src/static-renderer.tsx --outDir dist/static",
     "dev": "vite --force",
     "render-static": "tsx render-static.ts",
-    "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx --max-warnings 0",
+    "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx --max-warnings 0 && git ls-files | grep -E '\\.(js|jsx|ts|tsx|css|html|md)$' | xargs prettier -c",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx,.mdx --fix",
+    "format": "git ls-files | grep -E '\\.(js|jsx|ts|tsx|css|html|md)$' | xargs prettier --write",
     "tsc": "tsc",
     "caddy": "caddy run --config Caddyfile",
     "test": "npm run build"
