@@ -3,7 +3,7 @@ The Touchpoint SDK provides access to the [ConversationHandler](/headless-api-re
 ```js
 import { create } from "@nlxai/touchpoint-ui";
 // Instantiate touchpoint with your configuration options
-const touchpointOptions = {}
+const touchpointOptions = {};
 const touchpoint = await create(touchpointOptions);
 
 // Access conversationHandler
@@ -20,14 +20,14 @@ Touchpoint can be configured with a number of custom behaviors with the [Convers
 // Simple countdown to show Touchpoint
 const showTouchpointAfterInactivity = (seconds) => {
   let remaining = seconds;
-  
+
   const countdown = setInterval(() => {
     remaining--;
-    
+
     if (remaining <= 0) {
       // Clear the interval
       clearInterval(countdown);
-      
+
       // Open Touchpoint
       touchpoint.expanded = true;
     }
@@ -45,7 +45,7 @@ Uses [subscribe](/headless-api-reference#subscribe) to listen for a [modality](h
 ```js
 const myListenerFunction = (history, message) => {
   // Only process if we have a new bot message
-  if (!message || message.type !== 'bot') return;
+  if (!message || message.type !== "bot") return;
   const modalities = message.payload?.modalities;
   if (!modalities) return;
   if (modalities.MapDirections) console.log(modalities.MapDirections);
