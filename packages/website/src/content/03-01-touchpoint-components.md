@@ -190,7 +190,7 @@ This is useful when:
 - Template strings must maintain proper nesting and structure
 
 ```javascript
-const { html, Icons } = nlxai.touchpointUi;
+const { html, BaseText } = nlxai.touchpointUi;
 
 // Use html to create components with template literals
 const myComponent = ({ data, conversationHandler }) => {
