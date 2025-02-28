@@ -99,7 +99,7 @@ export const MobileNav: FC<{
         <Toggle
           value={props.touchpoint}
           options={[
-            { value: true, label: "Touchpoint (beta)" },
+            { value: true, label: "Touchpoint" },
             { value: false, label: "Chat Widget" },
           ]}
           onChange={(val) => {

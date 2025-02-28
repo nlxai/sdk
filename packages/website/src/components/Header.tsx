@@ -54,7 +54,7 @@ export const Header: FC<{
         className="hidden md:inline-flex"
         value={props.touchpoint}
         options={[
-          { value: true, label: "Touchpoint (beta)" },
+          { value: true, label: "Touchpoint" },
           { value: false, label: "Chat Widget" },
         ]}
         onChange={(val) => {

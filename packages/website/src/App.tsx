@@ -9,7 +9,7 @@ export const App: FC<unknown> = () => {
   const [mobileMenuExpanded, setMobileMenuExpanded] = useState<boolean>(false);
   const location = useLocation();
   const [touchpoint, setTouchpoint] = useState<boolean>(
-    location.pathname.includes("touchpoint"),
+    !location.pathname.includes("web-widget"),
   );
 
   return (
