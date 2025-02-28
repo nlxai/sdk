@@ -24,15 +24,14 @@ Import the Icons from Touchpoint. Useful when adding touchpoint to your project 
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
   const { html, Icons } = nlxai.touchpointUi;
-  const IconButtonExample = ({data, conversationHandler}) => {
-  return html`
-  <IconButton
+  const IconButtonExample = ({ data, conversationHandler }) => {
+    return html` <IconButton
       label=${data.buttonLabel}
       Icon=${Icons.ArrowForward}
       onClick=${() => conversationHandler.sendChoice(data.buttonId)}
       type="main"
-  />`;
-};
+    />`;
+  };
 </script>
 ```
 
@@ -41,60 +40,61 @@ Import the Icons from Touchpoint. Useful when adding touchpoint to your project 
 Import the elements to your project using import statements.
 
 ```javascript
-import { useTouchpointContext, IconButton, Icons } from '@nlxai/touchpoint-ui';
-const IconButtonExample = ({data, conversationHandler}) => {
-  return(
-  <IconButton
+import { useTouchpointContext, IconButton, Icons } from "@nlxai/touchpoint-ui";
+const IconButtonExample = ({ data, conversationHandler }) => {
+  return (
+    <IconButton
       label={data.buttonLabel}
       Icon={Icons.ArrowForward}
       onClick={() => conversationHandler.sendChoice(data.buttonId)}
       type="main"
-  />);
+    />
+  );
 };
 ```
 
 ## Available Icons
 
-* Action
-* Assistant
-* AssistantOld
-* Add
-* ArrowDown
-* ArrowLeft
-* ArrowRight
-* ArrowUp
-* ArrowForward
-* Attachment
-* Camera
-* Check
-* Close
-* Copy
-* Date
-* Delete
-* Escalate
-* Error
-* FullScreen
-* Mic
-* MicOff
-* Location
-* Volume
-* VolumeOff
-* Translate
-* OpenInNew
-* Play
-* Preview
-* Reorder
-* Restart
-* Settings
-* Search
-* Share
-* Warning
-* ThumbDown
-* ThumbUp
-* Time
-* Undo
-* Refresh
-* Help
+- Action
+- Assistant
+- AssistantOld
+- Add
+- ArrowDown
+- ArrowLeft
+- ArrowRight
+- ArrowUp
+- ArrowForward
+- Attachment
+- Camera
+- Check
+- Close
+- Copy
+- Date
+- Delete
+- Escalate
+- Error
+- FullScreen
+- Mic
+- MicOff
+- Location
+- Volume
+- VolumeOff
+- Translate
+- OpenInNew
+- Play
+- Preview
+- Reorder
+- Restart
+- Settings
+- Search
+- Share
+- Warning
+- ThumbDown
+- ThumbUp
+- Time
+- Undo
+- Refresh
+- Help
 
 ## Related Components
 

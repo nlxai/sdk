@@ -1,4 +1,4 @@
-The Custom Cards system provides a structured way to present information in your chat interface. The system consists of four components that work together: 
+The Custom Cards system provides a structured way to present information in your chat interface. The system consists of four components that work together:
 
 - **Carousel** - Top Level component, acts as a container for multiple horizontally scrolled cards. A Carousel has at least 1 CustomCard.
 - **CustomCard** - Primary component, is a 'card' made up of multiple rows. A CustomCard has at least 1 of CustomCardRow or CustomCardImageRow. CustomCard can be used outside Carousel.
@@ -141,7 +141,7 @@ import {
   React,
 } from "@nlxai/touchpoint-ui";
 
-const CarouselExample = ({data, conversationHandler}) => {
+const CarouselExample = ({ data, conversationHandler }) => {
   const [selected, setSelected] = React.useState(null);
   return (
     <Carousel>

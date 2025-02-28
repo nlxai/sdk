@@ -4,8 +4,8 @@ Touchpoint components work together with each other to create rich chat experien
 
 Basic context for custom components is available through the `data` and `handler` objects.
 
-* `data`: Can be any type. It will match the schema set in the modality within NLX once set in the Node.
-* `conversationHandler`: The [ConversationHandler](/headless-api-reference#interface-conversationhandler). Functions to access the conversational context and send data back to NLX.
+- `data`: Can be any type. It will match the schema set in the modality within NLX once set in the Node.
+- `conversationHandler`: The [ConversationHandler](/headless-api-reference#interface-conversationhandler). Functions to access the conversational context and send data back to NLX.
 
 Add the Component to the `customModalities` configuration option paired with the name of Modality in NLX. In the example below the [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) is named "MyComponentModality".
 
@@ -44,7 +44,7 @@ const touchpoint = await create(touchpointOptions);
 
 ### Example Button Modality
 
-Create a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) named `TextButtonExample` within NLX and attach to a User Choice Node. Then custom slots or a static data request to set any value for buttonLabel and buttonId for this example. 
+Create a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) named `TextButtonExample` within NLX and attach to a User Choice Node. Then custom slots or a static data request to set any value for buttonLabel and buttonId for this example.
 
 ```json
 {
@@ -56,7 +56,7 @@ Create a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) nam
 ### Example Button Component
 
 ```js
-import { create, TextButton } from '@nlxai/touchpoint-ui';
+import { create, TextButton } from "@nlxai/touchpoint-ui";
 /**
  * MyFirstButtonComponent is a functional component that renders a TextButton with a label, icon, and click handler.
  *
@@ -68,27 +68,29 @@ import { create, TextButton } from '@nlxai/touchpoint-ui';
  *
  * @returns {JSX.Element} The rendered TextButton component.
  */
-const MyFirstButtonComponent = ({data, conversationHandler}) => {
-  const myTextButton = (<TextButton
+const MyFirstButtonComponent = ({ data, conversationHandler }) => {
+  const myTextButton = (
+    <TextButton
       label={data.buttonLabel}
       Icon={Icons.ArrowForward}
       onClick={() => conversationHandler.sendChoice(data.buttonId)}
-    />);
+    />
+  );
   return myTextButton;
-}
+};
 
 const touchpointOptions = {
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: {
-      "nlx-api-key": "YOUR_API_KEY"
+      "nlx-api-key": "YOUR_API_KEY",
     },
-    languageCode: "en-US"
+    languageCode: "en-US",
   },
-  theme: {"fontFamily":"\"Neue Haas Grotesk\", sans-serif","accent":"#2663DA"},
+  theme: { fontFamily: '"Neue Haas Grotesk", sans-serif', accent: "#2663DA" },
   customModalities: {
-    "TextButtonExample": MyFirstButtonComponent,
-  }
+    TextButtonExample: MyFirstButtonComponent,
+  },
 };
 
 // Register components with specific modality keys
@@ -96,7 +98,6 @@ const touchpoint = await create(touchpointOptions);
 ```
 
 ### Example CustomCard Modality
-
 
 For example, a Modality named "ProductCard" with schema:
 
@@ -111,14 +112,18 @@ For example, a Modality named "ProductCard" with schema:
 
 ### Example CustomCard Component
 
-
 ```javascript
-import { create, CustomCard, BaseText, TextButton, SmallText } from '@nlxai/touchpoint-ui';
-
+import {
+  create,
+  CustomCard,
+  BaseText,
+  TextButton,
+  SmallText,
+} from "@nlxai/touchpoint-ui";
 
 /**
  * ProductCardComponent is a React functional component that renders a custom card for a product.
- * 
+ *
  * @param {Object} props - The properties object.
  * @param {Object} props.data - The data object containing product details.
  * @param {string} props.data.id - The unique identifier for the product.
@@ -126,29 +131,26 @@ import { create, CustomCard, BaseText, TextButton, SmallText } from '@nlxai/touc
  * @param {string} props.data.name - The name of the product.
  * @param {string} props.data.price - The price of the product.
  * @param {Function} props.conversationHandler - The handler object with a sendChoice method.
- * 
+ *
  * @returns {JSX.Element} A custom card component displaying product details.
  */
 const ProductCardComponent = ({ data, conversationHandler }) => {
   const [selected, setSelected] = React.useState(null);
   return (
-  <CustomCard
+    <CustomCard
       key="0"
       selected={selected === 0}
       onClick={() => {
         setSelected(0);
         conversationHandler.sendChoice(data.id);
       }}
-  >
-    <CustomCardImageRow
-      src={data.productImageUrl}
-      alt={data.name}
-    />
-    <CustomCardRow
-      left={<BaseText>{data.name}</BaseText>}
-      right={<BaseText>{data.price}</BaseText>}
-    />
-  </CustomCard>
+    >
+      <CustomCardImageRow src={data.productImageUrl} alt={data.name} />
+      <CustomCardRow
+        left={<BaseText>{data.name}</BaseText>}
+        right={<BaseText>{data.price}</BaseText>}
+      />
+    </CustomCard>
   );
 };
 
@@ -156,14 +158,14 @@ const touchpointOptions = {
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: {
-      "nlx-api-key": "YOUR_API_KEY"
+      "nlx-api-key": "YOUR_API_KEY",
     },
-    languageCode: "en-US"
+    languageCode: "en-US",
   },
-  theme: {"fontFamily":"\"Neue Haas Grotesk\", sans-serif","accent":"#2663DA"},
+  theme: { fontFamily: '"Neue Haas Grotesk", sans-serif', accent: "#2663DA" },
   customModalities: {
-    "ProductCard": ProductCardComponent,
-  }
+    ProductCard: ProductCardComponent,
+  },
 };
 
 // Register components with specific modality keys

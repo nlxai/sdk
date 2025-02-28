@@ -1,11 +1,9 @@
-
 The Date Input component provides a user-friendly interface for entering and submitting dates in a standardized format. It combines input masking, validation, and submission capabilities in a single component.
-
 
 ## Properties
 
-| Property | Type     | Required | Description                                                       |
-| -------- | -------- | -------- | ----------------------------------------------------------------- |
+| Property | Type     | Required | Description                                                        |
+| -------- | -------- | -------- | ------------------------------------------------------------------ |
 | onSubmit | function | No       | Handler function that receives the parsed date string (YYYY-MM-DD) |
 
 ## Import and Basic Usage
@@ -26,15 +24,14 @@ The [ConversationHandler](/headless-api-reference#interface-conversationhandler)
 
 The `sendSlots` method expects the Slot to previously be defined within NLX. For example, when the User Choice node is resolving a slot named "TouchpointDateInputResult" with the DatePicker, the SlotResponse should be `{"TouchpointDateInputResult": date}`.
 
-
 ### Import using `<script>`
 
 Import the elements via `html` from Touchpoint. Useful when adding touchpoint to your project via `<script>`
 
-The snippet below: 
+The snippet below:
 
-* Uses `html` to create the Date Input component.
-* Assumes the User Choice node is resolving the slot named "TouchpointDateInputResult"
+- Uses `html` to create the Date Input component.
+- Assumes the User Choice node is resolving the slot named "TouchpointDateInputResult"
 
 ```html
 <script src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
@@ -43,7 +40,8 @@ The snippet below:
   const DateInputExample = ({ data, conversationHandler }) => {
     return html`
       <DateInput
-        onSubmit=${(date) => conversationHandler.sendSlots({TouchpointDateInputResult: date})}
+        onSubmit=${(date) =>
+          conversationHandler.sendSlots({ TouchpointDateInputResult: date })}
       />
     `;
   };
@@ -52,15 +50,17 @@ The snippet below:
 
 ### Import using `import`
 
-Import the elements to your project using import statements. 
+Import the elements to your project using import statements.
 
 ```javascript
-import { DateInput } from '@nlxai/touchpoint-ui';
+import { DateInput } from "@nlxai/touchpoint-ui";
 
-const DateInputExample = ({data, conversationHandler}) => {
-  return(
+const DateInputExample = ({ data, conversationHandler }) => {
+  return (
     <DateInput
-      onSubmit={(date) => conversationHandler.sendSlots({TouchpointDateInputResult: date})}
+      onSubmit={(date) =>
+        conversationHandler.sendSlots({ TouchpointDateInputResult: date })
+      }
     />
   );
 };
