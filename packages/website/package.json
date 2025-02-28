@@ -14,8 +14,7 @@
     "format": "git ls-files | grep -E '\\.(js|jsx|ts|tsx|css|html|md)$' | xargs prettier --write",
     "tsc": "tsc",
     "caddy": "caddy run --config Caddyfile",
-    "test": "npm run build",
-    "format": "prettier --write ."
+    "test": "npm run build"
   },
   "dependencies": {
     "@docsearch/css": "^3.6.0",
