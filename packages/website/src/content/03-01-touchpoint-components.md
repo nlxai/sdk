@@ -26,7 +26,7 @@ const Component = ({data, conversationHandler}) => {
 
 const touchpointOptions = {
   config: {
-    botUrl: "YOUR_BOT_URL",
+    applicationUrl: "YOUR_APPLICATION_URL",
     headers: {
       "nlx-api-key": "YOUR_API_KEY"
     },
@@ -79,7 +79,7 @@ const MyFirstButtonComponent = ({data, conversationHandler}) => {
 
 const touchpointOptions = {
   config: {
-    botUrl: "YOUR_BOT_URL",
+    applicationUrl: "YOUR_APPLICATION_URL",
     headers: {
       "nlx-api-key": "YOUR_API_KEY"
     },
@@ -154,7 +154,7 @@ const ProductCardComponent = ({ data, conversationHandler }) => {
 
 const touchpointOptions = {
   config: {
-    botUrl: "YOUR_BOT_URL",
+    applicationUrl: "YOUR_APPLICATION_URL",
     headers: {
       "nlx-api-key": "YOUR_API_KEY"
     },

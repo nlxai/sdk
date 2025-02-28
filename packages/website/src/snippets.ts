@@ -68,7 +68,7 @@ export const touchpointUiSetupSnippet = ({
       contentLoaded().then(() => {
         return nlxai.touchpointUi.create({
           config: {
-            botUrl: "${defaultTo(config.botUrl, "REPLACE_WITH_BOT_URL")}",
+            applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
             headers: {
               "nlx-api-key": "${defaultTo(
                 config.headers?.["nlx-api-key"],

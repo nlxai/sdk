@@ -4,7 +4,7 @@
 
 | Field                           | Type   | Description                       |
 |---------------------------------|--------|-----------------------------------|
-| `config.botUrl`                 | string | The URL endpoint for your NLX bot |
+| `config.applicationUrl`         | string | The URL endpoint for your NLX bot |
 | `config.headers["nlx-api-key"]` | string | Your NLX API key                  |
 
 ## Core Optional Fields
@@ -22,8 +22,8 @@
 
 The `customModalities` field connects your custom components to specific bot responses. Each key in this object maps to a component that handles that modality type.
 
-| Field               | Description                                     |
-|----------------------------|-------------------------------------------------|
+| Field              | Description                                      |
+|--------------------|--------------------------------------------------|
 | `customModalities` | Maps modality types to their handling components |
 
 ### Available Components
@@ -32,24 +32,24 @@ These components can be imported and used within your custom modality components
 
 #### Display Components
 
-| Component   |   Description                               |
-|--------------|-------------------------------------------|
-| [`BaseText`](/touchpoint-Typography)    |   Primary text component for main content   |
-| [`SmallText`](/touchpoint-Typography)   |  Secondary text for supporting information |
-| [`Icons`](/touchpoint-Icons) | Stylized Icons |
+| Component                             | Description                               |
+|---------------------------------------|-------------------------------------------|
+| [`BaseText`](/touchpoint-Typography)  | Primary text component for main content   |
+| [`SmallText`](/touchpoint-Typography) | Secondary text for supporting information |
+| [`Icons`](/touchpoint-Icons)          | Stylized Icons                            |
 
 #### Layout Components
-| Component            |  Description                          |
-|----------------------|---------------------------------------|
-| [`Carousel`](/touchpoint-CustomCards)          |  Container for multiple card elements |
-| [`CustomCard`](/touchpoint-CustomCards)         |  Individual card component            |
-| [`CustomCardRow`](/touchpoint-CustomCards)      |  Horizontal layout within cards       |
-| [`CustomCardImageRow`](/touchpoint-CustomCards) |  Specialized row for image content    |
+| Component                                       | Description                          |
+|-------------------------------------------------|--------------------------------------|
+| [`Carousel`](/touchpoint-CustomCards)           | Container for multiple card elements |
+| [`CustomCard`](/touchpoint-CustomCards)         | Individual card component            |
+| [`CustomCardRow`](/touchpoint-CustomCards)      | Horizontal layout within cards       |
+| [`CustomCardImageRow`](/touchpoint-CustomCards) | Specialized row for image content    |
 
 #### Interactive Components
 
-| Component    | Description                          |
-|--------------|--------------------------------------|
+| Component                           | Description                          |
+|-------------------------------------|--------------------------------------|
 | [`TextButton`](/touchpoint-Buttons) | Text-based button with optional icon |
 | [`IconButton`](/touchpoint-Buttons) | Icon-only button for compact actions |
 
@@ -57,9 +57,9 @@ These components can be imported and used within your custom modality components
 
 The async `create()` function returns promise that will be fulfilled with a `TouchpointInstance` with these methods:
 
-| Method                     | Description                              | Returns             |
-|----------------------------|------------------------------------------|---------------------|
-| `expand()`                 | Expands the chat widget                  | void                |
-| `collapse()`               | Collapses the chat widget                | void                |
+| Method                | Description                              | Returns                                                                      |
+|-----------------------|------------------------------------------|------------------------------------------------------------------------------|
+| `expand()`            | Expands the chat widget                  | void                                                                         |
+| `collapse()`          | Collapses the chat widget                | void                                                                         |
 | `conversationHandler` | Returns the current conversation handler | [ConversationHandler](/headless-api-reference#interface-conversationhandler) |
-| `teardown()`               | Removes the widget from the DOM          | void                |
+| `teardown()`          | Removes the widget from the DOM          | void                                                                         |

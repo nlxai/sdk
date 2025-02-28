@@ -14,7 +14,7 @@ import { create } from '@nlxai/touchpoint-ui';
 
 const touchpointOptions = {
   config: {
-    botUrl: "YOUR_BOT_URL",
+    applicationUrl: "YOUR_APPLICATION_URL",
     headers: {
       "nlx-api-key": "YOUR_API_KEY"
     },

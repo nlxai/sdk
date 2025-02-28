@@ -12,7 +12,7 @@ The NLX Touchpoint widget provides a customizable chat interface that you can em
 Add the following code to your HTML file:
 ~~~html
 ${touchpointUiSetupSnippet({
-  config: { botUrl: "", languageCode: "en-US", headers: { "nlx-api-key": "" } },
+  config: { applicationUrl: "", languageCode: "en-US", headers: { "nlx-api-key": "" } },
 })}
 ~~~
 ${configOptions}
