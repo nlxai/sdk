@@ -19,10 +19,10 @@ export type Item =
   | { type: "loader" }
   | { type: "bot"; messages: BotMessage[] };
 
-type StepShared = {
+interface StepShared {
   onNext: () => void;
   inputRef: MutableRefObject<HTMLInputElement | null>;
-};
+}
 
 const UserStep: FC<
   { message: string; previousBotMessage: string } & StepShared
@@ -100,6 +100,7 @@ const BotStep: FC<{ messages: BotMessage[] } & StepShared> = ({
             </div>
           );
         }
+        return null;
       })}
     </div>
   );
