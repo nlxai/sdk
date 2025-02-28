@@ -26,6 +26,20 @@ The `customModalities` field connects your custom components to specific bot res
 |--------------------|--------------------------------------------------|
 | `customModalities` | Maps modality types to their handling components |
 
+### HTML Template Syntax
+
+You can use the provided `html` function to create components in a more readable syntax. This function supports all available components listed below:
+
+```javascript
+import { html } from '@nlxai/touchpoint';
+
+const MyComponent = () => {
+  return html`
+    <BaseText>Hello World</BaseText>
+  `;
+}
+```
+
 ### Available Components
 
 These components can be imported and used within your custom modality components:
@@ -52,14 +66,38 @@ These components can be imported and used within your custom modality components
 |-------------------------------------|--------------------------------------|
 | [`TextButton`](/touchpoint-Buttons) | Text-based button with optional icon |
 | [`IconButton`](/touchpoint-Buttons) | Icon-only button for compact actions |
+| [`DateInput`](/touchpoint-DateInput)| Component for date selection         |
 
-## Instance Methods
+## Instance Methods and Properties
 
-The async `create()` function returns promise that will be fulfilled with a `TouchpointInstance` with these methods:
+The async `create()` function returns a promise that will be fulfilled with a `TouchpointInstance` with these methods and properties:
 
-| Method                | Description                              | Returns                                                                      |
-|-----------------------|------------------------------------------|------------------------------------------------------------------------------|
-| `expand()`            | Expands the chat widget                  | void                                                                         |
-| `collapse()`          | Collapses the chat widget                | void                                                                         |
-| `conversationHandler` | Returns the current conversation handler | [ConversationHandler](/headless-api-reference#interface-conversationhandler) |
-| `teardown()`          | Removes the widget from the DOM          | void                                                                         |
+| Method/Property       | Type                | Description                                           |
+|-----------------------|---------------------|-------------------------------------------------------|
+| `expanded`            | boolean (property)  | Gets or sets the expanded state of the chat widget    |
+| `conversationHandler` | object (property)   | Returns the current conversation handler              |
+| `teardown()`          | function            | Removes the widget from the DOM                       |
+
+Example usage:
+
+```javascript
+import { create } from '@nlxai/touchpoint';
+
+const touchpoint = await create({
+  config: {
+    applicationUrl: 'YOUR_APPLICATION_URL"',
+    headers: {
+      'nlx-api-key': 'your-api-key'
+    }
+  }
+});
+
+// Toggle expanded state
+touchpoint.expanded = true;
+
+// Access conversation handler
+const conversationHandler = touchpoint.conversationHandler;
+
+// Remove widget
+touchpoint.teardown();
+```
