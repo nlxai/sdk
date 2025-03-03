@@ -1,3 +1,17 @@
+- [About](#about)
+- [Properties](#properties)
+  - [TextButton Properties](#textbutton-properties)
+  - [IconButton Properties](#iconbutton-properties)
+- [Import and Basic Usage](#import-and-basic-usage)
+  - [Define onClick](#define-onclick)
+- [Example](#example)
+  - [Example Modality Schema](#example-modality-schema)
+  - [Example Button Components](#example-button-components)
+- [Related Documents](#related-documents)
+
+
+## About
+
 Touchpoint provides two types of button components for handling user interactions: TextButton and IconButton. These components offer consistent styling and behavior while serving different interaction needs.
 
 - **TextButton** - Text-based interactive element with optional icon support. It's ideal for primary actions and menu items.
@@ -77,8 +91,9 @@ const IconButtonExample = ({ data, conversationHandler }) => {
 };
 ```
 
-## Related Components
+## Related Documents
 
 - [Icons](/touchpoint-Icons) for list of Icons available in Touchpoint
+- [Theming Touchpoint](/touchpoint-ui-theming)
+- [Building Components without JSX](/touchpoint-components#building-html-components-without-transpiling)
 
-For theme customization options, see the [Theming Documentation](/touchpoint-ui-theming).

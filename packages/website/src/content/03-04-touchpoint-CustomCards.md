@@ -1,3 +1,19 @@
+- [About](#about)
+- [Component Structure](#component-structure)
+  - [Visualization](#visualization)
+- [Properties](#properties)
+  - [CustomCard Properties](#customcard-properties)
+  - [CustomCardImageRow Properties](#customcardimagerow-properties)
+  - [CustomCardRow Properties](#customcardrow-properties)
+- [Import and Basic Usage](#import-and-basic-usage)
+  - [Define onClick](#define-onclick)
+- [Example](#example)
+  - [Example Modality Schema](#example-modality-schema)
+  - [Example Card Component](#example-card-component)
+- [Related Components](#related-components)
+
+## About
+
 The Custom Cards system provides a structured way to present information in your chat interface. The system consists of four components that work together:
 
 - **Carousel** - Top Level component, acts as a container for multiple horizontally scrolled cards. A Carousel has at least 1 CustomCard.
@@ -130,5 +146,5 @@ const CarouselExample = ({ data, conversationHandler }) => {
 
 - [Typography](/touchpoint-Typography) for Typography components
 - [Icons](/touchpoint-Icons) for visual elements
-
-For theme customization options, see the [Theming Documentation](/touchpoint-ui-theming).
+- [Theming Touchpoint](/touchpoint-ui-theming)
+- [Building Components without JSX](/touchpoint-components#building-html-components-without-transpiling)

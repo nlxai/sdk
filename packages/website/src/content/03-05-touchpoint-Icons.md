@@ -1,3 +1,13 @@
+- [About](#about)
+- [Icon Properties](#icon-properties)
+- [Import and Basic Usage](#import-and-basic-usage)
+- [Example](#example)
+- [Available Icons](#available-icons)
+- [Related Components](#related-components)
+
+
+## About
+
 Touchpoint provides built-in icons that integrate with buttons and custom components. Each icon maintains consistent styling and accessibility features.
 
 ## Icon Properties
@@ -81,5 +91,5 @@ const IconButtonExample = ({ data, conversationHandler }) => {
 
 - [Buttons](/touchpoint-Buttons)
 - [CustomCards](/touchpoint-CustomCards)
-
-For styling options, see [Theming Documentation](/touchpoint-ui-theming).
+- [Theming Touchpoint](/touchpoint-ui-theming)
+- [Building Components without JSX](/touchpoint-components#building-html-components-without-transpiling)
