@@ -4,9 +4,22 @@ import { type FC, type ReactNode } from "react";
 
 import { type Icon } from "../ui/Icons";
 
+
+/**
+ * Props for the CustomCard component
+ */
 export interface CustomCardProps {
+  /**
+   * Content to be rendered inside the card.
+   */
   children: ReactNode;
+  /**
+   * Whether the card is in a selected state. Used to highlight the card.
+   */
   selected?: boolean;
+  /**
+   * Handler function for when the card is clicked
+   */
   onClick?: () => void;
 }
 
@@ -36,9 +49,21 @@ export const CustomCardImageRow: FC<{ src: string; alt?: string }> = ({
   return <img src={src} alt={alt} className="w-full h-52 object-cover" />;
 };
 
+/**
+ * Props for the CustomCardRow component
+ */
 export interface CustomCardRowProps {
+  /**
+   * Content to be displayed on the left side of the row
+   */
   left: ReactNode;
+  /**
+   * Content to be displayed on the right side of the row
+   */
   right: ReactNode;
+  /**
+   * Optional icon to be displayed in the center of the row
+   */
   icon?: Icon;
 }
 

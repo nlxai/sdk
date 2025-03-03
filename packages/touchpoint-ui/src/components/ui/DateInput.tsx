@@ -5,9 +5,17 @@ import { InputMask } from "@react-input/mask";
 import { ArrowForward, Date } from "./Icons";
 import { IconButton } from "./IconButton";
 
-interface DateInputProps {
+/**
+ * Props for the DateInput component
+ */
+export interface DateInputProps {
+  /**
+   * Handler function called when the date is submitted
+   * @param date - The submitted date in YYYY-MM-DD format
+   */
   onSubmit?: (date: string) => void;
 }
+
 
 const options = {
   mask: "MM / DD / YYYY",

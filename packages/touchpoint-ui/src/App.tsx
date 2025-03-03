@@ -34,9 +34,21 @@ import {
 } from "./types";
 import { CustomPropertiesContainer } from "./components/Theme";
 
+/**
+ * Main Touchpoint creation properties object
+ */
 export interface Props {
+  /**
+   * Configuration object for Touchpoint
+   */
   config: Config;
+  /**
+   * Optional window size for the chat window, defaults to `half`
+   */
   windowSize?: WindowSize;
+  /**
+   * Optional color mode for the chat window, defaults to `dark`
+   */
   colorMode?: ColorMode;
   /**
    * URL of icon used to display the brand in the chat header
@@ -48,7 +60,13 @@ export interface Props {
    * When set to `false`, no launch button is shown at all. When not set or set to `true`, the default launch icon is rendered.
    */
   launchIcon?: string | boolean;
+  /**
+   * Optional theme object to override default theme values
+   */
   theme?: Partial<Theme>;
+  /**
+   * Optional custom modality components to render in Touchpoint
+   */
   customModalities?: Record<string, CustomModalityComponent<any>>;
 }
 
