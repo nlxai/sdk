@@ -9,7 +9,6 @@
   - [Example Button Components](#example-button-components)
 - [Related Documents](#related-documents)
 
-
 ## About
 
 Touchpoint provides two types of button components for handling user interactions: TextButton and IconButton. These components offer consistent styling and behavior while serving different interaction needs.
@@ -96,4 +95,3 @@ const IconButtonExample = ({ data, conversationHandler }) => {
 - [Icons](/touchpoint-Icons) for list of Icons available in Touchpoint
 - [Theming Touchpoint](/touchpoint-ui-theming)
 - [Building Components without JSX](/touchpoint-components#building-html-components-without-transpiling)
-

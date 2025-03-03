@@ -5,7 +5,6 @@
 - [Available Icons](#available-icons)
 - [Related Components](#related-components)
 
-
 ## About
 
 Touchpoint provides built-in icons that integrate with buttons and custom components. Each icon maintains consistent styling and accessibility features.

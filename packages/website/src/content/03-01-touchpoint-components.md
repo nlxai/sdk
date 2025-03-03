@@ -1,4 +1,4 @@
-Touchpoint components work together with each other to create rich chat experiences. 
+Touchpoint components work together with each other to create rich chat experiences.
 
 - [Building Custom Components](#building-custom-components)
   - [Modalities](#modalities)
@@ -12,7 +12,6 @@ Touchpoint components work together with each other to create rich chat experien
   - [Import and Basic Usage](#import-and-basic-usage)
   - [Example: Creating a Carousel with CustomCards](#example-creating-a-carousel-with-customcards)
 - [Component Categories](#component-categories)
-
 
 ## Building Custom Components
 
