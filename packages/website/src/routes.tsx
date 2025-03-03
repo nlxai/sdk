@@ -88,15 +88,20 @@ export const ContentRoutes: FC<unknown> = () => {
   // Scroll down to hash route if available
   useEffect(() => {
     setTimeout(() => {
-      if (location.hash.length === 0) {
-        return;
-      }
-      const node = document.querySelector(location.hash);
+      const node =
+        location.hash.length === 0
+          ? null
+          : document.querySelector(location.hash);
       if (node != null) {
         node.scrollIntoView({ behavior: "smooth" });
+      } else {
+        const htmlElement = document.querySelector("html");
+        if (htmlElement != null) {
+          htmlElement.scrollTop = 0;
+        }
       }
     });
-  }, [location.hash]);
+  }, [location.pathname, location.hash]);
 
   return (
     <Routes>
