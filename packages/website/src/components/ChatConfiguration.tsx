@@ -1,22 +1,23 @@
 import { type FC } from "react";
+import { type PartialDeep } from "type-fest";
 import { type Theme, type TitleBar, defaultTheme } from "@nlxai/chat-widget";
 import { type Config } from "@nlxai/chat-core";
+
 import { Behavior } from "../snippets";
 import { Labeled, inputClass } from "./Ui";
 import { RadioList } from "./RadioList";
-import { type PartialDeep } from "type-fest";
 
 function defaultInitialConfig({
-  botUrl,
+  applicationUrl,
   apiKey,
   languageCode,
 }: {
-  botUrl?: string | null;
+  applicationUrl?: string | null;
   apiKey?: string | null;
   languageCode?: string | null;
 } = {}): Config {
   return {
-    botUrl: botUrl ?? "",
+    applicationUrl: applicationUrl ?? "",
     headers: {
       "nlx-api-key": apiKey ?? "",
     },
@@ -31,7 +32,8 @@ export const getInitialConfig = (): Config => {
   }
   const searchParams = new URLSearchParams(window.location.search);
   return defaultInitialConfig({
-    botUrl: searchParams.get("botUrl"),
+    applicationUrl:
+      searchParams.get("applicationUrl") ?? searchParams.get("botUrl"),
     apiKey: searchParams.get("apiKey"),
     languageCode: searchParams.get("languageCode"),
   });
@@ -82,9 +84,9 @@ export const ConfigEditor: FC<{
           type="url"
           placeholder="Enter bot URL"
           className={inputClass}
-          value={config.botUrl}
+          value={config.applicationUrl}
           onInput={(ev: any) => {
-            props.onChange({ botUrl: ev.target.value });
+            props.onChange({ applicationUrl: ev.target.value });
           }}
         />
       </Labeled>
@@ -190,7 +192,7 @@ export const ThemeEditor: FC<{
             props.onChange({ spacing: Number(ev.target.value) });
           }}
         />
-        <span className="text-xs text-gray-700">{theme.spacing}px</span>
+        <span className="text-xs text-primary-60">{theme.spacing}px</span>
       </Labeled>
       <Labeled label="Border radius">
         <input
@@ -203,7 +205,7 @@ export const ThemeEditor: FC<{
             props.onChange({ borderRadius: Number(ev.target.value) });
           }}
         />
-        <span className="text-xs text-gray-700">{theme.borderRadius}px</span>
+        <span className="text-xs text-primary-60">{theme.borderRadius}px</span>
       </Labeled>
     </div>
   );
@@ -212,9 +214,11 @@ export const ThemeEditor: FC<{
 export const BehaviorEditor: FC<{
   behavior: Behavior;
   setBehavior: (val: Behavior) => void;
-}> = ({ behavior, setBehavior }) => {
+  className?: string;
+}> = ({ behavior, setBehavior, className }) => {
   return (
     <RadioList
+      className={className}
       selected={behavior}
       onChange={setBehavior}
       options={[
@@ -250,18 +254,14 @@ export const BehaviorEditor: FC<{
   );
 };
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const saveTheme = (theme: Partial<Theme>) => {
+export const saveTheme = (theme: Partial<Theme>): void => {
   localStorage.setItem("nlxchat-theme", JSON.stringify(theme));
 };
 
 export const retrieveTheme = (): Partial<Theme> | null => {
   try {
     const themeString = localStorage.getItem("nlxchat-theme");
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-    const theme = JSON.parse(themeString || "");
+    const theme = JSON.parse(themeString ?? "");
     if (typeof theme !== "object") {
       throw new Error("Invalid theme");
     }
@@ -271,18 +271,14 @@ export const retrieveTheme = (): Partial<Theme> | null => {
   }
 };
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const saveTitleBar = (theme: TitleBar) => {
+export const saveTitleBar = (theme: TitleBar): void => {
   localStorage.setItem("nlxchat-titleBar", JSON.stringify(theme));
 };
 
 export const retrieveTitleBar = (): TitleBar | null => {
   try {
     const titleBarString = localStorage.getItem("nlxchat-titleBar");
-    // initial eslint integration
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-    const titleBar = JSON.parse(titleBarString || "");
+    const titleBar = JSON.parse(titleBarString ?? "");
     if (typeof titleBar !== "object") {
       throw new Error("Invalid theme");
     }

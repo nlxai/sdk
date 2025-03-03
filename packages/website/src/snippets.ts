@@ -34,13 +34,16 @@ function defaultTo(
 export const touchpointUiSetupSnippet = ({
   config,
   theme,
+  customModalitiesExample = false,
 }: {
   config: Config;
   theme?: {
     fontFamily: string;
     accent: string;
   };
+  customModalitiesExample?: boolean;
 }): string => {
+  const renderCustomModalitiesExample = customModalitiesExample ?? false;
   return `<!-- Touchpoint sample HTML -->
 <!-- Downloaded from https://developers.nlx.ai -->
 <html lang="en">
@@ -62,11 +65,10 @@ export const touchpointUiSetupSnippet = ({
           return Promise.resolve();
         }
       };
-
       contentLoaded().then(() => {
-        const touchpointInstance = nlxai.touchpointUi.create({
+        return nlxai.touchpointUi.create({
           config: {
-            botUrl: "${defaultTo(config.botUrl, "REPLACE_WITH_BOT_URL")}",
+            applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
             headers: {
               "nlx-api-key": "${defaultTo(
                 config.headers?.["nlx-api-key"],
@@ -79,9 +81,14 @@ export const touchpointUiSetupSnippet = ({
               ? `
           theme: ${JSON.stringify(theme)}`
               : ""
+          }${
+            renderCustomModalitiesExample
+              ? `
+          customModalities: { REPLACE_WITH_CUSTOM_MODALITIES }`
+              : ""
           }
-        });
-      });
+        })
+      }); 
     </script>
   </body>
 </html>`;

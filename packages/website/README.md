@@ -16,6 +16,7 @@ npm run build
 ```
 
 ## Differences between `npm run dev` and _github pages_
+
 `npm run dev` assumes routing on the SPA will be handled by the server. This means, for instance, BrowserRouter doesn't work out of the box with github pages. To emulate a _github pages_ environment locally, build the site, then load it up with caddy:
 
 ```sh

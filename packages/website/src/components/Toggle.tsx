@@ -13,7 +13,7 @@ export const Toggle = <T,>(props: Props<T>): ReactNode => {
   return (
     <div
       className={clsx(
-        "rounded-full w-fit space-x-1 p-0.5 inline-flex bg-black10",
+        "rounded-full w-fit gap-1 p-0.5 inline-flex bg-primary-10 text-primary-80",
         {
           "opacity-70": disabled,
         },
@@ -28,12 +28,10 @@ export const Toggle = <T,>(props: Props<T>): ReactNode => {
           }}
           disabled={disabled}
           className={clsx({
-            "px-10 py-0.5 rounded-full text-xs transition-colors duration-200":
-              true,
-            "text-black40": props.value !== option.value,
-            "hover:bg-blue05 hover:text-blueMain disabled:hover:bg-transparent disabled:hover:text-black40":
+            "px-10 py-0.5 rounded-full text-xs whitespace-pre": true,
+            "enabled:hover:bg-primary-10":
               props.value !== option.value && props.onChange,
-            "bg-white text-black80": props.value === option.value,
+            "bg-secondary-80": props.value === option.value,
           })}
         >
           {option.label}

@@ -25,6 +25,51 @@
   src: url("/fonts/neue-haas-grotesk/NHaasGroteskDSPro-75Bd.otf");
 }
 
+:root {
+  --font-family: "Neue Haas Grotesk", sans-serif;
+  --inner-border-radius: 12px;
+  --outer-border-radius: 20px;
+
+  --primary-80: rgba(255, 255, 255, 0.85);
+  --primary-60: rgba(255, 255, 255, 0.65);
+  --primary-40: rgba(255, 255, 255, 0.45);
+  --primary-20: rgba(255, 255, 255, 0.25);
+  --primary-10: rgba(255, 255, 255, 0.15);
+  --primary-5: rgba(255, 255, 255, 0.08);
+  --primary-1: rgba(255, 255, 255, 0.01);
+
+  --secondary-80: rgba(0, 2, 9, 0.8);
+  --secondary-60: rgba(0, 2, 9, 0.6);
+  --secondary-40: rgba(0, 2, 9, 0.4);
+  --secondary-20: rgba(0, 2, 9, 0.2);
+  --secondary-10: rgba(0, 2, 9, 0.1);
+  --secondary-5: rgba(0, 2, 9, 0.05);
+  --secondary-1: rgba(0, 2, 9, 0.01);
+
+  --accent: rgb(174, 202, 255);
+  --accent-20: rgba(174, 202, 255, 0.25);
+  --background: rgba(0, 2, 9, 0.9);
+  --overlay: rgba(0, 2, 9, 0.4);
+
+  --warningPrimary: rgb(255, 214, 108);
+  --warningSecondary: rgb(95, 65, 29);
+  --errorPrimary: rgb(255, 133, 162);
+  --errorSecondary: rgb(94, 4, 4);
+}
+
+html,
+body {
+  @apply h-full;
+}
+
+body {
+  @apply bg-background-docs;
+}
+
+.prose th {
+  @apply text-left font-medium text-primary-60;
+}
+
 /* Carousel example */
 
 .slides-container {
@@ -280,6 +325,12 @@
   color: var(--primaryColorLighter);
 }
 
+/* Syntax highlighting */
+
+.prismjs {
+  @apply text-primary-80;
+}
+
 .token.class-name,
 .token.function,
 .token.selector,
@@ -294,7 +345,7 @@
 .token.keyword,
 .token.pseudo-class,
 .token.rule {
-  color: #cbd5e1;
+  @apply text-accent;
 }
 
 .token.module {
@@ -322,4 +373,8 @@
 .token.comment,
 .token.operator {
   color: #94a3b8;
+}
+
+.linenumber {
+  @apply text-primary-40;
 }

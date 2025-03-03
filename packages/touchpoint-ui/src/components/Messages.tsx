@@ -13,7 +13,7 @@ import { TextButton } from "./ui/TextButton";
 import { ArrowForward, Warning } from "./ui/Icons";
 import { type CustomModalityComponent, type ColorMode } from "../types";
 
-export interface ChatMessagesProps {
+export interface MessagesProps {
   isWaiting: boolean;
   handler: ConversationHandler;
   responses: Response[];
@@ -95,13 +95,14 @@ const ErrorMessage: FC<{ message: string }> = ({ message }) => {
   );
 };
 
-export const ChatMessages: FC<ChatMessagesProps> = ({
+export const Messages: FC<MessagesProps> = ({
   responses,
   colorMode,
   uploadedFiles,
   lastBotResponseIndex,
   isWaiting,
   customModalities,
+  handler,
   className,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -202,7 +203,13 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
                       );
                       return null;
                     }
-                    return <Component key={key} data={value} />;
+                    return (
+                      <Component
+                        key={key}
+                        data={value}
+                        conversationHandler={handler}
+                      />
+                    );
                   },
                 )}
               </div>

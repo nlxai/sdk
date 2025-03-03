@@ -5,41 +5,91 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     fontFamily: {
-      sans: ["'Neue Haas Grotesk'", "sans-serif"],
-      mono: ["'Fira Mono'", "monospace"],
-      serif: ["Times", "serif"],
+      sans: ["var(--font-family)"],
     },
     extend: {
-      typography: {
-        DEFAULT: {
+      typography: () => ({
+        docs: {
           css: {
-            "code::before": {
-              content: "normal",
-            },
-            "code::after": {
-              content: "normal",
-            },
+            "--tw-prose-body": "var(--primary-80)",
+            "--tw-prose-headings": "var(--primary-80)",
+            "--tw-prose-lead": "var(--primary-80)",
+            "--tw-prose-links": "var(--accent)",
+            "--tw-prose-bold": "var(--primary-80)",
+            "--tw-prose-counters": "var(--primary-80)",
+            "--tw-prose-bullets": "var(--primary-60)",
+            "--tw-prose-hr": "var(--primary-40)",
+            "--tw-prose-quotes": "var(--primary-80)",
+            "--tw-prose-quote-borders": "var(--color-pink-300)",
+            "--tw-prose-captions": "var(--color-pink-700)",
+            "--tw-prose-code": "var(--color-pink-900)",
+            "--tw-prose-pre-code": "var(--primary-20)",
+            "--tw-prose-pre-bg": "var(--secondary-20)",
+            "--tw-prose-th-borders": "var(--primary-20)",
+            "--tw-prose-td-borders": "var(--primary-20)",
+            "--tw-prose-invert-body": "var(--color-pink-200)",
+            "--tw-prose-invert-headings": "var(--color-white)",
+            "--tw-prose-invert-lead": "var(--color-pink-300)",
+            "--tw-prose-invert-links": "var(--color-white)",
+            "--tw-prose-invert-bold": "var(--color-white)",
+            "--tw-prose-invert-counters": "var(--color-pink-400)",
+            "--tw-prose-invert-bullets": "var(--color-pink-600)",
+            "--tw-prose-invert-hr": "var(--color-pink-700)",
+            "--tw-prose-invert-quotes": "var(--color-pink-100)",
+            "--tw-prose-invert-quote-borders": "var(--color-pink-700)",
+            "--tw-prose-invert-captions": "var(--color-pink-400)",
+            "--tw-prose-invert-code": "var(--color-white)",
+            "--tw-prose-invert-pre-code": "var(--color-pink-300)",
+            "--tw-prose-invert-pre-bg": "var(--primary-20)",
+            "--tw-prose-invert-th-borders": "var(--color-pink-600)",
+            "--tw-prose-invert-td-borders": "var(--color-pink-700)",
           },
         },
-      },
-      animation: {
-        slideInFromLeft: "slideInFromLeftKeyframes 0.3s ease-in-out",
-        slideInFromRight: "slideInFromRightKeyframes 0.3s ease-in-out",
-      },
-      keyframes: {
-        slideInFromRightKeyframes: {
-          "0%": { opacity: 0, transform: "translateX(30px)" },
-          "100%": { opacity: 1, transform: "translateX(0)" },
-        },
-        slideInFromLeftKeyframes: {
-          "0%": { opacity: 0, transform: "translateX(-30px)" },
-          "100%": { opacity: 1, transform: "translateX(0)" },
-        },
+      }),
+      backdropBlur: {
+        overlay: "48px",
       },
       maxWidth: {
-        "8xl": "88rem",
+        content: "608px",
+      },
+      borderRadius: {
+        inner: "var(--inner-border-radius)",
+        outer: "var(--outer-border-radius)",
+      },
+      zIndex: {
+        touchpoint: 1000,
+        launchButton: 100,
       },
       colors: {
+        "primary-80": "var(--primary-80)",
+        "primary-60": "var(--primary-60)",
+        "primary-40": "var(--primary-40)",
+        "primary-20": "var(--primary-20)",
+        "primary-10": "var(--primary-10)",
+        "primary-5": "var(--primary-5)",
+        "primary-1": "var(--primary-1)",
+        "secondary-80": "var(--secondary-80)",
+        "secondary-60": "var(--secondary-60)",
+        "secondary-40": "var(--secondary-40)",
+        "secondary-20": "var(--secondary-20)",
+        "secondary-10": "var(--secondary-10)",
+        "secondary-5": "var(--secondary-5)",
+        "secondary-1": "var(--secondary-1)",
+        accent: "var(--accent)",
+        "accent-20": "var(--accent-20)",
+        background: "var(--background)",
+        overlay: "var(--overlay)",
+        "warning-primary": "var(--warning-primary)",
+        "warning-secondary": "var(--warning-secondary)",
+        "error-primary": "var(--error-primary)",
+        "error-secondary": "var(--error-secondary)",
+        // Not part of the regular Touchpoint theme
+        "primary-90": "rgba(255, 255, 255, 0.9)",
+        "accent-50": "rgba(174, 202, 255, 0.50)",
+        "background-docs": "#26282D",
+        "accent-darker": "#8BA2CC", // Accent + secondary-20
+
+        // Legacy colors
         gray: colors.neutral,
         blueMain: "rgba(38, 99, 218, 1)",
         blueDarker: "rgba(30, 86, 196, 1)",

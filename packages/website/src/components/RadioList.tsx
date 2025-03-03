@@ -1,30 +1,31 @@
 import { type ReactNode } from "react";
+import { clsx } from "clsx";
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
-export const RadioList = <T extends unknown>({
+export const RadioList = <T,>({
+  className,
   selected,
   options,
   onChange,
 }: {
+  className?: string;
   selected: T;
   options: Array<{ id: string; value: T; label: string }>;
   onChange: (val: T) => void;
 }): ReactNode => {
   return (
-    <div className="space-y-2">
+    <div className={clsx("space-y-2", className)}>
       {options.map((option) => (
         <div className="flex items-center" key={option.id}>
           <input
             id={option.id}
             type="radio"
-            className="w-4 h-4 text-blueMain bg-gray-100 border-gray-300 focus:ring-blueMain dark:focus:ring-blueDarker dark:ring-offset-gray-800 focus:ring-2"
+            className="w-4 h-4 text-accent bg-primary-10 border-primary-20 focus:ring-accent dark:ring-offset-accent-20 focus:ring-2"
             checked={option.value === selected}
             onChange={() => {
               onChange(option.value);
             }}
           />
-          <label htmlFor={option.id} className="ms-2 text-black80">
+          <label htmlFor={option.id} className="ms-2 text-primary-80">
             {option.label}
           </label>
         </div>

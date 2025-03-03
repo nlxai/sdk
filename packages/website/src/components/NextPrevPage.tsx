@@ -1,9 +1,7 @@
 import { type FC } from "react";
 import { Link } from "react-router-dom";
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-const PrevArrow: FC<{}> = () => (
+const PrevArrow: FC<unknown> = () => (
   <svg
     viewBox="0 0 16 16"
     aria-hidden="true"
@@ -13,9 +11,7 @@ const PrevArrow: FC<{}> = () => (
   </svg>
 );
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-const NextArrow: FC<{}> = () => (
+const NextArrow: FC<unknown> = () => (
   <svg
     viewBox="0 0 16 16"
     aria-hidden="true"
@@ -30,39 +26,41 @@ interface LinkData {
   url: string;
 }
 
+const headingClass = "text-base text-primary-60";
+
 export const NextPrevPage: FC<{ prev?: LinkData; next?: LinkData }> = (
   props,
 ) => (
-  <dl className="mt-12 flex border-t border-gray-200 pt-6">
-    {props.prev && (
-      <div>
-        <dt className="font-display text-sm font-medium text-gray-800">
-          Previous
-        </dt>
-        <dd className="mt-1">
-          <Link
-            className="flex items-center gap-x-1 text-base font-medium text-black60 hover:text-blueMain flex-row-reverse"
-            to={props.prev.url}
-          >
-            {props.prev.label}
-            <PrevArrow />
-          </Link>
-        </dd>
-      </div>
-    )}
-    {props.next && (
-      <div className="ml-auto text-right">
-        <dt className="font-display text-sm font-medium text-gray-900">Next</dt>
-        <dd className="mt-1">
-          <Link
-            to={props.next.url}
-            className="flex items-center gap-x-1 text-base font-medium text-black60 hover:text-blueMain"
-          >
-            {props.next.label}
-            <NextArrow />
-          </Link>
-        </dd>
-      </div>
-    )}
+  <dl className="mt-12 border-t border-primary-10 pt-6">
+    <div className="flex max-w-3xl mx-auto">
+      {props.prev && (
+        <div>
+          <dt className={headingClass}>Previous</dt>
+          <dd className="mt-1">
+            <Link
+              className="flex items-center gap-x-1 text-base text-primary-90 hover:text-white flex-row-reverse"
+              to={props.prev.url}
+            >
+              {props.prev.label}
+              <PrevArrow />
+            </Link>
+          </dd>
+        </div>
+      )}
+      {props.next && (
+        <div className="ml-auto text-right">
+          <dt className={headingClass}>Next</dt>
+          <dd className="mt-1">
+            <Link
+              to={props.next.url}
+              className="flex items-center gap-x-1 text-base text-primary-90 hover:text-white"
+            >
+              {props.next.label}
+              <NextArrow />
+            </Link>
+          </dd>
+        </div>
+      )}
+    </div>
   </dl>
 );

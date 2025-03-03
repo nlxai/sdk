@@ -1,6 +1,7 @@
-import { type FC, Fragment } from "react";
+import { type FC, Fragment, useEffect } from "react";
 import { flatten, groupBy, sortBy } from "ramda";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+
 import { Prototyping } from "./components/Prototyping";
 import { PageTitle } from "./components/PageTitle";
 import { NextPrevPage } from "./components/NextPrevPage";
@@ -56,7 +57,11 @@ export const getFilteredRoutes = ({
 }): RouteGroup[] =>
   routes.filter(
     (route) =>
-      !(!touchpoint && route.heading === "Touchpoint") &&
+      !(
+        !touchpoint &&
+        (route.heading === "Touchpoint" ||
+          route.heading === "Touchpoint components")
+      ) &&
       !(
         touchpoint &&
         (route.heading === "Web widget" ||
@@ -78,6 +83,26 @@ const flattenedRoutes: RouteInfo[] = flatten(
 export const urls: string[] = flattenedRoutes.map(({ url }) => url);
 
 export const ContentRoutes: FC<unknown> = () => {
+  const location = useLocation();
+
+  // Scroll down to hash route if available
+  useEffect(() => {
+    setTimeout(() => {
+      const node =
+        location.hash.length === 0
+          ? null
+          : document.querySelector(location.hash);
+      if (node != null) {
+        node.scrollIntoView({ behavior: "smooth" });
+      } else {
+        const htmlElement = document.querySelector("html");
+        if (htmlElement != null) {
+          htmlElement.scrollTop = 0;
+        }
+      }
+    });
+  }, [location.pathname, location.hash]);
+
   return (
     <Routes>
       {flattenedRoutes.map(({ url, heading, label, element }, index) => {
@@ -85,8 +110,10 @@ export const ContentRoutes: FC<unknown> = () => {
         const next: RouteInfo | undefined = flattenedRoutes[index + 1];
         const elementWithPageNav = (
           <>
-            <PageTitle pretitle={heading} title={label} />
-            {element}
+            <main className="max-w-3xl mx-auto space-y-8">
+              <PageTitle pretitle={heading} title={label} />
+              {element}
+            </main>
             <NextPrevPage
               prev={
                 prev != null

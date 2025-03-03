@@ -1,10 +1,13 @@
 import { type FC, type ReactNode, useState } from "react";
+import { clsx } from "clsx";
+import { Link } from "react-router-dom";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { CheckIcon, ContentCopyIcon } from "./Icons";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
+
+import { CheckIcon, ContentCopyIcon } from "./Icons";
 
 const CopyToClipboardButton: FC<{ text: string; className?: string }> = ({
   text,
@@ -38,20 +41,39 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
   className,
 }) => (
   <div
-    className={`prose prose-slate max-w-none prose-headings:scroll-mt-28 prose-headings:font-display prose-headings:font-normal lg:prose-headings:scroll-mt-[8.5rem] prose-lead:text-slate-500 prose-a:font-medium prose-a:no-underline prose-a:shadow-[inset_0_-2px_0_0_var(--tw-prose-background,#fff),inset_0_calc(-1*(var(--tw-prose-underline-size,4px)+2px))_0_0_var(--tw-prose-underline,theme(colors.blue.300))] hover:prose-a:[--tw-prose-underline-size:6px]] prose-pre:rounded-xl prose-pre:bg-slate-900 prose-pre:shadow-lg ${
-      className ?? ""
-    }`}
+    className={clsx(
+      "prose prose-docs max-w-3xl w-full prose-headings:scroll-mt-28 prose-headings:font-display prose-headings:font-normal lg:prose-headings:scroll-mt-[8.5rem]",
+      "prose-a:font-normal prose-a:no-underline prose-a:text-accent hover:prose-a:text-accent-darker",
+      "prose-pre:rounded-xl prose-code:font-normal prose-pre:shadow-lg",
+      "prose-code:before:content-['']",
+      "prose-code:after:content-['']",
+      "prose-strong:font-medium",
+      className,
+    )}
   >
     {children}
   </div>
 );
 
-export const PageContent: FC<{ md: string }> = ({ md }) => (
-  <Prose>
+export const PageContent: FC<{ md: string; className?: string }> = ({
+  md,
+  className,
+}) => (
+  <Prose className={className}>
     <Markdown
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeRaw, rehypeSlug]}
       components={{
+        a(props) {
+          // eslint-disable-next-line react/prop-types
+          if (props.href == null) {
+            // eslint-disable-next-line react/prop-types
+            return <a href={props.href}>{props.children}</a>;
+          }
+          // TODO: when using a react-router redirect, scroll to heading ID if available
+          // eslint-disable-next-line react/prop-types
+          return <Link to={props.href}>{props.children}</Link>;
+        },
         pre(props) {
           return (
             <pre className="relative group !font-mono">{props.children}</pre>
@@ -71,15 +93,14 @@ export const PageContent: FC<{ md: string }> = ({ md }) => (
               />
               {match ? (
                 <SyntaxHighlighter
-                  // initial eslint integration
-                  // eslint-disable-next-line react/no-children-prop
-                  children={lines}
                   style={{}}
                   useInlineStyles={false}
                   showLineNumbers={true}
                   language={match[1]}
                   PreTag="div"
-                />
+                >
+                  {lines}
+                </SyntaxHighlighter>
               ) : (
                 <code {...rest} className={className}>
                   {children}

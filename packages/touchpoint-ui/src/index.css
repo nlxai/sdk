@@ -19,3 +19,57 @@
     scrollbar-width: none; /* Firefox */
   }
 }
+
+/** Fullscreen error animation styling */
+
+@property --glow-opacity {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+.fullscreen-error svg {
+  animation: error-glow 3s ease infinite;
+  --glow-opacity: 0%;
+  filter: drop-shadow(
+    0 0 6px color-mix(in srgb, transparent, var(--accent) var(--glow-opacity))
+  );
+}
+
+@keyframes error-glow {
+  from {
+    color: var(--primary);
+    fill-opacity: 8%;
+    --glow-opacity: 0%;
+  }
+  22% {
+    color: var(--primary);
+    fill-opacity: 8%;
+    --glow-opacity: 0%;
+  }
+  35% {
+    color: var(--accent);
+    fill-opacity: 80%;
+    --glow-opacity: 60%;
+  }
+  45% {
+    color: var(--accent);
+    fill-opacity: 70%;
+    --glow-opacity: 30%;
+  }
+  55% {
+    color: var(--accent);
+    fill-opacity: 60%;
+    --glow-opacity: 60%;
+  }
+  60% {
+    color: var(--primary);
+    fill-opacity: 8%;
+    --glow-opacity: 0%;
+  }
+  to {
+    color: var(--primary);
+    fill-opacity: 8%;
+    --glow-opacity: 0%;
+  }
+}

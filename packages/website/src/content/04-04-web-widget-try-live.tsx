@@ -77,42 +77,47 @@ export const Content: FC<unknown> = () => {
   return (
     <>
       <PageContent md={content} />
-      <Note
-        title="Important"
-        body="In order for the bot communication to work (i.e., not trigger CORS errors), make sure that the URL of your webpage is added to the whitelisted URL list of your API channel in Dialog Studio."
-      />
-      <div className="mt-6 space-y-4">
-        <ConfigEditor
-          value={config}
-          onChange={(val: any) => {
-            setConfig((prev) => ({ ...prev, ...val }));
-          }}
-        />
-        <ThemeEditor
-          value={theme}
-          onChange={(val: any) => {
-            setTheme((prev) => ({ ...prev, ...val }));
-          }}
-        />
-        <TitleBarEditor
-          value={titleBar}
-          onChange={(val: any) => {
-            setTitleBar((prev) => {
-              const titleBar = { ...prev, ...val };
-              if (titleBar.logo?.length === 0) return omit(["logo"], titleBar);
-              else return titleBar;
-            });
-          }}
-        />
-        <PageContent
-          md={snippetContent({
-            config,
-            theme,
-            titleBar,
-            behavior: Behavior.WelcomeIntentOnOpen,
-          })}
-        />
+      <div className="mt-6 space-y-8">
+        <div className="space-y-4">
+          <h3 className="text-xl">Setup</h3>
+          <Note body="In order for the bot communication to work (i.e., not trigger CORS errors), make sure that the URL of your webpage is added to the whitelisted URL list of your API channel in Dialog Studio." />
+          <ConfigEditor
+            value={config}
+            onChange={(val: any) => {
+              setConfig((prev) => ({ ...prev, ...val }));
+            }}
+          />
+        </div>
+        <div className="space-y-4">
+          <h3 className="text-xl">Theme</h3>
+          <ThemeEditor
+            value={theme}
+            onChange={(val: any) => {
+              setTheme((prev) => ({ ...prev, ...val }));
+            }}
+          />
+          <TitleBarEditor
+            value={titleBar}
+            onChange={(val: any) => {
+              setTitleBar((prev) => {
+                const titleBar = { ...prev, ...val };
+                if (titleBar.logo?.length === 0)
+                  return omit(["logo"], titleBar);
+                else return titleBar;
+              });
+            }}
+          />
+        </div>
       </div>
+      <PageContent
+        className="mt-8"
+        md={snippetContent({
+          config,
+          theme,
+          titleBar,
+          behavior: Behavior.WelcomeIntentOnOpen,
+        })}
+      />
       <Widget
         config={config}
         theme={theme}

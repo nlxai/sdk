@@ -1,4 +1,5 @@
 import { type FC, type ReactNode, useEffect, useState, useRef } from "react";
+import { clsx } from "clsx";
 import { last, flatten } from "ramda";
 
 export type Item =
@@ -6,9 +7,7 @@ export type Item =
   | { type: "bot"; message: string }
   | { type: "custom"; element: ReactNode };
 
-// initial eslint integration
-// eslint-disable-next-line @typescript-eslint/ban-types
-const Loader: FC<{}> = () => (
+const Loader: FC<unknown> = () => (
   <div className="inline-flex items-center py-1 space-x-1">
     <div className="w-1.5 h-1.5 animate-bounce rounded-full bg-current"></div>
     <div
@@ -45,9 +44,7 @@ export const InlineWidget: FC<{
   const loader: "user" | "bot" | undefined =
     displayedItems.length === props.items.length
       ? undefined
-      : // initial eslint integration
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        last(last(displayedItems) || [])?.type === "user"
+      : last(last(displayedItems) ?? [])?.type === "user"
         ? "bot"
         : "user";
 
@@ -63,9 +60,7 @@ export const InlineWidget: FC<{
       const firstContentNode: Node | undefined = addedNodes[0];
       if (
         isFullyVisible.current &&
-        // initial eslint integration
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        firstContentNode &&
+        firstContentNode != null &&
         firstContentNode instanceof HTMLElement
       ) {
         firstContentNode.scrollIntoView({
@@ -89,9 +84,7 @@ export const InlineWidget: FC<{
   useEffect(() => {
     const observer = new IntersectionObserver(
       (event) => {
-        // initial eslint integration
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        if (event[0]) {
+        if (event[0] != null) {
           isFullyVisible.current = event[0].intersectionRatio > 0.95;
         }
       },
@@ -110,11 +103,10 @@ export const InlineWidget: FC<{
 
   return (
     <div
-      className={`rounded-xl max-w-sm max-h-[440px] shadow-lg overflow-hidden flex flex-col ${
-        // initial eslint integration
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-        props.className || ""
-      }`}
+      className={clsx(
+        "rounded-xl text-secondary-80 max-w-sm max-h-[440px] shadow-lg overflow-hidden flex flex-col",
+        props.className,
+      )}
     >
       <div className="bg-blueMain text-white text-sm flex-none px-4 py-3">
         Support chat
@@ -126,8 +118,6 @@ export const InlineWidget: FC<{
         {displayedItems.map((items: Item[], index: number) => {
           return (
             <div key={index} className="space-y-2 flex flex-col">
-              {/* initial eslint integration */}
-              {/* eslint-disable-next-line array-callback-return */}
               {items.map((item, itemIndex) => {
                 if (item.type === "user") {
                   return (
@@ -165,12 +155,11 @@ export const InlineWidget: FC<{
                     </div>
                   );
                 }
+                return null;
               })}
             </div>
           );
         })}
-        {/* initial eslint integration */}
-        {}
         {loader &&
           (loader === "user" ? (
             <div
