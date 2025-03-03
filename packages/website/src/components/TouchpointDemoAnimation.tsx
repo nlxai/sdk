@@ -106,7 +106,7 @@ const BotStep: FC<{ messages: BotMessage[] } & StepShared> = ({
   );
 };
 
-export const TouchpointExampleWidget: FC<{
+export const TouchpointDemoAnimation: FC<{
   items: Item[];
   className?: string;
 }> = (props) => {
@@ -154,12 +154,23 @@ export const TouchpointExampleWidget: FC<{
           })()}
         </div>
       </div>
-      <div className="p-2">
+      <div className="p-2 relative">
         <input
           ref={inputRef}
-          className="text-base flex-none text-primary-80 w-full px-4 py-4 bg-primary-5 focus:outline-none rounded-outer disabled:text-primary-20"
+          className="peer text-base flex-none text-primary-80 w-full px-4 py-4 bg-primary-5 focus:outline-none rounded-outer disabled:text-primary-20"
           placeholder="Type your message..."
         />
+        <button
+          aria-label="Send message"
+          className="p-3 w-10 h-10 absolute right-4 top-1/2 transform -translate-y-1/2 transition-colors rounded-inner z-10 overflow-hidden before:content-[''] before:absolute before:transition-colors before:-z-10 before:inset-0 before:bg-transparent focus:outline-0 bg-primary-80 text-secondary-80 enabled:hover:before:bg-primary-80 focus:before:bg-primary-80 enabled:active:before:bg-secondary-10 peer-disabled:bg-primary-10 peer-disabled:text-secondary-40 flex-none"
+        >
+          <svg viewBox="0 0 24 24" width="100%" height="100%">
+            <path
+              d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+        </button>
       </div>
     </div>
   );

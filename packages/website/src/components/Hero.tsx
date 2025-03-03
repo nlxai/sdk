@@ -2,7 +2,7 @@ import { type FC } from "react";
 import { useLocation } from "react-router-dom";
 import { clsx } from "clsx";
 
-import { TouchpointExampleWidget } from "./TouchpointExampleWidget";
+import { TouchpointDemoAnimation } from "./TouchpointDemoAnimation";
 
 const buttonBaseClass =
   "rounded-xl py-1.5 px-8 text-sm focus:outline focus:outline-accent-50 focus:outline-2";
@@ -61,7 +61,7 @@ export const Hero: FC<unknown> = () => {
             </div>
           </div>
           <div className="relative lg:static">
-            <TouchpointExampleWidget
+            <TouchpointDemoAnimation
               className="w-full h-[360px] lg:h-[calc(100vh-4.75rem-80px)]"
               items={[
                 {
