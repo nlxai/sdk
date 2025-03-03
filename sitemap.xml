@@ -13,7 +13,28 @@
     <loc>https://developers.nlx.ai/touchpoint-ui-theming</loc>
   </url>
   <url>
+    <loc>https://developers.nlx.ai/touchpoint-ui-ConversationHandler</loc>
+  </url>
+  <url>
     <loc>https://developers.nlx.ai/touchpoint-ui-try-live</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/touchpoint-components</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/touchpoint-Typography</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/touchpoint-Buttons</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/touchpoint-CustomCards</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/touchpoint-Icons</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/touchpoint-DateInput</loc>
   </url>
   <url>
     <loc>https://developers.nlx.ai/web-widget-setup</loc>
@@ -34,28 +55,28 @@
     <loc>https://developers.nlx.ai/web-widget-components-getting-started</loc>
   </url>
   <url>
-    <loc>https://developers.nlx.ai/address-input</loc>
+    <loc>https://developers.nlx.ai/web-widget-components-address-input</loc>
   </url>
   <url>
-    <loc>https://developers.nlx.ai/disclaimer</loc>
+    <loc>https://developers.nlx.ai/web-widget-components-disclaimer</loc>
   </url>
   <url>
-    <loc>https://developers.nlx.ai/carousel</loc>
+    <loc>https://developers.nlx.ai/web-widget-components-carousel</loc>
   </url>
   <url>
-    <loc>https://developers.nlx.ai/datepicker</loc>
+    <loc>https://developers.nlx.ai/web-widget-components-datepicker</loc>
   </url>
   <url>
-    <loc>https://developers.nlx.ai/feedback-form</loc>
+    <loc>https://developers.nlx.ai/web-widget-components-feedback-form</loc>
   </url>
   <url>
-    <loc>https://developers.nlx.ai/file-upload</loc>
+    <loc>https://developers.nlx.ai/web-widget-components-file-upload</loc>
   </url>
   <url>
-    <loc>https://developers.nlx.ai/video-player</loc>
+    <loc>https://developers.nlx.ai/web-widget-components-video-player</loc>
   </url>
   <url>
-    <loc>https://developers.nlx.ai/secure-input</loc>
+    <loc>https://developers.nlx.ai/web-widget-components-secure-input</loc>
   </url>
   <url>
     <loc>https://developers.nlx.ai/custom-widgets-getting-started</loc>
