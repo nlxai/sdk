@@ -1,4 +1,14 @@
+- [About](#about)
+  - [Accessing the ConversationHandler](#accessing-the-conversationhandler)
+- [Examples](#examples)
+  - [Example 1: Open Touchpoint after user inactivity](#example-1-open-touchpoint-after-user-inactivity)
+  - [Example 2: Detecting Modalities in Conversation Responses](#example-2-detecting-modalities-in-conversation-responses)
+
+## About
+
 The Touchpoint SDK provides access to the [ConversationHandler](/headless-api-reference#interface-conversationhandler) through the Touchpoint Instance returned from the top-level create method.
+
+### Accessing the ConversationHandler
 
 ```js
 import { create } from "@nlxai/touchpoint-ui";

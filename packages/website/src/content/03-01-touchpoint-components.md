@@ -1,10 +1,29 @@
-Touchpoint components work together with each other to create rich chat experiences. Touchpoint relies on [modalities](https://docs.studio.nlx.ai/1-build/resources/modalities) defined within the NLX application to send structured data from the NLX conversation flow to touchpoint. For each Modality defined in your conversational application that you wish to use with Touchpoint, you must create a component and explicitly enable that modality when creating your touchpoint instance.
+Touchpoint components work together with each other to create rich chat experiences.
+
+- [Building Custom Components](#building-custom-components)
+  - [Modalities](#modalities)
+  - [Defining your Component](#defining-your-component)
+  - [Basic Component Structure](#basic-component-structure)
+  - [Example Button Modality](#example-button-modality)
+  - [Example Button Component](#example-button-component)
+  - [Example CustomCard Modality](#example-customcard-modality)
+  - [Example CustomCard Component](#example-customcard-component)
+- [Building HTML Components without Transpiling](#building-html-components-without-transpiling)
+  - [Import and Basic Usage](#import-and-basic-usage)
+  - [Example: Creating a Carousel with CustomCards](#example-creating-a-carousel-with-customcards)
+- [Component Categories](#component-categories)
 
 ## Building Custom Components
 
-Basic context for custom components is available through the `data` and `conversationHandler` objects.
+### Modalities
 
-- `data`: Can be any type. It will match the schema set in the modality within NLX once set in the Node.
+Touchpoint relies on [modalities](https://docs.studio.nlx.ai/1-build/resources/modalities) defined within the NLX application to send structured data from the NLX conversation flow to touchpoint. For each Modality defined in your conversational application that you wish to use with Touchpoint, you must create a component and explicitly enable that modality when creating your touchpoint instance.
+
+### Defining your Component
+
+Each component should accept an object with `data` and `conversationHandler` to access the conversation context sent from the NLX Application.
+
+- `data`: Can be any type. It will match the schema set in the modality within NLX.
 - `conversationHandler`: The [ConversationHandler](/headless-api-reference#interface-conversationhandler). Functions to access the conversational context and send data back to NLX.
 
 Add the Component to the `customModalities` configuration option paired with the name of Modality in NLX. In the example below the [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) is named "MyComponentModality".

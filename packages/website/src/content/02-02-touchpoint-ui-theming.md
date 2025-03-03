@@ -1,5 +1,14 @@
 Touchpoint provides powerful theming capabilities that let you match your brand's visual identity. While the system offers comprehensive customization options, most applications can achieve a cohesive look by adjusting just two key properties.
 
+- [Quick Customization](#quick-customization)
+- [Dark Mode Support](#dark-mode-support)
+- [Advanced Customization](#advanced-customization)
+  - [Primary Colors](#primary-colors)
+  - [Secondary Colors](#secondary-colors)
+  - [Additional Colors](#additional-colors)
+  - [Status Colors](#status-colors)
+  - [Layout](#layout)
+
 ## Quick Customization
 
 For most applications, customizing `accent` and `fontFamily` properties will create a branded experience:

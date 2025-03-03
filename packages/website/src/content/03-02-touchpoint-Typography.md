@@ -1,3 +1,10 @@
+- [About](#about)
+- [Import and Basic Usage](#import-and-basic-usage)
+  - [Example](#example)
+- [Related Documents](#related-documents)
+
+## About
+
 Touchpoint provides two typography elements, BaseText and SmallText, to provide consistent styling and theme integration for text within Custom Components.
 
 - **BaseText** - Primary text component in Touchpoint, used for main content, titles, and important information.
@@ -30,7 +37,8 @@ const ProductDetails = ({ data, conversationHandler }) => {
 };
 ```
 
-## Related Components
+## Related Documents
 
 - [CustomCards](/touchpoint-CustomCards)
 - [Buttons](/touchpoint-Buttons)
+- [Building Components without JSX](/touchpoint-components#building-html-components-without-transpiling)

@@ -1,3 +1,14 @@
+- [About](#about)
+- [Properties](#properties)
+- [Import and Basic Usage](#import-and-basic-usage)
+  - [Define onSumbit](#define-onsumbit)
+- [Example](#example)
+  - [Example Modality](#example-modality)
+  - [Example Date Input Component](#example-date-input-component)
+- [Related Documents](#related-documents)
+
+## About
+
 The Date Input component provides a user-friendly interface for entering and submitting dates in a standardized format. It combines input masking, validation, and submission capabilities in a single component.
 
 ## Properties
@@ -42,4 +53,7 @@ const DateInputExample = ({ data, conversationHandler }) => {
 };
 ```
 
-Read more details about building Custom Components with Touchpoint in the [Getting started with Touchpoint components](/touchpoint-components) documentation page.
+## Related Documents
+
+- [Theming Touchpoint](/touchpoint-ui-theming)
+- [Building Components without JSX](/touchpoint-components#building-html-components-without-transpiling)
