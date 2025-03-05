@@ -12,3 +12,5 @@ lib
 # used by the nix when nix is used to provide a development environment
 .direnv
 .idea
+
+deploy-staging.sh

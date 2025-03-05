@@ -1,5 +1,4 @@
 /* eslint-disable accessor-pairs */
-/* eslint-disable jsdoc/require-jsdoc */
 import { type Root, createRoot } from "react-dom/client";
 import htm from "htm";
 import { type ConversationHandler } from "@nlxai/chat-core";
@@ -55,6 +54,25 @@ export {
   Icons,
 };
 
+// Export types for all components
+export {
+  type CustomCardProps,
+  type CustomCardRowProps,
+} from "./components/ui/CustomCard";
+export { type DateInputProps } from "./components/ui/DateInput";
+export {
+  type IconButtonProps,
+  type IconButtonType,
+} from "./components/ui/IconButton";
+export { type TextButtonProps } from "./components/ui/TextButton";
+export { type Props } from "./App";
+export {
+  type ColorMode,
+  type Theme,
+  type WindowSize,
+  type CustomModalityComponent,
+} from "./types";
+
 class NlxTouchpointElement extends HTMLElement {
   _root: Root | null = null;
   _shadowRoot: ShadowRoot | null = null;
@@ -96,12 +114,29 @@ const customElementsDefine: typeof customElements.define = (
 
 customElementsDefine("nlx-touchpoint", NlxTouchpointElement);
 
+/**
+ * Instance of a Touchpoint UI component
+ */
 export interface TouchpointInstance {
+  /**
+   * Controls whether the Touchpoint UI is expanded or collapsed
+   */
   expanded: boolean;
+  /**
+   * The conversation handler instance for interacting with the application
+   */
   conversationHandler: ConversationHandler;
+  /**
+   * Method to remove the Touchpoint UI from the DOM
+   */
   teardown: () => void;
 }
 
+/**
+ * Creates a new Touchpoint UI instance and appends it to the document body
+ * @param props - Configuration props for Touchpoint
+ * @returns A promise that resolves to a TouchpointInstance
+ */
 // eslint-disable-next-line @typescript-eslint/promise-function-async
 export const create = (props: Props): Promise<TouchpointInstance> => {
   return new Promise((resolve) => {
