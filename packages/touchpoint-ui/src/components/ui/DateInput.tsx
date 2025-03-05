@@ -16,7 +16,6 @@ export interface DateInputProps {
   onSubmit?: (date: string) => void;
 }
 
-
 const options = {
   mask: "MM / DD / YYYY",
   replacement: { D: /\d/, M: /\d/, Y: /\d/ },

@@ -4,7 +4,6 @@ import { type FC, type ReactNode } from "react";
 
 import { type Icon } from "../ui/Icons";
 
-
 /**
  * Props for the CustomCard component
  */

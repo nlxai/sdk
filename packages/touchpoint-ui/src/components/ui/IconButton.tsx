@@ -6,7 +6,7 @@ import { type IconProps } from "./Icons";
 
 /**
  * Represents the different types of icon buttons available in the application.
- * 
+ *
  * - `main`: The primary icon button.
  * - `ghost`: A transparent or less prominent icon button.
  * - `activated`: An icon button that indicates an active state.

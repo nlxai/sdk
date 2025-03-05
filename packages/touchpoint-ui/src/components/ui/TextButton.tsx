@@ -21,7 +21,7 @@ export interface TextButtonProps {
   className?: string;
   /**
    * Visual style variant of the button
-   * @default "ghost"
+   * Default value is "ghost"
    */
   type?: "main" | "ghost";
   /**

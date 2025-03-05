@@ -1,5 +1,4 @@
 /* eslint-disable accessor-pairs */
-/* eslint-disable jsdoc/require-jsdoc */
 import { type Root, createRoot } from "react-dom/client";
 import htm from "htm";
 import { type ConversationHandler } from "@nlxai/chat-core";
@@ -56,16 +55,22 @@ export {
 };
 
 // Export types for all components
-export { type CustomCardProps, type CustomCardRowProps } from "./components/ui/CustomCard";
+export {
+  type CustomCardProps,
+  type CustomCardRowProps,
+} from "./components/ui/CustomCard";
 export { type DateInputProps } from "./components/ui/DateInput";
-export { type IconButtonProps, type IconButtonType } from "./components/ui/IconButton";
+export {
+  type IconButtonProps,
+  type IconButtonType,
+} from "./components/ui/IconButton";
 export { type TextButtonProps } from "./components/ui/TextButton";
 export { type Props } from "./App";
-export { 
+export {
   type ColorMode,
   type Theme,
   type WindowSize,
-  type CustomModalityComponent 
+  type CustomModalityComponent,
 } from "./types";
 
 class NlxTouchpointElement extends HTMLElement {
