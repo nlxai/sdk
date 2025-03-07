@@ -12,6 +12,10 @@
   - [Example Card Component](#example-card-component)
 - [Related Components](#related-components)
 
+### Carousel Example
+
+<img src="/images/Touchpoint-Carousel.png" alt="Carousel Rendered Example" style="max-width: 40%;">
+
 ## About
 
 The Custom Cards system provides a structured way to present information in your chat interface. The system consists of four components that work together:

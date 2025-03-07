@@ -118,6 +118,8 @@ const touchpoint = await create(touchpointOptions);
 
 ### Example CustomCard Modality
 
+<img src="/images/Touchpoint-Custom-Card.png" alt="Product Card with CustomCard" style="max-width: 40%;">
+
 For example, a Modality named "ProductCard" with schema:
 
 ```json
