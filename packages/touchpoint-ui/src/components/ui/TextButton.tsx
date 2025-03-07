@@ -3,11 +3,30 @@ import { clsx } from "clsx";
 import { type FC } from "react";
 import { type IconProps } from "./Icons";
 
-interface TextButtonProps {
+/**
+ * Props for the TextButton component
+ */
+export interface TextButtonProps {
+  /**
+   * Handler function called when the button is clicked
+   */
   onClick?: () => void;
+  /**
+   * Text to display on the button
+   */
   label: string;
+  /**
+   * Additional CSS classes to apply to the button
+   */
   className?: string;
+  /**
+   * Visual style variant of the button
+   * Default value is "ghost"
+   */
   type?: "main" | "ghost";
+  /**
+   * Icon component to display inside the button.
+   */
   Icon: FC<IconProps>;
 }
 

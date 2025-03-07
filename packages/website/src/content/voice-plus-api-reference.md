@@ -45,7 +45,7 @@ client.sendStep("REPLACE_WITH_STEP_ID");
 
 #### Defined in
 
-[index.ts:26](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/voice-plus-core/src/index.ts#L26)
+[index.ts:26](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L26)
 
 ---
 
@@ -59,7 +59,19 @@ client.sendStep("REPLACE_WITH_STEP_ID");
 
 #### Defined in
 
-[index.ts:121](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/voice-plus-core/src/index.ts#L121)
+[index.ts:143](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L143)
+
+## Other
+
+### StepInfo
+
+Ƭ **StepInfo**: `string` \| \{ `stepId`: `string` ; `stepTriggerDescription?`: `string` }
+
+Step information, either a step ID as a single string or an object
+
+#### Defined in
+
+[index.ts:95](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L95)
 
 <a name="indexmd"></a>
 
@@ -75,7 +87,7 @@ The Voice+ client
 
 #### sendStep
 
-• **sendStep**: (`stepId`: `string`, `context?`: [`Context`](#context)) => `Promise`\<`void`\>
+• **sendStep**: (`step`: [`StepInfo`](#stepinfo), `context?`: [`Context`](#context)) => `Promise`\<`void`\>
 
 **`Example`**
 
@@ -97,14 +109,14 @@ sends a step to the voice bot
 
 ##### Type declaration
 
-▸ (`stepId`, `context?`): `Promise`\<`void`\>
+▸ (`step`, `context?`): `Promise`\<`void`\>
 
 ###### Parameters
 
-| Name       | Type                  | Description                                                                                                                                                              |
-| :--------- | :-------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `stepId`   | `string`              | the next step to transition to. _Note: Must be a valid UUID_                                                                                                             |
-| `context?` | [`Context`](#context) | [context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) to send back to the voice bot, for usage later in the intent. |
+| Name       | Type                    | Description                                                                                                                                                              |
+| :--------- | :---------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `step`     | [`StepInfo`](#stepinfo) | the next step to transition to, either a UUID as string or an object containing stepId. _Note: The step ID must be a valid UUID_                                         |
+| `context?` | [`Context`](#context)   | [context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) to send back to the voice bot, for usage later in the intent. |
 
 ###### Returns
 
@@ -112,7 +124,7 @@ sends a step to the voice bot
 
 ##### Defined in
 
-[index.ts:114](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/voice-plus-core/src/index.ts#L114)
+[index.ts:136](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L136)
 
 <a name="interfacesconfigmd"></a>
 
@@ -130,7 +142,7 @@ Initial configuration used when creating a journey manager
 
 ##### Defined in
 
-[index.ts:129](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/voice-plus-core/src/index.ts#L129)
+[index.ts:151](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L151)
 
 ---
 
@@ -146,7 +158,7 @@ use `scriptId` instead
 
 ##### Defined in
 
-[index.ts:134](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/voice-plus-core/src/index.ts#L134)
+[index.ts:156](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L156)
 
 ---
 
@@ -158,7 +170,7 @@ the ID of the script.
 
 ##### Defined in
 
-[index.ts:136](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/voice-plus-core/src/index.ts#L136)
+[index.ts:158](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L158)
 
 ---
 
@@ -170,7 +182,7 @@ your workspace id
 
 ##### Defined in
 
-[index.ts:139](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/voice-plus-core/src/index.ts#L139)
+[index.ts:161](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L161)
 
 ---
 
@@ -184,7 +196,7 @@ _Note: This must be dynamically set by the voice bot._
 
 ##### Defined in
 
-[index.ts:146](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/voice-plus-core/src/index.ts#L146)
+[index.ts:168](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L168)
 
 ---
 
@@ -196,7 +208,7 @@ the user's language code, consistent with the language codes defined on the jour
 
 ##### Defined in
 
-[index.ts:151](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/voice-plus-core/src/index.ts#L151)
+[index.ts:173](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L173)
 
 ---
 
@@ -208,4 +220,4 @@ set to true to help debug issues or errors. Defaults to false
 
 ##### Defined in
 
-[index.ts:154](https://github.com/nlxai/sdk/blob/73d5c0062f764eac493b9e159fb7550a61a426b2/packages/voice-plus-core/src/index.ts#L154)
+[index.ts:176](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L176)

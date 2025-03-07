@@ -1,11 +1,23 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { type FC, type SVGProps } from "react";
 
+/**
+ * Props for icon components
+ */
 export interface IconProps {
+  /**
+   * Additional CSS classes to apply to the icon
+   */
   className?: string;
+  /**
+   * Custom size in pixels for the icon
+   */
   size?: number;
 }
 
+/**
+ * Type definition for an icon component
+ */
 export type Icon = FC<IconProps>;
 
 const iconSvgProps = (props: IconProps): SVGProps<SVGSVGElement> => ({

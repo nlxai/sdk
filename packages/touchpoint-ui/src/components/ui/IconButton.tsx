@@ -4,6 +4,15 @@ import { type FC } from "react";
 
 import { type IconProps } from "./Icons";
 
+/**
+ * Represents the different types of icon buttons available in the application.
+ *
+ * - `main`: The primary icon button.
+ * - `ghost`: A transparent or less prominent icon button.
+ * - `activated`: An icon button that indicates an active state.
+ * - `coverup`: An icon button used to cover up or mask something.
+ * - `overlay`: An icon button that appears over other content.
+ */
 export type IconButtonType =
   | "main"
   | "ghost"
@@ -11,11 +20,29 @@ export type IconButtonType =
   | "coverup"
   | "overlay";
 
-interface IconButtonProps {
+/**
+ * Props for the IconButton component
+ */
+export interface IconButtonProps {
+  /**
+   * Handler function called when the button is clicked
+   */
   onClick?: () => void;
+  /**
+   * Accessible label for the button
+   */
   label: string;
+  /**
+   * Additional CSS classes to apply to the button
+   */
   className?: string;
+  /**
+   * Visual style variant of the button. One of IconButtonType.
+   */
   type: IconButtonType;
+  /**
+   * Icon component to display inside the button
+   */
   Icon: FC<IconProps>;
 }
 
