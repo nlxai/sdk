@@ -7,6 +7,10 @@
   - [Example Date Input Component](#example-date-input-component)
 - [Related Documents](#related-documents)
 
+### Date Input Example
+
+<img src="/images/Touchpoint-Date-Input.png" alt="Date Input Example" style="max-width: 40%;">
+
 ## About
 
 The Date Input component provides a user-friendly interface for entering and submitting dates in a standardized format. It combines input masking, validation, and submission capabilities in a single component.

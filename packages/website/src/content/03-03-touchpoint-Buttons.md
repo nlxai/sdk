@@ -9,6 +9,10 @@
   - [Example Button Components](#example-button-components)
 - [Related Documents](#related-documents)
 
+### Text Button Example
+
+<img src="/images/Touchpoint-Text-Button.png" alt="Text Button with Left Arrow Icon" style="max-width: 40%;">
+
 ## About
 
 Touchpoint provides two types of button components for handling user interactions: TextButton and IconButton. These components offer consistent styling and behavior while serving different interaction needs.
