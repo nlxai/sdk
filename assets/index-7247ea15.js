@@ -3452,6 +3452,8 @@ const touchpoint = await create(touchpointOptions);
 
 ### Example CustomCard Modality
 
+<img src="/images/Touchpoint-Custom-Card.png" alt="Product Card with CustomCard" style="max-width: 40%;">
+
 For example, a Modality named "ProductCard" with schema:
 
 \`\`\`json
@@ -3648,6 +3650,10 @@ const ProductDetails = ({ data, conversationHandler }) => {
   - [Example Button Components](#example-button-components)
 - [Related Documents](#related-documents)
 
+### Text Button Example
+
+<img src="/images/Touchpoint-Text-Button.png" alt="Text Button with Left Arrow Icon" style="max-width: 40%;">
+
 ## About
 
 Touchpoint provides two types of button components for handling user interactions: TextButton and IconButton. These components offer consistent styling and behavior while serving different interaction needs.
@@ -3747,6 +3753,10 @@ const IconButtonExample = ({ data, conversationHandler }) => {
   - [Example Modality Schema](#example-modality-schema)
   - [Example Card Component](#example-card-component)
 - [Related Components](#related-components)
+
+### Carousel Example
+
+<img src="/images/Touchpoint-Carousel.png" alt="Carousel Rendered Example" style="max-width: 40%;">
 
 ## About
 
@@ -3986,6 +3996,10 @@ const IconButtonExample = ({ data, conversationHandler }) => {
   - [Example Modality](#example-modality)
   - [Example Date Input Component](#example-date-input-component)
 - [Related Documents](#related-documents)
+
+### Date Input Example
+
+<img src="/images/Touchpoint-Date-Input.png" alt="Date Input Example" style="max-width: 40%;">
 
 ## About
 
