@@ -1112,9 +1112,11 @@ export function createConversation(config: Config): ConversationHandler {
           ...(config.headers ?? {}),
           Accept: "application/json",
           "Content-Type": "application/json",
+          "nlx-conversation-id": state.conversationId,
           "nlx-sdk-version": packageJson.version,
         },
         body: JSON.stringify({
+          languageCode: state.languageCode,
           conversationId: state.conversationId,
           userId: state.userId,
           requestToken: true,
