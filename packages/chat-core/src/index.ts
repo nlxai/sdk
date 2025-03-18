@@ -501,6 +501,28 @@ export interface BotRequest {
 }
 
 /**
+ * Credentials to connect to a LiveKit channel
+ */
+export interface LiveKitCredentials {
+  /**
+   * LiveKit URL
+   */
+  url: string;
+  /**
+   * LiveKit room name
+   */
+  roomName: string;
+  /**
+   * LiveKit token
+   */
+  token: string;
+  /**
+   * LiveKit participant name
+   */
+  participantName: string;
+}
+
+/**
  * Helps link the choice to the specific message in the conversation.
  */
 export interface ChoiceRequestMetadata {
@@ -582,6 +604,12 @@ export interface ConversationHandler {
    * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
    */
   sendIntent: (intentId: string, context?: Context) => void;
+
+  /**
+   * Obtain LiveKit credentials to run the experience in voice.
+   * @returns LiveKit credentials in promise form
+   */
+  getLiveKitCredentials: () => Promise<LiveKitCredentials>;
 
   /**
    * Send a combination of choice, slots, and intent in one request.
@@ -711,6 +739,13 @@ export function createConversation(config: Config): ConversationHandler {
     conversationId: initialConversationId,
   };
 
+  const fullApplicationHttpUrl = () =>
+    `${applicationUrl}${
+      config.experimental?.completeBotUrl === true
+        ? ""
+        : `-${state.languageCode}`
+    }`;
+
   const setState = (
     change: Partial<InternalState>,
     // Optionally send the response that causes the current state change, to be sent to subscribers
@@ -821,23 +856,16 @@ export function createConversation(config: Config): ConversationHandler {
         socketMessageQueue = [...socketMessageQueue, bodyWithContext];
       }
     } else {
-      await fetch(
-        `${applicationUrl}${
-          config.experimental?.completeBotUrl === true
-            ? ""
-            : `-${state.languageCode}`
-        }`,
-        {
-          method: "POST",
-          headers: {
-            ...(config.headers ?? {}),
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "nlx-sdk-version": packageJson.version,
-          },
-          body: JSON.stringify(bodyWithContext),
+      await fetch(fullApplicationHttpUrl(), {
+        method: "POST",
+        headers: {
+          ...(config.headers ?? {}),
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "nlx-sdk-version": packageJson.version,
         },
-      )
+        body: JSON.stringify(bodyWithContext),
+      })
         .then(async (res) => {
           return await res.json();
         })
@@ -1076,6 +1104,24 @@ export function createConversation(config: Config): ConversationHandler {
     },
     currentLanguageCode: () => {
       return state.languageCode;
+    },
+    getLiveKitCredentials: async () => {
+      const res = await fetch(fullApplicationHttpUrl(), {
+        method: "POST",
+        headers: {
+          ...(config.headers ?? {}),
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "nlx-sdk-version": packageJson.version,
+        },
+        body: JSON.stringify({
+          conversationId: state.conversationId,
+          userId: state.userId,
+          requestToken: true,
+        }),
+      });
+      const data = await res.json();
+      return data;
     },
     subscribe,
     unsubscribe,
