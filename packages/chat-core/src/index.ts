@@ -607,6 +607,7 @@ export interface ConversationHandler {
 
   /**
    * Obtain LiveKit credentials to run the experience in voice.
+   * @internal
    * @returns LiveKit credentials in promise form
    */
   getLiveKitCredentials: () => Promise<LiveKitCredentials>;
