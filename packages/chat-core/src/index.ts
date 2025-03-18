@@ -1122,7 +1122,13 @@ export function createConversation(config: Config): ConversationHandler {
           requestToken: true,
         }),
       });
+      if (res.status >= 400) {
+        throw new Error(`Responded with ${res.status}`);
+      }
       const data = await res.json();
+      if (data?.url == null) {
+        throw new Error("Invalid response");
+      }
       return data;
     },
     subscribe,
