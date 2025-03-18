@@ -739,7 +739,7 @@ export function createConversation(config: Config): ConversationHandler {
     conversationId: initialConversationId,
   };
 
-  const fullApplicationHttpUrl = () =>
+  const fullApplicationHttpUrl = (): string =>
     `${applicationUrl}${
       config.experimental?.completeBotUrl === true
         ? ""
