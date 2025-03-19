@@ -79,10 +79,10 @@ export const ConfigEditor: FC<{
   const config = props.value;
   return (
     <div className="space-y-4">
-      <Labeled label="Bot URL">
+      <Labeled label="Application URL">
         <input
           type="url"
-          placeholder="Enter bot URL"
+          placeholder="Enter application URL"
           className={inputClass}
           value={config.applicationUrl}
           onInput={(ev: any) => {

@@ -80,7 +80,7 @@ export const Content: FC<unknown> = () => {
       <div className="mt-6 space-y-8">
         <div className="space-y-4">
           <h3 className="text-xl">Setup</h3>
-          <Note body="In order for the bot communication to work (i.e., not trigger CORS errors), make sure that the URL of your webpage is added to the whitelisted URL list of your API channel in Dialog Studio." />
+          <Note body="In order for the conversation to work (i.e., not trigger CORS errors when communicating with the application), make sure that the URL of your webpage is added to the whitelisted URL list of your API channel in Dialog Studio." />
           <ConfigEditor
             value={config}
             onChange={(val: any) => {
@@ -123,7 +123,10 @@ export const Content: FC<unknown> = () => {
         theme={theme}
         titleBar={titleBar}
         onExpand={(handler) => {
-          if (config.botUrl !== "" && !welcomeIntentSent.current) {
+          if (
+            (config.applicationUrl ?? config.botUrl ?? "") !== "" &&
+            !welcomeIntentSent.current
+          ) {
             handler.sendWelcomeIntent();
             welcomeIntentSent.current = true;
           }

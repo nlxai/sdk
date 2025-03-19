@@ -2,6 +2,7 @@ import { type FC, useState, useEffect, useRef, type ReactNode } from "react";
 import { type Config, isConfigValid } from "@nlxai/chat-core";
 
 import { TouchpointIcon } from "../components/Icons";
+import { Toggle } from "../components/Toggle";
 import { Labeled, inputClass } from "../components/Ui";
 import { PageContent } from "../components/PageContent";
 import {
@@ -13,7 +14,7 @@ import { touchpointUiSetupSnippet } from "../snippets";
 import { clsx } from "clsx";
 
 export const content = `
-You can try your bots directly on this configuration widget.
+You can try your applications directly on this configuration widget.
 `;
 
 export const snippetContent = ({
@@ -118,6 +119,8 @@ export const Content: FC<unknown> = () => {
     accent: "#AECAFF",
   });
 
+  const [colorMode, setColorMode] = useState<"light" | "dark">("dark");
+
   const touchpointInstance = useRef<any>();
 
   useEffect(() => {
@@ -127,6 +130,7 @@ export const Content: FC<unknown> = () => {
         touchpointInstance.current = await create({
           config,
           theme,
+          colorMode,
           launchIcon: false,
         });
       })
@@ -139,7 +143,7 @@ export const Content: FC<unknown> = () => {
         touchpointInstance.current.teardown();
       }
     };
-  }, [config, theme]);
+  }, [config, theme, colorMode]);
 
   return (
     <>
@@ -148,7 +152,7 @@ export const Content: FC<unknown> = () => {
         <div className="mt-6 grid lg:grid-cols-2 gap-8">
           <div className="space-y-4">
             <h3 className="text-xl">Setup</h3>
-            <Note body="In order for the bot communication to work (i.e., not trigger CORS errors), make sure that the URL of your webpage is added to the whitelisted URL list of your API channel in Dialog Studio." />
+            <Note body="In order for the application communication to work with NLX (i.e., not trigger CORS errors), make sure that the URL of your webpage is added to the whitelisted URL list of your API channel in Dialog Studio." />
             <ConfigEditor
               value={config}
               onChange={(val: any) => {
@@ -159,6 +163,17 @@ export const Content: FC<unknown> = () => {
           <div className="space-y-4">
             <h3 className="text-xl">Theme</h3>
             <ThemeEditor value={theme} onChange={setTheme} />
+
+            <Labeled label="Color mode">
+              <Toggle
+                value={colorMode}
+                onChange={setColorMode}
+                options={[
+                  { value: "dark", label: "Dark mode" },
+                  { value: "light", label: "Light mode" },
+                ]}
+              />
+            </Labeled>
           </div>
         </div>
         <FullscreenButton
