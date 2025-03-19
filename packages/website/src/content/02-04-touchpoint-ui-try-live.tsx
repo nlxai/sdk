@@ -2,6 +2,7 @@ import { type FC, useState, useEffect, useRef, type ReactNode } from "react";
 import { type Config, isConfigValid } from "@nlxai/chat-core";
 
 import { TouchpointIcon } from "../components/Icons";
+import { Toggle } from "../components/Toggle";
 import { Labeled, inputClass } from "../components/Ui";
 import { PageContent } from "../components/PageContent";
 import {
@@ -118,6 +119,8 @@ export const Content: FC<unknown> = () => {
     accent: "#AECAFF",
   });
 
+  const [colorMode, setColorMode] = useState<"light" | "dark">("dark");
+
   const touchpointInstance = useRef<any>();
 
   useEffect(() => {
@@ -127,6 +130,7 @@ export const Content: FC<unknown> = () => {
         touchpointInstance.current = await create({
           config,
           theme,
+          colorMode,
           launchIcon: false,
         });
       })
@@ -139,7 +143,7 @@ export const Content: FC<unknown> = () => {
         touchpointInstance.current.teardown();
       }
     };
-  }, [config, theme]);
+  }, [config, theme, colorMode]);
 
   return (
     <>
@@ -159,6 +163,17 @@ export const Content: FC<unknown> = () => {
           <div className="space-y-4">
             <h3 className="text-xl">Theme</h3>
             <ThemeEditor value={theme} onChange={setTheme} />
+
+            <Labeled label="Color mode">
+              <Toggle
+                value={colorMode}
+                onChange={setColorMode}
+                options={[
+                  { value: "dark", label: "Dark mode" },
+                  { value: "light", label: "Light mode" },
+                ]}
+              />
+            </Labeled>
           </div>
         </div>
         <FullscreenButton
