@@ -1,16 +1,12 @@
 # SDK for NLX applications
 
-The official JavaScript SDK to communicate with conversational applications created using NLX Dialog Studio. It contains the following packages:
-* [@nlxai/chat-widget](https://www.npmjs.com/package/@nlxai/chat-widget): the official out-of-the-box, lightly themeable NLX widget.
-* [@nlxai/chat-core](https://www.npmjs.com/package/@nlxai/chat-core): vanilla JavaScript SDK for creating fully custom chat widgets.
-* [@nlxai/chat-react](https://www.npmjs.com/package/@nlxai/chat-react): React custom hook for building chat widgets.
-* [@nlxai/chat-preact](https://www.npmjs.com/package/@nlxai/chat-preact): Preact custom hook for building chat widgets.
-
-## Usage with \*
-
-Do you work with Vue? React without hooks? Custom elements? Let us know what framework you are looking to build web-based chat applications with so we can look into making utilities for those.
-
-> *ps* if you work with Svelte, the conversation object returned by the core SDK satisfies [the Svelte store contract](https://svelte.dev/docs#component-format-script-4-prefix-stores-with-$-to-access-their-values-store-contract).
+This is the official JavaScript SDK to communicate with conversational applications created using the NLX Platform. It contains the following packages:
+* [@nlxai/touchpoint-ui](https://github.com/nlxai/sdk/tree/main/packages/touchpoint-ui): The modern and themeable chat widget for NLX applications.
+* [@nlxai/chat-widget](https://github.com/nlxai/sdk/tree/main/packages/chat-widget): the previous out-of-the-box, themeable NLX widget; it will be deprecated in Q1 2025 - use Touchpoint UI for new projects.
+* [@nlxai/chat-react](https://github.com/nlxai/sdk/tree/main/packages/chat-react): React custom hook for building chat widgets.
+* [@nlxai/chat-preact](https://github.com/nlxai/sdk/tree/main/packages/chat-preact): Preact custom hook for building chat widgets.
+* [@nlxai/chat-core](https://github.com/nlxai/sdk/tree/main/packages/chat-core): vanilla JavaScript SDK for creating fully custom chat widgets.
+* [@nlxai/voice-plus-core](https://github.com/nlxai/sdk/tree/main/packages/voice-plus-core): Voice+ capabilities.
 
 ## TypeScript
 
