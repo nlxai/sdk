@@ -1107,7 +1107,7 @@ export function createConversation(config: Config): ConversationHandler {
       return state.languageCode;
     },
     getLiveKitCredentials: async () => {
-      const res = await fetch(`${applicationUrl}/requestToken`, {
+      const res = await fetch(`${fullApplicationHttpUrl()}/requestToken`, {
         method: "POST",
         headers: {
           ...(config.headers ?? {}),
