@@ -93,9 +93,13 @@ const BotStep: FC<{ messages: BotMessage[] } & StepShared> = ({
         }
         if (message.type === "images") {
           return (
-            <div className="flex gap-2" key={messageIndex}>
+            <div className="flex overflow-hidden gap-2" key={messageIndex}>
               {message.images.map((imageUrl, index) => (
-                <img key={index} src={imageUrl} className="h-48" />
+                <img
+                  key={index}
+                  src={imageUrl}
+                  className="w-[290px] h-48 flex-none"
+                />
               ))}
             </div>
           );
