@@ -789,7 +789,7 @@ export function createConversation(config: Config): ConversationHandler {
   let socketMessageQueueCheckInterval: ReturnType<typeof setInterval> | null =
     null;
 
-  const sendToBot = async (body: BotRequest): Promise<void> => {
+  const sendToBot = async (body: BotRequest): Promise<unknown> => {
     if (botRequestOverride != null) {
       botRequestOverride(body, (payload) => {
         const newResponse: Response = {
@@ -821,31 +821,33 @@ export function createConversation(config: Config): ConversationHandler {
         socketMessageQueue = [...socketMessageQueue, bodyWithContext];
       }
     } else {
-      await fetch(
-        `${applicationUrl}${
-          config.experimental?.completeBotUrl === true
-            ? ""
-            : `-${state.languageCode}`
-        }`,
-        {
-          method: "POST",
-          headers: {
-            ...(config.headers ?? {}),
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "nlx-sdk-version": packageJson.version,
+      try {
+        const res = await fetch(
+          `${applicationUrl}${
+            config.experimental?.completeBotUrl === true
+              ? ""
+              : `-${state.languageCode}`
+          }`,
+          {
+            method: "POST",
+            headers: {
+              ...(config.headers ?? {}),
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              "nlx-sdk-version": packageJson.version,
+            },
+            body: JSON.stringify(bodyWithContext),
           },
-          body: JSON.stringify(bodyWithContext),
-        },
-      )
-        .then(async (res) => {
-          return await res.json();
-        })
-        .then(messageResponseHandler)
-        .catch((err) => {
-          Console.warn(err);
-          failureHandler();
-        });
+        );
+        if (res.status >= 400) {
+          throw new Error(`Responded with ${res.status}`);
+        }
+        const json = await res.json();
+        messageResponseHandler(json);
+      } catch (err) {
+        Console.warn(err);
+        failureHandler();
+      }
     }
   };
 
