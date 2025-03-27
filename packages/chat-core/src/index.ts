@@ -613,6 +613,12 @@ export interface ConversationHandler {
   getLiveKitCredentials: () => Promise<LiveKitCredentials>;
 
   /**
+   * Terminate LiveKit call
+   * @internal
+   */
+  terminateLiveKitCall: () => Promise<unknown>;
+
+  /**
    * Send a combination of choice, slots, and intent in one request.
    * @param request -
    * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
@@ -1131,6 +1137,28 @@ export function createConversation(config: Config): ConversationHandler {
         throw new Error("Invalid response");
       }
       return data;
+    },
+    terminateLiveKitCall: async () => {
+      const res = await fetch(`${applicationUrl}/terminateVoice`, {
+        method: "POST",
+        headers: {
+          ...(config.headers ?? {}),
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "nlx-conversation-id": state.conversationId,
+          "nlx-sdk-version": packageJson.version,
+        },
+        body: JSON.stringify({
+          languageCode: state.languageCode,
+          conversationId: state.conversationId,
+          userId: state.userId,
+        }),
+      });
+      if (res.status >= 400) {
+        throw new Error(`Responded with ${res.status}`);
+      }
+      // It has not been decided what will be sent here
+      return {};
     },
     subscribe,
     unsubscribe,
