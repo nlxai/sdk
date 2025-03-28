@@ -8,35 +8,41 @@ import { useTailwindMediaQuery } from "../hooks";
 import { Close, Settings, Undo } from "./ui/Icons";
 
 interface HeaderProps {
-  windowSize: WindowSize;
+  windowSize: WindowSize | "embedded";
   colorMode: ColorMode;
   brandIcon?: string;
-  collapse: () => void;
+  renderCollapse: boolean;
+  collapse: (event: Event) => void;
   reset: () => void;
   toggleSettings?: () => void;
   isSettingsOpen: boolean;
+  enabled: boolean;
 }
 
 export const Header: FC<HeaderProps> = ({
   windowSize,
+  renderCollapse,
   collapse,
   toggleSettings,
   isSettingsOpen,
   brandIcon,
   reset,
+  enabled,
 }) => {
   const isHalf = windowSize === "half";
   const isMd = useTailwindMediaQuery("md");
   const iconButtonType: IconButtonType = isHalf && isMd ? "overlay" : "ghost";
-
   return (
     <div
       className={clsx(
         "flex",
         "p-2 md:p-3 items-center justify-between gap-2",
-        isHalf
-          ? "md:absolute md:w-fit md:flex-col md:left-0 md:-translate-x-full"
-          : "md:absolute md:left-0 md:right-0 md:top-0",
+
+        {
+          "md:absolute md:w-fit md:flex-col md:left-0 md:-translate-x-full":
+            windowSize === "half",
+          "md:absolute md:left-0 md:right-0 md:top-0": windowSize === "full",
+        },
       )}
     >
       {brandIcon != null ? (
@@ -47,9 +53,13 @@ export const Header: FC<HeaderProps> = ({
         label="Reset"
         type={iconButtonType}
         className={brandIcon == null ? "" : "ml-auto"}
-        onClick={() => {
-          reset();
-        }}
+        onClick={
+          enabled
+            ? () => {
+                reset();
+              }
+            : undefined
+        }
         Icon={Undo}
       />
       {toggleSettings != null ? (
@@ -58,21 +68,27 @@ export const Header: FC<HeaderProps> = ({
           Icon={Settings}
           label="Settings"
           type={isSettingsOpen ? "activated" : iconButtonType}
-          onClick={toggleSettings}
+          onClick={enabled ? toggleSettings : undefined}
         />
       ) : null}
-      <IconButton
-        label="Collapse"
-        type={iconButtonType}
-        className={clsx(
-          toggleSettings == null ? "ml-auto" : "",
-          isHalf ? "md:-order-1" : "",
-        )}
-        onClick={() => {
-          collapse();
-        }}
-        Icon={Close}
-      />
+      {renderCollapse ? (
+        <IconButton
+          label="Collapse"
+          type={iconButtonType}
+          className={clsx(
+            toggleSettings == null ? "ml-auto" : "",
+            isHalf ? "md:-order-1" : "",
+          )}
+          onClick={
+            enabled
+              ? () => {
+                  collapse(new Event("collapse"));
+                }
+              : undefined
+          }
+          Icon={Close}
+        />
+      ) : null}
     </div>
   );
 };

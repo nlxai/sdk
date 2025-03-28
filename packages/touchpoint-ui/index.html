@@ -88,6 +88,20 @@
         aliquam bibendum.
       </p>
     </main>
-    <script type="module" src="/src/index.tsx"></script>
+    <script type="module">
+      import { create } from "/src/index.tsx";
+      const touchpoint = await create({
+        config: {
+          applicationUrl:
+            "https://bots.dev.studio.nlx.ai/c/kQwAgKCx86vJ4r0PUSxYR/ON4zgwWnVofsz2NaiD38Z",
+          headers: {
+            "nlx-api-key": "XDE2Th70VhBSlhz2YA",
+          },
+          userId: "1234-5678",
+          languageCode: "en-US",
+        },
+      });
+      touchpoint.expanded = true;
+    </script>
   </body>
 </html>

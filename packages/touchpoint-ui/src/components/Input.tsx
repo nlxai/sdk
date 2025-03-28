@@ -27,6 +27,7 @@ interface InputProps {
   uploadUrl?: UploadUrl;
   onFileUpload: (val: { uploadId: string; file: File }) => void;
   choiceMessage?: ChoiceMessage;
+  enabled: boolean;
 }
 
 interface FileInfo {
@@ -43,6 +44,7 @@ export const Input: FC<InputProps> = ({
   handler,
   uploadUrl,
   onFileUpload,
+  enabled,
 }) => {
   // Text state
   const [isTextAreaInFocus, setIsTextAreaInFocus] = useState(false);
@@ -75,7 +77,7 @@ export const Input: FC<InputProps> = ({
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
   const inputMessageSendDisabled =
-    (isInputEmpty && uploadedFileInfo == null) || isWaiting;
+    (isInputEmpty && uploadedFileInfo == null) || isWaiting || !enabled;
 
   const submit = (): void => {
     if (inputMessageSendDisabled) {
@@ -110,7 +112,7 @@ export const Input: FC<InputProps> = ({
     }
   };
 
-  const isUploadEnabled = uploadUrl != null;
+  const isUploadEnabled = uploadUrl != null && enabled;
 
   const setGenericUploadError = (): void => {
     setUploadErrorMessage("Something went wrong. Please try again.");
@@ -241,7 +243,7 @@ export const Input: FC<InputProps> = ({
               />
             )}
             <TextareaAutosize
-              disabled={isWaiting}
+              disabled={isWaiting || !enabled}
               className={clsx(
                 "h-10 w-full resize-none mr-2 px-2 py-2 outline-none",
                 "bg-transparent text-primary-80 placeholder:text-primary-40 caret-accent",
