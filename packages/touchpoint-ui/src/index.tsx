@@ -72,6 +72,7 @@ export {
   type Theme,
   type WindowSize,
   type CustomModalityComponent,
+  type TouchpointConfiguration,
 } from "./types";
 
 /**

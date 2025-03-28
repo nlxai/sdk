@@ -29,7 +29,6 @@ export const Header: FC<HeaderProps> = ({
   reset,
   enabled,
 }) => {
-  console.log(enabled);
   const isHalf = windowSize === "half";
   const isMd = useTailwindMediaQuery("md");
   const iconButtonType: IconButtonType = isHalf && isMd ? "overlay" : "ghost";
