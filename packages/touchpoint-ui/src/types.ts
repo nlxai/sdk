@@ -1,4 +1,4 @@
-import { type BotMessage, type ConversationHandler } from "@nlxai/chat-core";
+import type { Config, BotMessage, ConversationHandler } from "@nlxai/chat-core";
 import { type FC } from "react";
 
 /**
@@ -42,6 +42,13 @@ export type CustomModalityComponent<Data> = FC<{
    * Conversation handler instance
    */
   conversationHandler: ConversationHandler;
+
+  /**
+   * Whether the component is enabled
+   * We should probably use context and handle disabling interactive components automatically for the user
+   * @internal
+   */
+  enabled: boolean;
 }>;
 
 /**
@@ -153,4 +160,40 @@ export interface Theme {
    * Outer border radius: generally used for elements that contain buttons that have inner border radius. Also used by the launch button.
    */
   outerBorderRadius: string;
+}
+
+/**
+ * Main Touchpoint creation properties object
+ */
+export interface TouchpointConfiguration {
+  /**
+   * Connection information for the \@nlxai/chat-core conversation handler
+   */
+  config: Config;
+  /**
+   * Optional window size for the chat window, defaults to `half`
+   */
+  windowSize?: WindowSize;
+  /**
+   * Optional color mode for the chat window, defaults to `dark`
+   */
+  colorMode?: ColorMode;
+  /**
+   * URL of icon used to display the brand in the chat header
+   */
+  brandIcon?: string;
+  /**
+   * URL of icon used on the launch icon in the bottom right when the experience is collapsed.
+   *
+   * When set to `false`, no launch button is shown at all. When not set or set to `true`, the default launch icon is rendered.
+   */
+  launchIcon?: string | boolean;
+  /**
+   * Optional theme object to override default theme values
+   */
+  theme?: Partial<Theme>;
+  /**
+   * Optional custom modality components to render in Touchpoint
+   */
+  customModalities?: Record<string, CustomModalityComponent<any>>;
 }

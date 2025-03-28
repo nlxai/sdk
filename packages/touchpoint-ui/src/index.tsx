@@ -3,7 +3,7 @@ import { type Root, createRoot } from "react-dom/client";
 import htm from "htm";
 import { type ConversationHandler } from "@nlxai/chat-core";
 
-import App, { type Props, type AppRef } from "./App";
+import App, { type AppRef } from "./App";
 import cssRaw from "./index.css?inline";
 import * as Icons from "./components/ui/Icons";
 import { TextButton } from "./components/ui/TextButton";
@@ -18,6 +18,8 @@ import { Carousel } from "./components/ui/Carousel";
 import { DateInput } from "./components/ui/DateInput";
 
 import { createElement, type FC } from "react";
+import type { TouchpointConfiguration } from "./types";
+import { equals } from "ramda";
 
 export { default as React } from "react";
 
@@ -65,7 +67,6 @@ export {
   type IconButtonType,
 } from "./components/ui/IconButton";
 export { type TextButtonProps } from "./components/ui/TextButton";
-export { type Props } from "./App";
 export {
   type ColorMode,
   type Theme,
@@ -73,32 +74,83 @@ export {
   type CustomModalityComponent,
 } from "./types";
 
+/**
+ * A custom element implementing touchpoint.
+ *
+ * Note that when you create this element using the `create` function, it will have different defaults.
+ */
 class NlxTouchpointElement extends HTMLElement {
-  _root: Root | null = null;
-  _shadowRoot: ShadowRoot | null = null;
+  #root: Root | null = null;
+  #shadowRoot: ShadowRoot | null = null;
+  #props: TouchpointConfiguration | null = null;
+
+  /**
+   * Returns an imperative reference allowing control over the application
+   */
   onRef: ((ref: AppRef) => void) | null = null;
 
-  set props(value: Props) {
-    this._shadowRoot =
-      this._shadowRoot ?? this.attachShadow({ mode: "closed" });
-    this._root = createRoot(this._shadowRoot);
-    this._root.render(
-      <>
-        <style>{cssRaw}</style>
-        <App
-          {...value}
-          ref={(ref) => {
-            if (ref != null) {
-              this.onRef?.(ref);
-            }
-          }}
-        />
-      </>,
-    );
+  /**
+   * When set to false, will render a button that opens the touchpoint in a separate DOM location.
+   *
+   * When set to true, you get the touchpoint directly, and can control its size and placement.
+   */
+  embedded: boolean = true;
+
+  /**
+   * What does the close button in touchpoint do:
+   * - If set to null, the close button will not be rendered
+   * - If set to a function, the function will be called when the close button is clicked
+   *  You may call `preventDefault` to prevent the touchpoint from closing and handle closing yourself.
+   */
+  onClose: ((event: Event) => void) | null = null;
+  /** Render the settings button  */
+  enableSettings: boolean = false;
+  #enabled: boolean = true;
+
+  /** Disable the whole UI */
+  set enabled(value: boolean) {
+    if (this.#enabled === value) {
+      return;
+    }
+    this.#enabled = value;
+    this.#render();
+  }
+
+  /** The touchpoint configuration */
+  set touchpointConfiguration(value: TouchpointConfiguration) {
+    if (equals(this.#props, value)) {
+      return;
+    }
+    this.#props = value;
+    this.#render();
+  }
+
+  #render(): void {
+    this.#shadowRoot ??= this.attachShadow({ mode: "closed" });
+    this.#root ??= createRoot(this.#shadowRoot);
+    if (this.#props != null) {
+      this.#root.render(
+        <>
+          <style>{cssRaw}</style>
+          <App
+            {...this.#props}
+            embedded={this.embedded}
+            onClose={this.onClose}
+            enableSettings={this.enableSettings}
+            enabled={this.#enabled}
+            ref={(ref) => {
+              if (ref != null) {
+                this.onRef?.(ref);
+              }
+            }}
+          />
+        </>,
+      );
+    }
   }
 
   disconnectedCallback(): void {
-    this._root?.unmount();
+    this.#root?.unmount();
   }
 }
 
@@ -137,10 +189,13 @@ export interface TouchpointInstance {
  * @param props - Configuration props for Touchpoint
  * @returns A promise that resolves to a TouchpointInstance
  */
-// eslint-disable-next-line @typescript-eslint/promise-function-async
-export const create = (props: Props): Promise<TouchpointInstance> => {
+export const create = (
+  props: TouchpointConfiguration,
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+): Promise<TouchpointInstance> => {
   return new Promise((resolve) => {
     const element: any = document.createElement("nlx-touchpoint");
+    element.embedded = false;
     element.onRef = (ref: AppRef) => {
       resolve({
         set expanded(val) {
@@ -157,7 +212,9 @@ export const create = (props: Props): Promise<TouchpointInstance> => {
         },
       });
     };
-    element.props = props;
+    element.onClose = () => {};
+    element.enableSettings = true;
+    element.touchpointConfiguration = props;
     document.body.appendChild(element);
   });
 };
