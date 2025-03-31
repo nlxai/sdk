@@ -22,6 +22,7 @@ export interface MessagesProps {
   lastBotResponseIndex?: number;
   customModalities: Record<string, CustomModalityComponent<any>>;
   className?: string;
+  enabled: boolean;
 }
 
 export const MessageChoices: FC<{
@@ -104,6 +105,7 @@ export const Messages: FC<MessagesProps> = ({
   customModalities,
   handler,
   className,
+  enabled,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -208,6 +210,7 @@ export const Messages: FC<MessagesProps> = ({
                         key={key}
                         data={value}
                         conversationHandler={handler}
+                        enabled={enabled}
                       />
                     );
                   },

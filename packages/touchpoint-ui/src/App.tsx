@@ -6,6 +6,7 @@ import {
   useImperativeHandle,
   forwardRef,
   useMemo,
+  useCallback,
 } from "react";
 import {
   type ConversationHandler,
@@ -13,7 +14,6 @@ import {
   isConfigValid,
   type Subscriber,
   type Response,
-  type Config,
   type BotResponse,
 } from "@nlxai/chat-core";
 import { clsx } from "clsx";
@@ -25,49 +25,21 @@ import { Settings } from "./components/Settings";
 import { Messages } from "./components/Messages";
 import { FullscreenError } from "./components/FullscreenError";
 import { Input } from "./components/Input";
-import {
-  type ColorMode,
-  type WindowSize,
-  type ChoiceMessage,
-  type Theme,
-  type CustomModalityComponent,
+import type {
+  WindowSize,
+  ChoiceMessage,
+  TouchpointConfiguration,
 } from "./types";
 import { CustomPropertiesContainer } from "./components/Theme";
 
 /**
  * Main Touchpoint creation properties object
  */
-export interface Props {
-  /**
-   * Configuration object for Touchpoint
-   */
-  config: Config;
-  /**
-   * Optional window size for the chat window, defaults to `half`
-   */
-  windowSize?: WindowSize;
-  /**
-   * Optional color mode for the chat window, defaults to `dark`
-   */
-  colorMode?: ColorMode;
-  /**
-   * URL of icon used to display the brand in the chat header
-   */
-  brandIcon?: string;
-  /**
-   * URL of icon used on the launch icon in the bottom right when the experience is collapsed.
-   *
-   * When set to `false`, no launch button is shown at all. When not set or set to `true`, the default launch icon is rendered.
-   */
-  launchIcon?: string | boolean;
-  /**
-   * Optional theme object to override default theme values
-   */
-  theme?: Partial<Theme>;
-  /**
-   * Optional custom modality components to render in Touchpoint
-   */
-  customModalities?: Record<string, CustomModalityComponent<any>>;
+interface Props extends TouchpointConfiguration {
+  embedded: boolean;
+  onClose: ((event: Event) => void) | null;
+  enableSettings: boolean;
+  enabled: boolean;
 }
 
 export interface AppRef {
@@ -75,8 +47,6 @@ export interface AppRef {
   getExpanded: () => boolean;
   getConversationHandler: () => ConversationHandler;
 }
-
-const isDev = import.meta.env.DEV;
 
 const App = forwardRef<AppRef, Props>((props, ref) => {
   const handler = useMemo(() => {
@@ -89,13 +59,25 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const colorMode = props.colorMode ?? "dark";
 
-  const [isExpanded, setIsExpanded] = useState(isDev);
+  const [isExpanded, setIsExpanded] = useState(props.embedded);
 
   const configValid = isConfigValid(props.config);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
-  const isExpandedRef = useRef<boolean>(isDev);
+  const isExpandedRef = useRef<boolean>(props.embedded);
+
+  const onClose = useCallback(
+    (event: Event) => {
+      if (props.onClose != null) {
+        props.onClose(event);
+        if (!event.defaultPrevented) {
+          setIsExpanded(false);
+        }
+      }
+    },
+    [props.onClose, setIsExpanded],
+  );
 
   useEffect(() => {
     isExpandedRef.current = isExpanded;
@@ -137,7 +119,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     handler.sendWelcomeIntent();
   }, [handler, isExpanded]);
 
-  const windowSize: WindowSize = props.windowSize ?? "half";
+  const windowSize: WindowSize =
+    props.windowSize ?? (props.embedded ? "full" : "half");
 
   const lastBotResponse = useMemo<{
     index: number;
@@ -205,16 +188,20 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             )}
           >
             <Header
-              windowSize={windowSize}
+              windowSize={props.embedded ? "embedded" : windowSize}
               colorMode={colorMode}
               brandIcon={props.brandIcon}
               isSettingsOpen={isSettingsOpen}
-              toggleSettings={() => {
-                setIsSettingsOpen((prev) => !prev);
-              }}
-              collapse={() => {
-                setIsExpanded(false);
-              }}
+              enabled={props.enabled}
+              toggleSettings={
+                props.enableSettings
+                  ? () => {
+                      setIsSettingsOpen((prev) => !prev);
+                    }
+                  : undefined
+              }
+              renderCollapse={props.onClose != null}
+              collapse={onClose}
               reset={() => {
                 handler.reset({ clearResponses: true });
                 handler.sendWelcomeIntent();
@@ -237,6 +224,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               <>
                 {configValid ? (
                   <Messages
+                    enabled={props.enabled}
                     isWaiting={isWaiting}
                     lastBotResponseIndex={lastBotResponse?.index}
                     responses={responses}
@@ -261,6 +249,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                       ? "w-full md:max-w-content md:mx-auto"
                       : "",
                   )}
+                  enabled={props.enabled}
                   choiceMessage={choiceMessage}
                   handler={handler}
                   uploadUrl={
