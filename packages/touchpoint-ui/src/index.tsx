@@ -83,7 +83,7 @@ export {
 class NlxTouchpointElement extends HTMLElement {
   #root: Root | null = null;
   #shadowRoot: ShadowRoot | null = null;
-  #props: TouchpointConfiguration | null = null;
+  #touchpointConfiguration: TouchpointConfiguration | null = null;
 
   /**
    * Returns an imperative reference allowing control over the application
@@ -106,6 +106,8 @@ class NlxTouchpointElement extends HTMLElement {
   onClose: ((event: Event) => void) | null = null;
   /** Render the settings button  */
   enableSettings: boolean = false;
+
+  // TODO: revisit enabled vs. enableSettings naming
   #enabled: boolean = true;
 
   /** Disable the whole UI */
@@ -119,22 +121,22 @@ class NlxTouchpointElement extends HTMLElement {
 
   /** The touchpoint configuration */
   set touchpointConfiguration(value: TouchpointConfiguration) {
-    if (equals(this.#props, value)) {
+    if (equals(this.#touchpointConfiguration, value)) {
       return;
     }
-    this.#props = value;
+    this.#touchpointConfiguration = value;
     this.#render();
   }
 
   #render(): void {
     this.#shadowRoot ??= this.attachShadow({ mode: "closed" });
     this.#root ??= createRoot(this.#shadowRoot);
-    if (this.#props != null) {
+    if (this.#touchpointConfiguration != null) {
       this.#root.render(
         <>
           <style>{cssRaw}</style>
           <App
-            {...this.#props}
+            {...this.#touchpointConfiguration}
             embedded={this.embedded}
             onClose={this.onClose}
             enableSettings={this.enableSettings}
