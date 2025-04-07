@@ -13,13 +13,22 @@ import {
   type UploadUrl,
   type Subscriber,
 } from "@nlxai/chat-core";
+import { type Room } from "livekit-client";
 import { clsx } from "clsx";
 
 import { IconButton } from "./ui/IconButton";
-import { ArrowForward, Attachment, Delete, Check, Error } from "./ui/Icons";
+import {
+  ArrowForward,
+  Attachment,
+  Delete,
+  Check,
+  Error,
+  Mic,
+} from "./ui/Icons";
 import { type ChoiceMessage } from "../types";
 import { MessageChoices } from "./Messages";
 import { useTailwindMediaQuery } from "../hooks";
+import { startVoice } from "../voice";
 
 interface InputProps {
   className?: string;
@@ -27,6 +36,7 @@ interface InputProps {
   uploadUrl?: UploadUrl;
   onFileUpload: (val: { uploadId: string; file: File }) => void;
   choiceMessage?: ChoiceMessage;
+  voiceEnabled: boolean;
   enabled: boolean;
 }
 
@@ -38,10 +48,13 @@ interface FileInfo {
 
 const MAX_INPUT_FILE_SIZE_IN_MB = 8;
 
+type VoiceRoomState = "inactive" | "pending" | "active";
+
 export const Input: FC<InputProps> = ({
   className,
   choiceMessage,
   handler,
+  voiceEnabled,
   uploadUrl,
   onFileUpload,
   enabled,
@@ -62,6 +75,10 @@ export const Input: FC<InputProps> = ({
   const textInputRef = useRef<HTMLTextAreaElement>(null);
 
   const isMd = useTailwindMediaQuery("md");
+
+  const roomRef = useRef<Room | null>(null);
+
+  const [roomState, setRoomState] = useState<VoiceRoomState>("inactive");
 
   // Autofocus input on desktop only
   useEffect(() => {
@@ -215,7 +232,35 @@ export const Input: FC<InputProps> = ({
               <hr className="border-b-px border-background mb-2 -mx-2" />
             </>
           )}
-          <div className={clsx("flex items-end")}>
+          <div className={clsx("flex items-end gap-1")}>
+            {voiceEnabled ? (
+              <IconButton
+                className="flex-none"
+                Icon={Mic}
+                label="Voice"
+                type={roomState === "active" ? "activated" : "ghost"}
+                onClick={
+                  roomState === "pending"
+                    ? undefined
+                    : async () => {
+                        if (roomState === "active") {
+                          roomRef.current?.disconnect();
+                          roomRef.current = null;
+                          setRoomState("inactive");
+                          return;
+                        }
+                        try {
+                          setRoomState("pending");
+                          const room = await startVoice(handler);
+                          roomRef.current = room;
+                          setRoomState("active");
+                        } catch (err) {
+                          console.warn(err);
+                        }
+                      }
+                }
+              />
+            ) : null}
             {isUploadEnabled && uploadedFileInfo == null ? (
               <>
                 <label
