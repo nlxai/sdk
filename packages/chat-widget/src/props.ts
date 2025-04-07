@@ -46,7 +46,7 @@ export type StorageType = "localStorage" | "sessionStorage";
 
 /**
  * Custom Modalities allow rendering of rich components from nodes.
- * See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/advanced-messaging-+-functionality#modalities
+ * See: https://docs.studio.nlx.ai/build/resources/modalities
  */
 export type CustomModalityComponent = FC<{
   /**

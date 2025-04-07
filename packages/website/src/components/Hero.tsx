@@ -16,7 +16,7 @@ export const Hero: FC<unknown> = () => {
   }
   return (
     <div
-      className="overflow-hidden bg-black bg-cover min-h-[calc(100vh-4.75rem)]"
+      className="overflow-hidden bg-black bg-cover lg:h-[calc(100vh-4.75rem)] lg:max-h-[700px]"
       style={{
         backgroundImage: "url(/DevDocsHeroBG.webp)",
       }}
@@ -62,7 +62,7 @@ export const Hero: FC<unknown> = () => {
           </div>
           <div className="relative lg:static">
             <TouchpointDemoAnimation
-              className="w-full h-[360px] lg:h-[calc(100vh-4.75rem-80px)]"
+              className="w-full h-[480px] lg:h-[calc(100vh-4.75rem-72px)] lg:max-h-[628px]"
               items={[
                 {
                   type: "user",
