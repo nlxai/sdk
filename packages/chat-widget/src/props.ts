@@ -145,8 +145,7 @@ export interface Props {
   onNudgeClose?: (conversationHandler: ConversationHandler) => void;
   /**
    * Set this to render a {@link CustomModalityComponent} for a given modality name
-   * See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/advanced-messaging-+-functionality#modalities
-   *
+   * See: https://docs.studio.nlx.ai/build/resources/modalities
    */
   customModalities?: Record<string, CustomModalityComponent>;
 }

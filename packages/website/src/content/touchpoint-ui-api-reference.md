@@ -8,7 +8,6 @@
 
 ## Interfaces
 
-- [Props](#interfacespropsmd)
 - [CustomCardProps](#interfacescustomcardpropsmd)
 - [CustomCardRowProps](#interfacescustomcardrowpropsmd)
 - [DateInputProps](#interfacesdateinputpropsmd)
@@ -16,6 +15,7 @@
 - [TextButtonProps](#interfacestextbuttonpropsmd)
 - [TouchpointInstance](#interfacestouchpointinstancemd)
 - [Theme](#interfacesthememd)
+- [TouchpointConfiguration](#interfacestouchpointconfigurationmd)
 
 ## Type Aliases
 
@@ -33,7 +33,7 @@ Represents the different types of icon buttons available in the application.
 
 #### Defined in
 
-[packages/touchpoint-ui/src/components/ui/IconButton.tsx:16](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L16)
+[packages/touchpoint-ui/src/components/ui/IconButton.tsx:16](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L16)
 
 ---
 
@@ -45,7 +45,7 @@ Window size configuration
 
 #### Defined in
 
-[packages/touchpoint-ui/src/types.ts:7](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L7)
+[packages/touchpoint-ui/src/types.ts:7](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L7)
 
 ---
 
@@ -57,16 +57,16 @@ Color mode configuration (light/dark modes)
 
 #### Defined in
 
-[packages/touchpoint-ui/src/types.ts:12](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L12)
+[packages/touchpoint-ui/src/types.ts:12](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L12)
 
 ---
 
 ### CustomModalityComponent
 
-Ƭ **CustomModalityComponent**\<`Data`\>: `FC`\<\{ `data`: `Data` ; `conversationHandler`: `ConversationHandler` }\>
+Ƭ **CustomModalityComponent**\<`Data`\>: `FC`\<\{ `data`: `Data` ; `conversationHandler`: `ConversationHandler` ; `enabled`: `boolean` }\>
 
 Custom Modalities allow rendering of rich components from nodes.
-See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/advanced-messaging-+-functionality#modalities
+See: https://docs.studio.nlx.ai/build/resources/modalities
 
 #### Type parameters
 
@@ -76,7 +76,7 @@ See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode
 
 #### Defined in
 
-[packages/touchpoint-ui/src/types.ts:36](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L36)
+[packages/touchpoint-ui/src/types.ts:36](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L36)
 
 ## Functions
 
@@ -98,7 +98,7 @@ See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode
 
 #### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Carousel.tsx:5](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Carousel.tsx#L5)
+[packages/touchpoint-ui/src/components/ui/Carousel.tsx:5](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Carousel.tsx#L5)
 
 ---
 
@@ -119,7 +119,7 @@ See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode
 
 #### Defined in
 
-[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:25](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L25)
+[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:25](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L25)
 
 ---
 
@@ -142,7 +142,7 @@ See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode
 
 #### Defined in
 
-[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:44](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L44)
+[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:44](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L44)
 
 ---
 
@@ -163,7 +163,7 @@ See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode
 
 #### Defined in
 
-[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:69](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L69)
+[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:69](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L69)
 
 ---
 
@@ -184,7 +184,7 @@ See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode
 
 #### Defined in
 
-[packages/touchpoint-ui/src/components/ui/DateInput.tsx:25](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/DateInput.tsx#L25)
+[packages/touchpoint-ui/src/components/ui/DateInput.tsx:25](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/DateInput.tsx#L25)
 
 ---
 
@@ -205,7 +205,7 @@ See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode
 
 #### Defined in
 
-[packages/touchpoint-ui/src/components/ui/IconButton.tsx:64](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L64)
+[packages/touchpoint-ui/src/components/ui/IconButton.tsx:64](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L64)
 
 ---
 
@@ -226,7 +226,7 @@ See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode
 
 #### Defined in
 
-[packages/touchpoint-ui/src/components/ui/TextButton.tsx:33](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L33)
+[packages/touchpoint-ui/src/components/ui/TextButton.tsx:33](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L33)
 
 ---
 
@@ -249,7 +249,7 @@ See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode
 
 #### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Typography.tsx:5](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Typography.tsx#L5)
+[packages/touchpoint-ui/src/components/ui/Typography.tsx:5](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Typography.tsx#L5)
 
 ---
 
@@ -271,7 +271,7 @@ See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode
 
 #### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Typography.tsx:16](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Typography.tsx#L16)
+[packages/touchpoint-ui/src/components/ui/Typography.tsx:16](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Typography.tsx#L16)
 
 ---
 
@@ -292,7 +292,7 @@ See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode
 
 #### Defined in
 
-[packages/touchpoint-ui/src/index.tsx:31](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/index.tsx#L31)
+[packages/touchpoint-ui/src/index.tsx:33](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/index.tsx#L33)
 
 ---
 
@@ -304,9 +304,9 @@ Creates a new Touchpoint UI instance and appends it to the document body
 
 #### Parameters
 
-| Name    | Type                          | Description                        |
-| :------ | :---------------------------- | :--------------------------------- |
-| `props` | [`Props`](#interfacespropsmd) | Configuration props for Touchpoint |
+| Name    | Type                                                              | Description                        |
+| :------ | :---------------------------------------------------------------- | :--------------------------------- |
+| `props` | [`TouchpointConfiguration`](#interfacestouchpointconfigurationmd) | Configuration props for Touchpoint |
 
 #### Returns
 
@@ -316,7 +316,7 @@ A promise that resolves to a TouchpointInstance
 
 #### Defined in
 
-[packages/touchpoint-ui/src/index.tsx:141](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/index.tsx#L141)
+[packages/touchpoint-ui/src/index.tsx:195](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/index.tsx#L195)
 
 ---
 
@@ -340,7 +340,7 @@ A promise that resolves to a TouchpointInstance
 
 #### Defined in
 
-[packages/touchpoint-ui/src/preview.tsx:10](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/preview.tsx#L10)
+[packages/touchpoint-ui/src/preview.tsx:10](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/preview.tsx#L10)
 
 <a name="indexmd"></a>
 
@@ -362,7 +362,7 @@ Content to be rendered inside the card.
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:14](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L14)
+[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:14](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L14)
 
 ---
 
@@ -374,7 +374,7 @@ Whether the card is in a selected state. Used to highlight the card.
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:18](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L18)
+[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:18](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L18)
 
 ---
 
@@ -394,7 +394,7 @@ Handler function for when the card is clicked
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:22](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L22)
+[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:22](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L22)
 
 <a name="interfacescustomcardrowpropsmd"></a>
 
@@ -412,7 +412,7 @@ Content to be displayed on the left side of the row
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:58](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L58)
+[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:58](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L58)
 
 ---
 
@@ -424,7 +424,7 @@ Content to be displayed on the right side of the row
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:62](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L62)
+[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:62](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L62)
 
 ---
 
@@ -436,7 +436,7 @@ Optional icon to be displayed in the center of the row
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:66](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L66)
+[packages/touchpoint-ui/src/components/ui/CustomCard.tsx:66](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L66)
 
 <a name="interfacesdateinputpropsmd"></a>
 
@@ -468,7 +468,7 @@ Handler function called when the date is submitted
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/DateInput.tsx:16](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/DateInput.tsx#L16)
+[packages/touchpoint-ui/src/components/ui/DateInput.tsx:16](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/DateInput.tsx#L16)
 
 <a name="interfacesiconbuttonpropsmd"></a>
 
@@ -494,7 +494,7 @@ Handler function called when the button is clicked
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/IconButton.tsx:30](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L30)
+[packages/touchpoint-ui/src/components/ui/IconButton.tsx:30](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L30)
 
 ---
 
@@ -506,7 +506,7 @@ Accessible label for the button
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/IconButton.tsx:34](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L34)
+[packages/touchpoint-ui/src/components/ui/IconButton.tsx:34](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L34)
 
 ---
 
@@ -518,7 +518,7 @@ Additional CSS classes to apply to the button
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/IconButton.tsx:38](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L38)
+[packages/touchpoint-ui/src/components/ui/IconButton.tsx:38](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L38)
 
 ---
 
@@ -530,7 +530,7 @@ Visual style variant of the button. One of IconButtonType.
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/IconButton.tsx:42](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L42)
+[packages/touchpoint-ui/src/components/ui/IconButton.tsx:42](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L42)
 
 ---
 
@@ -542,7 +542,7 @@ Icon component to display inside the button
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/IconButton.tsx:46](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L46)
+[packages/touchpoint-ui/src/components/ui/IconButton.tsx:46](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L46)
 
 <a name="interfacesiconsiconpropsmd"></a>
 
@@ -562,7 +562,7 @@ Additional CSS classes to apply to the icon
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:11](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L11)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:11](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L11)
 
 ---
 
@@ -574,99 +574,7 @@ Custom size in pixels for the icon
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:15](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L15)
-
-<a name="interfacespropsmd"></a>
-
-## Interface: Props
-
-Main Touchpoint creation properties object
-
-### Properties
-
-#### config
-
-• **config**: `Config`
-
-Configuration object for Touchpoint
-
-##### Defined in
-
-[packages/touchpoint-ui/src/App.tsx:44](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/App.tsx#L44)
-
----
-
-#### windowSize
-
-• `Optional` **windowSize**: [`WindowSize`](#windowsize)
-
-Optional window size for the chat window, defaults to `half`
-
-##### Defined in
-
-[packages/touchpoint-ui/src/App.tsx:48](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/App.tsx#L48)
-
----
-
-#### colorMode
-
-• `Optional` **colorMode**: [`ColorMode`](#colormode)
-
-Optional color mode for the chat window, defaults to `dark`
-
-##### Defined in
-
-[packages/touchpoint-ui/src/App.tsx:52](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/App.tsx#L52)
-
----
-
-#### brandIcon
-
-• `Optional` **brandIcon**: `string`
-
-URL of icon used to display the brand in the chat header
-
-##### Defined in
-
-[packages/touchpoint-ui/src/App.tsx:56](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/App.tsx#L56)
-
----
-
-#### launchIcon
-
-• `Optional` **launchIcon**: `string` \| `boolean`
-
-URL of icon used on the launch icon in the bottom right when the experience is collapsed.
-
-When set to `false`, no launch button is shown at all. When not set or set to `true`, the default launch icon is rendered.
-
-##### Defined in
-
-[packages/touchpoint-ui/src/App.tsx:62](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/App.tsx#L62)
-
----
-
-#### theme
-
-• `Optional` **theme**: `Partial`\<[`Theme`](#interfacesthememd)\>
-
-Optional theme object to override default theme values
-
-##### Defined in
-
-[packages/touchpoint-ui/src/App.tsx:66](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/App.tsx#L66)
-
----
-
-#### customModalities
-
-• `Optional` **customModalities**: `Record`\<`string`, [`CustomModalityComponent`](#custommodalitycomponent)\<`any`\>\>
-
-Optional custom modality components to render in Touchpoint
-
-##### Defined in
-
-[packages/touchpoint-ui/src/App.tsx:70](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/App.tsx#L70)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:15](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L15)
 
 <a name="interfacestextbuttonpropsmd"></a>
 
@@ -692,7 +600,7 @@ Handler function called when the button is clicked
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/TextButton.tsx:13](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L13)
+[packages/touchpoint-ui/src/components/ui/TextButton.tsx:13](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L13)
 
 ---
 
@@ -704,7 +612,7 @@ Text to display on the button
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/TextButton.tsx:17](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L17)
+[packages/touchpoint-ui/src/components/ui/TextButton.tsx:17](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L17)
 
 ---
 
@@ -716,7 +624,7 @@ Additional CSS classes to apply to the button
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/TextButton.tsx:21](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L21)
+[packages/touchpoint-ui/src/components/ui/TextButton.tsx:21](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L21)
 
 ---
 
@@ -729,7 +637,7 @@ Default value is "ghost"
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/TextButton.tsx:26](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L26)
+[packages/touchpoint-ui/src/components/ui/TextButton.tsx:26](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L26)
 
 ---
 
@@ -741,7 +649,7 @@ Icon component to display inside the button.
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/TextButton.tsx:30](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L30)
+[packages/touchpoint-ui/src/components/ui/TextButton.tsx:30](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L30)
 
 <a name="interfacesthememd"></a>
 
@@ -759,7 +667,7 @@ Font family
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:54](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L54)
+[packages/touchpoint-ui/src/types.ts:61](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L61)
 
 ---
 
@@ -771,7 +679,7 @@ Primary color with 80% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:59](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L59)
+[packages/touchpoint-ui/src/types.ts:66](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L66)
 
 ---
 
@@ -783,7 +691,7 @@ Primary color with 60% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:63](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L63)
+[packages/touchpoint-ui/src/types.ts:70](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L70)
 
 ---
 
@@ -795,7 +703,7 @@ Primary color with 40% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:67](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L67)
+[packages/touchpoint-ui/src/types.ts:74](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L74)
 
 ---
 
@@ -807,7 +715,7 @@ Primary color with 20% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:71](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L71)
+[packages/touchpoint-ui/src/types.ts:78](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L78)
 
 ---
 
@@ -819,7 +727,7 @@ Primary color with 10% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:75](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L75)
+[packages/touchpoint-ui/src/types.ts:82](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L82)
 
 ---
 
@@ -831,7 +739,7 @@ Primary color with 5% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:79](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L79)
+[packages/touchpoint-ui/src/types.ts:86](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L86)
 
 ---
 
@@ -843,7 +751,7 @@ Primary color with 1% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:83](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L83)
+[packages/touchpoint-ui/src/types.ts:90](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L90)
 
 ---
 
@@ -855,7 +763,7 @@ Secondary color with 80% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:88](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L88)
+[packages/touchpoint-ui/src/types.ts:95](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L95)
 
 ---
 
@@ -867,7 +775,7 @@ Secondary color with 60% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:92](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L92)
+[packages/touchpoint-ui/src/types.ts:99](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L99)
 
 ---
 
@@ -879,7 +787,7 @@ Secondary color with 40% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:96](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L96)
+[packages/touchpoint-ui/src/types.ts:103](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L103)
 
 ---
 
@@ -891,7 +799,7 @@ Secondary color with 20% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:100](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L100)
+[packages/touchpoint-ui/src/types.ts:107](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L107)
 
 ---
 
@@ -903,7 +811,7 @@ Secondary color with 10% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:104](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L104)
+[packages/touchpoint-ui/src/types.ts:111](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L111)
 
 ---
 
@@ -915,7 +823,7 @@ Secondary color with 5% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:108](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L108)
+[packages/touchpoint-ui/src/types.ts:115](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L115)
 
 ---
 
@@ -927,7 +835,7 @@ Secondary color with 1% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:112](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L112)
+[packages/touchpoint-ui/src/types.ts:119](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L119)
 
 ---
 
@@ -939,7 +847,7 @@ Accent color used e.g. for prominent buttons, the loader animation as well as se
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:117](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L117)
+[packages/touchpoint-ui/src/types.ts:124](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L124)
 
 ---
 
@@ -951,7 +859,7 @@ Accent color with 20% opacity
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:121](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L121)
+[packages/touchpoint-ui/src/types.ts:128](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L128)
 
 ---
 
@@ -963,7 +871,7 @@ The background color of the main Touchpoint interface
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:125](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L125)
+[packages/touchpoint-ui/src/types.ts:132](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L132)
 
 ---
 
@@ -975,7 +883,7 @@ The color of the overlay covering the visible portion of the website when the To
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:129](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L129)
+[packages/touchpoint-ui/src/types.ts:136](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L136)
 
 ---
 
@@ -987,7 +895,7 @@ Primary warning color
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:134](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L134)
+[packages/touchpoint-ui/src/types.ts:141](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L141)
 
 ---
 
@@ -999,7 +907,7 @@ Secondary warning color
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:138](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L138)
+[packages/touchpoint-ui/src/types.ts:145](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L145)
 
 ---
 
@@ -1011,7 +919,7 @@ Primary error color
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:142](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L142)
+[packages/touchpoint-ui/src/types.ts:149](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L149)
 
 ---
 
@@ -1023,7 +931,7 @@ Secondary error color
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:146](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L146)
+[packages/touchpoint-ui/src/types.ts:153](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L153)
 
 ---
 
@@ -1035,7 +943,7 @@ Inner border radius: used for most buttons
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:151](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L151)
+[packages/touchpoint-ui/src/types.ts:158](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L158)
 
 ---
 
@@ -1047,7 +955,99 @@ Outer border radius: generally used for elements that contain buttons that have 
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/types.ts:155](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/types.ts#L155)
+[packages/touchpoint-ui/src/types.ts:162](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L162)
+
+<a name="interfacestouchpointconfigurationmd"></a>
+
+## Interface: TouchpointConfiguration
+
+Main Touchpoint creation properties object
+
+### Properties
+
+#### config
+
+• **config**: `Config`
+
+Connection information for the @nlxai/chat-core conversation handler
+
+##### Defined in
+
+[packages/touchpoint-ui/src/types.ts:172](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L172)
+
+---
+
+#### windowSize
+
+• `Optional` **windowSize**: [`WindowSize`](#windowsize)
+
+Optional window size for the chat window, defaults to `half`
+
+##### Defined in
+
+[packages/touchpoint-ui/src/types.ts:176](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L176)
+
+---
+
+#### colorMode
+
+• `Optional` **colorMode**: [`ColorMode`](#colormode)
+
+Optional color mode for the chat window, defaults to `dark`
+
+##### Defined in
+
+[packages/touchpoint-ui/src/types.ts:180](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L180)
+
+---
+
+#### brandIcon
+
+• `Optional` **brandIcon**: `string`
+
+URL of icon used to display the brand in the chat header
+
+##### Defined in
+
+[packages/touchpoint-ui/src/types.ts:184](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L184)
+
+---
+
+#### launchIcon
+
+• `Optional` **launchIcon**: `string` \| `boolean`
+
+URL of icon used on the launch icon in the bottom right when the experience is collapsed.
+
+When set to `false`, no launch button is shown at all. When not set or set to `true`, the default launch icon is rendered.
+
+##### Defined in
+
+[packages/touchpoint-ui/src/types.ts:190](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L190)
+
+---
+
+#### theme
+
+• `Optional` **theme**: `Partial`\<[`Theme`](#interfacesthememd)\>
+
+Optional theme object to override default theme values
+
+##### Defined in
+
+[packages/touchpoint-ui/src/types.ts:194](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L194)
+
+---
+
+#### customModalities
+
+• `Optional` **customModalities**: `Record`\<`string`, [`CustomModalityComponent`](#custommodalitycomponent)\<`any`\>\>
+
+Optional custom modality components to render in Touchpoint
+
+##### Defined in
+
+[packages/touchpoint-ui/src/types.ts:198](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/types.ts#L198)
 
 <a name="interfacestouchpointinstancemd"></a>
 
@@ -1065,7 +1065,7 @@ Controls whether the Touchpoint UI is expanded or collapsed
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/index.tsx:124](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/index.tsx#L124)
+[packages/touchpoint-ui/src/index.tsx:179](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/index.tsx#L179)
 
 ---
 
@@ -1077,7 +1077,7 @@ The conversation handler instance for interacting with the application
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/index.tsx:128](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/index.tsx#L128)
+[packages/touchpoint-ui/src/index.tsx:183](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/index.tsx#L183)
 
 ---
 
@@ -1097,7 +1097,7 @@ Method to remove the Touchpoint UI from the DOM
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/index.tsx:132](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/index.tsx#L132)
+[packages/touchpoint-ui/src/index.tsx:187](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/index.tsx#L187)
 
 # Modules
 
@@ -1119,7 +1119,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:21](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L21)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:21](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L21)
 
 ### Functions
 
@@ -1140,7 +1140,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:29](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L29)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:29](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L29)
 
 ---
 
@@ -1161,7 +1161,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:40](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L40)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:40](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L40)
 
 ---
 
@@ -1182,7 +1182,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:67](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L67)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:67](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L67)
 
 ---
 
@@ -1203,7 +1203,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:78](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L78)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:78](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L78)
 
 ---
 
@@ -1224,7 +1224,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:86](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L86)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:86](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L86)
 
 ---
 
@@ -1245,7 +1245,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:97](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L97)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:97](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L97)
 
 ---
 
@@ -1266,7 +1266,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:108](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L108)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:108](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L108)
 
 ---
 
@@ -1287,7 +1287,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:119](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L119)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:119](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L119)
 
 ---
 
@@ -1308,7 +1308,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:130](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L130)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:130](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L130)
 
 ---
 
@@ -1329,7 +1329,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:141](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L141)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:141](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L141)
 
 ---
 
@@ -1350,7 +1350,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:152](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L152)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:152](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L152)
 
 ---
 
@@ -1371,7 +1371,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:167](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L167)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:167](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L167)
 
 ---
 
@@ -1392,7 +1392,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:178](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L178)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:178](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L178)
 
 ---
 
@@ -1413,7 +1413,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:189](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L189)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:189](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L189)
 
 ---
 
@@ -1434,7 +1434,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:200](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L200)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:200](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L200)
 
 ---
 
@@ -1455,7 +1455,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:211](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L211)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:211](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L211)
 
 ---
 
@@ -1476,7 +1476,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:225](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L225)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:225](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L225)
 
 ---
 
@@ -1497,7 +1497,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:248](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L248)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:248](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L248)
 
 ---
 
@@ -1518,7 +1518,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:259](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L259)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:259](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L259)
 
 ---
 
@@ -1539,7 +1539,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:270](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L270)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:270](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L270)
 
 ---
 
@@ -1560,7 +1560,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:281](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L281)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:281](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L281)
 
 ---
 
@@ -1581,7 +1581,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:292](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L292)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:292](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L292)
 
 ---
 
@@ -1602,7 +1602,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:303](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L303)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:303](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L303)
 
 ---
 
@@ -1623,7 +1623,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:314](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L314)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:314](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L314)
 
 ---
 
@@ -1644,7 +1644,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:325](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L325)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:325](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L325)
 
 ---
 
@@ -1665,7 +1665,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:336](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L336)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:336](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L336)
 
 ---
 
@@ -1686,7 +1686,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:347](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L347)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:347](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L347)
 
 ---
 
@@ -1707,7 +1707,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:355](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L355)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:355](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L355)
 
 ---
 
@@ -1728,7 +1728,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:372](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L372)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:372](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L372)
 
 ---
 
@@ -1749,7 +1749,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:383](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L383)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:383](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L383)
 
 ---
 
@@ -1770,7 +1770,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:394](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L394)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:394](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L394)
 
 ---
 
@@ -1791,7 +1791,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:405](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L405)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:405](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L405)
 
 ---
 
@@ -1812,7 +1812,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:416](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L416)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:416](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L416)
 
 ---
 
@@ -1833,7 +1833,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:427](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L427)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:427](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L427)
 
 ---
 
@@ -1854,7 +1854,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:438](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L438)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:438](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L438)
 
 ---
 
@@ -1875,7 +1875,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:449](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L449)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:449](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L449)
 
 ---
 
@@ -1896,7 +1896,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:460](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L460)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:460](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L460)
 
 ---
 
@@ -1917,7 +1917,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:477](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L477)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:477](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L477)
 
 ---
 
@@ -1938,7 +1938,7 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:488](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L488)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:488](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L488)
 
 ---
 
@@ -1959,4 +1959,4 @@ Type definition for an icon component
 
 ##### Defined in
 
-[packages/touchpoint-ui/src/components/ui/Icons.tsx:499](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/touchpoint-ui/src/components/ui/Icons.tsx#L499)
+[packages/touchpoint-ui/src/components/ui/Icons.tsx:499](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/touchpoint-ui/src/components/ui/Icons.tsx#L499)

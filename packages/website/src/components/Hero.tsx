@@ -62,7 +62,7 @@ export const Hero: FC<unknown> = () => {
           </div>
           <div className="relative lg:static">
             <TouchpointDemoAnimation
-              className="w-full h-[480px] lg:h-[calc(100vh-4.75rem-72px)] lg:max-h-[628px]"
+              className="w-full h-[560px] lg:h-[calc(100vh-4.75rem-72px)] lg:max-h-[628px]"
               items={[
                 {
                   type: "user",

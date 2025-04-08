@@ -38,6 +38,7 @@ const UserStep: FC<
       tick.current = tick.current + 1;
       if (inputNode != null) {
         inputNode.value = message.slice(0, tick.current);
+        inputNode.scrollLeft = inputNode.scrollWidth;
       }
       if (tick.current === message.length) {
         setTimeout(() => {
@@ -209,7 +210,7 @@ export const TouchpointDemoAnimation: FC<{
       <div className="p-2 relative">
         <input
           ref={inputRef}
-          className="peer text-base flex-none text-primary-80 w-full px-4 py-4 bg-primary-5 focus:outline-none rounded-outer disabled:text-primary-20"
+          className="peer text-base flex-none text-primary-80 w-full pl-4 pr-16 py-4 bg-primary-5 focus:outline-none rounded-outer disabled:text-primary-20"
           placeholder="Type your message..."
         />
         <button

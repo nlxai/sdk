@@ -1,8 +1,7 @@
 import { type FC } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, Link } from "react-router-dom";
-import { getFilteredRoutes } from "../routes";
-import { Toggle } from "./Toggle";
+import { routes } from "../routes";
 import { clsx } from "clsx";
 
 const MenuListItem: FC<{
@@ -39,14 +38,12 @@ const MenuListItem: FC<{
   );
 };
 
-export const Nav: FC<{
-  touchpoint: boolean;
-}> = ({ touchpoint }) => (
+export const Nav: FC<unknown> = () => (
   <div className="hidden lg:relative lg:block lg:flex-none">
     <div className="sticky top-[4.75rem] -ml-0.5 h-[calc(100vh-4.75rem)] w-64 overflow-y-auto overflow-x-hidden px-6 py-16">
       <nav className="text-base lg:text-sm">
         <ul role="list" className="space-y-9">
-          {getFilteredRoutes({ touchpoint }).map((route, index) => (
+          {routes.map((route, index) => (
             <MenuListItem
               key={index}
               heading={route.heading}
@@ -60,8 +57,6 @@ export const Nav: FC<{
 );
 
 export const MobileNav: FC<{
-  touchpoint: boolean;
-  setTouchpoint: (val: boolean) => void;
   setMobileMenuExpanded: (val: boolean) => void;
 }> = (props) => {
   const location = useLocation();
@@ -96,50 +91,38 @@ export const MobileNav: FC<{
             <path d="M5 5l14 14M19 5l-14 14"></path>
           </svg>
         </button>
-        <Toggle
-          value={props.touchpoint}
-          options={[
-            { value: true, label: "Touchpoint" },
-            { value: false, label: "Chat Widget" },
-          ]}
-          onChange={(val) => {
-            props.setTouchpoint(val);
-          }}
-        />
       </div>
 
       <nav className="text-base lg:text-sm mt-5 px-1">
         <ul role="list" className="space-y-9">
-          {getFilteredRoutes({ touchpoint: props.touchpoint }).map(
-            (route, routeIndex) => (
-              <li key={routeIndex}>
-                <h2 className="text-primary-90">{route.heading}</h2>
-                <ul role="list" className="mt-2 space-y-2 lg:mt-4 lg:space-y-4">
-                  {route.items.map((item, itemIndex) => {
-                    const active = pathname === item.url;
-                    return (
-                      <li className="relative" key={itemIndex}>
-                        <Link
-                          className={clsx(
-                            "block",
-                            active
-                              ? "font-medium text-accent"
-                              : "text-primary-60 hover:text-primary-80",
-                          )}
-                          to={item.url}
-                          onClick={() => {
-                            props.setMobileMenuExpanded(false);
-                          }}
-                        >
-                          {item.label}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </li>
-            ),
-          )}
+          {routes.map((route, routeIndex) => (
+            <li key={routeIndex}>
+              <h2 className="text-primary-90">{route.heading}</h2>
+              <ul role="list" className="mt-2 space-y-2 lg:mt-4 lg:space-y-4">
+                {route.items.map((item, itemIndex) => {
+                  const active = pathname === item.url;
+                  return (
+                    <li className="relative" key={itemIndex}>
+                      <Link
+                        className={clsx(
+                          "block",
+                          active
+                            ? "font-medium text-accent"
+                            : "text-primary-60 hover:text-primary-80",
+                        )}
+                        to={item.url}
+                        onClick={() => {
+                          props.setMobileMenuExpanded(false);
+                        }}
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </li>
+          ))}
         </ul>
       </nav>
     </div>,
