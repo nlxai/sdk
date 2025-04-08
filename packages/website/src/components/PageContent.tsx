@@ -66,6 +66,8 @@ export const PageContent: FC<{ md: string; className?: string }> = ({
         rehypePlugins={[rehypeRaw, rehypeSlug]}
         components={{
           a(props) {
+            // JSDOC output contains markup such as <a name="interfacespropsmd"></a>, so the `name` attribute shows up even if the
+            // markdown package typings expect it not to.
             const name: string | undefined = (props as unknown as any).name;
             // eslint-disable-next-line react/prop-types
             if (props.href == null && name != null) {
