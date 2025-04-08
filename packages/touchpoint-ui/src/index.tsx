@@ -138,6 +138,12 @@ class NlxTouchpointElement extends HTMLElement {
           <App
             {...this.#touchpointConfiguration}
             embedded={this.embedded}
+            initializeConversation={
+              this.#touchpointConfiguration.initializeConversation ??
+              ((handler) => {
+                handler.sendWelcomeIntent();
+              })
+            }
             onClose={this.onClose}
             enableSettings={this.enableSettings}
             enabled={this.#enabled}
