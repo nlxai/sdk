@@ -65,14 +65,15 @@ export const PageContent: FC<{ md: string; className?: string }> = ({
       rehypePlugins={[rehypeRaw, rehypeSlug]}
       components={{
         a(props) {
+          const name: string | undefined = (props as unknown as any).name;
           // eslint-disable-next-line react/prop-types
-          if (props.href == null && props.name != null) {
+          if (props.href == null && name != null) {
             // eslint-disable-next-line react/prop-types
-            return <a id={props.name}>{props.children}</a>;
+            return <a id={name}>{props.children}</a>;
           }
           // TODO: when using a react-router redirect, scroll to heading ID if available
           // eslint-disable-next-line react/prop-types
-          return <Link to={props.href}>{props.children}</Link>;
+          return <Link to={props.href ?? ""}>{props.children}</Link>;
         },
         pre(props) {
           return (
