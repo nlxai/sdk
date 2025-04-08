@@ -59,7 +59,6 @@ export const PageContent: FC<{ md: string; className?: string }> = ({
   md,
   className,
 }) => {
-  console.log(md);
   return (
     <Prose className={className}>
       <Markdown
