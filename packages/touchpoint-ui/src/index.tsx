@@ -68,6 +68,7 @@ export {
 } from "./components/ui/IconButton";
 export { type TextButtonProps } from "./components/ui/TextButton";
 export {
+  type InitializeConversation,
   type ColorMode,
   type Theme,
   type WindowSize,
