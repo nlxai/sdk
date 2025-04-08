@@ -66,14 +66,17 @@ export const PageContent: FC<{ md: string; className?: string }> = ({
         rehypePlugins={[rehypeRaw, rehypeSlug]}
         components={{
           a(props) {
+            // `concat-md` output contains markup such as <a name="interfacespropsmd"></a> as anchor targets. However, react types don't expect the (basically deprecated) `name` attribute, hence the `as unknown as any` hack.
+            // markdown package typings expect it not to.
+            const name: string | undefined = (props as unknown as any).name;
             // eslint-disable-next-line react/prop-types
-            if (props.href == null) {
-              // eslint-disable-next-line react/prop-types
-              return <a href={props.href}>{props.children}</a>;
+            if (props.href == null && name != null) {
+              // redefine `name` as `id` as suggested in the MDN for anchor targets.
+              return <a id={name}>{props.children}</a>;
             }
             // TODO: when using a react-router redirect, scroll to heading ID if available
             // eslint-disable-next-line react/prop-types
-            return <Link to={props.href}>{props.children}</Link>;
+            return <Link to={props.href ?? ""}>{props.children}</Link>;
           },
           pre(props) {
             return (
