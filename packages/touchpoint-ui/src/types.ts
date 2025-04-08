@@ -198,8 +198,7 @@ export interface TouchpointConfiguration {
   customModalities?: Record<string, CustomModalityComponent<any>>;
   /**
    * Custom conversation init method. Defaults to sending the welcome intent
-   * @params handler - the conversation handler.
-   * @returns void
+   * @param handler - the conversation handler.
    */
   initializeConversation?: (handler: ConversationHandler) => void;
 }
