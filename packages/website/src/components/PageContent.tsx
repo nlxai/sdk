@@ -58,62 +58,60 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
 export const PageContent: FC<{ md: string; className?: string }> = ({
   md,
   className,
-}) => {
-  return (
-    <Prose className={className}>
-      <Markdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw, rehypeSlug]}
-        components={{
-          a(props) {
+}) => (
+  <Prose className={className}>
+    <Markdown
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeRaw, rehypeSlug]}
+      components={{
+        a(props) {
+          // eslint-disable-next-line react/prop-types
+          if (props.href == null && props.name != null) {
             // eslint-disable-next-line react/prop-types
-            if (props.href == null) {
-              // eslint-disable-next-line react/prop-types
-              return <a href={props.href}>{props.children}</a>;
-            }
-            // TODO: when using a react-router redirect, scroll to heading ID if available
-            // eslint-disable-next-line react/prop-types
-            return <Link to={props.href}>{props.children}</Link>;
-          },
-          pre(props) {
-            return (
-              <pre className="relative group !font-mono">{props.children}</pre>
-            );
-          },
-          code(props) {
-            // initial eslint integration
-            // eslint-disable-next-line react/prop-types
-            const { children, className, node, ...rest } = props;
-            const match = /language-(\w+)/.exec(className ?? "");
-            const lines = String(children).replace(/\n$/, "");
-            return (
-              <>
-                <CopyToClipboardButton
-                  text={lines}
-                  className="absolute top-1.5 right-1.5 hidden group-hover:block"
-                />
-                {match ? (
-                  <SyntaxHighlighter
-                    style={{}}
-                    useInlineStyles={false}
-                    showLineNumbers={true}
-                    language={match[1]}
-                    PreTag="div"
-                  >
-                    {lines}
-                  </SyntaxHighlighter>
-                ) : (
-                  <code {...rest} className={className}>
-                    {children}
-                  </code>
-                )}
-              </>
-            );
-          },
-        }}
-      >
-        {md}
-      </Markdown>
-    </Prose>
-  );
-};
+            return <a id={props.name}>{props.children}</a>;
+          }
+          // TODO: when using a react-router redirect, scroll to heading ID if available
+          // eslint-disable-next-line react/prop-types
+          return <Link to={props.href}>{props.children}</Link>;
+        },
+        pre(props) {
+          return (
+            <pre className="relative group !font-mono">{props.children}</pre>
+          );
+        },
+        code(props) {
+          // initial eslint integration
+          // eslint-disable-next-line react/prop-types
+          const { children, className, node, ...rest } = props;
+          const match = /language-(\w+)/.exec(className ?? "");
+          const lines = String(children).replace(/\n$/, "");
+          return (
+            <>
+              <CopyToClipboardButton
+                text={lines}
+                className="absolute top-1.5 right-1.5 hidden group-hover:block"
+              />
+              {match ? (
+                <SyntaxHighlighter
+                  style={{}}
+                  useInlineStyles={false}
+                  showLineNumbers={true}
+                  language={match[1]}
+                  PreTag="div"
+                >
+                  {lines}
+                </SyntaxHighlighter>
+              ) : (
+                <code {...rest} className={className}>
+                  {children}
+                </code>
+              )}
+            </>
+          );
+        },
+      }}
+    >
+      {md}
+    </Markdown>
+  </Prose>
+);
