@@ -71,7 +71,6 @@ export const PageContent: FC<{ md: string; className?: string }> = ({
             const name: string | undefined = (props as unknown as any).name;
             // eslint-disable-next-line react/prop-types
             if (props.href == null && name != null) {
-              // eslint-disable-next-line react/prop-types
               return <a id={name}>{props.children}</a>;
             }
             // TODO: when using a react-router redirect, scroll to heading ID if available
