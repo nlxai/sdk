@@ -1,3 +1,4 @@
+
 <a name="readmemd"></a>
 
 # @nlxai/voice-plus-core
@@ -17,8 +18,8 @@ The starting point of the package. Call create to create a Voice+ client.
 
 #### Parameters
 
-| Name      | Type                            | Description                          |
-| :-------- | :------------------------------ | :----------------------------------- |
+| Name | Type | Description |
+| :------ | :------ | :------ |
 | `options` | [`Config`](#interfacesconfigmd) | configuration options for the client |
 
 #### Returns
@@ -30,14 +31,14 @@ a Voice+ client
 **`Example`**
 
 ```typescript
-const client = nlxai.voicePlus.create({
-  // hard-coded params
-  apiKey: "REPLACE_WITH_API_KEY",
-  workspaceId: "REPLACE_WITH_WORKSPACE_ID",
-  scriptId: "REPLACE_WITH_SCRIPT_ID",
-  // dynamic params
-  conversationId: "REPLACE_WITH_CONVERSATION_ID",
-  languageCode: "en-US",
+ const client = nlxai.voicePlus.create({
+ // hard-coded params
+ apiKey: "REPLACE_WITH_API_KEY",
+ workspaceId: "REPLACE_WITH_WORKSPACE_ID",
+ scriptId: "REPLACE_WITH_SCRIPT_ID",
+ // dynamic params
+ conversationId: "REPLACE_WITH_CONVERSATION_ID",
+ languageCode: "en-US",
 });
 
 client.sendStep("REPLACE_WITH_STEP_ID");
@@ -45,9 +46,9 @@ client.sendStep("REPLACE_WITH_STEP_ID");
 
 #### Defined in
 
-[index.ts:26](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L26)
+[index.ts:26](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/voice-plus-core/src/index.ts#L26)
 
----
+___
 
 ## Client
 
@@ -59,23 +60,26 @@ client.sendStep("REPLACE_WITH_STEP_ID");
 
 #### Defined in
 
-[index.ts:143](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L143)
+[index.ts:143](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/voice-plus-core/src/index.ts#L143)
 
 ## Other
 
 ### StepInfo
 
-Ƭ **StepInfo**: `string` \| \{ `stepId`: `string` ; `stepTriggerDescription?`: `string` }
+Ƭ **StepInfo**: `string` \| \{ `stepId`: `string` ; `stepTriggerDescription?`: `string`  }
 
 Step information, either a step ID as a single string or an object
 
 #### Defined in
 
-[index.ts:95](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L95)
+[index.ts:95](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/voice-plus-core/src/index.ts#L95)
+
 
 <a name="indexmd"></a>
 
+
 # Interfaces
+
 
 <a name="interfacesclientmd"></a>
 
@@ -92,19 +96,18 @@ The Voice+ client
 **`Example`**
 
 ```typescript
-const client = nlxai.voicePlus.create({
-  // hard-coded params
-  apiKey: "REPLACE_WITH_API_KEY",
-  workspaceId: "REPLACE_WITH_WORKSPACE_ID",
-  scriptId: "REPLACE_WITH_SCRIPT_ID",
-  // dynamic params
-  conversationId: "REPLACE_WITH_CONVERSATION_ID",
-  languageCode: "en-US",
+ const client = nlxai.voicePlus.create({
+ // hard-coded params
+ apiKey: "REPLACE_WITH_API_KEY",
+ workspaceId: "REPLACE_WITH_WORKSPACE_ID",
+ scriptId: "REPLACE_WITH_SCRIPT_ID",
+ // dynamic params
+ conversationId: "REPLACE_WITH_CONVERSATION_ID",
+ languageCode: "en-US",
 });
 
-client.sendStep("REPLACE_WITH_STEP_ID", { selectedSeat: "4a" });
+client.sendStep("REPLACE_WITH_STEP_ID", {selectedSeat: "4a"});
 ```
-
 sends a step to the voice bot
 
 ##### Type declaration
@@ -113,10 +116,10 @@ sends a step to the voice bot
 
 ###### Parameters
 
-| Name       | Type                    | Description                                                                                                                                                              |
-| :--------- | :---------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `step`     | [`StepInfo`](#stepinfo) | the next step to transition to, either a UUID as string or an object containing stepId. _Note: The step ID must be a valid UUID_                                         |
-| `context?` | [`Context`](#context)   | [context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) to send back to the voice bot, for usage later in the intent. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `step` | [`StepInfo`](#stepinfo) | the next step to transition to, either a UUID as string or an object containing stepId. _Note: The step ID must be a valid UUID_ |
+| `context?` | [`Context`](#context) | [context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) to send back to the voice bot, for usage later in the intent. |
 
 ###### Returns
 
@@ -124,7 +127,8 @@ sends a step to the voice bot
 
 ##### Defined in
 
-[index.ts:136](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L136)
+[index.ts:136](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/voice-plus-core/src/index.ts#L136)
+
 
 <a name="interfacesconfigmd"></a>
 
@@ -138,13 +142,13 @@ Initial configuration used when creating a journey manager
 
 • **apiKey**: `string`
 
-- the API key generated for the journey.
+* the API key generated for the journey.
 
 ##### Defined in
 
-[index.ts:151](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L151)
+[index.ts:151](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/voice-plus-core/src/index.ts#L151)
 
----
+___
 
 #### journeyId
 
@@ -158,9 +162,9 @@ use `scriptId` instead
 
 ##### Defined in
 
-[index.ts:156](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L156)
+[index.ts:156](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/voice-plus-core/src/index.ts#L156)
 
----
+___
 
 #### scriptId
 
@@ -170,9 +174,9 @@ the ID of the script.
 
 ##### Defined in
 
-[index.ts:158](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L158)
+[index.ts:158](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/voice-plus-core/src/index.ts#L158)
 
----
+___
 
 #### workspaceId
 
@@ -182,9 +186,9 @@ your workspace id
 
 ##### Defined in
 
-[index.ts:161](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L161)
+[index.ts:161](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/voice-plus-core/src/index.ts#L161)
 
----
+___
 
 #### conversationId
 
@@ -196,9 +200,9 @@ _Note: This must be dynamically set by the voice bot._
 
 ##### Defined in
 
-[index.ts:168](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L168)
+[index.ts:168](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/voice-plus-core/src/index.ts#L168)
 
----
+___
 
 #### languageCode
 
@@ -208,9 +212,9 @@ the user's language code, consistent with the language codes defined on the jour
 
 ##### Defined in
 
-[index.ts:173](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L173)
+[index.ts:173](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/voice-plus-core/src/index.ts#L173)
 
----
+___
 
 #### debug
 
@@ -220,4 +224,4 @@ set to true to help debug issues or errors. Defaults to false
 
 ##### Defined in
 
-[index.ts:176](https://github.com/nlxai/sdk/blob/26f38959172570500ea03ce3d0f735855faa5734/packages/voice-plus-core/src/index.ts#L176)
+[index.ts:176](https://github.com/nlxai/sdk/blob/8b853457d427626d7c75ba959ddb9dd0754725af/packages/voice-plus-core/src/index.ts#L176)
