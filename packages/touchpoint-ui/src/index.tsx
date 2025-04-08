@@ -68,6 +68,7 @@ export {
 } from "./components/ui/IconButton";
 export { type TextButtonProps } from "./components/ui/TextButton";
 export {
+  type InitializeConversation,
   type ColorMode,
   type Theme,
   type WindowSize,
@@ -138,6 +139,12 @@ class NlxTouchpointElement extends HTMLElement {
           <App
             {...this.#touchpointConfiguration}
             embedded={this.embedded}
+            initializeConversation={
+              this.#touchpointConfiguration.initializeConversation ??
+              ((handler) => {
+                handler.sendWelcomeIntent();
+              })
+            }
             onClose={this.onClose}
             enableSettings={this.enableSettings}
             enabled={this.#enabled}

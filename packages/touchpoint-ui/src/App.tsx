@@ -29,6 +29,7 @@ import type {
   WindowSize,
   ChoiceMessage,
   TouchpointConfiguration,
+  InitializeConversation,
 } from "./types";
 import { CustomPropertiesContainer } from "./components/Theme";
 
@@ -40,6 +41,7 @@ interface Props extends TouchpointConfiguration {
   onClose: ((event: Event) => void) | null;
   enableSettings: boolean;
   enabled: boolean;
+  initializeConversation: InitializeConversation;
 }
 
 export interface AppRef {
@@ -109,15 +111,15 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     };
   }, [handler, setResponses]);
 
-  const initialWelcomeIntentSent = useRef<boolean>(false);
+  const conversationInitialized = useRef<boolean>(false);
 
   useEffect(() => {
-    if (!isExpanded || initialWelcomeIntentSent.current) {
+    if (!isExpanded || conversationInitialized.current) {
       return;
     }
-    initialWelcomeIntentSent.current = true;
-    handler.sendWelcomeIntent();
-  }, [handler, isExpanded]);
+    conversationInitialized.current = true;
+    props.initializeConversation(handler);
+  }, [props.initializeConversation, handler, isExpanded]);
 
   const windowSize: WindowSize =
     props.windowSize ?? (props.embedded ? "full" : "half");

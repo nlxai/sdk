@@ -163,6 +163,12 @@ export interface Theme {
 }
 
 /**
+ * Custom conversation init method. Defaults to sending the welcome intent
+ * @param handler - the conversation handler.
+ */
+export type InitializeConversation = (handler: ConversationHandler) => void;
+
+/**
  * Main Touchpoint creation properties object
  */
 export interface TouchpointConfiguration {
@@ -196,4 +202,9 @@ export interface TouchpointConfiguration {
    * Optional custom modality components to render in Touchpoint
    */
   customModalities?: Record<string, CustomModalityComponent<any>>;
+  /**
+   * Custom conversation init method. Defaults to sending the welcome intent
+   * @param handler - the conversation handler.
+   */
+  initializeConversation?: InitializeConversation;
 }
