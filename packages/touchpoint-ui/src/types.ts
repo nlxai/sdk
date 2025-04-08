@@ -196,4 +196,8 @@ export interface TouchpointConfiguration {
    * Optional custom modality components to render in Touchpoint
    */
   customModalities?: Record<string, CustomModalityComponent<any>>;
+  /**
+   * Optional context to pass to the intent flow
+   */
+  context?: Record<string, any>;
 }

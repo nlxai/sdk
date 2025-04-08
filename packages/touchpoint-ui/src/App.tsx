@@ -116,7 +116,11 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       return;
     }
     initialWelcomeIntentSent.current = true;
-    handler.sendWelcomeIntent();
+    // Send the welcome intent
+    // If the context is set, pass it to the sendWelcomeIntent function
+    console.log(props)
+    props.context ? handler.sendWelcomeIntent(props.context) : handler.sendWelcomeIntent();
+
   }, [handler, isExpanded]);
 
   const windowSize: WindowSize =
