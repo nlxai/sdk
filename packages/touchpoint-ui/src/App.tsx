@@ -109,15 +109,23 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     };
   }, [handler, setResponses]);
 
-  const initialWelcomeIntentSent = useRef<boolean>(false);
-
-  useEffect(() => {
-    if (!isExpanded || initialWelcomeIntentSent.current) {
+  const initializeConversation = useCallback(() => {
+    if (props.initializeConversation != null) {
+      props.initializeConversation(handler);
       return;
     }
-    initialWelcomeIntentSent.current = true;
     handler.sendWelcomeIntent();
-  }, [handler, isExpanded]);
+  }, [props.initializeConversation, handler]);
+
+  const conversationInitialized = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (!isExpanded || conversationInitialized.current) {
+      return;
+    }
+    conversationInitialized.current = true;
+    initializeConversation();
+  }, [initializeConversation, isExpanded]);
 
   const windowSize: WindowSize =
     props.windowSize ?? (props.embedded ? "full" : "half");
