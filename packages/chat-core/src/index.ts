@@ -616,7 +616,7 @@ export interface ConversationHandler {
    * Terminate LiveKit call
    * @internal
    */
-  terminateLiveKitCall: () => Promise<unknown>;
+  terminateLiveKitCall: () => Promise<void>;
 
   /**
    * Send a combination of choice, slots, and intent in one request.
@@ -1159,8 +1159,6 @@ export function createConversation(config: Config): ConversationHandler {
       if (res.status >= 400) {
         throw new Error(`Responded with ${res.status}`);
       }
-      // It has not been decided what will be sent here
-      return {};
     },
     subscribe,
     unsubscribe,

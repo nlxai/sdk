@@ -87,6 +87,7 @@ export const useVoice = ({
         });
       }
     };
+    // This function will never throw, the catch is only there to make the linter happy
     setup().catch((err) => {
       // eslint-disable-next-line no-console
       console.warn(err);
