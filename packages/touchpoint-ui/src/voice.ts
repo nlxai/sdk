@@ -39,7 +39,7 @@ export const useVoice = ({
 
   useEffect(() => {
     disconnect();
-    const handleBeforeUnload = () => {
+    const handleBeforeUnload = (): void => {
       disconnect();
     };
     window.addEventListener("beforeunload", handleBeforeUnload);
