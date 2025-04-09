@@ -89,8 +89,6 @@ export const useVoice = ({
         handler.terminateLiveKitCall().catch((err) => {
           // eslint-disable-next-line no-console
           console.warn(err);
-          // eslint-disable-next-line no-console
-          console.warn(err);
         });
       }
     };
