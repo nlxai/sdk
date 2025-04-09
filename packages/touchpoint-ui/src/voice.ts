@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import { type ConversationHandler } from "@nlxai/chat-core";
 import {
   Room,
@@ -6,7 +7,7 @@ import {
   Track,
   type RemoteTrack,
 } from "livekit-client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type VoiceRoomState = "inactive" | "pending" | "active";
 
@@ -28,17 +29,24 @@ export const useVoice = ({
 
   const [isUserSpeaking, setIsUserSpeaking] = useState<boolean>(false);
 
-  useEffect(() => {
-    roomRef.current?.disconnect();
+  const disconnect = useCallback(() => {
+    roomRef.current?.disconnect().catch((err) => {
+      // eslint-disable-next-line no-console
+      console.warn(err);
+    });
+    roomRef.current = null;
   }, []);
 
   useEffect(() => {
+    disconnect();
+  }, [disconnect]);
+
+  useEffect(() => {
     if (!active) {
-      roomRef.current?.disconnect();
-      roomRef.current = null;
+      disconnect();
       return;
     }
-    const setup = async () => {
+    const setup = async (): Promise<void> => {
       try {
         const room = new Room();
 
@@ -46,35 +54,44 @@ export const useVoice = ({
 
         const creds = await handler.getLiveKitCredentials();
 
-        const handleTrackSubscribed = (track: RemoteTrack) => {
+        const handleTrackSubscribed = (track: RemoteTrack): void => {
           if (track.kind === Track.Kind.Audio) {
             const element = track.attach();
             document.body.appendChild(element);
           }
         };
 
-        const handleIsSpeakingChanged = (speaking: boolean) => {
+        const handleIsSpeakingChanged = (speaking: boolean): void => {
           setIsUserSpeaking(speaking);
         };
 
-        room.prepareConnection(creds.url, creds.token);
+        await room.prepareConnection(creds.url, creds.token);
+        await room.localParticipant.setMicrophoneEnabled(true);
         room.on(RoomEvent.TrackSubscribed, handleTrackSubscribed);
-        room.localParticipant.setMicrophoneEnabled(true);
         room.localParticipant.on(
           ParticipantEvent.IsSpeakingChanged,
           handleIsSpeakingChanged,
         );
         await room.connect(creds.url, creds.token, { autoSubscribe: true });
+        await room.startAudio();
         setRoomState("active");
-        room.startAudio();
-        return room;
       } catch (err) {
-        handler.terminateLiveKitCall();
-        return null;
+        // TODO: error handling
+        // eslint-disable-next-line no-console
+        console.warn(err);
+        handler.terminateLiveKitCall().catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn(err);
+          // eslint-disable-next-line no-console
+          console.warn(err);
+        });
       }
     };
-    setup();
-  }, [active, setRoomState, handler]);
+    setup().catch((err) => {
+      // eslint-disable-next-line no-console
+      console.warn(err);
+    });
+  }, [active, disconnect, setRoomState, handler]);
 
   return { roomState, isUserSpeaking };
 };
