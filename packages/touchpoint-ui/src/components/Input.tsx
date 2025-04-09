@@ -13,7 +13,6 @@ import {
   type UploadUrl,
   type Subscriber,
 } from "@nlxai/chat-core";
-import { type Room } from "livekit-client";
 import { clsx } from "clsx";
 
 import { IconButton } from "./ui/IconButton";
@@ -28,7 +27,7 @@ import {
 import { type ChoiceMessage } from "../types";
 import { MessageChoices } from "./Messages";
 import { useTailwindMediaQuery } from "../hooks";
-import { startVoice } from "../voice";
+import { useVoice } from "../voice";
 
 interface InputProps {
   className?: string;
@@ -47,8 +46,6 @@ interface FileInfo {
 }
 
 const MAX_INPUT_FILE_SIZE_IN_MB = 8;
-
-type VoiceRoomState = "inactive" | "pending" | "active";
 
 export const Input: FC<InputProps> = ({
   className,
@@ -76,9 +73,12 @@ export const Input: FC<InputProps> = ({
 
   const isMd = useTailwindMediaQuery("md");
 
-  const roomRef = useRef<Room | null>(null);
+  const [voiceActive, setVoiceActive] = useState<boolean>(false);
 
-  const [roomState, setRoomState] = useState<VoiceRoomState>("inactive");
+  const { roomState, isUserSpeaking } = useVoice({
+    active: voiceActive,
+    handler,
+  });
 
   // Autofocus input on desktop only
   useEffect(() => {
@@ -235,28 +235,18 @@ export const Input: FC<InputProps> = ({
           <div className={clsx("flex items-end gap-1")}>
             {voiceEnabled ? (
               <IconButton
-                className="flex-none"
+                className={clsx(
+                  "flex-none",
+                  isUserSpeaking ? "shadow-[0_0_8px_var(--accent-20)]" : "",
+                )}
                 Icon={Mic}
                 label="Voice"
-                type={roomState === "active" ? "activated" : "ghost"}
+                type={voiceActive ? "activated" : "ghost"}
                 onClick={
                   roomState === "pending"
                     ? undefined
-                    : async () => {
-                        if (roomState === "active") {
-                          roomRef.current?.disconnect();
-                          roomRef.current = null;
-                          setRoomState("inactive");
-                          return;
-                        }
-                        try {
-                          setRoomState("pending");
-                          const room = await startVoice(handler);
-                          roomRef.current = room;
-                          setRoomState("active");
-                        } catch (err) {
-                          console.warn(err);
-                        }
+                    : () => {
+                        setVoiceActive((prev) => !prev);
                       }
                 }
               />
