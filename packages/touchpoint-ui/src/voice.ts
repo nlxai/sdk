@@ -92,11 +92,9 @@ export const useVoice = ({
         });
       }
     };
-    // This function will never throw, the catch is only there to make the linter happy
-    setup().catch((err) => {
-      // eslint-disable-next-line no-console
-      console.warn(err);
-    });
+    // This function call will never throw, therefore the floating promises rule should not apply
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    setup();
   }, [active, disconnect, setRoomState, handler]);
 
   return { roomState, isUserSpeaking };

@@ -1141,7 +1141,7 @@ export function createConversation(config: Config): ConversationHandler {
       return data;
     },
     terminateLiveKitCall: async () => {
-      const res = await fetch(`${applicationUrl}/terminateVoice`, {
+      const res = await fetch(`${fullApplicationHttpUrl()}/terminateVoice`, {
         method: "POST",
         headers: {
           ...(config.headers ?? {}),
