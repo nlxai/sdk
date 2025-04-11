@@ -1,17 +1,34 @@
+import {
+  computeAccessibleName,
+  computeAccessibleDescription,
+} from "dom-accessibility-api";
 const toAccessibilityInformation = (element: Element) => {
-  // TODO: comprehensively access accessibility information
   if (
     element instanceof HTMLInputElement ||
     element instanceof HTMLTextAreaElement
   ) {
     return {
-      name: element.name,
+      name: computeAccessibleName(element),
+      description: computeAccessibleDescription(element),
       type: element.type,
       placeholder: element.placeholder,
-      content: element.value,
+      value: element.value,
+    };
+  } else if (element instanceof HTMLSelectElement) {
+    return {
+      name: computeAccessibleName(element),
+      description: computeAccessibleDescription(element),
+      type: element.type,
+      value: element.value,
+    };
+  } else if (element instanceof HTMLButtonElement) {
+    return {
+      name: computeAccessibleName(element),
+      description: computeAccessibleDescription(element),
+      type: element.type,
     };
   }
-  return {};
+  throw new TypeError("Unsupported element type");
 };
 
 const getContext = () => {
