@@ -23,6 +23,7 @@ import {
   Check,
   Error,
   Mic,
+  MicOff,
 } from "./ui/Icons";
 import { type ChoiceMessage } from "../types";
 import { MessageChoices } from "./Messages";
@@ -239,9 +240,15 @@ export const Input: FC<InputProps> = ({
                   "flex-none",
                   isUserSpeaking ? "shadow-[0_0_8px_var(--accent-20)]" : "",
                 )}
-                Icon={Mic}
+                Icon={voiceActive ? MicOff : Mic}
                 label="Voice"
-                type={voiceActive ? "activated" : "ghost"}
+                type={
+                  voiceActive
+                    ? roomState === "error"
+                      ? "error"
+                      : "activated"
+                    : "ghost"
+                }
                 onClick={
                   roomState === "pending"
                     ? undefined

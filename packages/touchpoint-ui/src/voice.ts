@@ -9,7 +9,7 @@ import {
 } from "livekit-client";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-type VoiceRoomState = "inactive" | "pending" | "active";
+type VoiceRoomState = "inactive" | "pending" | "active" | "error";
 
 interface VoiceHookReturn {
   roomState: VoiceRoomState;
@@ -83,7 +83,7 @@ export const useVoice = ({
         await room.startAudio();
         setRoomState("active");
       } catch (err) {
-        // TODO: error handling
+        setRoomState("error");
         // eslint-disable-next-line no-console
         console.warn(err);
         handler.terminateLiveKitCall().catch((err) => {
