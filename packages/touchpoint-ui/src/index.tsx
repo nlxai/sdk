@@ -22,6 +22,7 @@ import type { TouchpointConfiguration } from "./types";
 import { equals } from "ramda";
 
 export { default as React } from "react";
+export { analyzePageForms } from "./agentic";
 
 // Create a htm instance where components can be used
 const createHtml = (

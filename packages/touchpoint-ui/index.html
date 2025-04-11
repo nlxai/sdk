@@ -20,6 +20,18 @@
     <main>
       <h1>Loreum ipsum dolor sit amet</h1>
 
+      <form>
+        <!-- Name attribute -->
+        <input name="address" type="text" />
+        <!-- Nested label -->
+        <label>First name<input type="text" /></label>
+        <!-- ID-based label -->
+        <div>
+          <label for="id_ab12xx">Last name</label>
+          <input id="id_ab12xx" type="text" placeholder="enter something" />
+        </div>
+      </form>
+
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
         fermentum nisi nec placerat facilisis. Ut fringilla magna ac ipsum
@@ -89,7 +101,7 @@
       </p>
     </main>
     <script type="module">
-      import { create } from "/src/index.tsx";
+      import { create, analyzePageForms } from "/src/index.tsx";
       const touchpoint = await create({
         config: {
           applicationUrl:
@@ -102,6 +114,9 @@
         },
       });
       touchpoint.expanded = true;
+      const pageForms = analyzePageForms();
+
+      console.log(pageForms);
     </script>
   </body>
 </html>
