@@ -3,7 +3,20 @@ import {
   computeAccessibleDescription,
 } from "dom-accessibility-api";
 
-const toAccessibilityInformation = (element: Element) => {
+type AccessibilityInformation = Record<string, any>;
+
+interface InteractiveElementInfo extends AccessibilityInformation {
+  id: string;
+}
+
+interface PageForms {
+  context: InteractiveElementInfo[];
+  formElements: Record<string, Element>;
+}
+
+const toAccessibilityInformation = (
+  element: Element,
+): AccessibilityInformation => {
   if (
     element instanceof HTMLInputElement ||
     element instanceof HTMLTextAreaElement
@@ -28,7 +41,11 @@ const toAccessibilityInformation = (element: Element) => {
   throw new TypeError("Unsupported element type");
 };
 
-export const analyzePageForms = () => {
+/**
+ * Analyze page forms
+ * @returns pageForms
+ */
+export const analyzePageForms = (): PageForms => {
   const interactiveNodes = Array.from(
     document.querySelectorAll("form input, form textarea, form select"),
   );
