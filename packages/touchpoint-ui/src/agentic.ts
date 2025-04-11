@@ -2,40 +2,35 @@ import {
   computeAccessibleName,
   computeAccessibleDescription,
 } from "dom-accessibility-api";
+
 const toAccessibilityInformation = (element: Element) => {
   if (
     element instanceof HTMLInputElement ||
     element instanceof HTMLTextAreaElement
   ) {
+    const accessibleName = computeAccessibleName(element) ?? "";
     return {
-      name: computeAccessibleName(element),
+      name: accessibleName === "" ? element.name : accessibleName,
       description: computeAccessibleDescription(element),
       type: element.type,
       placeholder: element.placeholder,
       value: element.value,
     };
   } else if (element instanceof HTMLSelectElement) {
+    const accessibleName = computeAccessibleName(element) ?? "";
     return {
-      name: computeAccessibleName(element),
+      name: accessibleName === "" ? element.name : accessibleName,
       description: computeAccessibleDescription(element),
       type: element.type,
       value: element.value,
-    };
-  } else if (element instanceof HTMLButtonElement) {
-    return {
-      name: computeAccessibleName(element),
-      description: computeAccessibleDescription(element),
-      type: element.type,
     };
   }
   throw new TypeError("Unsupported element type");
 };
 
-const getContext = () => {
+export const analyzePageForms = () => {
   const interactiveNodes = Array.from(
-    document.querySelectorAll(
-      "form input, form textarea, form select, form checkbox, form radio, form button",
-    ),
+    document.querySelectorAll("form input, form textarea, form select"),
   );
 
   const elementInfo = interactiveNodes.map((element, index) => ({
