@@ -18,6 +18,7 @@ export type IconButtonType =
   | "ghost"
   | "activated"
   | "coverup"
+  | "error"
   | "overlay";
 
 /**
@@ -61,6 +62,8 @@ const coverupClass =
 const overlayClass =
   "bg-background backdrop-blur text-primary-80 enabled:hover:before:bg-primary-10 focus:before:bg-primary-10 enabled:active:before:bg-secondary-10 disabled:bg-secondary-20 disabled:text-primary-20";
 
+const errorClass = "bg-error-primary text-secondary-80";
+
 export const IconButton: FC<IconButtonProps> = ({
   onClick,
   type,
@@ -81,6 +84,7 @@ export const IconButton: FC<IconButtonProps> = ({
         type === "activated" ? activatedClass : null,
         type === "coverup" ? coverupClass : null,
         type === "overlay" ? overlayClass : null,
+        type === "error" ? errorClass : null,
         className,
       )}
     >

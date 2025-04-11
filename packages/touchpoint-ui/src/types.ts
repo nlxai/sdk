@@ -207,4 +207,8 @@ export interface TouchpointConfiguration {
    * @param handler - the conversation handler.
    */
   initializeConversation?: InitializeConversation;
+  /**
+   * Enable voice
+   */
+  voice?: boolean;
 }
