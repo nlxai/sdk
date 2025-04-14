@@ -73,13 +73,13 @@ export const useVoice = ({
         };
 
         await room.prepareConnection(creds.url, creds.token);
-        await room.localParticipant.setMicrophoneEnabled(true);
         room.on(RoomEvent.TrackSubscribed, handleTrackSubscribed);
         room.localParticipant.on(
           ParticipantEvent.IsSpeakingChanged,
           handleIsSpeakingChanged,
         );
         await room.connect(creds.url, creds.token, { autoSubscribe: true });
+        await room.localParticipant.setMicrophoneEnabled(true);
         await room.startAudio();
         setRoomState("active");
       } catch (err) {
