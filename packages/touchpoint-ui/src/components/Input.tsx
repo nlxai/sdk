@@ -238,7 +238,9 @@ export const Input: FC<InputProps> = ({
               <IconButton
                 className={clsx(
                   "flex-none",
-                  isUserSpeaking ? "shadow-[0_0_8px_var(--accent-20)]" : "",
+                  voiceActive && isUserSpeaking
+                    ? "shadow-[0_0_8px_var(--accent-20)]"
+                    : "",
                 )}
                 Icon={voiceActive ? MicOff : Mic}
                 label="Voice"
