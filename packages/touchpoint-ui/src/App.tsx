@@ -254,7 +254,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                   enabled={props.enabled}
                   choiceMessage={choiceMessage}
                   handler={handler}
-                  voiceEnabled={props.voice ?? false}
+                  voiceEnabled={props.input === "textAndVoice"}
                   uploadUrl={
                     lastBotResponse?.response.payload.metadata?.uploadUrls?.[0]
                   }
