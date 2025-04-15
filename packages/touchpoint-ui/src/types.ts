@@ -207,4 +207,8 @@ export interface TouchpointConfiguration {
    * @param handler - the conversation handler.
    */
   initializeConversation?: InitializeConversation;
+  /**
+   * Controls the ways in which the user can communicate with the application. Defaults to `"text"`
+   */
+  input?: "text" | "textAndVoice";
 }
