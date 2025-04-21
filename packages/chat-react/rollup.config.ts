@@ -1,8 +1,11 @@
 import rollupConfig from "rollup-config-nlx";
-import pkg from "./package.json" assert { type: "json" };
 
 export default rollupConfig({
-  pkg: pkg,
+  pkg: {
+    // This fields are copied over directly from package.json because importing it here was not working anymore in node@22
+    main: "lib/index.cjs",
+    module: "lib/index.esm.js",
+  },
   externalDeps: ["preact/hooks", "ramda", "@nlxai/chat-core"],
   input: "src/index.ts",
 });

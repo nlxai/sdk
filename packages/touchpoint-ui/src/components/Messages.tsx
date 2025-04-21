@@ -113,7 +113,6 @@ export const Messages: FC<MessagesProps> = ({
 
   useEffect(() => {
     if (!isWaiting) {
-      // TODO: the smooth scrolling consistently scrolls from the top of the conversation, looks like the scroll position is lost
       setTimeout(() => {
         lastBotMessageRef.current?.scrollIntoView({ behavior: "smooth" });
       });
@@ -187,7 +186,7 @@ export const Messages: FC<MessagesProps> = ({
                   return (
                     <div key={messageIndex} className="text-base">
                       <div
-                        className="pr-10"
+                        className="pr-10 space-y-6"
                         dangerouslySetInnerHTML={{
                           __html: marked(message.text),
                         }}
