@@ -13,7 +13,7 @@
     "require": "./lib/index.cjs"
   },
   "scripts": {
-    "build": "rm -rf lib && rollup -c --configPlugin typescript",
+    "build": "rm -rf lib && rollup -c --configPlugin typescript --configImportAttributesKey with",
     "docs": "rm -rf docs/ && typedoc && concat-md --decrease-title-levels --dir-name-as-title docs/ > docs/index.md",
     "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
