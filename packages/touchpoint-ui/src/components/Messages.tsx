@@ -187,7 +187,7 @@ export const Messages: FC<MessagesProps> = ({
                   return (
                     <div key={messageIndex} className="text-base">
                       <div
-                        className="pr-10"
+                        className="pr-10 space-y-6"
                         dangerouslySetInnerHTML={{
                           __html: marked(message.text),
                         }}
