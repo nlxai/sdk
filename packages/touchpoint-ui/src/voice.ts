@@ -14,6 +14,7 @@ type VoiceRoomState = "inactive" | "pending" | "active" | "error";
 interface VoiceHookReturn {
   roomState: VoiceRoomState;
   isUserSpeaking: boolean;
+  isApplicationSpeaking: boolean;
 }
 
 export const useVoice = ({
@@ -28,6 +29,8 @@ export const useVoice = ({
   const [roomState, setRoomState] = useState<VoiceRoomState>("inactive");
 
   const [isUserSpeaking, setIsUserSpeaking] = useState<boolean>(false);
+  const [isApplicationSpeaking, setIsApplicationSpeaking] =
+    useState<boolean>(false);
 
   const disconnect = useCallback(() => {
     roomRef.current?.disconnect().catch((err) => {
@@ -64,6 +67,12 @@ export const useVoice = ({
         const handleTrackSubscribed = (track: RemoteTrack): void => {
           if (track.kind === Track.Kind.Audio) {
             const element = track.attach();
+            setIsApplicationSpeaking(true);
+            const handleEnd = (): void => {
+              setIsApplicationSpeaking(false);
+              element.removeEventListener("ended", handleEnd);
+            };
+            element.addEventListener("ended", handleEnd);
             element.play().catch((err) => {
               // eslint-disable-next-line no-console
               console.warn(err);
@@ -98,7 +107,14 @@ export const useVoice = ({
     // This function call will never throw, therefore the floating promises rule should not apply
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     setup();
-  }, [active, disconnect, setRoomState, handler]);
+  }, [
+    active,
+    disconnect,
+    setRoomState,
+    handler,
+    setIsUserSpeaking,
+    setIsApplicationSpeaking,
+  ]);
 
-  return { roomState, isUserSpeaking };
+  return { roomState, isUserSpeaking, isApplicationSpeaking };
 };
