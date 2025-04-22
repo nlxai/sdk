@@ -1,5 +1,5 @@
 import rollupConfig from "rollup-config-nlx";
-import pkg from "./package.json" assert { type: "json" };
+import pkg from "./package.json" with { type: "json" };
 import css from "rollup-plugin-import-css";
 
 export default rollupConfig({

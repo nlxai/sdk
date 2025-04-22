@@ -18,8 +18,8 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.5",
     "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^11.1.5",
-    "rollup": "^4.9.3",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "rollup": "^4.28",
     "rollup-plugin-polyfill-node": "^0.13.0"
   }
 }
