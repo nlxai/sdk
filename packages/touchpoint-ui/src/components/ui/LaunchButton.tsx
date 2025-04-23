@@ -1,7 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
 import { type FC } from "react";
-import { Assistant } from "./Icons";
+import { Touchpoint } from "./Icons";
 
 export interface LaunchButtonProps {
   label: string;
@@ -25,7 +25,7 @@ export const LaunchButton: FC<LaunchButtonProps> = (props) => {
     >
       <span className="block flex-none w-8 h-8">
         {props.iconUrl == null ? (
-          <Assistant />
+          <Touchpoint />
         ) : (
           <img src={props.iconUrl} className="w-8 h-8" />
         )}

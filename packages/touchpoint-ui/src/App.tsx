@@ -21,6 +21,7 @@ import { findLastIndex } from "ramda";
 
 import { LaunchButton } from "./components/ui/LaunchButton";
 import { Header } from "./components/Header";
+import { FullscreenVoice } from "./components/FullscreenVoice";
 import { Settings } from "./components/Settings";
 import { Messages } from "./components/Messages";
 import { FullscreenError } from "./components/FullscreenError";
@@ -68,6 +69,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
   const isExpandedRef = useRef<boolean>(props.embedded);
+
+  const input = props.input ?? "text";
 
   const onClose = useCallback(
     (event: Event) => {
@@ -222,7 +225,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                 }}
                 handler={handler}
               />
-            ) : (
+            ) : input === "text" || input === "textAndVoice" ? (
               <>
                 {configValid ? (
                   <Messages
@@ -254,15 +257,20 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                   enabled={props.enabled}
                   choiceMessage={choiceMessage}
                   handler={handler}
-                  voiceEnabled={props.input === "textAndVoice"}
+                  voiceEnabled={input === "textAndVoice"}
                   uploadUrl={
                     lastBotResponse?.response.payload.metadata?.uploadUrls?.[0]
                   }
                   onFileUpload={({ uploadId, file }) => {
-                    setUploadedFiles((prev) => ({ ...prev, [uploadId]: file }));
+                    setUploadedFiles((prev) => ({
+                      ...prev,
+                      [uploadId]: file,
+                    }));
                   }}
                 />
               </>
+            ) : (
+              <FullscreenVoice handler={handler} className="flex-grow" />
             )}
           </div>
         </CustomPropertiesContainer>

@@ -37,7 +37,7 @@ export const Action: Icon = (props) => {
   );
 };
 
-export const Assistant: Icon = (props) => {
+export const Touchpoint: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
       <path

@@ -2,7 +2,7 @@
 import { type FC } from "react";
 import { clsx } from "clsx";
 
-import { Assistant } from "./ui/Icons";
+import { Touchpoint } from "./ui/Icons";
 
 export const FullscreenError: FC<unknown> = () => (
   <div
@@ -12,7 +12,7 @@ export const FullscreenError: FC<unknown> = () => (
       "fullscreen-error",
     )}
   >
-    <Assistant className="w-20 h-20 text-primary-20" />
+    <Touchpoint className="w-20 h-20 text-primary-20" />
     <div className="text-center">
       <h3 className="text-xl mb-2">Oops!</h3>
       <p>Something went wrong.</p>

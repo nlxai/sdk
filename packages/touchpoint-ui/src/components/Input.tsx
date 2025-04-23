@@ -15,6 +15,7 @@ import {
 } from "@nlxai/chat-core";
 import { clsx } from "clsx";
 
+import { Ripple } from "./Ripple";
 import { IconButton } from "./ui/IconButton";
 import {
   ArrowForward,
@@ -23,7 +24,6 @@ import {
   Check,
   Error,
   Mic,
-  MicOff,
 } from "./ui/Icons";
 import { type ChoiceMessage } from "../types";
 import { MessageChoices } from "./Messages";
@@ -235,30 +235,30 @@ export const Input: FC<InputProps> = ({
           )}
           <div className={clsx("flex items-end gap-1")}>
             {voiceEnabled ? (
-              <IconButton
-                className={clsx(
-                  "flex-none",
-                  voiceActive && isUserSpeaking
-                    ? "shadow-[0_0_8px_var(--accent-20)]"
-                    : "",
-                )}
-                Icon={voiceActive ? MicOff : Mic}
-                label="Voice"
-                type={
-                  voiceActive
-                    ? roomState === "error"
-                      ? "error"
-                      : "activated"
-                    : "ghost"
-                }
-                onClick={
-                  roomState === "pending"
-                    ? undefined
-                    : () => {
-                        setVoiceActive((prev) => !prev);
-                      }
-                }
-              />
+              <div className="flex-none relative">
+                {voiceActive && isUserSpeaking ? (
+                  <Ripple className="rounded-inner" />
+                ) : null}
+                <IconButton
+                  className={clsx("flex-none")}
+                  Icon={Mic}
+                  label="Voice"
+                  type={
+                    voiceActive
+                      ? roomState === "error"
+                        ? "error"
+                        : "activated"
+                      : "ghost"
+                  }
+                  onClick={
+                    roomState === "pending"
+                      ? undefined
+                      : () => {
+                          setVoiceActive((prev) => !prev);
+                        }
+                  }
+                />
+              </div>
             ) : null}
             {isUploadEnabled && uploadedFileInfo == null ? (
               <>
