@@ -5,6 +5,7 @@ import {
   ParticipantEvent,
   RoomEvent,
   Track,
+  type Participant,
   type RemoteTrack,
 } from "livekit-client";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -64,15 +65,22 @@ export const useVoice = ({
 
         const creds = await handler.getLiveKitCredentials();
 
+        const handleActiveSpeakersChanged = (
+          participants: Participant[],
+        ): void => {
+          const hasAgent = participants.some(
+            (participant) => participant.isAgent,
+          );
+          const hasLocal = participants.some(
+            (participant) => participant.isLocal,
+          );
+          setIsApplicationSpeaking(hasAgent);
+          setIsUserSpeaking(hasLocal);
+        };
+
         const handleTrackSubscribed = (track: RemoteTrack): void => {
           if (track.kind === Track.Kind.Audio) {
             const element = track.attach();
-            setIsApplicationSpeaking(true);
-            const handleEnd = (): void => {
-              setIsApplicationSpeaking(false);
-              element.removeEventListener("ended", handleEnd);
-            };
-            element.addEventListener("ended", handleEnd);
             element.play().catch((err) => {
               // eslint-disable-next-line no-console
               console.warn(err);
@@ -86,6 +94,7 @@ export const useVoice = ({
 
         await room.prepareConnection(creds.url, creds.token);
         room.on(RoomEvent.TrackSubscribed, handleTrackSubscribed);
+        room.on(RoomEvent.ActiveSpeakersChanged, handleActiveSpeakersChanged);
         room.localParticipant.on(
           ParticipantEvent.IsSpeakingChanged,
           handleIsSpeakingChanged,
