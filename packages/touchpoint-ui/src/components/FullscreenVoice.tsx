@@ -42,13 +42,9 @@ export const FullscreenVoice: FC<{
           type={
             active ? (roomState === "error" ? "error" : "activated") : "ghost"
           }
-          onClick={
-            roomState === "pending"
-              ? undefined
-              : () => {
-                  setActive((prev) => !prev);
-                }
-          }
+          onClick={() => {
+            setActive((prev) => !prev);
+          }}
         />
       </div>
     </div>
