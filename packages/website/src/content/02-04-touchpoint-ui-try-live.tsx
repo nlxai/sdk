@@ -119,6 +119,8 @@ export const Content: FC<unknown> = () => {
     accent: "#AECAFF",
   });
 
+  const [input, setInput] = useState<any>("text");
+
   const [colorMode, setColorMode] = useState<"light" | "dark">("dark");
 
   const touchpointInstance = useRef<any>();
@@ -131,6 +133,7 @@ export const Content: FC<unknown> = () => {
           config,
           theme,
           colorMode,
+          input,
           launchIcon: false,
         });
       })
@@ -143,7 +146,7 @@ export const Content: FC<unknown> = () => {
         touchpointInstance.current.teardown();
       }
     };
-  }, [config, theme, colorMode]);
+  }, [config, theme, colorMode, input]);
 
   return (
     <>
@@ -166,11 +169,24 @@ export const Content: FC<unknown> = () => {
 
             <Labeled label="Color mode">
               <Toggle
+                className="w-full"
                 value={colorMode}
                 onChange={setColorMode}
                 options={[
                   { value: "dark", label: "Dark mode" },
                   { value: "light", label: "Light mode" },
+                ]}
+              />
+            </Labeled>
+            <Labeled label="Input">
+              <Toggle
+                className="w-full"
+                value={input}
+                onChange={setInput}
+                options={[
+                  { value: "text", label: "Text" },
+                  { value: "voice", label: "Voice" },
+                  { value: "textAndVoic", label: "Text & voice" },
                 ]}
               />
             </Labeled>

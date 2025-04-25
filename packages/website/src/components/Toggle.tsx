@@ -28,7 +28,7 @@ export const Toggle = <T,>(props: Props<T>): ReactNode => {
           }}
           disabled={disabled}
           className={clsx({
-            "px-10 py-0.5 rounded-full text-xs whitespace-pre": true,
+            "px-10 py-0.5 flex-grow rounded-full text-xs whitespace-pre": true,
             "enabled:hover:bg-primary-10":
               props.value !== option.value && props.onChange,
             "bg-secondary-80": props.value === option.value,
