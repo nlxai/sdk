@@ -230,6 +230,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                 {configValid ? (
                   <Messages
                     enabled={props.enabled}
+                    userMessageBubble={props.userMessageBubble ?? false}
+                    agentMessageBubble={props.agentMessageBubble ?? false}
                     isWaiting={isWaiting}
                     lastBotResponseIndex={lastBotResponse?.index}
                     responses={responses}

@@ -73,3 +73,25 @@
     --glow-opacity: 0%;
   }
 }
+
+.markdown ul {
+  @apply list-disc list-inside;
+}
+
+.markdown ol {
+  @apply list-decimal list-inside;
+}
+
+.markdown hr {
+  @apply border-primary-20;
+}
+
+.markdown a {
+  @apply underline;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  @apply font-bold;
+}

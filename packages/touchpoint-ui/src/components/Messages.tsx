@@ -17,6 +17,8 @@ export interface MessagesProps {
   isWaiting: boolean;
   handler: ConversationHandler;
   responses: Response[];
+  userMessageBubble: boolean;
+  agentMessageBubble: boolean;
   colorMode: ColorMode;
   uploadedFiles: Record<string, File>;
   lastBotResponseIndex?: number;
@@ -63,11 +65,20 @@ export const MessageChoices: FC<{
   ) : null;
 };
 
-const UserMessage: FC<{ text: string; files?: File[] }> = ({ text, files }) => {
+const UserMessage: FC<{ text: string; files?: File[]; bubble: boolean }> = ({
+  text,
+  bubble,
+  files,
+}) => {
   return (
     <div className="space-y-2">
       <div className="flex justify-end pl-10 text-base">
-        <div className="text-primary-60 p-3 rounded-inner bg-primary-5 whitespace-pre-wrap">
+        <div
+          className={clsx(
+            "text-primary-60 rounded-inner whitespace-pre-wrap",
+            bubble ? "bg-primary-5 p-3" : "",
+          )}
+        >
           {text}
         </div>
       </div>
@@ -100,6 +111,8 @@ export const Messages: FC<MessagesProps> = ({
   responses,
   colorMode,
   uploadedFiles,
+  userMessageBubble,
+  agentMessageBubble,
   lastBotResponseIndex,
   isWaiting,
   customModalities,
@@ -144,7 +157,11 @@ export const Messages: FC<MessagesProps> = ({
           if (response.type === "user") {
             if (response.payload.type === "text") {
               return (
-                <UserMessage key={responseIndex} text={response.payload.text} />
+                <UserMessage
+                  key={responseIndex}
+                  text={response.payload.text}
+                  bubble={userMessageBubble}
+                />
               );
             } else if (
               response.payload.type === "structured" &&
@@ -154,6 +171,7 @@ export const Messages: FC<MessagesProps> = ({
               return (
                 <UserMessage
                   key={responseIndex}
+                  bubble={userMessageBubble}
                   text={response.payload.utterance}
                   files={response.payload.uploadIds
                     .map((uploadId) => uploadedFiles[uploadId])
@@ -187,7 +205,12 @@ export const Messages: FC<MessagesProps> = ({
                   return (
                     <div key={messageIndex} className="text-base">
                       <div
-                        className="pr-10 space-y-6"
+                        className={clsx(
+                          "space-y-6 markdown",
+                          agentMessageBubble
+                            ? "p-3 w-fit bg-secondary-40 mr-10 rounded-inner"
+                            : "",
+                        )}
                         dangerouslySetInnerHTML={{
                           __html: marked(message.text),
                         }}
@@ -229,6 +252,7 @@ export const Messages: FC<MessagesProps> = ({
                     <UserMessage
                       key={messageIndex}
                       text={selectedChoice.choiceText}
+                      bubble={userMessageBubble}
                     />
                   );
                 }
