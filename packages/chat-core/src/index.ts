@@ -564,10 +564,31 @@ export type BotRequestOverride = (
   appendBotResponse: (res: BotResponsePayload) => void,
 ) => void;
 
-export type ConversationHandlerEvent = "command";
+/**
+ * Voice+ context, type to be defined
+ */
+export type VoicePlusContext = any;
 
+/**
+ * Messages sent to the Voice+ socket
+ */
+export interface VoicePlusMessage {
+  /**
+   * Voice+ context
+   */
+  context: VoicePlusContext;
+}
+
+/**
+ * Handler events
+ */
+export type ConversationHandlerEvent = "voicePlusCommand";
+
+/**
+ * Dictionary of handler methods per event
+ */
 export interface EventHandlers {
-  command: (payload: any) => {};
+  voicePlusCommand: (payload: any) => {};
 }
 
 /**
@@ -688,6 +709,10 @@ export interface ConversationHandler {
     event: ConversationHandlerEvent,
     handler: EventHandlers[ConversationHandlerEvent],
   ) => void;
+  /**
+   * Send voicePlus message
+   */
+  sendVoicePlusContext: (context: VoicePlusContext) => void;
 }
 
 interface InternalState {
@@ -740,6 +765,8 @@ export const isConfigValid = (config: Config): boolean => {
   return applicationUrl.length > 0;
 };
 
+type SetInterval = ReturnType<typeof setInterval>;
+
 /**
  * Call this to create a conversation handler.
  * @param config -
@@ -747,8 +774,12 @@ export const isConfigValid = (config: Config): boolean => {
  */
 export function createConversation(config: Config): ConversationHandler {
   let socket: ReconnectingWebSocket | undefined;
+  let socketMessageQueue: BotRequest[] = [];
+  let socketMessageQueueCheckInterval: SetInterval | null = null;
 
-  let commandSocket: ReconnectingWebSocket | undefined;
+  let voicePlusSocket: ReconnectingWebSocket | undefined;
+  let voicePlusSocketMessageQueue: VoicePlusMessage[] = [];
+  let voicePlusSocketMessageQueueCheckInterval: SetInterval | null = null;
 
   const applicationUrl = config.applicationUrl ?? config.botUrl ?? "";
 
@@ -762,7 +793,7 @@ export function createConversation(config: Config): ConversationHandler {
   const eventListeners: Record<
     ConversationHandlerEvent,
     EventHandlers[ConversationHandlerEvent][]
-  > = { command: [] };
+  > = { voicePlusCommand: [] };
 
   const initialConversationId = config.conversationId ?? uuid();
 
@@ -853,10 +884,13 @@ export function createConversation(config: Config): ConversationHandler {
 
   let botRequestOverride: BotRequestOverride | undefined;
 
-  let socketMessageQueue: BotRequest[] = [];
-
-  let socketMessageQueueCheckInterval: ReturnType<typeof setInterval> | null =
-    null;
+  const sendVoicePlusMessage = (message: any) => {
+    if (voicePlusSocket?.readyState === 1) {
+      voicePlusSocket.send(JSON.stringify(message));
+    } else {
+      voicePlusSocketMessageQueue = [...voicePlusSocketMessageQueue, message];
+    }
+  };
 
   const sendToBot = async (body: BotRequest): Promise<unknown> => {
     if (botRequestOverride != null) {
@@ -919,10 +953,20 @@ export function createConversation(config: Config): ConversationHandler {
 
   let subscribers: Subscriber[] = [];
 
-  const checkQueue = async (): Promise<void> => {
+  const checkSocketQueue = async (): Promise<void> => {
     if (socket?.readyState === 1 && socketMessageQueue[0] != null) {
       await sendToBot(socketMessageQueue[0]);
       socketMessageQueue = socketMessageQueue.slice(1);
+    }
+  };
+
+  const checkVoicePlusSocketQueue = (): void => {
+    if (
+      voicePlusSocket?.readyState === 1 &&
+      voicePlusSocketMessageQueue[0] != null
+    ) {
+      sendVoicePlusMessage(voicePlusSocketMessageQueue[0]);
+      voicePlusSocketMessageQueue = voicePlusSocketMessageQueue.slice(1);
     }
   };
 
@@ -938,7 +982,7 @@ export function createConversation(config: Config): ConversationHandler {
     url.searchParams.set("conversationId", state.conversationId);
     socket = new ReconnectingWebSocket(url.href);
     socketMessageQueueCheckInterval = setInterval(() => {
-      void checkQueue;
+      void checkSocketQueue;
     }, 500);
     socket.onmessage = function (e) {
       if (typeof e?.data === "string") {
@@ -946,12 +990,15 @@ export function createConversation(config: Config): ConversationHandler {
       }
     };
     url.searchParams.set("voice-plus", "true");
-    commandSocket = new ReconnectingWebSocket(url.href);
-    commandSocket.onmessage = (e) => {
+    voicePlusSocket = new ReconnectingWebSocket(url.href);
+    voicePlusSocketMessageQueueCheckInterval = setInterval(() => {
+      void checkVoicePlusSocketQueue;
+    }, 500);
+    voicePlusSocket.onmessage = (e) => {
       if (typeof e?.data === "string") {
         const command = safeJsonParse(e.data);
         if (command != null) {
-          eventListeners["command"].forEach((listener) => {
+          eventListeners["voicePlusCommand"].forEach((listener) => {
             listener(command);
           });
         }
@@ -968,10 +1015,10 @@ export function createConversation(config: Config): ConversationHandler {
       socket.close();
       socket = undefined;
     }
-    if (commandSocket != null) {
-      commandSocket.onmessage = null;
-      commandSocket.close();
-      commandSocket = undefined;
+    if (voicePlusSocket != null) {
+      voicePlusSocket.onmessage = null;
+      voicePlusSocket.close();
+      voicePlusSocket = undefined;
     }
   };
 
@@ -1235,6 +1282,9 @@ export function createConversation(config: Config): ConversationHandler {
       eventListeners[event] = eventListeners[event].filter(
         (l) => l !== listener,
       );
+    },
+    sendVoicePlusContext: (context) => {
+      sendVoicePlusMessage({ context });
     },
   };
 }
