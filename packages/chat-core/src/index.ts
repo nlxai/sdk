@@ -564,6 +564,12 @@ export type BotRequestOverride = (
   appendBotResponse: (res: BotResponsePayload) => void,
 ) => void;
 
+export type ConversationHandlerEvent = "command";
+
+export interface EventHandlers {
+  command: (payload: any) => {};
+}
+
 /**
  * A bundle of functions to interact with a conversation, created by {@link createConversation}.
  */
@@ -668,6 +674,20 @@ export interface ConversationHandler {
    * Optional {@link BotRequestOverride} function used to bypass the bot request and handle them in a custom fashion
    */
   setBotRequestOverride: (override: BotRequestOverride | undefined) => void;
+  /**
+   * Add a listener to one of the handler's custom events
+   */
+  addEventListener: (
+    event: ConversationHandlerEvent,
+    handler: EventHandlers[ConversationHandlerEvent],
+  ) => void;
+  /**
+   * Remove a listener to one of the handler's custom events
+   */
+  removeEventListener: (
+    event: ConversationHandlerEvent,
+    handler: EventHandlers[ConversationHandlerEvent],
+  ) => void;
 }
 
 interface InternalState {
@@ -728,6 +748,8 @@ export const isConfigValid = (config: Config): boolean => {
 export function createConversation(config: Config): ConversationHandler {
   let socket: ReconnectingWebSocket | undefined;
 
+  let commandSocket: ReconnectingWebSocket | undefined;
+
   const applicationUrl = config.applicationUrl ?? config.botUrl ?? "";
 
   // Check if the bot URL has a language code appended to it
@@ -736,6 +758,11 @@ export function createConversation(config: Config): ConversationHandler {
       "Since v1.0.0, the language code is no longer added at the end of the application URL. Please remove the modifier (e.g. '-en-US') from the URL, and specify it in the `languageCode` parameter instead.",
     );
   }
+
+  const eventListeners: Record<
+    ConversationHandlerEvent,
+    EventHandlers[ConversationHandlerEvent][]
+  > = { command: [] };
 
   const initialConversationId = config.conversationId ?? uuid();
 
@@ -918,6 +945,18 @@ export function createConversation(config: Config): ConversationHandler {
         messageResponseHandler(safeJsonParse(e.data));
       }
     };
+    url.searchParams.set("voice-plus", "true");
+    commandSocket = new ReconnectingWebSocket(url.href);
+    commandSocket.onmessage = (e) => {
+      if (typeof e?.data === "string") {
+        const command = safeJsonParse(e.data);
+        if (command != null) {
+          eventListeners["command"].forEach((listener) => {
+            listener(command);
+          });
+        }
+      }
+    };
   };
 
   const teardownWebsocket = (): void => {
@@ -928,6 +967,11 @@ export function createConversation(config: Config): ConversationHandler {
       socket.onmessage = null;
       socket.close();
       socket = undefined;
+    }
+    if (commandSocket != null) {
+      commandSocket.onmessage = null;
+      commandSocket.close();
+      commandSocket = undefined;
     }
   };
 
@@ -1183,6 +1227,14 @@ export function createConversation(config: Config): ConversationHandler {
     },
     setBotRequestOverride: (val: BotRequestOverride | undefined) => {
       botRequestOverride = val;
+    },
+    addEventListener: (event, listener) => {
+      eventListeners[event] = [...eventListeners[event], listener];
+    },
+    removeEventListener: (event, listener) => {
+      eventListeners[event] = eventListeners[event].filter(
+        (l) => l !== listener,
+      );
     },
   };
 }
