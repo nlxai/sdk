@@ -1,5 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import {
+  type FC,
   useRef,
   useEffect,
   useState,
@@ -19,7 +20,9 @@ import {
 import { clsx } from "clsx";
 import { findLastIndex } from "ramda";
 
+import { IconButton } from "./components/ui/IconButton";
 import { LaunchButton } from "./components/ui/LaunchButton";
+import { Mic } from "./components/ui/Icons";
 import { Header } from "./components/Header";
 import { FullscreenVoice } from "./components/FullscreenVoice";
 import { Settings } from "./components/Settings";
@@ -33,6 +36,8 @@ import type {
   InitializeConversation,
 } from "./types";
 import { CustomPropertiesContainer } from "./components/Theme";
+import { useVoice } from "./voice";
+import { Ripple } from "./components/Ripple";
 
 /**
  * Main Touchpoint creation properties object
@@ -50,6 +55,33 @@ export interface AppRef {
   getExpanded: () => boolean;
   getConversationHandler: () => ConversationHandler;
 }
+
+const Experimental: FC<{ handler: ConversationHandler }> = ({ handler }) => {
+  const [active, setActive] = useState<boolean>(false);
+
+  const { roomState, isUserSpeaking } = useVoice({
+    active,
+    handler,
+  });
+
+  return (
+    <div className="bg-secondary-80 rounded-outer p-2">
+      <div className="w-fit relative">
+        {active && isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
+        <IconButton
+          Icon={Mic}
+          label="Listen"
+          type={
+            active ? (roomState === "error" ? "error" : "activated") : "ghost"
+          }
+          onClick={() => {
+            setActive((prev) => !prev);
+          }}
+        />
+      </div>
+    </div>
+  );
+};
 
 const App = forwardRef<AppRef, Props>((props, ref) => {
   const handler = useMemo(() => {
@@ -170,6 +202,18 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   if (handler == null) {
     return null;
+  }
+
+  if (input === "experimental") {
+    return (
+      <CustomPropertiesContainer
+        theme={props.theme}
+        colorMode={colorMode}
+        className="fixed bottom-2 right-2 w-fit"
+      >
+        <Experimental handler={handler} />
+      </CustomPropertiesContainer>
+    );
   }
 
   return (
