@@ -588,6 +588,9 @@ export type ConversationHandlerEvent = "voicePlusCommand";
  * Dictionary of handler methods per event
  */
 export interface EventHandlers {
+  /**
+   * Voice+ command event handler
+   */
   voicePlusCommand: (payload: any) => {};
 }
 
