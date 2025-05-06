@@ -195,6 +195,14 @@ export interface TouchpointConfiguration {
    */
   launchIcon?: string | boolean;
   /**
+   * Specifies whether the user message has bubbles or not
+   */
+  userMessageBubble?: boolean;
+  /**
+   * Specifies whether the agent message has bubbles or not
+   */
+  agentMessageBubble?: boolean;
+  /**
    * Optional theme object to override default theme values
    */
   theme?: Partial<Theme>;
