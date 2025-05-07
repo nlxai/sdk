@@ -74,7 +74,7 @@ const getSpin = (t: number): number => {
   return 1;
 };
 
-export const LoaderAnimation = () => {
+export const LoaderAnimation: FC<unknown> = () => {
   const [time, setTime] = useState<{ start: number; current: number } | null>(
     null,
   );
