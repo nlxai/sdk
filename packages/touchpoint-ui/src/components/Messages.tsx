@@ -8,7 +8,7 @@ import {
 import { clsx } from "clsx";
 import { marked } from "marked";
 
-import { Loader } from "./ui/Loader";
+import { LoaderAnimation, Loader } from "./ui/Loader";
 import { TextButton } from "./ui/TextButton";
 import { ArrowForward, Warning } from "./ui/Icons";
 import { type CustomModalityComponent, type ColorMode } from "../types";
@@ -275,7 +275,12 @@ export const Messages: FC<MessagesProps> = ({
           );
         })}
         {chatMode && isWaiting ? (
-          <div className="text-primary-80">Loading...</div>
+          <div className="text-primary-60 flex items-center gap-1 text-base">
+            <span className="w-5 h-5 block flex-none text-accent">
+              <LoaderAnimation />
+            </span>
+            Thinking...
+          </div>
         ) : null}
       </div>
     </div>

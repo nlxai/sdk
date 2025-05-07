@@ -74,7 +74,7 @@ const getSpin = (t: number): number => {
   return 1;
 };
 
-export const Loader: FC<LoaderProps> = ({ label, className }) => {
+export const LoaderAnimation = () => {
   const [time, setTime] = useState<{ start: number; current: number } | null>(
     null,
   );
@@ -127,6 +127,23 @@ export const Loader: FC<LoaderProps> = ({ label, className }) => {
       : 1;
 
   return (
+    <svg
+      viewBox="0 0 100 100"
+      stroke="none"
+      fill="currentColor"
+      style={{
+        filter: `drop-shadow(0 0 ${dropShadowRadius}px var(--accent))`,
+      }}
+    >
+      <g transform={`translate(50 50) rotate(${spin * 90})`} opacity={opacity}>
+        <Pair d={r * dFactor} />
+      </g>
+    </svg>
+  );
+};
+
+export const Loader: FC<LoaderProps> = ({ label, className }) => {
+  return (
     <div
       className={clsx(
         "h-full w-full flex items-center justify-center",
@@ -135,21 +152,7 @@ export const Loader: FC<LoaderProps> = ({ label, className }) => {
     >
       <div className="flex flex-col items-center justify-center gap-3">
         <div className={clsx("w-8 h-8 block text-accent")}>
-          <svg
-            viewBox="0 0 100 100"
-            stroke="none"
-            fill="currentColor"
-            style={{
-              filter: `drop-shadow(0 0 ${dropShadowRadius}px var(--accent))`,
-            }}
-          >
-            <g
-              transform={`translate(50 50) rotate(${spin * 90})`}
-              opacity={opacity}
-            >
-              <Pair d={r * dFactor} />
-            </g>
-          </svg>
+          <LoaderAnimation />
         </div>
         <p className="text-primary-60">{label}</p>
       </div>
