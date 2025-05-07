@@ -225,7 +225,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                 }}
                 handler={handler}
               />
-            ) : input === "text" || input === "textAndVoice" ? (
+            ) : input === "text" ? (
               <>
                 {configValid ? (
                   <Messages
@@ -259,7 +259,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                   enabled={props.enabled}
                   choiceMessage={choiceMessage}
                   handler={handler}
-                  voiceEnabled={input === "textAndVoice"}
                   uploadUrl={
                     lastBotResponse?.response.payload.metadata?.uploadUrls?.[0]
                   }

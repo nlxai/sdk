@@ -15,20 +15,11 @@ import {
 } from "@nlxai/chat-core";
 import { clsx } from "clsx";
 
-import { Ripple } from "./Ripple";
 import { IconButton } from "./ui/IconButton";
-import {
-  ArrowForward,
-  Attachment,
-  Delete,
-  Check,
-  Error,
-  Mic,
-} from "./ui/Icons";
+import { ArrowForward, Attachment, Delete, Check, Error } from "./ui/Icons";
 import { type ChoiceMessage } from "../types";
 import { MessageChoices } from "./Messages";
 import { useTailwindMediaQuery } from "../hooks";
-import { useVoice } from "../voice";
 
 interface InputProps {
   className?: string;
@@ -36,7 +27,6 @@ interface InputProps {
   uploadUrl?: UploadUrl;
   onFileUpload: (val: { uploadId: string; file: File }) => void;
   choiceMessage?: ChoiceMessage;
-  voiceEnabled: boolean;
   enabled: boolean;
 }
 
@@ -52,7 +42,6 @@ export const Input: FC<InputProps> = ({
   className,
   choiceMessage,
   handler,
-  voiceEnabled,
   uploadUrl,
   onFileUpload,
   enabled,
@@ -73,13 +62,6 @@ export const Input: FC<InputProps> = ({
   const textInputRef = useRef<HTMLTextAreaElement>(null);
 
   const isMd = useTailwindMediaQuery("md");
-
-  const [voiceActive, setVoiceActive] = useState<boolean>(false);
-
-  const { roomState, isUserSpeaking } = useVoice({
-    active: voiceActive,
-    handler,
-  });
 
   // Autofocus input on desktop only
   useEffect(() => {
@@ -234,32 +216,6 @@ export const Input: FC<InputProps> = ({
             </>
           )}
           <div className={clsx("flex items-end gap-1")}>
-            {voiceEnabled ? (
-              <div className="flex-none relative">
-                {voiceActive && isUserSpeaking ? (
-                  <Ripple className="rounded-inner" />
-                ) : null}
-                <IconButton
-                  className={clsx("flex-none")}
-                  Icon={Mic}
-                  label="Voice"
-                  type={
-                    voiceActive
-                      ? roomState === "error"
-                        ? "error"
-                        : "activated"
-                      : "ghost"
-                  }
-                  onClick={
-                    roomState === "pending"
-                      ? undefined
-                      : () => {
-                          setVoiceActive((prev) => !prev);
-                        }
-                  }
-                />
-              </div>
-            ) : null}
             {isUploadEnabled && uploadedFileInfo == null ? (
               <>
                 <label
