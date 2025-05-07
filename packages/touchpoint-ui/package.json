@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/touchpoint-ui",
-  "version": "1.0.5-alpha.6",
+  "version": "1.0.5-alpha.7",
   "description": "Web UI for Touchpoint",
   "type": "module",
   "main": "lib/index.js",
