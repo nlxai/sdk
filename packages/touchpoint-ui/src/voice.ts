@@ -9,6 +9,7 @@ import {
   type RemoteTrack,
 } from "livekit-client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useDebouncedState } from "@react-hookz/web";
 
 type VoiceRoomState = "inactive" | "pending" | "active" | "error";
 
@@ -29,9 +30,12 @@ export const useVoice = ({
 
   const [roomState, setRoomState] = useState<VoiceRoomState>("inactive");
 
-  const [isUserSpeaking, setIsUserSpeaking] = useState<boolean>(false);
+  const [isUserSpeaking, setIsUserSpeaking] = useDebouncedState<boolean>(
+    false,
+    600,
+  );
   const [isApplicationSpeaking, setIsApplicationSpeaking] =
-    useState<boolean>(false);
+    useDebouncedState<boolean>(false, 600);
 
   const disconnect = useCallback(() => {
     roomRef.current?.disconnect().catch((err) => {
@@ -99,6 +103,7 @@ export const useVoice = ({
           ParticipantEvent.IsSpeakingChanged,
           handleIsSpeakingChanged,
         );
+
         await room.connect(creds.url, creds.token, { autoSubscribe: true });
         await room.localParticipant.setMicrophoneEnabled(true);
         await room.startAudio();
