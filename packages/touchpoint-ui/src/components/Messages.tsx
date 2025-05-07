@@ -19,6 +19,7 @@ export interface MessagesProps {
   responses: Response[];
   userMessageBubble: boolean;
   agentMessageBubble: boolean;
+  chatMode: boolean;
   colorMode: ColorMode;
   uploadedFiles: Record<string, File>;
   lastBotResponseIndex?: number;
@@ -110,6 +111,7 @@ const ErrorMessage: FC<{ message: string }> = ({ message }) => {
 export const Messages: FC<MessagesProps> = ({
   responses,
   colorMode,
+  chatMode,
   uploadedFiles,
   userMessageBubble,
   agentMessageBubble,
@@ -125,13 +127,21 @@ export const Messages: FC<MessagesProps> = ({
   const lastBotMessageRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!isWaiting) {
-      // TODO: the smooth scrolling consistently scrolls from the top of the conversation, looks like the scroll position is lost
+    if (!chatMode && !isWaiting) {
       setTimeout(() => {
         lastBotMessageRef.current?.scrollIntoView({ behavior: "smooth" });
       });
     }
-  }, [isWaiting]);
+  }, [isWaiting, chatMode]);
+
+  useEffect(() => {
+    if (chatMode) {
+      const lastChild = containerRef.current?.lastChild;
+      if (lastChild instanceof HTMLElement) {
+        lastChild.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [responses.length, chatMode]);
 
   return (
     <div className={clsx("relative", className)}>
@@ -141,14 +151,14 @@ export const Messages: FC<MessagesProps> = ({
           "absolute inset-x-0 h-[1px] top-0 bg-background opacity-[0.01] backdrop-blur-md",
         )}
       />
-      {isWaiting ? (
+      {!chatMode && isWaiting ? (
         <Loader label="Thinking" className="absolute inset-0" />
       ) : null}
       <div
         key="messages"
         className={clsx(
           "absolute inset-0 p-2 md:p-3 overflow-y-auto no-scrollbar space-y-8",
-          isWaiting ? "opacity-0" : "opacity-100",
+          !chatMode && isWaiting ? "opacity-0" : "opacity-100",
         )}
         ref={containerRef}
       >
@@ -198,7 +208,10 @@ export const Messages: FC<MessagesProps> = ({
           return (
             <Fragment key={responseIndex}>
               <div
-                className={clsx("space-y-2", isLast ? "min-h-full" : "")}
+                className={clsx(
+                  "space-y-2",
+                  !chatMode && isLast ? "min-h-full" : "",
+                )}
                 ref={isLast ? lastBotMessageRef : undefined}
               >
                 {response.payload.messages.map((message, messageIndex) => {
@@ -261,6 +274,9 @@ export const Messages: FC<MessagesProps> = ({
             </Fragment>
           );
         })}
+        {chatMode && isWaiting ? (
+          <div className="text-primary-80">Loading...</div>
+        ) : null}
       </div>
     </div>
   );
