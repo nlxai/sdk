@@ -203,6 +203,10 @@ export interface TouchpointConfiguration {
    */
   agentMessageBubble?: boolean;
   /**
+   * Enables chat mode, a classic chat experience with inline loaders and the chat history visible at all times.
+   */
+  chatMode?: boolean;
+  /**
    * Optional theme object to override default theme values
    */
   theme?: Partial<Theme>;

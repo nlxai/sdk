@@ -232,6 +232,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                     enabled={props.enabled}
                     userMessageBubble={props.userMessageBubble ?? false}
                     agentMessageBubble={props.agentMessageBubble ?? false}
+                    chatMode={props.chatMode ?? false}
                     isWaiting={isWaiting}
                     lastBotResponseIndex={lastBotResponse?.index}
                     responses={responses}
