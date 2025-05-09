@@ -188,7 +188,6 @@ export const Content: FC<unknown> = () => {
                 options={[
                   { value: "text", label: "Text" },
                   { value: "voice", label: "Voice" },
-                  { value: "textAndVoic", label: "Text & voice" },
                 ]}
               />
             </Labeled>
