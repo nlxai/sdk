@@ -57,23 +57,19 @@ When using the `html` template tag, follow these patterns:
 4. **Props and Attributes**:
 
    ```javascript
-   html`<TextButton onClick=${handleClick}>
-     Click me
-   </TextButton>`;
+   html`<TextButton onClick=${handleClick}> Click me </TextButton>`;
    ```
 
 5. **Rendering Arrays**:
    ```javascript
    html`${items.map(
-       (item) => html`<BaseText key=${item.id}>${item.text}</BaseText>`,
-     )}`;
+     (item) => html`<BaseText key=${item.id}>${item.text}</BaseText>`,
+   )}`;
    ```
-
 
 ## Example: Creating a Carousel
 
-Here's an example of creating a carousel component with the `html` tag and leveraging  [React's state management](/guide-managing-selection)
-
+Here's an example of creating a carousel component with the `html` tag and leveraging [React's state management](/guide-managing-selection)
 
 ```javascript
 const CarouselExample = ({ data, conversationHandler }) => {

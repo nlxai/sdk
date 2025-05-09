@@ -21,7 +21,6 @@ The Assistant Style provides a focused experience where only the latest applicat
 
 <img src="/animations/assistantMode.webp" alt="Assistant Mode Animation" style="max-width: 40%;">
 
-
 ### Example Assistant Configuration
 
 To implement the default Assistant Style, you can either omit the `chatMode` parameter or explicitly set it to `false`:
@@ -78,7 +77,6 @@ const touchpoint = await create(touchpointOptions);
 The Classic Chat Style provides a traditional messaging interface where all messages stack chronologically and remain visible. This creates a more conventional chat experience that many users are already familiar with from messaging apps.
 
 <img src="/animations/chatMode2.webp" alt="Chat Mode Animation" style="max-width: 40%;">
-
 
 ### Example Classic Chat Configuration
 
