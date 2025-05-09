@@ -91,4 +91,4 @@ const IconButtonExample = ({ data, conversationHandler }) => {
 - [Buttons](/touchpoint-Buttons)
 - [CustomCards](/touchpoint-CustomCards)
 - [Theming Touchpoint](/touchpoint-ui-theming)
-- [Building Components without JSX](/guide-building-custom-components#building-html-components-without-transpiling)
+- [Building Components without JSX](/guide-html-components)

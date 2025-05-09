@@ -98,4 +98,4 @@ const IconButtonExample = ({ data, conversationHandler }) => {
 
 - [Icons](/touchpoint-Icons) for list of Icons available in Touchpoint
 - [Theming Touchpoint](/touchpoint-ui-theming)
-- [Building Components without JSX](/guide-building-custom-components#building-html-components-without-transpiling)
+- [Building Components without JSX](/guide-html-components)

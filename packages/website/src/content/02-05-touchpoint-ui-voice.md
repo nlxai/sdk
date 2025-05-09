@@ -3,7 +3,7 @@
 - [Prerequisites](#prerequisites)
 - [Customization](#customization)
 
-Touchpoint UI supports voice interaction, allowing users to speak their requests instead of typing.
+Touchpoint UI supports voice input to allow your users to talk to your applications over the internet.
 
 ## Enabling Voice Input
 

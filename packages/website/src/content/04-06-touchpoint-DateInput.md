@@ -60,4 +60,4 @@ const DateInputExample = ({ data, conversationHandler }) => {
 ## Related Documents
 
 - [Theming Touchpoint](/touchpoint-ui-theming)
-- [Building Components without JSX](/guide-building-custom-components#building-html-components-without-transpiling)
+- [Building Components without JSX](/guide-html-components)

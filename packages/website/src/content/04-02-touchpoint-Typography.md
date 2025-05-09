@@ -41,4 +41,4 @@ const ProductDetails = ({ data, conversationHandler }) => {
 
 - [CustomCards](/touchpoint-CustomCards)
 - [Buttons](/touchpoint-Buttons)
-- [Building Components without JSX](/guide-building-custom-components#building-html-components-without-transpiling)
+- [Building Components without JSX](/guide-html-components)

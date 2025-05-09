@@ -21,12 +21,6 @@ The Assistant Style provides a focused experience where only the latest applicat
 
 <img src="/animations/assistantMode.webp" alt="Assistant Mode Animation" style="max-width: 40%;">
 
-**Key Characteristics:**
-
-- Focus on the most recent message
-- Cleaner, more minimal interface
-- Older messages visible only upon scrolling up
-- Well-suited for guided experiences and task completion
 
 ### Example Assistant Configuration
 
@@ -85,12 +79,6 @@ The Classic Chat Style provides a traditional messaging interface where all mess
 
 <img src="/animations/chatMode2.webp" alt="Chat Mode Animation" style="max-width: 40%;">
 
-**Key Characteristics:**
-
-- Full conversation history always visible
-- Messages displayed in chronological order
-- Similar to popular messaging applications
-- Well-suited for more conversational experiences
 
 ### Example Classic Chat Configuration
 

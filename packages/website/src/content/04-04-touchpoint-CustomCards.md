@@ -151,5 +151,5 @@ const CarouselExample = ({ data, conversationHandler }) => {
 - [Typography](/touchpoint-Typography) for Typography components
 - [Icons](/touchpoint-Icons) for visual elements
 - [Theming Touchpoint](/touchpoint-ui-theming)
-- [Building Components without JSX](/guide-building-custom-components#building-html-components-without-transpiling)
+- [Building Components without JSX](/guide-html-components)
 - [Managing Selection State](/guide-managing-selection) for handling selection in cards and carousels

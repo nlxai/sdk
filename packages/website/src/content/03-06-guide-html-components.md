@@ -1,7 +1,6 @@
 - [Best Practices and Limitations with HTML Templates](#best-practices-and-limitations-with-html-templates)
 - [Basic Usage](#basic-usage)
 - [Syntax Guidelines](#syntax-guidelines)
-- [Working with State](#working-with-state)
 - [Example: Creating a Carousel](#example-creating-a-carousel)
 - [Related Resources](#related-resources)
 
@@ -58,49 +57,23 @@ When using the `html` template tag, follow these patterns:
 4. **Props and Attributes**:
 
    ```javascript
-   html`<TextButton onClick=${handleClick} disabled=${isDisabled}>
+   html`<TextButton onClick=${handleClick}>
      Click me
    </TextButton>`;
    ```
 
 5. **Rendering Arrays**:
    ```javascript
-   html`<div>
-     ${items.map(
+   html`${items.map(
        (item) => html`<BaseText key=${item.id}>${item.text}</BaseText>`,
-     )}
-   </div>`;
+     )}`;
    ```
 
-## Working with State
-
-The HTML template syntax works seamlessly with React's state management:
-
-```javascript
-const CardSelector = ({ data, conversationHandler }) => {
-  const [selected, setSelected] = React.useState(null);
-
-  return html`<div>
-    ${data.map(
-      (item, index) =>
-        html`<CustomCard
-          key=${index}
-          selected=${selected === index}
-          onClick=${() => {
-            setSelected(index);
-            conversationHandler.sendChoice(item.id);
-          }}
-        >
-          <BaseText>${item.title}</BaseText>
-        </CustomCard>`,
-    )}
-  </div>`;
-};
-```
 
 ## Example: Creating a Carousel
 
-Here's an example of creating a carousel component with the `html` tag:
+Here's an example of creating a carousel component with the `html` tag and leveraging  [React's state management](/guide-managing-selection)
+
 
 ```javascript
 const CarouselExample = ({ data, conversationHandler }) => {
