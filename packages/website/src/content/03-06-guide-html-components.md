@@ -105,4 +105,4 @@ const CarouselExample = ({ data, conversationHandler }) => {
 
 - [Touchpoint Components](/guide-building-custom-components) - Available components to use with HTML syntax
 - [Building custom components](/guide-building-custom-components) - How to implement custom components
-- [Advanced Theming](/guide-advanced-theming) - Styling your components
+- [Advanced Theming](/touchpoint-ui-theming) - Styling your components
