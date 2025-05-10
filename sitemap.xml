@@ -7,22 +7,43 @@
     <loc>https://developers.nlx.ai/installation</loc>
   </url>
   <url>
-    <loc>https://developers.nlx.ai/touchpoint-ui-setup</loc>
-  </url>
-  <url>
-    <loc>https://developers.nlx.ai/touchpoint-ui-theming</loc>
-  </url>
-  <url>
-    <loc>https://developers.nlx.ai/touchpoint-ui-ConversationHandler</loc>
+    <loc>https://developers.nlx.ai/touchpoint-ui-Core-Concepts</loc>
   </url>
   <url>
     <loc>https://developers.nlx.ai/touchpoint-ui-try-live</loc>
   </url>
   <url>
+    <loc>https://developers.nlx.ai/touchpoint-ui-setup</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/touchpoint-voice</loc>
+  </url>
+  <url>
     <loc>https://developers.nlx.ai/touchpoint-ui-api-reference</loc>
   </url>
   <url>
-    <loc>https://developers.nlx.ai/touchpoint-components</loc>
+    <loc>https://developers.nlx.ai/guide-building-custom-components</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/guide-touchpoint-chat-modes</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/touchpoint-ui-theming</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/guide-custom-launch</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/guide-html-components</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/guide-managing-selection</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/guide-advanced-touchpoint-management</loc>
+  </url>
+  <url>
+    <loc>https://developers.nlx.ai/touchpoint-ui-ConversationHandler</loc>
   </url>
   <url>
     <loc>https://developers.nlx.ai/touchpoint-Typography</loc>
