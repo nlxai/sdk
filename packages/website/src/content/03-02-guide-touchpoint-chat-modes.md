@@ -34,6 +34,7 @@ const touchpointOptions = {
     headers: {
       "nlx-api-key": "YOUR_API_KEY",
     },
+    languageCode: "en-US",
   },
   chatMode: false, // Explicitly set to false or omit (default is false)
   // Add other common options like theme, brandIcon etc. if needed
@@ -59,6 +60,7 @@ const touchpointOptions = {
     headers: {
       "nlx-api-key": "YOUR_API_KEY",
     },
+    languageCode: "en-US",
   },
   chatMode: false, // Assistant style
   userMessageBubble: true, // Display user messages in bubbles
@@ -91,6 +93,7 @@ const touchpointOptions = {
     headers: {
       "nlx-api-key": "YOUR_API_KEY",
     },
+    languageCode: "en-US",
   },
   chatMode: true, // Enable classic chat mode
   // Add other common options like theme, brandIcon etc. if needed
@@ -116,6 +119,7 @@ const touchpointOptions = {
     headers: {
       "nlx-api-key": "YOUR_API_KEY",
     },
+    languageCode: "en-US",
   },
   chatMode: true, // Enable classic chat mode
   userMessageBubble: true, // Display user messages in bubbles
