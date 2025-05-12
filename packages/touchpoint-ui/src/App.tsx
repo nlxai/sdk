@@ -164,6 +164,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     };
   }, [lastBotResponse]);
 
+  const [voiceActive, setVoiceActive] = useState<boolean>(false);
+
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({});
 
   const customModalities = props.customModalities ?? {};
@@ -210,6 +212,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               reset={() => {
                 handler.reset({ clearResponses: true });
                 handler.sendWelcomeIntent();
+                setVoiceActive(false);
               }}
             />
             {isSettingsOpen ? (
@@ -272,7 +275,13 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                 />
               </>
             ) : (
-              <FullscreenVoice handler={handler} className="flex-grow" />
+              <FullscreenVoice
+                active={voiceActive}
+                setActive={setVoiceActive}
+                handler={handler}
+                colorMode={colorMode}
+                className="flex-grow"
+              />
             )}
           </div>
         </CustomPropertiesContainer>
