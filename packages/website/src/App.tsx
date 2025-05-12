@@ -3,11 +3,15 @@ import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Nav, MobileNav } from "./components/Nav";
 import { ContentRoutes } from "./routes";
+import { Touchpoint } from "./components/Touchpoint"; 
+import { TouchpointProvider } from "./contexts/TouchpointContext"; // Import the provider
+
 
 export const App: FC<unknown> = () => {
   const [mobileMenuExpanded, setMobileMenuExpanded] = useState<boolean>(false);
 
   return (
+    <TouchpointProvider>
     <div className="flex w-full flex-col text-primary-80">
       <Header
         mobileMenuExpanded={mobileMenuExpanded}
@@ -25,7 +29,9 @@ export const App: FC<unknown> = () => {
           </article>
         </div>
       </div>
+      <Touchpoint />
     </div>
+    </TouchpointProvider>
   );
 };
 
