@@ -1,6 +1,8 @@
 import { type FC, useEffect, useRef } from "react";
 import type { TouchpointInstance, TouchpointConfiguration } from '@nlxai/touchpoint-ui';
-import { useTouchpoint } from "../contexts/TouchpointContext"; // Import the hook
+import type { ConversationHandler, Response as Message } from '@nlxai/chat-core';
+import { useTouchpoint } from "../contexts/TouchpointContext"; 
+import { useNavigate, type NavigateFunction } from 'react-router-dom';
 
 const touchpointConfigBase: Omit<TouchpointConfiguration, 'customModalities'> = {
     config: {
@@ -12,10 +14,33 @@ const touchpointConfigBase: Omit<TouchpointConfiguration, 'customModalities'> = 
     },
 };
 
+
 export const Touchpoint: FC<unknown> = () => {
     const { setInstance } = useTouchpoint(); // Get setInstance from context
     const instanceRef = useRef<TouchpointInstance | null>(null);
-  
+    const navigate = useNavigate(); // Hook for navigation
+
+
+    const redirectPage = (history, message: any) => {
+        console.log("Message received:", message);
+        // Only process if we have a new bot message
+        if (!message || message.type !== "bot") return;
+        const modalities = message.payload?.modalities;
+        if (!modalities) return;
+        if (modalities.RedirectPage) {
+            const redirectPayload = modalities.RedirectPage as { targetUrl?: string };
+            console.log("RedirectPage payload:", redirectPayload);
+            if (redirectPayload && typeof redirectPayload.targetUrl === 'string') {
+                console.log(`NLX Modality "RedirectPage": Navigating to ${redirectPayload.targetUrl}`);
+                navigate(redirectPayload.targetUrl);
+            } else {
+                console.warn("RedirectPage modality received but targetUrl is missing or not a string:", redirectPayload);
+            }
+        }
+      };
+      
+
+
     useEffect(() => {
       let isMounted = true;
   
@@ -49,8 +74,9 @@ export const Touchpoint: FC<unknown> = () => {
                 const newInstance = await create(touchpointConfig);
     
                 if (isMounted) {
-                instanceRef.current = newInstance;
-                setInstance(newInstance);
+                    instanceRef.current = newInstance;
+                    setInstance(newInstance);
+                    newInstance.conversationHandler.subscribe(redirectPage);
                 }
             } catch (error) {
                 console.error("Failed to initialize Touchpoint:", error);
