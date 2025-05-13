@@ -1,9 +1,8 @@
 import { type FC, useEffect, useRef } from "react";
-import { create, IconButton, TouchpointInstance, TouchpointConfiguration} from '@nlxai/touchpoint-ui';
-import { CarouselExampleComponent, ProductCardComponent, ButtonExampleComponent, IconButtonExampleComponent, DateInputExampleComponent  } from './TouchpointComponents/TouchpointBasicExamples';
+import type { TouchpointInstance, TouchpointConfiguration } from '@nlxai/touchpoint-ui';
 import { useTouchpoint } from "../contexts/TouchpointContext"; // Import the hook
 
-const touchpointConfig : TouchpointConfiguration = {
+const touchpointConfigBase: Omit<TouchpointConfiguration, 'customModalities'> = {
     config: {
         applicationUrl: "https://bots.dev.studio.nlx.ai/c/Z5PChFXUCcLUfu2cqBMA8/JUSIkZ2CY9Yb2pFbwbYvB",
         headers: {
@@ -11,16 +10,7 @@ const touchpointConfig : TouchpointConfiguration = {
         },
         languageCode: "en-US"
     },
-    customModalities: {
-        ProductCard: ProductCardComponent,
-        CarouselExample: CarouselExampleComponent,
-        ButtonExample: ButtonExampleComponent,
-        IconButtonExample: IconButtonExampleComponent,
-        DateInputExample: DateInputExampleComponent,
-    }
 };
-
-
 
 export const Touchpoint: FC<unknown> = () => {
     const { setInstance } = useTouchpoint(); // Get setInstance from context
@@ -31,8 +21,8 @@ export const Touchpoint: FC<unknown> = () => {
   
       const initTouchpoint = async () => {
         // Prevent initialization if critical config is missing
-        if (!touchpointConfig.config.applicationUrl || touchpointConfig.config.applicationUrl === "YOUR_APPLICATION_URL" ||
-            !touchpointConfig.config.headers["nlx-api-key"] || touchpointConfig.config.headers["nlx-api-key"] === "YOUR_API_KEY") {
+        if (!touchpointConfigBase.config.applicationUrl || touchpointConfigBase.config.applicationUrl === "YOUR_APPLICATION_URL" ||
+            !touchpointConfigBase.config.headers["nlx-api-key"] || touchpointConfigBase.config.headers["nlx-api-key"] === "YOUR_API_KEY") {
           console.warn("Touchpoint applicationUrl or nlx-api-key is not configured. Skipping Touchpoint initialization.");
           if (isMounted) {
             setInstance(null);
@@ -40,18 +30,39 @@ export const Touchpoint: FC<unknown> = () => {
           return;
         }
   
-        try {
-          const newInstance = await create(touchpointConfig);
-  
-          if (isMounted) {
-            instanceRef.current = newInstance;
-            setInstance(newInstance);
-          }
-        } catch (error) {
-          console.error("Failed to initialize Touchpoint:", error);
-          if (isMounted) {
-            setInstance(null);
-          }
+        if (typeof window !== 'undefined') { // Ensure this runs only on the client
+            try {
+                const { create } = await import('@nlxai/touchpoint-ui');
+                const { ProductCardComponent, CarouselExampleComponent, ButtonExampleComponent, IconButtonExampleComponent, DateInputExampleComponent } = await import('./TouchpointComponents/TouchpointBasicExamples');
+
+                const touchpointConfig: TouchpointConfiguration = {
+                    ...touchpointConfigBase,
+                    customModalities: {
+                        ProductCard: ProductCardComponent,
+                        CarouselExample: CarouselExampleComponent,
+                        ButtonExample: ButtonExampleComponent,
+                        IconButtonExample: IconButtonExampleComponent,
+                        DateInputExample: DateInputExampleComponent,
+                    }
+                };
+
+                const newInstance = await create(touchpointConfig);
+    
+                if (isMounted) {
+                instanceRef.current = newInstance;
+                setInstance(newInstance);
+                }
+            } catch (error) {
+                console.error("Failed to initialize Touchpoint:", error);
+                if (isMounted) {
+                setInstance(null);
+                }
+            }
+        } else {
+            // In SSR, Touchpoint won't be initialized.
+            if (isMounted) {
+                setInstance(null);
+            }
         }
       };
   

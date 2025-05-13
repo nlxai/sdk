@@ -1,3 +1,4 @@
+- [Date Input Example](#date-input-example)
 - [About](#about)
 - [Properties](#properties)
 - [Import and Basic Usage](#import-and-basic-usage)
@@ -7,9 +8,13 @@
   - [Example Date Input Component](#example-date-input-component)
 - [Related Documents](#related-documents)
 
-### Date Input Example
+## Date Input Example
 
-<img src="/images/Touchpoint-Date-Input.png" alt="Date Input Example" style="max-width: 40%;">
+<div class="launch-touchpoint-button"
+     data-page-title="DateInput"
+     data-button-label="Launch Touchpoint Example"
+     data-description="Click to see this feature in action with Touchpoint.">
+</div>
 
 ## About
 

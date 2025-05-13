@@ -1,3 +1,4 @@
+- [Icon Button Example](#icon-button-example)
 - [About](#about)
 - [Icon Properties](#icon-properties)
 - [Import and Basic Usage](#import-and-basic-usage)
@@ -5,9 +6,19 @@
 - [Available Icons](#available-icons)
 - [Related Components](#related-components)
 
+
+## Icon Button Example
+
+<div class="launch-touchpoint-button"
+     data-page-title="Icons"
+     data-button-label="Launch Touchpoint Example"
+     data-description="Click to see this feature in action with Touchpoint.">
+</div>
+
 ## About
 
 Touchpoint provides built-in icons that integrate with buttons and custom components. Each icon maintains consistent styling and accessibility features.
+
 
 ## Icon Properties
 

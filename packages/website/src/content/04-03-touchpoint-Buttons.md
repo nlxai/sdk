@@ -11,7 +11,11 @@
 
 ### Text Button Example
 
-<img src="/images/Touchpoint-Text-Button.png" alt="Text Button with Left Arrow Icon" style="max-width: 40%;">
+<div class="launch-touchpoint-button"
+     data-page-title="Buttons"
+     data-button-label="Launch Touchpoint Example"
+     data-description="Click to see this feature in action with Touchpoint.">
+</div>
 
 ## About
 

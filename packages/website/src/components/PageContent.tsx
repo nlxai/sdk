@@ -8,6 +8,7 @@ import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 
 import { CheckIcon, ContentCopyIcon } from "./Icons";
+import { LaunchTouchpointButton } from "./LaunchTouchpointButton"; // Added import
 
 const CopyToClipboardButton: FC<{ text: string; className?: string }> = ({
   text,
@@ -112,6 +113,49 @@ export const PageContent: FC<{ md: string; className?: string }> = ({
                 )}
               </>
             );
+          },
+          div: ({ node, className: divClassName, children, ...props }: any) => {
+            if (divClassName === 'launch-touchpoint-button') {
+              const pageTitle = props['data-page-title'];
+              const buttonLabel = props['data-button-label'];
+              const intentName = props['data-intent-name'];
+              const description = props['data-description'];
+      
+              if (!pageTitle) {
+                console.warn(
+                  "Markdown <div class='launch-touchpoint-button'> is missing 'data-page-title' attribute.",
+                );
+                if (import.meta.env.DEV) { // Using Vite's way to check for development mode
+                  return (
+                    <div style={{ color: 'red', padding: '10px', border: '1px dashed red', margin: '10px 0', borderRadius: 'var(--inner-border-radius)' }}>
+                      <b>Markdown Error:</b> The launch-touchpoint-button div is missing <code>data-page-title</code>.
+                    </div>
+                  );
+                }
+                return null; // Don't render anything in production if title is missing
+              }
+      
+              const additionalContext: Record<string, any> = {};
+              for (const key in props) {
+                if (key.startsWith('data-ctx-')) {
+                  // Convert data-ctx-foo-bar to fooBar for the context object keys
+                  const contextKey = key.substring(9).replace(/-([a-z])/g, (match, letter) => letter.toUpperCase());
+                  additionalContext[contextKey] = props[key];
+                }
+              }
+      
+              return (
+                <LaunchTouchpointButton
+                  pageTitle={pageTitle}
+                  additionalContext={additionalContext}
+                  buttonLabel={buttonLabel}
+                  intentName={intentName}
+                  description={description}
+                />
+              );
+            }
+            // Default rendering for other divs
+            return <div className={divClassName} {...props}>{children}</div>;
           },
         }}
       >

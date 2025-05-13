@@ -1,6 +1,6 @@
+- [Card Example](#card-example)
 - [About](#about)
 - [Component Structure](#component-structure)
-  - [Visualization](#visualization)
 - [Properties](#properties)
   - [CustomCard Properties](#customcard-properties)
   - [CustomCardImageRow Properties](#customcardimagerow-properties)
@@ -8,30 +8,35 @@
 - [Import and Basic Usage](#import-and-basic-usage)
   - [Define onClick](#define-onclick)
 - [Example](#example)
+  - [Example Modality Schema](#example-modality-schema)
+  - [Example Card Component](#example-card-component)
+- [Related Components](#related-components)
 
-### Carousel Example
+## Card Example
 
-<img src="/images/Touchpoint-Carousel.png" alt="Carousel Rendered Example" style="max-width: 40%;">
+<div class="launch-touchpoint-button"
+     data-page-title="Custom Cards"
+     data-button-label="Launch Touchpoint Example"
+     data-description="Click to see this feature in action with Touchpoint.">
+</div>
 
 ## About
 
-The Custom Cards system provides a structured way to present information in your chat interface. The system consists of four components that work together:
+The CustomCard system provides a structured way to present information in your chat interface. The system consists of three components that work together:
 
-- **Carousel** - Top Level component, acts as a container for multiple horizontally scrolled cards. A Carousel has at least 1 CustomCard.
 - **CustomCard** - Primary component, is a 'card' made up of multiple rows. A CustomCard has at least 1 of CustomCardRow or CustomCardImageRow. CustomCard can be used outside Carousel.
 - **CustomCardRow** - Basic component for horizontal layouts within cards. Can have multiple rows in a CustomCard.
 - **CustomCardImageRow** - Basic component for specialized image layouts within a CustomCard.
 
 ## Component Structure
 
-The Custom Cards components follows a nested structure where components build upon each other to create rich layouts. A Carousel container holds one or more CustomCard components. Each CustomCard contains CustomCardRow or CustomCardImageRow components that organize the content within the card.
+The CustomCard components follows a nested structure where components build upon each other to create rich layouts. A Carousel container holds one or more CustomCard components. Each CustomCard contains CustomCardRow or CustomCardImageRow components that organize the content within the card.
 
 ```jsx
 {
   /* Container for all cards*/
 }
-<Carousel>
-  {/* First card */}
+  {/* card */}
   <CustomCard>
     {/* Image content */}
     <CustomCardImageRow>...</CustomCardImageRow>
@@ -40,12 +45,8 @@ The Custom Cards components follows a nested structure where components build up
   </CustomCard>
   {/* Second card */}
   <CustomCard>...</CustomCard>
-</Carousel>;
 ```
 
-### Visualization
-
-<img src="/images/CustomCard-Touchpoint.svg" alt="Custom Card Diagram" style="max-width: 40%;">
 
 ## Properties
 
@@ -87,4 +88,63 @@ Read more details about building Custom Components with Touchpoint in the [Getti
 
 ## Example
 
-In order to use the Carousel and CustomCard components you will need to have a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) defined in your NLX application that is a list of objects.
+In order to use the CustomCard component you will need to have a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) defined in your NLX application that is an objects
+
+
+
+### Example Modality Schema
+
+```json
+{
+    "id": "uuid",
+    "imageUrl": "imageUrl",
+    "leftText": "leftAlignedText",
+    "rightText": "rightAlignedText"
+}
+```
+
+### Example Card Component
+
+The snippet below:
+
+- Uses `import` to import the components to construct the Carousel.
+- Imports React from the Touchpoint package to track user selection state.
+
+```javascript
+import {
+  CustomCard,
+  CustomCardRow,
+  CustomCardImageRow,
+  React,
+} from "@nlxai/touchpoint-ui";
+
+const CarouselExample = ({ data, conversationHandler }) => {
+  const [selected, setSelected] = React.useState(null);
+  const cardData = data;
+  return (
+    <CustomCard
+        key={cardData.id}
+        selected={selected === cardData.id}
+        onClick={() => {
+        setSelected(cardData.id);
+        conversationHandler.sendChoice(cardData.id);
+        }}
+    >
+        <CustomCardImageRow src={cardData.imageUrl} alt="Alt Text" />
+        <CustomCardRow
+        left={<BaseText>{cardData.leftText}</BaseText>}
+        right={<BaseText>{cardData.rightText}</BaseText>}
+        />
+    </CustomCard>
+    )
+  );
+};
+```
+
+## Related Components
+
+- [Typography](/touchpoint-Typography) for Typography components
+- [Icons](/touchpoint-Icons) for visual elements
+- [Theming Touchpoint](/touchpoint-ui-theming)
+- [Building Components without JSX](/guide-html-components)
+- [Managing Selection State](/guide-managing-selection) for handling selection in cards and carousels
