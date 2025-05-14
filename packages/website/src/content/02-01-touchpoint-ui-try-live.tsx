@@ -22,15 +22,19 @@ You can try your applications directly on this configuration widget. Then you ca
 export const snippetContent = ({
   config,
   theme,
+  input,
+  colorMode,
 }: {
   config: Config;
   theme: EditableTheme;
+  input: string;
+  colorMode: "light" | "dark";
 }): string => `
 
 ### Setup snippet
 
 \`\`\`html
-${touchpointUiSetupSnippet({ config, theme })}
+${touchpointUiSetupSnippet({ config, theme, input, colorMode })}
 \`\`\`
 `;
 
@@ -215,6 +219,8 @@ export const Content: FC<unknown> = () => {
         md={snippetContent({
           config,
           theme,
+          input,
+          colorMode,
         })}
       />
     </>
