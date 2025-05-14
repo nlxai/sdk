@@ -65,7 +65,7 @@ const toAccessibilityInformation = (
  */
 export const analyzePageForms = (): PageForms => {
   const interactiveNodes = Array.from(
-    document.querySelectorAll("form input, form textarea, form select"),
+    document.querySelectorAll("input, textarea, select"),
   );
 
   const elementInfo = interactiveNodes.map((element, index) => ({
