@@ -4,7 +4,7 @@ import {
   type Dispatch,
   type SetStateAction,
   type FC,
-  ReactNode,
+  type ReactNode,
 } from "react";
 import { clsx } from "clsx";
 import { type ConversationHandler } from "@nlxai/chat-core";
