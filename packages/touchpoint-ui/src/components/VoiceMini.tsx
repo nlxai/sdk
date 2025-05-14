@@ -1,13 +1,27 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { type ConversationHandler } from "@nlxai/chat-core";
-import { useState, type FC } from "react";
+import { type ReactNode, useState, type FC } from "react";
 
 import { useVoice } from "../voice";
+import { LoaderAnimation } from "./ui/Loader";
 import { Ripple } from "./Ripple";
 import { IconButton } from "./ui/IconButton";
 import { ArrowForward, Mic, Volume } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
 import { SoundCheckUi } from "./FullscreenVoice";
+import { ErrorMessage } from "./ErrorMessage";
+
+const Container: FC<{ children: ReactNode }> = ({ children }) => (
+  <div className="bg-background rounded-outer p-2 max-w-[320px] space-y-4">
+    {children}
+  </div>
+);
+
+const CompactContainer: FC<{ children: ReactNode }> = ({ children }) => (
+  <div className="bg-background rounded-outer p-2 w-fit flex items-center gap-2">
+    {children}
+  </div>
+);
 
 export const VoiceMini: FC<{ handler: ConversationHandler }> = ({
   handler,
@@ -20,64 +34,71 @@ export const VoiceMini: FC<{ handler: ConversationHandler }> = ({
   const { roomState, soundCheck, isUserSpeaking, isApplicationSpeaking } =
     useVoice({
       active,
-      micEnabled: true,
+      micEnabled,
+      speakersEnabled,
       handler,
     });
 
-  return (
-    <div className="bg-background rounded-outer p-2 flex items-center gap-2">
-      {active ? (
-        <>
-          <div className="w-fit relative">
-            {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
-            <IconButton
-              Icon={Mic}
-              label="Microphone"
-              type={
-                roomState === "error"
-                  ? "error"
-                  : micEnabled
-                    ? "activated"
-                    : "ghost"
-              }
-              onClick={() => {
-                setMicEnabled((prev) => !prev);
-              }}
-            />
-          </div>
-          <div className="w-fit relative">
-            {isApplicationSpeaking ? (
-              <Ripple className="rounded-inner" />
-            ) : null}
-            <IconButton
-              Icon={Volume}
-              label="Speakers"
-              type={
-                roomState === "error"
-                  ? "error"
-                  : speakersEnabled
-                    ? "activated"
-                    : "ghost"
-              }
-              onClick={() => {
-                setSpeakersEnabled((prev) => !prev);
-              }}
-            />
-          </div>
-        </>
-      ) : (
-        <div className="max-w-[320px] space-y-4">
-          <SoundCheckUi soundCheck={soundCheck} />
-          <TextButton
-            type="main"
-            label="I'm ready"
-            Icon={ArrowForward}
-            onClick={() => {
-              setActive(true);
-            }}
-          />
+  if (!active) {
+    return (
+      <Container>
+        <SoundCheckUi soundCheck={soundCheck} />
+        <TextButton
+          type="main"
+          label="I'm ready"
+          Icon={ArrowForward}
+          onClick={() => {
+            setActive(true);
+          }}
+        />
+      </Container>
+    );
+  }
+
+  if (roomState === "error") {
+    return (
+      <Container>
+        <ErrorMessage message="Something went wrong" />
+      </Container>
+    );
+  }
+
+  if (roomState === "pending") {
+    return (
+      <Container>
+        <div className="flex items-center p-8">
+          <span className="w-6 h-6 block text-accent">
+            <LoaderAnimation />
+          </span>
         </div>
-      )}
-    </div>
+      </Container>
+    );
+  }
+
+  return (
+    <CompactContainer>
+      <div className="w-fit relative">
+        {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
+        <IconButton
+          Icon={Mic}
+          label="Microphone"
+          type={micEnabled ? "activated" : "ghost"}
+          onClick={() => {
+            setMicEnabled((prev) => !prev);
+          }}
+        />
+      </div>
+      <div className="w-fit relative">
+        {isApplicationSpeaking ? <Ripple className="rounded-inner" /> : null}
+        <IconButton
+          Icon={Volume}
+          label="Speakers"
+          type={speakersEnabled ? "activated" : "ghost"}
+          onClick={() => {
+            setSpeakersEnabled((prev) => !prev);
+          }}
+        />
+      </div>
+    </CompactContainer>
   );
 };

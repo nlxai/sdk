@@ -8,7 +8,7 @@ import {
   type Participant,
   type RemoteTrack,
 } from "livekit-client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDebouncedState } from "@react-hookz/web";
 
 type VoiceRoomState = "inactive" | "pending" | "active" | "error";
@@ -26,18 +26,20 @@ interface VoiceHookReturn {
   soundCheck: null | SoundCheck;
 }
 
+interface UseVoiceParams {
+  active: boolean;
+  micEnabled: boolean;
+  speakersEnabled: boolean;
+  handler: ConversationHandler;
+}
+
 export const useVoice = ({
   active,
   micEnabled,
+  speakersEnabled,
   handler,
-}: {
-  active: boolean;
-  micEnabled: boolean;
-  handler: ConversationHandler;
-}): VoiceHookReturn => {
-  const room = useMemo(() => {
-    return new Room();
-  }, []);
+}: UseVoiceParams): VoiceHookReturn => {
+  const roomRef = useRef<Room | null>(null);
 
   const [roomState, setRoomState] = useState<VoiceRoomState>("inactive");
 
@@ -46,12 +48,28 @@ export const useVoice = ({
     600,
   );
 
+  const audioElementRef = useRef<HTMLMediaElement | null>(null);
+
   const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
 
   useEffect(() => {
-    // TODO: stress-test this before enabling
-    // room.localParticipant.setMicrophoneEnabled(micEnabled);
+    const room = roomRef.current;
+    if (room == null) {
+      return;
+    }
+    room.localParticipant.setMicrophoneEnabled(micEnabled).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.warn(err);
+    });
   }, [micEnabled]);
+
+  useEffect(() => {
+    const audioElement = audioElementRef.current;
+    if (audioElement == null) {
+      return;
+    }
+    audioElement.volume = speakersEnabled ? 1 : 0;
+  }, [speakersEnabled]);
 
   useEffect(() => {
     const checkMic = async (): Promise<void> => {
@@ -89,14 +107,14 @@ export const useVoice = ({
     useDebouncedState<boolean>(false, 600);
 
   const disconnect = useCallback(() => {
-    room.disconnect().catch((err) => {
+    roomRef.current?.disconnect().catch((err) => {
       // eslint-disable-next-line no-console
       console.warn(err);
     });
-  }, [room]);
+    roomRef.current = null;
+  }, []);
 
   useEffect(() => {
-    disconnect();
     const handleBeforeUnload = (): void => {
       disconnect();
     };
@@ -132,12 +150,16 @@ export const useVoice = ({
             // eslint-disable-next-line no-console
             console.warn(err);
           });
+          audioElementRef.current = element;
         }
       };
 
       const handleIsSpeakingChanged = (speaking: boolean): void => {
         setIsUserSpeaking(speaking);
       };
+
+      const room = new Room();
+      roomRef.current = room;
 
       await room.prepareConnection(creds.url, creds.token);
       room.on(RoomEvent.TrackSubscribed, handleTrackSubscribed);
@@ -160,13 +182,7 @@ export const useVoice = ({
         console.warn(err);
       });
     }
-  }, [
-    room,
-    setRoomState,
-    handler,
-    setIsUserSpeaking,
-    setIsApplicationSpeaking,
-  ]);
+  }, [setRoomState, handler, setIsUserSpeaking, setIsApplicationSpeaking]);
 
   useEffect(() => {
     if (!active) {
