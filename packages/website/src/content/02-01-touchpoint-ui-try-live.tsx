@@ -22,15 +22,19 @@ You can try your applications directly on this configuration widget. Then you ca
 export const snippetContent = ({
   config,
   theme,
+  input,
+  colorMode,
 }: {
   config: Config;
   theme: EditableTheme;
+  input: string;
+  colorMode: "light" | "dark";
 }): string => `
 
 ### Setup snippet
 
 \`\`\`html
-${touchpointUiSetupSnippet({ config, theme })}
+${touchpointUiSetupSnippet({ config, theme, input, colorMode })}
 \`\`\`
 `;
 
@@ -128,6 +132,9 @@ export const Content: FC<unknown> = () => {
   const touchpointInstance = useRef<any>();
 
   useEffect(() => {
+    if (!isConfigValid(config)) {
+      return;
+    }
     // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
     import("@nlxai/touchpoint-ui/lib/index.js")
       .then(async ({ create }) => {
@@ -212,6 +219,8 @@ export const Content: FC<unknown> = () => {
         md={snippetContent({
           config,
           theme,
+          input,
+          colorMode,
         })}
       />
     </>

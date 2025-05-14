@@ -565,6 +565,36 @@ export type BotRequestOverride = (
 ) => void;
 
 /**
+ * Voice+ context, type to be defined
+ */
+export type VoicePlusContext = any;
+
+/**
+ * Messages sent to the Voice+ socket
+ */
+export interface VoicePlusMessage {
+  /**
+   * Voice+ context
+   */
+  context: VoicePlusContext;
+}
+
+/**
+ * Handler events
+ */
+export type ConversationHandlerEvent = "voicePlusCommand";
+
+/**
+ * Dictionary of handler methods per event
+ */
+export interface EventHandlers {
+  /**
+   * Voice+ command event handler
+   */
+  voicePlusCommand: (payload: any) => void;
+}
+
+/**
  * A bundle of functions to interact with a conversation, created by {@link createConversation}.
  */
 export interface ConversationHandler {
@@ -668,6 +698,24 @@ export interface ConversationHandler {
    * Optional {@link BotRequestOverride} function used to bypass the bot request and handle them in a custom fashion
    */
   setBotRequestOverride: (override: BotRequestOverride | undefined) => void;
+  /**
+   * Add a listener to one of the handler's custom events
+   */
+  addEventListener: (
+    event: ConversationHandlerEvent,
+    handler: EventHandlers[ConversationHandlerEvent],
+  ) => void;
+  /**
+   * Remove a listener to one of the handler's custom events
+   */
+  removeEventListener: (
+    event: ConversationHandlerEvent,
+    handler: EventHandlers[ConversationHandlerEvent],
+  ) => void;
+  /**
+   * Send voicePlus message
+   */
+  sendVoicePlusContext: (context: VoicePlusContext) => void;
 }
 
 interface InternalState {
@@ -711,6 +759,21 @@ export const shouldReinitialize = (
 };
 
 /**
+ * When the application works through websockets, LiveKit credentials still need to be obtained through HTTP. In order to make this possible,
+ * the frontend reconstructs that HTTP URL.
+ * @param websocketUrl - the websocket URL
+ * @returns httpUrl - the HTTP URL
+ */
+const websocketToHttpUrl = (websocketUrl: string): string => {
+  const isDev = websocketUrl.includes("bots.dev");
+  const url = new URL(websocketUrl);
+  const params = new URLSearchParams(url.search);
+  const channelKey = params.get("channelKey");
+  const deploymentKey = params.get("deploymentKey");
+  return `https://${isDev ? "bots.dev.studio.nlx.ai" : "bots.studio.nlx.ai"}/c/${deploymentKey}/${channelKey}`;
+};
+
+/**
  * Check whether a configuration is value.
  * @param config - Chat configuration
  * @returns isValid - Whether the configuration is valid
@@ -720,6 +783,8 @@ export const isConfigValid = (config: Config): boolean => {
   return applicationUrl.length > 0;
 };
 
+type SetInterval = ReturnType<typeof setInterval>;
+
 /**
  * Call this to create a conversation handler.
  * @param config -
@@ -727,6 +792,12 @@ export const isConfigValid = (config: Config): boolean => {
  */
 export function createConversation(config: Config): ConversationHandler {
   let socket: ReconnectingWebSocket | undefined;
+  let socketMessageQueue: BotRequest[] = [];
+  let socketMessageQueueCheckInterval: SetInterval | null = null;
+
+  let voicePlusSocket: ReconnectingWebSocket | undefined;
+  let voicePlusSocketMessageQueue: VoicePlusMessage[] = [];
+  let voicePlusSocketMessageQueueCheckInterval: SetInterval | null = null;
 
   const applicationUrl = config.applicationUrl ?? config.botUrl ?? "";
 
@@ -736,6 +807,11 @@ export function createConversation(config: Config): ConversationHandler {
       "Since v1.0.0, the language code is no longer added at the end of the application URL. Please remove the modifier (e.g. '-en-US') from the URL, and specify it in the `languageCode` parameter instead.",
     );
   }
+
+  const eventListeners: Record<
+    ConversationHandlerEvent,
+    Array<EventHandlers[ConversationHandlerEvent]>
+  > = { voicePlusCommand: [] };
 
   const initialConversationId = config.conversationId ?? uuid();
 
@@ -826,10 +902,13 @@ export function createConversation(config: Config): ConversationHandler {
 
   let botRequestOverride: BotRequestOverride | undefined;
 
-  let socketMessageQueue: BotRequest[] = [];
-
-  let socketMessageQueueCheckInterval: ReturnType<typeof setInterval> | null =
-    null;
+  const sendVoicePlusMessage = (message: any): void => {
+    if (voicePlusSocket?.readyState === 1) {
+      voicePlusSocket.send(JSON.stringify(message));
+    } else {
+      voicePlusSocketMessageQueue = [...voicePlusSocketMessageQueue, message];
+    }
+  };
 
   const sendToBot = async (body: BotRequest): Promise<unknown> => {
     if (botRequestOverride != null) {
@@ -892,10 +971,20 @@ export function createConversation(config: Config): ConversationHandler {
 
   let subscribers: Subscriber[] = [];
 
-  const checkQueue = async (): Promise<void> => {
+  const checkSocketQueue = async (): Promise<void> => {
     if (socket?.readyState === 1 && socketMessageQueue[0] != null) {
       await sendToBot(socketMessageQueue[0]);
       socketMessageQueue = socketMessageQueue.slice(1);
+    }
+  };
+
+  const checkVoicePlusSocketQueue = (): void => {
+    if (
+      voicePlusSocket?.readyState === 1 &&
+      voicePlusSocketMessageQueue[0] != null
+    ) {
+      sendVoicePlusMessage(voicePlusSocketMessageQueue[0]);
+      voicePlusSocketMessageQueue = voicePlusSocketMessageQueue.slice(1);
     }
   };
 
@@ -911,11 +1000,26 @@ export function createConversation(config: Config): ConversationHandler {
     url.searchParams.set("conversationId", state.conversationId);
     socket = new ReconnectingWebSocket(url.href);
     socketMessageQueueCheckInterval = setInterval(() => {
-      void checkQueue;
+      void checkSocketQueue;
     }, 500);
     socket.onmessage = function (e) {
       if (typeof e?.data === "string") {
         messageResponseHandler(safeJsonParse(e.data));
+      }
+    };
+    url.searchParams.set("voice-plus", "true");
+    voicePlusSocket = new ReconnectingWebSocket(url.href);
+    voicePlusSocketMessageQueueCheckInterval = setInterval(() => {
+      void checkVoicePlusSocketQueue;
+    }, 500);
+    voicePlusSocket.onmessage = (e) => {
+      if (typeof e?.data === "string") {
+        const command = safeJsonParse(e.data);
+        if (command != null) {
+          eventListeners.voicePlusCommand.forEach((listener) => {
+            listener(command);
+          });
+        }
       }
     };
   };
@@ -924,10 +1028,18 @@ export function createConversation(config: Config): ConversationHandler {
     if (socketMessageQueueCheckInterval != null) {
       clearInterval(socketMessageQueueCheckInterval);
     }
+    if (voicePlusSocketMessageQueueCheckInterval != null) {
+      clearInterval(voicePlusSocketMessageQueueCheckInterval);
+    }
     if (socket != null) {
       socket.onmessage = null;
       socket.close();
       socket = undefined;
+    }
+    if (voicePlusSocket != null) {
+      voicePlusSocket.onmessage = null;
+      voicePlusSocket.close();
+      voicePlusSocket = undefined;
     }
   };
 
@@ -1115,7 +1227,10 @@ export function createConversation(config: Config): ConversationHandler {
       return state.languageCode;
     },
     getLiveKitCredentials: async () => {
-      const res = await fetch(`${fullApplicationHttpUrl()}/requestToken`, {
+      const url = isUsingWebSockets()
+        ? websocketToHttpUrl(applicationUrl)
+        : applicationUrl;
+      const res = await fetch(`${url}-${state.languageCode}/requestToken`, {
         method: "POST",
         headers: {
           ...(config.headers ?? {}),
@@ -1183,6 +1298,17 @@ export function createConversation(config: Config): ConversationHandler {
     },
     setBotRequestOverride: (val: BotRequestOverride | undefined) => {
       botRequestOverride = val;
+    },
+    addEventListener: (event, listener) => {
+      eventListeners[event] = [...eventListeners[event], listener];
+    },
+    removeEventListener: (event, listener) => {
+      eventListeners[event] = eventListeners[event].filter(
+        (l) => l !== listener,
+      );
+    },
+    sendVoicePlusContext: (context) => {
+      sendVoicePlusMessage({ context });
     },
   };
 }
