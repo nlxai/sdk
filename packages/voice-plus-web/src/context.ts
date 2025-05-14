@@ -74,6 +74,7 @@ export const analyzePageForms = (): PageForms => {
     element,
   }));
 
+  // TODO: consider using a `Map` here for more performant access
   const formElements: Record<string, Element> = {};
 
   elementInfo.forEach(({ id, element }) => {
