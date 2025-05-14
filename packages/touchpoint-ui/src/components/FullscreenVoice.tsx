@@ -17,7 +17,7 @@ import {
   VolumeOff,
   Play,
 } from "./ui/Icons";
-import { useVoice } from "../voice";
+import { type SoundCheck, useVoice } from "../voice";
 
 interface Props {
   colorMode: ColorMode;
@@ -26,6 +26,51 @@ interface Props {
   active: boolean;
   setActive: Dispatch<SetStateAction<boolean>>;
 }
+
+export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
+  soundCheck,
+}) => {
+  return (
+    <div className="space-y-4 text-primary-80">
+      <p>
+        Get ready to join a voice experience. Please ensure your microphone and
+        speakers are turned on and functioning.
+      </p>
+      {soundCheck != null ? (
+        <>
+          <div className="flex items-center gap-3 text-primary-80">
+            <span
+              className={clsx(
+                "block w-10 h-10 p-1.5 flex-none",
+                soundCheck.micAllowed ? "" : "text-error-primary",
+              )}
+            >
+              {soundCheck.micAllowed ? <Mic /> : <MicOff />}
+            </span>
+            {soundCheck.micAllowed ? "enabled" : "disabled"}
+          </div>
+          <div className="flex items-center gap-3 text-primary-80">
+            <span
+              className={clsx(
+                "block w-10 h-10 p-1.5 flex-none",
+                soundCheck.micAllowed ? "" : "text-error-primary",
+              )}
+            >
+              {soundCheck.micAllowed ? <Volume /> : <VolumeOff />}
+            </span>
+            {soundCheck.micAllowed ? "enabled" : "disabled"}
+          </div>
+          <IconButton
+            label="Play"
+            Icon={Play}
+            onClick={() => {}}
+            type="ghost"
+          />
+        </>
+      ) : null}
+    </div>
+  );
+};
 
 export const FullscreenVoice: FC<Props> = ({
   handler,
@@ -86,44 +131,7 @@ export const FullscreenVoice: FC<Props> = ({
         )
       ) : (
         <div className="p-4 h-full flex flex-col justify-between">
-          <div className="space-y-4">
-            <p>
-              Get ready to join a voice experience. Please ensure your
-              microphone and speakers are turned on and functioning.
-            </p>
-            {soundCheck != null ? (
-              <>
-                <div className="flex items-center gap-3 text-primary-80">
-                  <span
-                    className={clsx(
-                      "block w-10 h-10 p-1.5 flex-none",
-                      soundCheck.micAllowed ? "" : "text-error-primary",
-                    )}
-                  >
-                    {soundCheck.micAllowed ? <Mic /> : <MicOff />}
-                  </span>
-                  {soundCheck.micAllowed ? "enabled" : "disabled"}
-                </div>
-                <div className="flex items-center gap-3 text-primary-80">
-                  <span
-                    className={clsx(
-                      "block w-10 h-10 p-1.5 flex-none",
-                      soundCheck.micAllowed ? "" : "text-error-primary",
-                    )}
-                  >
-                    {soundCheck.micAllowed ? <Volume /> : <VolumeOff />}
-                  </span>
-                  {soundCheck.micAllowed ? "enabled" : "disabled"}
-                </div>
-                <IconButton
-                  label="Play"
-                  Icon={Play}
-                  onClick={() => {}}
-                  type="ghost"
-                />
-              </>
-            ) : null}
-          </div>
+          <SoundCheckUi soundCheck={soundCheck} />
           <TextButton
             type="main"
             label="I'm ready"

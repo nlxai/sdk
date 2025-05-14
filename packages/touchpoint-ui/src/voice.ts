@@ -13,7 +13,7 @@ import { useDebouncedState } from "@react-hookz/web";
 
 type VoiceRoomState = "inactive" | "pending" | "active" | "error";
 
-interface SoundCheck {
+export interface SoundCheck {
   micAllowed: boolean;
   micNames: string[];
   speakerNames: string[];
