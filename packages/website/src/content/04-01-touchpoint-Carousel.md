@@ -14,6 +14,7 @@
 - [Related Components](#related-components)
 
 ## Carousel Example
+
 <div class="launch-touchpoint-button"
      data-page-title="Carousel"
      data-button-label="Launch Touchpoint Example"

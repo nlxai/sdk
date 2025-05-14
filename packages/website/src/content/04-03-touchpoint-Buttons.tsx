@@ -2,7 +2,7 @@ import { type FC } from "react";
 
 import { PageContent } from "../components/PageContent";
 import buttonContent from "./04-03-touchpoint-Buttons.md?raw";
-import { LaunchTouchpointButton } from "../components/LaunchTouchpointButton"; 
+import { LaunchTouchpointButton } from "../components/LaunchTouchpointButton";
 
 export const content = buttonContent;
 

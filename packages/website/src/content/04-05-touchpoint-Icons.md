@@ -6,7 +6,6 @@
 - [Available Icons](#available-icons)
 - [Related Components](#related-components)
 
-
 ## Icon Button Example
 
 <div class="launch-touchpoint-button"
@@ -18,7 +17,6 @@
 ## About
 
 Touchpoint provides built-in icons that integrate with buttons and custom components. Each icon maintains consistent styling and accessibility features.
-
 
 ## Icon Properties
 

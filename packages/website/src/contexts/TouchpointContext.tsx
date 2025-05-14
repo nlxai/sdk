@@ -1,5 +1,15 @@
-import { createContext, useContext, useState, useMemo, type ReactNode, type FC } from "react";
-import type { TouchpointInstance, ConversationHandler } from "@nlxai/touchpoint-ui";
+import {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  type ReactNode,
+  type FC,
+} from "react";
+import type {
+  TouchpointInstance,
+  ConversationHandler,
+} from "@nlxai/touchpoint-ui";
 
 interface TouchpointContextType {
   instance: TouchpointInstance | null;
@@ -8,20 +18,33 @@ interface TouchpointContextType {
   isTouchpointReady: boolean;
 }
 
-const TouchpointContext = createContext<TouchpointContextType | undefined>(undefined);
+const TouchpointContext = createContext<TouchpointContextType | undefined>(
+  undefined,
+);
 
-export const TouchpointProvider: FC<{ children: ReactNode }> = ({ children }) => {
+export const TouchpointProvider: FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [instance, setInstance] = useState<TouchpointInstance | null>(null);
 
-  const conversationHandler = useMemo(() => instance?.conversationHandler || null, [instance]);
-  const isTouchpointReady = useMemo(() => instance !== null && conversationHandler !== null, [instance, conversationHandler]);
+  const conversationHandler = useMemo(
+    () => instance?.conversationHandler || null,
+    [instance],
+  );
+  const isTouchpointReady = useMemo(
+    () => instance !== null && conversationHandler !== null,
+    [instance, conversationHandler],
+  );
 
-  const contextValue = useMemo(() => ({
-    instance,
-    setInstance,
-    conversationHandler,
-    isTouchpointReady,
-  }), [instance, conversationHandler, isTouchpointReady]);
+  const contextValue = useMemo(
+    () => ({
+      instance,
+      setInstance,
+      conversationHandler,
+      isTouchpointReady,
+    }),
+    [instance, conversationHandler, isTouchpointReady],
+  );
 
   return (
     <TouchpointContext.Provider value={contextValue}>

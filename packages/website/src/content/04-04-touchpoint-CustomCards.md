@@ -36,17 +36,20 @@ The CustomCard components follows a nested structure where components build upon
 {
   /* Container for all cards*/
 }
-  {/* card */}
-  <CustomCard>
-    {/* Image content */}
-    <CustomCardImageRow>...</CustomCardImageRow>
-    {/* Text content */}
-    <CustomCardRow>...</CustomCardRow>
-  </CustomCard>
-  {/* Second card */}
-  <CustomCard>...</CustomCard>
+{
+  /* card */
+}
+<CustomCard>
+  {/* Image content */}
+  <CustomCardImageRow>...</CustomCardImageRow>
+  {/* Text content */}
+  <CustomCardRow>...</CustomCardRow>
+</CustomCard>;
+{
+  /* Second card */
+}
+<CustomCard>...</CustomCard>;
 ```
-
 
 ## Properties
 
@@ -90,16 +93,14 @@ Read more details about building Custom Components with Touchpoint in the [Getti
 
 In order to use the CustomCard component you will need to have a [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) defined in your NLX application that is an objects
 
-
-
 ### Example Modality Schema
 
 ```json
 {
-    "id": "uuid",
-    "imageUrl": "imageUrl",
-    "leftText": "leftAlignedText",
-    "rightText": "rightAlignedText"
+  "id": "uuid",
+  "imageUrl": "imageUrl",
+  "leftText": "leftAlignedText",
+  "rightText": "rightAlignedText"
 }
 ```
 
