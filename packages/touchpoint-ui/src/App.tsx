@@ -56,9 +56,7 @@ export interface AppRef {
   getConversationHandler: () => ConversationHandler;
 }
 
-const ExperimentalVoicePlus: FC<{ handler: ConversationHandler }> = ({
-  handler,
-}) => {
+const VoiceMini: FC<{ handler: ConversationHandler }> = ({ handler }) => {
   const [active, setActive] = useState<boolean>(false);
 
   const { roomState, isUserSpeaking } = useVoice({
@@ -209,14 +207,14 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     return null;
   }
 
-  if (input === "experimentalVoicePlus") {
+  if (input === "voiceMini") {
     return (
       <CustomPropertiesContainer
         theme={props.theme}
         colorMode={colorMode}
         className="fixed bottom-2 right-2 w-fit"
       >
-        <ExperimentalVoicePlus handler={handler} />
+        <VoiceMini handler={handler} />
       </CustomPropertiesContainer>
     );
   }

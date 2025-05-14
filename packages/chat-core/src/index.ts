@@ -759,6 +759,21 @@ export const shouldReinitialize = (
 };
 
 /**
+ * When the application works through websockets, LiveKit credentials still need to be obtained through HTTP. In order to make this possible,
+ * the frontend reconstructs that HTTP URL.
+ * @param websocketUrl - the websocket URL
+ * @returns httpUrl - the HTTP URL
+ */
+const websocketToHttpUrl = (websocketUrl: string): string => {
+  const isDev = websocketUrl.includes("bots.dev");
+  const url = new URL(websocketUrl);
+  const params = new URLSearchParams(url.search);
+  const channelKey = params.get("channelKey");
+  const deploymentKey = params.get("deploymentKey");
+  return `https://${isDev ? "bots.dev.studio.nlx.ai" : "bots.studio.nlx.ai"}/c/${deploymentKey}/${channelKey}`;
+};
+
+/**
  * Check whether a configuration is value.
  * @param config - Chat configuration
  * @returns isValid - Whether the configuration is valid
@@ -1212,7 +1227,10 @@ export function createConversation(config: Config): ConversationHandler {
       return state.languageCode;
     },
     getLiveKitCredentials: async () => {
-      const res = await fetch(`${fullApplicationHttpUrl()}/requestToken`, {
+      const url = isUsingWebSockets()
+        ? websocketToHttpUrl(applicationUrl)
+        : applicationUrl;
+      const res = await fetch(`${url}-${state.languageCode}/requestToken`, {
         method: "POST",
         headers: {
           ...(config.headers ?? {}),
