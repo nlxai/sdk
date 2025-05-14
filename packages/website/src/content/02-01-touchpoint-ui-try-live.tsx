@@ -128,6 +128,9 @@ export const Content: FC<unknown> = () => {
   const touchpointInstance = useRef<any>();
 
   useEffect(() => {
+    if (!isConfigValid(config)) {
+      return;
+    }
     // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
     import("@nlxai/touchpoint-ui/lib/index.js")
       .then(async ({ create }) => {

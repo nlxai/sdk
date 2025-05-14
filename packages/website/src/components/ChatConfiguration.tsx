@@ -101,6 +101,19 @@ export const ConfigEditor: FC<{
           }}
         />
       </Labeled>
+      <Labeled label="User ID">
+        <input
+          type="text"
+          placeholder="Enter user ID"
+          className={inputClass}
+          value={config.userId ?? ""}
+          onInput={(ev: any) => {
+            props.onChange({
+              userId: ev.target.value === "" ? undefined : ev.target.value,
+            });
+          }}
+        />
+      </Labeled>
       <Labeled label="Language code">
         <input
           type="text"
