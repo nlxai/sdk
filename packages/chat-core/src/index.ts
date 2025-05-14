@@ -591,7 +591,7 @@ export interface EventHandlers {
   /**
    * Voice+ command event handler
    */
-  voicePlusCommand: (payload: any) => {};
+  voicePlusCommand: (payload: any) => void;
 }
 
 /**
@@ -795,7 +795,7 @@ export function createConversation(config: Config): ConversationHandler {
 
   const eventListeners: Record<
     ConversationHandlerEvent,
-    EventHandlers[ConversationHandlerEvent][]
+    Array<EventHandlers[ConversationHandlerEvent]>
   > = { voicePlusCommand: [] };
 
   const initialConversationId = config.conversationId ?? uuid();
@@ -887,7 +887,7 @@ export function createConversation(config: Config): ConversationHandler {
 
   let botRequestOverride: BotRequestOverride | undefined;
 
-  const sendVoicePlusMessage = (message: any) => {
+  const sendVoicePlusMessage = (message: any): void => {
     if (voicePlusSocket?.readyState === 1) {
       voicePlusSocket.send(JSON.stringify(message));
     } else {
@@ -1001,7 +1001,7 @@ export function createConversation(config: Config): ConversationHandler {
       if (typeof e?.data === "string") {
         const command = safeJsonParse(e.data);
         if (command != null) {
-          eventListeners["voicePlusCommand"].forEach((listener) => {
+          eventListeners.voicePlusCommand.forEach((listener) => {
             listener(command);
           });
         }
@@ -1012,6 +1012,9 @@ export function createConversation(config: Config): ConversationHandler {
   const teardownWebsocket = (): void => {
     if (socketMessageQueueCheckInterval != null) {
       clearInterval(socketMessageQueueCheckInterval);
+    }
+    if (voicePlusSocketMessageQueueCheckInterval != null) {
+      clearInterval(voicePlusSocketMessageQueueCheckInterval);
     }
     if (socket != null) {
       socket.onmessage = null;
