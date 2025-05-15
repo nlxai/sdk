@@ -783,7 +783,7 @@ export const isConfigValid = (config: Config): boolean => {
   return applicationUrl.length > 0;
 };
 
-type SetInterval = ReturnType<typeof setInterval>;
+type Timer = ReturnType<typeof setInterval>;
 
 /**
  * Call this to create a conversation handler.
@@ -793,11 +793,11 @@ type SetInterval = ReturnType<typeof setInterval>;
 export function createConversation(config: Config): ConversationHandler {
   let socket: ReconnectingWebSocket | undefined;
   let socketMessageQueue: BotRequest[] = [];
-  let socketMessageQueueCheckInterval: SetInterval | null = null;
+  let socketMessageQueueCheckInterval: Timer | null = null;
 
   let voicePlusSocket: ReconnectingWebSocket | undefined;
   let voicePlusSocketMessageQueue: VoicePlusMessage[] = [];
-  let voicePlusSocketMessageQueueCheckInterval: SetInterval | null = null;
+  let voicePlusSocketMessageQueueCheckInterval: Timer | null = null;
 
   const applicationUrl = config.applicationUrl ?? config.botUrl ?? "";
 
