@@ -35,6 +35,8 @@ export const touchpointUiSetupSnippet = ({
   config,
   theme,
   customModalitiesExample = false,
+  input = "text",
+  colorMode = "light",
 }: {
   config: Config;
   theme?: {
@@ -42,6 +44,8 @@ export const touchpointUiSetupSnippet = ({
     accent: string;
   };
   customModalitiesExample?: boolean;
+  input: string;
+  colorMode: "light" | "dark";
 }): string => {
   const renderCustomModalitiesExample = customModalitiesExample ?? false;
   return `<!-- Touchpoint sample HTML -->
@@ -75,8 +79,11 @@ export const touchpointUiSetupSnippet = ({
                 "REPLACE_WITH_API_KEY",
               )}"
             },
-            languageCode: "${config.languageCode}"
-          },${
+            languageCode: "${config.languageCode}",
+            userId: "${defaultTo(config.userId, "REPLACE_WITH_USER_ID")}"
+          },
+          colorMode: "${colorMode}",
+          input: "${input}",${
             theme != null
               ? `
           theme: ${JSON.stringify(theme)}`
