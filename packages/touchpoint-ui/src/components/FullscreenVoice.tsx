@@ -22,7 +22,6 @@ import {
   MicOff,
   Volume,
   VolumeOff,
-  Play,
 } from "./ui/Icons";
 import { type SoundCheck, useVoice } from "../voice";
 
@@ -45,34 +44,38 @@ export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
       </p>
       {soundCheck != null ? (
         <>
-          <div className="flex items-center gap-3 text-primary-80">
+          <div className="flex items-center gap-2 text-primary-80">
             <span
               className={clsx(
-                "block w-10 h-10 p-1.5 flex-none",
+                "block w-10 h-10 p-2 flex-none",
                 soundCheck.micAllowed ? "" : "text-error-primary",
               )}
             >
               {soundCheck.micAllowed ? <Mic /> : <MicOff />}
             </span>
-            {soundCheck.micAllowed ? "enabled" : "disabled"}
+            <input
+              className="p-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
+              value={soundCheck.micNames[0]}
+              placeholder="Mic not found"
+              disabled
+            />
           </div>
-          <div className="flex items-center gap-3 text-primary-80">
+          <div className="flex items-center gap-2 text-primary-80">
             <span
               className={clsx(
-                "block w-10 h-10 p-1.5 flex-none",
-                soundCheck.micAllowed ? "" : "text-error-primary",
+                "block w-10 h-10 p-2 flex-none",
+                soundCheck.speakerNames[0] != null ? "" : "text-error-primary",
               )}
             >
-              {soundCheck.micAllowed ? <Volume /> : <VolumeOff />}
+              {soundCheck.speakerNames[0] != null ? <Volume /> : <VolumeOff />}
             </span>
-            {soundCheck.micAllowed ? "enabled" : "disabled"}
+            <input
+              className="p-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
+              value={soundCheck.speakerNames[0]}
+              placeholder="Speaker not found"
+              disabled
+            />
           </div>
-          <IconButton
-            label="Play"
-            Icon={Play}
-            onClick={() => {}}
-            type="ghost"
-          />
         </>
       ) : null}
     </div>

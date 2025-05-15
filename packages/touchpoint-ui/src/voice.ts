@@ -81,10 +81,10 @@ export const useVoice = ({
         setSoundCheck({
           micAllowed: true,
           micNames: devices
-            .filter((device) => device.kind === "audiooutput")
+            .filter((device) => device.kind === "audioinput")
             .map((device) => device.label),
           speakerNames: devices
-            .filter((device) => device.kind === "audioinput")
+            .filter((device) => device.kind === "audiooutput")
             .map((device) => device.label),
         });
       } catch (err) {
