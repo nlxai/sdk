@@ -1000,7 +1000,10 @@ export function createConversation(config: Config): ConversationHandler {
     url.searchParams.set("conversationId", state.conversationId);
     socket = new ReconnectingWebSocket(url.href);
     socketMessageQueueCheckInterval = setInterval(() => {
-      void checkSocketQueue;
+      checkSocketQueue().catch((err) => {
+        // eslint-disable-next-line no-console
+        console.warn(err);
+      });
     }, 500);
     socket.onmessage = function (e) {
       if (typeof e?.data === "string") {
@@ -1010,7 +1013,7 @@ export function createConversation(config: Config): ConversationHandler {
     url.searchParams.set("voice-plus", "true");
     voicePlusSocket = new ReconnectingWebSocket(url.href);
     voicePlusSocketMessageQueueCheckInterval = setInterval(() => {
-      void checkVoicePlusSocketQueue;
+      checkVoicePlusSocketQueue();
     }, 500);
     voicePlusSocket.onmessage = (e) => {
       if (typeof e?.data === "string") {
