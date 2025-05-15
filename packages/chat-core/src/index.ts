@@ -1000,10 +1000,7 @@ export function createConversation(config: Config): ConversationHandler {
     url.searchParams.set("conversationId", state.conversationId);
     socket = new ReconnectingWebSocket(url.href);
     socketMessageQueueCheckInterval = setInterval(() => {
-      checkSocketQueue().catch((err) => {
-        // eslint-disable-next-line no-console
-        console.warn(err);
-      });
+      void checkSocketQueue();
     }, 500);
     socket.onmessage = function (e) {
       if (typeof e?.data === "string") {

@@ -147,10 +147,7 @@ export const useVoice = ({
       const handleTrackSubscribed = (track: RemoteTrack): void => {
         if (track.kind === Track.Kind.Audio) {
           const element = track.attach();
-          element.play().catch((err) => {
-            // eslint-disable-next-line no-console
-            console.warn(err);
-          });
+          void element.play();
           audioElementRef.current = element;
         }
       };
