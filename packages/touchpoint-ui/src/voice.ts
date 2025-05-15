@@ -57,10 +57,11 @@ export const useVoice = ({
     if (room == null) {
       return;
     }
-    room.localParticipant.setMicrophoneEnabled(micEnabled).catch((err) => {
+    // TODO: evaluate how this can be added reliably
+    /* room.localParticipant.setMicrophoneEnabled(micEnabled).catch((err) => {
       // eslint-disable-next-line no-console
       console.warn(err);
-    });
+    }); */
   }, [micEnabled]);
 
   useEffect(() => {
@@ -68,7 +69,8 @@ export const useVoice = ({
     if (audioElement == null) {
       return;
     }
-    audioElement.volume = speakersEnabled ? 1 : 0;
+    // TODO: evaluate how this can be added reliably
+    // audioElement.volume = speakersEnabled ? 1 : 0;
   }, [speakersEnabled]);
 
   useEffect(() => {
