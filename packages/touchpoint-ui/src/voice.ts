@@ -52,26 +52,25 @@ export const useVoice = ({
 
   const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
 
-  useEffect(() => {
+  // TODO: evaluate how this can be added reliably
+  /* useEffect(() => {
     const room = roomRef.current;
     if (room == null) {
       return;
     }
-    // TODO: evaluate how this can be added reliably
-    /* room.localParticipant.setMicrophoneEnabled(micEnabled).catch((err) => {
-      // eslint-disable-next-line no-console
+    room.localParticipant.setMicrophoneEnabled(micEnabled).catch((err) => {
       console.warn(err);
-    }); */
-  }, [micEnabled]);
+    });
+  }, [micEnabled]); */
 
-  useEffect(() => {
+  // TODO: evaluate how this can be added reliably
+  /* useEffect(() => {
     const audioElement = audioElementRef.current;
     if (audioElement == null) {
       return;
     }
-    // TODO: evaluate how this can be added reliably
-    // audioElement.volume = speakersEnabled ? 1 : 0;
-  }, [speakersEnabled]);
+    audioElement.volume = speakersEnabled ? 1 : 0;
+  }, [speakersEnabled]); */
 
   useEffect(() => {
     const checkMic = async (): Promise<void> => {
