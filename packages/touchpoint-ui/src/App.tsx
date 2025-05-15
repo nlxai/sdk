@@ -33,7 +33,6 @@ import type {
   InitializeConversation,
 } from "./types";
 import { CustomPropertiesContainer } from "./components/Theme";
-import { VoiceMini } from "./components/VoiceMini";
 
 /**
  * Main Touchpoint creation properties object
@@ -165,26 +164,12 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     };
   }, [lastBotResponse]);
 
-  const [voiceActive, setVoiceActive] = useState<boolean>(false);
-
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({});
 
   const customModalities = props.customModalities ?? {};
 
   if (handler == null) {
     return null;
-  }
-
-  if (input === "voiceMini") {
-    return (
-      <CustomPropertiesContainer
-        theme={props.theme}
-        colorMode={colorMode}
-        className="fixed bottom-2 right-2 w-fit"
-      >
-        <VoiceMini handler={handler} />
-      </CustomPropertiesContainer>
-    );
   }
 
   return (
@@ -225,7 +210,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               reset={() => {
                 handler.reset({ clearResponses: true });
                 handler.sendWelcomeIntent();
-                setVoiceActive(false);
               }}
             />
             {isSettingsOpen ? (
@@ -288,13 +272,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                 />
               </>
             ) : (
-              <FullscreenVoice
-                active={voiceActive}
-                setActive={setVoiceActive}
-                handler={handler}
-                colorMode={colorMode}
-                className="flex-grow"
-              />
+              <FullscreenVoice handler={handler} className="flex-grow" />
             )}
           </div>
         </CustomPropertiesContainer>

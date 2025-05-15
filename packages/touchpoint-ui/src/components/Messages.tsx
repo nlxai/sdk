@@ -8,10 +8,9 @@ import {
 import { clsx } from "clsx";
 import { marked } from "marked";
 
-import { ErrorMessage } from "./ErrorMessage";
 import { LoaderAnimation, Loader } from "./ui/Loader";
 import { TextButton } from "./ui/TextButton";
-import { ArrowForward } from "./ui/Icons";
+import { ArrowForward, Warning } from "./ui/Icons";
 import { type CustomModalityComponent, type ColorMode } from "../types";
 
 export interface MessagesProps {
@@ -96,6 +95,15 @@ const UserMessage: FC<{ text: string; files?: File[]; bubble: boolean }> = ({
           ))}
         </div>
       ) : null}
+    </div>
+  );
+};
+
+const ErrorMessage: FC<{ message: string }> = ({ message }) => {
+  return (
+    <div className="bg-error-secondary text-error-primary text-base p-3 rounded-inner flex items-center gap-2">
+      <Warning className="w-4 h-4 flex-none" />
+      <p className="text-primary-80">{message}</p>
     </div>
   );
 };

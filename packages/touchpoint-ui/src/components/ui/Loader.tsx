@@ -6,7 +6,7 @@ import { useEffect, useRef, useState, type FC } from "react";
 // notebook: https://observablehq.com/@gampleman/touchpoint-animation-debugging
 
 export interface LoaderProps {
-  label?: string;
+  label: string;
   className?: string;
 }
 
@@ -154,7 +154,7 @@ export const Loader: FC<LoaderProps> = ({ label, className }) => {
         <div className={clsx("w-8 h-8 block text-accent")}>
           <LoaderAnimation />
         </div>
-        {label != null ? <p className="text-primary-60">{label}</p> : null}
+        <p className="text-primary-60">{label}</p>
       </div>
     </div>
   );

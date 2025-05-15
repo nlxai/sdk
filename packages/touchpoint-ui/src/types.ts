@@ -222,5 +222,5 @@ export interface TouchpointConfiguration {
   /**
    * Controls the ways in which the user can communicate with the application. Defaults to `"text"`
    */
-  input?: "text" | "voice" | "voiceMini";
+  input?: "text" | "voice";
 }
