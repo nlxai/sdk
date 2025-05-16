@@ -175,7 +175,6 @@ export const Content: FC<unknown> = () => {
           <div className="space-y-4">
             <h3 className="text-xl">Theme</h3>
             <ThemeEditor value={theme} onChange={setTheme} />
-
             <Labeled label="Color mode">
               <Toggle
                 className="w-full"
@@ -195,6 +194,7 @@ export const Content: FC<unknown> = () => {
                 options={[
                   { value: "text", label: "Text" },
                   { value: "voice", label: "Voice" },
+                  { value: "voiceMini", label: "Voice mini" },
                 ]}
               />
             </Labeled>
