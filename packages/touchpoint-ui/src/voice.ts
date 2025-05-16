@@ -113,6 +113,11 @@ export const useVoice = ({
       console.warn(err);
     });
     roomRef.current = null;
+    // Not 100% sure this is necessary but it seems to help
+    if (audioElementRef.current != null) {
+      audioElementRef.current.pause();
+      audioElementRef.current = null;
+    }
   }, []);
 
   useEffect(() => {
