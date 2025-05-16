@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/voice-plus-web",
-  "version": "1.0.5-alpha.4",
+  "version": "1.0.5-alpha.8",
   "description": "Journey Manager",
   "type": "module",
   "main": "lib/index.cjs",
