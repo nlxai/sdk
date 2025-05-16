@@ -217,7 +217,7 @@ export const Messages: FC<MessagesProps> = ({
                             : "",
                         )}
                         dangerouslySetInnerHTML={{
-                          __html: marked(message.text),
+                          __html: marked(message.text, { async: false }),
                         }}
                       />
                     </div>
