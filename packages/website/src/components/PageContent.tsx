@@ -1,4 +1,4 @@
-import { type FC, type ReactNode, useState } from "react";
+import { type FC, type ReactNode, useState, useEffect } from "react";
 import { clsx } from "clsx";
 import { Link } from "react-router-dom";
 import Markdown from "react-markdown";
@@ -6,6 +6,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
+import mermaid from "mermaid";
 
 import { CheckIcon, ContentCopyIcon } from "./Icons";
 
@@ -55,6 +56,32 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
   </div>
 );
 
+const MermaidChart: FC<{ code: string }> = ({ code }) => {
+  const [mermaidSvg, setMermaidSvg] = useState<
+    "loading" | "error" | { svg: string }
+  >("loading");
+
+  useEffect(() => {
+    mermaid
+      .render("mermaid", code)
+      .then((renderResult) => {
+        console.log(renderResult);
+        setMermaidSvg({ svg: renderResult.svg });
+      })
+      .catch(() => {
+        setMermaidSvg("error");
+      });
+  }, [code, setMermaidSvg]);
+  if (mermaidSvg === "loading") {
+    return "Loading...";
+  }
+  if (mermaidSvg === "error") {
+    return "Something went wrong";
+  }
+
+  return <div dangerouslySetInnerHTML={{ __html: mermaidSvg.svg }}></div>;
+};
+
 export const PageContent: FC<{ md: string; className?: string }> = ({
   md,
   className,
@@ -89,27 +116,39 @@ export const PageContent: FC<{ md: string; className?: string }> = ({
             const { children, className, node, ...rest } = props;
             const match = /language-(\w+)/.exec(className ?? "");
             const lines = String(children).replace(/\n$/, "");
+            if (match == null) {
+              return (
+                <>
+                  <CopyToClipboardButton
+                    text={lines}
+                    className="absolute top-1.5 right-1.5 hidden group-hover:block"
+                  />
+
+                  <code {...rest} className={className}>
+                    {children}
+                  </code>
+                </>
+              );
+            }
+            if (match[1] === "mermaid") {
+              return <MermaidChart code={lines} />;
+            }
             return (
               <>
                 <CopyToClipboardButton
                   text={lines}
                   className="absolute top-1.5 right-1.5 hidden group-hover:block"
                 />
-                {match ? (
-                  <SyntaxHighlighter
-                    style={{}}
-                    useInlineStyles={false}
-                    showLineNumbers={true}
-                    language={match[1]}
-                    PreTag="div"
-                  >
-                    {lines}
-                  </SyntaxHighlighter>
-                ) : (
-                  <code {...rest} className={className}>
-                    {children}
-                  </code>
-                )}
+
+                <SyntaxHighlighter
+                  style={{}}
+                  useInlineStyles={false}
+                  showLineNumbers={true}
+                  language={match[1]}
+                  PreTag="div"
+                >
+                  {lines}
+                </SyntaxHighlighter>
               </>
             );
           },
