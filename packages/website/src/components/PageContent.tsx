@@ -65,7 +65,6 @@ const MermaidChart: FC<{ code: string }> = ({ code }) => {
     mermaid
       .render("mermaid", code)
       .then((renderResult) => {
-        console.log(renderResult);
         setMermaidSvg({ svg: renderResult.svg });
       })
       .catch(() => {
