@@ -240,7 +240,10 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               : undefined
           }
           renderCollapse={props.onClose != null}
-          collapse={onClose}
+          collapse={(event) => {
+            onClose(event);
+            setVoiceActive(false);
+          }}
           reset={() => {
             handler.reset({ clearResponses: true });
             handler.sendWelcomeIntent();
