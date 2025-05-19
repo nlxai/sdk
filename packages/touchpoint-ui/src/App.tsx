@@ -246,7 +246,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           }}
           reset={() => {
             handler.reset({ clearResponses: true });
-            handler.sendWelcomeIntent();
+            props.initializeConversation(handler);
+
             setVoiceActive(false);
           }}
         />

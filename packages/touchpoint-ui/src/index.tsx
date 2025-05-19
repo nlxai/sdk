@@ -142,7 +142,8 @@ class NlxTouchpointElement extends HTMLElement {
             initializeConversation={
               this.#touchpointConfiguration.initializeConversation ??
               ((handler) => {
-                handler.sendWelcomeIntent();
+                if (this.#touchpointConfiguration?.input === "text")
+                  handler.sendWelcomeIntent();
               })
             }
             onClose={this.onClose}
