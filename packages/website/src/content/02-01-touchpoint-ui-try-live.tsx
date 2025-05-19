@@ -138,8 +138,15 @@ export const Content: FC<unknown> = () => {
     // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
     import("@nlxai/touchpoint-ui/lib/index.js")
       .then(async ({ create }) => {
+        const touchpointConfig = {
+          ...config,
+        };
+        if (config.userId === undefined || config.userId === "") {
+          touchpointConfig.userId = "TemporaryUserId";
+        }
+
         touchpointInstance.current = await create({
-          config,
+          config: touchpointConfig,
           theme,
           colorMode,
           input,
