@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type ConversationHandler } from "@nlxai/chat-core";
+import { Context, type ConversationHandler } from "@nlxai/chat-core";
 import {
   Room,
   ParticipantEvent,
@@ -31,6 +31,7 @@ interface UseVoiceParams {
   micEnabled: boolean;
   speakersEnabled: boolean;
   handler: ConversationHandler;
+  context?: Context;
 }
 
 export const useVoice = ({
@@ -38,6 +39,7 @@ export const useVoice = ({
   micEnabled,
   speakersEnabled,
   handler,
+  context,
 }: UseVoiceParams): VoiceHookReturn => {
   const roomRef = useRef<Room | null>(null);
 
@@ -134,7 +136,7 @@ export const useVoice = ({
     try {
       setRoomState("pending");
 
-      const creds = await handler.getLiveKitCredentials();
+      const creds = await handler.getLiveKitCredentials(context);
 
       const handleActiveSpeakersChanged = (
         participants: Participant[],

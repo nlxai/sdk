@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type ConversationHandler } from "@nlxai/chat-core";
+import { Context, type ConversationHandler } from "@nlxai/chat-core";
 import { type ReactNode, useState, type FC } from "react";
 
 import { useVoice } from "../voice";
@@ -23,9 +23,10 @@ const CompactContainer: FC<{ children: ReactNode }> = ({ children }) => (
   </div>
 );
 
-export const VoiceMini: FC<{ handler: ConversationHandler }> = ({
-  handler,
-}) => {
+export const VoiceMini: FC<{
+  handler: ConversationHandler;
+  context?: Context;
+}> = ({ handler, context }) => {
   const [active, setActive] = useState<boolean>(false);
 
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
@@ -37,6 +38,7 @@ export const VoiceMini: FC<{ handler: ConversationHandler }> = ({
       micEnabled,
       speakersEnabled,
       handler,
+      context,
     });
 
   if (!active) {
