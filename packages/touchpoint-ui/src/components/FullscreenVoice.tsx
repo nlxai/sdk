@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { clsx } from "clsx";
-import { Context, type ConversationHandler } from "@nlxai/chat-core";
+import type { Context, ConversationHandler } from "@nlxai/chat-core";
 import { type ColorMode } from "../types";
 
 import { FullscreenError } from "./FullscreenError";

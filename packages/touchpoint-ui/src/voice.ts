@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { Context, type ConversationHandler } from "@nlxai/chat-core";
+import type { Context, ConversationHandler } from "@nlxai/chat-core";
 import {
   Room,
   ParticipantEvent,
