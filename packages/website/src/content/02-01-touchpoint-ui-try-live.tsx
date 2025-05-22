@@ -131,6 +131,13 @@ export const Content: FC<unknown> = () => {
 
   const touchpointInstance = useRef<any>();
 
+  const generateAndSetUserId = (config: Config): Config => {
+    const isUserIdEmpty = config.userId === undefined || config.userId === "";
+    return isUserIdEmpty
+      ? { ...config, userId: "TemporaryUserId_" + crypto.randomUUID() }
+      : config;
+  };
+
   useEffect(() => {
     if (!isConfigValid(config)) {
       return;
@@ -138,8 +145,9 @@ export const Content: FC<unknown> = () => {
     // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
     import("@nlxai/touchpoint-ui/lib/index.js")
       .then(async ({ create }) => {
+        const touchpointConfig = generateAndSetUserId(config);
         touchpointInstance.current = await create({
-          config,
+          config: touchpointConfig,
           theme,
           colorMode,
           input,
