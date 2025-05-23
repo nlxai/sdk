@@ -1,0 +1,236 @@
+<!-- Touchpoint sample HTML -->
+<!-- Downloaded from https://developers.nlx.ai -->
+<html lang="en">
+
+<head>
+    <title>Touchpoint Sample HTML</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+                <!-- <CustomCardRow
+                    left=${html`
+                    <TextButton
+                        label="Other Exhibits"
+                        Icon=${Icons.ArrowForward}
+                        type="ghost"
+                        onClick=${() => conversationHandler.sendChoice('view_other_exhibits')}
+                    />`}
+                    right=${html`
+                    <TextButton
+                        label="Exit"
+                        Icon=${Icons.Close}
+                        type="main"
+                        onClick=${() => conversationHandler.sendChoice('exit')}
+                    />`}
+                /> -->
+<body>
+    <script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+    <script type="module">
+        const contentLoaded = () => {
+        if (document.readyState === "loading") {
+            return new Promise((resolve) => {
+            window.addEventListener("DOMContentLoaded", () => {
+                resolve();
+            });
+            });
+        } else {
+            return Promise.resolve();
+        }
+        };
+        
+        await contentLoaded();
+        const { Icons, html, create, React } = nlxai.touchpointUi;
+        const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
+            const [selected, setSelected] = React.useState(null);
+
+            return html`
+                <Carousel>
+                ${data.map((exhibit, index) => html`
+                    <CustomCard
+                    key=${index}
+                    selected=${selected === index}
+                    onClick=${() => {
+                        setSelected(index);
+                        conversationHandler.sendChoice(exhibit.id);
+                    }}
+                    >
+                    <CustomCardImageRow 
+                        src=${exhibit.imageUrl} 
+                        alt=${exhibit.name}
+                    />
+                    <CustomCardRow
+                        left=${html`<BaseText>${exhibit.name}</BaseText>`}
+                        right=${html`<SmallText>Through ${exhibit.endDate}</SmallText>`}
+                    />
+                    </CustomCard>`
+                )}
+                </Carousel>
+            `;
+        };
+
+        const MuseumExhibitDetails = ({ data, conversationHandler }) => {
+            console.log("MuseumExhibitDetails data", data);
+            return html`
+            <CustomCard>
+                <CustomCardImageRow 
+                    src=${data.detailImageUrl} 
+                    alt=${data.name}
+                />
+                <CustomCardRow
+                    left=${html`<BaseText>${data.name}</BaseText>`}
+                    right=${html`<BaseText>Through ${data.endDate}</BaseText>`}
+                />
+                <CustomCardRow
+                    left=${html`<SmallText>Location</SmallText>`}
+                    right=${html`<BaseText>${data.galleryLocation}</BaseText>`}
+                />
+                <CustomCardRow
+                    left=${html`<SmallText>Summary</SmallText>`}
+                    right=${html`<BaseText>${data.summary}</BaseText>`}
+                />
+                </CustomCard>
+                <TextButton
+                    label="Other Exhibits"
+                    Icon=${Icons.ArrowForward}
+                    type="ghost"
+                    onClick=${() => conversationHandler.sendText('view_other_exhibits')}
+                />
+                <TextButton
+                    label="Exit"
+                    Icon=${Icons.Close}
+                    type="main"
+                    onClick=${() => conversationHandler.sendText('exit')}
+                />
+            `;
+        };
+
+        const MuseumKBCitationsSimple = ({ data, conversationHandler }) => {
+            return html`
+                ${data.map((citation, index) => 
+                html`<CustomCard key=${index}>
+                    <CustomCardRow
+                    left=${html`<BaseText>[${index + 1}] </BaseText>`}
+                    right=${html`<div/>`}
+                    />
+                    <CustomCardRow
+                    left=${html`
+                        <div>
+                        ${html`<BaseText>${citation.fileName}</BaseText>`}
+                        ${html`<SmallText>Page ${citation.pageNumber}</SmallText>`}
+                        </div>
+                    `}
+                    right=${html`<div/>`}
+                    />
+                    <CustomCardRow
+                    left=${html`<SmallText>${citation.content}</SmallText>`}
+                    right=${html`<div/>`}
+                    />
+                </CustomCard>`
+                )}
+            `;
+        };
+        const MuseumKBCitations = ({ data, conversationHandler }) => {
+            console.log("MuseumKBCitations data", data);
+            const [expandedCitations, setExpandedCitations] = React.useState({});
+
+            const toggleExpanded = (index) => {
+                setExpandedCitations(prev => ({
+                ...prev,
+                [index]: !prev[index]
+                }));
+            };
+
+            const truncateContent = (content, maxLength = 150) => {
+                if (content.length <= maxLength) return content;
+                return content.substring(0, maxLength) + '...';
+            };
+
+            return html`
+                ${data.map((citation, index) => 
+                html`<CustomCard
+                    key=${index}
+                    onClick=${() => toggleExpanded(index)}
+                >
+                    <CustomCardRow
+                        left=${html`<BaseText>[${index + 1}] </BaseText>`}
+                        right=${html`<SmallText>${citation.fileName}</SmallText>`}
+                    />
+                    ${expandedCitations[index] ? html`
+                    <CustomCardRow
+                        left=${html`
+                        <div>
+                            ${html`<SmallText>Page ${citation.pageNumber} - Source Content:</SmallText>`}
+                            ${html`<BaseText>${citation.content}</BaseText>`}
+                        </div>
+                        `}
+                        right=${html`
+                        <IconButton
+                            Icon=${Icons.ArrowUp}
+                            label="Collapse"
+                            type="ghost"
+                            onClick=${(e) => {
+                            e.stopPropagation();
+                            toggleExpanded(index);
+                            }}
+                        />
+                        `}
+                    />
+                    ` : html`
+                    <CustomCardRow
+                        left=${html`
+                        <div>
+                            ${html`<SmallText>Page ${citation.pageNumber} - Source Content:</SmallText>`}
+                            ${html`<BaseText>${truncateContent(citation.content)}</BaseText>`}
+                        </div>
+                        `}
+                        right=${html`
+                        <IconButton
+                            Icon=${Icons.ArrowDown}
+                            label="Expand"
+                            type="ghost"
+                            onClick=${(e) => {
+                            e.stopPropagation();
+                            toggleExpanded(index);
+                            }}
+                        />
+                        `}
+                    />
+                    `}
+                </CustomCard>`
+                )}
+            `;
+        };
+
+        const touchpoint = await nlxai.touchpointUi.create({
+            config: {
+                applicationUrl: "https://bots.dev.studio.nlx.ai/c/5KCQGKJ7itnkafMnFfiRz/H4NQhl5oiHUsEmZm3Zpvj",
+                headers: {
+                    "nlx-api-key": "RGgxSTYilkK/khOFvxotFSjE6LPR/S04"
+                },
+                languageCode: "en-US",
+                userId: "REPLACE_WITH_USER_ID"
+            },
+            colorMode: "dark",
+            input: "text",
+            theme: { "fontFamily": "\"Neue Haas Grotesk\", sans-serif", "accent": "#AECAFF" },
+            customModalities:{
+                MuseumExhibitDetails: MuseumExhibitDetails,
+                MuseumExhibitCarousel: MuseumExhibitCarousel,
+                MuseumKBCitations: MuseumKBCitations
+            }
+        });
+        const conversationHandler = touchpoint.conversationHandler;
+        const myListenerFunction = (history, message) => {
+            // Only process if we have a new bot message
+            if (!message || message.type !== "bot") return;
+            const modalities = message.payload?.modalities;
+            if (!modalities) return;
+            console.log("Modalities received:", modalities);
+        };
+
+        // Start listening to the conversation
+        conversationHandler.subscribe(myListenerFunction);
+    </script>
+</body>
+
+</html>
