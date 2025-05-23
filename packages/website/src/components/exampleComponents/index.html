@@ -79,31 +79,6 @@
             `;
         };
 
-        const MuseumKBCitationsButton = ({ data, conversationHandler }) => {
-            const [expanded, setExpanded] = React.useState(false);
-
-            return html`
-                <div>
-                    <TextButton
-                        label="Sources"
-                        Icon=${expanded ? Icons.ArrowUp : Icons.ArrowDown}
-                        type="ghost"
-                        onClick=${() => setExpanded(!expanded)}
-                    />
-                    ${expanded ? html`
-                        ${data.map((citation, index) =>html`
-                
-                            <div key=${index}>
-                                ${html`<SmallText>• [${index + 1}] ${citation.fileName} (Page ${citation.pageNumber})</SmallText>`}
-                            </div>
-                            `)}
-                    ` : null}
-                </div>
-            `;
-        };
-
-
-
         const MuseumKBCitationsNoButton = ({ data, conversationHandler }) => {
             const [expanded, setExpanded] = React.useState(false);
 
@@ -113,14 +88,12 @@
                         ${html`<BaseText>Sources ${expanded ? '▴' : '▾'}</BaseText>`}
                     </div>
                     ${expanded ? html`
-                        ${data.map((citation, index) =>
-                html`
-                                <div key=${index}>
-                                    ${html`<SmallText>• [${index + 1}] ${citation.fileName} (Page ${citation.pageNumber})</SmallText>`}
-                                </div>
-                            `
-            )}
-                    ` : null}
+                        ${data.map((citation, index) =>html`
+                            <div key=${index}>
+                                ${html`<SmallText>• [${index + 1}] ${citation.fileName} (Page ${citation.pageNumber})</SmallText>`}
+                            </div>
+                        `)}`
+                    : null}
                 </div>
             `;
         };
