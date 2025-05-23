@@ -640,7 +640,7 @@ export interface ConversationHandler {
    * @internal
    * @returns LiveKit credentials in promise form
    */
-  getLiveKitCredentials: () => Promise<LiveKitCredentials>;
+  getLiveKitCredentials: (context?: Context) => Promise<LiveKitCredentials>;
 
   /**
    * Terminate LiveKit call
@@ -1226,7 +1226,7 @@ export function createConversation(config: Config): ConversationHandler {
     currentLanguageCode: () => {
       return state.languageCode;
     },
-    getLiveKitCredentials: async () => {
+    getLiveKitCredentials: async (context?: Context) => {
       const url = isUsingWebSockets()
         ? websocketToHttpUrl(applicationUrl)
         : applicationUrl;
@@ -1244,6 +1244,7 @@ export function createConversation(config: Config): ConversationHandler {
           conversationId: state.conversationId,
           userId: state.userId,
           requestToken: true,
+          context,
         }),
       });
       if (res.status >= 400) {
