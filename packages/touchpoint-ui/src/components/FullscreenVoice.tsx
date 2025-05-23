@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { clsx } from "clsx";
-import { type ConversationHandler } from "@nlxai/chat-core";
+import type { Context, ConversationHandler } from "@nlxai/chat-core";
 import { type ColorMode } from "../types";
 
 import { FullscreenError } from "./FullscreenError";
@@ -31,6 +31,7 @@ interface Props {
   className?: string;
   active: boolean;
   setActive: Dispatch<SetStateAction<boolean>>;
+  context?: Context;
 }
 
 export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
@@ -102,6 +103,7 @@ export const FullscreenVoice: FC<Props> = ({
   className,
   active,
   setActive,
+  context,
 }) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
 
@@ -111,6 +113,7 @@ export const FullscreenVoice: FC<Props> = ({
       micEnabled,
       speakersEnabled: true,
       handler,
+      context,
     });
 
   if (!active) {

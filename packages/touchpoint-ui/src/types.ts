@@ -1,4 +1,9 @@
-import type { Config, BotMessage, ConversationHandler } from "@nlxai/chat-core";
+import type {
+  Config,
+  BotMessage,
+  ConversationHandler,
+  Context,
+} from "@nlxai/chat-core";
 import { type FC } from "react";
 
 /**
@@ -165,8 +170,12 @@ export interface Theme {
 /**
  * Custom conversation init method. Defaults to sending the welcome intent
  * @param handler - the conversation handler.
+ * @param context - context set via TouchpointConfiguration.initialContext
  */
-export type InitializeConversation = (handler: ConversationHandler) => void;
+export type InitializeConversation = (
+  handler: ConversationHandler,
+  context?: Context,
+) => void;
 
 /**
  * Main Touchpoint creation properties object
@@ -217,10 +226,15 @@ export interface TouchpointConfiguration {
   /**
    * Custom conversation init method. Defaults to sending the welcome intent
    * @param handler - the conversation handler.
+   * @param context - the context object
    */
   initializeConversation?: InitializeConversation;
   /**
    * Controls the ways in which the user can communicate with the application. Defaults to `"text"`
    */
   input?: "text" | "voice" | "voiceMini";
+  /**
+   * Context sent with the initial request.
+   */
+  initialContext?: Context;
 }
