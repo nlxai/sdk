@@ -241,8 +241,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           }
           renderCollapse={props.onClose != null}
           collapse={(event) => {
-            onClose(event);
             setVoiceActive(false);
+            onClose(event);
           }}
           reset={() => {
             handler.reset({ clearResponses: true });

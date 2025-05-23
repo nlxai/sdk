@@ -147,6 +147,24 @@ export const FullscreenVoice: FC<Props> = ({
     );
   }
 
+  if (roomState === "terminated") {
+    return (
+      <Container className={className}>
+        <div
+          className={clsx(
+            "flex-grow flex flex-col items-center justify-center gap-6 text-primary-80",
+          )}
+        >
+          <Touchpoint className="w-20 h-20 text-primary-20" />
+          <div className="text-center">
+            <h3 className="text-xl mb-2">The call has ended</h3>
+            <p>You can close this panel now or restart.</p>
+          </div>
+        </div>
+      </Container>
+    );
+  }
+
   return (
     <Container className={className}>
       <div className="rounded-full w-fit relative">
