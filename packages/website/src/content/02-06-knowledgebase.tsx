@@ -1,6 +1,6 @@
 import { type FC, useState, useEffect, useRef, type ReactNode } from "react";
 import { type Config, isConfigValid } from "@nlxai/chat-core";
-
+import { MuseumExhibitCarousel, MuseumExhibitDetails, MuseumKBCitationsNoButton } from "../components/exampleComponents/kbHTMLcomponents";;
 import { TouchpointIcon } from "../components/Icons";
 import { Toggle } from "../components/Toggle";
 import { Labeled, inputClass } from "../components/Ui";
@@ -10,35 +10,27 @@ import {
   getInitialConfig,
 } from "../components/ChatConfiguration";
 import { Note } from "../components/Note";
-import { touchpointUiSetupSnippet } from "../snippets";
+import { kbTouchpointDemo } from "../snippets";
 import { clsx } from "clsx";
 
 export const navGroup: string = "Touchpoint";
 
 export const title: string = "Knowledge Base with Touchpoint";
 
-export const content = `
-The NLX Touchpoint widget provides a customizable chat interface that you can embed in your web applications. This widget allows users to interact with your application and provides a seamless conversational experience.
+export const content = `Touchpoint can be extended with Custom Components to provide a more tailored experience for your users. This allows you to create a unique and engaging interface that meets the specific needs of your application.
 
-You can try your applications directly on this configuration widget. Then you can copy the code snippet to your HTML file.
-`;
+This example demonstrates using Touchpoint to render Museum Exhibit selection carousel, additional information info card, and show Knowledge Base cited sources.`;
 
 export const snippetContent = ({
   config,
-  theme,
-  input,
-  colorMode,
 }: {
   config: Config;
-  theme: EditableTheme;
-  input: string;
-  colorMode: "light" | "dark";
 }): string => `
 
 ### Setup snippet
 
 \`\`\`html
-${touchpointUiSetupSnippet({ config, theme, input, colorMode })}
+${kbTouchpointDemo({ config})}
 \`\`\`
 `;
 
@@ -50,51 +42,6 @@ interface EditableTheme {
 }
 
 const defaultFont = '"Neue Haas Grotesk", sans-serif';
-
-const ThemeEditor: FC<{
-  value: EditableTheme;
-  onChange: (val: EditableTheme) => void;
-}> = (props) => {
-  const theme = props.value;
-  return (
-    <div className="space-y-4">
-      <Labeled label="Font">
-        <select
-          className={inputClass}
-          value={theme.fontFamily}
-          onChange={(ev: any) => {
-            props.onChange({
-              ...theme,
-              fontFamily: ev.target.value ?? theme.fontFamily,
-            });
-          }}
-        >
-          {[
-            defaultFont,
-            "Helvetica",
-            "Arial",
-            "Monaco",
-            "Georgia",
-            "monospace",
-          ].map((val) => (
-            <option key={val} value={val}>
-              {val}
-            </option>
-          ))}
-        </select>
-      </Labeled>
-      <Labeled label="Accent color">
-        <input
-          type="color"
-          value={theme.accent}
-          onInput={(ev: any) => {
-            props.onChange({ ...theme, accent: ev.target.value });
-          }}
-        />
-      </Labeled>
-    </div>
-  );
-};
 
 const FullscreenButton: FC<{
   onClick?: () => void;
@@ -144,9 +91,89 @@ export const Content: FC<unknown> = () => {
     if (!isConfigValid(config)) {
       return;
     }
-    // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
-    import("@nlxai/touchpoint-ui/lib/index.js")
-      .then(async ({ create }) => {
+
+    const initializeTouchpoint = async () => {
+      try {
+        const { Icons, html, create, React, BaseText, TextButton, SmallText} = await import("@nlxai/touchpoint-ui/lib/index.js");
+        
+        const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
+            const [selected, setSelected] = React.useState(null);
+
+            return html`
+                <Carousel>
+                ${data.map((exhibit, index) => html`
+                    <CustomCard
+                    key=${index}
+                    selected=${selected === index}
+                    onClick=${() => {
+                    setSelected(index);
+                    conversationHandler.sendChoice(exhibit.id);
+                }}
+                    >
+                    <CustomCardImageRow 
+                        src=${exhibit.imageUrl} 
+                        alt=${exhibit.name}
+                    />
+                    <CustomCardRow
+                        left=${html`<BaseText>${exhibit.name}</BaseText>`}
+                        right=${html`<SmallText>Through ${exhibit.endDate}</SmallText>`}
+                    />
+                    </CustomCard>`
+            )}
+                </Carousel>
+            `;
+        };
+
+        const MuseumExhibitDetails = ({ data, conversationHandler }) => {
+            console.log("MuseumExhibitDetails data", data);
+            // put other imagees into a carousel
+            return html`
+            <CustomCard>
+                <CustomCardImageRow 
+                    src=${data.detailImageUrl} 
+                    alt=${data.name}
+                />
+                <CustomCardRow
+                    left=${html`<BaseText>${data.name}</BaseText>`}
+                    right=${html`<BaseText>Through ${data.endDate}</BaseText>`}
+                />
+                <CustomCardRow
+                    left=${html`<BaseText>Location:</BaseText>`}
+                    right=${html`<BaseText>${data.galleryLocation}</BaseText>`}
+                />
+                <CustomCardRow
+                    left=${html`<SmallText>${data.summary}</SmallText>`}
+                    right=${html`<div/>`}
+                />
+                </CustomCard>
+            `;
+        };
+
+
+        const MuseumKBCitationsNoButton = ({ data, conversationHandler }) => {
+            const [expanded, setExpanded] = React.useState(false);
+
+            const expandedContent = html`
+                ${data.map((citation, index) => html`
+                    <div key=${index}>
+                        ${html`<SmallText>• [${index + 1}] ${citation.fileName} (Page ${citation.pageNumber})</SmallText>`}
+                    </div>
+                `)}
+            `;
+
+            return html`
+                <div>
+                    <div onClick=${() => setExpanded(!expanded)}>
+                        ${html`<BaseText>Sources ${expanded ? '▴' : '▾'}</BaseText>`}
+                    </div>
+                    ${expanded ? expandedContent : null}
+                </div>
+            `;
+        };
+
+
+
+
         const touchpointConfig = generateAndSetUserId(config);
         touchpointInstance.current = await create({
           config: touchpointConfig,
@@ -154,12 +181,20 @@ export const Content: FC<unknown> = () => {
           colorMode,
           input,
           launchIcon: false,
+          customModalities: {
+            MuseumExhibitDetails: MuseumExhibitDetails,
+            MuseumExhibitCarousel: MuseumExhibitCarousel,
+            MuseumKBCitations: MuseumKBCitationsNoButton
+          }
         });
-      })
-      .catch((err) => {
+      } catch (err) {
         // eslint-disable-next-line no-console
         console.warn(err);
-      });
+      }
+    };
+
+    initializeTouchpoint();
+
     return () => {
       if (touchpointInstance.current != null) {
         touchpointInstance.current.teardown();
@@ -182,33 +217,6 @@ export const Content: FC<unknown> = () => {
               }}
             />
           </div>
-          <div className="space-y-4">
-            <h3 className="text-xl">Theme</h3>
-            <ThemeEditor value={theme} onChange={setTheme} />
-            <Labeled label="Color mode">
-              <Toggle
-                className="w-full"
-                value={colorMode}
-                onChange={setColorMode}
-                options={[
-                  { value: "dark", label: "Dark mode" },
-                  { value: "light", label: "Light mode" },
-                ]}
-              />
-            </Labeled>
-            <Labeled label="Input">
-              <Toggle
-                className="w-full"
-                value={input}
-                onChange={setInput}
-                options={[
-                  { value: "text", label: "Text" },
-                  { value: "voice", label: "Voice" },
-                  { value: "voiceMini", label: "Voice mini" },
-                ]}
-              />
-            </Labeled>
-          </div>
         </div>
         <FullscreenButton
           onClick={
@@ -228,9 +236,6 @@ export const Content: FC<unknown> = () => {
       <PageContent
         md={snippetContent({
           config,
-          theme,
-          input,
-          colorMode,
         })}
       />
     </>
