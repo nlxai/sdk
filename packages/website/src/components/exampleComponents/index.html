@@ -4,42 +4,28 @@
 
 <head>
     <title>Touchpoint Sample HTML</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
 </head>
 
-                <!-- <CustomCardRow
-                    left=${html`
-                    <TextButton
-                        label="Other Exhibits"
-                        Icon=${Icons.ArrowForward}
-                        type="ghost"
-                        onClick=${() => conversationHandler.sendChoice('view_other_exhibits')}
-                    />`}
-                    right=${html`
-                    <TextButton
-                        label="Exit"
-                        Icon=${Icons.Close}
-                        type="main"
-                        onClick=${() => conversationHandler.sendChoice('exit')}
-                    />`}
-                /> -->
 <body>
     <script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
     <script type="module">
         const contentLoaded = () => {
-        if (document.readyState === "loading") {
-            return new Promise((resolve) => {
-            window.addEventListener("DOMContentLoaded", () => {
-                resolve();
-            });
-            });
-        } else {
-            return Promise.resolve();
-        }
+            if (document.readyState === "loading") {
+                return new Promise((resolve) => {
+                    window.addEventListener("DOMContentLoaded", () => {
+                        resolve();
+                    });
+                });
+            } else {
+                return Promise.resolve();
+            }
         };
-        
+
         await contentLoaded();
-        const { Icons, html, create, React } = nlxai.touchpointUi;
+        const { Icons, html, create, React, BaseText, TextButton, SmallText } = nlxai.touchpointUi;
         const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
             const [selected, setSelected] = React.useState(null);
 
@@ -50,9 +36,9 @@
                     key=${index}
                     selected=${selected === index}
                     onClick=${() => {
-                        setSelected(index);
-                        conversationHandler.sendChoice(exhibit.id);
-                    }}
+                    setSelected(index);
+                    conversationHandler.sendChoice(exhibit.id);
+                }}
                     >
                     <CustomCardImageRow 
                         src=${exhibit.imageUrl} 
@@ -63,13 +49,14 @@
                         right=${html`<SmallText>Through ${exhibit.endDate}</SmallText>`}
                     />
                     </CustomCard>`
-                )}
+            )}
                 </Carousel>
             `;
         };
 
         const MuseumExhibitDetails = ({ data, conversationHandler }) => {
             console.log("MuseumExhibitDetails data", data);
+            // put other imagees into a carousel
             return html`
             <CustomCard>
                 <CustomCardImageRow 
@@ -81,125 +68,63 @@
                     right=${html`<BaseText>Through ${data.endDate}</BaseText>`}
                 />
                 <CustomCardRow
-                    left=${html`<SmallText>Location</SmallText>`}
+                    left=${html`<BaseText>Location:</BaseText>`}
                     right=${html`<BaseText>${data.galleryLocation}</BaseText>`}
                 />
                 <CustomCardRow
-                    left=${html`<SmallText>Summary</SmallText>`}
-                    right=${html`<BaseText>${data.summary}</BaseText>`}
+                    left=${html`<SmallText>${data.summary}</SmallText>`}
+                    right=${html`<div/>`}
                 />
                 </CustomCard>
-                <TextButton
-                    label="Other Exhibits"
-                    Icon=${Icons.ArrowForward}
-                    type="ghost"
-                    onClick=${() => conversationHandler.sendText('view_other_exhibits')}
-                />
-                <TextButton
-                    label="Exit"
-                    Icon=${Icons.Close}
-                    type="main"
-                    onClick=${() => conversationHandler.sendText('exit')}
-                />
             `;
         };
 
-        const MuseumKBCitationsSimple = ({ data, conversationHandler }) => {
-            return html`
-                ${data.map((citation, index) => 
-                html`<CustomCard key=${index}>
-                    <CustomCardRow
-                    left=${html`<BaseText>[${index + 1}] </BaseText>`}
-                    right=${html`<div/>`}
-                    />
-                    <CustomCardRow
-                    left=${html`
-                        <div>
-                        ${html`<BaseText>${citation.fileName}</BaseText>`}
-                        ${html`<SmallText>Page ${citation.pageNumber}</SmallText>`}
-                        </div>
-                    `}
-                    right=${html`<div/>`}
-                    />
-                    <CustomCardRow
-                    left=${html`<SmallText>${citation.content}</SmallText>`}
-                    right=${html`<div/>`}
-                    />
-                </CustomCard>`
-                )}
-            `;
-        };
-        const MuseumKBCitations = ({ data, conversationHandler }) => {
-            console.log("MuseumKBCitations data", data);
-            const [expandedCitations, setExpandedCitations] = React.useState({});
-
-            const toggleExpanded = (index) => {
-                setExpandedCitations(prev => ({
-                ...prev,
-                [index]: !prev[index]
-                }));
-            };
-
-            const truncateContent = (content, maxLength = 150) => {
-                if (content.length <= maxLength) return content;
-                return content.substring(0, maxLength) + '...';
-            };
+        const MuseumKBCitationsButton = ({ data, conversationHandler }) => {
+            const [expanded, setExpanded] = React.useState(false);
 
             return html`
-                ${data.map((citation, index) => 
-                html`<CustomCard
-                    key=${index}
-                    onClick=${() => toggleExpanded(index)}
-                >
-                    <CustomCardRow
-                        left=${html`<BaseText>[${index + 1}] </BaseText>`}
-                        right=${html`<SmallText>${citation.fileName}</SmallText>`}
+                <div>
+                    <TextButton
+                        label="Sources"
+                        Icon=${expanded ? Icons.ArrowUp : Icons.ArrowDown}
+                        type="ghost"
+                        onClick=${() => setExpanded(!expanded)}
                     />
-                    ${expandedCitations[index] ? html`
-                    <CustomCardRow
-                        left=${html`
-                        <div>
-                            ${html`<SmallText>Page ${citation.pageNumber} - Source Content:</SmallText>`}
-                            ${html`<BaseText>${citation.content}</BaseText>`}
-                        </div>
-                        `}
-                        right=${html`
-                        <IconButton
-                            Icon=${Icons.ArrowUp}
-                            label="Collapse"
-                            type="ghost"
-                            onClick=${(e) => {
-                            e.stopPropagation();
-                            toggleExpanded(index);
-                            }}
-                        />
-                        `}
-                    />
-                    ` : html`
-                    <CustomCardRow
-                        left=${html`
-                        <div>
-                            ${html`<SmallText>Page ${citation.pageNumber} - Source Content:</SmallText>`}
-                            ${html`<BaseText>${truncateContent(citation.content)}</BaseText>`}
-                        </div>
-                        `}
-                        right=${html`
-                        <IconButton
-                            Icon=${Icons.ArrowDown}
-                            label="Expand"
-                            type="ghost"
-                            onClick=${(e) => {
-                            e.stopPropagation();
-                            toggleExpanded(index);
-                            }}
-                        />
-                        `}
-                    />
-                    `}
-                </CustomCard>`
-                )}
+                    ${expanded ? html`
+                        ${data.map((citation, index) =>html`
+                
+                            <div key=${index}>
+                                ${html`<SmallText>• [${index + 1}] ${citation.fileName} (Page ${citation.pageNumber})</SmallText>`}
+                            </div>
+                            `)}
+                    ` : null}
+                </div>
             `;
         };
+
+
+
+        const MuseumKBCitationsNoButton = ({ data, conversationHandler }) => {
+            const [expanded, setExpanded] = React.useState(false);
+
+            return html`
+                <div>
+                    <div onClick=${() => setExpanded(!expanded)}>
+                        ${html`<BaseText>Sources ${expanded ? '▴' : '▾'}</BaseText>`}
+                    </div>
+                    ${expanded ? html`
+                        ${data.map((citation, index) =>
+                html`
+                                <div key=${index}>
+                                    ${html`<SmallText>• [${index + 1}] ${citation.fileName} (Page ${citation.pageNumber})</SmallText>`}
+                                </div>
+                            `
+            )}
+                    ` : null}
+                </div>
+            `;
+        };
+
 
         const touchpoint = await nlxai.touchpointUi.create({
             config: {
@@ -213,10 +138,10 @@
             colorMode: "dark",
             input: "text",
             theme: { "fontFamily": "\"Neue Haas Grotesk\", sans-serif", "accent": "#AECAFF" },
-            customModalities:{
+            customModalities: {
                 MuseumExhibitDetails: MuseumExhibitDetails,
                 MuseumExhibitCarousel: MuseumExhibitCarousel,
-                MuseumKBCitations: MuseumKBCitations
+                MuseumKBCitations: MuseumKBCitationsNoButton
             }
         });
         const conversationHandler = touchpoint.conversationHandler;
