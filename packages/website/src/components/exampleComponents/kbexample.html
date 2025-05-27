@@ -56,7 +56,6 @@
 
         const MuseumExhibitDetails = ({ data, conversationHandler }) => {
             console.log("MuseumExhibitDetails data", data);
-            // put other imagees into a carousel
             return html`
             <CustomCard>
                 <CustomCardImageRow 
@@ -111,15 +110,13 @@
                     <div onClick=${() => setExpanded(!expanded)}>
                         ${html`<BaseText>Sources ${expanded ? '▴' : '▾'}</BaseText>`}
                     </div>
-                    ${expanded ? html`
-                        ${data.map((citation, index) =>
-                html`
-                                <div key=${index}>
-                                    ${html`<SmallText>• [${index + 1}] ${citation.fileName} (Page ${citation.pageNumber})</SmallText>`}
-                                </div>
-                            `
-            )}
-                    ` : null}
+                    ${expanded ? 
+                        html`${data.map((citation, index) =>html`
+                            <div key=${index}>
+                                ${html`<SmallText>• [${index + 1}] ${citation.fileName} (Page ${citation.pageNumber})</SmallText>`}
+                            </div>`)}`
+                    :
+                    null}
                 </div>
             `;
         };
