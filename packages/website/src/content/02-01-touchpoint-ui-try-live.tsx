@@ -8,11 +8,13 @@ import { PageContent } from "../components/PageContent";
 import {
   ConfigEditor,
   getInitialConfig,
+  getInitialInput,
 } from "../components/ChatConfiguration";
 import { Note } from "../components/Note";
 import { touchpointUiSetupSnippet } from "../snippets";
 import { clsx } from "clsx";
 import useUrlState from "../useUrlState";
+import { get } from "node:http";
 
 export const content = `
 The NLX Touchpoint widget provides a customizable chat interface that you can embed in your web applications. This widget allows users to interact with your application and provides a seamless conversational experience.
@@ -126,7 +128,7 @@ export const Content: FC<unknown> = () => {
     accent: "#AECAFF",
   });
 
-  const [input, setInput] = useUrlState<any>("input", "text");
+  const [input, setInput] = useUrlState<any>("input", getInitialInput());
 
   const [colorMode, setColorMode] = useUrlState<"light" | "dark">(
     "color-mode",

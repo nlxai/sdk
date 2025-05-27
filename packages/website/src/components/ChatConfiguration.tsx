@@ -39,6 +39,15 @@ export const getInitialConfig = (): Config => {
   });
 };
 
+export const getInitialInput = (): string => {
+  // for static rendering
+  if (typeof window === "undefined") {
+    return "text";
+  }
+  const searchParams = new URLSearchParams(window.location.search);
+  return searchParams.get("input") ?? "text";
+};
+
 export const TitleBarEditor: FC<{
   value: TitleBar;
   onChange: (val: Partial<TitleBar>) => void;
