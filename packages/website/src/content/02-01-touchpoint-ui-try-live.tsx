@@ -14,7 +14,6 @@ import { Note } from "../components/Note";
 import { touchpointUiSetupSnippet } from "../snippets";
 import { clsx } from "clsx";
 import useUrlState from "../useUrlState";
-import { get } from "node:http";
 
 export const content = `
 The NLX Touchpoint widget provides a customizable chat interface that you can embed in your web applications. This widget allows users to interact with your application and provides a seamless conversational experience.
