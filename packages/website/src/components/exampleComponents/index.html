@@ -25,6 +25,22 @@
         };
 
         await contentLoaded();
+
+        const sampleSources = [
+            {
+                fileName: "Exhibit Catalog.pdf",
+                pageNumber: 5
+            },
+            {
+                fileName: "Museum Guide.docx",
+                pageNumber: 12
+            },
+            {
+                fileName: "Research Paper.pdf",
+                pageNumber: 3
+            }
+        ];
+
         const { Icons, html, create, React, BaseText, TextButton, SmallText } = nlxai.touchpointUi;
         const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
             const [selected, setSelected] = React.useState(null);
@@ -99,6 +115,53 @@
         };
 
 
+        const MuseumKBCitations = ({ data }) => {
+            const [expanded, setExpanded] = React.useState(false);
+            data = sampleSources;
+
+            const sourcesList = html`
+                ${data.map((citation, index) => html`
+                    <div key=${index}>
+                        ${html`<SmallText>${index + 1}  ${citation.fileName}</SmallText>`}
+                    </div>
+                `)}
+            `;
+
+            return html`
+                <div>
+                    <div onClick=${() => setExpanded(!expanded)}>
+                        ${html`<BaseText>${expanded ? '▼' : '▶'} Sources</BaseText>`}
+                    </div>
+                    ${expanded ? sourcesList : null}
+                </div>
+            `;
+        };
+
+const MuseumKBCitationsEnhanced = ({ data }) => {
+    const [expanded, setExpanded] = React.useState(false);
+    data = sampleSources;
+    const sourcesList = html`
+        <div className="space-y-2">
+            ${data.map((citation, index) => html`
+                <div key=${index} className="flex items-center gap-3">
+                    <span className="text-primary-60 text-sm font-medium">${index + 1}</span>
+                    ${html`<SmallText>${citation.fileName}</SmallText>`}
+                </div>
+            `)}
+        </div>
+    `;
+
+    return html`
+        <div className="space-y-3">
+            <button onClick=${() => setExpanded(!expanded)} className="flex items-center gap-3 px-3 py-2 bg-primary-10 border border-primary-20 rounded-inner hover:bg-primary-20 transition-colors">
+                <span className="w-6 h-6 border border-primary-40 rounded-full flex items-center justify-center text-primary-80 text-xs">${expanded ? '▼' : '▶'}</span>
+                ${html`<BaseText>Sources</BaseText>`}
+            </button>
+            ${expanded ? sourcesList : null}
+        </div>
+    `;
+};
+
         const touchpoint = await nlxai.touchpointUi.create({
             config: {
                 applicationUrl: "https://bots.dev.studio.nlx.ai/c/5KCQGKJ7itnkafMnFfiRz/H4NQhl5oiHUsEmZm3Zpvj",
@@ -114,7 +177,7 @@
             customModalities: {
                 MuseumExhibitDetails: MuseumExhibitDetails,
                 MuseumExhibitCarousel: MuseumExhibitCarousel,
-                MuseumKBCitations: MuseumKBCitationsNoButton
+                MuseumKBCitations: MuseumKBCitationsEnhanced
             }
         });
         const conversationHandler = touchpoint.conversationHandler;
@@ -123,7 +186,7 @@
             if (!message || message.type !== "bot") return;
             const modalities = message.payload?.modalities;
             if (!modalities) return;
-            console.log("Modalities received:", modalities);
+            console.log("Modalities received:", JSON.stringify(modalities, null, 2));
         };
 
         // Start listening to the conversation
