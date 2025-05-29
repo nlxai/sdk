@@ -372,6 +372,10 @@ export interface Config {
    */
   environment?: Environment;
   /**
+   * Specifies whether the conversation is bidirectional
+   */
+  bidirectional?: boolean;
+  /**
    * Experimental settings
    */
   experimental?: {
@@ -759,18 +763,41 @@ export const shouldReinitialize = (
 };
 
 /**
- * When the application works through websockets, LiveKit credentials still need to be obtained through HTTP. In order to make this possible,
- * the frontend reconstructs that HTTP URL.
- * @param websocketUrl - the websocket URL
+ * When a HTTP URL is provided, deduce the websocket URL. Otherwise, return the argument.
+ * @param applicationUrl - the websocket URL
  * @returns httpUrl - the HTTP URL
  */
-const websocketToHttpUrl = (websocketUrl: string): string => {
-  const isDev = websocketUrl.includes("bots.dev");
-  const url = new URL(websocketUrl);
+const normalizeToWebsocket = (applicationUrl: string): string => {
+  if (isWebsocketUrl(applicationUrl)) {
+    return applicationUrl;
+  }
+  const isDev = applicationUrl.includes("bots.dev");
+  const url = new URL(applicationUrl);
+  const pathChunks = url.pathname.split("/");
+  const deploymentKey = pathChunks[2];
+  const channelKey = pathChunks[3];
+  return `ws://us-east-1-ws.${isDev ? "bots.dev" : "bots"}?deploymentKey=${deploymentKey}&channelKey=${channelKey}`;
+};
+
+/**
+ * When a websocket URL is provided, deduce the HTTP URL. Otherwise, return the argument.
+ * @param applicationUrl - the websocket URL
+ * @returns httpUrl - the HTTP URL
+ */
+const normalizeToHttp = (applicationUrl: string): string => {
+  if (!isWebsocketUrl(applicationUrl)) {
+    return applicationUrl;
+  }
+  const isDev = applicationUrl.includes("bots.dev");
+  const url = new URL(applicationUrl);
   const params = new URLSearchParams(url.search);
   const channelKey = params.get("channelKey");
   const deploymentKey = params.get("deploymentKey");
   return `https://${isDev ? "bots.dev.studio.nlx.ai" : "bots.studio.nlx.ai"}/c/${deploymentKey}/${channelKey}`;
+};
+
+const isWebsocketUrl = (url: string): boolean => {
+  return url.indexOf("wss://") === 0;
 };
 
 /**
@@ -935,7 +962,7 @@ export function createConversation(config: Config): ConversationHandler {
       channelType: config.experimental?.channelType,
       environment: config.environment,
     };
-    if (isUsingWebSockets()) {
+    if (isWebsocketUrl(applicationUrl)) {
       if (socket?.readyState === 1) {
         socket.send(JSON.stringify(bodyWithContext));
       } else {
@@ -965,10 +992,6 @@ export function createConversation(config: Config): ConversationHandler {
     }
   };
 
-  const isUsingWebSockets = (): boolean => {
-    return applicationUrl.indexOf("wss://") === 0;
-  };
-
   let subscribers: Subscriber[] = [];
 
   const checkSocketQueue = async (): Promise<void> => {
@@ -989,6 +1012,8 @@ export function createConversation(config: Config): ConversationHandler {
   };
 
   const setupWebsocket = (): void => {
+    // If the socket is already set up, tear it down first
+    teardownWebsocket();
     const url = new URL(applicationUrl);
     if (config.experimental?.completeBotUrl !== true) {
       url.searchParams.set("languageCode", state.languageCode);
@@ -1024,17 +1049,56 @@ export function createConversation(config: Config): ConversationHandler {
     };
   };
 
+  const setupCommandWebsocket = (): void => {
+    // If the socket is already set up, tear it down first
+    teardownCommandWebsocket();
+    if (config.bidirectional !== true) {
+      return;
+    }
+    const url = new URL(normalizeToWebsocket(applicationUrl));
+    if (config.experimental?.completeBotUrl !== true) {
+      url.searchParams.set("languageCode", state.languageCode);
+      url.searchParams.set(
+        "channelKey",
+        `${url.searchParams.get("channelKey") ?? ""}-${state.languageCode}`,
+      );
+    }
+    url.searchParams.set("conversationId", state.conversationId);
+    url.searchParams.set("voice-plus", "true");
+    const apiKey = config.headers["nlx-api-key"];
+    if (!isWebsocketUrl(applicationUrl) && apiKey != null) {
+      url.searchParams.set("apiKey", apiKey);
+    }
+    voicePlusSocket = new ReconnectingWebSocket(url.href);
+    voicePlusSocketMessageQueueCheckInterval = setInterval(() => {
+      checkVoicePlusSocketQueue();
+    }, 500);
+    voicePlusSocket.onmessage = (e) => {
+      if (typeof e?.data === "string") {
+        const command = safeJsonParse(e.data);
+        if (command != null) {
+          eventListeners.voicePlusCommand.forEach((listener) => {
+            listener(command);
+          });
+        }
+      }
+    };
+  };
+
   const teardownWebsocket = (): void => {
     if (socketMessageQueueCheckInterval != null) {
       clearInterval(socketMessageQueueCheckInterval);
-    }
-    if (voicePlusSocketMessageQueueCheckInterval != null) {
-      clearInterval(voicePlusSocketMessageQueueCheckInterval);
     }
     if (socket != null) {
       socket.onmessage = null;
       socket.close();
       socket = undefined;
+    }
+  };
+
+  const teardownCommandWebsocket = (): void => {
+    if (voicePlusSocketMessageQueueCheckInterval != null) {
+      clearInterval(voicePlusSocketMessageQueueCheckInterval);
     }
     if (voicePlusSocket != null) {
       voicePlusSocket.onmessage = null;
@@ -1043,9 +1107,11 @@ export function createConversation(config: Config): ConversationHandler {
     }
   };
 
-  if (isUsingWebSockets()) {
+  if (isWebsocketUrl(applicationUrl)) {
     setupWebsocket();
   }
+
+  setupCommandWebsocket();
 
   const appendStructuredUserResponse = (
     structured: StructuredRequest,
@@ -1217,19 +1283,17 @@ export function createConversation(config: Config): ConversationHandler {
         );
         return;
       }
-      if (isUsingWebSockets()) {
-        teardownWebsocket();
+      if (isWebsocketUrl(applicationUrl)) {
         setupWebsocket();
       }
+      setupCommandWebsocket();
       setState({ languageCode });
     },
     currentLanguageCode: () => {
       return state.languageCode;
     },
     getLiveKitCredentials: async (context?: Context) => {
-      const url = isUsingWebSockets()
-        ? websocketToHttpUrl(applicationUrl)
-        : applicationUrl;
+      const url = normalizeToHttp(applicationUrl);
       const res = await fetch(`${url}-${state.languageCode}/requestToken`, {
         method: "POST",
         headers: {
@@ -1286,16 +1350,17 @@ export function createConversation(config: Config): ConversationHandler {
         conversationId: uuid(),
         responses: options?.clearResponses === true ? [] : state.responses,
       });
-      if (isUsingWebSockets()) {
-        teardownWebsocket();
+      if (isWebsocketUrl(applicationUrl)) {
         setupWebsocket();
       }
+      setupCommandWebsocket();
     },
     destroy: () => {
       subscribers = [];
-      if (isUsingWebSockets()) {
+      if (isWebsocketUrl(applicationUrl)) {
         teardownWebsocket();
       }
+      teardownCommandWebsocket();
     },
     setBotRequestOverride: (val: BotRequestOverride | undefined) => {
       botRequestOverride = val;
