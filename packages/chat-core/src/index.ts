@@ -1070,7 +1070,7 @@ export function createConversation(config: Config): ConversationHandler {
       );
     }
     url.searchParams.set("conversationId", state.conversationId);
-    url.searchParams.set("voice-plus", "true");
+    url.searchParams.set("type", "voice-plus");
     const apiKey = config.headers["nlx-api-key"];
     if (!isWebsocketUrl(applicationUrl) && apiKey != null) {
       url.searchParams.set("apiKey", apiKey);
