@@ -640,6 +640,12 @@ export interface ConversationHandler {
   sendIntent: (intentId: string, context?: Context) => void;
 
   /**
+   * Send context without sending a message
+   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   */
+  sendContext: (context: Context) => Promise<void>;
+
+  /**
    * Obtain LiveKit credentials to run the experience in voice.
    * @internal
    * @returns LiveKit credentials in promise form
@@ -850,7 +856,7 @@ export function createConversation(config: Config): ConversationHandler {
   };
 
   const fullApplicationHttpUrl = (): string =>
-    `${applicationUrl}${
+    `${normalizeToHttp(applicationUrl)}${
       config.experimental?.completeBotUrl === true
         ? ""
         : `-${state.languageCode}`
@@ -1247,6 +1253,27 @@ export function createConversation(config: Config): ConversationHandler {
 
   return {
     sendText,
+    sendContext: async (context: Context) => {
+      const res = await fetch(`${fullApplicationHttpUrl()}/context`, {
+        method: "POST",
+        headers: {
+          ...(config.headers ?? {}),
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "nlx-conversation-id": state.conversationId,
+          "nlx-sdk-version": packageJson.version,
+        },
+        body: JSON.stringify({
+          languageCode: state.languageCode,
+          conversationId: state.conversationId,
+          userId: state.userId,
+          context,
+        }),
+      });
+      if (res.status >= 400) {
+        throw new Error(`Responded with ${res.status}`);
+      }
+    },
     sendStructured: (structured: StructuredRequest, context) => {
       appendStructuredUserResponse(structured, context);
       void sendToBot({
