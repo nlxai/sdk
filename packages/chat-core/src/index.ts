@@ -782,7 +782,7 @@ const normalizeToWebsocket = (applicationUrl: string): string => {
   const pathChunks = url.pathname.split("/");
   const deploymentKey = pathChunks[2];
   const channelKey = pathChunks[3];
-  return `ws://us-east-1-ws.${isDev ? "bots.dev" : "bots"}?deploymentKey=${deploymentKey}&channelKey=${channelKey}`;
+  return `wss://us-east-1-ws.${isDev ? "bots.dev" : "bots"}.studio.nlx.ai?deploymentKey=${deploymentKey}&channelKey=${channelKey}`;
 };
 
 /**
