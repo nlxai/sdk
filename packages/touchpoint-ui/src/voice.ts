@@ -59,8 +59,7 @@ export const useVoice = ({
 
   const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
 
-  // TODO: evaluate how this can be added reliably
-  /* useEffect(() => {
+  useEffect(() => {
     const room = roomRef.current;
     if (room == null) {
       return;
@@ -68,16 +67,15 @@ export const useVoice = ({
     room.localParticipant.setMicrophoneEnabled(micEnabled).catch((err) => {
       console.warn(err);
     });
-  }, [micEnabled]); */
+  }, [micEnabled]);
 
-  // TODO: evaluate how this can be added reliably
-  /* useEffect(() => {
+  useEffect(() => {
     const audioElement = audioElementRef.current;
     if (audioElement == null) {
       return;
     }
     audioElement.volume = speakersEnabled ? 1 : 0;
-  }, [speakersEnabled]); */
+  }, [speakersEnabled]);
 
   useEffect(() => {
     const checkMic = async (): Promise<void> => {
