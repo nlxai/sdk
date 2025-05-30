@@ -136,7 +136,7 @@ export const Content: FC<unknown> = () => {
   const touchpointInstance = useRef<any>();
 
   const generateAndSetUserId = (config: Config): Config => {
-    const isUserIdEmpty = config.userId === undefined || config.userId === "";
+    const isUserIdEmpty = config.userId == null || config.userId === "";
     return isUserIdEmpty
       ? { ...config, userId: "TemporaryUserId_" + crypto.randomUUID() }
       : config;
