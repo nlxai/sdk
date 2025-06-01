@@ -768,6 +768,11 @@ export const shouldReinitialize = (
   return !equals(config1, config2);
 };
 
+const getBaseDomain = (url: string) =>
+  url.match(
+    /(bots\.dev\.studio\.nlx\.ai|bots\.studio\.nlx\.ai|apps\.nlx\.ai|dev\.apps\.nlx\.ai)/g,
+  )?.[0] ?? "apps.nlx.ai";
+
 /**
  * When a HTTP URL is provided, deduce the websocket URL. Otherwise, return the argument.
  * @param applicationUrl - the websocket URL
@@ -777,12 +782,12 @@ const normalizeToWebsocket = (applicationUrl: string): string => {
   if (isWebsocketUrl(applicationUrl)) {
     return applicationUrl;
   }
-  const isDev = applicationUrl.includes("bots.dev");
+  const base = getBaseDomain(applicationUrl);
   const url = new URL(applicationUrl);
   const pathChunks = url.pathname.split("/");
   const deploymentKey = pathChunks[2];
   const channelKey = pathChunks[3];
-  return `wss://us-east-1-ws.${isDev ? "bots.dev" : "bots"}.studio.nlx.ai?deploymentKey=${deploymentKey}&channelKey=${channelKey}`;
+  return `wss://us-east-1-ws.${base}?deploymentKey=${deploymentKey}&channelKey=${channelKey}`;
 };
 
 /**
@@ -794,12 +799,12 @@ const normalizeToHttp = (applicationUrl: string): string => {
   if (!isWebsocketUrl(applicationUrl)) {
     return applicationUrl;
   }
-  const isDev = applicationUrl.includes("bots.dev");
+  const base = getBaseDomain(applicationUrl);
   const url = new URL(applicationUrl);
   const params = new URLSearchParams(url.search);
   const channelKey = params.get("channelKey");
   const deploymentKey = params.get("deploymentKey");
-  return `https://${isDev ? "bots.dev.studio.nlx.ai" : "bots.studio.nlx.ai"}/c/${deploymentKey}/${channelKey}`;
+  return `https://${base}/c/${deploymentKey}/${channelKey}`;
 };
 
 const isWebsocketUrl = (url: string): boolean => {
