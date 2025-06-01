@@ -70,6 +70,227 @@
             `;
         };
 
+const SourcesComponent1 = ({ data, conversationHandler }) => {
+  // Access Touchpoint UI components from global scope
+  const [isExpanded, setIsExpanded] = React.useState(false);
+    data = sampleSources;
+  if (!data || data.length === 0) {
+    return null;
+  }
+
+  if (!isExpanded) {
+    // Collapsed state - button with arrow pointing right
+    return html`
+      <div style=${{ marginTop: '16px' }}>
+        <button
+          onClick=${() => setIsExpanded(true)}
+          style=${{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '12px 20px',
+            borderRadius: '24px',
+            backgroundColor: 'var(--primary-5)',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s',
+            fontFamily: 'inherit'
+          }}
+          onMouseEnter=${(e) => e.currentTarget.style.backgroundColor = 'var(--primary-10)'}
+          onMouseLeave=${(e) => e.currentTarget.style.backgroundColor = 'var(--primary-5)'}
+        >
+          <${Icons.ArrowRight} size=${20} style=${{ color: 'var(--primary-60)' }} />
+          <span style=${{ 
+            color: 'var(--primary-80)', 
+            fontSize: '16px',
+            fontWeight: '400'
+          }}>
+            Sources
+          </span>
+        </button>
+      </div>
+    `;
+  } else {
+    // Expanded state - container with sources list
+    return html`
+      <div style=${{ marginTop: '16px' }}>
+        <div style=${{
+          backgroundColor: 'var(--primary-5)',
+          borderRadius: 'var(--outer-border-radius)',
+          padding: '20px'
+        }}>
+          <button
+            onClick=${() => setIsExpanded(false)}
+            style=${{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '0',
+              marginBottom: '16px',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              width: '100%',
+              fontFamily: 'inherit'
+            }}
+          >
+            <${Icons.ArrowDown} size=${20} style=${{ color: 'var(--primary-60)' }} />
+            <span style=${{ 
+              color: 'var(--primary-80)', 
+              fontSize: '16px',
+              fontWeight: '400'
+            }}>
+              Sources
+            </span>
+          </button>
+          
+          <div style=${{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            ${data.map((source, index) => html`
+              <div key=${index} style=${{ 
+                display: 'flex', 
+                alignItems: 'flex-start', 
+                gap: '16px' 
+              }}>
+                <span style=${{ 
+                  color: 'var(--primary-40)', 
+                  fontSize: '15px',
+                  minWidth: '20px',
+                  marginTop: '2px'
+                }}>
+                  ${index + 1}
+                </span>
+                <span style=${{ 
+                  color: 'var(--primary-80)', 
+                  fontSize: '15px',
+                  lineHeight: '1.5'
+                }}>
+                  ${source.fileName}
+                </span>
+              </div>
+            `)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+};
+
+
+// Knowledge Base Sources Component
+const SourcesComponent = ({ data, conversationHandler }) => {
+  // Access Touchpoint UI components from global scope
+  const [isExpanded, setIsExpanded] = React.useState(false);
+    data = sampleSources;
+  if (!data || data.length === 0) {
+    return null;
+  }
+
+  if (!isExpanded) {
+    // Collapsed state - chevron button separate from text
+    return html`
+      <div style=${{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <button
+          onClick=${() => setIsExpanded(true)}
+          style=${{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            backgroundColor: 'rgba(255, 255, 255, 0.08)',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s',
+            padding: '0',
+            flexShrink: '0'
+          }}
+          onMouseEnter=${(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)'}
+          onMouseLeave=${(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)'}
+          aria-label="Expand sources"
+        >
+          <${Icons.ArrowRight} size=${16} style=${{ color: 'rgba(255, 255, 255, 0.7)' }} />
+        </button>
+        <span style=${{ 
+          color: 'var(--primary-80)', 
+          fontSize: '16px',
+          fontWeight: '400'
+        }}>
+          Sources
+        </span>
+      </div>
+    `;
+  } else {
+    // Expanded state - container with sources list
+    return html`
+      <div style=${{ marginTop: '16px' }}>
+        <div style=${{
+          backgroundColor: 'var(--primary-5)',
+          borderRadius: 'var(--outer-border-radius)',
+          padding: '20px'
+        }}>
+          <div style=${{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+            <button
+              onClick=${() => setIsExpanded(false)}
+              style=${{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                backgroundColor: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'background-color 0.2s',
+                padding: '0',
+                flexShrink: '0'
+              }}
+              onMouseEnter=${(e) => e.currentTarget.style.backgroundColor = 'var(--primary-10)'}
+              onMouseLeave=${(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              aria-label="Collapse sources"
+            >
+              <${Icons.ArrowDown} size=${16} style=${{ color: 'var(--primary-60)' }} />
+            </button>
+            <span style=${{ 
+              color: 'var(--primary-80)', 
+              fontSize: '16px',
+              fontWeight: '400'
+            }}>
+              Sources
+            </span>
+          </div>
+          
+          <div style=${{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            ${data.map((source, index) => html`
+              <div key=${index} style=${{ 
+                display: 'flex', 
+                alignItems: 'flex-start', 
+                gap: '16px' 
+              }}>
+                <span style=${{ 
+                  color: 'var(--primary-40)', 
+                  fontSize: '15px',
+                  minWidth: '20px',
+                  marginTop: '2px'
+                }}>
+                  ${index + 1}
+                </span>
+                <span style=${{ 
+                  color: 'var(--primary-80)', 
+                  fontSize: '15px',
+                  lineHeight: '1.5'
+                }}>
+                  ${source.fileName}
+                </span>
+              </div>
+            `)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+};
         const MuseumExhibitDetails = ({ data, conversationHandler }) => {
             console.log("MuseumExhibitDetails data", data);
             // put other imagees into a carousel
@@ -177,7 +398,7 @@ const MuseumKBCitationsEnhanced = ({ data }) => {
             customModalities: {
                 MuseumExhibitDetails: MuseumExhibitDetails,
                 MuseumExhibitCarousel: MuseumExhibitCarousel,
-                MuseumKBCitations: MuseumKBCitationsEnhanced
+                MuseumKBCitations: SourcesComponent
             }
         });
         const conversationHandler = touchpoint.conversationHandler;
