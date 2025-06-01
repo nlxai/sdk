@@ -1,4 +1,4 @@
-import { type FC, useState, useEffect, useRef, type ReactNode } from "react";
+import { type FC, useEffect, useRef, type ReactNode } from "react";
 import { type Config, isConfigValid } from "@nlxai/chat-core";
 
 import { TouchpointIcon } from "../components/Icons";
@@ -12,6 +12,7 @@ import {
 import { Note } from "../components/Note";
 import { touchpointUiSetupSnippet } from "../snippets";
 import { clsx } from "clsx";
+import useUrlState from "../useUrlState";
 
 export const content = `
 The NLX Touchpoint widget provides a customizable chat interface that you can embed in your web applications. This widget allows users to interact with your application and provides a seamless conversational experience.
@@ -118,16 +119,19 @@ const FullscreenButton: FC<{
 };
 
 export const Content: FC<unknown> = () => {
-  const [config, setConfig] = useState<Config>(getInitialConfig());
+  const [config, setConfig] = useUrlState<Config>("config", getInitialConfig());
 
-  const [theme, setTheme] = useState<EditableTheme>({
+  const [theme, setTheme] = useUrlState<EditableTheme>("theme", {
     fontFamily: defaultFont,
     accent: "#AECAFF",
   });
 
-  const [input, setInput] = useState<any>("text");
+  const [input, setInput] = useUrlState<any>("input", "text");
 
-  const [colorMode, setColorMode] = useState<"light" | "dark">("dark");
+  const [colorMode, setColorMode] = useUrlState<"light" | "dark">(
+    "color-mode",
+    "dark",
+  );
 
   const touchpointInstance = useRef<any>();
 
@@ -142,6 +146,7 @@ export const Content: FC<unknown> = () => {
     if (!isConfigValid(config)) {
       return;
     }
+
     // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
     import("@nlxai/touchpoint-ui/lib/index.js")
       .then(async ({ create }) => {

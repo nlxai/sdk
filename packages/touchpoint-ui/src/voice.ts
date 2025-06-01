@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type ConversationHandler } from "@nlxai/chat-core";
+import type { Context, ConversationHandler } from "@nlxai/chat-core";
 import {
   Room,
   ParticipantEvent,
@@ -11,7 +11,12 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDebouncedState } from "@react-hookz/web";
 
-type VoiceRoomState = "inactive" | "pending" | "active" | "error";
+type VoiceRoomState =
+  | "inactive"
+  | "pending"
+  | "active"
+  | "error"
+  | "terminated";
 
 export interface SoundCheck {
   micAllowed: boolean;
@@ -31,6 +36,7 @@ interface UseVoiceParams {
   micEnabled: boolean;
   speakersEnabled: boolean;
   handler: ConversationHandler;
+  context?: Context;
 }
 
 export const useVoice = ({
@@ -38,6 +44,7 @@ export const useVoice = ({
   micEnabled,
   speakersEnabled,
   handler,
+  context,
 }: UseVoiceParams): VoiceHookReturn => {
   const roomRef = useRef<Room | null>(null);
 
@@ -52,25 +59,24 @@ export const useVoice = ({
 
   const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
 
-  // TODO: evaluate how this can be added reliably
-  /* useEffect(() => {
+  useEffect(() => {
     const room = roomRef.current;
     if (room == null) {
       return;
     }
     room.localParticipant.setMicrophoneEnabled(micEnabled).catch((err) => {
+      // eslint-disable-next-line no-console
       console.warn(err);
     });
-  }, [micEnabled]); */
+  }, [micEnabled]);
 
-  // TODO: evaluate how this can be added reliably
-  /* useEffect(() => {
+  useEffect(() => {
     const audioElement = audioElementRef.current;
     if (audioElement == null) {
       return;
     }
     audioElement.volume = speakersEnabled ? 1 : 0;
-  }, [speakersEnabled]); */
+  }, [speakersEnabled]);
 
   useEffect(() => {
     const checkMic = async (): Promise<void> => {
@@ -108,10 +114,14 @@ export const useVoice = ({
     useDebouncedState<boolean>(false, 600);
 
   const disconnect = useCallback(() => {
-    roomRef.current?.disconnect().catch((err) => {
+    if (roomRef.current == null) {
+      return;
+    }
+    roomRef.current.disconnect().catch((err) => {
       // eslint-disable-next-line no-console
       console.warn(err);
     });
+    void handler.terminateLiveKitCall();
     roomRef.current = null;
     // Not 100% sure this is necessary but it seems to help
     if (audioElementRef.current != null) {
@@ -134,7 +144,7 @@ export const useVoice = ({
     try {
       setRoomState("pending");
 
-      const creds = await handler.getLiveKitCredentials();
+      const creds = await handler.getLiveKitCredentials(context);
 
       const handleActiveSpeakersChanged = (
         participants: Participant[],
@@ -171,6 +181,12 @@ export const useVoice = ({
         ParticipantEvent.IsSpeakingChanged,
         handleIsSpeakingChanged,
       );
+      room.on(RoomEvent.Disconnected, () => {
+        setRoomState("terminated");
+        setIsUserSpeaking(false);
+        setIsApplicationSpeaking(false);
+        disconnect();
+      });
 
       await room.connect(creds.url, creds.token, { autoSubscribe: true });
       await room.localParticipant.setMicrophoneEnabled(true);
@@ -188,13 +204,10 @@ export const useVoice = ({
   }, [setRoomState, handler, setIsUserSpeaking, setIsApplicationSpeaking]);
 
   useEffect(() => {
-    if (!active) {
-      disconnect();
-      return;
+    if (active) {
+      void setupRoom();
     }
-    // This function call will never throw, therefore the floating promises rule should not apply
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    setupRoom();
+    return disconnect;
   }, [active, disconnect, setupRoom]);
 
   return {

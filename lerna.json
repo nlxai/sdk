@@ -18,6 +18,6 @@
     "packages/touchpoint-ui",
     "packages/website"
   ],
-  "version": "1.0.5-alpha.8",
+  "version": "1.0.5-alpha.10",
   "$schema": "node_modules/lerna/schemas/lerna-schema.json"
 }

@@ -122,8 +122,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       return;
     }
     conversationInitialized.current = true;
-    props.initializeConversation(handler);
-  }, [props.initializeConversation, handler, isExpanded]);
+    props.initializeConversation(handler, props.initialContext);
+  }, [props.initializeConversation, props.initialContext, handler, isExpanded]);
 
   const windowSize: WindowSize =
     props.windowSize ?? (props.embedded ? "full" : "half");
@@ -203,7 +203,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         colorMode={colorMode}
         className="fixed bottom-2 right-2 w-fit"
       >
-        <VoiceMini handler={handler} />
+        <VoiceMini handler={handler} context={props.initialContext} />
       </CustomPropertiesContainer>
     );
   }
@@ -241,8 +241,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           }
           renderCollapse={props.onClose != null}
           collapse={(event) => {
-            onClose(event);
             setVoiceActive(false);
+            onClose(event);
           }}
           reset={() => {
             handler.reset({ clearResponses: true });
@@ -315,6 +315,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             handler={handler}
             colorMode={colorMode}
             className="flex-grow"
+            context={props.initialContext}
           />
         )}
       </div>
