@@ -199,12 +199,48 @@ const touchpoint = await create({
 | `languageCode`           | string | Yes            | Chat language (e.g., "en-US", "fr-FR")             |
 | `userId`                 | string | For voice only | User identifier (required when `input` is "voice") |
 
+**Example JS**
+
+```js
+const touchpointConfig = {
+  // Core configuration (required)
+  config: {
+    applicationUrl: "https://your-bot.studio.nlx.ai/...",
+    headers: {
+      "nlx-api-key": "YOUR_API_KEY",
+    },
+    languageCode: "en-US",
+    userId: "user-123-abc",
+  },
+};
+```
+
 ### Optional Config (inside `config` object)
 
 | Field            | Type                                                  | Required | Description                                                                                                                                                      |
 | ---------------- | ----------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `conversationId` | string                                                | optional | `conversationId` to continue an existing conversation. Used to recover conversation when [persisting history](/guide-persisting-history).                        |
 | `responses`      | array of [Response](/headless-api-reference#response) | optional | When `responses` is set, initialize the chatHandler with historical messages. Used to recover conversation when [persisting history](/guide-persisting-history). |
+
+**Example JS**
+
+```js
+const touchpointConfig = {
+  // Core configuration (required)
+  config: {
+    applicationUrl: "https://your-bot.studio.nlx.ai/...",
+    headers: {
+      "nlx-api-key": "YOUR_API_KEY",
+    },
+    languageCode: "en-US",
+    userId: "user-123-abc",
+    conversationId: "existing-conversation-id",
+    responses: [
+      // Array of previous Response objects
+    ],
+  },
+};
+```
 
 💡 See the API Reference for the [Full Configuration Object](/headless-api-reference#interfacesconfigmd)
 
@@ -218,6 +254,27 @@ const touchpoint = await create({
 | `launchIcon` | string \| boolean                      | true      | URL for chat button icon, false to hide |
 | `input`      | `"text"` \| `"voice"` \| `"voiceMini"` | `"text"`  | How users communicate with the chat     |
 
+**Example JS**
+
+```js
+const touchpointConfig = {
+  // Core configuration (required)
+  config: {
+    applicationUrl: "https://your-bot.studio.nlx.ai/...",
+    headers: {
+      "nlx-api-key": "YOUR_API_KEY"
+    },
+    languageCode: "en-US",
+    userId: "user-123-abc"
+  }
+  windowSize: "half",
+  colorMode: "dark",
+  brandIcon: "https://yoursite.com/logo.png",
+  launchIcon: "https://yoursite.com/chat-icon.svg",
+  input: "text"
+};
+```
+
 ### Message Styling
 
 | Field                | Type    | Default | Description                                      |
@@ -225,6 +282,27 @@ const touchpoint = await create({
 | `userMessageBubble`  | boolean | false   | Add bubbles to user messages                     |
 | `agentMessageBubble` | boolean | false   | Add bubbles to agent messages                    |
 | `chatMode`           | boolean | false   | Show persistent chat history with inline loaders |
+
+💡 See the [Chat Modes](/guide-touchpoint-chat-modes) section for more information.
+
+**Example JS**
+
+```js
+const touchpointConfig = {
+  // Core configuration (required)
+  config: {
+    applicationUrl: "https://your-bot.studio.nlx.ai/...",
+    headers: {
+      "nlx-api-key": "YOUR_API_KEY"
+    },
+    languageCode: "en-US",
+    userId: "user-123-abc"
+  }
+  chatMode: true,
+  userMessageBubble: true,
+  agentMessageBubble: true
+};
+```
 
 ### Theme Customization (inside `theme` object)
 
@@ -235,10 +313,56 @@ const touchpoint = await create({
 | `innerBorderRadius` | string | "12px"              | Rounding for buttons and inputs  |
 | `outerBorderRadius` | string | "20px"              | Rounding for main window         |
 
+💡 See the [Theming and Styling](/touchpoint-ui-theming) section for more information.
+
+**Example JS**
+
+```js
+const touchpointConfig = {
+  // Core configuration (required)
+  config: {
+    applicationUrl: "https://your-bot.studio.nlx.ai/...",
+    headers: {
+      "nlx-api-key": "YOUR_API_KEY"
+    },
+    languageCode: "en-US",
+    userId: "user-123-abc"
+  }
+  theme: {
+    fontFamily: '"Helvetica Neue", sans-serif',
+    accent: "rgb(28, 99, 218)"
+  }
+};
+```
+
 ### Advanced Options
 
-| Field                    | Type     | Default              | Description                             |
-| ------------------------ | -------- | -------------------- | --------------------------------------- |
-| `customModalities`       | object   | {}                   | Custom UI components for rich responses |
-| `initializeConversation` | function | Sends welcome intent | Control the first interaction           |
-| `initialContext`         | object   | undefined            | Context sent with initial request       |
+| Field                    | Type     | Default              | Description                                                                                                                                                                               |
+| ------------------------ | -------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `customModalities`       | object   | {}                   | Custom UI components for rich responses. Read more in the [Custom Components](/guide-building-custom-components) for how customModalities are used.                                       |
+| `initializeConversation` | function | Sends welcome intent | Control the first interaction. Read more in the [Launching with Context](/guide-custom-launch#customizing-initialization-logic-with-initializeconversation) section for more information. |
+| `initialContext`         | object   | undefined            | Context sent with initial request. Read more in the [Launching with Context](/guide-custom-launch#passing-initial-data-with-initialcontext) section for more information.                 |
+
+**Example JS**
+
+```js
+const touchpointConfig = {
+  // Core configuration (required)
+  config: {
+    applicationUrl: "https://your-bot.studio.nlx.ai/...",
+    headers: {
+      "nlx-api-key": "YOUR_API_KEY",
+    },
+    languageCode: "en-US",
+    userId: "user-123-abc",
+  },
+  initialContext: {
+    userTier: "premium",
+    currentPage: "/products",
+  },
+  customModalities: {
+    OrderDetails: OrderDetailsComponent,
+    MapDisplay: MapDisplayComponent,
+  },
+};
+```

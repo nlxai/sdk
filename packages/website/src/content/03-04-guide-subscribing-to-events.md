@@ -214,6 +214,61 @@ Each `BotMessage` object within the `payload.messages` array has the following k
 | `nodeId`              | `string?`  | Identifier for the flow node that generated this message. |
 | `messageId`           | `string?`  | Unique identifier for this specific message.              |
 
+**Example Application Message (Choices)**
+
+```json
+{
+  "type": "bot",
+  "receivedAt": 1701234567890,
+  "payload": {
+    "conversationId": "conversationId",
+    "messages": [
+      {
+        "messageId": "messageId",
+        "nodeId": "nodeId",
+        "text": "Hello! How can I help you today?",
+        "choices": [
+          {
+            "choiceId": "choice_product_info",
+            "choiceText": "Learn about products"
+          },
+          {
+            "choiceId": "choice_support",
+            "choiceText": "Get support"
+          }
+      }
+    ],
+    "metadata": {
+      "intentId": "Welcome"
+    }
+  }
+}
+```
+
+**Example Application Message (modalities)**
+
+```json
+{
+  "type": "bot",
+  "receivedAt": 1701234597890,
+  "payload": {
+    "messages": [
+      {
+        "text": "Here's your order information:",
+        "choices": []
+      }
+    ],
+    "modalities": {
+      "OrderDetails": {
+        "orderId": "ORD-12345",
+        "status": "Shipped",
+        "trackingNumber": "1Z999AA1234567890"
+      }
+    }
+  }
+}
+```
+
 ### User Response Object Details
 
 If the `newResponse.type` is `"user"`, its `payload` provides information about the user's input:
@@ -225,6 +280,36 @@ If the `newResponse.type` is `"user"`, its `payload` provides information about 
 | `choiceId`                     | `string`                                 | The ID of the choice selected by the user. (Present if `payload.type` is `"choice"`)                    |
 | _(Other properties)_           | (Varies)                                 | For `payload.type` `"structured"`, other properties relevant to the structured request will be present. |
 
+**Example User Response (text)**
+
+```json
+{
+  "type": "user",
+  "receivedAt": 1701234577890,
+  "payload": {
+    "type": "text",
+    "text": "I need help with my order",
+    "context": {
+      "pageUrl": "/orders"
+    }
+  }
+}
+```
+
+**Example User Response (choice)**
+
+```json
+{
+  "type": "user",
+  "receivedAt": 1701234587890,
+  "payload": {
+    "type": "choice",
+    "choiceId": "choice_support",
+    "context": {}
+  }
+}
+```
+
 ### Failure Response Object Details
 
 If the `newResponse.type` is `"failure"`, its `payload` contains error information:
@@ -232,3 +317,15 @@ If the `newResponse.type` is `"failure"`, its `payload` contains error informati
 | `newResponse.payload` Property | Type     | Description                                                                                      |
 | :----------------------------- | :------- | :----------------------------------------------------------------------------------------------- |
 | `text`                         | `string` | A description of the error or failure encountered during communication with the NLX application. |
+
+**Example Failure Message**
+
+```json
+{
+  "type": "failure",
+  "receivedAt": 1701234607890,
+  "payload": {
+    "text": "We encountered an issue. Please try again soon."
+  }
+}
+```

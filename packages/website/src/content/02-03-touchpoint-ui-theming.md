@@ -117,8 +117,7 @@ const touchpoint = await create({
     languageCode: "en-US",
     userId: "REQUIRED_FOR_VOICE",
   },
-  launchIcon:
-    "[https://yourdomain.com/path/to/your-launch-icon.svg](https://yourdomain.com/path/to/your-launch-icon.svg)",
+  launchIcon: "https://yourdomain.com/path/to/your-launch-icon.svg",
   theme: {
     background: "rgb(0, 100, 255)", // Example: Ensure your icon contrasts with this
   },
@@ -130,7 +129,7 @@ const touchpoint = await create({
 ```html
 <script
   defer
-  src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
 ></script>
 <script>
   const contentLoaded = () => {
@@ -152,8 +151,7 @@ const touchpoint = await create({
         languageCode: "en-US",
         userId: "REQUIRED_FOR_VOICE",
       },
-      launchIcon:
-        "[https://yourdomain.com/path/to/your-launch-icon.svg](https://yourdomain.com/path/to/your-launch-icon.svg)",
+      launchIcon: "https://yourdomain.com/path/to/your-launch-icon.svg",
       theme: {
         background: "rgb(0, 100, 255)", // Example: Ensure your icon contrasts with this
       },
@@ -190,8 +188,7 @@ const touchpoint = await create({
     languageCode: "en-US",
     userId: "REQUIRED_FOR_VOICE",
   },
-  brandIcon:
-    "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
+  brandIcon: "https://yourdomain.com/path/to/your-brand-icon.svg",
 });
 ```
 
@@ -200,7 +197,7 @@ const touchpoint = await create({
 ```html
 <script
   defer
-  src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
 ></script>
 <script>
   const contentLoaded = () => {
@@ -222,8 +219,7 @@ const touchpoint = await create({
         languageCode: "en-US",
         userId: "REQUIRED_FOR_VOICE",
       },
-      brandIcon:
-        "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
+      brandIcon: "https://yourdomain.com/path/to/your-brand-icon.svg",
     });
   });
 </script>
@@ -243,8 +239,7 @@ const touchpoint = await create({
     languageCode: "en-US",
     userId: "REQUIRED_FOR_VOICE",
   },
-  brandIcon:
-    "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
+  brandIcon: "https://yourdomain.com/path/to/your-brand-icon.svg",
   launchIcon: false,
 });
 
@@ -285,8 +280,7 @@ document.getElementById("my-custom-button").addEventListener("click", () => {
           languageCode: "en-US",
           userId: "REQUIRED_FOR_VOICE",
         },
-        brandIcon:
-          "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
+        brandIcon: "https://yourdomain.com/path/to/your-brand-icon.svg",
         launchIcon: false,
       })
       .then((touchpoint) => {
