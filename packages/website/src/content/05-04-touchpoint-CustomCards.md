@@ -160,8 +160,8 @@ const ItemCard = ({ data, conversationHandler }) => {
         <CustomCard selected=${isSelected} onClick=${handleClick}>
           <CustomCardImageRow src=${data.thumbnail} alt="Information Card Image" />
           <CustomCardRow
-            left=${<BaseText faded>${data.label}</BaseText>}
-            right=${<BaseText>${data.value}</BaseText>}
+            left=${html`<BaseText faded>${data.label}</BaseText>`}
+            right=${html`<BaseText>${data.value}</BaseText>`}
           />
         </CustomCard>
       `;

@@ -133,12 +133,12 @@ const ItemsCarousel = ({ data, conversationHandler }) => {
             >
               <CustomCardImageRow src=${item.thumbnail} alt="Image" />
               <CustomCardRow
-                left=${<BaseText faded>Label</BaseText>}
-                right=${<BaseText>Value</BaseText>}
+                left=${html`<BaseText faded>Label</BaseText>`}
+                right=${html`<BaseText>Value</BaseText>`}
               />
               <CustomCardRow
-                left=${<BaseText faded>Label</BaseText>}
-                right=${<BaseText>Value</BaseText>}
+                left=${html`<BaseText faded>Label</BaseText>`}
+                right=${html`<BaseText>Value</BaseText>`}
               />
             </CustomCard>
           `)}
