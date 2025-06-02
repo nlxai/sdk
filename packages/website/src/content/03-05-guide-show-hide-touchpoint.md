@@ -4,13 +4,12 @@
 - [Completely Removing Touchpoint UI from the DOM](#completely-removing-touchpoint-ui-from-the-dom)
 - [Example: Open Touchpoint UI After User Inactivity](#example-open-touchpoint-ui-after-user-inactivity)
 
-
 ## Showing and Hiding the Chat Window
 
 You can show or hide the Touchpoint UI window by setting the `expanded` boolean property on the `TouchpointInstance`.
 
-  * `touchpoint.expanded = true;` opens the chat window.
-  * `touchpoint.expanded = false;` collapses the chat window to the launch icon (if visible) or hides it if the launch icon is disabled.
+- `touchpoint.expanded = true;` opens the chat window.
+- `touchpoint.expanded = false;` collapses the chat window to the launch icon (if visible) or hides it if the launch icon is disabled.
 
 **JavaScript**
 
@@ -23,9 +22,9 @@ create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "your-unique-user-id"
+    userId: "your-unique-user-id",
   },
-}).then(touchpoint => {
+}).then((touchpoint) => {
   // To open the chat window:
   // touchpoint.expanded = true;
 
@@ -42,7 +41,10 @@ create({
 **HTML**
 
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -56,27 +58,29 @@ create({
     }
   };
 
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: "your-unique-user-id"
-      },
+  contentLoaded()
+    .then(() => {
+      return nlxai.touchpointUi.create({
+        config: {
+          applicationUrl: "YOUR_APPLICATION_URL",
+          headers: { "nlx-api-key": "YOUR_API_KEY" },
+          languageCode: "en-US",
+          userId: "your-unique-user-id",
+        },
+      });
+    })
+    .then((touchpoint) => {
+      // To open the chat window:
+      // touchpoint.expanded = true;
+
+      // To close the chat window:
+      // touchpoint.expanded = false;
+
+      // Example: Open the chat window after 2 seconds
+      setTimeout(() => {
+        touchpoint.expanded = true;
+      }, 2000);
     });
-  }).then(touchpoint => {
-    // To open the chat window:
-    // touchpoint.expanded = true;
-
-    // To close the chat window:
-    // touchpoint.expanded = false;
-
-    // Example: Open the chat window after 2 seconds
-    setTimeout(() => {
-      touchpoint.expanded = true;
-    }, 2000);
-  });
 </script>
 ```
 
@@ -95,7 +99,7 @@ create({
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
   },
-}).then(touchpoint => {
+}).then((touchpoint) => {
   // Open immediately after initialization
   touchpoint.expanded = true;
 });
@@ -104,7 +108,10 @@ create({
 **HTML**
 
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -118,19 +125,21 @@ create({
     }
   };
 
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: "your-unique-user-id"
-      },
+  contentLoaded()
+    .then(() => {
+      return nlxai.touchpointUi.create({
+        config: {
+          applicationUrl: "YOUR_APPLICATION_URL",
+          headers: { "nlx-api-key": "YOUR_API_KEY" },
+          languageCode: "en-US",
+          userId: "your-unique-user-id",
+        },
+      });
+    })
+    .then((touchpoint) => {
+      // Open immediately after initialization
+      touchpoint.expanded = true;
     });
-  }).then(touchpoint => {
-    // Open immediately after initialization
-    touchpoint.expanded = true;
-  });
 </script>
 ```
 
@@ -150,10 +159,10 @@ create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "your-unique-user-id"
+    userId: "your-unique-user-id",
   },
   launchIcon: false, // Disable the default launch button
-}).then(touchpoint => {
+}).then((touchpoint) => {
   const customButton = document.getElementById("my-custom-chat-button");
   if (customButton) {
     customButton.addEventListener("click", () => {
@@ -168,7 +177,10 @@ create({
 ```html
 <button id="my-custom-chat-button">Toggle Chat</button>
 
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -182,24 +194,26 @@ create({
     }
   };
 
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: "your-unique-user-id"
-      },
-      launchIcon: false, // Disable the default launch button
-    });
-  }).then(touchpoint => {
-    const customButton = document.getElementById("my-custom-chat-button");
-    if (customButton) {
-      customButton.addEventListener("click", () => {
-        touchpoint.expanded = !touchpoint.expanded;
+  contentLoaded()
+    .then(() => {
+      return nlxai.touchpointUi.create({
+        config: {
+          applicationUrl: "YOUR_APPLICATION_URL",
+          headers: { "nlx-api-key": "YOUR_API_KEY" },
+          languageCode: "en-US",
+          userId: "your-unique-user-id",
+        },
+        launchIcon: false, // Disable the default launch button
       });
-    }
-  });
+    })
+    .then((touchpoint) => {
+      const customButton = document.getElementById("my-custom-chat-button");
+      if (customButton) {
+        customButton.addEventListener("click", () => {
+          touchpoint.expanded = !touchpoint.expanded;
+        });
+      }
+    });
 </script>
 ```
 
@@ -217,20 +231,25 @@ create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "your-unique-user-id"
+    userId: "your-unique-user-id",
   },
-}).then(touchpoint => {
+}).then((touchpoint) => {
   // To remove the widget (e.g., on a button click or page navigation):
-  document.getElementById("remove-chat-button").addEventListener("click", () => {
-    touchpoint.teardown();
-  });
+  document
+    .getElementById("remove-chat-button")
+    .addEventListener("click", () => {
+      touchpoint.teardown();
+    });
 });
 ```
 
 **HTML**
 
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -244,24 +263,26 @@ create({
     }
   };
 
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: "your-unique-user-id"
-      },
-    });
-  }).then(touchpoint => {
-    // To remove the widget (e.g., on a button click or page navigation):
-    const removeButton = document.getElementById("remove-chat-button");
-    if (removeButton) {
-      removeButton.addEventListener("click", () => {
-        touchpoint.teardown();
+  contentLoaded()
+    .then(() => {
+      return nlxai.touchpointUi.create({
+        config: {
+          applicationUrl: "YOUR_APPLICATION_URL",
+          headers: { "nlx-api-key": "YOUR_API_KEY" },
+          languageCode: "en-US",
+          userId: "your-unique-user-id",
+        },
       });
-    }
-  });
+    })
+    .then((touchpoint) => {
+      // To remove the widget (e.g., on a button click or page navigation):
+      const removeButton = document.getElementById("remove-chat-button");
+      if (removeButton) {
+        removeButton.addEventListener("click", () => {
+          touchpoint.teardown();
+        });
+      }
+    });
 </script>
 ```
 
@@ -279,9 +300,9 @@ create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "your-unique-user-id"
+    userId: "your-unique-user-id",
   },
-}).then(touchpoint => {
+}).then((touchpoint) => {
   let inactivityTimer;
 
   const resetInactivityTimer = () => {
@@ -289,7 +310,8 @@ create({
     // Do not open if already expanded or if UI has been torn down
     if (touchpoint && !touchpoint.expanded) {
       inactivityTimer = setTimeout(() => {
-        if (touchpoint && !touchpoint.expanded) { // Double check before expanding
+        if (touchpoint && !touchpoint.expanded) {
+          // Double check before expanding
           touchpoint.expanded = true;
         }
       }, 30000); // Open after 30 seconds of inactivity
@@ -297,21 +319,29 @@ create({
   };
 
   // Events that indicate user activity
-  const activityEvents = ["mousemove", "mousedown", "keypress", "scroll", "touchstart"];
-  activityEvents.forEach(event => {
+  const activityEvents = [
+    "mousemove",
+    "mousedown",
+    "keypress",
+    "scroll",
+    "touchstart",
+  ];
+  activityEvents.forEach((event) => {
     document.addEventListener(event, resetInactivityTimer, true);
   });
 
   // Initialize the timer
   resetInactivityTimer();
-
 });
 ```
 
 **HTML**
 
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -325,36 +355,44 @@ create({
     }
   };
 
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: "your-unique-user-id"
-      },
+  contentLoaded()
+    .then(() => {
+      return nlxai.touchpointUi.create({
+        config: {
+          applicationUrl: "YOUR_APPLICATION_URL",
+          headers: { "nlx-api-key": "YOUR_API_KEY" },
+          languageCode: "en-US",
+          userId: "your-unique-user-id",
+        },
+      });
+    })
+    .then((touchpoint) => {
+      let inactivityTimer;
+
+      const resetInactivityTimer = () => {
+        clearTimeout(inactivityTimer);
+        // touchpoint might be null if teardown was called externally
+        if (touchpoint && !touchpoint.expanded) {
+          inactivityTimer = setTimeout(() => {
+            if (touchpoint && !touchpoint.expanded) {
+              touchpoint.expanded = true;
+            }
+          }, 30000); // Open after 30 seconds of inactivity
+        }
+      };
+
+      const activityEvents = [
+        "mousemove",
+        "mousedown",
+        "keypress",
+        "scroll",
+        "touchstart",
+      ];
+      activityEvents.forEach((event) => {
+        document.addEventListener(event, resetInactivityTimer, true);
+      });
+
+      resetInactivityTimer();
     });
-  }).then(touchpoint => {
-    let inactivityTimer;
-
-    const resetInactivityTimer = () => {
-      clearTimeout(inactivityTimer);
-      // touchpoint might be null if teardown was called externally
-      if (touchpoint && !touchpoint.expanded) {
-        inactivityTimer = setTimeout(() => {
-           if (touchpoint && !touchpoint.expanded) {
-            touchpoint.expanded = true;
-          }
-        }, 30000); // Open after 30 seconds of inactivity
-      }
-    };
-
-    const activityEvents = ["mousemove", "mousedown", "keypress", "scroll", "touchstart"];
-    activityEvents.forEach(event => {
-      document.addEventListener(event, resetInactivityTimer, true);
-    });
-
-    resetInactivityTimer();
-  });
 </script>
 ```

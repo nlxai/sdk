@@ -34,7 +34,7 @@ The Custom Cards components follows a nested structure where components build up
   <CustomCardImageRow>...</CustomCardImageRow>
   {/* Text content */}
   <CustomCardRow>...</CustomCardRow>
-</CustomCard>
+</CustomCard>;
 ```
 
 ## Properties
@@ -84,7 +84,7 @@ In order to use the Carousel and CustomCard components you will need to have a [
 ```json
 {
   "id": "uuid",
-  "thumbnail": "imageUrl", 
+  "thumbnail": "imageUrl",
   "label": "Label text",
   "value": "Value text"
 }
@@ -95,7 +95,14 @@ In order to use the Carousel and CustomCard components you will need to have a [
 This defines a component `ItemCard` that takes `data` (representing `cardItemData`) and an optional `initialSelectedId` and `onSelect` handler.
 
 ```javascript
-import { html, React, BaseText, CustomCard, CustomCardImageRow, CustomCardRow } from "@nlxai/touchpoint-ui";
+import {
+  html,
+  React,
+  BaseText,
+  CustomCard,
+  CustomCardImageRow,
+  CustomCardRow,
+} from "@nlxai/touchpoint-ui";
 
 const ItemCard = ({ data, conversationHandler }) => {
   const [isSelected, setIsSelected] = React.useState(null);
@@ -105,14 +112,13 @@ const ItemCard = ({ data, conversationHandler }) => {
     if (onSelect) {
       onSelect(data.id); // Notify parent about selection
     }
-    conversationHandler.sendChoice(data.id, { /* context */ });
+    conversationHandler.sendChoice(data.id, {
+      /* context */
+    });
   };
 
   return (
-    <CustomCard
-      selected={isSelected}
-      onClick={handleClick}
-    >
+    <CustomCard selected={isSelected} onClick={handleClick}>
       <CustomCardImageRow src={data.thumbnail} alt="Information Card Image" />
       <CustomCardRow
         left={<BaseText faded>{data.label}</BaseText>}
@@ -126,7 +132,10 @@ const ItemCard = ({ data, conversationHandler }) => {
 **HTML**
 
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -157,7 +166,9 @@ const ItemCard = ({ data, conversationHandler }) => {
       return html`
         <CustomCard
           selected=${data.id === selectedItemId}
-          onClick=${() => {setSelectedItemId(data.id)}}
+          onClick=${() => {
+            setSelectedItemId(data.id);
+          }}
         >
           <CustomCardImageRow src=${data.thumbnail} alt="Image" />
           <CustomCardRow

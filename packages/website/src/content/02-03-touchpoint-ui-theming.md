@@ -19,13 +19,14 @@
 For many applications, adjusting just two key properties will create a cohesive branded experience:
 
 **JavaScript**
+
 ```javascript
 const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "REQUIRED_FOR_VOICE"
+    userId: "REQUIRED_FOR_VOICE",
   },
   theme: {
     // The primary color for buttons and highlights
@@ -38,8 +39,12 @@ const touchpoint = await create({
 ```
 
 **HTML**
+
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -58,14 +63,14 @@ const touchpoint = await create({
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "REQUIRED_FOR_VOICE"
+        userId: "REQUIRED_FOR_VOICE",
       },
       theme: {
         accent: "rgb(28, 99, 218)",
         fontFamily: '"Helvetica Neue", sans-serif',
       },
     });
-  }); 
+  });
 </script>
 ```
 
@@ -88,13 +93,13 @@ The `launchIcon` is displayed on the floating action button when the Touchpoint 
 
 **Design Guidance:**
 
-| Guidance | Details | Reference |
-|--|--|--|
-| Button and Icon Size | Icon is 32x32 within the launch button | Your `launchIcon` image will be displayed at 32x32 pixels within this 64x64 button  |
-| File Format | SVG or PNG | A single-color SVG is ideal |
-| Color and Contrast | Single Color | Should contrast well with background color. (Check both light and dark mode)| 
-| Background and Borders | Icon  **must have a transparent background** | The icon should not have any embedded borders; the button handles its own border and rounding (`rounded-outer` which uses `theme.outerBorderRadius`) |
-| Shape and Proportions | 32x32 pixels | Encuse the icon is clear and recognizable at this size |
+| Guidance               | Details                                     | Reference                                                                                                                                            |
+| ---------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Button and Icon Size   | Icon is 32x32 within the launch button      | Your `launchIcon` image will be displayed at 32x32 pixels within this 64x64 button                                                                   |
+| File Format            | SVG or PNG                                  | A single-color SVG is ideal                                                                                                                          |
+| Color and Contrast     | Single Color                                | Should contrast well with background color. (Check both light and dark mode)                                                                         |
+| Background and Borders | Icon **must have a transparent background** | The icon should not have any embedded borders; the button handles its own border and rounding (`rounded-outer` which uses `theme.outerBorderRadius`) |
+| Shape and Proportions  | 32x32 pixels                                | Encuse the icon is clear and recognizable at this size                                                                                               |
 
 **Configuration:**
 
@@ -110,19 +115,23 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "REQUIRED_FOR_VOICE"
+    userId: "REQUIRED_FOR_VOICE",
   },
-  launchIcon: "[https://yourdomain.com/path/to/your-launch-icon.svg](https://yourdomain.com/path/to/your-launch-icon.svg)",
+  launchIcon:
+    "[https://yourdomain.com/path/to/your-launch-icon.svg](https://yourdomain.com/path/to/your-launch-icon.svg)",
   theme: {
-    background: "rgb(0, 100, 255)" // Example: Ensure your icon contrasts with this
-  }
+    background: "rgb(0, 100, 255)", // Example: Ensure your icon contrasts with this
+  },
 });
 ```
 
 **HTML**
 
 ```html
-<script defer src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"></script>
+<script
+  defer
+  src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -141,12 +150,13 @@ const touchpoint = await create({
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "REQUIRED_FOR_VOICE"
+        userId: "REQUIRED_FOR_VOICE",
       },
-      launchIcon: "[https://yourdomain.com/path/to/your-launch-icon.svg](https://yourdomain.com/path/to/your-launch-icon.svg)",
+      launchIcon:
+        "[https://yourdomain.com/path/to/your-launch-icon.svg](https://yourdomain.com/path/to/your-launch-icon.svg)",
       theme: {
-        background: "rgb(0, 100, 255)" // Example: Ensure your icon contrasts with this
-      }
+        background: "rgb(0, 100, 255)", // Example: Ensure your icon contrasts with this
+      },
     });
   });
 </script>
@@ -158,11 +168,11 @@ The `brandIcon` appears in the header of the expanded Touchpoint UI, reinforcing
 
 **Design Guidelines:**
 
-| Guidance | Details | Reference |
-|--|--|--|
-| Size | 40x40 pixels | Ensure design is clear at this size |
-| File Format | SVG or PNG | A SVG is ideal, High Quality PNG will work |
-| Background and Borders | Icon  **must have a transparent background** | The icon should not have any embedded borders |
+| Guidance               | Details                                     | Reference                                     |
+| ---------------------- | ------------------------------------------- | --------------------------------------------- |
+| Size                   | 40x40 pixels                                | Ensure design is clear at this size           |
+| File Format            | SVG or PNG                                  | A SVG is ideal, High Quality PNG will work    |
+| Background and Borders | Icon **must have a transparent background** | The icon should not have any embedded borders |
 
 **Configuration:**
 
@@ -178,16 +188,20 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "REQUIRED_FOR_VOICE"
+    userId: "REQUIRED_FOR_VOICE",
   },
-  brandIcon: "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)"
+  brandIcon:
+    "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
 });
 ```
 
 **HTML**
 
 ```html
-<script defer src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"></script>
+<script
+  defer
+  src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -206,10 +220,10 @@ const touchpoint = await create({
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "REQUIRED_FOR_VOICE"
+        userId: "REQUIRED_FOR_VOICE",
       },
-      brandIcon: "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
-
+      brandIcon:
+        "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
     });
   });
 </script>
@@ -220,32 +234,36 @@ const touchpoint = await create({
 You can implement a fully custom launch experience if the default launch button constraints don't meet your needs.
 
 **JavaScript**
+
 ```javascript
 const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "REQUIRED_FOR_VOICE"
+    userId: "REQUIRED_FOR_VOICE",
   },
-  brandIcon: "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
+  brandIcon:
+    "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
   launchIcon: false,
 });
 
 // Create your own launch button
-document.getElementById('my-custom-button').addEventListener('click', () => {
+document.getElementById("my-custom-button").addEventListener("click", () => {
   touchpoint.expanded = true;
 });
 ```
 
 **HTML**
+
 ```html
 <!-- Your custom button -->
-<button id="my-custom-button" class="my-brand-button">
-  Chat with us
-</button>
+<button id="my-custom-button" class="my-brand-button">Chat with us</button>
 
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -259,21 +277,26 @@ document.getElementById('my-custom-button').addEventListener('click', () => {
     }
   };
   contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: "REQUIRED_FOR_VOICE"
-      },
-      brandIcon: "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
-      launchIcon: false,
-    }).then((touchpoint) => {
-      document.getElementById('my-custom-button').addEventListener('click', () => {
-        touchpoint.expanded = true;
+    return nlxai.touchpointUi
+      .create({
+        config: {
+          applicationUrl: "YOUR_APPLICATION_URL",
+          headers: { "nlx-api-key": "YOUR_API_KEY" },
+          languageCode: "en-US",
+          userId: "REQUIRED_FOR_VOICE",
+        },
+        brandIcon:
+          "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
+        launchIcon: false,
+      })
+      .then((touchpoint) => {
+        document
+          .getElementById("my-custom-button")
+          .addEventListener("click", () => {
+            touchpoint.expanded = true;
+          });
       });
-    });
-  }); 
+  });
 </script>
 ```
 
@@ -284,13 +307,14 @@ This approach gives you complete control over the launch button's appearance, po
 Touchpoint automatically adapts your theme for both light and dark modes. Use the `light-dark()` method to provide different accent colors for each mode:
 
 **JavaScript**
+
 ```javascript
 const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "REQUIRED_FOR_VOICE"
+    userId: "REQUIRED_FOR_VOICE",
   },
   colorMode: "dark", // or "light"
   theme: {
@@ -301,8 +325,12 @@ const touchpoint = await create({
 ```
 
 **HTML**
+
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -321,7 +349,7 @@ const touchpoint = await create({
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "REQUIRED_FOR_VOICE"
+        userId: "REQUIRED_FOR_VOICE",
       },
       colorMode: "dark",
       theme: {
@@ -329,7 +357,7 @@ const touchpoint = await create({
         fontFamily: '"Helvetica Neue", sans-serif',
       },
     });
-  }); 
+  });
 </script>
 ```
 
@@ -338,6 +366,7 @@ const touchpoint = await create({
 For maximum control, you can create entirely separate theme objects for light and dark modes:
 
 **JavaScript**
+
 ```javascript
 import { create } from "@nlxai/touchpoint-ui";
 
@@ -367,7 +396,7 @@ const initializeTouchpoint = async (
       applicationUrl: "YOUR_APPLICATION_URL",
       headers: { "nlx-api-key": "YOUR_API_KEY" },
       languageCode: "en-US",
-      userId: "REQUIRED_FOR_VOICE"
+      userId: "REQUIRED_FOR_VOICE",
     },
     colorMode: userColorModePreference,
     theme: userColorModePreference === "dark" ? darkTheme : lightTheme,
@@ -376,8 +405,12 @@ const initializeTouchpoint = async (
 ```
 
 **HTML**
+
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -390,7 +423,7 @@ const initializeTouchpoint = async (
       return Promise.resolve();
     }
   };
-  
+
   const lightTheme = {
     fontFamily: '"Inter", sans-serif',
     accent: "#007AFF",
@@ -406,21 +439,25 @@ const initializeTouchpoint = async (
     secondary80: "#1C1C1E",
     background: "#000000",
   };
-  
+
   contentLoaded().then(() => {
-    const userColorModePreference = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    
+    const userColorModePreference = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches
+      ? "dark"
+      : "light";
+
     return nlxai.touchpointUi.create({
       config: {
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "REQUIRED_FOR_VOICE"
+        userId: "REQUIRED_FOR_VOICE",
       },
       colorMode: userColorModePreference,
       theme: userColorModePreference === "dark" ? darkTheme : lightTheme,
     });
-  }); 
+  });
 </script>
 ```
 
@@ -500,6 +537,7 @@ const theme = {
 Here's a complete theme configuration showing all available properties:
 
 **JavaScript**
+
 ```javascript
 import { create } from "@nlxai/touchpoint-ui";
 
@@ -547,7 +585,7 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "REQUIRED_FOR_VOICE"
+    userId: "REQUIRED_FOR_VOICE",
   },
   theme: completeTheme,
   launchIcon: "https://yoursite.com/chat-icon.svg",
@@ -556,8 +594,12 @@ const touchpoint = await create({
 ```
 
 **HTML**
+
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -598,18 +640,18 @@ const touchpoint = await create({
       innerBorderRadius: "4px",
       outerBorderRadius: "12px",
     };
-    
+
     return nlxai.touchpointUi.create({
       config: {
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "REQUIRED_FOR_VOICE"
+        userId: "REQUIRED_FOR_VOICE",
       },
       theme: completeTheme,
       launchIcon: "https://yoursite.com/chat-icon.svg",
       brandIcon: "https://yoursite.com/logo.png",
     });
-  }); 
+  });
 </script>
 ```

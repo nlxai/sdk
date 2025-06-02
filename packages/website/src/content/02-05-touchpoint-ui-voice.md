@@ -33,11 +33,15 @@ const touchpointConfig = {
 
 const touchpoint = await create(touchpointOptions);
 ```
+
 </td>
 <td>
 
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -55,22 +59,25 @@ const touchpoint = await create(touchpointOptions);
       config: {
         applicationUrl: "REPLACE_WITH_APPLICATION_URL",
         headers: {
-          "nlx-api-key": "REPLACE_WITH_API_KEY"
+          "nlx-api-key": "REPLACE_WITH_API_KEY",
         },
         languageCode: "en-US",
-        userId: "REPLACE_WITH_USER_ID"
+        userId: "REPLACE_WITH_USER_ID",
       },
       colorMode: "dark",
       input: "voice",
-      theme: {"fontFamily":"\"Neue Haas Grotesk\", sans-serif","accent":"#AECAFF"}
-    })
-  }); 
+      theme: {
+        fontFamily: '"Neue Haas Grotesk", sans-serif',
+        accent: "#AECAFF",
+      },
+    });
+  });
 </script>
 ```
+
 </td>
 </tr>
 <table>
-
 
 ## User Experience
 

@@ -9,7 +9,6 @@
   - [`sendSlots(slots, context?)`](#sendslotsslots-context)
   - [`sendStructured(request, context?)`](#sendstructuredrequest-context)
 
-
 ## Accessing the ConversationHandler
 
 You can access the `ConversationHandler` in two main ways:
@@ -19,6 +18,7 @@ You can access the `ConversationHandler` in two main ways:
 When you initialize Touchpoint UI using the `create` method, it returns a `TouchpointInstance` object. This object contains the `conversationHandler`.
 
 **JavaScript**
+
 ```javascript
 import { create } from "@nlxai/touchpoint-ui";
 
@@ -28,7 +28,7 @@ const touchpointOptions = {
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
     // userId is required for voice input, recommended otherwise
-    userId: "your-unique-user-id"
+    userId: "your-unique-user-id",
   },
   // Other Touchpoint UI options
 };
@@ -45,7 +45,10 @@ initializeAndUseTouchpoint();
 **HTML**
 
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -65,7 +68,7 @@ initializeAndUseTouchpoint();
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "your-unique-user-id"
+        userId: "your-unique-user-id",
       },
       // Other Touchpoint UI options
     };
@@ -91,12 +94,11 @@ const MyCustomButtonComponent = ({ data, conversationHandler }) => {
   const myButton = html`<TextButton
     label="My Button"
     Icon=${Icons.ArrowForward}
-    onClick=${() => {
+    onClick="${() => {
       conversationHandler.sendChoice(data.buttonId);
-      }
-    }}
+    }}}"
   />`;
-  return myButton
+  return myButton;
 };
 ```
 
@@ -112,8 +114,8 @@ Use `sendText` to send a free-form text message from the user. This is typically
 
 **When to use:**
 
-  * Responding to an open-ended question from the bot.
-  * Filling a slot that expects arbitrary text input.
+- Responding to an open-ended question from the bot.
+- Filling a slot that expects arbitrary text input.
 
 ```javascript
 // Assuming 'conversationHandler' is obtained
@@ -122,10 +124,9 @@ conversationHandler.sendText("Yes, I'd like to know more about your services.");
 // Sending text with context
 conversationHandler.sendText("My email is user@example.com", {
   pageSection: "pricingInquiry",
-  timestamp: new Date().toISOString()
+  timestamp: new Date().toISOString(),
 });
 ```
-
 
 ### `sendIntent(intentId, context?)`
 
@@ -133,9 +134,9 @@ Use `sendIntent` to programmatically trigger a specific flow within your NLX app
 
 **When to use:**
 
-  * Starting a conversation with a specific purpose (e.g., "CheckOrderStatus").
-  * Responding to user interactions on your webpage that map to a defined flow.
-  * Allowing custom components to direct the conversation flow.
+- Starting a conversation with a specific purpose (e.g., "CheckOrderStatus").
+- Responding to user interactions on your webpage that map to a defined flow.
+- Allowing custom components to direct the conversation flow.
 
 ```javascript
 // Assuming 'conversationHandler' is obtained
@@ -144,7 +145,7 @@ conversationHandler.sendIntent("RequestTechnicalSupport");
 // Sending an intent with context variables
 conversationHandler.sendIntent("ViewProductDetails", {
   productId: "PROD12345",
-  category: "electronics"
+  category: "electronics",
 });
 ```
 
@@ -154,9 +155,9 @@ Use `sendWelcomeIntent` to initiate the conversation with the default welcome fl
 
 **When to use:**
 
-  * Starting the conversation when the chat widget is first opened.
-  * Providing a "start over" functionality.
-  * Sending initial context data (like user status or page information) at the beginning of a conversation.
+- Starting the conversation when the chat widget is first opened.
+- Providing a "start over" functionality.
+- Sending initial context data (like user status or page information) at the beginning of a conversation.
 
 ```javascript
 // Assuming 'conversationHandler' is obtained
@@ -168,7 +169,7 @@ conversationHandler.sendWelcomeIntent();
 conversationHandler.sendWelcomeIntent({
   userLoggedIn: true,
   entryPoint: "ProductPageWelcome",
-  languagePreference: "es-MX"
+  languagePreference: "es-MX",
 });
 ```
 
@@ -180,9 +181,9 @@ Use `sendChoice` when the user selects an option from a list of choices presente
 
 **When to use:**
 
-  * User clicks a quick reply button.
-  * User selects an item from a [carousel](/touchpoint-carousel) or list that has an associated `choiceId`.
-  * Responding to a user-choice node that expects a 'label' or 'id' response.
+- User clicks a quick reply button.
+- User selects an item from a [carousel](/touchpoint-carousel) or list that has an associated `choiceId`.
+- Responding to a user-choice node that expects a 'label' or 'id' response.
 
 ```javascript
 import { html, Icons } from "@nlxai/touchpoint-ui";
@@ -191,15 +192,13 @@ const MyCustomButtonComponent = ({ data, conversationHandler }) => {
   const myButton = html`<TextButton
     label="My Button"
     Icon=${Icons.ArrowForward}
-    onClick=${() => {
+    onClick="${() => {
       conversationHandler.sendChoice(data.buttonId);
-      }
-    }}
+    }}}"
   />`;
-  return myButton
+  return myButton;
 };
 ```
-
 
 ### `sendSlots(slots, context?)`
 
@@ -209,8 +208,8 @@ Provide an object where keys are the **slot names** (as defined in your NLX Appl
 
 **When to use:**
 
-  * Submitting data from a form within a custom component or your webpage.
-  * Providing multiple pieces of information gathered through a custom UI.
+- Submitting data from a form within a custom component or your webpage.
+- Providing multiple pieces of information gathered through a custom UI.
 
 ```javascript
 // Assuming 'conversationHandler' is obtained
@@ -218,13 +217,13 @@ Provide an object where keys are the **slot names** (as defined in your NLX Appl
 conversationHandler.sendSlots({
   FirstName: "Alex",
   LastName: "Rivera",
-  ProductInterest: "Solar Panels"
+  ProductInterest: "Solar Panels",
 });
 
 // Sending slots with context
 conversationHandler.sendSlots(
   { EmailAddress: "alex.rivera@email.com", ZipCode: "90210" },
-  { formName: "leadCaptureForm" }
+  { formName: "leadCaptureForm" },
 );
 ```
 
@@ -234,18 +233,18 @@ conversationHandler.sendSlots(
 
 Refer to the [Headless API Reference (`StructuredRequest` type)](/headless-api-reference#interfacesconversationhandlermd) for details on the `request` object structure.
 
-
 ```javascript
 // Assuming 'conversationHandler' is obtained
 conversationHandler.sendStructured(
   {
     intentId: "FinalizeOrderIntent", // Trigger a specific intent
-    slots: { // Provide slot data
+    slots: {
+      // Provide slot data
       PaymentMethod: "CreditCard",
-      ShippingPreference: "Express"
+      ShippingPreference: "Express",
     },
     // choiceId: "confirm_action" // Optionally, also send a choiceId
   },
-  { currentCartValue: 150.75 } // Send along some context
+  { currentCartValue: 150.75 }, // Send along some context
 );
 ```

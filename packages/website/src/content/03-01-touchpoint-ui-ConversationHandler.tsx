@@ -2,7 +2,6 @@ import { type FC } from "react";
 import { PageContent } from "../components/PageContent";
 import markdownContent from "./03-01-touchpoint-ui-ConversationHandler.md?raw";
 
-
 export const navGroup: string = "Conversation Control";
 
 export const title: string = "The Conversation Handler";
@@ -13,7 +12,6 @@ The \`ConversationHandler\` is a key part of the Touchpoint UI SDK, providing th
 Refer to the [Headless API Reference (ConversationHandler interface)](/headless-api-reference#interfacesconversationhandlermd) for a complete list of methods and their detailed type signatures.
 
 ${markdownContent}`;
-
 
 export const Content: FC<unknown> = () => {
   return <PageContent md={content} />;

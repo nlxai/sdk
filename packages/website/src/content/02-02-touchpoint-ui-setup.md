@@ -14,6 +14,7 @@
 ### Required Configuration
 
 **JavaScript**
+
 ```javascript
 import { create } from "@nlxai/touchpoint-ui";
 
@@ -22,14 +23,18 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "REQUIRED_FOR_VOICE"
+    userId: "REQUIRED_FOR_VOICE",
   },
 });
 ```
 
 **HTML**
+
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -48,18 +53,18 @@ const touchpoint = await create({
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "REQUIRED_FOR_VOICE"
+        userId: "REQUIRED_FOR_VOICE",
       },
     });
-  }); 
+  });
 </script>
 ```
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `applicationUrl` | string | Your NLX application endpoint |
-| `headers["nlx-api-key"]` | string | Your NLX API key |
-| `languageCode` | string | Chat language (e.g., "en-US", "fr-FR") |
+| Field                    | Type   | Description                            |
+| ------------------------ | ------ | -------------------------------------- |
+| `applicationUrl`         | string | Your NLX application endpoint          |
+| `headers["nlx-api-key"]` | string | Your NLX API key                       |
+| `languageCode`           | string | Chat language (e.g., "en-US", "fr-FR") |
 
 ---
 
@@ -68,28 +73,33 @@ const touchpoint = await create({
 Add these options outside the `config` object:
 
 **JavaScript**
+
 ```javascript
 const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "REQUIRED_FOR_VOICE"
+    userId: "REQUIRED_FOR_VOICE",
   },
   // Brand customization
-  colorMode: "light",                              // "light" or "dark"
+  colorMode: "light", // "light" or "dark"
   theme: {
-    accent: "#0066CC",                             // Your brand color
-    fontFamily: '"Inter", sans-serif',             // Your brand font
+    accent: "#0066CC", // Your brand color
+    fontFamily: '"Inter", sans-serif', // Your brand font
   },
-  brandIcon: "https://yoursite.com/logo.png",     // Header logo
+  brandIcon: "https://yoursite.com/logo.png", // Header logo
   launchIcon: "https://yoursite.com/chat-icon.svg", // Chat button icon
 });
 ```
 
 **HTML**
+
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -108,7 +118,7 @@ const touchpoint = await create({
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "REQUIRED_FOR_VOICE"
+        userId: "REQUIRED_FOR_VOICE",
       },
       colorMode: "light",
       theme: {
@@ -118,7 +128,7 @@ const touchpoint = await create({
       brandIcon: "https://yoursite.com/logo.png",
       launchIcon: "https://yoursite.com/chat-icon.svg",
     });
-  }); 
+  });
 </script>
 ```
 
@@ -129,21 +139,26 @@ const touchpoint = await create({
 Voice input requires a `userId` in your config:
 
 **JavaScript**
+
 ```javascript
 const touchpoint = await create({
   config: {
-    applicationUrl: "YOUR_APPLICATION_URL", 
+    applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "user-12345",                    // Required for voice
+    userId: "user-12345", // Required for voice
   },
-  input: "voice",                            // Enable voice input
+  input: "voice", // Enable voice input
 });
 ```
 
 **HTML**
+
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -166,7 +181,7 @@ const touchpoint = await create({
       },
       input: "voice",
     });
-  }); 
+  });
 </script>
 ```
 
@@ -175,40 +190,45 @@ const touchpoint = await create({
 ## Complete Configuration Reference
 
 ### Core Config (inside `config` object)
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `applicationUrl` | string | Yes | Your NLX application endpoint |
-| `headers["nlx-api-key"]` | string | Yes | Your NLX API key |
-| `languageCode` | string | Yes | Chat language (e.g., "en-US", "fr-FR") |
-| `userId` | string | For voice only | User identifier (required when `input` is "voice") |
+
+| Field                    | Type   | Required       | Description                                        |
+| ------------------------ | ------ | -------------- | -------------------------------------------------- |
+| `applicationUrl`         | string | Yes            | Your NLX application endpoint                      |
+| `headers["nlx-api-key"]` | string | Yes            | Your NLX API key                                   |
+| `languageCode`           | string | Yes            | Chat language (e.g., "en-US", "fr-FR")             |
+| `userId`                 | string | For voice only | User identifier (required when `input` is "voice") |
 
 ### UI Options (outside `config` object)
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `windowSize` | `"half"` \| `"full"` | `"half"` | Half-screen overlay or full-screen mode |
-| `colorMode` | `"light"` \| `"dark"` | `"dark"` | Light or dark theme |
-| `brandIcon` | string | undefined | URL for header logo |
-| `launchIcon` | string \| boolean | true | URL for chat button icon, false to hide |
-| `input` | `"text"` \| `"voice"` \| `"voiceMini"` | `"text"` | How users communicate with the chat |
+
+| Field        | Type                                   | Default   | Description                             |
+| ------------ | -------------------------------------- | --------- | --------------------------------------- |
+| `windowSize` | `"half"` \| `"full"`                   | `"half"`  | Half-screen overlay or full-screen mode |
+| `colorMode`  | `"light"` \| `"dark"`                  | `"dark"`  | Light or dark theme                     |
+| `brandIcon`  | string                                 | undefined | URL for header logo                     |
+| `launchIcon` | string \| boolean                      | true      | URL for chat button icon, false to hide |
+| `input`      | `"text"` \| `"voice"` \| `"voiceMini"` | `"text"`  | How users communicate with the chat     |
 
 ### Message Styling
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `userMessageBubble` | boolean | false | Add bubbles to user messages |
-| `agentMessageBubble` | boolean | false | Add bubbles to agent messages |
-| `chatMode` | boolean | false | Show persistent chat history with inline loaders |
+
+| Field                | Type    | Default | Description                                      |
+| -------------------- | ------- | ------- | ------------------------------------------------ |
+| `userMessageBubble`  | boolean | false   | Add bubbles to user messages                     |
+| `agentMessageBubble` | boolean | false   | Add bubbles to agent messages                    |
+| `chatMode`           | boolean | false   | Show persistent chat history with inline loaders |
 
 ### Theme Customization (inside `theme` object)
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `fontFamily` | string | "Neue Haas Grotesk" | Font for all text |
-| `accent` | string | varies by mode | Color for buttons and highlights |
-| `innerBorderRadius` | string | "12px" | Rounding for buttons and inputs |
-| `outerBorderRadius` | string | "20px" | Rounding for main window |
+
+| Field               | Type   | Default             | Description                      |
+| ------------------- | ------ | ------------------- | -------------------------------- |
+| `fontFamily`        | string | "Neue Haas Grotesk" | Font for all text                |
+| `accent`            | string | varies by mode      | Color for buttons and highlights |
+| `innerBorderRadius` | string | "12px"              | Rounding for buttons and inputs  |
+| `outerBorderRadius` | string | "20px"              | Rounding for main window         |
 
 ### Advanced Options
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `customModalities` | object | {} | Custom UI components for rich responses |
-| `initializeConversation` | function | Sends welcome intent | Control the first interaction |
-| `initialContext` | object | undefined | Context sent with initial request |
+
+| Field                    | Type     | Default              | Description                             |
+| ------------------------ | -------- | -------------------- | --------------------------------------- |
+| `customModalities`       | object   | {}                   | Custom UI components for rich responses |
+| `initializeConversation` | function | Sends welcome intent | Control the first interaction           |
+| `initialContext`         | object   | undefined            | Context sent with initial request       |

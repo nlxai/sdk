@@ -17,10 +17,10 @@ You use the `conversationHandler.subscribe()` method to register a callback func
 
 The `subscribe` method takes a call function that will be called with `(allResponses: Response[], newResponse?: Response)`
 
-| Parameter     | Type         | Description                                                                                                                                                             |
-| :------------ | :----------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `allResponses`| `Response[]` | An array containing all `Response` objects in the conversation history up to this point. This reflects the complete current state of the conversation.                |
-| `newResponse` | `Response?`  | The most recent `Response` object that triggered this specific callback invocation. It is `undefined` during the initial call when the subscriber first registers. |
+| Parameter      | Type         | Description                                                                                                                                                        |
+| :------------- | :----------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `allResponses` | `Response[]` | An array containing all `Response` objects in the conversation history up to this point. This reflects the complete current state of the conversation.             |
+| `newResponse`  | `Response?`  | The most recent `Response` object that triggered this specific callback invocation. It is `undefined` during the initial call when the subscriber first registers. |
 
 The `subscribe` method returns a function that you can call later to unsubscribe this specific callback.
 
@@ -45,7 +45,9 @@ const myConversationListener = (allResponses, newResponse) => {
 };
 
 // Start listening to conversation updates
-const unsubscribeListener = conversationHandler.subscribe(myConversationListener);
+const unsubscribeListener = conversationHandler.subscribe(
+  myConversationListener,
+);
 
 // To stop this specific listener later:
 // unsubscribeListener();
@@ -54,7 +56,10 @@ const unsubscribeListener = conversationHandler.subscribe(myConversationListener
 **HTML**
 
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -71,38 +76,45 @@ const unsubscribeListener = conversationHandler.subscribe(myConversationListener
   let touchpointInstance; // To store the touchpoint instance
   let unsubscribeListener; // To store the unsubscribe function
 
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: "your-user-id" // Recommended
-      }
+  contentLoaded()
+    .then(() => {
+      return nlxai.touchpointUi.create({
+        config: {
+          applicationUrl: "YOUR_APPLICATION_URL",
+          headers: { "nlx-api-key": "YOUR_API_KEY" },
+          languageCode: "en-US",
+          userId: "your-user-id", // Recommended
+        },
+      });
+    })
+    .then((touchpoint) => {
+      touchpointInstance = touchpoint;
+      const { conversationHandler } = touchpointInstance;
+
+      const myConversationListener = (allResponses, newResponse) => {
+        console.log("Total messages so far:", allResponses.length);
+
+        if (newResponse) {
+          console.log("A new response was received. Type:", newResponse.type);
+          // Further processing of newResponse...
+        } else {
+          console.log(
+            "Subscription initialized. Historical messages:",
+            allResponses,
+          );
+        }
+      };
+
+      // Start listening to conversation updates
+      unsubscribeListener = conversationHandler.subscribe(
+        myConversationListener,
+      );
+
+      // Example: To stop this specific listener later, you could call:
+      // if (unsubscribeListener) {
+      //   unsubscribeListener();
+      // }
     });
-  }).then(touchpoint => {
-    touchpointInstance = touchpoint;
-    const { conversationHandler } = touchpointInstance;
-
-    const myConversationListener = (allResponses, newResponse) => {
-      console.log("Total messages so far:", allResponses.length);
-
-      if (newResponse) {
-        console.log("A new response was received. Type:", newResponse.type);
-        // Further processing of newResponse...
-      } else {
-        console.log("Subscription initialized. Historical messages:", allResponses);
-      }
-    };
-
-    // Start listening to conversation updates
-    unsubscribeListener = conversationHandler.subscribe(myConversationListener);
-
-    // Example: To stop this specific listener later, you could call:
-    // if (unsubscribeListener) {
-    //   unsubscribeListener();
-    // }
-  });
 </script>
 ```
 
@@ -116,7 +128,7 @@ A common use for `subscribe` is to detect and act upon custom modalities sent by
 const handleConversationUpdate = (allResponses, newResponse) => {
   if (newResponse && newResponse.type === "bot") {
     const botPayload = newResponse.payload;
-    console.log("Bot says:", botPayload.messages.map(m => m.text).join(' '));
+    console.log("Bot says:", botPayload.messages.map((m) => m.text).join(" "));
 
     // Check for a specific custom modality, e.g., "MapDisplay"
     if (botPayload.modalities?.MapDisplay) {
@@ -128,9 +140,9 @@ const handleConversationUpdate = (allResponses, newResponse) => {
 
     // Check for another modality, e.g., "TrackOrder"
     if (botPayload.modalities?.TrackOrder) {
-        const orderDetails = botPayload.modalities.TrackOrder;
-        // Example: Update UI with order status
-        // displayOrderStatus(orderDetails.status, orderDetails.estimatedDelivery);
+      const orderDetails = botPayload.modalities.TrackOrder;
+      // Example: Update UI with order status
+      // displayOrderStatus(orderDetails.status, orderDetails.estimatedDelivery);
     }
   } else if (newResponse && newResponse.type === "user") {
     if (newResponse.payload.type === "text") {
@@ -175,50 +187,48 @@ The `Response` objects provided to your callback give you detailed information a
 
 A `Response` object (whether in `allResponses` or as `newResponse`) always has a `type` property that indicates its origin:
 
-| `Response.type` Value | Description                                                |
-| :-------------------- | :--------------------------------------------------------- |
+| `Response.type` Value | Description                                                  |
+| :-------------------- | :----------------------------------------------------------- |
 | `"bot"`               | A message or set of messages from the NLX application.       |
-| `"user"`              | A message or action initiated by the user.                 |
+| `"user"`              | A message or action initiated by the user.                   |
 | `"failure"`           | An error occurred in communication with the NLX application. |
 
 For detailed structures of these objects, refer to the [Headless API Reference](/headless-api-reference).
 
 ### NLX Response Object Details
 
-If the `newResponse.type` is `"bot"`, its `payload` contains details from  NLX:
+If the `newResponse.type` is `"bot"`, its `payload` contains details from NLX:
 
-| `newResponse.payload` Property | Type / Structure                   | Description                                                                                                                                                  |
-| :----------------------------- | :--------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `messages`                     | `BotMessage[]`                     | An array of message objects from the bot. See `BotMessage` structure below.                                                                                  |
-| `modalities`                   | `Record<string, any>` (Optional)   | An object where keys are modality names (e.g., `"MapDisplay"`) and values are their data payloads. This allows for custom UI rendering or client-side actions. |
-| `metadata`                     | `BotResponseMetadata` (Optional)   | Contains conversation-level metadata, such as `intentId`.                                                                                                    |
+| `newResponse.payload` Property | Type / Structure                 | Description                                                                                                                                                    |
+| :----------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`                     | `BotMessage[]`                   | An array of message objects from the bot. See `BotMessage` structure below.                                                                                    |
+| `modalities`                   | `Record<string, any>` (Optional) | An object where keys are modality names (e.g., `"MapDisplay"`) and values are their data payloads. This allows for custom UI rendering or client-side actions. |
+| `metadata`                     | `BotResponseMetadata` (Optional) | Contains conversation-level metadata, such as `intentId`.                                                                                                      |
 
 Each `BotMessage` object within the `payload.messages` array has the following key properties:
 
-| `BotMessage` Property | Type        | Description                                               |
-| :-------------------- | :---------- | :-------------------------------------------------------- |
-| `text`                | `string`    | The text content of the message.                          |
-| `choices`             | `Choice[]`  | An array of choice objects offered to the user.           |
-| `nodeId`              | `string?`   | Identifier for the flow node that generated this message. |
-| `messageId`           | `string?`   | Unique identifier for this specific message.              |
-
+| `BotMessage` Property | Type       | Description                                               |
+| :-------------------- | :--------- | :-------------------------------------------------------- |
+| `text`                | `string`   | The text content of the message.                          |
+| `choices`             | `Choice[]` | An array of choice objects offered to the user.           |
+| `nodeId`              | `string?`  | Identifier for the flow node that generated this message. |
+| `messageId`           | `string?`  | Unique identifier for this specific message.              |
 
 ### User Response Object Details
 
 If the `newResponse.type` is `"user"`, its `payload` provides information about the user's input:
 
-| `newResponse.payload` Property | Type                                     | Description                                                                                               |
-| :----------------------------- | :--------------------------------------- | :-------------------------------------------------------------------------------------------------------- |
-| `type`                         | `"text"` \| `"choice"` \| `"structured"`   | Indicates the kind of user input.                                                                         |
-| `text`                         | `string`                                 | The text entered by the user. (Present if `payload.type` is `"text"`)                                     |
-| `choiceId`                     | `string`                                 | The ID of the choice selected by the user. (Present if `payload.type` is `"choice"`)                      |
-| *(Other properties)* | (Varies)                                 | For `payload.type` `"structured"`, other properties relevant to the structured request will be present. |
-
+| `newResponse.payload` Property | Type                                     | Description                                                                                             |
+| :----------------------------- | :--------------------------------------- | :------------------------------------------------------------------------------------------------------ |
+| `type`                         | `"text"` \| `"choice"` \| `"structured"` | Indicates the kind of user input.                                                                       |
+| `text`                         | `string`                                 | The text entered by the user. (Present if `payload.type` is `"text"`)                                   |
+| `choiceId`                     | `string`                                 | The ID of the choice selected by the user. (Present if `payload.type` is `"choice"`)                    |
+| _(Other properties)_           | (Varies)                                 | For `payload.type` `"structured"`, other properties relevant to the structured request will be present. |
 
 ### Failure Response Object Details
 
 If the `newResponse.type` is `"failure"`, its `payload` contains error information:
 
-| `newResponse.payload` Property | Type     | Description                                                                              |
-| :----------------------------- | :------- | :--------------------------------------------------------------------------------------- |
+| `newResponse.payload` Property | Type     | Description                                                                                      |
+| :----------------------------- | :------- | :----------------------------------------------------------------------------------------------- |
 | `text`                         | `string` | A description of the error or failure encountered during communication with the NLX application. |

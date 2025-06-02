@@ -20,9 +20,9 @@ The Carousel component provides a horizontally scrollable container for displayi
 
 The Carousel component accepts these properties:
 
-| Property | Type      | Required | Description                                      |
-| -------- | --------- | -------- | ------------------------------------------------ |
-| children | ReactNode | Yes      | Content to be rendered inside the carousel       |
+| Property | Type      | Required | Description                                |
+| -------- | --------- | -------- | ------------------------------------------ |
+| children | ReactNode | Yes      | Content to be rendered inside the carousel |
 
 ## Import and Basic Usage
 
@@ -46,7 +46,7 @@ The Carousel component is best used with multiple CustomCard components to creat
 [
   {
     "id": "uuid",
-    "thumbnail": "imageUrl", 
+    "thumbnail": "imageUrl",
     "label": "Label text",
     "value": "Value text"
   }
@@ -122,7 +122,7 @@ const ItemsCarousel = ({ data, conversationHandler }) => {
 
       return html`
         <Carousel>
-          ${data.map((item) => 
+          ${data.map((item) =>
             <CustomCard
               selected=${item.id === selectedItemId}
               onClick=${() => {setSelectedItemId(order.id)}}
@@ -144,7 +144,6 @@ const ItemsCarousel = ({ data, conversationHandler }) => {
   });
 </script>
 ```
-
 
 ## Related Components
 

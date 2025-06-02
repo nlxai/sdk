@@ -5,7 +5,6 @@
   - [1. Sending User Information via `initialContext` (Recommended for Data Passing)](#1-sending-user-information-via-initialcontext-recommended-for-data-passing)
   - [2. Launching with a Custom Intent Using `initializeConversation`](#2-launching-with-a-custom-intent-using-initializeconversation)
 
-
 ## Passing Initial Data with `initialContext`
 
 The `initialContext` option in your Touchpoint UI configuration is the simplest way to send data to your NLX application when a conversation starts. `initialContext` works all input modes: text, voice, and voiceMini.
@@ -13,11 +12,13 @@ The `initialContext` option in your Touchpoint UI configuration is the simplest 
 The `initialContext` object accepts key-value pairs, which are then available as [Context Variables](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) within your NLX flows.
 
 **When to use `initialContext`:**
+
 - You need to pass user details, page information, or any other relevant data at the beginning of the conversation.
 - You don't need custom JavaScript logic to run on launch, just data passing.
 - You want a straightforward way to provide context for text, voice, or voiceMini interactions from the start.
 
 **JavaScript**
+
 ```javascript
 import { create } from "@nlxai/touchpoint-ui";
 
@@ -27,7 +28,7 @@ const touchpoint = await create({
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
     // userId is required if input is "voice" or "voiceMini"
-    userId: "your-unique-user-id"
+    userId: "your-unique-user-id",
   },
   initialContext: {
     userId: "user-789",
@@ -41,7 +42,10 @@ const touchpoint = await create({
 **HTML**
 
 ```html
-<script defer src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"></script>
+<script
+  defer
+  src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -62,13 +66,13 @@ const touchpoint = await create({
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
         // userId is required if input is "voice" or "voiceMini"
-        userId: "your-unique-user-id"
+        userId: "your-unique-user-id",
       },
       initialContext: {
         userId: "user-789",
         userTier: "gold",
         currentPage: "/products/item123",
-      }
+      },
     });
   });
 </script>
@@ -84,9 +88,9 @@ For more advanced scenarios where you need to execute custom JavaScript logic wh
 
 **When to use `initializeConversation`:**
 
-  - You need to conditionally decide which intent to send based on application state.
-  - You want to perform actions like logging, analytics tracking, or API calls before the first message is sent.
-  - You need to implement custom setup logic for specific input modes.
+- You need to conditionally decide which intent to send based on application state.
+- You want to perform actions like logging, analytics tracking, or API calls before the first message is sent.
+- You need to implement custom setup logic for specific input modes.
 
 ### Initialization Function Signature
 
@@ -95,15 +99,15 @@ The `initializeConversation` function receives the [`ConversationHandler`](/touc
 ```typescript
 type InitializeConversation = (
   conversationHandler: ConversationHandler,
-  initialContext?: Record<string, any> // Context from TouchpointConfiguration.initialContext
+  initialContext?: Record<string, any>, // Context from TouchpointConfiguration.initialContext
 ) => void;
 ```
 
 The `ConversationHandler` provides methods like:
-| Method                        | Description                                                                                                                               |
+| Method | Description |
 |-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
 | `sendWelcomeIntent(context?)` | Sends the default welcome intent. The `context` argument here will merge with or override the `initialContext` passed to the function. |
-| `sendIntent(intent, context?)`| Sends a specific intent. The `context` argument here will merge with or override the `initialContext` passed to the function.      |
+| `sendIntent(intent, context?)`| Sends a specific intent. The `context` argument here will merge with or override the `initialContext` passed to the function. |
 
 ## Examples
 
@@ -121,7 +125,7 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "user123" // Required for voice
+    userId: "user123", // Required for voice
   },
   initialContext: {
     // userId and userTier must be defined as Context Variables in NLX Studio
@@ -135,7 +139,10 @@ const touchpoint = await create({
 **HTML**
 
 ```html
-<script defer src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"></script>
+<script
+  defer
+  src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -155,7 +162,7 @@ const touchpoint = await create({
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "user123" // Required for voice
+        userId: "user123", // Required for voice
       },
       initialContext: {
         firstName: "David",
@@ -167,7 +174,7 @@ const touchpoint = await create({
 </script>
 ```
 
-### 2. Launching with a Custom Intent Using `initializeConversation` 
+### 2. Launching with a Custom Intent Using `initializeConversation`
 
 The specific flow (`CheckOrderStatus`) must be defined in your NLX application. `userSource`, `pageUrl`, `clientTime` all must be defined as context variables in your NLX workspace.
 
@@ -200,7 +207,10 @@ const touchpoint = await create({
 **HTML**
 
 ```html
-<script defer src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"></script>
+<script
+  defer
+  src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {

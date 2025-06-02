@@ -10,7 +10,6 @@ The visibility of Touchpoint UI can be programmatically controlled including sho
 
 ${ContentRaw}`;
 
-
 export const Content: FC<unknown> = () => {
   return <PageContent md={content} />;
 };
