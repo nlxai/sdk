@@ -1,5 +1,5 @@
 - [About](#about)
-- [Component Structure](#component-structure)
+- [Component Structure \& Recommended Pattern](#component-structure--recommended-pattern)
 - [Properties](#properties)
   - [CustomCard Properties](#customcard-properties)
   - [CustomCardImageRow Properties](#customcardimagerow-properties)
@@ -21,21 +21,20 @@ The Custom Card system provides a structured way to present information in your 
 - **CustomCardRow** - Basic component for horizontal layouts within cards. Can have multiple rows in a CustomCard.
 - **CustomCardImageRow** - Basic component for specialized image layouts within a CustomCard.
 
-## Component Structure
+## Component Structure & Recommended Pattern
 
 The Custom Cards components follows a nested structure where components build upon each other to create rich layouts. Each CustomCard contains CustomCardRow or CustomCardImageRow components that organize the content within the card.
 
-```jsx
-{
-  /* Container for card*/
-}
-<CustomCard>
-  {/* Image content */}
-  <CustomCardImageRow>...</CustomCardImageRow>
-  {/* Text content */}
-  <CustomCardRow>...</CustomCardRow>
-</CustomCard>;
-```
+Recommended Card Structure:
+
+1. **CustomCardImageRow** at the top (optional)
+2. **CustomCardRow** elements with:
+   - Left side: Faded BaseText for labels
+   - Right side: Normal BaseText for values
+3. **Selection state** managed with React.useState
+4. **onClick handler** that updates state and sends choice to NLX
+
+This pattern provides a consistent, professional appearance across all card-based components in your Touchpoint UI.
 
 ## Properties
 
@@ -132,10 +131,7 @@ const ItemCard = ({ data, conversationHandler }) => {
 **HTML**
 
 ```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
+<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -153,35 +149,35 @@ const ItemCard = ({ data, conversationHandler }) => {
     const { html, React } = nlxai.touchpointUi;
 
     const ItemCard = ({ data, conversationHandler }) => {
-      const [isSelected, setIsSelected] = React.useState(null);
+      const [isSelected, setIsSelected] = React.useState(false);
 
       const handleClick = () => {
         setIsSelected(true);
-        if (onSelect) {
-          onSelect(data.id);
-        }
-        conversationHandler.sendChoice(data.id); // If conversationHandler is available
+        conversationHandler.sendChoice(data.id);
       };
 
       return html`
-        <CustomCard
-          selected=${data.id === selectedItemId}
-          onClick=${() => {
-            setSelectedItemId(data.id);
-          }}
-        >
-          <CustomCardImageRow src=${data.thumbnail} alt="Image" />
+        <CustomCard selected=${isSelected} onClick=${handleClick}>
+          <CustomCardImageRow src=${data.thumbnail} alt="Information Card Image" />
           <CustomCardRow
-            left=<BaseText faded>Label</BaseText>
-            right=<BaseText>Value</BaseText>
-          />
-          <CustomCardRow
-            left=<BaseText faded>Label</BaseText>
-            right=<BaseText>Value</BaseText>
+            left=${<BaseText faded>${data.label}</BaseText>}
+            right=${<BaseText>${data.value}</BaseText>}
           />
         </CustomCard>
       `;
     };
+
+    // Register component when creating touchpoint
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+      },
+      customModalities: {
+        ItemCardModality: ItemCard,
+      },
+    });
   });
 </script>
 ```

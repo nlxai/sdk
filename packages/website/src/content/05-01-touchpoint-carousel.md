@@ -100,7 +100,7 @@ const ItemsCarousel = ({ data, conversationHandler }) => {
 **HTML**
 
 ```html
-<script defer src=https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js></script>
+<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -115,32 +115,48 @@ const ItemsCarousel = ({ data, conversationHandler }) => {
   };
 
   contentLoaded().then(() => {
-    const { html, React} = nlxai.touchpointUi;
+    const { html, React } = nlxai.touchpointUi;
 
-    const ItemsCarousel = ({ data }) => {
+    const ItemsCarousel = ({ data, conversationHandler }) => {
       const [selectedItemId, setSelectedItemId] = React.useState(null);
 
       return html`
         <Carousel>
-          ${data.map((item) =>
+          ${data.map((item) => html`
             <CustomCard
+              key=${item.id}
               selected=${item.id === selectedItemId}
-              onClick=${() => {setSelectedItemId(order.id)}}
+              onClick=${() => {
+                setSelectedItemId(item.id);
+                conversationHandler.sendChoice(item.id);
+              }}
             >
               <CustomCardImageRow src=${item.thumbnail} alt="Image" />
               <CustomCardRow
-                left=<BaseText faded>Label</BaseText>
-                right=<BaseText>Value</BaseText>
+                left=${<BaseText faded>Label</BaseText>}
+                right=${<BaseText>Value</BaseText>}
               />
               <CustomCardRow
-                left=<BaseText faded>Label</BaseText>
-                right=<BaseText>Value</BaseText>
+                left=${<BaseText faded>Label</BaseText>}
+                right=${<BaseText>Value</BaseText>}
               />
             </CustomCard>
-          )}
+          `)}
         </Carousel>
       `;
     };
+
+    // Register component when creating touchpoint
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+      },
+      customModalities: {
+        ItemsCarouselModality: ItemsCarousel,
+      },
+    });
   });
 </script>
 ```

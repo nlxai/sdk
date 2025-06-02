@@ -69,6 +69,8 @@ The examples below require a [modality](https://docs.studio.nlx.ai/1-build/resou
 
 ### Example Button Components
 
+**Javascript**
+
 ```javascript
 import { TextButton, IconButton, Icons } from "@nlxai/touchpoint-ui";
 
@@ -92,6 +94,63 @@ const IconButtonExample = ({ data, conversationHandler }) => {
     />
   );
 };
+```
+
+**HTML**
+
+```html
+<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  contentLoaded().then(() => {
+    const { html, Icons } = nlxai.touchpointUi;
+
+    const TextButtonExample = ({ data, conversationHandler }) => {
+      return html`
+        <TextButton
+          label=${data.buttonLabel}
+          Icon=${Icons.ArrowForward}
+          onClick=${() => conversationHandler.sendChoice(data.buttonId)}
+        />
+      `;
+    };
+
+    const IconButtonExample = ({ data, conversationHandler }) => {
+      return html`
+        <IconButton
+          label=${data.buttonLabel}
+          Icon=${Icons.ArrowForward}
+          onClick=${() => conversationHandler.sendChoice(data.buttonId)}
+          type="main"
+        />
+      `;
+    };
+
+    // Register components when creating touchpoint
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+      },
+      customModalities: {
+        TextButtonModality: TextButtonExample,
+        IconButtonModality: IconButtonExample,
+      },
+    });
+  });
+</script>
 ```
 
 ## Related Documents
