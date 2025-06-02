@@ -193,7 +193,7 @@ const HashLink: FC<{
     <a
       href={`#${hash}`}
       onClick={onClick}
-      className={`py-0.5 ${(active ?? false) ? "font-bold" : ""}`}
+      className={`py-0.5 ${active ?? false ? "font-bold" : ""}`}
     >
       {label}
     </a>
