@@ -136,7 +136,7 @@ Use **voice** when:
 
 ## When to use Voice Mini
 
-<img src="/animations/voice-mini.png" alt="Voice Mini Mode Animation" style="max-width: 40%;">
+<img src="/animations/voice-mini.png" alt="Voice Mini Mode Animation" style="max-width: 80%;">
 
 Use **voiceMini** when:
 - You're using Enhanced Voice+

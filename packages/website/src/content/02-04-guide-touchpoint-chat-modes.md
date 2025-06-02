@@ -1,7 +1,7 @@
 - [Chat Modes](#chat-modes)
+  - [Visual Comparison Details](#visual-comparison-details)
   - [When to Use Assistant Style](#when-to-use-assistant-style)
   - [When to Use Classic Chat Style](#when-to-use-classic-chat-style)
-  - [Visual Comparison](#visual-comparison)
 - [Configuration Quick Reference](#configuration-quick-reference)
 - [Assistant Style (Default)](#assistant-style-default)
   - [Example Assistant Configuration](#example-assistant-configuration)
@@ -10,7 +10,6 @@
   - [Example Classic Chat Configuration](#example-classic-chat-configuration)
   - [Example Classic Chat Configuration with message bubbles](#example-classic-chat-configuration-with-message-bubbles)
 
-Touchpoint UI offers two distinct chat interface modes to suit different user experience needs.
 
 ## Chat Modes
 
@@ -19,19 +18,7 @@ Touchpoint UI offers two distinct chat interface modes to suit different user ex
 * **Classic Chat Style** 
   * Traditional messaging interface with full history visible, easy message reference, familiar chat experience.
 
-### When to Use Assistant Style
-- **Guided workflows**: Step-by-step processes like form filling or troubleshooting
-- **Simple queries**: Quick questions that don't require conversation history
-- **Mobile experiences**: Limited screen space benefits from focused interface
-- **Task completion**: When users need to focus on one thing at a time
-
-### When to Use Classic Chat Style
-- **Support conversations**: When users need to reference previous messages
-- **Complex discussions**: Multi-turn conversations with context dependencies
-- **Documentation queries**: When users might need to scroll back for information
-- **Familiar experience**: When users expect traditional chat interfaces
-
-### Visual Comparison
+### Visual Comparison Details
 
 | Feature           | Assistant Style               | Classic Chat Style   |
 |-------------------|-------------------------------|----------------------|
@@ -40,6 +27,27 @@ Touchpoint UI offers two distinct chat interface modes to suit different user ex
 | Loading Indicator | Full-screen overlay           | Inline with messages |
 | Screen Space      | Maximizes content area        | Fixed message list   |
 | User Experience   | Step-by-step guidance         | Conversational flow  |
+
+
+### When to Use Assistant Style
+
+- **Guided workflows**: Step-by-step processes like form filling or troubleshooting
+- **Simple queries**: Quick questions that don't require conversation history
+- **Mobile experiences**: Limited screen space benefits from focused interface
+- **Task completion**: When users need to focus on one thing at a time
+
+
+<img src="/animations/assistantMode.webp" alt="Assistant Mode Animation" style="max-width: 40%;">
+
+### When to Use Classic Chat Style
+
+- **Support conversations**: When users need to reference previous messages
+- **Complex discussions**: Multi-turn conversations with context dependencies
+- **Documentation queries**: When users might need to scroll back for information
+- **Familiar experience**: When users expect traditional chat interfaces
+
+<img src="/animations/chatMode2.webp" alt="Chat Mode Animation" style="max-width: 40%;">
+
 
 ## Configuration Quick Reference
 
@@ -54,8 +62,6 @@ Touchpoint UI offers two distinct chat interface modes to suit different user ex
 ## Assistant Style (Default)
 
 The Assistant Style provides a focused experience where only the latest application message is prominently displayed. This creates a clean interface that directs the user's attention to the most recent information or question, while still allowing them to scroll up to view conversation history.
-
-<img src="/animations/assistantMode.webp" alt="Assistant Mode Animation" style="max-width: 40%;">
 
 ### Example Assistant Configuration
 
@@ -197,8 +203,6 @@ const touchpoint = await create(touchpointOptions);
 ## Classic Chat Style
 
 The Classic Chat Style provides a traditional messaging interface where all messages stack chronologically and remain visible. This creates a more conventional chat experience that many users are already familiar with from messaging apps.
-
-<img src="/animations/chatMode2.webp" alt="Chat Mode Animation" style="max-width: 40%;">
 
 ### Example Classic Chat Configuration
 
