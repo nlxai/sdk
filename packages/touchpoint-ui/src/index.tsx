@@ -70,6 +70,7 @@ export { type TextButtonProps } from "./components/ui/TextButton";
 export {
   type InitializeConversation,
   type ColorMode,
+  type Input,
   type Theme,
   type WindowSize,
   type CustomModalityComponent,
