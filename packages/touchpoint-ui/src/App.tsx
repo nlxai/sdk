@@ -231,9 +231,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       >
         <Header
           windowSize={props.embedded ? "embedded" : windowSize}
-          errorThemedCloseButton={input === "voice"}
+          errorThemedCloseButton={input === "voice" && voiceActive}
           speakerControls={
-            input === "voice"
+            input === "voice" && voiceActive
               ? {
                   enabled: fullscreenVoiceSpeakersEnabled,
                   setEnabled: setFullscreenVoiceSpeakersEnabled,
