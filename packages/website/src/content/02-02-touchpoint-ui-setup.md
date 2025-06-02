@@ -4,6 +4,7 @@
 - [Voice Input](#voice-input)
 - [Complete Configuration Reference](#complete-configuration-reference)
   - [Core Config (inside `config` object)](#core-config-inside-config-object)
+  - [Optional Config (inside `config` object)](#optional-config-inside-config-object)
   - [UI Options (outside `config` object)](#ui-options-outside-config-object)
   - [Message Styling](#message-styling)
   - [Theme Customization (inside `theme` object)](#theme-customization-inside-theme-object)
@@ -197,6 +198,15 @@ const touchpoint = await create({
 | `headers["nlx-api-key"]` | string | Yes            | Your NLX API key                                   |
 | `languageCode`           | string | Yes            | Chat language (e.g., "en-US", "fr-FR")             |
 | `userId`                 | string | For voice only | User identifier (required when `input` is "voice") |
+
+### Optional Config (inside `config` object)
+
+| Field                    | Type   | Required       | Description                                        |
+| ------------------------ | ------ | -------------- | -------------------------------------------------- |
+| `conversationId` | string | optional | `conversationId` to continue an existing conversation. Used to recover conversation when [persisting history](/guide-persisting-history). | 
+| `responses` | array of [Response](/headless-api-reference#response) | optional |  When `responses` is set, initialize the chatHandler with historical messages. Used to recover conversation when [persisting history](/guide-persisting-history). |
+
+💡 See the API Reference for the [Full Configuration Object](/headless-api-reference#interfacesconfigmd)
 
 ### UI Options (outside `config` object)
 
