@@ -1,4 +1,8 @@
 - [Quick Customization Essentials](#quick-customization-essentials)
+- [Launch and Brand Icons](#launch-and-brand-icons)
+  - [Launch Icon Guidance](#launch-icon-guidance)
+  - [Brand Icon Guidance](#brand-icon-guidance)
+  - [Custom Launch Implementation](#custom-launch-implementation)
 - [Dark Mode Support](#dark-mode-support)
   - [Defining Distinct Light and Dark Themes](#defining-distinct-light-and-dark-themes)
 - [Comprehensive Color System](#comprehensive-color-system)
@@ -8,21 +12,20 @@
   - [Status Colors](#status-colors)
 - [Layout Customization](#layout-customization)
   - [Border Radius Properties](#border-radius-properties)
-  - [Visual Impact of Different Border Radius Values](#visual-impact-of-different-border-radius-values)
 - [Complete Theme Example](#complete-theme-example)
-
-Touchpoint UI provides a powerful and flexible theming system that allows you to seamlessly integrate the chat widget with your application's visual identity. This guide explores both basic and advanced theming techniques to give you complete control over the appearance of your Touchpoint implementation.
 
 ## Quick Customization Essentials
 
 For many applications, adjusting just two key properties will create a cohesive branded experience:
 
+**JavaScript**
 ```javascript
-const touchpointInstance = await nlxai.touchpointUi.create({
+const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
+    userId: "REQUIRED_FOR_VOICE"
   },
   theme: {
     // The primary color for buttons and highlights
@@ -34,6 +37,38 @@ const touchpointInstance = await nlxai.touchpointUi.create({
 });
 ```
 
+**HTML**
+```html
+<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+  contentLoaded().then(() => {
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        userId: "REQUIRED_FOR_VOICE"
+      },
+      theme: {
+        accent: "rgb(28, 99, 218)",
+        fontFamily: '"Helvetica Neue", sans-serif',
+      },
+    });
+  }); 
+</script>
+```
+
 The `accent` color is used throughout the interface for:
 
 - Interactive buttons
@@ -43,16 +78,219 @@ The `accent` color is used throughout the interface for:
 
 The `fontFamily` property affects all text in the interface, ensuring typographic consistency.
 
-## Dark Mode Support
+## Launch and Brand Icons
 
-Touchpoint automatically adapts your theme for both light and dark modes. Use the `light-dark()` method to provide different accent colors for each mode:
+Icons are critical for maintaining brand consistency and ensuring a polished user experience. Touchpoint provides two key icon customization points: the launch icon (chat button) and the brand icon (header logo).
+
+### Launch Icon Guidance
+
+The `launchIcon` is displayed on the floating action button when the Touchpoint UI is collapsed. This is often the first interaction point for the user.
+
+**Design Guidance:**
+
+| Guidance | Details | Reference |
+|--|--|--|
+| Button and Icon Size | Icon is 32x32 within the launch button | Your `launchIcon` image will be displayed at 32x32 pixels within this 64x64 button  |
+| File Format | SVG or PNG | A single-color SVG is ideal |
+| Color and Contrast | Single Color | Should contrast well with background color. (Check both light and dark mode)| 
+| Background and Borders | Icon  **must have a transparent background** | The icon should not have any embedded borders; the button handles its own border and rounding (`rounded-outer` which uses `theme.outerBorderRadius`) |
+| Shape and Proportions | 32x32 pixels | Encuse the icon is clear and recognizable at this size |
+
+**Configuration:**
+
+Provide the URL to your custom icon via the `launchIcon` property.
+
+**JavaScript**
 
 ```javascript
-const touchpointInstance = await nlxai.touchpointUi.create({
+import { create } from "@nlxai/touchpoint-ui";
+
+const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
+    userId: "REQUIRED_FOR_VOICE"
+  },
+  launchIcon: "[https://yourdomain.com/path/to/your-launch-icon.svg](https://yourdomain.com/path/to/your-launch-icon.svg)",
+  theme: {
+    background: "rgb(0, 100, 255)" // Example: Ensure your icon contrasts with this
+  }
+});
+```
+
+**HTML**
+
+```html
+<script defer src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+  contentLoaded().then(() => {
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        userId: "REQUIRED_FOR_VOICE"
+      },
+      launchIcon: "[https://yourdomain.com/path/to/your-launch-icon.svg](https://yourdomain.com/path/to/your-launch-icon.svg)",
+      theme: {
+        background: "rgb(0, 100, 255)" // Example: Ensure your icon contrasts with this
+      }
+    });
+  });
+</script>
+```
+
+### Brand Icon Guidance
+
+The `brandIcon` appears in the header of the expanded Touchpoint UI, reinforcing your brand's presence.
+
+**Design Guidelines:**
+
+| Guidance | Details | Reference |
+|--|--|--|
+| Size | 40x40 pixels | Ensure design is clear at this size |
+| File Format | SVG or PNG | A SVG is ideal, High Quality PNG will work |
+| Background and Borders | Icon  **must have a transparent background** | The icon should not have any embedded borders |
+
+**Configuration:**
+
+Pass the URL of your icon to the `brandIcon` property in the Touchpoint configuration.
+
+**JavaScript**
+
+```javascript
+import { create } from "@nlxai/touchpoint-ui";
+
+const touchpoint = await create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+    userId: "REQUIRED_FOR_VOICE"
+  },
+  brandIcon: "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)"
+});
+```
+
+**HTML**
+
+```html
+<script defer src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+  contentLoaded().then(() => {
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        userId: "REQUIRED_FOR_VOICE"
+      },
+      brandIcon: "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
+
+    });
+  });
+</script>
+```
+
+### Custom Launch Implementation
+
+You can implement a fully custom launch experience if the default launch button constraints don't meet your needs.
+
+**JavaScript**
+```javascript
+const touchpoint = await create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+    userId: "REQUIRED_FOR_VOICE"
+  },
+  brandIcon: "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
+  launchIcon: false,
+});
+
+// Create your own launch button
+document.getElementById('my-custom-button').addEventListener('click', () => {
+  touchpoint.expanded = true;
+});
+```
+
+**HTML**
+```html
+<!-- Your custom button -->
+<button id="my-custom-button" class="my-brand-button">
+  Chat with us
+</button>
+
+<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+  contentLoaded().then(() => {
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        userId: "REQUIRED_FOR_VOICE"
+      },
+      brandIcon: "[https://yourdomain.com/path/to/your-brand-icon.svg](https://yourdomain.com/path/to/your-brand-icon.svg)",
+      launchIcon: false,
+    }).then((touchpoint) => {
+      document.getElementById('my-custom-button').addEventListener('click', () => {
+        touchpoint.expanded = true;
+      });
+    });
+  }); 
+</script>
+```
+
+This approach gives you complete control over the launch button's appearance, position, and behavior. See the [Showing and Hiding Touchpoint](/guide-show-hide-touchpoint) guide for more details.
+
+## Dark Mode Support
+
+Touchpoint automatically adapts your theme for both light and dark modes. Use the `light-dark()` method to provide different accent colors for each mode:
+
+**JavaScript**
+```javascript
+const touchpoint = await create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+    userId: "REQUIRED_FOR_VOICE"
   },
   colorMode: "dark", // or "light"
   theme: {
@@ -62,10 +300,44 @@ const touchpointInstance = await nlxai.touchpointUi.create({
 });
 ```
 
+**HTML**
+```html
+<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+  contentLoaded().then(() => {
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        userId: "REQUIRED_FOR_VOICE"
+      },
+      colorMode: "dark",
+      theme: {
+        accent: "light-dark(rgb(28, 99, 218), rgb(38, 99, 118))",
+        fontFamily: '"Helvetica Neue", sans-serif',
+      },
+    });
+  }); 
+</script>
+```
+
 ### Defining Distinct Light and Dark Themes
 
 For maximum control, you can create entirely separate theme objects for light and dark modes:
 
+**JavaScript**
 ```javascript
 import { create } from "@nlxai/touchpoint-ui";
 
@@ -95,11 +367,61 @@ const initializeTouchpoint = async (
       applicationUrl: "YOUR_APPLICATION_URL",
       headers: { "nlx-api-key": "YOUR_API_KEY" },
       languageCode: "en-US",
+      userId: "REQUIRED_FOR_VOICE"
     },
     colorMode: userColorModePreference,
     theme: userColorModePreference === "dark" ? darkTheme : lightTheme,
   });
 };
+```
+
+**HTML**
+```html
+<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+  
+  const lightTheme = {
+    fontFamily: '"Inter", sans-serif',
+    accent: "#007AFF",
+    primary80: "#1C1C1E",
+    secondary80: "#F2F2F7",
+    background: "#FFFFFF",
+  };
+
+  const darkTheme = {
+    fontFamily: '"Inter", sans-serif',
+    accent: "#0A84FF",
+    primary80: "#FFFFFF",
+    secondary80: "#1C1C1E",
+    background: "#000000",
+  };
+  
+  contentLoaded().then(() => {
+    const userColorModePreference = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        userId: "REQUIRED_FOR_VOICE"
+      },
+      colorMode: userColorModePreference,
+      theme: userColorModePreference === "dark" ? darkTheme : lightTheme,
+    });
+  }); 
+</script>
 ```
 
 ## Comprehensive Color System
@@ -173,23 +495,11 @@ const theme = {
 };
 ```
 
-### Visual Impact of Different Border Radius Values
-
-- **Sharp corners**: `innerBorderRadius: "0px"`, `outerBorderRadius: "0px"`
-
-  - Creates a very geometric, angular appearance
-
-- **Slightly rounded**: `innerBorderRadius: "4px"`, `outerBorderRadius: "8px"`
-
-  - Provides subtle rounding for a modern look
-
-- **Very rounded**: `innerBorderRadius: "20px"`, `outerBorderRadius: "20px"`
-  - Creates pill-shaped elements with a friendly, approachable feel
-
 ## Complete Theme Example
 
 Here's a complete theme configuration showing all available properties:
 
+**JavaScript**
 ```javascript
 import { create } from "@nlxai/touchpoint-ui";
 
@@ -237,7 +547,69 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
+    userId: "REQUIRED_FOR_VOICE"
   },
   theme: completeTheme,
+  launchIcon: "https://yoursite.com/chat-icon.svg",
+  brandIcon: "https://yoursite.com/logo.png",
 });
+```
+
+**HTML**
+```html
+<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+  contentLoaded().then(() => {
+    const completeTheme = {
+      fontFamily: '"Roboto", sans-serif',
+      primary80: "rgba(0, 0, 0, 0.8)",
+      primary60: "rgba(0, 0, 0, 0.6)",
+      primary40: "rgba(0, 0, 0, 0.4)",
+      primary20: "rgba(0, 0, 0, 0.2)",
+      primary10: "rgba(0, 0, 0, 0.1)",
+      primary5: "rgba(0, 0, 0, 0.05)",
+      primary1: "rgba(0, 0, 0, 0.01)",
+      secondary80: "rgba(255, 255, 255, 0.8)",
+      secondary60: "rgba(255, 255, 255, 0.6)",
+      secondary40: "rgba(255, 255, 255, 0.4)",
+      secondary20: "rgba(255, 255, 255, 0.2)",
+      secondary10: "rgba(255, 255, 255, 0.1)",
+      secondary5: "rgba(255, 255, 255, 0.05)",
+      secondary1: "rgba(255, 255, 255, 0.01)",
+      accent: "#FF5733",
+      accent20: "rgba(255, 87, 51, 0.2)",
+      background: "rgba(245, 245, 245, 0.95)",
+      overlay: "rgba(0, 0, 0, 0.4)",
+      warningPrimary: "#FFA500",
+      warningSecondary: "rgba(255, 165, 0, 0.1)",
+      errorPrimary: "#FF0000",
+      errorSecondary: "rgba(255, 0, 0, 0.1)",
+      innerBorderRadius: "4px",
+      outerBorderRadius: "12px",
+    };
+    
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        userId: "REQUIRED_FOR_VOICE"
+      },
+      theme: completeTheme,
+      launchIcon: "https://yoursite.com/chat-icon.svg",
+      brandIcon: "https://yoursite.com/logo.png",
+    });
+  }); 
+</script>
 ```

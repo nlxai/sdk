@@ -2,7 +2,10 @@ import { type FC } from "react";
 import { PageContent } from "../components/PageContent";
 import themeContent from "./02-03-touchpoint-ui-theming.md?raw";
 
-export const content = themeContent;
+export const content = `
+Touchpoint UI provides a powerful and flexible theming system that allows you to seamlessly integrate the chat widget with your application's visual identity. This guide explores both basic and advanced theming techniques to give you complete control over the appearance of your Touchpoint implementation.
+
+${themeContent}`;
 
 export const navGroup: string = "Touchpoint Setup";
 
