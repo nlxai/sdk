@@ -10,7 +10,6 @@ Touchpoint UI offers two distinct voice input modes (\`voice\` and \`voiceMini\`
 
 ${ContentRaw}`;
 
-
 export const Content: FC<unknown> = () => {
   return <PageContent md={content} />;
 };

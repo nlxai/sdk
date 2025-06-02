@@ -10,24 +10,22 @@
   - [Example Classic Chat Configuration](#example-classic-chat-configuration)
   - [Example Classic Chat Configuration with message bubbles](#example-classic-chat-configuration-with-message-bubbles)
 
-
 ## Chat Modes
 
-* **Assistant Style**
-  * Focused interface highlighting current interaction with clean minimal interface to focus user attention and reduced distractions.
-* **Classic Chat Style** 
-  * Traditional messaging interface with full history visible, easy message reference, familiar chat experience.
+- **Assistant Style**
+  - Focused interface highlighting current interaction with clean minimal interface to focus user attention and reduced distractions.
+- **Classic Chat Style**
+  - Traditional messaging interface with full history visible, easy message reference, familiar chat experience.
 
 ### Visual Comparison Details
 
 | Feature           | Assistant Style               | Classic Chat Style   |
-|-------------------|-------------------------------|----------------------|
+| ----------------- | ----------------------------- | -------------------- |
 | Message History   | Hidden by default, scrollable | Always visible       |
 | Focus             | Current interaction only      | Full conversation    |
 | Loading Indicator | Full-screen overlay           | Inline with messages |
 | Screen Space      | Maximizes content area        | Fixed message list   |
 | User Experience   | Step-by-step guidance         | Conversational flow  |
-
 
 ### When to Use Assistant Style
 
@@ -35,7 +33,6 @@
 - **Simple queries**: Quick questions that don't require conversation history
 - **Mobile experiences**: Limited screen space benefits from focused interface
 - **Task completion**: When users need to focus on one thing at a time
-
 
 <img src="/animations/assistantMode.webp" alt="Assistant Mode Animation" style="max-width: 40%;">
 
@@ -48,11 +45,10 @@
 
 <img src="/animations/chatMode2.webp" alt="Chat Mode Animation" style="max-width: 40%;">
 
-
 ## Configuration Quick Reference
 
 | Property             | Type    | Default | Description                                      |
-|----------------------|---------|---------|--------------------------------------------------|
+| -------------------- | ------- | ------- | ------------------------------------------------ |
 | `chatMode`           | boolean | `false` | `false` = Assistant style, `true` = Classic chat |
 | `userMessageBubble`  | boolean | `false` | Add bubble styling to user messages              |
 | `agentMessageBubble` | boolean | `false` | Add bubble styling to agent messages             |
@@ -95,7 +91,10 @@ const touchpoint = await create(touchpointOptions);
 
 ```html
 <!-- HTML Example: Assistant Style (Default) -->
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -163,7 +162,10 @@ const touchpoint = await create(touchpointOptions);
 
 ```html
 <!-- HTML Example: Assistant Style with Message Bubbles -->
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -210,7 +212,6 @@ To implement the Classic Chat Style, set the `chatMode` parameter to `true`:
 
 **Javascript**
 
-
 ```javascript
 import { create } from "@nlxai/touchpoint-ui";
 
@@ -237,7 +238,10 @@ const touchpoint = await create(touchpointOptions);
 
 ```html
 <!-- HTML Example: Classic Chat Style -->
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -303,7 +307,10 @@ const touchpoint = await create(touchpointOptions);
 
 ```html
 <!-- HTML Example: Classic Chat Style with message bubbles -->
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {

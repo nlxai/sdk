@@ -100,7 +100,10 @@ const ItemsCarousel = ({ data, conversationHandler }) => {
 **HTML**
 
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -122,26 +125,28 @@ const ItemsCarousel = ({ data, conversationHandler }) => {
 
       return html`
         <Carousel>
-          ${data.map((item) => html`
-            <CustomCard
-              key=${item.id}
-              selected=${item.id === selectedItemId}
-              onClick=${() => {
-                setSelectedItemId(item.id);
-                conversationHandler.sendChoice(item.id);
-              }}
-            >
-              <CustomCardImageRow src=${item.thumbnail} alt="Image" />
-              <CustomCardRow
-                left=${html`<BaseText faded>Label</BaseText>`}
-                right=${html`<BaseText>Value</BaseText>`}
-              />
-              <CustomCardRow
-                left=${html`<BaseText faded>Label</BaseText>`}
-                right=${html`<BaseText>Value</BaseText>`}
-              />
-            </CustomCard>
-          `)}
+          ${data.map(
+            (item) => html`
+              <CustomCard
+                key=${item.id}
+                selected=${item.id === selectedItemId}
+                onClick=${() => {
+                  setSelectedItemId(item.id);
+                  conversationHandler.sendChoice(item.id);
+                }}
+              >
+                <CustomCardImageRow src=${item.thumbnail} alt="Image" />
+                <CustomCardRow
+                  left=${html`<BaseText faded>Label</BaseText>`}
+                  right=${html`<BaseText>Value</BaseText>`}
+                />
+                <CustomCardRow
+                  left=${html`<BaseText faded>Label</BaseText>`}
+                  right=${html`<BaseText>Value</BaseText>`}
+                />
+              </CustomCard>
+            `,
+          )}
         </Carousel>
       `;
     };

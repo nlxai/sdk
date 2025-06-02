@@ -131,7 +131,10 @@ const ItemCard = ({ data, conversationHandler }) => {
 **HTML**
 
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -158,7 +161,10 @@ const ItemCard = ({ data, conversationHandler }) => {
 
       return html`
         <CustomCard selected=${isSelected} onClick=${handleClick}>
-          <CustomCardImageRow src=${data.thumbnail} alt="Information Card Image" />
+          <CustomCardImageRow
+            src=${data.thumbnail}
+            alt="Information Card Image"
+          />
           <CustomCardRow
             left=${html`<BaseText faded>${data.label}</BaseText>`}
             right=${html`<BaseText>${data.value}</BaseText>`}

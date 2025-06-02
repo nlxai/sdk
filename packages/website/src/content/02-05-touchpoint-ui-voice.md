@@ -6,7 +6,6 @@
 - [When to use Voice](#when-to-use-voice)
 - [When to use Voice Mini](#when-to-use-voice-mini)
 
-
 ## Quick Start
 
 ### Standard Voice Mode
@@ -14,6 +13,7 @@
 Full-screen voice interface for immersive conversations.
 
 **JavaScript**
+
 ```javascript
 import { create } from "@nlxai/touchpoint-ui";
 
@@ -29,8 +29,12 @@ const touchpoint = await create({
 ```
 
 **HTML**
+
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -62,6 +66,7 @@ const touchpoint = await create({
 Floating widget for voice without taking over the screen.
 
 **JavaScript**
+
 ```javascript
 import { create } from "@nlxai/touchpoint-ui";
 
@@ -77,8 +82,12 @@ const touchpoint = await create({
 ```
 
 **HTML**
+
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   const contentLoaded = () => {
     if (document.readyState === "loading") {
@@ -107,41 +116,41 @@ const touchpoint = await create({
 
 ## Voice Input Options
 
-| Mode | Description | Best For |
-|------|-------------|----------|
-| `voice` | Full-screen voice interface with immersive experience | Primary voice interactions, voice-first applications |
-| `voiceMini` | Compact floating widget with minimal controls | Voice as a secondary input option, space-constrained layouts |
+| Mode        | Description                                           | Best For                                                     |
+| ----------- | ----------------------------------------------------- | ------------------------------------------------------------ |
+| `voice`     | Full-screen voice interface with immersive experience | Primary voice interactions, voice-first applications         |
+| `voiceMini` | Compact floating widget with minimal controls         | Voice as a secondary input option, space-constrained layouts |
 
 ### Application and Touchpoint Prerequisites
 
 All voice modes require:
 
-| Item | Description |
-|--|--|
-| `config.userId` | A unique identifier in your config (required for voice session management) |
-| Voice-enabled Application | Your NLX application must be configured for voice on API channels |
-| Browser support | WebRTC APIs must be available |
-| User permissions| Microphone access must be granted when prompted |
+| Item                      | Description                                                                |
+| ------------------------- | -------------------------------------------------------------------------- |
+| `config.userId`           | A unique identifier in your config (required for voice session management) |
+| Voice-enabled Application | Your NLX application must be configured for voice on API channels          |
+| Browser support           | WebRTC APIs must be available                                              |
+| User permissions          | Microphone access must be granted when prompted                            |
 
 ## When to use Voice
 
 <img src="/animations/voiceinput.png" alt="Voice Mode Animation" style="max-width: 40%;">
 
 Use **voice** when:
+
 - Voice is the primary interaction method
 - You want an immersive, focused experience
 - Screen real estate isn't a concern
 - The conversation is the main user activity
-
 
 ## When to use Voice Mini
 
 <img src="/animations/voice-mini.png" alt="Voice Mini Mode Animation" style="max-width: 80%;">
 
 Use **voiceMini** when:
+
 - You're using Enhanced Voice+
 - Voice is an optional input method alongside other UI
 - You need to preserve screen space
 - Users need access to other page content during voice interaction
 - You want a less intrusive voice option
-

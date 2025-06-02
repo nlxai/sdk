@@ -112,11 +112,13 @@ The `html` tag is a template literal function that:
 When using HTML, always destructure the components you need from `nlxai.touchpointUi`:
 
 **HTML**
+
 ```javascript
 const { html, React, Icons } = nlxai.touchpointUi;
 ```
 
 This gives you access to:
+
 - `html` - The template tag for creating components
 - `React` - React utilities like useState
 - `Icons` - All available icon components
@@ -124,12 +126,12 @@ This gives you access to:
 
 ### HTML vs JSX Quick Reference
 
-| Feature | JavaScript/JSX | HTML Template |
-|---------|---------------|---------------|
-| Import | `import { html } from "@nlxai/touchpoint-ui"` | `const { html } = nlxai.touchpointUi` |
-| Component | `<BaseText>Hello</BaseText>` | `html\`<BaseText>Hello</BaseText>\`` |
-| Props | `label="Click me"` | `label="Click me"` |
-| Dynamic Props | `onClick={() => console.log()}` | `onClick=${() => console.log()}` |
+| Feature       | JavaScript/JSX                                | HTML Template                         |
+| ------------- | --------------------------------------------- | ------------------------------------- |
+| Import        | `import { html } from "@nlxai/touchpoint-ui"` | `const { html } = nlxai.touchpointUi` |
+| Component     | `<BaseText>Hello</BaseText>`                  | `html\`<BaseText>Hello</BaseText>\``  |
+| Props         | `label="Click me"`                            | `label="Click me"`                    |
+| Dynamic Props | `onClick={() => console.log()}`               | `onClick=${() => console.log()}`      |
 
 ### Key Differences from JSX
 
@@ -422,11 +424,15 @@ const touchpoint = await create({
 ### HTML-Specific Issues
 
 **"nlxai is not defined"**
+
 - **Cause**: Script running before Touchpoint UI loads
 - **Solution**: Ensure the script tag has `defer` attribute and wrap code in `contentLoaded()`:
 
 ```html
-<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
 <script>
   contentLoaded().then(() => {
     // Your code here
@@ -435,6 +441,7 @@ const touchpoint = await create({
 ```
 
 **Components not rendering**
+
 - **Cause**: Using JSX syntax instead of template syntax
 - **Solution**: Use `${html`...`}` for nested components:
 
@@ -447,6 +454,7 @@ left=${html`<Carousel>...</Carousel>`}
 ```
 
 **"React.useState is not a function"**
+
 - **Cause**: React not properly imported
 - **Solution**: Destructure React from nlxai.touchpointUi:
 
@@ -457,20 +465,23 @@ const { React } = nlxai.touchpointUi;
 ### General Issues
 
 **Component receives undefined data**
+
 - **Cause**: Modality schema doesn't match expected data structure
-- **Solution**: Log the data to check structure. See [Subscribing to events](/guide-subscribing-to-events#example-use-case-reacting-to-modalities) for methods to check data outside components. 
+- **Solution**: Log the data to check structure. See [Subscribing to events](/guide-subscribing-to-events#example-use-case-reacting-to-modalities) for methods to check data outside components.
 
 ```javascript
 const MyComponent = ({ data }) => {
-  console.log('Received data:', data);
+  console.log("Received data:", data);
   // Component code
 };
 ```
 
 **Choice not sent to NLX**
+
 - **Cause**: Missing or incorrect conversationHandler call
 - **Solution**: Ensure you're calling the correct method. See [Sending Messages and Data](/touchpoint-ui-ConversationHandler#sending-messages-and-data) for more information.
-- 
+-
+
 ```javascript
 // For choices
 conversationHandler.sendChoice(choiceId);
