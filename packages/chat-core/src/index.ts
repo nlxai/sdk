@@ -768,7 +768,7 @@ export const shouldReinitialize = (
   return !equals(config1, config2);
 };
 
-const getBaseDomain = (url: string) =>
+const getBaseDomain = (url: string): string =>
   url.match(
     /(bots\.dev\.studio\.nlx\.ai|bots\.studio\.nlx\.ai|apps\.nlx\.ai|dev\.apps\.nlx\.ai)/g,
   )?.[0] ?? "apps.nlx.ai";
