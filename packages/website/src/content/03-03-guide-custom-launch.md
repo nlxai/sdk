@@ -1,113 +1,239 @@
-- [Customizing Conversation Initialization](#customizing-conversation-initialization)
-  - [Initialization Function](#initialization-function)
-- [Example sending user information on Touchpoint Launch](#example-sending-user-information-on-touchpoint-launch)
-- [Example launching Touchpoint with a custom intent](#example-launching-touchpoint-with-a-custom-intent)
-- [Example passing API Key on Touchpoint Launch](#example-passing-api-key-on-touchpoint-launch)
+- [Passing Initial Data with `initialContext`](#passing-initial-data-with-initialcontext)
+- [Customizing Initialization Logic with `initializeConversation`](#customizing-initialization-logic-with-initializeconversation)
+  - [Initialization Function Signature](#initialization-function-signature)
+- [Examples](#examples)
+  - [1. Sending User Information via `initialContext` (Recommended for Data Passing)](#1-sending-user-information-via-initialcontext-recommended-for-data-passing)
+  - [2. Launching with a Custom Intent Using `initializeConversation`](#2-launching-with-a-custom-intent-using-initializeconversation)
 
-The launch behavior of the Touchpoint-UI widget can be customized with both custom visual elements and custom initialization logic.
 
-## Customizing Conversation Initialization
+## Passing Initial Data with `initialContext`
 
-By default, Touchpoint starts a conversation by sending a welcome intent when the widget is launched. You can provide a function to the `initializeConversation` option to customize this behavior:
+The `initialContext` option in your Touchpoint UI configuration is the simplest way to send data to your NLX application when a conversation starts. `initialContext` works all input modes: text, voice, and voiceMini.
 
-- Send a different intent than the default welcome intent
-- Include custom context data with the welcome intent
-- Perform additional operations before starting the conversation
-- Add custom logging or tracking at initialization time
+The `initialContext` object accepts key-value pairs, which are then available as [Context Variables](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) within your NLX flows.
 
-### Initialization Function
+**When to use `initialContext`:**
+- You need to pass user details, page information, or any other relevant data at the beginning of the conversation.
+- You don't need custom JavaScript logic to run on launch, just data passing.
+- You want a straightforward way to provide context for text, voice, or voiceMini interactions from the start.
 
-The provided function will be passed the [ConversationHandler](/headless-api-reference#interface-conversationhandler)
-
-```typescript
-type InitializeConversation = (handler: ConversationHandler) => void;
-```
-
-Where `ConversationHandler` provides the following methods:
-
-| Method                         | Description                                                                                                            |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| `sendWelcomeIntent(context?)`  | Sends the welcome intent with optional context. Context Variables must be defined within NLX to be used in your flows. |
-| `sendIntent(intent, context?)` | Sends a specific intent with optional context. The specific intent must be defined as a flow in your NLX application   |
-
-## Example sending user information on Touchpoint Launch
-
-The context passed (`userId` and `userTier`) need to be defined as Context Variables within your Workspace to be used within the flow.
-
+**JavaScript**
 ```javascript
-import { create, type InitializeConversation } from "@nlxai/touchpoint-ui";
-
-const initializeWithUserContext: InitializeConversation = (handler) => {
-  // Include user information in the context
-  handler.sendWelcomeIntent({
-    userId: "user123",
-    userTier: "premium"
-  });
-};
+import { create } from "@nlxai/touchpoint-ui";
 
 const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
-    headers: {
-      "nlx-api-key": "YOUR_API_KEY",
-    },
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
+    // userId is required if input is "voice" or "voiceMini"
+    userId: "your-unique-user-id"
   },
-  initializeConversation: initializeWithUserContext,
+  initialContext: {
+    userId: "user-789",
+    userTier: "gold",
+    currentPage: "/products/item123",
+  },
+  // input: "text", // or "voice", "voiceMini"
 });
 ```
 
-## Example launching Touchpoint with a custom intent
+**HTML**
 
-The specific intent (CheckOrderStatus) must be defined as a flow within your NLX application.
+```html
+<script defer src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  contentLoaded().then(() => {
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        // userId is required if input is "voice" or "voiceMini"
+        userId: "your-unique-user-id"
+      },
+      initialContext: {
+        userId: "user-789",
+        userTier: "gold",
+        currentPage: "/products/item123",
+      }
+    });
+  });
+</script>
+```
+
+If you also provide a custom `initializeConversation` function (see below), the `initialContext` object will be passed as the second argument to that function.
+
+## Customizing Initialization Logic with `initializeConversation`
+
+For more advanced scenarios where you need to execute custom JavaScript logic when the Touchpoint UI launches, you can use the `initializeConversation` function.
+
+💡 `initializeConversation` **only works** for `text` input mode. Your function is responsible for initiating the conversation (e.g., by calling `handler.sendWelcomeIntent()` or `handler.sendIntent()`).
+
+**When to use `initializeConversation`:**
+
+  - You need to conditionally decide which intent to send based on application state.
+  - You want to perform actions like logging, analytics tracking, or API calls before the first message is sent.
+  - You need to implement custom setup logic for specific input modes.
+
+### Initialization Function Signature
+
+The `initializeConversation` function receives the [`ConversationHandler`](/touchpoint-ui-ConversationHandler) instance and any `initialContext` you provided in the configuration:
+
+```typescript
+type InitializeConversation = (
+  conversationHandler: ConversationHandler,
+  initialContext?: Record<string, any> // Context from TouchpointConfiguration.initialContext
+) => void;
+```
+
+The `ConversationHandler` provides methods like:
+| Method                        | Description                                                                                                                               |
+|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| `sendWelcomeIntent(context?)` | Sends the default welcome intent. The `context` argument here will merge with or override the `initialContext` passed to the function. |
+| `sendIntent(intent, context?)`| Sends a specific intent. The `context` argument here will merge with or override the `initialContext` passed to the function.      |
+
+## Examples
+
+### 1. Sending User Information via `initialContext` (Recommended for Data Passing)
+
+This example demonstrates passing `firstName` and `userTier`. These need to be defined as Context Variables in your NLX Workspace to be usable in your flows. This approach works for text, voice, and voiceMini.
+
+**JavaScript**
+
+```javascript
+import { create } from "@nlxai/touchpoint-ui";
+
+const touchpoint = await create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+    userId: "user123" // Required for voice
+  },
+  initialContext: {
+    // userId and userTier must be defined as Context Variables in NLX Studio
+    firstName: "David",
+    userTier: "premium",
+  },
+  // input: "text", // Or "voice", "voiceMini"
+});
+```
+
+**HTML**
+
+```html
+<script defer src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  contentLoaded().then(() => {
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        userId: "user123" // Required for voice
+      },
+      initialContext: {
+        firstName: "David",
+        userTier: "premium",
+      },
+      // input: "text", // Or "voice", "voiceMini"
+    });
+  });
+</script>
+```
+
+### 2. Launching with a Custom Intent Using `initializeConversation` 
+
+The specific flow (`CheckOrderStatus`) must be defined in your NLX application. `userSource`, `pageUrl`, `clientTime` all must be defined as context variables in your NLX workspace.
+
+**JavaScript**
 
 ```javascript
 import { create, type InitializeConversation } from "@nlxai/touchpoint-ui";
 
-const initializeWithCustomIntent: InitializeConversation = (handler) => {
-  // Send a specific intent instead of the welcome intent
-  handler.sendIntent("CheckOrderStatus", {
-    source: "website",
-    pageUrl: window.location.href
-  });
+const initializeWithCustomIntent: InitializeConversation = (conversationHandler) => {
+  const context = {
+    userSource: "website",
+    pageUrl: window.location.href,
+    clientTime: new Date().toISOString(),
+  }
+  // Send a specific intent with the context
+  conversationHandler.sendIntent("CheckOrderStatus", context);
 };
 
 const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
-    headers: {
-      "nlx-api-key": "YOUR_API_KEY",
-    },
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
   },
   initializeConversation: initializeWithCustomIntent,
+  input: "text", // This custom function will run for any input mode
 });
 ```
 
-## Example passing API Key on Touchpoint Launch
+**HTML**
 
-The context passed (`UserApiKey`) needs to be defined as Context Variables within your Workspace to be used within the flow.
+```html
+<script defer src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
 
-```javascript
-import { create, type InitializeConversation } from "@nlxai/touchpoint-ui";
+  const initializeWithCustomIntent: InitializeConversation = (conversationHandler) => {
+    const context = {
+      userSource: "website",
+      pageUrl: window.location.href,
+      clientTime: new Date().toISOString(),
+    }
+    // Send a specific intent with the context
+    conversationHandler.sendIntent("CheckOrderStatus", context);
+  };
 
-// Assume userCredential holds the API key needed for the conversation
-const userCredential = "USER_SPECIFIC_API_KEY";
-
-const initializeWithAPIKey: InitializeConversation = (handler) => {
-  console.log("Initializing conversation with custom API key context");
-  // Send the welcome intent, but include the API key in the context
-  handler.sendWelcomeIntent({ UserApiKey: userCredential });
-};
-
-const touchpoint = await create({
-  config: {
-    applicationUrl: "YOUR_APPLICATION_URL",
-    headers: {
-      "nlx-api-key": "YOUR_GENERAL_API_KEY", // General key for initial connection
-    },
-    languageCode: "en-US",
-  },
-  initializeConversation: initializeWithAPIKey,
-});
+  contentLoaded().then(() => {
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+      },
+      initializeConversation: initializeWithCustomIntent,
+      input: "text",
+    });
+  });
+</script>
 ```

@@ -5,7 +5,7 @@ import { PageContent } from "../components/PageContent";
 
 export const content = dateContent;
 
-export const navGroup: string = "Component Library";
+export const navGroup: string = "Custom Components";
 
 export const title: string = "DateInput";
 

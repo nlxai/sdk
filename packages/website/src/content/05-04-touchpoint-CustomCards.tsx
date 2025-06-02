@@ -5,7 +5,7 @@ import customCardContent from "./05-04-touchpoint-CustomCards.md?raw";
 
 export const content = customCardContent;
 
-export const navGroup: string = "Component Library";
+export const navGroup: string = "Custom Components";
 
 export const title: string = "Custom Cards";
 

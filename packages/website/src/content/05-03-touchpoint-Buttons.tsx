@@ -5,7 +5,7 @@ import buttonContent from "./05-03-touchpoint-Buttons.md?raw";
 
 export const content = buttonContent;
 
-export const navGroup: string = "Component Library";
+export const navGroup: string = "Custom Components";
 
 export const title: string = "Buttons";
 

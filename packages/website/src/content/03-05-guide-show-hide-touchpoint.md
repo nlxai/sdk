@@ -1,114 +1,360 @@
-- [Managing Expanded State](#managing-expanded-state)
-  - [Example Open chat on page load](#example-open-chat-on-page-load)
-  - [Example Toggle chat with custom button](#example-toggle-chat-with-custom-button)
-  - [Example open chat based on user behavior](#example-open-chat-based-on-user-behavior)
-- [Removing Touchpoint from the DOM](#removing-touchpoint-from-the-dom)
+- [Showing and Hiding the Chat Window](#showing-and-hiding-the-chat-window)
+  - [Example: Open Chat on Page Load](#example-open-chat-on-page-load)
+  - [Example: Toggle Chat with a Custom Button](#example-toggle-chat-with-a-custom-button)
+- [Completely Removing Touchpoint UI from the DOM](#completely-removing-touchpoint-ui-from-the-dom)
+- [Example: Open Touchpoint UI After User Inactivity](#example-open-touchpoint-ui-after-user-inactivity)
 
-The Touchpoint widget's visibility can be dynamically controlled properly removing it from the DOM through the returned [Touchpoint Instance](/touchpoint-ui-api-reference#interfacestouchpointinstancemd).
 
-## Managing Expanded State
+## Showing and Hiding the Chat Window
 
-The `expanded` property allows you to programmatically show or hide the chat window:
+You can show or hide the Touchpoint UI window by setting the `expanded` boolean property on the `TouchpointInstance`.
+
+  * `touchpoint.expanded = true;` opens the chat window.
+  * `touchpoint.expanded = false;` collapses the chat window to the launch icon (if visible) or hides it if the launch icon is disabled.
+
+**JavaScript**
 
 ```javascript
-// Initialize Touchpoint
 import { create } from "@nlxai/touchpoint-ui";
 
-const touchpoint = await create({
+// Initialize Touchpoint
+create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
-    headers: {
-      "nlx-api-key": "YOUR_API_KEY",
-    },
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
+    userId: "your-unique-user-id"
   },
-});
+}).then(touchpoint => {
+  // To open the chat window:
+  // touchpoint.expanded = true;
 
-// Open the chat window programmatically
-touchpoint.expanded = true;
+  // To close the chat window:
+  // touchpoint.expanded = false;
 
-// Close the chat window programmatically
-touchpoint.expanded = false;
-```
-
-### Example Open chat on page load
-
-If you want the chat widget to be automatically expanded when your page loads:
-
-```javascript
-const touchpoint = await create({
-  config: {
-    applicationUrl: "YOUR_APPLICATION_URL",
-    headers: {
-      "nlx-api-key": "YOUR_API_KEY",
-    },
-    languageCode: "en-US",
-  },
-});
-
-// Open immediately after initialization
-touchpoint.expanded = true;
-```
-
-### Example Toggle chat with custom button
-
-Create your own button to open and close the chat:
-
-```javascript
-const touchpoint = await create({
-  config: {
-    applicationUrl: "YOUR_APPLICATION_URL",
-    headers: {
-      "nlx-api-key": "YOUR_API_KEY",
-    },
-    languageCode: "en-US",
-  },
-  // Optionally hide the default launcher
-  launchIcon: false,
-});
-
-// Add click event to your custom button
-document.getElementById("my-chat-button").addEventListener("click", () => {
-  touchpoint.expanded = !touchpoint.expanded;
+  // Example: Open the chat window after 2 seconds
+  setTimeout(() => {
+    touchpoint.expanded = true;
+  }, 2000);
 });
 ```
 
-### Example open chat based on user behavior
+**HTML**
 
-Open the chat after a user has been on the page for a certain amount of time:
+```html
+<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  contentLoaded().then(() => {
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        userId: "your-unique-user-id"
+      },
+    });
+  }).then(touchpoint => {
+    // To open the chat window:
+    // touchpoint.expanded = true;
+
+    // To close the chat window:
+    // touchpoint.expanded = false;
+
+    // Example: Open the chat window after 2 seconds
+    setTimeout(() => {
+      touchpoint.expanded = true;
+    }, 2000);
+  });
+</script>
+```
+
+### Example: Open Chat on Page Load
+
+To have the Touchpoint UI automatically expanded when your page loads:
+
+**JavaScript**
 
 ```javascript
-const touchpoint = await create({
+import { create } from "@nlxai/touchpoint-ui";
+
+create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
-    headers: {
-      "nlx-api-key": "YOUR_API_KEY",
-    },
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
   },
-});
-
-// Open chat after 30 seconds
-setTimeout(() => {
+}).then(touchpoint => {
+  // Open immediately after initialization
   touchpoint.expanded = true;
-}, 30000);
+});
 ```
 
-## Removing Touchpoint from the DOM
+**HTML**
 
-When you need to completely remove the Touchpoint widget from your page, use the `teardown()` method:
+```html
+<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  contentLoaded().then(() => {
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        userId: "your-unique-user-id"
+      },
+    });
+  }).then(touchpoint => {
+    // Open immediately after initialization
+    touchpoint.expanded = true;
+  });
+</script>
+```
+
+### Example: Toggle Chat with a Custom Button
+
+If you prefer to use your own button to control the Touchpoint UI, disable the default launch icon by setting `launchIcon: false` in the configuration. Then, use the `expanded` property to toggle visibility.
+
+For details on `launchIcon` and custom launch button styling, see the [Theming and Styling guide](/touchpoint-ui-theming#launch-and-brand-icons) and the [Custom Launch guide](/guide-custom-launch).
+
+**JavaScript**
 
 ```javascript
-const touchpoint = await create({
+import { create } from "@nlxai/touchpoint-ui";
+
+create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
-    headers: {
-      "nlx-api-key": "YOUR_API_KEY",
-    },
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
+    userId: "your-unique-user-id"
   },
+  launchIcon: false, // Disable the default launch button
+}).then(touchpoint => {
+  const customButton = document.getElementById("my-custom-chat-button");
+  if (customButton) {
+    customButton.addEventListener("click", () => {
+      touchpoint.expanded = !touchpoint.expanded;
+    });
+  }
 });
+```
 
-// Later, when you want to remove the widget:
-touchpoint.teardown();
+**HTML**
+
+```html
+<button id="my-custom-chat-button">Toggle Chat</button>
+
+<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  contentLoaded().then(() => {
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        userId: "your-unique-user-id"
+      },
+      launchIcon: false, // Disable the default launch button
+    });
+  }).then(touchpoint => {
+    const customButton = document.getElementById("my-custom-chat-button");
+    if (customButton) {
+      customButton.addEventListener("click", () => {
+        touchpoint.expanded = !touchpoint.expanded;
+      });
+    }
+  });
+</script>
+```
+
+## Completely Removing Touchpoint UI from the DOM
+
+To entirely remove the Touchpoint UI widget from your page (including its associated DOM elements and event listeners), call the `teardown()` method on the `TouchpointInstance`. This is useful when navigating away from a page in a single-page application or when the chat functionality is no longer needed.
+
+**JavaScript**
+
+```javascript
+import { create } from "@nlxai/touchpoint-ui";
+
+create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+    userId: "your-unique-user-id"
+  },
+}).then(touchpoint => {
+  // To remove the widget (e.g., on a button click or page navigation):
+  document.getElementById("remove-chat-button").addEventListener("click", () => {
+    touchpoint.teardown();
+  });
+});
+```
+
+**HTML**
+
+```html
+<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  contentLoaded().then(() => {
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        userId: "your-unique-user-id"
+      },
+    });
+  }).then(touchpoint => {
+    // To remove the widget (e.g., on a button click or page navigation):
+    const removeButton = document.getElementById("remove-chat-button");
+    if (removeButton) {
+      removeButton.addEventListener("click", () => {
+        touchpoint.teardown();
+      });
+    }
+  });
+</script>
+```
+
+## Example: Open Touchpoint UI After User Inactivity
+
+You can combine these methods with browser events or timers to create more dynamic interactions, such as proactively opening the Touchpoint UI after a period of user inactivity.
+
+**JavaScript**
+
+```javascript
+import { create } from "@nlxai/touchpoint-ui";
+
+create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+    userId: "your-unique-user-id"
+  },
+}).then(touchpoint => {
+  let inactivityTimer;
+
+  const resetInactivityTimer = () => {
+    clearTimeout(inactivityTimer);
+    // Do not open if already expanded or if UI has been torn down
+    if (touchpoint && !touchpoint.expanded) {
+      inactivityTimer = setTimeout(() => {
+        if (touchpoint && !touchpoint.expanded) { // Double check before expanding
+          touchpoint.expanded = true;
+        }
+      }, 30000); // Open after 30 seconds of inactivity
+    }
+  };
+
+  // Events that indicate user activity
+  const activityEvents = ["mousemove", "mousedown", "keypress", "scroll", "touchstart"];
+  activityEvents.forEach(event => {
+    document.addEventListener(event, resetInactivityTimer, true);
+  });
+
+  // Initialize the timer
+  resetInactivityTimer();
+
+});
+```
+
+**HTML**
+
+```html
+<script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  contentLoaded().then(() => {
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+        userId: "your-unique-user-id"
+      },
+    });
+  }).then(touchpoint => {
+    let inactivityTimer;
+
+    const resetInactivityTimer = () => {
+      clearTimeout(inactivityTimer);
+      // touchpoint might be null if teardown was called externally
+      if (touchpoint && !touchpoint.expanded) {
+        inactivityTimer = setTimeout(() => {
+           if (touchpoint && !touchpoint.expanded) {
+            touchpoint.expanded = true;
+          }
+        }, 30000); // Open after 30 seconds of inactivity
+      }
+    };
+
+    const activityEvents = ["mousemove", "mousedown", "keypress", "scroll", "touchstart"];
+    activityEvents.forEach(event => {
+      document.addEventListener(event, resetInactivityTimer, true);
+    });
+
+    resetInactivityTimer();
+  });
+</script>
 ```

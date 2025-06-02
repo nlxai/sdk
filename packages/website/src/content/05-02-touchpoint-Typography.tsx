@@ -5,7 +5,7 @@ import baseTextContent from "./05-02-touchpoint-Typography.md?raw";
 
 export const content = baseTextContent;
 
-export const navGroup: string = "Component Library";
+export const navGroup: string = "Custom Components";
 
 export const title: string = "Typography";
 
