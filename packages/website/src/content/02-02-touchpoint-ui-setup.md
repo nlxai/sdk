@@ -201,10 +201,10 @@ const touchpoint = await create({
 
 ### Optional Config (inside `config` object)
 
-| Field                    | Type   | Required       | Description                                        |
-| ------------------------ | ------ | -------------- | -------------------------------------------------- |
-| `conversationId` | string | optional | `conversationId` to continue an existing conversation. Used to recover conversation when [persisting history](/guide-persisting-history). | 
-| `responses` | array of [Response](/headless-api-reference#response) | optional |  When `responses` is set, initialize the chatHandler with historical messages. Used to recover conversation when [persisting history](/guide-persisting-history). |
+| Field            | Type                                                  | Required | Description                                                                                                                                                      |
+| ---------------- | ----------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `conversationId` | string                                                | optional | `conversationId` to continue an existing conversation. Used to recover conversation when [persisting history](/guide-persisting-history).                        |
+| `responses`      | array of [Response](/headless-api-reference#response) | optional | When `responses` is set, initialize the chatHandler with historical messages. Used to recover conversation when [persisting history](/guide-persisting-history). |
 
 💡 See the API Reference for the [Full Configuration Object](/headless-api-reference#interfacesconfigmd)
 
