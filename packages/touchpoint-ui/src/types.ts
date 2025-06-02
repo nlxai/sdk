@@ -178,6 +178,11 @@ export type InitializeConversation = (
 ) => void;
 
 /**
+ * Input type for the experience
+ */
+export type Input = "text" | "voice" | "voiceMini";
+
+/**
  * Main Touchpoint creation properties object
  */
 export interface TouchpointConfiguration {
@@ -232,7 +237,7 @@ export interface TouchpointConfiguration {
   /**
    * Controls the ways in which the user can communicate with the application. Defaults to `"text"`
    */
-  input?: "text" | "voice" | "voiceMini";
+  input?: Input;
   /**
    * Context sent with the initial request.
    */

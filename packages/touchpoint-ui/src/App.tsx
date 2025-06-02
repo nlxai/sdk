@@ -171,6 +171,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const customModalities = props.customModalities ?? {};
 
+  const [fullscreenVoiceSpeakersEnabled, setFullscreenVoiceSpeakersEnabled] =
+    useState<boolean>(true);
+
   if (handler == null) {
     return null;
   }
@@ -228,6 +231,15 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       >
         <Header
           windowSize={props.embedded ? "embedded" : windowSize}
+          errorThemedCloseButton={input === "voice"}
+          speakerControls={
+            input === "voice"
+              ? {
+                  enabled: fullscreenVoiceSpeakersEnabled,
+                  setEnabled: setFullscreenVoiceSpeakersEnabled,
+                }
+              : undefined
+          }
           colorMode={colorMode}
           brandIcon={props.brandIcon}
           isSettingsOpen={isSettingsOpen}
@@ -313,6 +325,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             active={voiceActive}
             setActive={setVoiceActive}
             handler={handler}
+            speakersEnabled={fullscreenVoiceSpeakersEnabled}
             colorMode={colorMode}
             className="flex-grow"
             context={props.initialContext}
