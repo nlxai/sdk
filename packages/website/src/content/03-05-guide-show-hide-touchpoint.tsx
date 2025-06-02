@@ -1,9 +1,9 @@
 import { type FC } from "react";
 import { PageContent } from "../components/PageContent";
-import ContentRaw from "./03-02-guide-touchpoint-chat-modes.md?raw";
+import ContentRaw from "./03-05-guide-show-hide-touchpoint.md?raw";
 
-export const navGroup = "Touchpoint Guides";
-export const title = "Changing Chat Modes";
+export const navGroup = "Conversation Control";
+export const title = "Showing and Hiding Touchpoint";
 
 export const Content: FC<unknown> = () => {
   return <PageContent md={ContentRaw} />;

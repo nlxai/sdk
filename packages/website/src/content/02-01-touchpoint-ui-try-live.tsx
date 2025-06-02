@@ -39,7 +39,7 @@ ${touchpointUiSetupSnippet({ config, theme, input, colorMode })}
 \`\`\`
 `;
 
-export const navGroup: string = "Touchpoint";
+export const navGroup: string = "Touchpoint Setup";
 
 export const title: string = "Quick Start";
 

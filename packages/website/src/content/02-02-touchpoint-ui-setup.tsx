@@ -9,7 +9,7 @@ The NLX Touchpoint widget provides a customizable chat interface that you can em
 ${configOptions}
 `;
 
-export const navGroup: string = "Touchpoint";
+export const navGroup: string = "Touchpoint Setup";
 
 export const title: string = "Configuration";
 

@@ -1,11 +1,11 @@
 import { type FC } from "react";
-import dateContent from "./04-06-touchpoint-DateInput.md?raw";
+import dateContent from "./05-06-touchpoint-DateInput.md?raw";
 
 import { PageContent } from "../components/PageContent";
 
 export const content = dateContent;
 
-export const navGroup: string = "Touchpoint components";
+export const navGroup: string = "Component Library";
 
 export const title: string = "DateInput";
 
