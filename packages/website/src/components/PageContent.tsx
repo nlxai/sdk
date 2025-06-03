@@ -59,9 +59,11 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
 
 type Env = "html" | "js";
 
+const touchpointUiImports = ["create", "React", "html"];
+
 const processTouchpointUiCode = (code: string, env: Env): string => {
   if (env === "html") {
-    const codeWithImport = `import { create } from "https://unpkg.com/@nlxai/touchpoint-ui@1.0.5-alpha.10/lib/index.js?module";
+    const codeWithImport = `import { ${touchpointUiImports.join(", ")} } from "https://unpkg.com/@nlxai/touchpoint-ui@1.0.5-alpha.10/lib/index.js?module";
 
 ${code}
 `;
@@ -69,7 +71,7 @@ ${code}
 ${indentBy("  ", codeWithImport)}
 </script>`;
   }
-  return `import { create } from "@nlxai/touchpoint-ui";
+  return `import { ${touchpointUiImports.join(", ")} } from "@nlxai/touchpoint-ui";
 
 ${code}
 `;
