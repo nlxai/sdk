@@ -372,6 +372,10 @@ export interface Config {
    */
   environment?: Environment;
   /**
+   * Specifies whether the conversation is bidirectional
+   */
+  bidirectional?: boolean;
+  /**
    * Experimental settings
    */
   experimental?: {
@@ -406,6 +410,7 @@ const normalizeStructuredRequest = (
   structured: StructuredRequest,
 ): NormalizedStructuredRequest => ({
   ...structured,
+  intentId: structured.flowId ?? structured.intentId,
   slots:
     structured.slots != null
       ? normalizeSlots(structured.slots)
@@ -428,8 +433,13 @@ export interface StructuredRequest {
   nodeId?: string;
   /**
    * The intent to trigger. The `intentId` is the name under the application's _Intents_.
+   * @deprecated use `flowId` instead.
    */
   intentId?: string;
+  /**
+   * The flow to trigger. The `flowId` is the name under the application's _Flows_.
+   */
+  flowId?: string;
   /**
    * The slots to populate
    */
@@ -462,7 +472,7 @@ export type NormalizedStructuredRequest = StructuredRequest & {
 /**
  * The request data actually sent to the application, slightly different from {@link UserResponsePayload}, which includes some UI-specific information
  */
-export interface BotRequest {
+export interface ApplicationRequest {
   /**
    * The current conversation ID
    */
@@ -499,6 +509,12 @@ export interface BotRequest {
     };
   };
 }
+
+/**
+ * Legacy name for application request
+ * @deprecated use {@link ApplicationRequest}
+ */
+export type BotRequest = ApplicationRequest;
 
 /**
  * Credentials to connect to a LiveKit channel
@@ -559,10 +575,16 @@ export type LanguageCode = string;
  * @param botRequest - The {@link BotRequest} that is being overridden
  * @param appendResponse - A method to append the {@link BotResponsePayload} to the message history
  */
-export type BotRequestOverride = (
+export type RequestOverride = (
   botRequest: BotRequest,
-  appendBotResponse: (res: BotResponsePayload) => void,
+  appendResponse: (res: BotResponsePayload) => void,
 ) => void;
+
+/**
+ * Legacy name for bot request override
+ * @deprecated use {@link RequestOverride} instead
+ */
+export type BotRequestOverride = RequestOverride;
 
 /**
  * Voice+ context, type to be defined
@@ -623,17 +645,38 @@ export interface ConversationHandler {
   ) => void;
 
   /**
-   * Trigger the welcome [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents). This should be done when the user starts interacting with the chat.
+   * Trigger the welcome flow. This should be done when the user starts interacting with the chat.
    * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
    */
+  sendWelcomeFlow: (context?: Context) => void;
+
+  /**
+   * Trigger the welcome [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents). This should be done when the user starts interacting with the chat.
+   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   * @deprecated use `sendWelcomeFlow` instead
+   */
   sendWelcomeIntent: (context?: Context) => void;
+
+  /**
+   * Trigger a specific flow.
+   * @param flowId - the flow to trigger. The id is the name under the application's _Intents_.
+   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   */
+  sendFlow: (flowId: string, context?: Context) => void;
 
   /**
    * Trigger a specific [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents).
    * @param intentId - the intent to trigger. The id is the name under the application's _Intents_.
    * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   * @deprecated use `sendFlow` instead
    */
   sendIntent: (intentId: string, context?: Context) => void;
+
+  /**
+   * Send context without sending a message
+   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   */
+  sendContext: (context: Context) => Promise<void>;
 
   /**
    * Obtain LiveKit credentials to run the experience in voice.
@@ -695,9 +738,14 @@ export interface ConversationHandler {
    */
   destroy: () => void;
   /**
-   * Optional {@link BotRequestOverride} function used to bypass the bot request and handle them in a custom fashion
+   * Optional {@link RequestOverride} function used to bypass the bot request and handle them in a custom fashion
+   * @deprecated use `setRequestOverride` instead
    */
-  setBotRequestOverride: (override: BotRequestOverride | undefined) => void;
+  setBotRequestOverride: (override: RequestOverride | undefined) => void;
+  /**
+   * Optional {@link RequestOverride} function used to bypass the bot request and handle them in a custom fashion
+   */
+  setRequestOverride: (override: RequestOverride | undefined) => void;
   /**
    * Add a listener to one of the handler's custom events
    */
@@ -758,19 +806,47 @@ export const shouldReinitialize = (
   return !equals(config1, config2);
 };
 
+const getBaseDomain = (url: string): string =>
+  url.match(
+    /(bots\.dev\.studio\.nlx\.ai|bots\.studio\.nlx\.ai|apps\.nlx\.ai|dev\.apps\.nlx\.ai)/g,
+  )?.[0] ?? "apps.nlx.ai";
+
 /**
- * When the application works through websockets, LiveKit credentials still need to be obtained through HTTP. In order to make this possible,
- * the frontend reconstructs that HTTP URL.
- * @param websocketUrl - the websocket URL
+ * When a HTTP URL is provided, deduce the websocket URL. Otherwise, return the argument.
+ * @param applicationUrl - the websocket URL
  * @returns httpUrl - the HTTP URL
  */
-const websocketToHttpUrl = (websocketUrl: string): string => {
-  const isDev = websocketUrl.includes("bots.dev");
-  const url = new URL(websocketUrl);
+const normalizeToWebsocket = (applicationUrl: string): string => {
+  if (isWebsocketUrl(applicationUrl)) {
+    return applicationUrl;
+  }
+  const base = getBaseDomain(applicationUrl);
+  const url = new URL(applicationUrl);
+  const pathChunks = url.pathname.split("/");
+  const deploymentKey = pathChunks[2];
+  const channelKey = pathChunks[3];
+  return `wss://us-east-1-ws.${base}?deploymentKey=${deploymentKey}&channelKey=${channelKey}`;
+};
+
+/**
+ * When a websocket URL is provided, deduce the HTTP URL. Otherwise, return the argument.
+ * @param applicationUrl - the websocket URL
+ * @returns httpUrl - the HTTP URL
+ */
+const normalizeToHttp = (applicationUrl: string): string => {
+  if (!isWebsocketUrl(applicationUrl)) {
+    return applicationUrl;
+  }
+  const base = getBaseDomain(applicationUrl);
+  const url = new URL(applicationUrl);
   const params = new URLSearchParams(url.search);
   const channelKey = params.get("channelKey");
   const deploymentKey = params.get("deploymentKey");
-  return `https://${isDev ? "bots.dev.studio.nlx.ai" : "bots.studio.nlx.ai"}/c/${deploymentKey}/${channelKey}`;
+  return `https://${base}/c/${deploymentKey}/${channelKey}`;
+};
+
+const isWebsocketUrl = (url: string): boolean => {
+  return url.indexOf("wss://") === 0;
 };
 
 /**
@@ -823,7 +899,7 @@ export function createConversation(config: Config): ConversationHandler {
   };
 
   const fullApplicationHttpUrl = (): string =>
-    `${applicationUrl}${
+    `${normalizeToHttp(applicationUrl)}${
       config.experimental?.completeBotUrl === true
         ? ""
         : `-${state.languageCode}`
@@ -900,7 +976,7 @@ export function createConversation(config: Config): ConversationHandler {
     }
   };
 
-  let botRequestOverride: BotRequestOverride | undefined;
+  let requestOverride: RequestOverride | undefined;
 
   const sendVoicePlusMessage = (message: any): void => {
     if (voicePlusSocket?.readyState === 1) {
@@ -911,8 +987,8 @@ export function createConversation(config: Config): ConversationHandler {
   };
 
   const sendToBot = async (body: BotRequest): Promise<unknown> => {
-    if (botRequestOverride != null) {
-      botRequestOverride(body, (payload) => {
+    if (requestOverride != null) {
+      requestOverride(body, (payload) => {
         const newResponse: Response = {
           type: "bot",
           receivedAt: new Date().getTime(),
@@ -935,7 +1011,7 @@ export function createConversation(config: Config): ConversationHandler {
       channelType: config.experimental?.channelType,
       environment: config.environment,
     };
-    if (isUsingWebSockets()) {
+    if (isWebsocketUrl(applicationUrl)) {
       if (socket?.readyState === 1) {
         socket.send(JSON.stringify(bodyWithContext));
       } else {
@@ -965,10 +1041,6 @@ export function createConversation(config: Config): ConversationHandler {
     }
   };
 
-  const isUsingWebSockets = (): boolean => {
-    return applicationUrl.indexOf("wss://") === 0;
-  };
-
   let subscribers: Subscriber[] = [];
 
   const checkSocketQueue = async (): Promise<void> => {
@@ -989,6 +1061,8 @@ export function createConversation(config: Config): ConversationHandler {
   };
 
   const setupWebsocket = (): void => {
+    // If the socket is already set up, tear it down first
+    teardownWebsocket();
     const url = new URL(applicationUrl);
     if (config.experimental?.completeBotUrl !== true) {
       url.searchParams.set("languageCode", state.languageCode);
@@ -1024,17 +1098,56 @@ export function createConversation(config: Config): ConversationHandler {
     };
   };
 
+  const setupCommandWebsocket = (): void => {
+    // If the socket is already set up, tear it down first
+    teardownCommandWebsocket();
+    if (config.bidirectional !== true) {
+      return;
+    }
+    const url = new URL(normalizeToWebsocket(applicationUrl));
+    if (config.experimental?.completeBotUrl !== true) {
+      url.searchParams.set("languageCode", state.languageCode);
+      url.searchParams.set(
+        "channelKey",
+        `${url.searchParams.get("channelKey") ?? ""}-${state.languageCode}`,
+      );
+    }
+    url.searchParams.set("conversationId", state.conversationId);
+    url.searchParams.set("type", "voice-plus");
+    const apiKey = config.headers["nlx-api-key"];
+    if (!isWebsocketUrl(applicationUrl) && apiKey != null) {
+      url.searchParams.set("apiKey", apiKey);
+    }
+    voicePlusSocket = new ReconnectingWebSocket(url.href);
+    voicePlusSocketMessageQueueCheckInterval = setInterval(() => {
+      checkVoicePlusSocketQueue();
+    }, 500);
+    voicePlusSocket.onmessage = (e) => {
+      if (typeof e?.data === "string") {
+        const command = safeJsonParse(e.data);
+        if (command != null) {
+          eventListeners.voicePlusCommand.forEach((listener) => {
+            listener(command);
+          });
+        }
+      }
+    };
+  };
+
   const teardownWebsocket = (): void => {
     if (socketMessageQueueCheckInterval != null) {
       clearInterval(socketMessageQueueCheckInterval);
-    }
-    if (voicePlusSocketMessageQueueCheckInterval != null) {
-      clearInterval(voicePlusSocketMessageQueueCheckInterval);
     }
     if (socket != null) {
       socket.onmessage = null;
       socket.close();
       socket = undefined;
+    }
+  };
+
+  const teardownCommandWebsocket = (): void => {
+    if (voicePlusSocketMessageQueueCheckInterval != null) {
+      clearInterval(voicePlusSocketMessageQueueCheckInterval);
     }
     if (voicePlusSocket != null) {
       voicePlusSocket.onmessage = null;
@@ -1043,9 +1156,11 @@ export function createConversation(config: Config): ConversationHandler {
     }
   };
 
-  if (isUsingWebSockets()) {
+  if (isWebsocketUrl(applicationUrl)) {
     setupWebsocket();
   }
+
+  setupCommandWebsocket();
 
   const appendStructuredUserResponse = (
     structured: StructuredRequest,
@@ -1068,7 +1183,7 @@ export function createConversation(config: Config): ConversationHandler {
     );
   };
 
-  const sendIntent = (intentId: string, context?: Context): void => {
+  const sendFlow = (intentId: string, context?: Context): void => {
     appendStructuredUserResponse({ intentId }, context);
     void sendToBot({
       context,
@@ -1181,6 +1296,27 @@ export function createConversation(config: Config): ConversationHandler {
 
   return {
     sendText,
+    sendContext: async (context: Context) => {
+      const res = await fetch(`${fullApplicationHttpUrl()}/context`, {
+        method: "POST",
+        headers: {
+          ...(config.headers ?? {}),
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "nlx-conversation-id": state.conversationId,
+          "nlx-sdk-version": packageJson.version,
+        },
+        body: JSON.stringify({
+          languageCode: state.languageCode,
+          conversationId: state.conversationId,
+          userId: state.userId,
+          context,
+        }),
+      });
+      if (res.status >= 400) {
+        throw new Error(`Responded with ${res.status}`);
+      }
+    },
     sendStructured: (structured: StructuredRequest, context) => {
       appendStructuredUserResponse(structured, context);
       void sendToBot({
@@ -1201,9 +1337,21 @@ export function createConversation(config: Config): ConversationHandler {
         },
       });
     },
-    sendIntent,
+    sendFlow,
+    sendIntent: (intentId, context) => {
+      Console.warn(
+        "Calling `sendIntent` is deprecated and will be removed in a future version of the SDK. Use `sendFlow` instead.",
+      );
+      sendFlow(intentId, context);
+    },
+    sendWelcomeFlow: (context) => {
+      sendFlow(welcomeIntent, context);
+    },
     sendWelcomeIntent: (context) => {
-      sendIntent(welcomeIntent, context);
+      Console.warn(
+        "Calling `sendWelcomeIntent` is deprecated and will be removed in a future version of the SDK. Use `sendWelcomeFlow` instead.",
+      );
+      sendFlow(welcomeIntent, context);
     },
     sendChoice,
     currentConversationId: () => {
@@ -1211,25 +1359,22 @@ export function createConversation(config: Config): ConversationHandler {
     },
     setLanguageCode: (languageCode: string) => {
       if (languageCode === state.languageCode) {
-        // eslint-disable-next-line no-console
-        console.warn(
+        Console.warn(
           "Attempted to set language code to the one already active.",
         );
         return;
       }
-      if (isUsingWebSockets()) {
-        teardownWebsocket();
+      if (isWebsocketUrl(applicationUrl)) {
         setupWebsocket();
       }
+      setupCommandWebsocket();
       setState({ languageCode });
     },
     currentLanguageCode: () => {
       return state.languageCode;
     },
     getLiveKitCredentials: async (context?: Context) => {
-      const url = isUsingWebSockets()
-        ? websocketToHttpUrl(applicationUrl)
-        : applicationUrl;
+      const url = normalizeToHttp(applicationUrl);
       const res = await fetch(`${url}-${state.languageCode}/requestToken`, {
         method: "POST",
         headers: {
@@ -1286,19 +1431,26 @@ export function createConversation(config: Config): ConversationHandler {
         conversationId: uuid(),
         responses: options?.clearResponses === true ? [] : state.responses,
       });
-      if (isUsingWebSockets()) {
-        teardownWebsocket();
+      if (isWebsocketUrl(applicationUrl)) {
         setupWebsocket();
       }
+      setupCommandWebsocket();
     },
     destroy: () => {
       subscribers = [];
-      if (isUsingWebSockets()) {
+      if (isWebsocketUrl(applicationUrl)) {
         teardownWebsocket();
       }
+      teardownCommandWebsocket();
     },
-    setBotRequestOverride: (val: BotRequestOverride | undefined) => {
-      botRequestOverride = val;
+    setBotRequestOverride: (val: RequestOverride | undefined) => {
+      Console.warn(
+        "Calling `setBotRequestOverride` is deprecated and will be removed in a future version of the SDK. Use `setRequestOverride` instead.",
+      );
+      requestOverride = val;
+    },
+    setRequestOverride: (val: RequestOverride | undefined) => {
+      requestOverride = val;
     },
     addEventListener: (event, listener) => {
       eventListeners[event] = [...eventListeners[event], listener];

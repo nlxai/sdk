@@ -28,6 +28,7 @@ import { type SoundCheck, useVoice } from "../voice";
 interface Props {
   colorMode: ColorMode;
   handler: ConversationHandler;
+  speakersEnabled: boolean;
   className?: string;
   active: boolean;
   setActive: Dispatch<SetStateAction<boolean>>;
@@ -99,6 +100,7 @@ const Container: FC<{ className?: string; children: ReactNode }> = ({
 
 export const FullscreenVoice: FC<Props> = ({
   handler,
+  speakersEnabled,
   colorMode,
   className,
   active,
@@ -111,7 +113,7 @@ export const FullscreenVoice: FC<Props> = ({
     useVoice({
       active,
       micEnabled,
-      speakersEnabled: true,
+      speakersEnabled,
       handler,
       context,
     });
