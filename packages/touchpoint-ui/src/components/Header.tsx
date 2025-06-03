@@ -1,15 +1,20 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type FC } from "react";
+import { type SetStateAction, type Dispatch, type FC } from "react";
 import { clsx } from "clsx";
 
 import { IconButton, type IconButtonType } from "./ui/IconButton";
 import { type WindowSize, type ColorMode } from "../types";
 import { useTailwindMediaQuery } from "../hooks";
-import { Close, Settings, Undo } from "./ui/Icons";
+import { Close, Settings, Undo, Volume } from "./ui/Icons";
 
 interface HeaderProps {
   windowSize: WindowSize | "embedded";
   colorMode: ColorMode;
+  errorThemedCloseButton?: boolean;
+  speakerControls?: {
+    enabled: boolean;
+    setEnabled: Dispatch<SetStateAction<boolean>>;
+  };
   brandIcon?: string;
   renderCollapse: boolean;
   collapse: (event: Event) => void;
@@ -22,6 +27,8 @@ interface HeaderProps {
 export const Header: FC<HeaderProps> = ({
   windowSize,
   renderCollapse,
+  errorThemedCloseButton,
+  speakerControls,
   collapse,
   toggleSettings,
   isSettingsOpen,
@@ -71,10 +78,20 @@ export const Header: FC<HeaderProps> = ({
           onClick={enabled ? toggleSettings : undefined}
         />
       ) : null}
+      {speakerControls != null ? (
+        <IconButton
+          Icon={Volume}
+          label="Speakers"
+          type={speakerControls.enabled ? "activated" : iconButtonType}
+          onClick={() => {
+            speakerControls.setEnabled((prev) => !prev);
+          }}
+        />
+      ) : null}
       {renderCollapse ? (
         <IconButton
           label="Collapse"
-          type={iconButtonType}
+          type={errorThemedCloseButton ?? false ? "error" : iconButtonType}
           className={clsx(
             toggleSettings == null ? "ml-auto" : "",
             isHalf ? "md:-order-1" : "",
