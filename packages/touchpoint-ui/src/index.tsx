@@ -196,15 +196,28 @@ export interface TouchpointInstance {
   teardown: () => void;
 }
 
+const contentLoaded = (): Promise<void> => {
+  if (document.readyState === "loading") {
+    return new Promise((resolve) => {
+      window.addEventListener("DOMContentLoaded", () => {
+        resolve(undefined);
+      });
+    });
+  } else {
+    return Promise.resolve();
+  }
+};
+
 /**
  * Creates a new Touchpoint UI instance and appends it to the document body
  * @param props - Configuration props for Touchpoint
  * @returns A promise that resolves to a TouchpointInstance
  */
-export const create = (
+export const create = async (
   props: TouchpointConfiguration,
   // eslint-disable-next-line @typescript-eslint/promise-function-async
 ): Promise<TouchpointInstance> => {
+  await contentLoaded();
   return new Promise((resolve) => {
     const element: any = document.createElement("nlx-touchpoint");
     element.embedded = false;
