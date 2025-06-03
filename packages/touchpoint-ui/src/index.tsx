@@ -196,15 +196,15 @@ export interface TouchpointInstance {
   teardown: () => void;
 }
 
-const contentLoaded = (): Promise<void> => {
+const contentLoaded = async (): Promise<void> => {
   if (document.readyState === "loading") {
-    return new Promise((resolve) => {
+    await new Promise((resolve) => {
       window.addEventListener("DOMContentLoaded", () => {
         resolve(undefined);
       });
     });
   } else {
-    return Promise.resolve();
+    await Promise.resolve();
   }
 };
 
@@ -215,10 +215,9 @@ const contentLoaded = (): Promise<void> => {
  */
 export const create = async (
   props: TouchpointConfiguration,
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
 ): Promise<TouchpointInstance> => {
   await contentLoaded();
-  return new Promise((resolve) => {
+  return await new Promise((resolve) => {
     const element: any = document.createElement("nlx-touchpoint");
     element.embedded = false;
     element.onRef = (ref: AppRef) => {
