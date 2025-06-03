@@ -472,7 +472,7 @@ export type NormalizedStructuredRequest = StructuredRequest & {
 /**
  * The request data actually sent to the application, slightly different from {@link UserResponsePayload}, which includes some UI-specific information
  */
-export interface BotRequest {
+export interface ApplicationRequest {
   /**
    * The current conversation ID
    */
@@ -509,6 +509,12 @@ export interface BotRequest {
     };
   };
 }
+
+/**
+ * Legacy name for application request
+ * @deprecated use {@link ApplicationRequest}
+ */
+export type BotRequest = ApplicationRequest;
 
 /**
  * Credentials to connect to a LiveKit channel
@@ -569,10 +575,16 @@ export type LanguageCode = string;
  * @param botRequest - The {@link BotRequest} that is being overridden
  * @param appendResponse - A method to append the {@link BotResponsePayload} to the message history
  */
-export type BotRequestOverride = (
+export type RequestOverride = (
   botRequest: BotRequest,
-  appendBotResponse: (res: BotResponsePayload) => void,
+  appendResponse: (res: BotResponsePayload) => void,
 ) => void;
+
+/**
+ * Legacy name for bot request override
+ * @deprecated use {@link RequestOverride} instead
+ */
+export type BotRequestOverride = RequestOverride;
 
 /**
  * Voice+ context, type to be defined
@@ -726,14 +738,14 @@ export interface ConversationHandler {
    */
   destroy: () => void;
   /**
-   * Optional {@link BotRequestOverride} function used to bypass the bot request and handle them in a custom fashion
+   * Optional {@link RequestOverride} function used to bypass the bot request and handle them in a custom fashion
    * @deprecated use `setRequestOverride` instead
    */
-  setBotRequestOverride: (override: BotRequestOverride | undefined) => void;
+  setBotRequestOverride: (override: RequestOverride | undefined) => void;
   /**
-   * Optional {@link BotRequestOverride} function used to bypass the bot request and handle them in a custom fashion
+   * Optional {@link RequestOverride} function used to bypass the bot request and handle them in a custom fashion
    */
-  setRequestOverride: (override: BotRequestOverride | undefined) => void;
+  setRequestOverride: (override: RequestOverride | undefined) => void;
   /**
    * Add a listener to one of the handler's custom events
    */
@@ -964,7 +976,7 @@ export function createConversation(config: Config): ConversationHandler {
     }
   };
 
-  let requestOverride: BotRequestOverride | undefined;
+  let requestOverride: RequestOverride | undefined;
 
   const sendVoicePlusMessage = (message: any): void => {
     if (voicePlusSocket?.readyState === 1) {
@@ -1431,13 +1443,13 @@ export function createConversation(config: Config): ConversationHandler {
       }
       teardownCommandWebsocket();
     },
-    setBotRequestOverride: (val: BotRequestOverride | undefined) => {
+    setBotRequestOverride: (val: RequestOverride | undefined) => {
       Console.warn(
         "Calling `setBotRequestOverride` is deprecated and will be removed in a future version of the SDK. Use `setRequestOverride` instead.",
       );
       requestOverride = val;
     },
-    setRequestOverride: (val: BotRequestOverride | undefined) => {
+    setRequestOverride: (val: RequestOverride | undefined) => {
       requestOverride = val;
     },
     addEventListener: (event, listener) => {
