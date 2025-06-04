@@ -61,9 +61,14 @@ type Env = "html" | "js";
 
 const touchpointUiImports = ["create", "React", "html"];
 
+/**
+ * Update this manually according to which version is considered ready for outside use
+ */
+const touchpointUiVersion = "1.0.5-alpha.10";
+
 const processTouchpointUiCode = (code: string, env: Env): string => {
   if (env === "html") {
-    const codeWithImport = `import { ${touchpointUiImports.join(", ")} } from "https://unpkg.com/@nlxai/touchpoint-ui@1.0.5-alpha.10/lib/index.js?module";
+    const codeWithImport = `import { ${touchpointUiImports.join(", ")} } from "https://unpkg.com/@nlxai/touchpoint-ui@${touchpointUiVersion}/lib/index.js?module";
 
 ${code}
 `;
