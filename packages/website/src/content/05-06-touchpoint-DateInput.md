@@ -43,6 +43,8 @@ In the examples below, the modality is named `DateInputExample` with a single st
 
 ### Example Date Input Component
 
+**Javascript**
+
 ```javascript
 import { DateInput } from "@nlxai/touchpoint-ui";
 
@@ -55,6 +57,53 @@ const DateInputExample = ({ data, conversationHandler }) => {
     />
   );
 };
+```
+
+**HTML**
+
+```html
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  contentLoaded().then(() => {
+    const { html } = nlxai.touchpointUi;
+
+    const DateInputExample = ({ data, conversationHandler }) => {
+      return html`
+        <DateInput
+          onSubmit=${(date) =>
+            conversationHandler.sendSlots({ TouchpointDateInputResult: date })}
+        />
+      `;
+    };
+
+    // Register component when creating touchpoint
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+      },
+      customModalities: {
+        DateInputModality: DateInputExample,
+      },
+    });
+  });
+</script>
 ```
 
 ## Related Documents

@@ -18,6 +18,8 @@ You can import the typography elements from touchpoint once the package has been
 
 - Uses both the BaseText and SmallText typography components to construct a [CustomCard](/touchpoint-CustomCards) with the "primary" (BaseText) information left aligned and "secondary" (SmallText) right aligned.
 
+**Javascript**
+
 ```javascript
 import {
   BaseText,
@@ -35,6 +37,55 @@ const ProductDetails = ({ data, conversationHandler }) => {
     </CustomCard>
   );
 };
+```
+
+**HTML**
+
+```html
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  contentLoaded().then(() => {
+    const { html } = nlxai.touchpointUi;
+
+    const ProductDetails = ({ data, conversationHandler }) => {
+      return html`
+        <CustomCard>
+          <CustomCardRow
+            left=${(<BaseText>${data.PrimaryInformation}</BaseText>)}
+            right=${(<SmallText>${data.SecondaryInformation}</SmallText>)}
+          />
+        </CustomCard>
+      `;
+    };
+
+    // Register component when creating touchpoint
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+      },
+      customModalities: {
+        ProductDetailsModality: ProductDetails,
+      },
+    });
+  });
+</script>
 ```
 
 ## Related Documents

@@ -1,6 +1,5 @@
 - [About](#about)
-- [Component Structure](#component-structure)
-  - [Visualization](#visualization)
+- [Component Structure \& Recommended Pattern](#component-structure--recommended-pattern)
 - [Properties](#properties)
   - [CustomCard Properties](#customcard-properties)
   - [CustomCardImageRow Properties](#customcardimagerow-properties)
@@ -12,43 +11,30 @@
   - [Example Card Component](#example-card-component)
 - [Related Components](#related-components)
 
-### Carousel Example
-
 <img src="/images/Touchpoint-Carousel.png" alt="Carousel Rendered Example" style="max-width: 40%;">
 
 ## About
 
-The Custom Cards system provides a structured way to present information in your chat interface. The system consists of four components that work together:
+The Custom Card system provides a structured way to present information in your chat interface. The system consists of four components that work together:
 
-- **Carousel** - Top Level component, acts as a container for multiple horizontally scrolled cards. A Carousel has at least 1 CustomCard.
 - **CustomCard** - Primary component, is a 'card' made up of multiple rows. A CustomCard has at least 1 of CustomCardRow or CustomCardImageRow. CustomCard can be used outside Carousel.
 - **CustomCardRow** - Basic component for horizontal layouts within cards. Can have multiple rows in a CustomCard.
 - **CustomCardImageRow** - Basic component for specialized image layouts within a CustomCard.
 
-## Component Structure
+## Component Structure & Recommended Pattern
 
-The Custom Cards components follows a nested structure where components build upon each other to create rich layouts. A Carousel container holds one or more CustomCard components. Each CustomCard contains CustomCardRow or CustomCardImageRow components that organize the content within the card.
+The Custom Cards components follows a nested structure where components build upon each other to create rich layouts. Each CustomCard contains CustomCardRow or CustomCardImageRow components that organize the content within the card.
 
-```jsx
-{
-  /* Container for all cards*/
-}
-<Carousel>
-  {/* First card */}
-  <CustomCard>
-    {/* Image content */}
-    <CustomCardImageRow>...</CustomCardImageRow>
-    {/* Text content */}
-    <CustomCardRow>...</CustomCardRow>
-  </CustomCard>
-  {/* Second card */}
-  <CustomCard>...</CustomCard>
-</Carousel>;
-```
+Recommended Card Structure:
 
-### Visualization
+1. **CustomCardImageRow** at the top (optional)
+2. **CustomCardRow** elements with:
+   - Left side: Faded BaseText for labels
+   - Right side: Normal BaseText for values
+3. **Selection state** managed with React.useState
+4. **onClick handler** that updates state and sends choice to NLX
 
-<img src="/images/CustomCard-Touchpoint.svg" alt="Custom Card Diagram" style="max-width: 40%;">
+This pattern provides a consistent, professional appearance across all card-based components in your Touchpoint UI.
 
 ## Properties
 
@@ -95,55 +81,111 @@ In order to use the Carousel and CustomCard components you will need to have a [
 ### Example Modality Schema
 
 ```json
-[
-  {
-    "id": "uuid",
-    "imageUrl": "imageUrl",
-    "leftText": "leftAlignedText",
-    "rightText": "rightAlignedText"
-  }
-]
+{
+  "id": "uuid",
+  "thumbnail": "imageUrl",
+  "label": "Label text",
+  "value": "Value text"
+}
 ```
 
 ### Example Card Component
 
-The snippet below:
-
-- Uses `import` to import the components to construct the Carousel.
-- Imports React from the Touchpoint package to track user selection state.
+This defines a component `ItemCard` that takes `data` (representing `cardItemData`) and an optional `initialSelectedId` and `onSelect` handler.
 
 ```javascript
 import {
-  Carousel,
-  CustomCard,
-  CustomCardRow,
-  CustomCardImageRow,
+  html,
   React,
+  BaseText,
+  CustomCard,
+  CustomCardImageRow,
+  CustomCardRow,
 } from "@nlxai/touchpoint-ui";
 
-const CarouselExample = ({ data, conversationHandler }) => {
-  const [selected, setSelected] = React.useState(null);
+const ItemCard = ({ data, conversationHandler }) => {
+  const [isSelected, setIsSelected] = React.useState(null);
+
+  const handleClick = () => {
+    setIsSelected(true); // Visually select this card
+    if (onSelect) {
+      onSelect(data.id); // Notify parent about selection
+    }
+    conversationHandler.sendChoice(data.id, {
+      /* context */
+    });
+  };
+
   return (
-    <Carousel>
-      {data.map((cardData, cardIndex) => (
-        <CustomCard
-          key={cardIndex}
-          selected={selected === cardIndex}
-          onClick={() => {
-            setSelected(cardIndex);
-            conversationHandler.sendChoice(cardData.id);
-          }}
-        >
-          <CustomCardImageRow src={cardData.imageUrl} alt="Alt Text" />
-          <CustomCardRow
-            left={<BaseText>{cardData.leftText}</BaseText>}
-            right={<BaseText>{cardData.rightText}</BaseText>}
-          />
-        </CustomCard>
-      ))}
-    </Carousel>
+    <CustomCard selected={isSelected} onClick={handleClick}>
+      <CustomCardImageRow src={data.thumbnail} alt="Information Card Image" />
+      <CustomCardRow
+        left={<BaseText faded>{data.label}</BaseText>}
+        right={<BaseText>{data.value}</BaseText>}
+      />
+    </CustomCard>
   );
 };
+```
+
+**HTML**
+
+```html
+<script
+  defer
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
+></script>
+<script>
+  const contentLoaded = () => {
+    if (document.readyState === "loading") {
+      return new Promise((resolve) => {
+        window.addEventListener("DOMContentLoaded", () => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  contentLoaded().then(() => {
+    const { html, React } = nlxai.touchpointUi;
+
+    const ItemCard = ({ data, conversationHandler }) => {
+      const [isSelected, setIsSelected] = React.useState(false);
+
+      const handleClick = () => {
+        setIsSelected(true);
+        conversationHandler.sendChoice(data.id);
+      };
+
+      return html`
+        <CustomCard selected=${isSelected} onClick=${handleClick}>
+          <CustomCardImageRow
+            src=${data.thumbnail}
+            alt="Information Card Image"
+          />
+          <CustomCardRow
+            left=${html`<BaseText faded>${data.label}</BaseText>`}
+            right=${html`<BaseText>${data.value}</BaseText>`}
+          />
+        </CustomCard>
+      `;
+    };
+
+    // Register component when creating touchpoint
+    return nlxai.touchpointUi.create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+      },
+      customModalities: {
+        ItemCardModality: ItemCard,
+      },
+    });
+  });
+</script>
 ```
 
 ## Related Components
@@ -152,4 +194,3 @@ const CarouselExample = ({ data, conversationHandler }) => {
 - [Icons](/touchpoint-Icons) for visual elements
 - [Theming Touchpoint](/touchpoint-ui-theming)
 - [Building Components without JSX](/guide-html-components)
-- [Managing Selection State](/guide-managing-selection) for handling selection in cards and carousels

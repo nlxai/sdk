@@ -40,7 +40,7 @@ ${umdScriptTags.voicePlusCore}
 All packages are available on npm as CommonJS modules. They are written in TypeScript and include comprehensive type definitions.
 
 ~~~bash
-# The Touchpoint UI widget
+# Touchpoint UI
 npm install @nlxai/touchpoint-ui
 
 # The Chat widget - will be deprecated in Q1 2025 - use Touchpoint UI for new projects.
