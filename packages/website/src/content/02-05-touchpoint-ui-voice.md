@@ -1,5 +1,5 @@
 - [Quick Start](#quick-start)
-  - [Standard Voice Mode](#standard-voice-mode)
+  - [Immersive Voice Mode](#immersive-voice-mode)
   - [Compact Voice Mode (Voice Mini)](#compact-voice-mode-voice-mini)
 - [Voice Input Options](#voice-input-options)
   - [Application and Touchpoint Prerequisites](#application-and-touchpoint-prerequisites)
@@ -8,7 +8,7 @@
 
 ## Quick Start
 
-### Standard Voice Mode
+### Immersive Voice Mode
 
 Full-screen voice interface for immersive conversations.
 
