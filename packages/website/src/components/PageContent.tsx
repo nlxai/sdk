@@ -1,4 +1,4 @@
-import { type FC, type ReactNode, useState } from "react";
+import { type FC, type ReactNode, useState, useContext } from "react";
 import { clsx } from "clsx";
 import { Link } from "react-router-dom";
 import Markdown from "react-markdown";
@@ -8,6 +8,8 @@ import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import { version } from "@nlxai/chat-core";
 
+import { ReactContext } from "../context";
+import { type SnippetEnv } from "../types";
 import { indentBy } from "../snippets";
 import { Toggle } from "./Toggle";
 import { CheckIcon, ContentCopyIcon } from "./Icons";
@@ -58,11 +60,9 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
   </div>
 );
 
-type Env = "html" | "js";
-
 const touchpointUiImports = ["create", "React", "html"];
 
-const processTouchpointUiCode = (code: string, env: Env): string => {
+const processTouchpointUiCode = (code: string, env: SnippetEnv): string => {
   if (env === "html") {
     const codeWithImport = `import { ${touchpointUiImports.join(", ")} } from "https://unpkg.com/@nlxai/touchpoint-ui@${version}/lib/index.js?module";
 
@@ -84,18 +84,18 @@ const Code: FC<{
 }> = ({ children, className }) => {
   const language = /language-(\w+)/.exec(className ?? "")?.[1];
   const lines = String(children).replace(/\n$/, "");
-  const [env, setEnv] = useState<Env>("html");
+  const ctx = useContext(ReactContext);
   const isTouchpointUiLang = language === "touchpointui";
   const displayCode = isTouchpointUiLang
-    ? processTouchpointUiCode(lines, env)
+    ? processTouchpointUiCode(lines, ctx.snippetEnv)
     : lines;
   return (
     <>
       <div className="absolute top-1.5 right-1.5 hidden group-hover:flex items-center gap-2">
         {isTouchpointUiLang ? (
           <Toggle
-            value={env}
-            onChange={setEnv}
+            value={ctx.snippetEnv}
+            onChange={ctx.setSnippetEnv}
             options={[
               { value: "html", label: "HTML" },
               { value: "js", label: "JS" },
@@ -111,7 +111,7 @@ const Code: FC<{
           showLineNumbers={true}
           language={
             isTouchpointUiLang
-              ? env === "html"
+              ? ctx.snippetEnv === "html"
                 ? "html"
                 : "javascript"
               : language
