@@ -59,23 +59,26 @@ const touchpoint = await create({
 
 ```html
 <script type="module">
-   import { html, create } from "https://unpkg.com/@nlxai/touchpoint-ui@1.0.5-alpha.10/lib/index.js?module";
-  
-   const SimpleComponent = ({ data }) => 
-      html`<BaseText>${data.message}</BaseText>`;
-   
-   window.addEventListener("DOMContentLoaded", () => {
-       create({
-          config: {
-            applicationUrl: "YOUR_APPLICATION_URL",
-            headers: { "nlx-api-key": "YOUR_API_KEY" },
-            languageCode: "en-US",
-          },
-          customModalities: {
-            SimpleModality: SimpleComponent,
-          },
-        });
-   });
+  import {
+    html,
+    create,
+  } from "https://unpkg.com/@nlxai/touchpoint-ui@1.0.5-alpha.10/lib/index.js?module";
+
+  const SimpleComponent = ({ data }) =>
+    html`<BaseText>${data.message}</BaseText>`;
+
+  window.addEventListener("DOMContentLoaded", () => {
+    create({
+      config: {
+        applicationUrl: "YOUR_APPLICATION_URL",
+        headers: { "nlx-api-key": "YOUR_API_KEY" },
+        languageCode: "en-US",
+      },
+      customModalities: {
+        SimpleModality: SimpleComponent,
+      },
+    });
+  });
 </script>
 ```
 
@@ -87,8 +90,8 @@ The `html` template literal tag allows you to create components without requirin
 
 The `html` tag is a template literal function that:
 
-*  Parses HTML-like syntax at runtime
-*  Automatically imports all Touchpoint UI components
+- Parses HTML-like syntax at runtime
+- Automatically imports all Touchpoint UI components
 
 ### Accessing Components in HTML
 
@@ -110,7 +113,7 @@ This gives you access to:
 ### HTML vs JSX Quick Reference
 
 | Feature       | JSX                                           | HTML Template                         |
-|---------------|-----------------------------------------------|---------------------------------------|
+| ------------- | --------------------------------------------- | ------------------------------------- |
 | Import        | `import { html } from "@nlxai/touchpoint-ui"` | `const { html } = nlxai.touchpointUi` |
 | Component     | `<BaseText>Hello</BaseText>`                  | `html\`<BaseText>Hello</BaseText>\``  |
 | Props         | `label="Click me"`                            | `label="Click me"`                    |
@@ -131,15 +134,16 @@ This gives you access to:
 ```javascript
 import { React, BaseText, TextButton, Icons } from "@nlxai/touchpoint-ui";
 
-const MyComponent = ({ data }) => 
-   <>
+const MyComponent = ({ data }) => (
+  <>
     <BaseText>{data.title}</BaseText>
     <TextButton
       label="Click me"
       Icon={Icons.ArrowForward}
       onClick={() => console.log("Clicked!")}
     />
-  </>;
+  </>
+);
 ```
 
 **HTML**
@@ -177,7 +181,7 @@ import { React } from "@nlx/touchpoint-ui";
 
 ```html
 <script>
- const { React } = nlxai.touchpointUi;
+  const { React } = nlxai.touchpointUi;
 </script>
 ```
 
