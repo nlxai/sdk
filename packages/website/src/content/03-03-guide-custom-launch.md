@@ -44,7 +44,7 @@ const touchpoint = await create({
 ```html
 <script
   defer
-  src="[https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js](https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js)"
+  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
 ></script>
 <script>
   const contentLoaded = () => {
