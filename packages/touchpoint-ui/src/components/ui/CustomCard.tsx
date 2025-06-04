@@ -48,7 +48,7 @@ export const CustomCard: FC<CustomCardProps> = ({
       <a
         className={className}
         href={url}
-        target={newTab ? "_blank" : undefined}
+        {...(newTab ? { target: "_blank", rel: "noreferrer" } : {})}
       >
         {children}
       </a>
