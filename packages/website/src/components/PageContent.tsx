@@ -19,7 +19,7 @@ const CopyToClipboardButton: FC<{ text: string; className?: string }> = ({
 
   return (
     <button
-      className={`w-8 h-8 p-1.5 bg-slate-900 border border-slate-600 rounded-lg hover:bg-slate-800 ${
+      className={`w-6 h-6 p-1.5 bg-primary-10 text-primary-60 rounded-lg hover:bg-primary-20 hover:text-primary-80 ${
         className ?? ""
       }`}
       onClick={() => {
@@ -68,7 +68,7 @@ const processTouchpointUiCode = (code: string, env: Env): string => {
 ${code}
 `;
     return `<script type="module">
-${indentBy("  ", codeWithImport)}
+  ${indentBy("  ", codeWithImport)}
 </script>`;
   }
   return `import { ${touchpointUiImports.join(", ")} } from "@nlxai/touchpoint-ui";
@@ -83,12 +83,11 @@ const Code: FC<{
 }> = ({ children, className }) => {
   const language = /language-(\w+)/.exec(className ?? "")?.[1];
   const lines = String(children).replace(/\n$/, "");
-  const [env, setEnv] = useState<Env>("js");
+  const [env, setEnv] = useState<Env>("html");
   const isTouchpointUiLang = language === "touchpointui";
   return (
     <>
       <div className="absolute top-1.5 right-1.5 hidden group-hover:flex items-center gap-2">
-        <CopyToClipboardButton text={lines} />
         {isTouchpointUiLang ? (
           <Toggle
             value={env}
@@ -99,6 +98,7 @@ const Code: FC<{
             ]}
           />
         ) : null}
+        <CopyToClipboardButton text={lines} />
       </div>
       {language != null ? (
         <SyntaxHighlighter
