@@ -21,9 +21,9 @@ export interface CustomCardProps {
    */
   onClick?: () => void;
   /**
-   *  URL
+   *  Transform the card into an anchor tag with the href specified
    */
-  url?: string;
+  href?: string;
   /**
    * Specify whether the URL should take the user to a new tab
    */
@@ -34,20 +34,20 @@ export const CustomCard: FC<CustomCardProps> = ({
   children,
   selected,
   onClick,
-  url,
+  href,
   newTab,
 }) => {
   const className = clsx(
     "block shrink-0 rounded-inner overflow-hidden",
     "w-80 space-y-px",
     selected ? "outline outline-2 outline-accent" : "",
-    onClick != null || url != null ? "hover:bg-primary-5" : "",
+    onClick != null || href != null ? "hover:bg-primary-5" : "",
   );
-  if (url != null) {
+  if (href != null) {
     return (
       <a
         className={className}
-        href={url}
+        href={href}
         {...(newTab ? { target: "_blank", rel: "noreferrer" } : {})}
       >
         {children}
