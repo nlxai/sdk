@@ -85,6 +85,9 @@ const Code: FC<{
   const lines = String(children).replace(/\n$/, "");
   const [env, setEnv] = useState<Env>("html");
   const isTouchpointUiLang = language === "touchpointui";
+  const displayCode = isTouchpointUiLang
+    ? processTouchpointUiCode(lines, env)
+    : lines;
   return (
     <>
       <div className="absolute top-1.5 right-1.5 hidden group-hover:flex items-center gap-2">
@@ -98,7 +101,7 @@ const Code: FC<{
             ]}
           />
         ) : null}
-        <CopyToClipboardButton text={lines} />
+        <CopyToClipboardButton text={displayCode} />
       </div>
       {language != null ? (
         <SyntaxHighlighter
@@ -114,7 +117,7 @@ const Code: FC<{
           }
           PreTag="div"
         >
-          {isTouchpointUiLang ? processTouchpointUiCode(lines, env) : lines}
+          {displayCode}
         </SyntaxHighlighter>
       ) : (
         <code className={className}>{children}</code>
