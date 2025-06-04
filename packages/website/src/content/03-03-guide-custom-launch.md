@@ -176,7 +176,7 @@ const touchpoint = await create({
 
 ### 2. Launching with a Custom Flow Using `initializeConversation`
 
-The specific flow (`CheckOrderStatus`) must be defined in your NLX application. `userSource`, `pageUrl`, `clientTime` all must be defined as context variables in your NLX workspace.
+The specific flow (`CheckOrderStatus`) must be defined in your NLX application. `userSource`, `pageUrl`, all must be defined as context variables in your NLX workspace.
 
 **JavaScript**
 
