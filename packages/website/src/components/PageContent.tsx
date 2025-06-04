@@ -6,6 +6,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
+import { version } from "@nlxai/chat-core";
 
 import { indentBy } from "../snippets";
 import { Toggle } from "./Toggle";
@@ -61,14 +62,9 @@ type Env = "html" | "js";
 
 const touchpointUiImports = ["create", "React", "html"];
 
-/**
- * Update this manually according to which version is considered ready for outside use
- */
-const touchpointUiVersion = "1.0.5-alpha.10";
-
 const processTouchpointUiCode = (code: string, env: Env): string => {
   if (env === "html") {
-    const codeWithImport = `import { ${touchpointUiImports.join(", ")} } from "https://unpkg.com/@nlxai/touchpoint-ui@${touchpointUiVersion}/lib/index.js?module";
+    const codeWithImport = `import { ${touchpointUiImports.join(", ")} } from "https://unpkg.com/@nlxai/touchpoint-ui@${version}/lib/index.js?module";
 
 ${code}
 `;

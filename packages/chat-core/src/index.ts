@@ -4,6 +4,11 @@ import { equals, adjust } from "ramda";
 import { v4 as uuid } from "uuid";
 import packageJson from "../package.json";
 
+/**
+ * Package version
+ */
+export const version: string = packageJson.version;
+
 // use a custom Console to indicate we really want to log to the console and it's not incidental. `console.log` causes an eslint error
 const Console = console;
 
