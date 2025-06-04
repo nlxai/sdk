@@ -4,7 +4,7 @@ import { PageContent } from "../components/PageContent";
 import configOptions from "./02-02-touchpoint-ui-setup.md?raw";
 
 export const content = `
-The NLX Touchpoint widget provides a customizable chat interface that you can embed in your web applications. This widget allows users to interact with your application and provides a seamless conversational experience.
+Touchpoint UI provides a customizable chat interface that you can embed in your web applications. Touchpoint UI allows users to interact with your application and provides a seamless conversational experience.
 
 ${configOptions}
 `;

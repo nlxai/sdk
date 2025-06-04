@@ -219,7 +219,7 @@ create({
 
 ## Completely Removing Touchpoint UI from the DOM
 
-To entirely remove the Touchpoint UI widget from your page (including its associated DOM elements and event listeners), call the `teardown()` method on the `TouchpointInstance`. This is useful when navigating away from a page in a single-page application or when the chat functionality is no longer needed.
+To entirely remove Touchpoint UI from your page (including its associated DOM elements and event listeners), call the `teardown()` method on the `TouchpointInstance`. This is useful when navigating away from a page in a single-page application or when the chat functionality is no longer needed.
 
 **JavaScript**
 
@@ -234,7 +234,7 @@ create({
     userId: crypto.randomUUID(),
   },
 }).then((touchpoint) => {
-  // To remove the widget (e.g., on a button click or page navigation):
+  // To remove Touchpoint (e.g., on a button click or page navigation):
   document
     .getElementById("remove-chat-button")
     .addEventListener("click", () => {
@@ -275,7 +275,7 @@ create({
       });
     })
     .then((touchpoint) => {
-      // To remove the widget (e.g., on a button click or page navigation):
+      // To remove Touchpoints (e.g., on a button click or page navigation):
       const removeButton = document.getElementById("remove-chat-button");
       if (removeButton) {
         removeButton.addEventListener("click", () => {

@@ -63,7 +63,7 @@ const touchpoint = await create({
 
 ### Compact Voice Mode (Voice Mini)
 
-Floating widget for voice without taking over the screen.
+Floating module for voice without taking over the screen.
 
 **JavaScript**
 
@@ -119,7 +119,7 @@ const touchpoint = await create({
 | Mode        | Description                                           | Best For                                                     |
 | ----------- | ----------------------------------------------------- | ------------------------------------------------------------ |
 | `voice`     | Full-screen voice interface with immersive experience | Primary voice interactions, voice-first applications         |
-| `voiceMini` | Compact floating widget with minimal controls         | Voice as a secondary input option, space-constrained layouts |
+| `voiceMini` | Compact floating module with minimal controls         | Voice as a secondary input option, space-constrained layouts |
 
 ### Application and Touchpoint Prerequisites
 

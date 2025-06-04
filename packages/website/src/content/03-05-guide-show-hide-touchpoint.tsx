@@ -6,7 +6,7 @@ export const navGroup = "Conversation Control";
 export const title = "Showing and Hiding Touchpoint";
 
 export const content = `
-The visibility of Touchpoint UI can be programmatically controlled including showing, hiding, and completely removing the widget from your webpage. You interact with the Touchpoint UI through the \`TouchpointInstance\` object returned when you initialize the widget.
+The visibility of Touchpoint UI can be programmatically controlled including showing, hiding, and completely removing Touchpoint from your webpage. You interact with the Touchpoint UI through the \`TouchpointInstance\` object returned when you initialize Touchpoint.
 
 ${ContentRaw}`;
 

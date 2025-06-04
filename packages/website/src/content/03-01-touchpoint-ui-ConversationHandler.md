@@ -155,7 +155,7 @@ Use `sendWelcomeFlow` to initiate the conversation with the default welcome flow
 
 **When to use:**
 
-- Starting the conversation when the chat widget is first opened.
+- Starting the conversation when Touchpoint is first opened.
 - Providing a "start over" functionality.
 - Sending initial context data (like user status or page information) at the beginning of a conversation.
 
