@@ -6,28 +6,11 @@
 
 Touchpoint UI, the Conversation Core, and the NLX API work together to deliver a seamless conversational experience. The NLX Platform is where you design the underlying conversational logic.
 
-```mermaid
-flowchart TD
-    %% Client Components
-    USER((User))
-    TOUCHPOINT_UI["Touchpoint UI"]:::uiLayer
-    %% Server Components
-    NLX_APPLICATION_FLOW["NLX Flow"]:::backendLayer
-
-    %% Core Data Flow
-    USER -->|Interacts with| TOUCHPOINT_UI
-    TOUCHPOINT_UI -->|Passes events to| NLX_APPLICATION_FLOW
-
-    %% Return Path
-    NLX_APPLICATION_FLOW -->|Returns data to| TOUCHPOINT_UI
-    TOUCHPOINT_UI -->|relays to| USER
-```
-
 **Core Components at a Glance:**
 
-- **Touchpoint UI**: The visual front-end for user interaction.
-- **Conversation Core**: The engine managing conversation state and communication with the NLX API.
-- **NLX**: The NLX platform where you design conversational flows, intents, and modalities.
+- **Touchpoint UI**: The visual front-end for user interactions in voice, text, or other modes.
+- **Conversation Core**: The engine managing conversation state and communication with NLX.
+- **NLX**: Where you design conversational flows, configure modalities, and setup applications.
 
 ## Key Concepts to Explore
 
@@ -37,7 +20,7 @@ To make the most of Touchpoint UI, familiarize yourself with these concepts:
 
   - _Recommended Reading_: [Custom Components Guide](/guide-building-custom-components)
 
-- **The ConversationHandler**: This JavaScript object is your main tool for programmatically controlling the conversation. Use it to send messages, trigger intents, and listen for updates.
+- **The ConversationHandler**: This JavaScript object is your main tool for programmatically controlling the conversation. Use it to send messages, start conversation flows, and listen for updates.
 
   - _Recommended Reading_: [Conversation Handler Guide](/touchpoint-ui-ConversationHandler)
 

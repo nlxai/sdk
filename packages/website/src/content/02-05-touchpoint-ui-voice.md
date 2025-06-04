@@ -1,9 +1,9 @@
 - [Quick Start](#quick-start)
   - [Standard Voice Mode](#standard-voice-mode)
-  - [Compact Voice Mode (VoiceMini)](#compact-voice-mode-voicemini)
+  - [Compact Voice Mode (Voice Mini)](#compact-voice-mode-voice-mini)
 - [Voice Input Options](#voice-input-options)
   - [Application and Touchpoint Prerequisites](#application-and-touchpoint-prerequisites)
-- [When to use Voice](#when-to-use-voice)
+- [When to Use Immersive Voice mode](#when-to-use-immersive-voice-mode)
 - [When to use Voice Mini](#when-to-use-voice-mini)
 
 ## Quick Start
@@ -61,7 +61,7 @@ const touchpoint = await create({
 </script>
 ```
 
-### Compact Voice Mode (VoiceMini)
+### Compact Voice Mode (Voice Mini)
 
 Floating widget for voice without taking over the screen.
 
@@ -132,7 +132,7 @@ All voice modes require:
 | Browser support           | WebRTC APIs must be available                                              |
 | User permissions          | Microphone access must be granted when prompted                            |
 
-## When to use Voice
+## When to Use Immersive Voice mode
 
 <img src="/animations/voiceinput.png" alt="Voice Mode Animation" style="max-width: 40%;">
 

@@ -58,39 +58,24 @@ const touchpoint = await create({
 **HTML**
 
 ```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
+<script type="module">
+   import { html, create } from "https://unpkg.com/@nlxai/touchpoint-ui@1.0.5-alpha.10/lib/index.js?module";
+  
+   const SimpleComponent = ({ data }) => 
+      html`<BaseText>${data.message}</BaseText>`;
+   
+   window.addEventListener("DOMContentLoaded", () => {
+       create({
+          config: {
+            applicationUrl: "YOUR_APPLICATION_URL",
+            headers: { "nlx-api-key": "YOUR_API_KEY" },
+            languageCode: "en-US",
+          },
+          customModalities: {
+            SimpleModality: SimpleComponent,
+          },
         });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  contentLoaded().then(() => {
-    const SimpleComponent = ({ data, conversationHandler }) => {
-      return nlxai.touchpointUi.html`<BaseText>${data.message}</BaseText>`;
-    };
-
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-      },
-      customModalities: {
-        SimpleModality: SimpleComponent,
-      },
-    });
-  });
+   });
 </script>
 ```
 
@@ -102,10 +87,8 @@ The `html` template literal tag allows you to create components without requirin
 
 The `html` tag is a template literal function that:
 
-1. Parses HTML-like syntax at runtime
-2. Converts it into React elements
-3. Handles interpolation of JavaScript expressions using `${}`
-4. Automatically imports all Touchpoint UI components
+*  Parses HTML-like syntax at runtime
+*  Automatically imports all Touchpoint UI components
 
 ### Accessing Components in HTML
 
@@ -126,8 +109,8 @@ This gives you access to:
 
 ### HTML vs JSX Quick Reference
 
-| Feature       | JavaScript/JSX                                | HTML Template                         |
-| ------------- | --------------------------------------------- | ------------------------------------- |
+| Feature       | JSX                                           | HTML Template                         |
+|---------------|-----------------------------------------------|---------------------------------------|
 | Import        | `import { html } from "@nlxai/touchpoint-ui"` | `const { html } = nlxai.touchpointUi` |
 | Component     | `<BaseText>Hello</BaseText>`                  | `html\`<BaseText>Hello</BaseText>\``  |
 | Props         | `label="Click me"`                            | `label="Click me"`                    |
@@ -146,18 +129,17 @@ This gives you access to:
 **JavaScript**
 
 ```javascript
-import { html, BaseText, Icons } from "@nlxai/touchpoint-ui";
+import { React, BaseText, TextButton, Icons } from "@nlxai/touchpoint-ui";
 
-const MyComponent = ({ data }) => {
-  return html`
-    <BaseText>${data.title}</BaseText>
+const MyComponent = ({ data }) => 
+   <>
+    <BaseText>{data.title}</BaseText>
     <TextButton
       label="Click me"
-      Icon=${Icons.ArrowForward}
-      onClick=${() => console.log("Clicked!")}
+      Icon={Icons.ArrowForward}
+      onClick={() => console.log("Clicked!")}
     />
-  `;
-};
+  </>;
 ```
 
 **HTML**
@@ -182,6 +164,22 @@ const MyComponent = ({ data }) => {
 ## Managing State, Events, User Selection within Components
 
 Components often need to track state (like which item is selected) and handle user interactions (like clicks). Touchpoint provides React's state management and event handling patterns.
+
+If you wish to build custom modalities using NLX, you will want to import from touchpoint instead of importing from "react" directly. This ensures that the custom modalities will be running in the same React context as the Touchpoint UI using the correct version of React.
+
+**JavaScript**
+
+```javascript
+import { React } from "@nlx/touchpoint-ui";
+```
+
+**HTML**
+
+```html
+<script>
+ const { React } = nlxai.touchpointUi;
+</script>
+```
 
 ### useState in Touchpoint Components
 

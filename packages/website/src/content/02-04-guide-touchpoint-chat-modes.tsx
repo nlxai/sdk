@@ -6,7 +6,7 @@ export const navGroup = "Touchpoint Setup";
 export const title = "Chat Modes";
 
 export const content = `
-Touchpoint UI offers two distinct voice input modes (\`voice\` and \`voiceMini\`) each designed for different use cases and user experiences.
+Touchpoint UI offers two distinct chat input modes ('Assistant Style' and 'Classic Chat Style') each designed for different use cases and user experiences.
 
 ${ContentRaw}`;
 

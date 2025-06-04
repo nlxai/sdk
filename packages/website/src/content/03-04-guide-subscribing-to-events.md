@@ -203,7 +203,6 @@ If the `newResponse.type` is `"bot"`, its `payload` contains details from NLX:
 | :----------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `messages`                     | `BotMessage[]`                   | An array of message objects from the bot. See `BotMessage` structure below.                                                                                    |
 | `modalities`                   | `Record<string, any>` (Optional) | An object where keys are modality names (e.g., `"MapDisplay"`) and values are their data payloads. This allows for custom UI rendering or client-side actions. |
-| `metadata`                     | `BotResponseMetadata` (Optional) | Contains conversation-level metadata, such as `intentId`.                                                                                                      |
 
 Each `BotMessage` object within the `payload.messages` array has the following key properties:
 
@@ -237,10 +236,7 @@ Each `BotMessage` object within the `payload.messages` array has the following k
             "choiceText": "Get support"
           }
       }
-    ],
-    "metadata": {
-      "intentId": "Welcome"
-    }
+    ]
   }
 }
 ```

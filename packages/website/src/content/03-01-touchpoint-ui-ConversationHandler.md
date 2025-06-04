@@ -3,8 +3,8 @@
   - [From Custom Modality Components](#from-custom-modality-components)
 - [Sending Messages and Data](#sending-messages-and-data)
   - [`sendText(text, context?)`](#sendtexttext-context)
-  - [`sendIntent(intentId, context?)`](#sendintentintentid-context)
-  - [`sendWelcomeIntent(context?)`](#sendwelcomeintentcontext)
+  - [`sendFlow(flowId, context?)`](#sendflowflowid-context)
+  - [`sendWelcomeFlow(context?)`](#sendwelcomeflowcontext)
   - [`sendChoice(choiceId, context?, metadata?)`](#sendchoicechoiceid-context-metadata)
   - [`sendSlots(slots, context?)`](#sendslotsslots-context)
   - [`sendStructured(request, context?)`](#sendstructuredrequest-context)
@@ -128,9 +128,9 @@ conversationHandler.sendText("My email is user@example.com", {
 });
 ```
 
-### `sendIntent(intentId, context?)`
+### `sendFlow(flowId, context?)`
 
-Use `sendIntent` to programmatically trigger a specific flow within your NLX application. This is useful for starting the conversation at a particular point or guiding it based on user actions outside the chat interface (e.g., clicking a "Track Order" button on your website).
+Use `sendFlow` to programmatically trigger a specific flow within your NLX application. This is useful for starting the conversation at a particular point or guiding it based on user actions outside the chat interface (e.g., clicking a "Track Order" button on your website).
 
 **When to use:**
 
@@ -140,18 +140,18 @@ Use `sendIntent` to programmatically trigger a specific flow within your NLX app
 
 ```javascript
 // Assuming 'conversationHandler' is obtained
-conversationHandler.sendIntent("RequestTechnicalSupport");
+conversationHandler.sendFlow("RequestTechnicalSupport");
 
-// Sending an intent with context variables
-conversationHandler.sendIntent("ViewProductDetails", {
+// Sending an flow with context variables
+conversationHandler.sendFlow("ViewProductDetails", {
   productId: "PROD12345",
   category: "electronics",
 });
 ```
 
-### `sendWelcomeIntent(context?)`
+### `sendWelcomeFlow(context?)`
 
-Use `sendWelcomeIntent` to initiate the conversation with the default welcome flow configured in your NLX application. This is automatically called by Touchpoint UI by default when the chat opens (unless `initializeConversation` is overridden), but you can call it manually to restart or refresh the conversation. You can also pass `context` variables to personalize the welcome experience.
+Use `sendWelcomeFlow` to initiate the conversation with the default welcome flow configured in your NLX application. This is automatically called by Touchpoint UI by default when the chat opens (unless `initializeConversation` is overridden), but you can call it manually to restart or refresh the conversation. You can also pass `context` variables to personalize the welcome experience.
 
 **When to use:**
 
@@ -162,11 +162,11 @@ Use `sendWelcomeIntent` to initiate the conversation with the default welcome fl
 ```javascript
 // Assuming 'conversationHandler' is obtained
 
-// Simple welcome intent
-conversationHandler.sendWelcomeIntent();
+// Simple welcome flow
+conversationHandler.sendWelcomeFlow();
 
-// Welcome intent with initial context
-conversationHandler.sendWelcomeIntent({
+// Welcome flow with initial context
+conversationHandler.sendWelcomeFlow({
   userLoggedIn: true,
   entryPoint: "ProductPageWelcome",
   languagePreference: "es-MX",
@@ -229,7 +229,7 @@ conversationHandler.sendSlots(
 
 ### `sendStructured(request, context?)`
 
-`sendStructured` is used for sending a combination of an intent, choice, and/or slots in a single request. This is useful for more complex interactions where multiple pieces of data need to be conveyed simultaneously.
+`sendStructured` is used for sending a combination of an flow, choice, and/or slots in a single request. This is useful for more complex interactions where multiple pieces of data need to be conveyed simultaneously.
 
 Refer to the [Headless API Reference (`StructuredRequest` type)](/headless-api-reference#interfacesconversationhandlermd) for details on the `request` object structure.
 
@@ -237,7 +237,7 @@ Refer to the [Headless API Reference (`StructuredRequest` type)](/headless-api-r
 // Assuming 'conversationHandler' is obtained
 conversationHandler.sendStructured(
   {
-    intentId: "FinalizeOrderIntent", // Trigger a specific intent
+    flowId: "FinalizeOrderFlow", // Trigger a specific flow
     slots: {
       // Provide slot data
       PaymentMethod: "CreditCard",

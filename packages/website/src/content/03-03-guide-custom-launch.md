@@ -3,7 +3,7 @@
   - [Initialization Function Signature](#initialization-function-signature)
 - [Examples](#examples)
   - [1. Sending User Information via `initialContext` (Recommended for Data Passing)](#1-sending-user-information-via-initialcontext-recommended-for-data-passing)
-  - [2. Launching with a Custom Intent Using `initializeConversation`](#2-launching-with-a-custom-intent-using-initializeconversation)
+  - [2. Launching with a Custom Flow Using `initializeConversation`](#2-launching-with-a-custom-flow-using-initializeconversation)
 
 ## Passing Initial Data with `initialContext`
 
@@ -84,11 +84,11 @@ If you also provide a custom `initializeConversation` function (see below), the 
 
 For more advanced scenarios where you need to execute custom JavaScript logic when the Touchpoint UI launches, you can use the `initializeConversation` function.
 
-💡 `initializeConversation` **only works** for `text` input mode. Your function is responsible for initiating the conversation (e.g., by calling `handler.sendWelcomeIntent()` or `handler.sendIntent()`).
+💡 `initializeConversation` **only works** for `text` input mode. Your function is responsible for initiating the conversation (e.g., by calling `handler.sendWelcomeFlow()` or `handler.sendFlow()`).
 
 **When to use `initializeConversation`:**
 
-- You need to conditionally decide which intent to send based on application state.
+- You need to conditionally decide which flow to send based on application state.
 - You want to perform actions like logging, analytics tracking, or API calls before the first message is sent.
 - You need to implement custom setup logic for specific input modes.
 
@@ -106,8 +106,8 @@ type InitializeConversation = (
 The `ConversationHandler` provides methods like:
 | Method | Description |
 |-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
-| `sendWelcomeIntent(context?)` | Sends the default welcome intent. The `context` argument here will merge with or override the `initialContext` passed to the function. |
-| `sendIntent(intent, context?)`| Sends a specific intent. The `context` argument here will merge with or override the `initialContext` passed to the function. |
+| `sendWelcomeFlow(context?)` | Sends the default welcome Flow. The `context` argument here will merge with or override the `initialContext` passed to the function. |
+| `sendFlow(flowId, context?)`| Sends a specific Flow. The `context` argument here will merge with or override the `initialContext` passed to the function. |
 
 ## Examples
 
@@ -174,7 +174,7 @@ const touchpoint = await create({
 </script>
 ```
 
-### 2. Launching with a Custom Intent Using `initializeConversation`
+### 2. Launching with a Custom Flow Using `initializeConversation`
 
 The specific flow (`CheckOrderStatus`) must be defined in your NLX application. `userSource`, `pageUrl`, `clientTime` all must be defined as context variables in your NLX workspace.
 
@@ -183,14 +183,13 @@ The specific flow (`CheckOrderStatus`) must be defined in your NLX application. 
 ```javascript
 import { create, type InitializeConversation } from "@nlxai/touchpoint-ui";
 
-const initializeWithCustomIntent: InitializeConversation = (conversationHandler) => {
+const initializeWithCustomFlow: InitializeConversation = (conversationHandler) => {
   const context = {
     userSource: "website",
-    pageUrl: window.location.href,
-    clientTime: new Date().toISOString(),
+    pageUrl: window.location.href
   }
-  // Send a specific intent with the context
-  conversationHandler.sendIntent("CheckOrderStatus", context);
+  // Send a specific Flow with the context
+  conversationHandler.sendFlow("CheckOrderStatus", context);
 };
 
 const touchpoint = await create({
@@ -199,7 +198,7 @@ const touchpoint = await create({
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
   },
-  initializeConversation: initializeWithCustomIntent,
+  initializeConversation: initializeWithCustomFlow,
   input: "text", // This custom function will run for any input mode
 });
 ```
@@ -224,14 +223,13 @@ const touchpoint = await create({
     }
   };
 
-  const initializeWithCustomIntent: InitializeConversation = (conversationHandler) => {
+  const initializeWithCustomFlow: InitializeConversation = (conversationHandler) => {
     const context = {
       userSource: "website",
-      pageUrl: window.location.href,
-      clientTime: new Date().toISOString(),
+      pageUrl: window.location.href
     }
-    // Send a specific intent with the context
-    conversationHandler.sendIntent("CheckOrderStatus", context);
+    // Send a specific flow with the context
+    conversationHandler.sendFlow("CheckOrderStatus", context);
   };
 
   contentLoaded().then(() => {
@@ -241,7 +239,7 @@ const touchpoint = await create({
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
       },
-      initializeConversation: initializeWithCustomIntent,
+      initializeConversation: initializeWithCustomFlow,
       input: "text",
     });
   });
