@@ -484,4 +484,3 @@ conversationHandler.sendSlots({ slotName: value });
 ```javascript
 import { React } from "@nlx/touchpoint-ui";
 ```
-
