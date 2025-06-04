@@ -1,3 +1,4 @@
+- [Context Variables in NLX and Touchpoint](#context-variables-in-nlx-and-touchpoint)
 - [Passing Initial Data with `initialContext`](#passing-initial-data-with-initialcontext)
 - [Customizing Initialization Logic with `initializeConversation`](#customizing-initialization-logic-with-initializeconversation)
   - [Initialization Function Signature](#initialization-function-signature)
@@ -5,11 +6,17 @@
   - [1. Sending User Information via `initialContext` (Recommended for Data Passing)](#1-sending-user-information-via-initialcontext-recommended-for-data-passing)
   - [2. Launching with a Custom Flow Using `initializeConversation`](#2-launching-with-a-custom-flow-using-initializeconversation)
 
+## Context Variables in NLX and Touchpoint
+
+Context Variables within NLX and Touchpoint allow you pass 'context' about the user's interaction and state from Touchpoint to NLX.
+
+💡 In order to use the context variables from Touchpoint in your flow, you need to define each variable as a [Context Variable](https://docs.nlx.ai/platform/build/resources/context-variables) in your NLX workspace. If the context variable is not configured within NLX, the value will not be available in the Flow.
+
 ## Passing Initial Data with `initialContext`
 
 The `initialContext` option in your Touchpoint UI configuration is the simplest way to send data to your NLX application when a conversation starts. `initialContext` works all input modes: text, voice, and voiceMini.
 
-The `initialContext` object accepts key-value pairs, which are then available as [Context Variables](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) within your NLX flows.
+The `initialContext` object accepts key-value pairs, which are then available as [Context Variables](https://docs.nlx.ai/platform/build/resources/context-variables#use-a-context-variable) within your NLX flows.
 
 **When to use `initialContext`:**
 
@@ -30,8 +37,8 @@ const touchpoint = await create({
     // userId is required if input is "voice" or "voiceMini"
     userId: crypto.randomUUID(),
   },
+  // userTier and current page must be defined as context variables in your NLX workspace
   initialContext: {
-    userId: crypto.randomUUID(),
     userTier: "gold",
     currentPage: "/products/item123",
   },
@@ -68,8 +75,8 @@ const touchpoint = await create({
         // userId is required if input is "voice" or "voiceMini"
         userId: crypto.randomUUID(),
       },
+      // userTier and current page must be defined as context variables in your NLX workspace
       initialContext: {
-        userId: crypto.randomUUID(),
         userTier: "gold",
         currentPage: "/products/item123",
       },
@@ -127,8 +134,8 @@ const touchpoint = await create({
     languageCode: "en-US",
     userId: crypto.randomUUID(), // Required for voice
   },
+  // userTier and firstName must be defined as context variables in your NLX workspace
   initialContext: {
-    // userId and userTier must be defined as Context Variables in NLX Studio
     firstName: "David",
     userTier: "premium",
   },
@@ -164,6 +171,7 @@ const touchpoint = await create({
         languageCode: "en-US",
         userId: crypto.randomUUID(), // Required for voice
       },
+      // userTier and firstName must be defined as context variables in your NLX workspace
       initialContext: {
         firstName: "David",
         userTier: "premium",
@@ -184,7 +192,8 @@ The specific flow (`CheckOrderStatus`) must be defined in your NLX application. 
 import { create, type InitializeConversation } from "@nlxai/touchpoint-ui";
 
 const initializeWithCustomFlow: InitializeConversation = (conversationHandler) => {
-  const context = {
+  // userSource and pageUrl must be defined as context variables in your NLX workspace
+const context = {
     userSource: "website",
     pageUrl: window.location.href
   }
@@ -224,6 +233,7 @@ const touchpoint = await create({
   };
 
   const initializeWithCustomFlow: InitializeConversation = (conversationHandler) => {
+    // userSource and pageUrl must be defined as context variables in your NLX workspace
     const context = {
       userSource: "website",
       pageUrl: window.location.href

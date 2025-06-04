@@ -169,22 +169,6 @@ const MyComponent = ({ data }) => (
 
 Components often need to track state (like which item is selected) and handle user interactions (like clicks). Touchpoint provides React's state management and event handling patterns.
 
-If you wish to build custom modalities using NLX, you will want to import from touchpoint instead of importing from "react" directly. This ensures that the custom modalities will be running in the same React context as the Touchpoint UI using the correct version of React.
-
-**JavaScript**
-
-```javascript
-import { React } from "@nlx/touchpoint-ui";
-```
-
-**HTML**
-
-```html
-<script>
-  const { React } = nlxai.touchpointUi;
-</script>
-```
-
 ### useState in Touchpoint Components
 
 `useState` returns an array with two elements:
@@ -490,4 +474,13 @@ conversationHandler.sendChoice(choiceId);
 
 // For slots
 conversationHandler.sendSlots({ slotName: value });
+```
+
+**React Version Mismatch Error**
+
+- **Cause**: Importing React from the parent project instead of from the touchpoint-ui package
+- **Solution**: Import React directly from the `"@nlx/touchpoint-ui"` package when using JSX to build custom components. This ensures that the components will be running in the same React context as the Touchpoint UI using the correct version of React.
+
+```javascript
+import { React } from "@nlx/touchpoint-ui";
 ```

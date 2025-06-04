@@ -18,7 +18,7 @@ export enum Environment {
   Node,
 }
 
-const indentBy = (indendStr: string, str: string): string =>
+export const indentBy = (indendStr: string, str: string): string =>
   str
     .split("\n")
     .map((str, index) => `${index === 0 ? "" : indendStr}${str}`)

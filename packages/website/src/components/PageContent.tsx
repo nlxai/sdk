@@ -1,4 +1,4 @@
-import { type FC, type ReactNode, useState } from "react";
+import { type FC, type ReactNode, useState, useContext } from "react";
 import { clsx } from "clsx";
 import { Link } from "react-router-dom";
 import Markdown from "react-markdown";
@@ -6,7 +6,12 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
+import { version } from "@nlxai/chat-core";
 
+import { ReactContext } from "../context";
+import { type SnippetEnv } from "../types";
+import { indentBy } from "../snippets";
+import { Toggle } from "./Toggle";
 import { CheckIcon, ContentCopyIcon } from "./Icons";
 
 const CopyToClipboardButton: FC<{ text: string; className?: string }> = ({
@@ -17,7 +22,7 @@ const CopyToClipboardButton: FC<{ text: string; className?: string }> = ({
 
   return (
     <button
-      className={`w-8 h-8 p-1.5 bg-slate-900 border border-slate-600 rounded-lg hover:bg-slate-800 ${
+      className={`w-6 h-6 p-1.5 bg-primary-10 text-primary-60 rounded-lg hover:bg-primary-20 hover:text-primary-80 ${
         className ?? ""
       }`}
       onClick={() => {
@@ -55,6 +60,73 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
   </div>
 );
 
+const touchpointUiImports = ["create", "React", "html"];
+
+const processTouchpointUiCode = (code: string, env: SnippetEnv): string => {
+  if (env === "html") {
+    const codeWithImport = `import { ${touchpointUiImports.join(", ")} } from "https://unpkg.com/@nlxai/touchpoint-ui@${version}/lib/index.js?module";
+
+${code}
+`;
+    return `<script type="module">
+  ${indentBy("  ", codeWithImport)}
+</script>`;
+  }
+  return `import { ${touchpointUiImports.join(", ")} } from "@nlxai/touchpoint-ui";
+
+${code}
+`;
+};
+
+const Code: FC<{
+  children: ReactNode;
+  className?: string;
+}> = ({ children, className }) => {
+  const language = /language-(\w+)/.exec(className ?? "")?.[1];
+  const lines = String(children).replace(/\n$/, "");
+  const ctx = useContext(ReactContext);
+  const isTouchpointUiLang = language === "touchpointui";
+  const displayCode = isTouchpointUiLang
+    ? processTouchpointUiCode(lines, ctx.snippetEnv)
+    : lines;
+  return (
+    <>
+      <div className="absolute top-1.5 right-1.5 hidden group-hover:flex items-center gap-2">
+        {isTouchpointUiLang ? (
+          <Toggle
+            value={ctx.snippetEnv}
+            onChange={ctx.setSnippetEnv}
+            options={[
+              { value: "html", label: "HTML" },
+              { value: "js", label: "JS" },
+            ]}
+          />
+        ) : null}
+        <CopyToClipboardButton text={displayCode} />
+      </div>
+      {language != null ? (
+        <SyntaxHighlighter
+          style={{}}
+          useInlineStyles={false}
+          showLineNumbers={true}
+          language={
+            isTouchpointUiLang
+              ? ctx.snippetEnv === "html"
+                ? "html"
+                : "javascript"
+              : language
+          }
+          PreTag="div"
+        >
+          {displayCode}
+        </SyntaxHighlighter>
+      ) : (
+        <code className={className}>{children}</code>
+      )}
+    </>
+  );
+};
+
 export const PageContent: FC<{ md: string; className?: string }> = ({
   md,
   className,
@@ -83,35 +155,8 @@ export const PageContent: FC<{ md: string; className?: string }> = ({
               <pre className="relative group !font-mono">{props.children}</pre>
             );
           },
-          code(props) {
-            // initial eslint integration
-            // eslint-disable-next-line react/prop-types
-            const { children, className, node, ...rest } = props;
-            const match = /language-(\w+)/.exec(className ?? "");
-            const lines = String(children).replace(/\n$/, "");
-            return (
-              <>
-                <CopyToClipboardButton
-                  text={lines}
-                  className="absolute top-1.5 right-1.5 hidden group-hover:block"
-                />
-                {match ? (
-                  <SyntaxHighlighter
-                    style={{}}
-                    useInlineStyles={false}
-                    showLineNumbers={true}
-                    language={match[1]}
-                    PreTag="div"
-                  >
-                    {lines}
-                  </SyntaxHighlighter>
-                ) : (
-                  <code {...rest} className={className}>
-                    {children}
-                  </code>
-                )}
-              </>
-            );
+          code({ children, className }) {
+            return <Code className={className}>{children}</Code>;
           },
         }}
       >
