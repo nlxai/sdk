@@ -108,6 +108,8 @@ To use this component, you would register it in the `customModalities` option wh
 
 The `ConversationHandler` provides several methods to send information to your NLX application. Most of these methods allow an optional `context` object as the second argument, enabling you to pass context variables to NLX to use in your flows.
 
+💡 In order to use the context variables from Touchpoint in your flow, you need to define each variable as a [Context Variable](https://docs.nlx.ai/platform/build/resources/context-variables) in your NLX workspace. If the context variable is not configured within NLX, the value will not be available in the Flow.
+
 ### `sendText(text, context?)`
 
 Use `sendText` to send a free-form text message from the user. This is typically used when your NLX flow expects a textual response, such as capturing a name, email, or any other information for a slot that accepts open-ended input.
