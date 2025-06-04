@@ -20,22 +20,48 @@ export interface CustomCardProps {
    * Handler function for when the card is clicked
    */
   onClick?: () => void;
+  /**
+   *  URL
+   */
+  url?: string;
+  /**
+   * Specify whether the URL should take the user to a new tab
+   */
+  newTab?: boolean;
 }
 
 export const CustomCard: FC<CustomCardProps> = ({
   children,
   selected,
   onClick,
+  url,
+  newTab,
 }) => {
+  const className = clsx(
+    "block shrink-0 rounded-inner overflow-hidden",
+    "w-80 space-y-px",
+    selected ? "outline outline-2 outline-accent" : "",
+  );
+  if (url != null) {
+    return (
+      <a
+        className={className}
+        href={url}
+        target={newTab ? "_blank" : undefined}
+      >
+        {children}
+      </a>
+    );
+  }
+  if (onClick != null) {
+    return (
+      <button className={className} onClick={onClick}>
+        {children}
+      </button>
+    );
+  }
   return (
-    <div
-      className={clsx(
-        "block shrink-0 rounded-inner overflow-hidden",
-        "w-80 space-y-px",
-        selected ? "outline outline-2 outline-accent" : "",
-      )}
-      onClick={onClick}
-    >
+    <div className={className} onClick={onClick}>
       {children}
     </div>
   );
