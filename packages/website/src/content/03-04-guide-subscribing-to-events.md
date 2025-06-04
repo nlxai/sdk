@@ -83,7 +83,7 @@ const unsubscribeListener = conversationHandler.subscribe(
           applicationUrl: "YOUR_APPLICATION_URL",
           headers: { "nlx-api-key": "YOUR_API_KEY" },
           languageCode: "en-US",
-          userId: "your-user-id", // Recommended
+          userId: crypto.randomUUID(), // Recommended
         },
       });
     })

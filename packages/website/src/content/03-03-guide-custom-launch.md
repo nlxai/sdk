@@ -28,10 +28,10 @@ const touchpoint = await create({
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
     // userId is required if input is "voice" or "voiceMini"
-    userId: "your-unique-user-id",
+    userId: crypto.randomUUID(),
   },
   initialContext: {
-    userId: "user-789",
+    userId: crypto.randomUUID(),
     userTier: "gold",
     currentPage: "/products/item123",
   },
@@ -66,10 +66,10 @@ const touchpoint = await create({
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
         // userId is required if input is "voice" or "voiceMini"
-        userId: "your-unique-user-id",
+        userId: crypto.randomUUID(),
       },
       initialContext: {
-        userId: "user-789",
+        userId: crypto.randomUUID(),
         userTier: "gold",
         currentPage: "/products/item123",
       },
@@ -125,7 +125,7 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "user123", // Required for voice
+    userId: crypto.randomUUID(), // Required for voice
   },
   initialContext: {
     // userId and userTier must be defined as Context Variables in NLX Studio
@@ -162,7 +162,7 @@ const touchpoint = await create({
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "user123", // Required for voice
+        userId: crypto.randomUUID(), // Required for voice
       },
       initialContext: {
         firstName: "David",

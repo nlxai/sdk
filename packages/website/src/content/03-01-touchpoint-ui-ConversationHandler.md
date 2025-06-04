@@ -5,7 +5,7 @@
   - [`sendText(text, context?)`](#sendtexttext-context)
   - [`sendFlow(flowId, context?)`](#sendflowflowid-context)
   - [`sendWelcomeFlow(context?)`](#sendwelcomeflowcontext)
-  - [`sendChoice(choiceId, context?, metadata?)`](#sendchoicechoiceid-context-metadata)
+  - [`sendChoice(choiceId, context?)`](#sendchoicechoiceid-context)
   - [`sendSlots(slots, context?)`](#sendslotsslots-context)
   - [`sendStructured(request, context?)`](#sendstructuredrequest-context)
 
@@ -28,7 +28,7 @@ const touchpointOptions = {
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
     // userId is required for voice input, recommended otherwise
-    userId: "your-unique-user-id",
+    userId: crypto.randomUUID(),
   },
   // Other Touchpoint UI options
 };
@@ -68,7 +68,7 @@ initializeAndUseTouchpoint();
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "your-unique-user-id",
+        userId: crypto.randomUUID(),
       },
       // Other Touchpoint UI options
     };
@@ -175,7 +175,7 @@ conversationHandler.sendWelcomeFlow({
 
 Refer to the [Launching with Context guide](/guide-custom-launch) for more on customizing initial interactions.
 
-### `sendChoice(choiceId, context?, metadata?)`
+### `sendChoice(choiceId, context?)`
 
 Use `sendChoice` when the user selects an option from a list of choices presented by the NLX application. These choices might appear as quick replies, buttons in a card, or items in a carousel. The `choiceId` must match one of the `choiceId`s provided by the bot in a previous message.
 

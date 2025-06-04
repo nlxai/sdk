@@ -22,7 +22,7 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "user-12345", // Required for voice
+    userId: crypto.randomUUID(), // Required for voice
   },
   input: "voice", // Enable full voice mode
 });
@@ -53,7 +53,7 @@ const touchpoint = await create({
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "user-12345", // Required for voice
+        userId: crypto.randomUUID(), // Required for voice
       },
       input: "voice", // Enable full voice mode
     });
@@ -75,7 +75,7 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "user-12345", // Required for voice
+    userId: crypto.randomUUID(), // Required for voice
   },
   input: "voiceMini", // Enable compact voice mode
 });
@@ -106,7 +106,7 @@ const touchpoint = await create({
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "user-12345", // Required for voice
+        userId: crypto.randomUUID(), // Required for voice
       },
       input: "voiceMini", // Enable compact voice mode
     });

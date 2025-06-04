@@ -22,7 +22,7 @@ create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "your-unique-user-id",
+    userId: crypto.randomUUID(),
   },
 }).then((touchpoint) => {
   // To open the chat window:
@@ -65,7 +65,7 @@ create({
           applicationUrl: "YOUR_APPLICATION_URL",
           headers: { "nlx-api-key": "YOUR_API_KEY" },
           languageCode: "en-US",
-          userId: "your-unique-user-id",
+          userId: crypto.randomUUID(),
         },
       });
     })
@@ -132,7 +132,7 @@ create({
           applicationUrl: "YOUR_APPLICATION_URL",
           headers: { "nlx-api-key": "YOUR_API_KEY" },
           languageCode: "en-US",
-          userId: "your-unique-user-id",
+          userId: crypto.randomUUID(),
         },
       });
     })
@@ -159,7 +159,7 @@ create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "your-unique-user-id",
+    userId: crypto.randomUUID(),
   },
   launchIcon: false, // Disable the default launch button
 }).then((touchpoint) => {
@@ -201,7 +201,7 @@ create({
           applicationUrl: "YOUR_APPLICATION_URL",
           headers: { "nlx-api-key": "YOUR_API_KEY" },
           languageCode: "en-US",
-          userId: "your-unique-user-id",
+          userId: crypto.randomUUID(),
         },
         launchIcon: false, // Disable the default launch button
       });
@@ -231,7 +231,7 @@ create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "your-unique-user-id",
+    userId: crypto.randomUUID(),
   },
 }).then((touchpoint) => {
   // To remove the widget (e.g., on a button click or page navigation):
@@ -270,7 +270,7 @@ create({
           applicationUrl: "YOUR_APPLICATION_URL",
           headers: { "nlx-api-key": "YOUR_API_KEY" },
           languageCode: "en-US",
-          userId: "your-unique-user-id",
+          userId: crypto.randomUUID(),
         },
       });
     })
@@ -300,7 +300,7 @@ create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "your-unique-user-id",
+    userId: crypto.randomUUID(),
   },
 }).then((touchpoint) => {
   let inactivityTimer;
@@ -362,7 +362,7 @@ create({
           applicationUrl: "YOUR_APPLICATION_URL",
           headers: { "nlx-api-key": "YOUR_API_KEY" },
           languageCode: "en-US",
-          userId: "your-unique-user-id",
+          userId: crypto.randomUUID(),
         },
       });
     })

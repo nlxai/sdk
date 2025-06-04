@@ -24,7 +24,7 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "REQUIRED_FOR_VOICE",
+    userId: crypto.randomUUID(),
   },
 });
 ```
@@ -54,7 +54,7 @@ const touchpoint = await create({
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "REQUIRED_FOR_VOICE",
+        userId: crypto.randomUUID(),
       },
     });
   });
@@ -81,7 +81,7 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "REQUIRED_FOR_VOICE",
+    userId: crypto.randomUUID(),
   },
   // Brand customization
   colorMode: "light", // "light" or "dark"
@@ -119,7 +119,7 @@ const touchpoint = await create({
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "REQUIRED_FOR_VOICE",
+        userId: crypto.randomUUID(),
       },
       colorMode: "light",
       theme: {
@@ -147,7 +147,7 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "user-12345", // Required for voice
+    userId: crypto.randomUUID(), // Required for voice
   },
   input: "voice", // Enable voice input
 });
@@ -178,7 +178,7 @@ const touchpoint = await create({
         applicationUrl: "YOUR_APPLICATION_URL",
         headers: { "nlx-api-key": "YOUR_API_KEY" },
         languageCode: "en-US",
-        userId: "user-12345",
+        userId: crypto.randomUUID(),
       },
       input: "voice",
     });
@@ -210,7 +210,7 @@ const touchpointConfig = {
       "nlx-api-key": "YOUR_API_KEY",
     },
     languageCode: "en-US",
-    userId: "user-123-abc",
+    userId: crypto.randomUUID(),
   },
 };
 ```
@@ -233,7 +233,7 @@ const touchpointConfig = {
       "nlx-api-key": "YOUR_API_KEY",
     },
     languageCode: "en-US",
-    userId: "user-123-abc",
+    userId: crypto.randomUUID(),
     conversationId: "existing-conversation-id",
     responses: [
       // Array of previous Response objects
@@ -265,7 +265,7 @@ const touchpointConfig = {
       "nlx-api-key": "YOUR_API_KEY"
     },
     languageCode: "en-US",
-    userId: "user-123-abc"
+    userId: crypto.randomUUID()
   }
   windowSize: "half",
   colorMode: "dark",
@@ -296,7 +296,7 @@ const touchpointConfig = {
       "nlx-api-key": "YOUR_API_KEY"
     },
     languageCode: "en-US",
-    userId: "user-123-abc"
+    userId: crypto.randomUUID()
   }
   chatMode: true,
   userMessageBubble: true,
@@ -326,7 +326,7 @@ const touchpointConfig = {
       "nlx-api-key": "YOUR_API_KEY"
     },
     languageCode: "en-US",
-    userId: "user-123-abc"
+    userId: crypto.randomUUID()
   }
   theme: {
     fontFamily: '"Helvetica Neue", sans-serif',
@@ -354,7 +354,7 @@ const touchpointConfig = {
       "nlx-api-key": "YOUR_API_KEY",
     },
     languageCode: "en-US",
-    userId: "user-123-abc",
+    userId: crypto.randomUUID(),
   },
   initialContext: {
     userTier: "premium",
