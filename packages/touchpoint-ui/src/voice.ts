@@ -82,14 +82,11 @@ export const useVoice = ({
     600,
   );
 
-  const audioElementRef = useRef<HTMLMediaElement | null>(null);
+  const trackRef = useRef<RemoteTrack | null>(null);
 
   const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
 
-  const [roomData, setRoomData] = useState<ModalitiesWithContext | null>({
-    modalities: { Something: {} },
-    timestamp: 0,
-  });
+  const [roomData, setRoomData] = useState<ModalitiesWithContext | null>(null);
 
   useEffect(() => {
     const room = roomRef.current;
@@ -103,11 +100,11 @@ export const useVoice = ({
   }, [micEnabled]);
 
   useEffect(() => {
-    const audioElement = audioElementRef.current;
-    if (audioElement == null) {
+    const track = trackRef.current;
+    if (track == null) {
       return;
     }
-    audioElement.volume = speakersEnabled ? 1 : 0;
+    track.setMuted(!speakersEnabled);
   }, [speakersEnabled]);
 
   useEffect(() => {
@@ -149,20 +146,20 @@ export const useVoice = ({
     useDebouncedState<boolean>(false, 600);
 
   const disconnect = useCallback(() => {
-    if (roomRef.current == null) {
+    const room = roomRef.current;
+    if (room == null) {
       return;
     }
-    roomRef.current.disconnect().catch((err) => {
+    room.disconnect().catch((err) => {
       // eslint-disable-next-line no-console
       console.warn(err);
     });
     void handler.terminateVoiceCall();
-    roomRef.current = null;
-    // Not 100% sure this is necessary but it seems to help
-    if (audioElementRef.current != null) {
-      audioElementRef.current.pause();
-      audioElementRef.current = null;
+    if (trackRef.current != null) {
+      trackRef.current.stop();
+      trackRef.current = null;
     }
+    roomRef.current = null;
     setRoomData(null);
   }, [setRoomData]);
 
@@ -197,9 +194,9 @@ export const useVoice = ({
 
       const handleTrackSubscribed = (track: RemoteTrack): void => {
         if (track.kind === Track.Kind.Audio) {
+          trackRef.current = track;
           const element = track.attach();
           void element.play();
-          audioElementRef.current = element;
         }
       };
 
