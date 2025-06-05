@@ -81,18 +81,21 @@ export const useVoice = ({
   useEffect(() => {
     const checkMic = async (): Promise<void> => {
       try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
         await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const speakers = devices
+          .filter((device) => device.kind === "audiooutput")
+          .map((device) => device.label);
         setSoundCheck({
           micAllowed: true,
           micNames: devices
             .filter((device) => device.kind === "audioinput")
             .map((device) => device.label),
-          speakerNames: devices
-            .filter((device) => device.kind === "audiooutput")
-            .map((device) => device.label),
+          speakerNames:
+            // Safari does not return speaker names, so we default to just assuming there is a system default speaker
+            speakers.length > 0 ? speakers : ["System Default Speaker Device"],
         });
       } catch (err) {
         // eslint-disable-next-line no-console
