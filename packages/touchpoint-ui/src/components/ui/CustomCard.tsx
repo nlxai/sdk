@@ -50,7 +50,7 @@ export const CustomCard: FC<CustomCardProps> = ({
         "Setting the `newTab` prop on the `<CustomCard/>` has no effect if the `href` is not also set.",
       );
     }
-  }, [onClick, href, newTab]);
+  }, [href, newTab]);
   if (href != null) {
     return (
       <a
@@ -69,11 +69,7 @@ export const CustomCard: FC<CustomCardProps> = ({
       </button>
     );
   }
-  return (
-    <div className={className} onClick={onClick}>
-      {children}
-    </div>
-  );
+  return <div className={className}>{children}</div>;
 };
 
 export const CustomCardImageRow: FC<{ src: string; alt?: string }> = ({
