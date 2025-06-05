@@ -5,7 +5,7 @@ import { clsx } from "clsx";
 import { IconButton, type IconButtonType } from "./ui/IconButton";
 import { type WindowSize, type ColorMode } from "../types";
 import { useTailwindMediaQuery } from "../hooks";
-import { Close, Settings, Undo, Volume } from "./ui/Icons";
+import { Close, Settings, Undo, Volume, VolumeOff } from "./ui/Icons";
 
 interface HeaderProps {
   windowSize: WindowSize | "embedded";
@@ -80,7 +80,7 @@ export const Header: FC<HeaderProps> = ({
       ) : null}
       {speakerControls != null ? (
         <IconButton
-          Icon={Volume}
+          Icon={speakerControls.enabled ? Volume : VolumeOff}
           label="Speakers"
           type={speakerControls.enabled ? "activated" : iconButtonType}
           onClick={() => {
