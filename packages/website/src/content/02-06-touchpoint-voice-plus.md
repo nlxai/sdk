@@ -3,16 +3,11 @@
   - [Bidirectional Communication](#bidirectional-communication)
   - [Voice Commands](#voice-commands)
 - [Sending Page Context](#sending-page-context)
-  - [Context Data Structure](#context-data-structure)
 - [Handling Voice Commands](#handling-voice-commands)
 - [Command Handlers](#command-handlers)
   - [Navigation Commands](#navigation-commands)
   - [Form Fill Commands](#form-fill-commands)
   - [Custom Commands](#custom-commands)
-- [Best Practices](#best-practices)
-  - [Context Updates](#context-updates)
-  - [Error Handling](#error-handling)
-  - [User Feedback](#user-feedback)
 - [Browser Requirements](#browser-requirements)
 - [Complete Implementation Example](#complete-implementation-example)
 - [Related Documentation](#related-documentation)
@@ -59,7 +54,7 @@ Enhanced Voice Plus supports three command types:
 
 ## Sending Page Context
 
-Provide NLX with information about your page structure using the Voice Plus context API:
+Provide NLX with information about your page structure using the Voice Plus context API. This powers the input / formfill commands for NLX to have context of which fields are available and their types.
 
 ```javascript
 import { analyzePageForms } from "@nlxai/voice-plus-web";
@@ -69,31 +64,8 @@ const { context, formElements } = analyzePageForms();
 
 // Send context to NLX
 touchpoint.conversationHandler.sendVoicePlusContext({
-  forms: context,
-  customData: {
-    // Add any custom context data
-  }
+  context: context
 });
-```
-
-### Context Data Structure
-
-The `analyzePageForms()` function returns:
-
-```typescript
-interface PageForms {
-  context: InteractiveElementInfo[];
-  formElements: Record<string, Element>;
-}
-
-interface InteractiveElementInfo {
-  id: string;
-  name: string;
-  type: string;
-  placeholder?: string;
-  textContent?: string;
-  value?: string;
-}
 ```
 
 ## Handling Voice Commands
@@ -200,74 +172,6 @@ function handleCustomCommand(action, data) {
     document.getElementById(data.sectionId)?.scrollIntoView({ 
       behavior: 'smooth' 
     });
-  }
-}
-```
-
-## Best Practices
-
-### Context Updates
-
-Send updated context when page content changes:
-
-```javascript
-// Update context after dynamic content loads
-function updateContext(handler) {
-  const { context } = nlxai.voicePlusWeb.analyzePageForms();
-  handler.sendVoicePlusContext({ forms: context });
-}
-
-// Example: After AJAX form load
-fetch('/api/form-data')
-  .then(response => response.json())
-  .then(data => {
-    renderForm(data);
-    updateContext(touchpoint.conversationHandler);
-  });
-```
-
-### Error Handling
-
-Implement robust error handling for voice commands:
-
-```javascript
-handler.addEventListener("voicePlusCommand", (payload) => {
-  try {
-    processVoiceCommand(payload);
-  } catch (error) {
-    console.error("Voice command error:", error);
-    
-    // Optionally notify user
-    showNotification("Unable to process voice command");
-  }
-});
-```
-
-### User Feedback
-
-Provide visual or audio feedback for voice actions:
-
-```javascript
-function handleFormInput(data) {
-  const updatedFields = [];
-  
-  Object.entries(data.formData).forEach(([fieldName, value]) => {
-    const field = document.querySelector(`[name="${fieldName}"]`);
-    if (field) {
-      field.value = value;
-      field.classList.add('voice-updated');
-      updatedFields.push(fieldName);
-      
-      // Remove highlight after animation
-      setTimeout(() => {
-        field.classList.remove('voice-updated');
-      }, 2000);
-    }
-  });
-  
-  // Announce completion
-  if (updatedFields.length > 0) {
-    speak(`Updated ${updatedFields.join(', ')}`);
   }
 }
 ```
@@ -405,7 +309,7 @@ A starter example implementing voice-driven form filling and navigation:
       
       Object.entries(data.formData).forEach(([fieldName, value]) => {
         const field = document.querySelector(
-          `[name="\${fieldName}"], #\${fieldName}`
+          `[name="${fieldName}"], #${fieldName}`
         );
         
         if (field) {
