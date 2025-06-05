@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
-import { type FC, type ReactNode } from "react";
+import { useEffect, type FC, type ReactNode } from "react";
 
 import { type Icon } from "../ui/Icons";
 
@@ -43,6 +43,14 @@ export const CustomCard: FC<CustomCardProps> = ({
     selected ? "outline outline-2 outline-accent" : "",
     onClick != null || href != null ? "hover:bg-primary-5" : "",
   );
+  useEffect(() => {
+    if (href == null && newTab != null) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        "Setting the `newTab` prop on the `<CustomCard/>` has no effect if the `href` is not also set.",
+      );
+    }
+  }, [onClick, href, newTab]);
   if (href != null) {
     return (
       <a
