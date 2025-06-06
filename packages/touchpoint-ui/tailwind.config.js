@@ -11,7 +11,7 @@ module.exports = {
         overlay: "48px",
       },
       maxWidth: {
-        content: "608px",
+        content: "640px",
       },
       borderRadius: {
         inner: "var(--inner-border-radius)",
