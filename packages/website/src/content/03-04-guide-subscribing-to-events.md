@@ -51,7 +51,6 @@ const unsubscribeListener = conversationHandler.subscribe(
 // unsubscribeListener();
 ```
 
-
 ## Example Use Case: Reacting to Modalities
 
 A common use for `subscribe` is to detect and act upon custom modalities sent by NLX. This example looks for the Modalities to be defined in NLX: `MapDisplay`, `TrackOrder`
