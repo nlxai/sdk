@@ -324,6 +324,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           <FullscreenVoice
             active={voiceActive}
             setActive={setVoiceActive}
+            brandIcon={props.brandIcon}
             handler={handler}
             speakersEnabled={fullscreenVoiceSpeakersEnabled}
             colorMode={colorMode}
