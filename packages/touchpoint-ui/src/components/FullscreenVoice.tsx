@@ -29,6 +29,7 @@ interface Props {
   colorMode: ColorMode;
   handler: ConversationHandler;
   speakersEnabled: boolean;
+  brandIcon?: string;
   className?: string;
   active: boolean;
   setActive: Dispatch<SetStateAction<boolean>>;
@@ -102,6 +103,7 @@ export const FullscreenVoice: FC<Props> = ({
   handler,
   speakersEnabled,
   colorMode,
+  brandIcon,
   className,
   active,
   setActive,
@@ -175,14 +177,21 @@ export const FullscreenVoice: FC<Props> = ({
       <div className="rounded-full w-fit relative">
         <div
           className={clsx(
-            "w-[128px] h-[128px] p-4 z-10 relative rounded-full",
+            "w-[128px] h-[128px] p-4 z-10 relative rounded-full overflow-hidden bg-cover bg-center",
             // This color imitates primary5 overlayed on the regular background, but it has to be solid
-            colorMode === "dark"
-              ? "bg-[rgb(40,41,47)]"
-              : "bg-[rgb(175,175,175)]",
+            brandIcon != null
+              ? ""
+              : colorMode === "dark"
+                ? "bg-[rgb(40,41,47)]"
+                : "bg-[rgb(175,175,175)]",
           )}
+          style={
+            brandIcon != null ? { backgroundImage: `url(${brandIcon})` } : {}
+          }
         >
-          <Touchpoint className="w-full h-full text-primary-40" />
+          {brandIcon == null ? (
+            <Touchpoint className="w-full h-full text-primary-40" />
+          ) : null}
         </div>
         {isApplicationSpeaking ? <Ripple className="rounded-full" /> : null}
       </div>
