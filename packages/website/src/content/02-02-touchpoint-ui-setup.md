@@ -14,11 +14,7 @@
 
 ### Required Configuration
 
-**JavaScript**
-
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -27,38 +23,6 @@ const touchpoint = await create({
     userId: crypto.randomUUID(),
   },
 });
-```
-
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: crypto.randomUUID(),
-      },
-    });
-  });
-</script>
 ```
 
 | Field                    | Type   | Description                            |
@@ -73,9 +37,7 @@ const touchpoint = await create({
 
 Add these options outside the `config` object:
 
-**JavaScript**
-
-```javascript
+```touchpointui
 const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -94,54 +56,13 @@ const touchpoint = await create({
 });
 ```
 
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: crypto.randomUUID(),
-      },
-      colorMode: "light",
-      theme: {
-        accent: "#0066CC",
-        fontFamily: '"Inter", sans-serif',
-      },
-      brandIcon: "https://yoursite.com/logo.png",
-      launchIcon: "https://yoursite.com/chat-icon.svg",
-    });
-  });
-</script>
-```
-
 ---
 
 ## Voice Input
 
 Voice input requires a `userId` in your config:
 
-**JavaScript**
-
-```javascript
+```touchpointui
 const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -151,39 +72,6 @@ const touchpoint = await create({
   },
   input: "voice", // Enable voice input
 });
-```
-
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: crypto.randomUUID(),
-      },
-      input: "voice",
-    });
-  });
-</script>
 ```
 
 ---
@@ -199,9 +87,9 @@ const touchpoint = await create({
 | `languageCode`           | string | Yes            | Chat language (e.g., "en-US", "fr-FR")             |
 | `userId`                 | string | For voice only | User identifier (required when `input` is "voice") |
 
-**Example JS**
+**Example**
 
-```js
+```touchpointui
 const touchpointConfig = {
   // Core configuration (required)
   config: {
@@ -222,9 +110,9 @@ const touchpointConfig = {
 | `conversationId` | string                                                | optional | `conversationId` to continue an existing conversation. Used to recover conversation when [persisting history](/guide-persisting-history).                        |
 | `responses`      | array of [Response](/headless-api-reference#response) | optional | When `responses` is set, initialize the chatHandler with historical messages. Used to recover conversation when [persisting history](/guide-persisting-history). |
 
-**Example JS**
+**Example**
 
-```js
+```touchpointui
 const touchpointConfig = {
   // Core configuration (required)
   config: {
@@ -254,9 +142,9 @@ const touchpointConfig = {
 | `launchIcon` | string \| boolean                      | true      | URL for chat button icon, false to hide |
 | `input`      | `"text"` \| `"voice"` \| `"voiceMini"` | `"text"`  | How users communicate with the chat     |
 
-**Example JS**
+**Example**
 
-```js
+```touchpointui
 const touchpointConfig = {
   // Core configuration (required)
   config: {
@@ -285,9 +173,9 @@ const touchpointConfig = {
 
 💡 See the [Chat Modes](/guide-touchpoint-chat-modes) section for more information.
 
-**Example JS**
+**Example**
 
-```js
+```touchpointui
 const touchpointConfig = {
   // Core configuration (required)
   config: {
@@ -315,9 +203,9 @@ const touchpointConfig = {
 
 💡 See the [Theming and Styling](/touchpoint-ui-theming) section for more information.
 
-**Example JS**
+**Example**
 
-```js
+```touchpointui
 const touchpointConfig = {
   // Core configuration (required)
   config: {
@@ -343,9 +231,9 @@ const touchpointConfig = {
 | `initializeConversation` | function | Sends welcome flow | Control the first interaction. Read more in the [Launching with Context](/guide-custom-launch#customizing-initialization-logic-with-initializeconversation) section for more information. |
 | `initialContext`         | object   | undefined          | Context sent with initial request. Read more in the [Launching with Context](/guide-custom-launch#passing-initial-data-with-initialcontext) section for more information.                 |
 
-**Example JS**
+**Example**
 
-```js
+```touchpointui
 const touchpointConfig = {
   // Core configuration (required)
   config: {
