@@ -63,11 +63,7 @@ The Assistant Style provides a focused experience where only the latest applicat
 
 To implement the default Assistant Style, you can either omit the `chatMode` parameter or explicitly set it to `false`:
 
-**Javascript**
-
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpointOptions = {
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -87,57 +83,11 @@ const touchpointOptions = {
 const touchpoint = await create(touchpointOptions);
 ```
 
-**HTML**
-
-```html
-<!-- HTML Example: Assistant Style (Default) -->
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  contentLoaded().then(() => {
-    const touchpointOptions = {
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: {
-          "nlx-api-key": "YOUR_API_KEY",
-        },
-        languageCode: "en-US",
-      },
-      chatMode: false, // Explicitly set to false or omit (default is false)
-      theme: {
-        fontFamily: '"Neue Haas Grotesk", sans-serif',
-        accent: "#AECAFF",
-      },
-    };
-
-    return nlxai.touchpointUi.create(touchpointOptions);
-  });
-</script>
-```
-
 ### Example Assistant Configuration with message bubbles
 
 To add message bubbles to the Assistant Style:
 
-**Javascript**
-
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpointOptions = {
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -158,50 +108,6 @@ const touchpointOptions = {
 const touchpoint = await create(touchpointOptions);
 ```
 
-**HTML**
-
-```html
-<!-- HTML Example: Assistant Style with Message Bubbles -->
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  contentLoaded().then(() => {
-    const touchpointOptions = {
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: {
-          "nlx-api-key": "YOUR_API_KEY",
-        },
-        languageCode: "en-US",
-      },
-      chatMode: false, // Assistant style
-      userMessageBubble: true, // Display user messages in bubbles
-      agentMessageBubble: true, // Display agent messages in bubbles
-      theme: {
-        fontFamily: '"Neue Haas Grotesk", sans-serif',
-        accent: "#AECAFF",
-      },
-    };
-
-    return nlxai.touchpointUi.create(touchpointOptions);
-  });
-</script>
-```
-
 ## Classic Chat Style
 
 The Classic Chat Style provides a traditional messaging interface where all messages stack chronologically and remain visible. This creates a more conventional chat experience that many users are already familiar with from messaging apps.
@@ -210,11 +116,7 @@ The Classic Chat Style provides a traditional messaging interface where all mess
 
 To implement the Classic Chat Style, set the `chatMode` parameter to `true`:
 
-**Javascript**
-
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpointOptions = {
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -234,55 +136,11 @@ const touchpointOptions = {
 const touchpoint = await create(touchpointOptions);
 ```
 
-**HTML**
-
-```html
-<!-- HTML Example: Classic Chat Style -->
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  contentLoaded().then(() => {
-    const touchpointOptions = {
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: {
-          "nlx-api-key": "YOUR_API_KEY",
-        },
-        languageCode: "en-US",
-      },
-      chatMode: true, // Enable classic chat mode
-      theme: {
-        fontFamily: '"Arial", sans-serif',
-        accent: "rgb(40, 167, 69)", // Example green accent
-      },
-    };
-
-    return nlxai.touchpointUi.create(touchpointOptions);
-  });
-</script>
-```
-
 ### Example Classic Chat Configuration with message bubbles
 
 To enable message bubbles in Classic Chat Style for a more traditional messaging look:
 
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpointOptions = {
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -301,50 +159,6 @@ const touchpointOptions = {
 };
 
 const touchpoint = await create(touchpointOptions);
-```
-
-**HTML**
-
-```html
-<!-- HTML Example: Classic Chat Style with message bubbles -->
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  contentLoaded().then(() => {
-    const touchpointOptions = {
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: {
-          "nlx-api-key": "YOUR_API_KEY",
-        },
-        languageCode: "en-US",
-      },
-      chatMode: true, // Enable classic chat mode
-      userMessageBubble: true, // Display user messages in bubbles
-      agentMessageBubble: true, // Display agent messages in bubbles
-      theme: {
-        fontFamily: '"Arial", sans-serif',
-        accent: "rgb(40, 167, 69)", // Example green accent
-      },
-    };
-
-    return nlxai.touchpointUi.create(touchpointOptions);
-  });
-</script>
 ```
 
 For more information on customizing your Touchpoint UI experience, refer to the [Theming documentation](/touchpoint-ui-theming) and [Component Configuration](/guide-building-custom-components) guides.

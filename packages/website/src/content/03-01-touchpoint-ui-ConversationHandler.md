@@ -17,11 +17,7 @@ You can access the `ConversationHandler` in two main ways:
 
 When you initialize Touchpoint UI using the `create` method, it returns a `TouchpointInstance` object. This object contains the `conversationHandler`.
 
-**JavaScript**
-
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpointOptions = {
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -33,65 +29,23 @@ const touchpointOptions = {
   // Other Touchpoint UI options
 };
 
-async function initializeAndUseTouchpoint() {
-  const touchpoint = await create(touchpointOptions);
-  const conversationHandler = touchpoint.conversationHandler;
-  // Now you can use conversationHandler methods
-}
-
-initializeAndUseTouchpoint();
-```
-
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  contentLoaded().then(async () => {
-    const touchpointOptions = {
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: crypto.randomUUID(),
-      },
-      // Other Touchpoint UI options
-    };
-    const touchpoint = await nlxai.touchpointUi.create(touchpointOptions);
-    const conversationHandler = touchpoint.conversationHandler;
-    // Now you can use conversationHandler methods
-    // Make it globally accessible for other script tags or inline event handlers
-    window.myAppGlobalConversationHandler = conversationHandler;
-  });
-</script>
+const touchpoint = await create(touchpointOptions);
+const conversationHandler = touchpoint.conversationHandler;
+// Now you can use conversationHandler methods
+// Make it globally accessible for other script tags or inline event handlers
+window.myAppGlobalConversationHandler = conversationHandler;
 ```
 
 ### From Custom Modality Components
 
 When building [Custom Modality Components](/guide-building-custom-components), the `conversationHandler` is passed as a prop to your component, allowing seamless interaction with the ongoing conversation.
 
-**JavaScript (Example within a custom component)**
+**Component example**
 
-```jsx
-import { html, Icons } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const MyCustomButtonComponent = ({ data, conversationHandler }) => {
-  const myButton = html`<TextButton
+  const myButton = html`
+  <TextButton
     label="My Button"
     Icon=${Icons.ArrowForward}
     onClick="${() => {
@@ -119,7 +73,7 @@ Use `sendText` to send a free-form text message from the user. This is typically
 - Responding to an open-ended question from the bot.
 - Filling a slot that expects arbitrary text input.
 
-```javascript
+```js
 // Assuming 'conversationHandler' is obtained
 conversationHandler.sendText("Yes, I'd like to know more about your services.");
 
@@ -140,7 +94,7 @@ Use `sendFlow` to programmatically trigger a specific flow within your NLX appli
 - Responding to user interactions on your webpage that map to a defined flow.
 - Allowing custom components to direct the conversation flow.
 
-```javascript
+```js
 // Assuming 'conversationHandler' is obtained
 conversationHandler.sendFlow("RequestTechnicalSupport");
 
@@ -161,7 +115,7 @@ Use `sendWelcomeFlow` to initiate the conversation with the default welcome flow
 - Providing a "start over" functionality.
 - Sending initial context data (like user status or page information) at the beginning of a conversation.
 
-```javascript
+```js
 // Assuming 'conversationHandler' is obtained
 
 // Simple welcome flow
@@ -187,9 +141,7 @@ Use `sendChoice` when the user selects an option from a list of choices presente
 - User selects an item from a [carousel](/touchpoint-carousel) or list that has an associated `choiceId`.
 - Responding to a user-choice node that expects a 'label' or 'id' response.
 
-```javascript
-import { html, Icons } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const MyCustomButtonComponent = ({ data, conversationHandler }) => {
   const myButton = html`<TextButton
     label="My Button"
@@ -213,7 +165,7 @@ Provide an object where keys are the **slot names** (as defined in your NLX Appl
 - Submitting data from a form within a custom component or your webpage.
 - Providing multiple pieces of information gathered through a custom UI.
 
-```javascript
+```js
 // Assuming 'conversationHandler' is obtained
 // Slot names ('FirstName', 'ProductInterest') must match those in your NLX configuration.
 conversationHandler.sendSlots({
@@ -235,7 +187,7 @@ conversationHandler.sendSlots(
 
 Refer to the [Headless API Reference (`StructuredRequest` type)](/headless-api-reference#interfacesconversationhandlermd) for details on the `request` object structure.
 
-```javascript
+```js
 // Assuming 'conversationHandler' is obtained
 conversationHandler.sendStructured(
   {

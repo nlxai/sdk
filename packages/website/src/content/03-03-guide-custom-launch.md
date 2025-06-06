@@ -24,11 +24,7 @@ The `initialContext` object accepts key-value pairs, which are then available as
 - You don't need custom JavaScript logic to run on launch, just data passing.
 - You want a straightforward way to provide context for text, voice, or voiceMini interactions from the start.
 
-**JavaScript**
-
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -44,45 +40,6 @@ const touchpoint = await create({
   },
   // input: "text", // or "voice", "voiceMini"
 });
-```
-
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        // userId is required if input is "voice" or "voiceMini"
-        userId: crypto.randomUUID(),
-      },
-      // userTier and current page must be defined as context variables in your NLX workspace
-      initialContext: {
-        userTier: "gold",
-        currentPage: "/products/item123",
-      },
-    });
-  });
-</script>
 ```
 
 If you also provide a custom `initializeConversation` function (see below), the `initialContext` object will be passed as the second argument to that function.
@@ -122,11 +79,7 @@ The `ConversationHandler` provides methods like:
 
 This example demonstrates passing `firstName` and `userTier`. These need to be defined as Context Variables in your NLX Workspace to be usable in your flows. This approach works for text, voice, and voiceMini.
 
-**JavaScript**
-
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -143,57 +96,14 @@ const touchpoint = await create({
 });
 ```
 
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: crypto.randomUUID(), // Required for voice
-      },
-      // userTier and firstName must be defined as context variables in your NLX workspace
-      initialContext: {
-        firstName: "David",
-        userTier: "premium",
-      },
-      // input: "text", // Or "voice", "voiceMini"
-    });
-  });
-</script>
-```
-
 ### 2. Launching with a Custom Flow Using `initializeConversation`
 
 The specific flow (`CheckOrderStatus`) must be defined in your NLX application. `userSource`, `pageUrl`, all must be defined as context variables in your NLX workspace.
 
-**JavaScript**
-
-```javascript
-import { create, type InitializeConversation } from "@nlxai/touchpoint-ui";
-
-const initializeWithCustomFlow: InitializeConversation = (conversationHandler) => {
+```touchpointui
+const initializeWithCustomFlow = (conversationHandler) => {
   // userSource and pageUrl must be defined as context variables in your NLX workspace
-const context = {
+  const context = {
     userSource: "website",
     pageUrl: window.location.href
   }
@@ -210,48 +120,4 @@ const touchpoint = await create({
   initializeConversation: initializeWithCustomFlow,
   input: "text", // This custom function will run for any input mode
 });
-```
-
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  const initializeWithCustomFlow: InitializeConversation = (conversationHandler) => {
-    // userSource and pageUrl must be defined as context variables in your NLX workspace
-    const context = {
-      userSource: "website",
-      pageUrl: window.location.href
-    }
-    // Send a specific flow with the context
-    conversationHandler.sendFlow("CheckOrderStatus", context);
-  };
-
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-      },
-      initializeConversation: initializeWithCustomFlow,
-      input: "text",
-    });
-  });
-</script>
 ```

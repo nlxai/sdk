@@ -26,9 +26,7 @@ The `subscribe` method returns a function that you can call later to unsubscribe
 
 **JavaScript**
 
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 // Assuming 'touchpoint' is initialized as per the setup guide
 // const touchpoint = await create({ config: { /* ... */ } });
 const { conversationHandler } = touchpoint;
@@ -53,76 +51,11 @@ const unsubscribeListener = conversationHandler.subscribe(
 // unsubscribeListener();
 ```
 
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  let touchpointInstance; // To store the touchpoint instance
-  let unsubscribeListener; // To store the unsubscribe function
-
-  contentLoaded()
-    .then(() => {
-      return nlxai.touchpointUi.create({
-        config: {
-          applicationUrl: "YOUR_APPLICATION_URL",
-          headers: { "nlx-api-key": "YOUR_API_KEY" },
-          languageCode: "en-US",
-          userId: crypto.randomUUID(), // Recommended
-        },
-      });
-    })
-    .then((touchpoint) => {
-      touchpointInstance = touchpoint;
-      const { conversationHandler } = touchpointInstance;
-
-      const myConversationListener = (allResponses, newResponse) => {
-        console.log("Total messages so far:", allResponses.length);
-
-        if (newResponse) {
-          console.log("A new response was received. Type:", newResponse.type);
-          // Further processing of newResponse...
-        } else {
-          console.log(
-            "Subscription initialized. Historical messages:",
-            allResponses,
-          );
-        }
-      };
-
-      // Start listening to conversation updates
-      unsubscribeListener = conversationHandler.subscribe(
-        myConversationListener,
-      );
-
-      // Example: To stop this specific listener later, you could call:
-      // if (unsubscribeListener) {
-      //   unsubscribeListener();
-      // }
-    });
-</script>
-```
-
 ## Example Use Case: Reacting to Modalities
 
 A common use for `subscribe` is to detect and act upon custom modalities sent by NLX. This example looks for the Modalities to be defined in NLX: `MapDisplay`, `TrackOrder`
 
-```javascript
+```js
 // Assuming 'conversationHandler' is obtained
 
 const handleConversationUpdate = (allResponses, newResponse) => {
@@ -167,7 +100,7 @@ It's important to clean up subscriptions when they are no longer needed to preve
 
 The `subscribe` method returns a function. Call this function to remove that specific listener.
 
-```javascript
+```js
 const unsubscribeMe = conversationHandler.subscribe(mySpecificCallback);
 // ... later ...
 unsubscribeMe(); // This will stop mySpecificCallback from being called
@@ -177,7 +110,7 @@ unsubscribeMe(); // This will stop mySpecificCallback from being called
 
 To remove all previously registered subscribers from the `conversationHandler`:
 
-```javascript
+```js
 conversationHandler.unsubscribeAll();
 ```
 

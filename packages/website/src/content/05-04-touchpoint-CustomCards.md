@@ -93,99 +93,40 @@ In order to use the Carousel and CustomCard components you will need to have a [
 
 This defines a component `ItemCard` that takes `data` (representing `cardItemData`) and an optional `initialSelectedId` and `onSelect` handler.
 
-```javascript
-import {
-  html,
-  React,
-  BaseText,
-  CustomCard,
-  CustomCardImageRow,
-  CustomCardRow,
-} from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const ItemCard = ({ data, conversationHandler }) => {
-  const [isSelected, setIsSelected] = React.useState(null);
+  const [isSelected, setIsSelected] = React.useState(false);
 
   const handleClick = () => {
-    setIsSelected(true); // Visually select this card
-    if (onSelect) {
-      onSelect(data.id); // Notify parent about selection
-    }
-    conversationHandler.sendChoice(data.id, {
-      /* context */
-    });
+    setIsSelected(true);
+    conversationHandler.sendChoice(data.id);
   };
 
-  return (
-    <CustomCard selected={isSelected} onClick={handleClick}>
-      <CustomCardImageRow src={data.thumbnail} alt="Information Card Image" />
+  return html`
+    <CustomCard selected=${isSelected} onClick=${handleClick}>
+      <CustomCardImageRow
+        src=${data.thumbnail}
+        alt="Information Card Image"
+      />
       <CustomCardRow
-        left={<BaseText faded>{data.label}</BaseText>}
-        right={<BaseText>{data.value}</BaseText>}
+        left=${html`<BaseText faded>${data.label}</BaseText>`}
+        right=${html`<BaseText>${data.value}</BaseText>`}
       />
     </CustomCard>
-  );
+  `;
 };
-```
 
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  contentLoaded().then(() => {
-    const { html, React } = nlxai.touchpointUi;
-
-    const ItemCard = ({ data, conversationHandler }) => {
-      const [isSelected, setIsSelected] = React.useState(false);
-
-      const handleClick = () => {
-        setIsSelected(true);
-        conversationHandler.sendChoice(data.id);
-      };
-
-      return html`
-        <CustomCard selected=${isSelected} onClick=${handleClick}>
-          <CustomCardImageRow
-            src=${data.thumbnail}
-            alt="Information Card Image"
-          />
-          <CustomCardRow
-            left=${html`<BaseText faded>${data.label}</BaseText>`}
-            right=${html`<BaseText>${data.value}</BaseText>`}
-          />
-        </CustomCard>
-      `;
-    };
-
-    // Register component when creating touchpoint
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-      },
-      customModalities: {
-        ItemCardModality: ItemCard,
-      },
-    });
-  });
-</script>
+// Register component when creating touchpoint
+const touchpoint = await create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+  },
+  customModalities: {
+    ItemCardModality: ItemCard,
+  },
+});
 ```
 
 ## Related Components

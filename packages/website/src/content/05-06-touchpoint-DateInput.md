@@ -27,7 +27,7 @@ You can import the DateInput component once the package has been installed or ma
 
 ### Define onSumbit
 
-The Date Input Component expect a function passed via `onSubmit` that be called when the user finalizes their date selection.
+The Date Input Component expects a function passed via `onSubmit` that be called when the user finalizes their date selection.
 
 The [ConversationHandler](/headless-api-reference#interface-conversationhandler) method [sendSlots](/headless-api-reference#sendslots) is available through the `conversationHandler.sendSlots` to send the user's choice back to NLX.
 
@@ -43,67 +43,27 @@ In the examples below, the modality is named `DateInputExample` with a single st
 
 ### Example Date Input Component
 
-**Javascript**
-
-```javascript
-import { DateInput } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const DateInputExample = ({ data, conversationHandler }) => {
-  return (
+  return html`
     <DateInput
-      onSubmit={(date) =>
-        conversationHandler.sendSlots({ TouchpointDateInputResult: date })
-      }
+      onSubmit=${(date) =>
+        conversationHandler.sendSlots({ TouchpointDateInputResult: date })}
     />
-  );
+  `;
 };
-```
 
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  contentLoaded().then(() => {
-    const { html } = nlxai.touchpointUi;
-
-    const DateInputExample = ({ data, conversationHandler }) => {
-      return html`
-        <DateInput
-          onSubmit=${(date) =>
-            conversationHandler.sendSlots({ TouchpointDateInputResult: date })}
-        />
-      `;
-    };
-
-    // Register component when creating touchpoint
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-      },
-      customModalities: {
-        DateInputModality: DateInputExample,
-      },
-    });
-  });
-</script>
+// Register component when creating touchpoint
+const touchpoint = await create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+  },
+  customModalities: {
+    DateInputModality: DateInputExample,
+  },
+});
 ```
 
 ## Related Documents
