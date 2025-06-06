@@ -56,6 +56,7 @@ export const CustomCard: FC<CustomCardProps> = ({
       <a
         className={className}
         href={href}
+        onClick={onClick}
         {...(newTab ? { target: "_blank", rel: "noreferrer" } : {})}
       >
         {children}
