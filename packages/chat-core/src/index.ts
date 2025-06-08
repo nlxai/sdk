@@ -1,6 +1,6 @@
 import fetch from "isomorphic-fetch";
+import { adjust, equals } from "ramda";
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { equals, adjust } from "ramda";
 import { v4 as uuid } from "uuid";
 import packageJson from "../package.json";
 
@@ -522,23 +522,23 @@ export interface ApplicationRequest {
 export type BotRequest = ApplicationRequest;
 
 /**
- * Credentials to connect to a LiveKit channel
+ * Credentials to connect to a Voice channel
  */
-export interface LiveKitCredentials {
+export interface VoiceCredentials {
   /**
-   * LiveKit URL
+   * Voice Connection URL
    */
   url: string;
   /**
-   * LiveKit room name
+   * Voice room name
    */
   roomName: string;
   /**
-   * LiveKit token
+   * Voice token
    */
   token: string;
   /**
-   * LiveKit participant name
+   * Voice participant name
    */
   participantName: string;
 }
@@ -684,17 +684,17 @@ export interface ConversationHandler {
   sendContext: (context: Context) => Promise<void>;
 
   /**
-   * Obtain LiveKit credentials to run the experience in voice.
+   * Obtain Voice credentials to run the experience in voice.
    * @internal
-   * @returns LiveKit credentials in promise form
+   * @returns Voice credentials in promise form
    */
-  getLiveKitCredentials: (context?: Context) => Promise<LiveKitCredentials>;
+  getVoiceCredentials: (context?: Context) => Promise<VoiceCredentials>;
 
   /**
-   * Terminate LiveKit call
+   * Terminate Voice call
    * @internal
    */
-  terminateLiveKitCall: () => Promise<void>;
+  terminateVoiceCall: () => Promise<void>;
 
   /**
    * Send a combination of choice, slots, and intent in one request.
@@ -1378,7 +1378,7 @@ export function createConversation(config: Config): ConversationHandler {
     currentLanguageCode: () => {
       return state.languageCode;
     },
-    getLiveKitCredentials: async (context?: Context) => {
+    getVoiceCredentials: async (context?: Context) => {
       const url = normalizeToHttp(applicationUrl);
       const res = await fetch(`${url}-${state.languageCode}/requestToken`, {
         method: "POST",
@@ -1406,7 +1406,7 @@ export function createConversation(config: Config): ConversationHandler {
       }
       return data;
     },
-    terminateLiveKitCall: async () => {
+    terminateVoiceCall: async () => {
       const res = await fetch(`${fullApplicationHttpUrl()}/terminateVoice`, {
         method: "POST",
         headers: {

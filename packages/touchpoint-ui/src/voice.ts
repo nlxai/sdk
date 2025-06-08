@@ -1,15 +1,15 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import type { Context, ConversationHandler } from "@nlxai/chat-core";
+import { useDebouncedState } from "@react-hookz/web";
 import {
-  Room,
   ParticipantEvent,
+  Room,
   RoomEvent,
   Track,
   type Participant,
   type RemoteTrack,
 } from "livekit-client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDebouncedState } from "@react-hookz/web";
 
 type VoiceRoomState =
   | "inactive"
@@ -124,7 +124,7 @@ export const useVoice = ({
       // eslint-disable-next-line no-console
       console.warn(err);
     });
-    void handler.terminateLiveKitCall();
+    void handler.terminateVoiceCall();
     roomRef.current = null;
     // Not 100% sure this is necessary but it seems to help
     if (audioElementRef.current != null) {
@@ -147,7 +147,7 @@ export const useVoice = ({
     try {
       setRoomState("pending");
 
-      const creds = await handler.getLiveKitCredentials(context);
+      const creds = await handler.getVoiceCredentials(context);
 
       const handleActiveSpeakersChanged = (
         participants: Participant[],
@@ -199,7 +199,7 @@ export const useVoice = ({
       setRoomState("error");
       // eslint-disable-next-line no-console
       console.warn(err);
-      handler.terminateLiveKitCall().catch((err: any) => {
+      handler.terminateVoiceCall().catch((err: any) => {
         // eslint-disable-next-line no-console
         console.warn(err);
       });
