@@ -29,6 +29,7 @@ interface VoiceHookReturn {
   isUserSpeaking: boolean;
   isApplicationSpeaking: boolean;
   soundCheck: null | SoundCheck;
+  roomData: any;
 }
 
 interface UseVoiceParams {
@@ -58,6 +59,8 @@ export const useVoice = ({
   const audioElementRef = useRef<HTMLMediaElement | null>(null);
 
   const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
+
+  const [roomData, setRoomData] = useState<any>(null);
 
   useEffect(() => {
     const room = roomRef.current;
@@ -191,6 +194,25 @@ export const useVoice = ({
         disconnect();
       });
 
+      // Handle incoming data from the room/agent
+      room.on(RoomEvent.DataReceived, (payload, participant) => {
+        try {
+          const data = JSON.parse(new TextDecoder().decode(payload));
+          setRoomData({
+            data,
+            from: participant?.identity,
+            timestamp: Date.now(),
+          });
+        } catch (err) {
+          const rawData = new TextDecoder().decode(payload);
+          setRoomData({
+            data: rawData,
+            from: participant?.identity,
+            timestamp: Date.now(),
+          });
+        }
+      });
+
       await room.connect(creds.url, creds.token, { autoSubscribe: true });
       await room.localParticipant.setMicrophoneEnabled(true);
       await room.startAudio();
@@ -218,5 +240,6 @@ export const useVoice = ({
     isUserSpeaking,
     isApplicationSpeaking,
     soundCheck,
+    roomData,
   };
 };
