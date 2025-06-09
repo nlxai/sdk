@@ -55,115 +55,49 @@ The Carousel component is best used with multiple CustomCard components to creat
 
 ### Example Carousel Component
 
-**Javascript**
-
-```javascript
-import {
-  Carousel,
-  CustomCard,
-  CustomCardRow,
-  CustomCardImageRow,
-  BaseText,
-  React,
-} from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const ItemsCarousel = ({ data, conversationHandler }) => {
   const [selectedItemId, setSelectedItemId] = React.useState(null);
 
-  return (
+  return html`
     <Carousel>
-      {data.map((item) => (
-        <CustomCard
-          key={item.id}
-          selected={item.id === selectedItemId}
-          onClick={() => {
-            setSelectedItemId(item.id);
-            conversationHandler.sendChoice(item.id);
-          }}
-        >
-          <CustomCardImageRow src={item.thumbnail} alt="Image" />
-          <CustomCardRow
-            left={<BaseText faded>Label</BaseText>}
-            right={<BaseText>Value</BaseText>}
-          />
-          <CustomCardRow
-            left={<BaseText faded>Label</BaseText>}
-            right={<BaseText>Value</BaseText>}
-          />
-        </CustomCard>
-      ))}
+      ${data.map(
+        (item) => html`
+          <CustomCard
+            key=${item.id}
+            selected=${item.id === selectedItemId}
+            onClick=${() => {
+              setSelectedItemId(item.id);
+              conversationHandler.sendChoice(item.id);
+            }}
+          >
+            <CustomCardImageRow src=${item.thumbnail} alt="Image" />
+            <CustomCardRow
+              left=${html`<BaseText faded>Label</BaseText>`}
+              right=${html`<BaseText>Value</BaseText>`}
+            />
+            <CustomCardRow
+              left=${html`<BaseText faded>Label</BaseText>`}
+              right=${html`<BaseText>Value</BaseText>`}
+            />
+          </CustomCard>
+        `,
+      )}
     </Carousel>
-  );
+  `;
 };
-```
 
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  contentLoaded().then(() => {
-    const { html, React } = nlxai.touchpointUi;
-
-    const ItemsCarousel = ({ data, conversationHandler }) => {
-      const [selectedItemId, setSelectedItemId] = React.useState(null);
-
-      return html`
-        <Carousel>
-          ${data.map(
-            (item) => html`
-              <CustomCard
-                key=${item.id}
-                selected=${item.id === selectedItemId}
-                onClick=${() => {
-                  setSelectedItemId(item.id);
-                  conversationHandler.sendChoice(item.id);
-                }}
-              >
-                <CustomCardImageRow src=${item.thumbnail} alt="Image" />
-                <CustomCardRow
-                  left=${html`<BaseText faded>Label</BaseText>`}
-                  right=${html`<BaseText>Value</BaseText>`}
-                />
-                <CustomCardRow
-                  left=${html`<BaseText faded>Label</BaseText>`}
-                  right=${html`<BaseText>Value</BaseText>`}
-                />
-              </CustomCard>
-            `,
-          )}
-        </Carousel>
-      `;
-    };
-
-    // Register component when creating touchpoint
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-      },
-      customModalities: {
-        ItemsCarouselModality: ItemsCarousel,
-      },
-    });
-  });
-</script>
+// Register component when creating touchpoint
+const touchpoint = await create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+  },
+  customModalities: {
+    ItemsCarouselModality: ItemsCarousel,
+  },
+});
 ```
 
 ## Related Components
