@@ -161,7 +161,7 @@ export const useVoice = ({
       audioElementRef.current = null;
     }
     setRoomData(null);
-  }, []);
+  }, [setRoomData]);
 
   useEffect(() => {
     const handleBeforeUnload = (): void => {
