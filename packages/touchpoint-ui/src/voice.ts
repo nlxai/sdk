@@ -134,6 +134,7 @@ export const useVoice = ({
       audioElementRef.current.pause();
       audioElementRef.current = null;
     }
+    setRoomData(null);
   }, []);
 
   useEffect(() => {
