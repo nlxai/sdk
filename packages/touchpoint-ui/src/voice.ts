@@ -1,5 +1,9 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import type { Context, ConversationHandler } from "@nlxai/chat-core";
+import type {
+  Context,
+  ConversationHandler,
+  Modalities,
+} from "@nlxai/chat-core";
 import { useDebouncedState } from "@react-hookz/web";
 import {
   ParticipantEvent,
@@ -40,6 +44,28 @@ interface UseVoiceParams {
   context?: Context;
 }
 
+export interface ModalitiesWithContext {
+  modalities: Modalities;
+  from?: string;
+  timestamp: number;
+}
+
+const decodeModalities = (val: Uint8Array): Modalities | null => {
+  const decoded = new TextDecoder().decode(val);
+  if (decoded !== null && typeof decoded === "object") {
+    return decoded;
+  }
+  try {
+    const parsed = JSON.parse(decoded);
+    if (parsed === null || typeof decoded !== "object") {
+      throw new Error("Invalid parsed");
+    }
+    return parsed;
+  } catch (err) {
+    return null;
+  }
+};
+
 export const useVoice = ({
   active,
   micEnabled,
@@ -60,7 +86,7 @@ export const useVoice = ({
 
   const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
 
-  const [roomData, setRoomData] = useState<any>(null);
+  const [roomData, setRoomData] = useState<ModalitiesWithContext | null>(null);
 
   useEffect(() => {
     const room = roomRef.current;
@@ -197,21 +223,11 @@ export const useVoice = ({
 
       // Handle incoming data from the room/agent
       room.on(RoomEvent.DataReceived, (payload, participant) => {
-        try {
-          const data = JSON.parse(new TextDecoder().decode(payload));
-          setRoomData({
-            data,
-            from: participant?.identity,
-            timestamp: Date.now(),
-          });
-        } catch (err) {
-          const rawData = new TextDecoder().decode(payload);
-          setRoomData({
-            data: rawData,
-            from: participant?.identity,
-            timestamp: Date.now(),
-          });
-        }
+        setRoomData({
+          modalities: decodeModalities(payload) ?? {},
+          from: participant?.identity,
+          timestamp: Date.now(),
+        });
       });
 
       await room.connect(creds.url, creds.token, { autoSubscribe: true });

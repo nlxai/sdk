@@ -209,11 +209,9 @@ export const FullscreenVoice: FC<Props> = ({
         </div>
         {isApplicationSpeaking ? <Ripple className="rounded-full" /> : null}
       </div>
-      {roomData &&
-        (() => {
-          // Check if roomData contains modalities that match custom components
-          if (typeof roomData.data === "object" && roomData.data !== null) {
-            const modalityEntries = Object.entries(roomData.data);
+      {roomData !== null
+        ? (() => {
+            const modalityEntries = Object.entries(roomData.modalities);
             const customModalityComponents = modalityEntries
               .map(([key, value]) => {
                 const Component = customModalities[key];
@@ -238,20 +236,8 @@ export const FullscreenVoice: FC<Props> = ({
                 </div>
               );
             }
-          }
-
-          // Fallback to raw data display
-          return (
-            <div className="absolute top-4 left-4 right-4 bg-primary-5 rounded-inner p-3 text-sm text-primary-80">
-              <div className="font-medium mb-1">Modality:</div>
-              <div className="break-words">
-                {typeof roomData.data === "string"
-                  ? roomData.data
-                  : JSON.stringify(roomData.data, null, 2)}
-              </div>
-            </div>
-          );
-        })()}
+          })()
+        : null}
       <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2">
         {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
         <IconButton
