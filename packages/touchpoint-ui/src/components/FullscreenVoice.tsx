@@ -209,35 +209,36 @@ export const FullscreenVoice: FC<Props> = ({
         </div>
         {isApplicationSpeaking ? <Ripple className="rounded-full" /> : null}
       </div>
-      {roomData !== null
-        ? (() => {
-            const modalityEntries = Object.entries(roomData.modalities);
-            const customModalityComponents = modalityEntries
-              .map(([key, value]) => {
-                const Component = customModalities[key];
-                if (Component != null) {
-                  return (
-                    <Component
-                      key={key}
-                      data={value}
-                      conversationHandler={handler}
-                      enabled={true}
-                    />
-                  );
-                }
-                return null;
-              })
-              .filter(Boolean);
-
-            if (customModalityComponents.length > 0) {
+      {(() => {
+        if (roomData == null) {
+          return null;
+        }
+        const modalityEntries = Object.entries(roomData.modalities);
+        const customModalityComponents = modalityEntries
+          .map(([key, value]) => {
+            const Component = customModalities[key];
+            if (Component != null) {
               return (
-                <div className="absolute top-4 left-4 right-4">
-                  {customModalityComponents}
-                </div>
+                <Component
+                  key={key}
+                  data={value}
+                  conversationHandler={handler}
+                  enabled={true}
+                />
               );
             }
-          })()
-        : null}
+            return null;
+          })
+          .filter(Boolean);
+
+        if (customModalityComponents.length > 0) {
+          return (
+            <div className="absolute top-4 left-4 right-4">
+              {customModalityComponents}
+            </div>
+          );
+        }
+      })()}
       <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2">
         {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
         <IconButton

@@ -33,7 +33,7 @@ interface VoiceHookReturn {
   isUserSpeaking: boolean;
   isApplicationSpeaking: boolean;
   soundCheck: null | SoundCheck;
-  roomData: any;
+  roomData: null | ModalitiesWithContext;
 }
 
 interface UseVoiceParams {
