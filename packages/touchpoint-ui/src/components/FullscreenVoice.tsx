@@ -8,7 +8,11 @@ import {
 } from "react";
 import { clsx } from "clsx";
 import type { Context, ConversationHandler } from "@nlxai/chat-core";
-import type { ColorMode, InitializeConversation } from "../types";
+import type {
+  ColorMode,
+  InitializeConversation,
+  CustomModalityComponent,
+} from "../types";
 
 import { FullscreenError } from "./FullscreenError";
 import { Ripple } from "./Ripple";
@@ -35,6 +39,7 @@ interface Props {
   setActive: Dispatch<SetStateAction<boolean>>;
   context?: Context;
   initializeConversation: InitializeConversation;
+  customModalities?: Record<string, CustomModalityComponent<any>>;
 }
 
 export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
@@ -110,17 +115,23 @@ export const FullscreenVoice: FC<Props> = ({
   setActive,
   initializeConversation,
   context,
+  customModalities = {},
 }) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
 
-  const { roomState, soundCheck, isUserSpeaking, isApplicationSpeaking } =
-    useVoice({
-      active,
-      micEnabled,
-      speakersEnabled,
-      handler,
-      context,
-    });
+  const {
+    roomState,
+    soundCheck,
+    isUserSpeaking,
+    isApplicationSpeaking,
+    roomData,
+  } = useVoice({
+    active,
+    micEnabled,
+    speakersEnabled,
+    handler,
+    context,
+  });
 
   if (!active) {
     return (
@@ -198,6 +209,49 @@ export const FullscreenVoice: FC<Props> = ({
         </div>
         {isApplicationSpeaking ? <Ripple className="rounded-full" /> : null}
       </div>
+      {roomData &&
+        (() => {
+          // Check if roomData contains modalities that match custom components
+          if (typeof roomData.data === "object" && roomData.data !== null) {
+            const modalityEntries = Object.entries(roomData.data);
+            const customModalityComponents = modalityEntries
+              .map(([key, value]) => {
+                const Component = customModalities[key];
+                if (Component != null) {
+                  return (
+                    <Component
+                      key={key}
+                      data={value}
+                      conversationHandler={handler}
+                      enabled={true}
+                    />
+                  );
+                }
+                return null;
+              })
+              .filter(Boolean);
+
+            if (customModalityComponents.length > 0) {
+              return (
+                <div className="absolute top-4 left-4 right-4">
+                  {customModalityComponents}
+                </div>
+              );
+            }
+          }
+
+          // Fallback to raw data display
+          return (
+            <div className="absolute top-4 left-4 right-4 bg-primary-5 rounded-inner p-3 text-sm text-primary-80">
+              <div className="font-medium mb-1">Modality:</div>
+              <div className="break-words">
+                {typeof roomData.data === "string"
+                  ? roomData.data
+                  : JSON.stringify(roomData.data, null, 2)}
+              </div>
+            </div>
+          );
+        })()}
       <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2">
         {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
         <IconButton

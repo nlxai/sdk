@@ -338,6 +338,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             colorMode={colorMode}
             className="flex-grow"
             context={props.initialContext}
+            customModalities={customModalities}
           />
         )}
       </div>
