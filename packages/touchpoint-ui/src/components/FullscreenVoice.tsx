@@ -164,7 +164,7 @@ export const FullscreenVoice: FC<Props> = ({
         >
           <Touchpoint className="w-20 h-20 text-primary-20" />
           <div className="text-center">
-            <h3 className="text-xl mb-2">The call has ended</h3>
+            <h3 className="text-xl mb-2">The conversation has ended</h3>
             <p>You can close this panel now or restart.</p>
           </div>
         </div>
