@@ -253,6 +253,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           }
           renderCollapse={props.onClose != null}
           collapse={(event) => {
+            if (input === "voice") {
+              handler.reset({ clearResponses: true });
+            }
             setVoiceActive(false);
             onClose(event);
           }}
