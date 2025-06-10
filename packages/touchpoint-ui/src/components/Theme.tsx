@@ -103,7 +103,7 @@ const darkModeCustomProperties: Theme = {
   errorSecondary: "rgb(94, 4, 4)",
 };
 
-const inteligentMerge = (theme: Partial<Theme>, base: Theme): Theme => {
+const intelligentMerge = (theme: Partial<Theme>, base: Theme): Theme => {
   const computed: Partial<Theme> = {};
 
   if (theme.accent != null && theme.accent20 == null) {
@@ -153,7 +153,7 @@ export const CustomPropertiesContainer: FC<{
   theme?: Partial<Theme>;
   children?: ReactNode;
 }> = ({ colorMode, children, theme, className }) => {
-  const themeWithOverrides: Theme = inteligentMerge(
+  const themeWithOverrides: Theme = intelligentMerge(
     theme ?? {},
     colorMode === "dark" ? darkModeCustomProperties : lightModeCustomProperties,
   );
