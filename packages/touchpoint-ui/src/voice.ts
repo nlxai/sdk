@@ -2,7 +2,7 @@
 import type {
   Context,
   ConversationHandler,
-  Modalities,
+  ModalityPayloads,
 } from "@nlxai/chat-core";
 import { useDebouncedState } from "@react-hookz/web";
 import {
@@ -45,12 +45,12 @@ interface UseVoiceParams {
 }
 
 export interface ModalitiesWithContext {
-  modalities: Modalities;
+  modalities: ModalityPayloads;
   from?: string;
   timestamp: number;
 }
 
-const decodeModalities = (val: Uint8Array): Modalities | null => {
+const decodeModalities = (val: Uint8Array): ModalityPayloads | null => {
   const decoded = new TextDecoder().decode(val);
   if (decoded !== null && typeof decoded === "object") {
     return decoded;

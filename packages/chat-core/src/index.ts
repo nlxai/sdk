@@ -104,7 +104,7 @@ export interface BotResponsePayload {
   /**
    * If configured, the node's modalities and their payloads.
    */
-  modalities?: Modalities;
+  modalities?: ModalityPayloads;
   /**
    * If the node is set to send context, the whole context associated with the conversation.
    */
@@ -115,7 +115,7 @@ export interface BotResponsePayload {
  * Modalities data
  * TODO: make it generic
  */
-export type Modalities = Record<string, any>;
+export type ModalityPayloads = Record<string, any>;
 
 /**
  * Global state about the current conversation
