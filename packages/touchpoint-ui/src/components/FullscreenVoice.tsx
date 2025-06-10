@@ -7,12 +7,8 @@ import {
   type ReactNode,
 } from "react";
 import { clsx } from "clsx";
-import type {
-  Context,
-  ConversationHandler,
-  InitializeConversation,
-} from "@nlxai/chat-core";
-import { type ColorMode } from "../types";
+import type { Context, ConversationHandler } from "@nlxai/chat-core";
+import type { ColorMode, InitializeConversation } from "../types";
 
 import { FullscreenError } from "./FullscreenError";
 import { Ripple } from "./Ripple";
