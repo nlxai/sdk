@@ -264,8 +264,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           }}
           reset={() => {
             handler.reset({ clearResponses: true });
-            props.initializeConversation(handler);
-
+            if (input !== "voice") {
+              props.initializeConversation(handler);
+            }
             setVoiceActive(false);
           }}
         />
@@ -329,6 +330,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         ) : (
           <FullscreenVoice
             active={voiceActive}
+            initializeConversation={props.initializeConversation}
             setActive={setVoiceActive}
             brandIcon={props.brandIcon}
             handler={handler}
