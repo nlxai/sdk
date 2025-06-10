@@ -253,13 +253,20 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           }
           renderCollapse={props.onClose != null}
           collapse={(event) => {
+            // In text mode, collapsing should leave the conversation intact so re-expanding fully resumes it.
+            // In voice, the behavior is designed to be consistent with voice mini, where the close button also hangs up the call.
+            // Subsequently re-expanding the experience should start a brand new call.
+            if (input === "voice") {
+              handler.reset({ clearResponses: true });
+            }
             setVoiceActive(false);
             onClose(event);
           }}
           reset={() => {
             handler.reset({ clearResponses: true });
-            props.initializeConversation(handler);
-
+            if (input !== "voice") {
+              props.initializeConversation(handler);
+            }
             setVoiceActive(false);
           }}
         />
@@ -323,6 +330,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         ) : (
           <FullscreenVoice
             active={voiceActive}
+            initializeConversation={props.initializeConversation}
             setActive={setVoiceActive}
             brandIcon={props.brandIcon}
             handler={handler}
