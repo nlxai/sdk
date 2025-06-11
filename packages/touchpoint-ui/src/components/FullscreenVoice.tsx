@@ -133,7 +133,7 @@ export const FullscreenVoice: FC<Props> = ({
             Icon={ArrowForward}
             onClick={() => {
               setActive(true);
-              initializeConversation(handler);
+              initializeConversation(handler, context);
             }}
           />
         </div>
