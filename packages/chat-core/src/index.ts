@@ -145,6 +145,36 @@ export interface BotResponseMetadata {
    * Whether the client should poll for more application responses.
    */
   hasPendingDataRequest?: boolean;
+  /**
+   * Knowledge base sources
+   */
+  sources?: KnowledgeBaseResponseSource[];
+}
+
+/**
+ * Response for knowlege base sources
+ */
+export interface KnowledgeBaseResponseSource {
+  /**
+   * File name
+   */
+  fileName?: string;
+  /**
+   * Page number
+   */
+  pageNumber?: number;
+  /**
+   * Content
+   */
+  content?: string;
+  /**
+   * Metadata
+   */
+  metadata?: Record<string, any>;
+  /**
+   * Presigned URL for direct retrieval
+   */
+  presignedUrl?: string;
 }
 
 /**
