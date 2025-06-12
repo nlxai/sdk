@@ -2,8 +2,13 @@
 - [Core Concepts](#core-concepts)
   - [Bidirectional Communication](#bidirectional-communication)
   - [Voice Commands](#voice-commands)
-  - [Room Data and Modalities](#room-data-and-modalities)
 - [Sending Page Context](#sending-page-context)
+  - [Understanding analyzePageForms](#understanding-analyzepageforms)
+    - [context Object](#context-object)
+    - [formElements Object](#formelements-object)
+  - [Sending Context to NLX](#sending-context-to-nlx)
+  - [When to Send Context](#when-to-send-context)
+  - [Best Practices](#best-practices)
 - [Handling Voice Commands](#handling-voice-commands)
 - [Command Handlers](#command-handlers)
   - [Navigation Commands](#navigation-commands)
@@ -56,23 +61,82 @@ Enhanced Voice Plus supports three command types:
 | `input`        | Form field updates                          | Fill form fields with voice data     |
 | `custom`       | Application-specific                        | Custom commands defined by your flow |
 
-### Room Data and Modalities
-
-The voice agent can send rich data back to your application through room data events. This enables the agent to:
-
-- Display charts, maps, or custom visualizations
-- Update UI components dynamically
-- Send structured data beyond simple commands
-
 ## Sending Page Context
 
 Provide NLX with information about your page structure using the Voice Plus context API. This powers the input / formfill commands for NLX to have context of which fields are available and their types.
+
+### Understanding analyzePageForms
+
+The `analyzePageForms` function scans your page for form elements and returns two important objects:
 
 ```javascript
 import { create, analyzePageForms } from "@nlxai/touchpoint-ui";
 
 // Analyze forms on the current page
 const { context, formElements } = analyzePageForms();
+```
+
+#### context Object
+
+A structured representation of your forms for NLX to understand - This context is sent to NLX so it knows what fields are available, their types, and any constraints. NLX uses this to understand user requests like "fill in my email" or "enter John in the first name field". You shouldn't need to interact with or modify this object.
+
+**Example**
+
+```javascript
+{
+  forms: [
+    {
+      id: "contact-form",
+      fields: [
+        {
+          id: "firstName",
+          name: "firstName",
+          type: "text",
+          placeholder: "First Name",
+          label: "First Name",
+          required: false
+        },
+        {
+          id: "email",
+          name: "email", 
+          type: "email",
+          placeholder: "Email",
+          label: "Email",
+          required: true
+        }
+        // ... more fields
+      ]
+    }
+  ]
+}
+```
+
+**Purpose**:
+
+#### formElements Object
+A key-value mapping of form field IDs to their DOM elements. Store this reference to quickly access form elements when processing voice commands. The IDs in this object will match the field IDs sent back by NLX in voice commands.
+
+```javascript
+{
+  "firstName": HTMLInputElement,
+  "lastName": HTMLInputElement,
+  "email": HTMLInputElement,
+  "phone": HTMLInputElement,
+  "message": HTMLTextAreaElement
+}
+```
+
+
+### Sending Context to NLX
+
+```javascript
+import { create, analyzePageForms } from "@nlxai/touchpoint-ui";
+
+// Analyze forms on the current page
+const { context, formElements } = analyzePageForms();
+
+// Store formElements for later use when handling commands
+window.formElements = formElements; // or use state management
 
 // Send form context specifically for voice plus
 touchpoint.conversationHandler.sendVoicePlusContext({
@@ -82,6 +146,20 @@ touchpoint.conversationHandler.sendVoicePlusContext({
 // Or send general context without triggering a message
 touchpoint.conversationHandler.sendContext(context);
 ```
+
+### When to Send Context
+
+1. **On page load** - Send initial context after touchpoint initialization
+2. **On route changes** - In SPAs, resend context when navigating to new pages
+3. **After dynamic form updates** - If forms are added/removed dynamically
+4. **After significant DOM changes** - When form structure changes
+
+### Best Practices
+
+- Always store the `formElements` reference for use in your command handlers
+- Re-analyze and resend context when your page structure changes
+- Include meaningful IDs and labels on form fields for better voice recognition
+- Consider adding `aria-label` attributes for better accessibility and voice context
 
 ## Handling Voice Commands
 
@@ -144,33 +222,55 @@ function handleNavigation(action, data) {
 
 ### Form Fill Commands
 
-Automatically fill form fields based on voice input:
+Automatically fill form fields based on voice input. The voice agent sends back commands with field IDs that match the IDs from your `formElements` object:
 
 ```javascript
 import { create, analyzePageForms } from "@nlxai/touchpoint-ui";
 
-// Analyze and store form elements
+// Analyze and store form elements at initialization
 const { context, formElements } = analyzePageForms();
 
 // Send context to enable voice form filling
 touchpoint.conversationHandler.sendContext(context);
 
 function handleFormInput(command) {
-  // Handle the new fields array structure
+  // Voice command structure:
+  // {
+  //   classification: "input",
+  //   fields: [
+  //     { id: "firstName", value: "John" },
+  //     { id: "email", value: "john@example.com" }
+  //   ]
+  // }
+  
   if (!command.fields) return;
 
   command.fields.forEach((field) => {
+    // Use the stored formElements to find the DOM element
     if (formElements[field.id]) {
       const element = formElements[field.id];
       element.value = field.value;
 
-      // Trigger events for framework compatibility
+      // Optional: Trigger events for framework compatibility
+      // Uncomment if your framework needs these events
       // element.dispatchEvent(new Event('input', { bubbles: true }));
       // element.dispatchEvent(new Event('change', { bubbles: true }));
+      
+      // Optional: Add visual feedback
+      element.classList.add('voice-updated');
+      setTimeout(() => element.classList.remove('voice-updated'), 2000);
+    } else {
+      console.warn(`Field with id "${field.id}" not found in formElements`);
     }
   });
 }
 ```
+
+**Important Notes:**
+- The `field.id` in the command will match the element IDs in your `formElements` object
+- Always check if the element exists before trying to update it
+- Some frameworks (React, Vue) may require dispatching events to trigger updates
+- Consider adding visual feedback to show which fields were updated by voice
 
 ### Custom Commands
 
