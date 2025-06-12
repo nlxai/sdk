@@ -34,36 +34,33 @@ export const MessageChoices: FC<{
   message: BotMessage;
   responseIndex: number;
   messageIndex: number;
-  className?: string;
-}> = ({ handler, message, responseIndex, messageIndex, className }) => {
+}> = ({ handler, message, responseIndex, messageIndex }) => {
   return message.choices.length > 0 ? (
-    <div className={className}>
-      <ul className="space-y-2">
-        {message.choices.map((choice, key) =>
-          message.selectedChoiceId == null ||
-          choice.choiceId === message.selectedChoiceId ? (
-            <li key={key} className="w-full">
-              <TextButton
-                type="ghost"
-                Icon={ArrowForward}
-                onClick={
-                  message.selectedChoiceId == null
-                    ? () => {
-                        handler.sendChoice(
-                          choice.choiceId,
-                          {},
-                          { responseIndex, messageIndex },
-                        );
-                      }
-                    : undefined
-                }
-                label={choice.choiceText}
-              />
-            </li>
-          ) : null,
-        )}
-      </ul>
-    </div>
+    <ul className="space-y-2 max-h-[40vh] overflow-auto no-scrollbar">
+      {message.choices.map((choice, key) =>
+        message.selectedChoiceId == null ||
+        choice.choiceId === message.selectedChoiceId ? (
+          <li key={key} className="w-full">
+            <TextButton
+              type="ghost"
+              Icon={ArrowForward}
+              onClick={
+                message.selectedChoiceId == null
+                  ? () => {
+                      handler.sendChoice(
+                        choice.choiceId,
+                        {},
+                        { responseIndex, messageIndex },
+                      );
+                    }
+                  : undefined
+              }
+              label={choice.choiceText}
+            />
+          </li>
+        ) : null,
+      )}
+    </ul>
   ) : null;
 };
 
