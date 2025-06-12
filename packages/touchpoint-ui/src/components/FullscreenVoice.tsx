@@ -110,10 +110,11 @@ const Container: FC<{ className?: string; children: ReactNode }> = ({
 );
 
 export const VoiceModalities: FC<{
+  Wrapper?: FC<{ children: ReactNode }>;
   roomData: ModalitiesWithContext;
-  customModalities?: Record<string, CustomModalityComponent<any>>;
+  customModalities: Record<string, CustomModalityComponent<any>>;
   handler: ConversationHandler;
-}> = ({ roomData, customModalities = {}, handler }) => {
+}> = ({ Wrapper, roomData, customModalities, handler }) => {
   const modalityEntries = Object.entries(roomData.modalities);
   const customModalityComponents = modalityEntries
     .map(([key, value]) => {
@@ -133,13 +134,17 @@ export const VoiceModalities: FC<{
     .filter(Boolean);
 
   if (customModalityComponents.length > 0) {
-    return (
-      <div className="absolute top-4 left-4 right-4">
-        {customModalityComponents}
-      </div>
+    return Wrapper == null ? (
+      customModalityComponents
+    ) : (
+      <Wrapper>{customModalityComponents}</Wrapper>
     );
   }
 };
+
+const VoiceModalitiesWrapper: FC<{ children: ReactNode }> = ({ children }) => (
+  <div className="absolute top-4 left-4 right-4">{children}</div>
+);
 
 export const FullscreenVoice: FC<Props> = ({
   handler,
@@ -247,6 +252,7 @@ export const FullscreenVoice: FC<Props> = ({
       </div>
       {roomData != null ? (
         <VoiceModalities
+          Wrapper={VoiceModalitiesWrapper}
           roomData={roomData}
           customModalities={customModalities}
           handler={handler}

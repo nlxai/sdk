@@ -212,6 +212,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           onClose={() => {
             setIsExpanded(false);
           }}
+          customModalities={customModalities}
         />
       </CustomPropertiesContainer>
     );

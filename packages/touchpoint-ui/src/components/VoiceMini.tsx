@@ -3,20 +3,24 @@ import type { Context, ConversationHandler } from "@nlxai/chat-core";
 import { type ReactNode, useState, type FC } from "react";
 import { clsx } from "clsx";
 
+import type { CustomModalityComponent } from "../types";
 import { useVoice } from "../voice";
 import { LoaderAnimation } from "./ui/Loader";
 import { Ripple } from "./Ripple";
 import { IconButton } from "./ui/IconButton";
 import { ArrowForward, Close, Mic, Volume, VolumeOff } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
-import { SoundCheckUi } from "./FullscreenVoice";
+import { SoundCheckUi, VoiceModalities } from "./FullscreenVoice";
 import { ErrorMessage } from "./ErrorMessage";
+
+const containerClass =
+  "bg-background text-primary-80 rounded-outer p-2 w-[calc(100vw-16px)] max-w-[360px] space-y-4";
 
 const Container: FC<{ children: ReactNode; onClose: () => void }> = ({
   children,
   onClose,
 }) => (
-  <div className="bg-background rounded-outer p-2 w-[calc(100%-16px)] max-w-[360px] space-y-4">
+  <div className={containerClass}>
     <div className="flex items-center justify-end ">
       <IconButton onClick={onClose} Icon={Close} type="ghost" label="Close" />
     </div>
@@ -49,24 +53,41 @@ const CloseButton: FC<{ onClick: () => void }> = ({ onClick }) => {
   );
 };
 
+const VoiceModalitiesWrapper: FC<{ children: ReactNode }> = ({ children }) => (
+  <div
+    className={clsx(
+      containerClass,
+      "absolute right-0 -top-2 transform -translate-y-full",
+    )}
+  >
+    {children}
+  </div>
+);
+
 export const VoiceMini: FC<{
+  customModalities: Record<string, CustomModalityComponent<any>>;
   handler: ConversationHandler;
   onClose: () => void;
   context?: Context;
-}> = ({ handler, context, onClose }) => {
+}> = ({ handler, context, onClose, customModalities }) => {
   const [active, setActive] = useState<boolean>(false);
 
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
   const [speakersEnabled, setSpeakersEnabled] = useState<boolean>(true);
 
-  const { roomState, soundCheck, isUserSpeaking, isApplicationSpeaking } =
-    useVoice({
-      active,
-      micEnabled,
-      speakersEnabled,
-      handler,
-      context,
-    });
+  const {
+    roomState,
+    soundCheck,
+    isUserSpeaking,
+    isApplicationSpeaking,
+    roomData,
+  } = useVoice({
+    active,
+    micEnabled,
+    speakersEnabled,
+    handler,
+    context,
+  });
 
   if (!active) {
     return (
@@ -154,6 +175,14 @@ export const VoiceMini: FC<{
           onClose();
         }}
       />
+      {roomData != null ? (
+        <VoiceModalities
+          Wrapper={VoiceModalitiesWrapper}
+          roomData={roomData}
+          customModalities={customModalities}
+          handler={handler}
+        />
+      ) : null}
     </CompactContainer>
   );
 };
