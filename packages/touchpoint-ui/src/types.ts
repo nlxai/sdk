@@ -4,7 +4,7 @@ import type {
   ConversationHandler,
   Context,
 } from "@nlxai/chat-core";
-import { type FC } from "react";
+import { type ComponentType } from "react";
 
 /**
  * Window size configuration
@@ -38,7 +38,7 @@ export interface ChoiceMessage {
  * Custom Modalities allow rendering of rich components from nodes.
  * See: https://docs.studio.nlx.ai/build/resources/modalities
  */
-export type CustomModalityComponent<Data> = FC<{
+export type CustomModalityComponent<Data> = ComponentType<{
   /**
    * The payload of the Custom Modality. The schema is defined in Dialog Studio settings.
    */
@@ -227,7 +227,7 @@ export interface TouchpointConfiguration {
   /**
    * Optional custom modality components to render in Touchpoint
    */
-  customModalities?: Record<string, CustomModalityComponent<any>>;
+  customModalities?: Record<string, CustomModalityComponent<unknown>>;
   /**
    * Custom conversation init method. Defaults to sending the welcome intent
    * @param handler - the conversation handler.
