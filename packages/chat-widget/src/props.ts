@@ -48,7 +48,7 @@ export type StorageType = "localStorage" | "sessionStorage";
  * Custom Modalities allow rendering of rich components from nodes.
  * See: https://docs.studio.nlx.ai/build/resources/modalities
  */
-export type CustomModalityComponent<T = any> = ComponentType<{
+export type CustomModalityComponent<T = unknown> = ComponentType<{
   /**
    * The name of the Modality as defined in Dialog Studio settings.
    */
