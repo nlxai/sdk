@@ -57,7 +57,7 @@ const decodeModalities = (val: Uint8Array): ModalityPayloads | null => {
   }
   try {
     const parsed = JSON.parse(decoded);
-    if (parsed === null || typeof decoded !== "object") {
+    if (parsed === null || typeof parsed !== "object") {
       throw new Error("Invalid parsed");
     }
     return parsed;
