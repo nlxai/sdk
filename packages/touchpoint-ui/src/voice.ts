@@ -1,5 +1,9 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import type { Context, ConversationHandler } from "@nlxai/chat-core";
+import type {
+  Context,
+  ConversationHandler,
+  ModalityPayloads,
+} from "@nlxai/chat-core";
 import { useDebouncedState } from "@react-hookz/web";
 import {
   ParticipantEvent,
@@ -29,6 +33,7 @@ interface VoiceHookReturn {
   isUserSpeaking: boolean;
   isApplicationSpeaking: boolean;
   soundCheck: null | SoundCheck;
+  roomData: null | ModalitiesWithContext;
 }
 
 interface UseVoiceParams {
@@ -38,6 +43,28 @@ interface UseVoiceParams {
   handler: ConversationHandler;
   context?: Context;
 }
+
+export interface ModalitiesWithContext {
+  modalities: ModalityPayloads;
+  from?: string;
+  timestamp: number;
+}
+
+const decodeModalities = (val: Uint8Array): ModalityPayloads | null => {
+  const decoded = new TextDecoder().decode(val);
+  if (decoded !== null && typeof decoded === "object") {
+    return decoded;
+  }
+  try {
+    const parsed = JSON.parse(decoded);
+    if (parsed === null || typeof parsed !== "object") {
+      throw new Error("Invalid parsed");
+    }
+    return parsed;
+  } catch (err) {
+    return null;
+  }
+};
 
 export const useVoice = ({
   active,
@@ -58,6 +85,8 @@ export const useVoice = ({
   const audioElementRef = useRef<HTMLMediaElement | null>(null);
 
   const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
+
+  const [roomData, setRoomData] = useState<ModalitiesWithContext | null>(null);
 
   useEffect(() => {
     const room = roomRef.current;
@@ -131,7 +160,8 @@ export const useVoice = ({
       audioElementRef.current.pause();
       audioElementRef.current = null;
     }
-  }, []);
+    setRoomData(null);
+  }, [setRoomData]);
 
   useEffect(() => {
     const handleBeforeUnload = (): void => {
@@ -191,6 +221,15 @@ export const useVoice = ({
         disconnect();
       });
 
+      // Handle incoming data from the room/agent
+      room.on(RoomEvent.DataReceived, (payload, participant) => {
+        setRoomData({
+          modalities: decodeModalities(payload) ?? {},
+          from: participant?.identity,
+          timestamp: Date.now(),
+        });
+      });
+
       await room.connect(creds.url, creds.token, { autoSubscribe: true });
       await room.localParticipant.setMicrophoneEnabled(true);
       await room.startAudio();
@@ -218,5 +257,6 @@ export const useVoice = ({
     isUserSpeaking,
     isApplicationSpeaking,
     soundCheck,
+    roomData,
   };
 };

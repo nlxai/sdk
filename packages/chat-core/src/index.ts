@@ -104,12 +104,17 @@ export interface BotResponsePayload {
   /**
    * If configured, the node's modalities and their payloads.
    */
-  modalities?: Record<string, any>;
+  modalities?: ModalityPayloads;
   /**
    * If the node is set to send context, the whole context associated with the conversation.
    */
   context?: Context;
 }
+
+/**
+ * Payloads for modalities as a key-value pair by modality name
+ */
+export type ModalityPayloads = Record<string, any>;
 
 /**
  * Global state about the current conversation

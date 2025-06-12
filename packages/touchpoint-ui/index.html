@@ -89,20 +89,96 @@
       </p>
     </main>
     <script type="module">
-      import { create } from "/src/index.tsx";
-      const touchpoint = await create({
-        config: {
-          applicationUrl:
-            "https://bots.dev.studio.nlx.ai/c/kQwAgKCx86vJ4r0PUSxYR/ON4zgwWnVofsz2NaiD38Z",
-          headers: {
-            "nlx-api-key": "XDE2Th70VhBSlhz2YA",
-          },
-          userId: "1234-5678",
-          languageCode: "en-US",
+      import { create, html, Icons } from "/src/index.tsx";
+
+      // Example custom modality component for voice
+      const ExampleCard = ({ data, conversationHandler }) => {
+        return html`
+          <div className="bg-accent rounded-inner p-4 text-white shadow-lg">
+            <div className="flex items-center gap-2 mb-2">
+              <${Icons.Touchpoint} className="w-5 h-5" />
+              <span className="font-medium">Voice Modality</span>
+            </div>
+            <div className="space-y-2">
+              <div className="text-sm opacity-90">
+                Title: ${data.title || "No title"}
+              </div>
+              <div className="text-sm opacity-90">
+                Message: ${data.message || "No message"}
+              </div>
+              ${data.showButton
+                ? html`
+                    <button
+                      className="mt-3 px-3 py-1 bg-white text-accent rounded text-sm font-medium hover:bg-gray-100"
+                      onClick=${() =>
+                        conversationHandler.sendText(
+                          "Button clicked from voice modality!",
+                        )}
+                    >
+                      ${data.buttonText || "Click me"}
+                    </button>
+                  `
+                : ""}
+            </div>
+          </div>
+        `;
+      };
+
+      // Another example - simple data display
+      const DataDisplay = ({ data }) => {
+        return html`
+          <div
+            className="bg-primary-5 rounded-inner p-3 text-primary-80 border-l-4 border-accent"
+          >
+            <div className="font-medium text-accent mb-1">Data Received</div>
+            <pre className="text-xs overflow-auto">
+${JSON.stringify(data, null, 2)}</pre
+            >
+          </div>
+        `;
+      };
+
+      const config = {
+        applicationUrl:
+          "https://apps.nlx.ai/c/C8za89Z8bS1cw02DHiXfA/rkq9b2D1RHkM5QDWHbWo5",
+        headers: {
+          "nlx-api-key": "eYnAnPAcF9ioyU0oH79ByP5VnhXdV9SF",
         },
+        userId: "+19208331234",
+        languageCode: "en-US",
+      };
+
+      config.applicationUrl = config.applicationUrl.replace(
+        /(https:\/\/bots\.dev\.studio\.nlx\.ai)|(https:\/\/apps\.nlx\.ai)/,
+        "http://localhost:3000",
+      );
+      const touchpoint = await create({
+        config,
         input: "voice",
+        // Configure custom modality components
+        customModalities: {
+          // This will render when roomData contains { "ExampleCard": { ... } }
+          ExampleCard,
+          // This will render when roomData contains { "DataDisplay": { ... } }
+          DataDisplay,
+          // You can add more modalities here
+        },
       });
       touchpoint.expanded = true;
+
+      // Example: Simulate receiving modality data (for testing)
+      // In real usage, this data would come from the voice bot/agent
+      setTimeout(() => {
+        console.log(
+          "To test custom modalities, send data like this from your voice agent:",
+        );
+        console.log(
+          '{ "ExampleCard": { "title": "Hello World", "message": "This is a custom modality!", "showButton": true, "buttonText": "Say Hi" } }',
+        );
+        console.log(
+          '{ "DataDisplay": { "timestamp": "2024-01-01", "status": "active", "count": 42 } }',
+        );
+      }, 2000);
     </script>
   </body>
 </html>
