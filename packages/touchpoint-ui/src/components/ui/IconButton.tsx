@@ -65,7 +65,8 @@ const coverupClass =
 const overlayClass =
   "bg-background backdrop-blur text-primary-80 enabled:hover:before:bg-primary-10 focus:before:bg-primary-10 enabled:active:before:bg-secondary-10 disabled:bg-secondary-20 disabled:text-primary-20";
 
-const errorClass = "bg-error-primary text-secondary-80";
+const errorClass =
+  "bg-error-primary text-secondary-80 enabled:hover:before:bg-primary-10";
 
 // Used in <summary> tags
 export const UnsemanticIconButton: FC<{

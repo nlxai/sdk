@@ -16,7 +16,7 @@ const Container: FC<{ children: ReactNode; onClose: () => void }> = ({
   children,
   onClose,
 }) => (
-  <div className="bg-background rounded-outer p-2 max-w-[320px] space-y-4">
+  <div className="bg-background rounded-outer p-2 w-[calc(100%-16px)] max-w-[360px] space-y-4">
     <div className="flex items-center justify-end ">
       <IconButton onClick={onClose} Icon={Close} type="ghost" label="Close" />
     </div>

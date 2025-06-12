@@ -90,7 +90,12 @@
     </p>
   </main>
   <script type="module">
-    import {create} from "/src/index.tsx";
+    import {create, html} from "/src/index.tsx";
+    const Something = () => {
+      return html`
+        <p>Hello, world</p>
+      `;
+    };
     const touchpoint = await create({
       config: {
         applicationUrl:
@@ -101,8 +106,10 @@
         userId: "1234-5678",
         languageCode: "en-US",
       },
-      windowSize: "full",
       input: "voiceMini",
+      customModalities: {
+        Something,
+      },
       initializeConversation: () => { }
     });
   </script>

@@ -86,7 +86,10 @@ export const useVoice = ({
 
   const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
 
-  const [roomData, setRoomData] = useState<ModalitiesWithContext | null>(null);
+  const [roomData, setRoomData] = useState<ModalitiesWithContext | null>({
+    modalities: { Something: {} },
+    timestamp: 0,
+  });
 
   useEffect(() => {
     const room = roomRef.current;
