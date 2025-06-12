@@ -67,17 +67,9 @@ const overlayClass =
 
 const errorClass = "bg-error-primary text-secondary-80";
 
-/**
- * Used in <summary> tags
- */
+// Used in <summary> tags
 export const UnsemanticIconButton: FC<{
-  /**
-   * Visual style variant of the button. One of IconButtonType.
-   */
   type: IconButtonType;
-  /**
-   * Icon component to display inside the button
-   */
   Icon: FC<IconProps>;
 }> = ({ type, Icon }) => {
   return (
