@@ -1,9 +1,10 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type FC, Fragment, useEffect, useRef } from "react";
+import { type FC, Fragment, useEffect, useRef, useState } from "react";
 import {
   type Response,
   type ConversationHandler,
   type BotMessage,
+  type KnowledgeBaseResponseSource,
 } from "@nlxai/chat-core";
 import { clsx } from "clsx";
 import { marked } from "marked";
@@ -11,7 +12,8 @@ import { marked } from "marked";
 import { ErrorMessage } from "./ErrorMessage";
 import { LoaderAnimation, Loader } from "./ui/Loader";
 import { TextButton } from "./ui/TextButton";
-import { ArrowForward } from "./ui/Icons";
+import { ArrowForward, ArrowRight, ArrowDown, OpenLink } from "./ui/Icons";
+import { UnsemanticIconButton } from "./ui/IconButton";
 import { type CustomModalityComponent, type ColorMode } from "../types";
 
 export interface MessagesProps {
@@ -34,36 +36,33 @@ export const MessageChoices: FC<{
   message: BotMessage;
   responseIndex: number;
   messageIndex: number;
-  className?: string;
-}> = ({ handler, message, responseIndex, messageIndex, className }) => {
+}> = ({ handler, message, responseIndex, messageIndex }) => {
   return message.choices.length > 0 ? (
-    <div className={className}>
-      <ul className="space-y-2">
-        {message.choices.map((choice, key) =>
-          message.selectedChoiceId == null ||
-          choice.choiceId === message.selectedChoiceId ? (
-            <li key={key} className="w-full">
-              <TextButton
-                type="ghost"
-                Icon={ArrowForward}
-                onClick={
-                  message.selectedChoiceId == null
-                    ? () => {
-                        handler.sendChoice(
-                          choice.choiceId,
-                          {},
-                          { responseIndex, messageIndex },
-                        );
-                      }
-                    : undefined
-                }
-                label={choice.choiceText}
-              />
-            </li>
-          ) : null,
-        )}
-      </ul>
-    </div>
+    <ul className="space-y-2 max-h-[40vh] overflow-auto no-scrollbar">
+      {message.choices.map((choice, key) =>
+        message.selectedChoiceId == null ||
+        choice.choiceId === message.selectedChoiceId ? (
+          <li key={key} className="w-full">
+            <TextButton
+              type="ghost"
+              Icon={ArrowForward}
+              onClick={
+                message.selectedChoiceId == null
+                  ? () => {
+                      handler.sendChoice(
+                        choice.choiceId,
+                        {},
+                        { responseIndex, messageIndex },
+                      );
+                    }
+                  : undefined
+              }
+              label={choice.choiceText}
+            />
+          </li>
+        ) : null,
+      )}
+    </ul>
   ) : null;
 };
 
@@ -97,6 +96,51 @@ const UserMessage: FC<{ text: string; files?: File[]; bubble: boolean }> = ({
         </div>
       ) : null}
     </div>
+  );
+};
+
+const Sources: FC<{ sources: KnowledgeBaseResponseSource[] }> = ({
+  sources,
+}) => {
+  const [open, setOpen] = useState<boolean>(false);
+  return (
+    <details
+      className="space-y-2"
+      open={open}
+      onToggle={(ev) => {
+        setOpen(ev.currentTarget.open);
+      }}
+    >
+      <summary className="flex cursor-pointer items-center gap-2 rounded-inner hover:bg-primary-5 text-primary-80">
+        <UnsemanticIconButton
+          type="ghost"
+          Icon={open ? ArrowDown : ArrowRight}
+        />
+        Sources
+      </summary>
+      <ol className="space-y-2">
+        {sources.map((source, sourceIndex) => {
+          const displayName = source.fileName ?? "Source";
+          const sharedClassName =
+            "p-3 bg-primary-5 rounded-inner w-full flex items-center justify-between text-primary-80";
+          return (
+            <li key={sourceIndex}>
+              {source.presignedUrl != null ? (
+                <a
+                  href={source.presignedUrl}
+                  className={clsx(sharedClassName, "hover:bg-primary-10")}
+                >
+                  {displayName}
+                  <OpenLink className="w-4 h-4 text-primary-60" />
+                </a>
+              ) : (
+                <div className={sharedClassName}>{displayName}</div>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </details>
   );
 };
 
@@ -223,6 +267,9 @@ export const Messages: FC<MessagesProps> = ({
                     </div>
                   );
                 })}
+                {response.payload.metadata?.sources != null ? (
+                  <Sources sources={response.payload.metadata.sources} />
+                ) : null}
                 {Object.entries(response.payload.modalities ?? {}).map(
                   ([key, value]) => {
                     const Component = customModalities[key];
