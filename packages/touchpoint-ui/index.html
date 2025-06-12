@@ -102,47 +102,9 @@
         languageCode: "en-US",
       },
       windowSize: "full",
-      input: "text",
+      input: "voiceMini",
       initializeConversation: () => { }
     });
-    touchpoint.conversationHandler.setRequestOverride((req, append) => {
-      if (req.request.unstructured?.text != null) {
-        setTimeout(() => {
-          append({
-            messages: [{
-              text: "Yo", choices: [
-                {choiceId: "a", choiceText: "A"}
-                , {choiceId: "b", choiceText: "B"}
-                , {choiceId: "c", choiceText: "C"}
-                , {choiceId: "c", choiceText: "C"}
-                , {choiceId: "c", choiceText: "C"}
-                , {choiceId: "c", choiceText: "C"}
-                , {choiceId: "c", choiceText: "C"}
-                , {choiceId: "c", choiceText: "C"}
-                , {choiceId: "c", choiceText: "C"}
-              ]
-            }],
-            metadata: {
-              sources: [
-                {fileName: "my-source.pdf", presignedUrl: "https://abcd"},
-                {fileName: "my-source.pdf", presignedUrl: "https://abcd"},
-              ]
-            }
-          });
-        }, 1000)
-      } else {
-        setTimeout(() => {
-          append({
-            messages: [{
-              text: "Yo", choices: [
-              ]
-            }]
-          });
-        }, 1000)
-      }
-    });
-    touchpoint.conversationHandler.sendText("hello");
-    touchpoint.expanded = true;
   </script>
 </body>
 

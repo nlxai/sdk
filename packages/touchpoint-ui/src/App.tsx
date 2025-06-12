@@ -206,7 +206,13 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         colorMode={colorMode}
         className="fixed bottom-2 right-2 w-fit"
       >
-        <VoiceMini handler={handler} context={props.initialContext} />
+        <VoiceMini
+          handler={handler}
+          context={props.initialContext}
+          onClose={() => {
+            setIsExpanded(false);
+          }}
+        />
       </CustomPropertiesContainer>
     );
   }

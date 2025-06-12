@@ -47,7 +47,7 @@ export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
 }) => {
   return (
     <div className="space-y-4 text-primary-80">
-      <p>
+      <p className="px-1">
         Get ready to join a voice experience. Please ensure your microphone and
         speakers are turned on and functioning.
       </p>
@@ -63,7 +63,7 @@ export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
               {soundCheck.micAllowed ? <Mic /> : <MicOff />}
             </span>
             <input
-              className="p-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
+              className="px-3 py-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
               value={soundCheck.micNames[0]}
               placeholder="Mic not found"
               disabled
@@ -79,7 +79,7 @@ export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
               {soundCheck.speakerNames[0] != null ? <Volume /> : <VolumeOff />}
             </span>
             <input
-              className="p-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
+              className="px-3 py-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
               value={soundCheck.speakerNames[0]}
               placeholder="Speaker not found"
               disabled
