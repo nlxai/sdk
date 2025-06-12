@@ -65,7 +65,7 @@ const VoiceModalitiesWrapper: FC<{ children: ReactNode }> = ({ children }) => (
 );
 
 export const VoiceMini: FC<{
-  customModalities: Record<string, CustomModalityComponent<any>>;
+  customModalities: Record<string, CustomModalityComponent<unknown>>;
   handler: ConversationHandler;
   onClose: () => void;
   context?: Context;

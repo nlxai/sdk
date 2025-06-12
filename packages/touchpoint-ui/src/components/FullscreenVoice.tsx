@@ -43,7 +43,7 @@ interface Props {
   setActive: Dispatch<SetStateAction<boolean>>;
   context?: Context;
   initializeConversation: InitializeConversation;
-  customModalities?: Record<string, CustomModalityComponent<any>>;
+  customModalities?: Record<string, CustomModalityComponent<unknown>>;
 }
 
 export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
@@ -112,7 +112,7 @@ const Container: FC<{ className?: string; children: ReactNode }> = ({
 export const VoiceModalities: FC<{
   Wrapper?: FC<{ children: ReactNode }>;
   roomData: ModalitiesWithContext;
-  customModalities: Record<string, CustomModalityComponent<any>>;
+  customModalities: Record<string, CustomModalityComponent<unknown>>;
   handler: ConversationHandler;
 }> = ({ Wrapper, roomData, customModalities, handler }) => {
   const modalityEntries = Object.entries(roomData.modalities);
