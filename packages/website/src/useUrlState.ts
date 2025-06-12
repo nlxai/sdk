@@ -16,10 +16,14 @@ const useUrlState = <T>(
       globalThis.location?.search as string | undefined,
     );
     const val = params.get(key);
-    if (val != null && typeof defaultValue !== "string") {
-      try {
-        return JSON.parse(val);
-      } catch {}
+    if (val != null) {
+      if (typeof defaultValue !== "string") {
+        try {
+          return JSON.parse(val);
+        } catch {}
+      } else {
+        return val;
+      }
     }
     return defaultValue;
   });

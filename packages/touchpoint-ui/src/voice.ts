@@ -1,15 +1,19 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import type { Context, ConversationHandler } from "@nlxai/chat-core";
+import type {
+  Context,
+  ConversationHandler,
+  ModalityPayloads,
+} from "@nlxai/chat-core";
+import { useDebouncedState } from "@react-hookz/web";
 import {
-  Room,
   ParticipantEvent,
+  Room,
   RoomEvent,
   Track,
   type Participant,
   type RemoteTrack,
 } from "livekit-client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDebouncedState } from "@react-hookz/web";
 
 type VoiceRoomState =
   | "inactive"
@@ -29,6 +33,7 @@ interface VoiceHookReturn {
   isUserSpeaking: boolean;
   isApplicationSpeaking: boolean;
   soundCheck: null | SoundCheck;
+  roomData: null | ModalitiesWithContext;
 }
 
 interface UseVoiceParams {
@@ -38,6 +43,28 @@ interface UseVoiceParams {
   handler: ConversationHandler;
   context?: Context;
 }
+
+export interface ModalitiesWithContext {
+  modalities: ModalityPayloads;
+  from?: string;
+  timestamp: number;
+}
+
+const decodeModalities = (val: Uint8Array): ModalityPayloads | null => {
+  const decoded = new TextDecoder().decode(val);
+  if (decoded !== null && typeof decoded === "object") {
+    return decoded;
+  }
+  try {
+    const parsed = JSON.parse(decoded);
+    if (parsed === null || typeof parsed !== "object") {
+      throw new Error("Invalid parsed");
+    }
+    return parsed;
+  } catch (err) {
+    return null;
+  }
+};
 
 export const useVoice = ({
   active,
@@ -58,6 +85,8 @@ export const useVoice = ({
   const audioElementRef = useRef<HTMLMediaElement | null>(null);
 
   const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
+
+  const [roomData, setRoomData] = useState<ModalitiesWithContext | null>(null);
 
   useEffect(() => {
     const room = roomRef.current;
@@ -124,14 +153,15 @@ export const useVoice = ({
       // eslint-disable-next-line no-console
       console.warn(err);
     });
-    void handler.terminateLiveKitCall();
+    void handler.terminateVoiceCall();
     roomRef.current = null;
     // Not 100% sure this is necessary but it seems to help
     if (audioElementRef.current != null) {
       audioElementRef.current.pause();
       audioElementRef.current = null;
     }
-  }, []);
+    setRoomData(null);
+  }, [setRoomData]);
 
   useEffect(() => {
     const handleBeforeUnload = (): void => {
@@ -147,7 +177,7 @@ export const useVoice = ({
     try {
       setRoomState("pending");
 
-      const creds = await handler.getLiveKitCredentials(context);
+      const creds = await handler.getVoiceCredentials(context);
 
       const handleActiveSpeakersChanged = (
         participants: Participant[],
@@ -191,6 +221,15 @@ export const useVoice = ({
         disconnect();
       });
 
+      // Handle incoming data from the room/agent
+      room.on(RoomEvent.DataReceived, (payload, participant) => {
+        setRoomData({
+          modalities: decodeModalities(payload) ?? {},
+          from: participant?.identity,
+          timestamp: Date.now(),
+        });
+      });
+
       await room.connect(creds.url, creds.token, { autoSubscribe: true });
       await room.localParticipant.setMicrophoneEnabled(true);
       await room.startAudio();
@@ -199,7 +238,7 @@ export const useVoice = ({
       setRoomState("error");
       // eslint-disable-next-line no-console
       console.warn(err);
-      handler.terminateLiveKitCall().catch((err: any) => {
+      handler.terminateVoiceCall().catch((err: any) => {
         // eslint-disable-next-line no-console
         console.warn(err);
       });
@@ -218,5 +257,6 @@ export const useVoice = ({
     isUserSpeaking,
     isApplicationSpeaking,
     soundCheck,
+    roomData,
   };
 };

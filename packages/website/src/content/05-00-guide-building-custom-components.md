@@ -34,13 +34,9 @@ Add the Component to the `customModalities` configuration option paired with the
 
 Every custom component follows the same pattern. Here's a simple example in both JavaScript and HTML formats:
 
-**JavaScript**
-
-```javascript
-import { create, BaseText } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const SimpleComponent = ({ data, conversationHandler }) => {
-  return <BaseText>{data.message}</BaseText>;
+  return html`<BaseText>${data.message}</BaseText>`;
 };
 
 const touchpoint = await create({
@@ -53,33 +49,6 @@ const touchpoint = await create({
     SimpleModality: SimpleComponent,
   },
 });
-```
-
-**HTML**
-
-```html
-<script type="module">
-  import {
-    html,
-    create,
-  } from "https://unpkg.com/@nlxai/touchpoint-ui@1.0.5-alpha.10/lib/index.js?module";
-
-  const SimpleComponent = ({ data }) =>
-    html`<BaseText>${data.message}</BaseText>`;
-
-  window.addEventListener("DOMContentLoaded", () => {
-    create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-      },
-      customModalities: {
-        SimpleModality: SimpleComponent,
-      },
-    });
-  });
-</script>
 ```
 
 ## HTML Template Syntax
@@ -178,19 +147,15 @@ Components often need to track state (like which item is selected) and handle us
 
 When you call the update function, React will re-render the component with the new state value.
 
-**JavaScript**
-
-```javascript
-import { React, CustomCard, BaseText } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const SelectableCard = ({ data, conversationHandler }) => {
-  // Declare state variable with initial value of null
-  const [isSelected, setIsSelected] = React.useState(null);
+  // Declare state variable with initial value of false
+  const [isSelected, setIsSelected] = React.useState(false);
 
-  return (
+  return html`
     <CustomCard
-      selected={isSelected}
-      onClick={() => {
+      selected=${isSelected}
+      onClick=${() => {
         // Update the state when clicked
         setIsSelected(true);
         // Send the selection to NLX
@@ -198,52 +163,21 @@ const SelectableCard = ({ data, conversationHandler }) => {
       }}
     >
       <CustomCardRow
-        left={<BaseText faded>Status</BaseText>}
-        right={<BaseText>{isSelected ? "Selected" : "Not Selected"}</BaseText>}
+        left=${html`<BaseText faded>Status</BaseText>`}
+        right=${html`<BaseText
+          >${isSelected ? "Selected" : "Not Selected"}</BaseText
+        >`}
       />
     </CustomCard>
-  );
+  `;
 };
-```
-
-**HTML**
-
-```html
-<script>
-  const SelectableCard = ({ data, conversationHandler }) => {
-    const { React, html, CustomCard, CustomCardRow, BaseText } =
-      nlxai.touchpointUi;
-
-    // Declare state variable with initial value of false
-    const [isSelected, setIsSelected] = React.useState(false);
-
-    return html`
-      <CustomCard
-        selected=${isSelected}
-        onClick=${() => {
-          // Update the state when clicked
-          setIsSelected(true);
-          // Send the selection to NLX
-          conversationHandler.sendChoice(data.id);
-        }}
-      >
-        <CustomCardRow
-          left=${html`<BaseText faded>Status</BaseText>`}
-          right=${html`<BaseText
-            >${isSelected ? "Selected" : "Not Selected"}</BaseText
-          >`}
-        />
-      </CustomCard>
-    `;
-  };
-</script>
 ```
 
 ### Event Handler Pattern
 
 Always use arrow functions for event handlers in both JavaScript and HTML:
 
-```javascript
+```js
 // Correct - arrow function
 onClick=${() => conversationHandler.sendChoice(data.id)}
 
@@ -257,58 +191,48 @@ This ensures the function is called when the user clicks, not when the component
 
 Here's a complete carousel implementation following the standard pattern with CustomCardImageRow at the top and faded labels:
 
-### JavaScript Example
-
-```javascript
-import {
-  create,
-  Carousel,
-  CustomCard,
-  CustomCardRow,
-  CustomCardImageRow,
-  BaseText,
-  React,
-} from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const ItemsCarousel = ({ data, conversationHandler }) => {
   // Track which item is selected
   const [selectedItemId, setSelectedItemId] = React.useState(null);
 
-  return (
+  return html`
     <Carousel>
-      {data.map((item) => (
-        <CustomCard
-          key={item.id}
-          selected={item.id === selectedItemId}
-          onClick={() => {
-            // Update selected state
-            setSelectedItemId(item.id);
-            // Send choice to NLX
-            conversationHandler.sendChoice(item.id);
-          }}
-        >
-          {/* Image at the top */}
-          <CustomCardImageRow src={item.thumbnail} alt={item.name} />
+      ${data.map(
+        (item) => html`
+          <CustomCard
+            key=${item.id}
+            selected=${item.id === selectedItemId}
+            onClick=${() => {
+              // Update selected state
+              setSelectedItemId(item.id);
+              // Send choice to NLX
+              conversationHandler.sendChoice(item.id);
+            }}
+          >
+            <!-- Image at the top -->
+            <CustomCardImageRow src=${item.thumbnail} alt=${item.name} />
 
-          {/* Faded label on left, normal text on right */}
-          <CustomCardRow
-            left={<BaseText faded>Name</BaseText>}
-            right={<BaseText>{item.name}</BaseText>}
-          />
+            <!-- Faded label on left, normal text on right -->
+            <CustomCardRow
+              left=${html`<BaseText faded>Name</BaseText>`}
+              right=${html`<BaseText>${item.name}</BaseText>`}
+            />
 
-          <CustomCardRow
-            left={<BaseText faded>Price</BaseText>}
-            right={<BaseText>{item.price}</BaseText>}
-          />
+            <CustomCardRow
+              left=${html`<BaseText faded>Price</BaseText>`}
+              right=${html`<BaseText>${item.price}</BaseText>`}
+            />
 
-          <CustomCardRow
-            left={<BaseText faded>Status</BaseText>}
-            right={<BaseText>{item.status}</BaseText>}
-          />
-        </CustomCard>
-      ))}
+            <CustomCardRow
+              left=${html`<BaseText faded>Status</BaseText>`}
+              right=${html`<BaseText>${item.status}</BaseText>`}
+            />
+          </CustomCard>
+        `,
+      )}
     </Carousel>
-  );
+  `;
 };
 
 // Register the component
@@ -322,87 +246,6 @@ const touchpoint = await create({
     ItemsCarouselModality: ItemsCarousel,
   },
 });
-```
-
-### HTML Example
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  contentLoaded().then(() => {
-    const ItemsCarousel = ({ data, conversationHandler }) => {
-      const { html, React } = nlxai.touchpointUi;
-
-      // Track which item is selected
-      const [selectedItemId, setSelectedItemId] = React.useState(null);
-
-      return html`
-        <Carousel>
-          ${data.map(
-            (item) => html`
-              <CustomCard
-                key=${item.id}
-                selected=${item.id === selectedItemId}
-                onClick=${() => {
-                  // Update selected state
-                  setSelectedItemId(item.id);
-                  // Send choice to NLX
-                  conversationHandler.sendChoice(item.id);
-                }}
-              >
-                <!-- Image at the top -->
-                <CustomCardImageRow src=${item.thumbnail} alt=${item.name} />
-
-                <!-- Faded label on left, normal text on right -->
-                <CustomCardRow
-                  left=${html`<BaseText faded>Name</BaseText>`}
-                  right=${html`<BaseText>${item.name}</BaseText>`}
-                />
-
-                <CustomCardRow
-                  left=${html`<BaseText faded>Price</BaseText>`}
-                  right=${html`<BaseText>${item.price}</BaseText>`}
-                />
-
-                <CustomCardRow
-                  left=${html`<BaseText faded>Status</BaseText>`}
-                  right=${html`<BaseText>${item.status}</BaseText>`}
-                />
-              </CustomCard>
-            `,
-          )}
-        </Carousel>
-      `;
-    };
-
-    // Register the component
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-      },
-      customModalities: {
-        ItemsCarouselModality: ItemsCarousel,
-      },
-    });
-  });
-</script>
 ```
 
 ## Troubleshooting Common Issues
@@ -455,7 +298,7 @@ const { React } = nlxai.touchpointUi;
 - **Cause**: Modality schema doesn't match expected data structure
 - **Solution**: Log the data to check structure. See [Subscribing to events](/guide-subscribing-to-events#example-use-case-reacting-to-modalities) for methods to check data outside components.
 
-```javascript
+```touchpointui
 const MyComponent = ({ data }) => {
   console.log("Received data:", data);
   // Component code
@@ -468,7 +311,7 @@ const MyComponent = ({ data }) => {
 - **Solution**: Ensure you're calling the correct method. See [Sending Messages and Data](/touchpoint-ui-ConversationHandler#sending-messages-and-data) for more information.
 -
 
-```javascript
+```js
 // For choices
 conversationHandler.sendChoice(choiceId);
 
@@ -481,6 +324,7 @@ conversationHandler.sendSlots({ slotName: value });
 - **Cause**: Importing React from the parent project instead of from the touchpoint-ui package
 - **Solution**: Import React directly from the `"@nlx/touchpoint-ui"` package when using JSX to build custom components. This ensures that the components will be running in the same React context as the Touchpoint UI using the correct version of React.
 
-```javascript
-import { React } from "@nlx/touchpoint-ui";
+```js
+// React is available as React in touchpointui
+const [state, setState] = React.useState(initialValue);
 ```

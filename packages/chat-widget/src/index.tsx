@@ -245,7 +245,13 @@ const MessageGroups: FC<{
                   );
                   return null;
                 }
-                return <Component key={key} data={value} />;
+                return (
+                  <Component
+                    key={key}
+                    data={value}
+                    conversationHandler={props.chat.conversationHandler}
+                  />
+                );
               },
             )}
           </C.MessageGroup>

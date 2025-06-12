@@ -6,7 +6,7 @@ import { useVoice } from "../voice";
 import { LoaderAnimation } from "./ui/Loader";
 import { Ripple } from "./Ripple";
 import { IconButton } from "./ui/IconButton";
-import { ArrowForward, Close, Mic, Volume } from "./ui/Icons";
+import { ArrowForward, Close, Mic, Volume, VolumeOff } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
 import { SoundCheckUi } from "./FullscreenVoice";
 import { ErrorMessage } from "./ErrorMessage";
@@ -93,7 +93,7 @@ export const VoiceMini: FC<{
       <div className="w-fit relative">
         {isApplicationSpeaking ? <Ripple className="rounded-inner" /> : null}
         <IconButton
-          Icon={Volume}
+          Icon={speakersEnabled ? Volume : VolumeOff}
           label="Speakers"
           type={speakersEnabled ? "activated" : "ghost"}
           onClick={() => {

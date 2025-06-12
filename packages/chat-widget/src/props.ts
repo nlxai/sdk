@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { type ComponentType } from "react";
 import { type Config, type ConversationHandler } from "@nlxai/chat-core";
 import { type Theme } from "./theme";
 
@@ -48,7 +48,7 @@ export type StorageType = "localStorage" | "sessionStorage";
  * Custom Modalities allow rendering of rich components from nodes.
  * See: https://docs.studio.nlx.ai/build/resources/modalities
  */
-export type CustomModalityComponent = FC<{
+export type CustomModalityComponent<T = unknown> = ComponentType<{
   /**
    * The name of the Modality as defined in Dialog Studio settings.
    */
@@ -56,7 +56,12 @@ export type CustomModalityComponent = FC<{
   /**
    * The payload of the Custom Modality. The schema is defined in Dialog Studio settings.
    */
-  data: any;
+  data: T;
+
+  /**
+   * The conversation handler to use for sending messages and handling the conversation.
+   */
+  conversationHandler: ConversationHandler;
 }>;
 
 /**

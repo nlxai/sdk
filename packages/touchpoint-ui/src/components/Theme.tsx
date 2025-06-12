@@ -103,18 +103,60 @@ const darkModeCustomProperties: Theme = {
   errorSecondary: "rgb(94, 4, 4)",
 };
 
+const intelligentMerge = (theme: Partial<Theme>, base: Theme): Theme => {
+  const computed: Partial<Theme> = {};
+
+  if (theme.accent != null && theme.accent20 == null) {
+    computed.accent20 = `color-mix(in srgb, ${theme.accent} 20%, transparent)`;
+  }
+
+  if (theme.primary80 != null) {
+    if (theme.primary60 == null)
+      computed.primary60 = `rgb(from ${theme.primary80} r g b / 0.6)`;
+    if (theme.primary40 == null)
+      computed.primary40 = `rgb(from ${theme.primary80} r g b / 0.4)`;
+    if (theme.primary20 == null)
+      computed.primary20 = `rgb(from ${theme.primary80} r g b / 0.2)`;
+    if (theme.primary10 == null)
+      computed.primary10 = `rgb(from ${theme.primary80} r g b / 0.1)`;
+    if (theme.primary5 == null)
+      computed.primary5 = `rgb(from ${theme.primary80} r g b / 0.05)`;
+    if (theme.primary1 == null)
+      computed.primary1 = `rgb(from ${theme.primary80} r g b / 0.01)`;
+  }
+
+  if (theme.secondary80 != null) {
+    if (theme.secondary60 == null)
+      computed.secondary60 = `rgb(from ${theme.secondary80} r g b / 0.6)`;
+    if (theme.secondary40 == null)
+      computed.secondary40 = `rgb(from ${theme.secondary80} r g b / 0.4)`;
+    if (theme.secondary20 == null)
+      computed.secondary20 = `rgb(from ${theme.secondary80} r g b / 0.2)`;
+    if (theme.secondary10 == null)
+      computed.secondary10 = `rgb(from ${theme.secondary80} r g b / 0.1)`;
+    if (theme.secondary5 == null)
+      computed.secondary5 = `rgb(from ${theme.secondary80} r g b / 0.05)`;
+    if (theme.secondary1 == null)
+      computed.secondary1 = `rgb(from ${theme.secondary80} r g b / 0.01)`;
+  }
+
+  return {
+    ...base,
+    ...computed,
+    ...theme,
+  };
+};
+
 export const CustomPropertiesContainer: FC<{
   colorMode: ColorMode;
   className?: string;
   theme?: Partial<Theme>;
   children?: ReactNode;
 }> = ({ colorMode, children, theme, className }) => {
-  const themeWithOverrides: Theme = {
-    ...(colorMode === "dark"
-      ? darkModeCustomProperties
-      : lightModeCustomProperties),
-    ...(theme ?? {}),
-  };
+  const themeWithOverrides: Theme = intelligentMerge(
+    theme ?? {},
+    colorMode === "dark" ? darkModeCustomProperties : lightModeCustomProperties,
+  );
   return (
     <div
       className={clsx(className)}

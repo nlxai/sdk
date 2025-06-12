@@ -29,69 +29,29 @@ The following examples use the Icons available from Touchpoint to construct an [
 
 Example IconButton using the Icons from Touchpoint
 
-**Javascript**
-
-```javascript
-import { useTouchpointContext, IconButton, Icons } from "@nlxai/touchpoint-ui";
+```touchpointui
 const IconButtonExample = ({ data, conversationHandler }) => {
-  return (
+  return html`
     <IconButton
-      label={data.buttonLabel}
-      Icon={Icons.ArrowForward}
-      onClick={() => conversationHandler.sendChoice(data.buttonId)}
+      label=${data.buttonLabel}
+      Icon=${Icons.ArrowForward}
+      onClick=${() => conversationHandler.sendChoice(data.buttonId)}
       type="main"
     />
-  );
+  `;
 };
-```
 
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-
-  contentLoaded().then(() => {
-    const { html, Icons } = nlxai.touchpointUi;
-
-    const IconButtonExample = ({ data, conversationHandler }) => {
-      return html`
-        <IconButton
-          label=${data.buttonLabel}
-          Icon=${Icons.ArrowForward}
-          onClick=${() => conversationHandler.sendChoice(data.buttonId)}
-          type="main"
-        />
-      `;
-    };
-
-    // Register component when creating touchpoint
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-      },
-      customModalities: {
-        IconButtonModality: IconButtonExample,
-      },
-    });
-  });
-</script>
+// Register component when creating touchpoint
+const touchpoint = await create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+  },
+  customModalities: {
+    IconButtonModality: IconButtonExample,
+  },
+});
 ```
 
 ## Available Icons

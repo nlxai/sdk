@@ -20,7 +20,12 @@ import { DateInput } from "./components/ui/DateInput";
 import { createElement, type FC } from "react";
 import type { TouchpointConfiguration } from "./types";
 import { equals } from "ramda";
-
+export {
+  analyzePageForms,
+  type InteractiveElementInfo,
+  type PageForms,
+  type AccessibilityInformation,
+} from "./analyzePageForms";
 /**
  * If you wish to build custom modalities using JSX, you will want to
  *

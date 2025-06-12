@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
-import { type FC, type ReactNode } from "react";
+import { useEffect, type FC, type ReactNode } from "react";
 
 import { type Icon } from "../ui/Icons";
 
@@ -20,25 +20,57 @@ export interface CustomCardProps {
    * Handler function for when the card is clicked
    */
   onClick?: () => void;
+  /**
+   *  Transform the card into an anchor tag with the href specified
+   */
+  href?: string;
+  /**
+   * Specify whether the URL should take the user to a new tab
+   */
+  newTab?: boolean;
 }
 
 export const CustomCard: FC<CustomCardProps> = ({
   children,
   selected,
   onClick,
+  href,
+  newTab,
 }) => {
-  return (
-    <div
-      className={clsx(
-        "block shrink-0 rounded-inner overflow-hidden",
-        "w-80 space-y-px",
-        selected ? "outline outline-2 outline-accent" : "",
-      )}
-      onClick={onClick}
-    >
-      {children}
-    </div>
+  const className = clsx(
+    "block shrink-0 rounded-inner overflow-hidden",
+    "w-80 space-y-px",
+    selected ? "outline outline-2 outline-accent" : "",
+    onClick != null || href != null ? "hover:bg-primary-5" : "",
   );
+  useEffect(() => {
+    if (href == null && newTab != null) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        "Setting the `newTab` prop on the `<CustomCard/>` has no effect if the `href` is not also set.",
+      );
+    }
+  }, [href, newTab]);
+  if (href != null) {
+    return (
+      <a
+        className={className}
+        href={href}
+        onClick={onClick}
+        {...(newTab ? { target: "_blank", rel: "noreferrer" } : {})}
+      >
+        {children}
+      </a>
+    );
+  }
+  if (onClick != null) {
+    return (
+      <button className={className} onClick={onClick}>
+        {children}
+      </button>
+    );
+  }
+  return <div className={className}>{children}</div>;
 };
 
 export const CustomCardImageRow: FC<{ src: string; alt?: string }> = ({

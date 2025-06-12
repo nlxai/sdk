@@ -12,11 +12,7 @@
 
 Full-screen voice interface for immersive conversations.
 
-**JavaScript**
-
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -28,48 +24,11 @@ const touchpoint = await create({
 });
 ```
 
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: crypto.randomUUID(), // Required for voice
-      },
-      input: "voice", // Enable full voice mode
-    });
-  });
-</script>
-```
-
 ### Compact Voice Mode (Voice Mini)
 
 Floating module for voice without taking over the screen.
 
-**JavaScript**
-
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -79,39 +38,6 @@ const touchpoint = await create({
   },
   input: "voiceMini", // Enable compact voice mode
 });
-```
-
-**HTML**
-
-```html
-<script
-  defer
-  src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-></script>
-<script>
-  const contentLoaded = () => {
-    if (document.readyState === "loading") {
-      return new Promise((resolve) => {
-        window.addEventListener("DOMContentLoaded", () => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  };
-  contentLoaded().then(() => {
-    return nlxai.touchpointUi.create({
-      config: {
-        applicationUrl: "YOUR_APPLICATION_URL",
-        headers: { "nlx-api-key": "YOUR_API_KEY" },
-        languageCode: "en-US",
-        userId: crypto.randomUUID(), // Required for voice
-      },
-      input: "voiceMini", // Enable compact voice mode
-    });
-  });
-</script>
 ```
 
 ## Voice Input Options
