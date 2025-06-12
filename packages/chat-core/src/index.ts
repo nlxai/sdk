@@ -112,8 +112,7 @@ export interface BotResponsePayload {
 }
 
 /**
- * Modalities data
- * TODO: make it generic
+ * Payloads for modalities as a key-value pair by modality name
  */
 export type ModalityPayloads = Record<string, any>;
 
