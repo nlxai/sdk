@@ -170,7 +170,7 @@ export interface KnowledgeBaseResponseSource {
   /**
    * Metadata
    */
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   /**
    * Presigned URL for direct retrieval
    */
