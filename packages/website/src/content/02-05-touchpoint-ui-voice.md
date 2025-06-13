@@ -1,45 +1,82 @@
-- [Enabling Voice Input](#enabling-voice-input)
-- [User Experience](#user-experience)
-- [Prerequisites](#prerequisites)
-- [Customization](#customization)
+- [Quick Start](#quick-start)
+  - [Immersive Voice Mode](#immersive-voice-mode)
+  - [Compact Voice Mode (Voice Mini)](#compact-voice-mode-voice-mini)
+- [Voice Input Options](#voice-input-options)
+  - [Application and Touchpoint Prerequisites](#application-and-touchpoint-prerequisites)
+- [When to Use Immersive Voice mode](#when-to-use-immersive-voice-mode)
+- [When to use Voice Mini](#when-to-use-voice-mini)
 
-Touchpoint UI supports voice input to allow your users to talk to your applications over the internet.
+## Quick Start
 
-## Enabling Voice Input
+### Immersive Voice Mode
 
-To enable voice mode, set:
+Full-screen voice interface for immersive conversations.
 
-- `userId` to a `"string"` in the `config` objection within the `TouchpointConfiguration`.
-- `input` option in your `TouchpointConfiguration` to `"voice"`
-
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
-const touchpointConfig = {
+```touchpointui
+const touchpoint = await create({
   config: {
-    applicationUrl: "YOUR_NLX_BOT_URL",
-    headers: { "nlx-api-key": "YOUR_NLX_API_KEY" },
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: "userId", // required to use for voice
+    userId: crypto.randomUUID(), // Required for voice
   },
-  input: "voice", // Key setting to enable voice input
-  // Other settings like theme, brandIcon, etc.
-};
-
-const touchpoint = await create(touchpointOptions);
+  input: "voice", // Enable full voice mode
+});
 ```
 
-## User Experience
+### Compact Voice Mode (Voice Mini)
 
-- The user clicks the microphone icon to start/stop voice input.
-- Visual cues (like the `Ripple` animation) indicate when the application is speaking or listening.
+Floating module for voice without taking over the screen.
 
-## Prerequisites
+```touchpointui
+const touchpoint = await create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+    userId: crypto.randomUUID(), // Required for voice
+  },
+  input: "voiceMini", // Enable compact voice mode
+});
+```
 
-- Your NLX application deployment must be configured to support voice integration for the API channels.
-- The browser must support the WebRTC APIs.
-- Users must grant microphone permission when prompted by the browser.
+## Voice Input Options
 
-## Customization
+| Mode        | Description                                           | Best For                                                     |
+| ----------- | ----------------------------------------------------- | ------------------------------------------------------------ |
+| `voice`     | Full-screen voice interface with immersive experience | Primary voice interactions, voice-first applications         |
+| `voiceMini` | Compact floating module with minimal controls         | Voice as a secondary input option, space-constrained layouts |
 
-- The visual appearance is controlled by the standard Touchpoint UI [Theming](/touchpoint-ui-theming)
+### Application and Touchpoint Prerequisites
+
+All voice modes require:
+
+| Item                      | Description                                                                |
+| ------------------------- | -------------------------------------------------------------------------- |
+| `config.userId`           | A unique identifier in your config (required for voice session management) |
+| Voice-enabled Application | Your NLX application must be configured for voice on API channels          |
+| Browser support           | WebRTC APIs must be available                                              |
+| User permissions          | Microphone access must be granted when prompted                            |
+
+## When to Use Immersive Voice mode
+
+<img src="/animations/voiceinput.png" alt="Voice Mode Animation" style="max-width: 40%;">
+
+Use **voice** when:
+
+- Voice is the primary interaction method
+- You want an immersive, focused experience
+- Screen real estate isn't a concern
+- The conversation is the main user activity
+
+## When to use Voice Mini
+
+<img src="/animations/voice-mini.png" alt="Voice Mini Mode Animation" style="max-width: 80%;">
+
+Use **voiceMini** when:
+
+- You're using Enhanced Voice+
+- Voice is an optional input method alongside other UI
+- You need to preserve screen space
+- Users need access to other page content during voice interaction
+- You want a less intrusive voice option

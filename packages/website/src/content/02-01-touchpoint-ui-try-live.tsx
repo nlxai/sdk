@@ -15,9 +15,9 @@ import { clsx } from "clsx";
 import useUrlState from "../useUrlState";
 
 export const content = `
-The NLX Touchpoint widget provides a customizable chat interface that you can embed in your web applications. This widget allows users to interact with your application and provides a seamless conversational experience.
+Touchpoint-UI provides a customizable chat interface that you can embed in your web applications. Touchpoint UI allows users to interact with your application and provides a seamless conversational experience.
 
-You can try your applications directly on this configuration widget. Then you can copy the code snippet to your HTML file.
+You can try your applications directly on this configuration page. Then you can copy the code snippet to your HTML file.
 `;
 
 export const snippetContent = ({
@@ -39,7 +39,7 @@ ${touchpointUiSetupSnippet({ config, theme, input, colorMode })}
 \`\`\`
 `;
 
-export const navGroup: string = "Touchpoint";
+export const navGroup: string = "Touchpoint Setup";
 
 export const title: string = "Quick Start";
 
@@ -136,7 +136,7 @@ export const Content: FC<unknown> = () => {
   const touchpointInstance = useRef<any>();
 
   const generateAndSetUserId = (config: Config): Config => {
-    const isUserIdEmpty = config.userId === undefined || config.userId === "";
+    const isUserIdEmpty = config.userId == null || config.userId === "";
     return isUserIdEmpty
       ? { ...config, userId: "TemporaryUserId_" + crypto.randomUUID() }
       : config;

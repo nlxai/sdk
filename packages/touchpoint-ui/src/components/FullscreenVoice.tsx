@@ -8,7 +8,11 @@ import {
 } from "react";
 import { clsx } from "clsx";
 import type { Context, ConversationHandler } from "@nlxai/chat-core";
-import { type ColorMode } from "../types";
+import type {
+  ColorMode,
+  InitializeConversation,
+  CustomModalityComponent,
+} from "../types";
 
 import { FullscreenError } from "./FullscreenError";
 import { Ripple } from "./Ripple";
@@ -23,15 +27,23 @@ import {
   Volume,
   VolumeOff,
 } from "./ui/Icons";
-import { type SoundCheck, useVoice } from "../voice";
+import {
+  type SoundCheck,
+  type ModalitiesWithContext,
+  useVoice,
+} from "../voice";
 
 interface Props {
   colorMode: ColorMode;
   handler: ConversationHandler;
+  speakersEnabled: boolean;
+  brandIcon?: string;
   className?: string;
   active: boolean;
   setActive: Dispatch<SetStateAction<boolean>>;
   context?: Context;
+  initializeConversation: InitializeConversation;
+  customModalities?: Record<string, CustomModalityComponent<unknown>>;
 }
 
 export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
@@ -39,7 +51,7 @@ export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
 }) => {
   return (
     <div className="space-y-4 text-primary-80">
-      <p>
+      <p className="px-1">
         Get ready to join a voice experience. Please ensure your microphone and
         speakers are turned on and functioning.
       </p>
@@ -55,7 +67,7 @@ export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
               {soundCheck.micAllowed ? <Mic /> : <MicOff />}
             </span>
             <input
-              className="p-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
+              className="px-3 py-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
               value={soundCheck.micNames[0]}
               placeholder="Mic not found"
               disabled
@@ -71,7 +83,7 @@ export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
               {soundCheck.speakerNames[0] != null ? <Volume /> : <VolumeOff />}
             </span>
             <input
-              className="p-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
+              className="px-3 py-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
               value={soundCheck.speakerNames[0]}
               placeholder="Speaker not found"
               disabled
@@ -97,24 +109,70 @@ const Container: FC<{ className?: string; children: ReactNode }> = ({
   </div>
 );
 
+export const VoiceModalities: FC<{
+  Wrapper?: FC<{ children: ReactNode }>;
+  roomData: ModalitiesWithContext;
+  customModalities: Record<string, CustomModalityComponent<unknown>>;
+  handler: ConversationHandler;
+}> = ({ Wrapper, roomData, customModalities, handler }) => {
+  const modalityEntries = Object.entries(roomData.modalities);
+  const customModalityComponents = modalityEntries
+    .map(([key, value]) => {
+      const Component = customModalities[key];
+      if (Component != null) {
+        return (
+          <Component
+            key={key}
+            data={value}
+            conversationHandler={handler}
+            enabled={true}
+          />
+        );
+      }
+      return null;
+    })
+    .filter(Boolean);
+
+  if (customModalityComponents.length > 0) {
+    return Wrapper == null ? (
+      customModalityComponents
+    ) : (
+      <Wrapper>{customModalityComponents}</Wrapper>
+    );
+  }
+};
+
+const VoiceModalitiesWrapper: FC<{ children: ReactNode }> = ({ children }) => (
+  <div className="absolute top-4 left-4 right-4">{children}</div>
+);
+
 export const FullscreenVoice: FC<Props> = ({
   handler,
+  speakersEnabled,
   colorMode,
+  brandIcon,
   className,
   active,
   setActive,
+  initializeConversation,
   context,
+  customModalities = {},
 }) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
 
-  const { roomState, soundCheck, isUserSpeaking, isApplicationSpeaking } =
-    useVoice({
-      active,
-      micEnabled,
-      speakersEnabled: true,
-      handler,
-      context,
-    });
+  const {
+    roomState,
+    soundCheck,
+    isUserSpeaking,
+    isApplicationSpeaking,
+    roomData,
+  } = useVoice({
+    active,
+    micEnabled,
+    speakersEnabled,
+    handler,
+    context,
+  });
 
   if (!active) {
     return (
@@ -127,6 +185,7 @@ export const FullscreenVoice: FC<Props> = ({
             Icon={ArrowForward}
             onClick={() => {
               setActive(true);
+              initializeConversation(handler, context);
             }}
           />
         </div>
@@ -160,7 +219,7 @@ export const FullscreenVoice: FC<Props> = ({
         >
           <Touchpoint className="w-20 h-20 text-primary-20" />
           <div className="text-center">
-            <h3 className="text-xl mb-2">The call has ended</h3>
+            <h3 className="text-xl mb-2">The conversation has ended</h3>
             <p>You can close this panel now or restart.</p>
           </div>
         </div>
@@ -173,17 +232,32 @@ export const FullscreenVoice: FC<Props> = ({
       <div className="rounded-full w-fit relative">
         <div
           className={clsx(
-            "w-[128px] h-[128px] p-4 z-10 relative rounded-full",
+            "w-[128px] h-[128px] p-4 z-10 relative rounded-full overflow-hidden bg-cover bg-center",
             // This color imitates primary5 overlayed on the regular background, but it has to be solid
-            colorMode === "dark"
-              ? "bg-[rgb(40,41,47)]"
-              : "bg-[rgb(175,175,175)]",
+            brandIcon != null
+              ? ""
+              : colorMode === "dark"
+                ? "bg-[rgb(40,41,47)]"
+                : "bg-[rgb(175,175,175)]",
           )}
+          style={
+            brandIcon != null ? { backgroundImage: `url(${brandIcon})` } : {}
+          }
         >
-          <Touchpoint className="w-full h-full text-primary-40" />
+          {brandIcon == null ? (
+            <Touchpoint className="w-full h-full text-primary-40" />
+          ) : null}
         </div>
         {isApplicationSpeaking ? <Ripple className="rounded-full" /> : null}
       </div>
+      {roomData != null ? (
+        <VoiceModalities
+          Wrapper={VoiceModalitiesWrapper}
+          roomData={roomData}
+          customModalities={customModalities}
+          handler={handler}
+        />
+      ) : null}
       <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2">
         {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
         <IconButton

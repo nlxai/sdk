@@ -18,12 +18,7 @@ import { triggerOnce } from "./triggerOnce";
 import prepareDigression from "./digression";
 
 export type { Triggers, Trigger, StepId } from "./trigger";
-export {
-  analyzePageForms,
-  type InteractiveElementInfo,
-  type PageForms,
-  type AccessibilityInformation,
-} from "./context";
+
 export {
   type EncodedQuery,
   type Method,

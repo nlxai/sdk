@@ -23,7 +23,7 @@ import { LaunchButton } from "./components/ui/LaunchButton";
 import { Header } from "./components/Header";
 import { FullscreenVoice } from "./components/FullscreenVoice";
 import { Settings } from "./components/Settings";
-import { Messages } from "./components/Messages";
+import { MessageChoices, Messages } from "./components/Messages";
 import { FullscreenError } from "./components/FullscreenError";
 import { Input } from "./components/Input";
 import type {
@@ -171,6 +171,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const customModalities = props.customModalities ?? {};
 
+  const [fullscreenVoiceSpeakersEnabled, setFullscreenVoiceSpeakersEnabled] =
+    useState<boolean>(true);
+
   if (handler == null) {
     return null;
   }
@@ -203,7 +206,14 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         colorMode={colorMode}
         className="fixed bottom-2 right-2 w-fit"
       >
-        <VoiceMini handler={handler} context={props.initialContext} />
+        <VoiceMini
+          handler={handler}
+          context={props.initialContext}
+          onClose={() => {
+            setIsExpanded(false);
+          }}
+          customModalities={customModalities}
+        />
       </CustomPropertiesContainer>
     );
   }
@@ -228,6 +238,15 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       >
         <Header
           windowSize={props.embedded ? "embedded" : windowSize}
+          errorThemedCloseButton={input === "voice" && voiceActive}
+          speakerControls={
+            input === "voice" && voiceActive
+              ? {
+                  enabled: fullscreenVoiceSpeakersEnabled,
+                  setEnabled: setFullscreenVoiceSpeakersEnabled,
+                }
+              : undefined
+          }
           colorMode={colorMode}
           brandIcon={props.brandIcon}
           isSettingsOpen={isSettingsOpen}
@@ -241,13 +260,20 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           }
           renderCollapse={props.onClose != null}
           collapse={(event) => {
+            // In text mode, collapsing should leave the conversation intact so re-expanding fully resumes it.
+            // In voice, the behavior is designed to be consistent with voice mini, where the close button also hangs up the call.
+            // Subsequently re-expanding the experience should start a brand new call.
+            if (input === "voice") {
+              handler.reset({ clearResponses: true });
+            }
             setVoiceActive(false);
             onClose(event);
           }}
           reset={() => {
             handler.reset({ clearResponses: true });
-            props.initializeConversation(handler);
-
+            if (input !== "voice") {
+              props.initializeConversation(handler);
+            }
             setVoiceActive(false);
           }}
         />
@@ -265,57 +291,71 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         ) : input === "text" ? (
           <>
             {configValid ? (
-              <Messages
-                enabled={props.enabled}
-                userMessageBubble={props.userMessageBubble ?? false}
-                agentMessageBubble={props.agentMessageBubble ?? false}
-                chatMode={props.chatMode ?? false}
-                isWaiting={isWaiting}
-                lastBotResponseIndex={lastBotResponse?.index}
-                responses={responses}
-                colorMode={colorMode}
-                handler={handler}
-                uploadedFiles={uploadedFiles}
-                customModalities={customModalities}
-                className={clsx(
-                  "flex-grow",
-                  windowSize === "full"
-                    ? "w-full md:max-w-content md:mx-auto"
-                    : "",
-                )}
-              />
+              <>
+                <Messages
+                  enabled={props.enabled}
+                  userMessageBubble={props.userMessageBubble ?? false}
+                  agentMessageBubble={props.agentMessageBubble ?? false}
+                  chatMode={props.chatMode ?? false}
+                  isWaiting={isWaiting}
+                  lastBotResponseIndex={lastBotResponse?.index}
+                  responses={responses}
+                  colorMode={colorMode}
+                  handler={handler}
+                  uploadedFiles={uploadedFiles}
+                  customModalities={customModalities}
+                  className={clsx(
+                    "flex-grow",
+                    windowSize === "full"
+                      ? "w-full md:max-w-content md:mx-auto"
+                      : "",
+                  )}
+                />
+                <div
+                  className={clsx(
+                    "p-2 md:p-3 flex flex-col flex-none gap-2",
+                    windowSize === "full"
+                      ? "w-full md:max-w-content md:mx-auto"
+                      : "",
+                  )}
+                >
+                  {choiceMessage != null ? (
+                    <MessageChoices {...choiceMessage} handler={handler} />
+                  ) : null}
+                  {choiceMessage?.message.selectedChoiceId != null ? null : (
+                    <Input
+                      enabled={props.enabled}
+                      handler={handler}
+                      uploadUrl={
+                        lastBotResponse?.response.payload.metadata
+                          ?.uploadUrls?.[0]
+                      }
+                      onFileUpload={({ uploadId, file }) => {
+                        setUploadedFiles((prev) => ({
+                          ...prev,
+                          [uploadId]: file,
+                        }));
+                      }}
+                    />
+                  )}
+                </div>
+              </>
             ) : (
               <FullscreenError />
             )}
-            <Input
-              className={clsx(
-                "flex-none",
-                windowSize === "full"
-                  ? "w-full md:max-w-content md:mx-auto"
-                  : "",
-              )}
-              enabled={props.enabled}
-              choiceMessage={choiceMessage}
-              handler={handler}
-              uploadUrl={
-                lastBotResponse?.response.payload.metadata?.uploadUrls?.[0]
-              }
-              onFileUpload={({ uploadId, file }) => {
-                setUploadedFiles((prev) => ({
-                  ...prev,
-                  [uploadId]: file,
-                }));
-              }}
-            />
           </>
         ) : (
           <FullscreenVoice
             active={voiceActive}
+            initializeConversation={props.initializeConversation}
             setActive={setVoiceActive}
+            brandIcon={props.brandIcon}
             handler={handler}
+            speakersEnabled={fullscreenVoiceSpeakersEnabled}
             colorMode={colorMode}
             className="flex-grow"
             context={props.initialContext}
+            customModalities={customModalities}
           />
         )}
       </div>

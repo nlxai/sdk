@@ -1,15 +1,19 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import type { Context, ConversationHandler } from "@nlxai/chat-core";
+import type {
+  Context,
+  ConversationHandler,
+  ModalityPayloads,
+} from "@nlxai/chat-core";
+import { useDebouncedState } from "@react-hookz/web";
 import {
-  Room,
   ParticipantEvent,
+  Room,
   RoomEvent,
   Track,
   type Participant,
   type RemoteTrack,
 } from "livekit-client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDebouncedState } from "@react-hookz/web";
 
 type VoiceRoomState =
   | "inactive"
@@ -29,6 +33,7 @@ interface VoiceHookReturn {
   isUserSpeaking: boolean;
   isApplicationSpeaking: boolean;
   soundCheck: null | SoundCheck;
+  roomData: null | ModalitiesWithContext;
 }
 
 interface UseVoiceParams {
@@ -38,6 +43,28 @@ interface UseVoiceParams {
   handler: ConversationHandler;
   context?: Context;
 }
+
+export interface ModalitiesWithContext {
+  modalities: ModalityPayloads;
+  from?: string;
+  timestamp: number;
+}
+
+const decodeModalities = (val: Uint8Array): ModalityPayloads | null => {
+  const decoded = new TextDecoder().decode(val);
+  if (decoded !== null && typeof decoded === "object") {
+    return decoded;
+  }
+  try {
+    const parsed = JSON.parse(decoded);
+    if (parsed === null || typeof parsed !== "object") {
+      throw new Error("Invalid parsed");
+    }
+    return parsed;
+  } catch (err) {
+    return null;
+  }
+};
 
 export const useVoice = ({
   active,
@@ -55,45 +82,51 @@ export const useVoice = ({
     600,
   );
 
-  const audioElementRef = useRef<HTMLMediaElement | null>(null);
+  const trackRef = useRef<RemoteTrack | null>(null);
 
   const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
 
-  // TODO: evaluate how this can be added reliably
-  /* useEffect(() => {
+  const [roomData, setRoomData] = useState<ModalitiesWithContext | null>(null);
+
+  useEffect(() => {
     const room = roomRef.current;
     if (room == null) {
       return;
     }
     room.localParticipant.setMicrophoneEnabled(micEnabled).catch((err) => {
+      // eslint-disable-next-line no-console
       console.warn(err);
     });
-  }, [micEnabled]); */
-
-  // TODO: evaluate how this can be added reliably
-  /* useEffect(() => {
-    const audioElement = audioElementRef.current;
-    if (audioElement == null) {
-      return;
-    }
-    audioElement.volume = speakersEnabled ? 1 : 0;
-  }, [speakersEnabled]); */
+  }, [micEnabled]);
 
   useEffect(() => {
+    const track = trackRef.current;
+    if (track == null) {
+      return;
+    }
+    track.setMuted(!speakersEnabled);
+  }, [speakersEnabled]);
+
+  useEffect(() => {
+    let mediaStream: MediaStream | null = null;
+
     const checkMic = async (): Promise<void> => {
       try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        await navigator.mediaDevices.getUserMedia({
+        mediaStream = await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const speakers = devices
+          .filter((device) => device.kind === "audiooutput")
+          .map((device) => device.label);
         setSoundCheck({
           micAllowed: true,
           micNames: devices
             .filter((device) => device.kind === "audioinput")
             .map((device) => device.label),
-          speakerNames: devices
-            .filter((device) => device.kind === "audiooutput")
-            .map((device) => device.label),
+          speakerNames:
+            // Safari does not return speaker names, so we default to just assuming there is a system default speaker
+            speakers.length > 0 ? speakers : ["System Default Speaker Device"],
         });
       } catch (err) {
         // eslint-disable-next-line no-console
@@ -109,27 +142,39 @@ export const useVoice = ({
     // This function call will never throw, therefore the floating promises rule should not apply
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     checkMic();
+
+    return () => {
+      if (mediaStream == null) {
+        return;
+      }
+      const tracks = mediaStream.getTracks();
+      tracks.forEach((track) => {
+        track.stop();
+        mediaStream?.removeTrack(track);
+      });
+    };
   }, [setSoundCheck]);
 
   const [isApplicationSpeaking, setIsApplicationSpeaking] =
     useDebouncedState<boolean>(false, 600);
 
   const disconnect = useCallback(() => {
-    if (roomRef.current == null) {
+    const room = roomRef.current;
+    if (room == null) {
       return;
     }
-    roomRef.current.disconnect().catch((err) => {
+    room.disconnect().catch((err) => {
       // eslint-disable-next-line no-console
       console.warn(err);
     });
-    void handler.terminateLiveKitCall();
-    roomRef.current = null;
-    // Not 100% sure this is necessary but it seems to help
-    if (audioElementRef.current != null) {
-      audioElementRef.current.pause();
-      audioElementRef.current = null;
+    void handler.terminateVoiceCall();
+    if (trackRef.current != null) {
+      trackRef.current.stop();
+      trackRef.current = null;
     }
-  }, []);
+    roomRef.current = null;
+    setRoomData(null);
+  }, [setRoomData]);
 
   useEffect(() => {
     const handleBeforeUnload = (): void => {
@@ -145,7 +190,7 @@ export const useVoice = ({
     try {
       setRoomState("pending");
 
-      const creds = await handler.getLiveKitCredentials(context);
+      const creds = await handler.getVoiceCredentials(context);
 
       const handleActiveSpeakersChanged = (
         participants: Participant[],
@@ -162,9 +207,9 @@ export const useVoice = ({
 
       const handleTrackSubscribed = (track: RemoteTrack): void => {
         if (track.kind === Track.Kind.Audio) {
+          trackRef.current = track;
           const element = track.attach();
           void element.play();
-          audioElementRef.current = element;
         }
       };
 
@@ -189,6 +234,15 @@ export const useVoice = ({
         disconnect();
       });
 
+      // Handle incoming data from the room/agent
+      room.on(RoomEvent.DataReceived, (payload, participant) => {
+        setRoomData({
+          modalities: decodeModalities(payload) ?? {},
+          from: participant?.identity,
+          timestamp: Date.now(),
+        });
+      });
+
       await room.connect(creds.url, creds.token, { autoSubscribe: true });
       await room.localParticipant.setMicrophoneEnabled(true);
       await room.startAudio();
@@ -197,7 +251,7 @@ export const useVoice = ({
       setRoomState("error");
       // eslint-disable-next-line no-console
       console.warn(err);
-      handler.terminateLiveKitCall().catch((err: any) => {
+      handler.terminateVoiceCall().catch((err: any) => {
         // eslint-disable-next-line no-console
         console.warn(err);
       });
@@ -216,5 +270,6 @@ export const useVoice = ({
     isUserSpeaking,
     isApplicationSpeaking,
     soundCheck,
+    roomData,
   };
 };

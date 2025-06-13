@@ -1,4 +1,8 @@
 - [Chat Modes](#chat-modes)
+  - [Visual Comparison Details](#visual-comparison-details)
+  - [When to Use Assistant Style](#when-to-use-assistant-style)
+  - [When to Use Classic Chat Style](#when-to-use-classic-chat-style)
+- [Configuration Quick Reference](#configuration-quick-reference)
 - [Assistant Style (Default)](#assistant-style-default)
   - [Example Assistant Configuration](#example-assistant-configuration)
   - [Example Assistant Configuration with message bubbles](#example-assistant-configuration-with-message-bubbles)
@@ -6,28 +10,60 @@
   - [Example Classic Chat Configuration](#example-classic-chat-configuration)
   - [Example Classic Chat Configuration with message bubbles](#example-classic-chat-configuration-with-message-bubbles)
 
-Touchpoint UI offers two distinct chat interface modes to suit different user experience needs.
-
 ## Chat Modes
 
-| Mode                   | Description                                        | Best Used When                                            | Key Benefits                                                    |
-| :--------------------- | :------------------------------------------------- | :-------------------------------------------------------- | :-------------------------------------------------------------- |
-| **Assistant Style**    | Focused interface highlighting current interaction | Guided tasks, step-by-step workflows, single interactions | Clean minimal interface, focused attention, reduced distraction |
-| **Classic Chat Style** | Traditional messaging interface with history       | Complex discussions, reference-heavy interactions         | Full history visible, easy reference, familiar experience       |
+- **Assistant Style**
+  - Focused interface highlighting current interaction with clean minimal interface to focus user attention and reduced distractions.
+- **Classic Chat Style**
+  - Traditional messaging interface with full history visible, easy message reference, familiar chat experience.
+
+### Visual Comparison Details
+
+| Feature           | Assistant Style               | Classic Chat Style   |
+| ----------------- | ----------------------------- | -------------------- |
+| Message History   | Hidden by default, scrollable | Always visible       |
+| Focus             | Current interaction only      | Full conversation    |
+| Loading Indicator | Full-screen overlay           | Inline with messages |
+| Screen Space      | Maximizes content area        | Fixed message list   |
+| User Experience   | Step-by-step guidance         | Conversational flow  |
+
+### When to Use Assistant Style
+
+- **Guided workflows**: Step-by-step processes like form filling or troubleshooting
+- **Simple queries**: Quick questions that don't require conversation history
+- **Mobile experiences**: Limited screen space benefits from focused interface
+- **Task completion**: When users need to focus on one thing at a time
+
+<img src="/animations/assistantMode.webp" alt="Assistant Mode Animation" style="max-width: 40%;">
+
+### When to Use Classic Chat Style
+
+- **Support conversations**: When users need to reference previous messages
+- **Complex discussions**: Multi-turn conversations with context dependencies
+- **Documentation queries**: When users might need to scroll back for information
+- **Familiar experience**: When users expect traditional chat interfaces
+
+<img src="/animations/chatMode2.webp" alt="Chat Mode Animation" style="max-width: 40%;">
+
+## Configuration Quick Reference
+
+| Property             | Type    | Default | Description                                      |
+| -------------------- | ------- | ------- | ------------------------------------------------ |
+| `chatMode`           | boolean | `false` | `false` = Assistant style, `true` = Classic chat |
+| `userMessageBubble`  | boolean | `false` | Add bubble styling to user messages              |
+| `agentMessageBubble` | boolean | `false` | Add bubble styling to agent messages             |
+
+**Note**: Message bubble settings work with both chat modes but have different visual effects in each mode.
 
 ## Assistant Style (Default)
 
 The Assistant Style provides a focused experience where only the latest application message is prominently displayed. This creates a clean interface that directs the user's attention to the most recent information or question, while still allowing them to scroll up to view conversation history.
 
-<img src="/animations/assistantMode.webp" alt="Assistant Mode Animation" style="max-width: 40%;">
-
 ### Example Assistant Configuration
 
 To implement the default Assistant Style, you can either omit the `chatMode` parameter or explicitly set it to `false`:
 
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpointOptions = {
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -51,9 +87,7 @@ const touchpoint = await create(touchpointOptions);
 
 To add message bubbles to the Assistant Style:
 
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpointOptions = {
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -78,15 +112,11 @@ const touchpoint = await create(touchpointOptions);
 
 The Classic Chat Style provides a traditional messaging interface where all messages stack chronologically and remain visible. This creates a more conventional chat experience that many users are already familiar with from messaging apps.
 
-<img src="/animations/chatMode2.webp" alt="Chat Mode Animation" style="max-width: 40%;">
-
 ### Example Classic Chat Configuration
 
 To implement the Classic Chat Style, set the `chatMode` parameter to `true`:
 
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpointOptions = {
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
@@ -110,9 +140,7 @@ const touchpoint = await create(touchpointOptions);
 
 To enable message bubbles in Classic Chat Style for a more traditional messaging look:
 
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const touchpointOptions = {
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",

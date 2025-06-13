@@ -20,7 +20,22 @@ import { DateInput } from "./components/ui/DateInput";
 import { createElement, type FC } from "react";
 import type { TouchpointConfiguration } from "./types";
 import { equals } from "ramda";
-
+export {
+  analyzePageForms,
+  type InteractiveElementInfo,
+  type PageForms,
+  type AccessibilityInformation,
+} from "./analyzePageForms";
+/**
+ * If you wish to build custom modalities using JSX, you will want to
+ *
+ * ```javascript
+ * import { React } from "@nlx/touchpoint-ui";
+ * ```
+ *
+ * instead of importing from "react" directly. This ensures that the custom modalities will
+ * be running in the same React context as the Touchpoint UI using the correct version of React.
+ */
 export { default as React } from "react";
 
 // Create a htm instance where components can be used
@@ -70,6 +85,7 @@ export { type TextButtonProps } from "./components/ui/TextButton";
 export {
   type InitializeConversation,
   type ColorMode,
+  type Input,
   type Theme,
   type WindowSize,
   type CustomModalityComponent,
@@ -142,8 +158,8 @@ class NlxTouchpointElement extends HTMLElement {
             initializeConversation={
               this.#touchpointConfiguration.initializeConversation ??
               ((handler, context) => {
-                if (this.#touchpointConfiguration?.input === "text")
-                  handler.sendWelcomeIntent(context);
+                if ((this.#touchpointConfiguration?.input ?? "text") === "text")
+                  handler.sendWelcomeFlow(context);
               })
             }
             onClose={this.onClose}

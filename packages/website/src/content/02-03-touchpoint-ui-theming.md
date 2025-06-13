@@ -1,4 +1,8 @@
 - [Quick Customization Essentials](#quick-customization-essentials)
+- [Launch and Brand Icons](#launch-and-brand-icons)
+  - [Launch Icon Guidance](#launch-icon-guidance)
+  - [Brand Icon Guidance](#brand-icon-guidance)
+  - [Custom Launch Implementation](#custom-launch-implementation)
 - [Dark Mode Support](#dark-mode-support)
   - [Defining Distinct Light and Dark Themes](#defining-distinct-light-and-dark-themes)
 - [Comprehensive Color System](#comprehensive-color-system)
@@ -8,21 +12,19 @@
   - [Status Colors](#status-colors)
 - [Layout Customization](#layout-customization)
   - [Border Radius Properties](#border-radius-properties)
-  - [Visual Impact of Different Border Radius Values](#visual-impact-of-different-border-radius-values)
 - [Complete Theme Example](#complete-theme-example)
-
-Touchpoint UI provides a powerful and flexible theming system that allows you to seamlessly integrate the chat widget with your application's visual identity. This guide explores both basic and advanced theming techniques to give you complete control over the appearance of your Touchpoint implementation.
 
 ## Quick Customization Essentials
 
 For many applications, adjusting just two key properties will create a cohesive branded experience:
 
-```javascript
-const touchpointInstance = await nlxai.touchpointUi.create({
+```touchpointui
+const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
+    userId: crypto.randomUUID(),
   },
   theme: {
     // The primary color for buttons and highlights
@@ -43,16 +45,113 @@ The `accent` color is used throughout the interface for:
 
 The `fontFamily` property affects all text in the interface, ensuring typographic consistency.
 
-## Dark Mode Support
+## Launch and Brand Icons
 
-Touchpoint automatically adapts your theme for both light and dark modes. Use the `light-dark()` method to provide different accent colors for each mode:
+Icons are critical for maintaining brand consistency and ensuring a polished user experience. Touchpoint provides two key icon customization points: the launch icon (chat button) and the brand icon (header logo).
 
-```javascript
-const touchpointInstance = await nlxai.touchpointUi.create({
+### Launch Icon Guidance
+
+The `launchIcon` is displayed on the floating action button when the Touchpoint UI is collapsed. This is often the first interaction point for the user.
+
+**Design Guidance:**
+
+| Guidance               | Details                                     | Reference                                                                                                                                            |
+| ---------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Button and Icon Size   | Icon is 32x32 within the launch button      | Your `launchIcon` image will be displayed at 32x32 pixels within this 64x64 button                                                                   |
+| File Format            | SVG or PNG                                  | A single-color SVG is ideal                                                                                                                          |
+| Color and Contrast     | Single Color                                | Should contrast well with background color. (Check both light and dark mode)                                                                         |
+| Background and Borders | Icon **must have a transparent background** | The icon should not have any embedded borders; the button handles its own border and rounding (`rounded-outer` which uses `theme.outerBorderRadius`) |
+| Shape and Proportions  | 32x32 pixels                                | Encuse the icon is clear and recognizable at this size                                                                                               |
+
+**Configuration:**
+
+Provide the URL to your custom icon via the `launchIcon` property.
+
+```touchpointui
+const touchpoint = await create({
   config: {
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
+    userId: crypto.randomUUID(),
+  },
+  launchIcon: "https://yourdomain.com/path/to/your-launch-icon.svg",
+  theme: {
+    background: "rgb(0, 100, 255)", // Example: Ensure your icon contrasts with this
+  },
+});
+```
+
+### Brand Icon Guidance
+
+The `brandIcon` appears in the header of the expanded Touchpoint UI, reinforcing your brand's presence.
+
+**Design Guidelines:**
+
+| Guidance               | Details                                     | Reference                                     |
+| ---------------------- | ------------------------------------------- | --------------------------------------------- |
+| Size                   | 40x40 pixels                                | Ensure design is clear at this size           |
+| File Format            | SVG or PNG                                  | A SVG is ideal, High Quality PNG will work    |
+| Background and Borders | Icon **must have a transparent background** | The icon should not have any embedded borders |
+
+**Configuration:**
+
+Pass the URL of your icon to the `brandIcon` property in the Touchpoint configuration.
+
+```touchpointui
+const touchpoint = await create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+    userId: crypto.randomUUID(),
+  },
+  brandIcon: "https://yourdomain.com/path/to/your-brand-icon.svg",
+});
+```
+
+### Custom Launch Implementation
+
+You can implement a fully custom launch experience if the default launch button constraints don't meet your needs.
+
+```touchpointui
+const touchpoint = await create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+    userId: crypto.randomUUID(),
+  },
+  brandIcon: "https://yourdomain.com/path/to/your-brand-icon.svg",
+  launchIcon: false,
+});
+
+// Create your own launch button
+document.getElementById("my-custom-button").addEventListener("click", () => {
+  touchpoint.expanded = true;
+});
+```
+
+**HTML**
+
+```html
+<!-- Your custom button -->
+<button id="my-custom-button" class="my-brand-button">Chat with us</button>
+```
+
+This approach gives you complete control over the launch button's appearance, position, and behavior. See the [Showing and Hiding Touchpoint](/guide-show-hide-touchpoint) guide for more details.
+
+## Dark Mode Support
+
+Touchpoint automatically adapts your theme for both light and dark modes. Use the `light-dark()` method to provide different accent colors for each mode:
+
+```touchpointui
+const touchpoint = await create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+    userId: crypto.randomUUID(),
   },
   colorMode: "dark", // or "light"
   theme: {
@@ -66,9 +165,7 @@ const touchpointInstance = await nlxai.touchpointUi.create({
 
 For maximum control, you can create entirely separate theme objects for light and dark modes:
 
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const lightTheme = {
   fontFamily: '"Inter", sans-serif',
   accent: "#007AFF",
@@ -87,19 +184,22 @@ const darkTheme = {
   // ... other dark theme properties
 };
 
-const initializeTouchpoint = async (
-  userColorModePreference /* 'light' or 'dark' */,
-) => {
-  const touchpoint = await create({
-    config: {
-      applicationUrl: "YOUR_APPLICATION_URL",
-      headers: { "nlx-api-key": "YOUR_API_KEY" },
-      languageCode: "en-US",
-    },
-    colorMode: userColorModePreference,
-    theme: userColorModePreference === "dark" ? darkTheme : lightTheme,
-  });
-};
+const userColorModePreference = window.matchMedia(
+  "(prefers-color-scheme: dark)",
+).matches
+  ? "dark"
+  : "light";
+
+const touchpoint = await create({
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: { "nlx-api-key": "YOUR_API_KEY" },
+    languageCode: "en-US",
+    userId: crypto.randomUUID(),
+  },
+  colorMode: userColorModePreference,
+  theme: userColorModePreference === "dark" ? darkTheme : lightTheme,
+});
 ```
 
 ## Comprehensive Color System
@@ -165,7 +265,7 @@ Two key properties control the roundness of UI elements:
 
 For example:
 
-```javascript
+```touchpointui
 const theme = {
   // Other theme properties...
   innerBorderRadius: "4px", // Slightly rounded buttons and inputs
@@ -173,26 +273,11 @@ const theme = {
 };
 ```
 
-### Visual Impact of Different Border Radius Values
-
-- **Sharp corners**: `innerBorderRadius: "0px"`, `outerBorderRadius: "0px"`
-
-  - Creates a very geometric, angular appearance
-
-- **Slightly rounded**: `innerBorderRadius: "4px"`, `outerBorderRadius: "8px"`
-
-  - Provides subtle rounding for a modern look
-
-- **Very rounded**: `innerBorderRadius: "20px"`, `outerBorderRadius: "20px"`
-  - Creates pill-shaped elements with a friendly, approachable feel
-
 ## Complete Theme Example
 
 Here's a complete theme configuration showing all available properties:
 
-```javascript
-import { create } from "@nlxai/touchpoint-ui";
-
+```touchpointui
 const completeTheme = {
   // Typography
   fontFamily: '"Roboto", sans-serif',
@@ -237,7 +322,10 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
+    userId: crypto.randomUUID(),
   },
   theme: completeTheme,
+  launchIcon: "https://yoursite.com/chat-icon.svg",
+  brandIcon: "https://yoursite.com/logo.png",
 });
 ```
