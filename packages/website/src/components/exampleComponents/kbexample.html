@@ -1,0 +1,146 @@
+<!-- Touchpoint sample HTML -->
+<!-- Downloaded from https://developers.nlx.ai -->
+<html lang="en">
+
+<head>
+    <title>Touchpoint Sample HTML</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body>
+    <script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+    <script type="module">
+        const contentLoaded = () => {
+            if (document.readyState === "loading") {
+                return new Promise((resolve) => {
+                    window.addEventListener("DOMContentLoaded", () => {
+                        resolve();
+                    });
+                });
+            } else {
+                return Promise.resolve();
+            }
+        };
+
+        await contentLoaded();
+        const { Icons, html, create, React, BaseText, TextButton, SmallText } = nlxai.touchpointUi;
+        const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
+            const [selected, setSelected] = React.useState(null);
+
+            return html`
+                <Carousel>
+                ${data.map((exhibit, index) => html`
+                    <CustomCard
+                    key=${index}
+                    selected=${selected === index}
+                    onClick=${() => {
+                    setSelected(index);
+                    conversationHandler.sendChoice(exhibit.id);
+                }}
+                    >
+                    <CustomCardImageRow 
+                        src=${exhibit.imageUrl} 
+                        alt=${exhibit.name}
+                    />
+                    <CustomCardRow
+                        left=${html`<BaseText>${exhibit.name}</BaseText>`}
+                        right=${html`<SmallText>Through ${exhibit.endDate}</SmallText>`}
+                    />
+                    </CustomCard>`
+            )}
+                </Carousel>
+            `;
+        };
+
+        const MuseumExhibitDetails = ({ data, conversationHandler }) => {
+            console.log("MuseumExhibitDetails data", data);
+            return html`
+            <CustomCard>
+                <CustomCardImageRow 
+                    src=${data.detailImageUrl} 
+                    alt=${data.name}
+                />
+                <CustomCardRow
+                    left=${html`<BaseText>${data.name}</BaseText>`}
+                    right=${html`<BaseText>Through ${data.endDate}</BaseText>`}
+                />
+                <CustomCardRow
+                    left=${html`<BaseText>Location:</BaseText>`}
+                    right=${html`<BaseText>${data.galleryLocation}</BaseText>`}
+                />
+                <CustomCardRow
+                    left=${html`<SmallText>${data.summary}</SmallText>`}
+                    right=${html`<div/>`}
+                />
+                </CustomCard>
+            `;
+        };
+
+        const MuseumKBCitationsButton = ({ data, conversationHandler }) => {
+            const [expanded, setExpanded] = React.useState(false);
+
+            return html`
+                <div>
+                    <TextButton
+                        label="Sources"
+                        Icon=${expanded ? Icons.ArrowUp : Icons.ArrowDown}
+                        type="ghost"
+                        onClick=${() => setExpanded(!expanded)}
+                    />
+                    ${expanded ? html`
+                        ${data.map((citation, index) =>html`
+                
+                            <div key=${index}>
+                                ${html`<SmallText>• [${index + 1}] ${citation.fileName} (Page ${citation.pageNumber})</SmallText>`}
+                            </div>
+                            `)}
+                    ` : null}
+                </div>
+            `;
+        };
+
+
+        const MuseumKBCitationsNoButton = ({ data, conversationHandler }) => {
+            const [expanded, setExpanded] = React.useState(false);
+
+            return html`
+                <div>
+                    <div onClick=${() => setExpanded(!expanded)}>
+                        ${html`<BaseText>Sources ${expanded ? '▴' : '▾'}</BaseText>`}
+                    </div>
+                    ${expanded ? 
+                        html`${data.map((citation, index) =>html`
+                            <div key=${index}>
+                                ${html`<SmallText>• [${index + 1}] ${citation.fileName} (Page ${citation.pageNumber})</SmallText>`}
+                            </div>`)}`
+                    :
+                    null}
+                </div>
+            `;
+        };
+
+
+        const touchpoint = await nlxai.touchpointUi.create({
+            config: {
+                applicationUrl: "https://bots.dev.studio.nlx.ai/c/5KCQGKJ7itnkafMnFfiRz/H4NQhl5oiHUsEmZm3Zpvj",
+                headers: {
+                    "nlx-api-key": "RGgxSTYilkK/khOFvxotFSjE6LPR/S04"
+                },
+                languageCode: "en-US",
+                userId: "REPLACE_WITH_USER_ID"
+            },
+            colorMode: "dark",
+            input: "text",
+            theme: { "fontFamily": "\"Neue Haas Grotesk\", sans-serif", "accent": "#AECAFF" },
+            customModalities: {
+                MuseumExhibitDetails: MuseumExhibitDetails,
+                MuseumExhibitCarousel: MuseumExhibitCarousel,
+                MuseumKBCitations: MuseumKBCitationsNoButton
+            }
+        });
+    </script>
+</body>
+
+</html>

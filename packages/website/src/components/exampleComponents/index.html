@@ -1,0 +1,418 @@
+<!-- Touchpoint sample HTML -->
+<!-- Downloaded from https://developers.nlx.ai -->
+<html lang="en">
+
+<head>
+    <title>Touchpoint Sample HTML</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+</head>
+
+<body>
+    <script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
+    <script type="module">
+        const contentLoaded = () => {
+            if (document.readyState === "loading") {
+                return new Promise((resolve) => {
+                    window.addEventListener("DOMContentLoaded", () => {
+                        resolve();
+                    });
+                });
+            } else {
+                return Promise.resolve();
+            }
+        };
+
+        await contentLoaded();
+
+        const sampleSources = [
+            {
+                fileName: "Exhibit Catalog.pdf",
+                pageNumber: 5
+            },
+            {
+                fileName: "Museum Guide.docx",
+                pageNumber: 12
+            },
+            {
+                fileName: "Research Paper.pdf",
+                pageNumber: 3
+            }
+        ];
+
+        const { Icons, html, create, React, BaseText, TextButton, SmallText } = nlxai.touchpointUi;
+        const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
+            const [selected, setSelected] = React.useState(null);
+
+            return html`
+                <Carousel>
+                ${data.map((exhibit, index) => html`
+                    <CustomCard
+                    key=${index}
+                    selected=${selected === index}
+                    onClick=${() => {
+                    setSelected(index);
+                    conversationHandler.sendChoice(exhibit.id);
+                }}
+                    >
+                    <CustomCardImageRow 
+                        src=${exhibit.imageUrl} 
+                        alt=${exhibit.name}
+                    />
+                    <CustomCardRow
+                        left=${html`<BaseText>${exhibit.name}</BaseText>`}
+                        right=${html`<SmallText>Through ${exhibit.endDate}</SmallText>`}
+                    />
+                    </CustomCard>`
+            )}
+                </Carousel>
+            `;
+        };
+
+const SourcesComponent1 = ({ data, conversationHandler }) => {
+  // Access Touchpoint UI components from global scope
+  const [isExpanded, setIsExpanded] = React.useState(false);
+    data = sampleSources;
+  if (!data || data.length === 0) {
+    return null;
+  }
+
+  if (!isExpanded) {
+    // Collapsed state - button with arrow pointing right
+    return html`
+      <div style=${{ marginTop: '16px' }}>
+        <button
+          onClick=${() => setIsExpanded(true)}
+          style=${{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '12px 20px',
+            borderRadius: '24px',
+            backgroundColor: 'var(--primary-5)',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s',
+            fontFamily: 'inherit'
+          }}
+          onMouseEnter=${(e) => e.currentTarget.style.backgroundColor = 'var(--primary-10)'}
+          onMouseLeave=${(e) => e.currentTarget.style.backgroundColor = 'var(--primary-5)'}
+        >
+          <${Icons.ArrowRight} size=${20} style=${{ color: 'var(--primary-60)' }} />
+          <span style=${{ 
+            color: 'var(--primary-80)', 
+            fontSize: '16px',
+            fontWeight: '400'
+          }}>
+            Sources
+          </span>
+        </button>
+      </div>
+    `;
+  } else {
+    // Expanded state - container with sources list
+    return html`
+      <div style=${{ marginTop: '16px' }}>
+        <div style=${{
+          backgroundColor: 'var(--primary-5)',
+          borderRadius: 'var(--outer-border-radius)',
+          padding: '20px'
+        }}>
+          <button
+            onClick=${() => setIsExpanded(false)}
+            style=${{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '0',
+              marginBottom: '16px',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              width: '100%',
+              fontFamily: 'inherit'
+            }}
+          >
+            <${Icons.ArrowDown} size=${20} style=${{ color: 'var(--primary-60)' }} />
+            <span style=${{ 
+              color: 'var(--primary-80)', 
+              fontSize: '16px',
+              fontWeight: '400'
+            }}>
+              Sources
+            </span>
+          </button>
+          
+          <div style=${{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            ${data.map((source, index) => html`
+              <div key=${index} style=${{ 
+                display: 'flex', 
+                alignItems: 'flex-start', 
+                gap: '16px' 
+              }}>
+                <span style=${{ 
+                  color: 'var(--primary-40)', 
+                  fontSize: '15px',
+                  minWidth: '20px',
+                  marginTop: '2px'
+                }}>
+                  ${index + 1}
+                </span>
+                <span style=${{ 
+                  color: 'var(--primary-80)', 
+                  fontSize: '15px',
+                  lineHeight: '1.5'
+                }}>
+                  ${source.fileName}
+                </span>
+              </div>
+            `)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+};
+
+
+// Knowledge Base Sources Component
+const SourcesComponent = ({ data, conversationHandler }) => {
+  // Access Touchpoint UI components from global scope
+  const [isExpanded, setIsExpanded] = React.useState(false);
+    data = sampleSources;
+  if (!data || data.length === 0) {
+    return null;
+  }
+
+  if (!isExpanded) {
+    // Collapsed state - chevron button separate from text
+    return html`
+      <div style=${{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <button
+          onClick=${() => setIsExpanded(true)}
+          style=${{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            backgroundColor: 'rgba(255, 255, 255, 0.08)',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s',
+            padding: '0',
+            flexShrink: '0'
+          }}
+          onMouseEnter=${(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)'}
+          onMouseLeave=${(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)'}
+          aria-label="Expand sources"
+        >
+          <${Icons.ArrowRight} size=${16} style=${{ color: 'rgba(255, 255, 255, 0.7)' }} />
+        </button>
+        <span style=${{ 
+          color: 'var(--primary-80)', 
+          fontSize: '16px',
+          fontWeight: '400'
+        }}>
+          Sources
+        </span>
+      </div>
+    `;
+  } else {
+    // Expanded state - container with sources list
+    return html`
+      <div style=${{ marginTop: '16px' }}>
+        <div style=${{
+          backgroundColor: 'var(--primary-5)',
+          borderRadius: 'var(--outer-border-radius)',
+          padding: '20px'
+        }}>
+          <div style=${{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+            <button
+              onClick=${() => setIsExpanded(false)}
+              style=${{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                backgroundColor: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'background-color 0.2s',
+                padding: '0',
+                flexShrink: '0'
+              }}
+              onMouseEnter=${(e) => e.currentTarget.style.backgroundColor = 'var(--primary-10)'}
+              onMouseLeave=${(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              aria-label="Collapse sources"
+            >
+              <${Icons.ArrowDown} size=${16} style=${{ color: 'var(--primary-60)' }} />
+            </button>
+            <span style=${{ 
+              color: 'var(--primary-80)', 
+              fontSize: '16px',
+              fontWeight: '400'
+            }}>
+              Sources
+            </span>
+          </div>
+          
+          <div style=${{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            ${data.map((source, index) => html`
+              <div key=${index} style=${{ 
+                display: 'flex', 
+                alignItems: 'flex-start', 
+                gap: '16px' 
+              }}>
+                <span style=${{ 
+                  color: 'var(--primary-40)', 
+                  fontSize: '15px',
+                  minWidth: '20px',
+                  marginTop: '2px'
+                }}>
+                  ${index + 1}
+                </span>
+                <span style=${{ 
+                  color: 'var(--primary-80)', 
+                  fontSize: '15px',
+                  lineHeight: '1.5'
+                }}>
+                  ${source.fileName}
+                </span>
+              </div>
+            `)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+};
+        const MuseumExhibitDetails = ({ data, conversationHandler }) => {
+            console.log("MuseumExhibitDetails data", data);
+            // put other imagees into a carousel
+            return html`
+            <CustomCard>
+                <CustomCardImageRow 
+                    src=${data.detailImageUrl} 
+                    alt=${data.name}
+                />
+                <CustomCardRow
+                    left=${html`<BaseText>${data.name}</BaseText>`}
+                    right=${html`<BaseText>Through ${data.endDate}</BaseText>`}
+                />
+                <CustomCardRow
+                    left=${html`<BaseText>Location:</BaseText>`}
+                    right=${html`<BaseText>${data.galleryLocation}</BaseText>`}
+                />
+                <CustomCardRow
+                    left=${html`<SmallText>${data.summary}</SmallText>`}
+                    right=${html`<div/>`}
+                />
+                </CustomCard>
+            `;
+        };
+
+        const MuseumKBCitationsNoButton = ({ data, conversationHandler }) => {
+            const [expanded, setExpanded] = React.useState(false);
+
+            return html`
+                <div>
+                    <div onClick=${() => setExpanded(!expanded)}>
+                        ${html`<BaseText>Sources ${expanded ? '▴' : '▾'}</BaseText>`}
+                    </div>
+                    ${expanded ? html`
+                        ${data.map((citation, index) =>html`
+                            <div key=${index}>
+                                ${html`<SmallText>• [${index + 1}] ${citation.fileName} (Page ${citation.pageNumber})</SmallText>`}
+                            </div>
+                        `)}`
+                    : null}
+                </div>
+            `;
+        };
+
+
+        const MuseumKBCitations = ({ data }) => {
+            const [expanded, setExpanded] = React.useState(false);
+            data = sampleSources;
+
+            const sourcesList = html`
+                ${data.map((citation, index) => html`
+                    <div key=${index}>
+                        ${html`<SmallText>${index + 1}  ${citation.fileName}</SmallText>`}
+                    </div>
+                `)}
+            `;
+
+            return html`
+                <div>
+                    <div onClick=${() => setExpanded(!expanded)}>
+                        ${html`<BaseText>${expanded ? '▼' : '▶'} Sources</BaseText>`}
+                    </div>
+                    ${expanded ? sourcesList : null}
+                </div>
+            `;
+        };
+
+const MuseumKBCitationsEnhanced = ({ data }) => {
+    const [expanded, setExpanded] = React.useState(false);
+    data = sampleSources;
+    const sourcesList = html`
+        <div className="space-y-2">
+            ${data.map((citation, index) => html`
+                <div key=${index} className="flex items-center gap-3">
+                    <span className="text-primary-60 text-sm font-medium">${index + 1}</span>
+                    ${html`<SmallText>${citation.fileName}</SmallText>`}
+                </div>
+            `)}
+        </div>
+    `;
+
+    return html`
+        <div className="space-y-3">
+            <button onClick=${() => setExpanded(!expanded)} className="flex items-center gap-3 px-3 py-2 bg-primary-10 border border-primary-20 rounded-inner hover:bg-primary-20 transition-colors">
+                <span className="w-6 h-6 border border-primary-40 rounded-full flex items-center justify-center text-primary-80 text-xs">${expanded ? '▼' : '▶'}</span>
+                ${html`<BaseText>Sources</BaseText>`}
+            </button>
+            ${expanded ? sourcesList : null}
+        </div>
+    `;
+};
+
+        const touchpoint = await nlxai.touchpointUi.create({
+            config: {
+                applicationUrl: "https://bots.dev.studio.nlx.ai/c/5KCQGKJ7itnkafMnFfiRz/H4NQhl5oiHUsEmZm3Zpvj",
+                headers: {
+                    "nlx-api-key": "RGgxSTYilkK/khOFvxotFSjE6LPR/S04"
+                },
+                languageCode: "en-US",
+                userId: "REPLACE_WITH_USER_ID"
+            },
+            colorMode: "dark",
+            input: "text",
+            theme: { "fontFamily": "\"Neue Haas Grotesk\", sans-serif", "accent": "#AECAFF" },
+            customModalities: {
+                MuseumExhibitDetails: MuseumExhibitDetails,
+                MuseumExhibitCarousel: MuseumExhibitCarousel,
+                MuseumKBCitations: SourcesComponent
+            }
+        });
+        const conversationHandler = touchpoint.conversationHandler;
+        const myListenerFunction = (history, message) => {
+            // Only process if we have a new bot message
+            if (!message || message.type !== "bot") return;
+            const modalities = message.payload?.modalities;
+            if (!modalities) return;
+            console.log("Modalities received:", JSON.stringify(modalities, null, 2));
+        };
+
+        // Start listening to the conversation
+        conversationHandler.subscribe(myListenerFunction);
+    </script>
+</body>
+
+</html>
