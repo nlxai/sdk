@@ -82,7 +82,7 @@ export const useVoice = ({
     600,
   );
 
-  const audioElementRef = useRef<HTMLMediaElement | null>(null);
+  const trackRef = useRef<RemoteTrack | null>(null);
 
   const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
 
@@ -100,17 +100,19 @@ export const useVoice = ({
   }, [micEnabled]);
 
   useEffect(() => {
-    const audioElement = audioElementRef.current;
-    if (audioElement == null) {
+    const track = trackRef.current;
+    if (track == null) {
       return;
     }
-    audioElement.volume = speakersEnabled ? 1 : 0;
+    track.setMuted(!speakersEnabled);
   }, [speakersEnabled]);
 
   useEffect(() => {
+    let mediaStream: MediaStream | null = null;
+
     const checkMic = async (): Promise<void> => {
       try {
-        await navigator.mediaDevices.getUserMedia({
+        mediaStream = await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -140,26 +142,37 @@ export const useVoice = ({
     // This function call will never throw, therefore the floating promises rule should not apply
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     checkMic();
+
+    return () => {
+      if (mediaStream == null) {
+        return;
+      }
+      const tracks = mediaStream.getTracks();
+      tracks.forEach((track) => {
+        track.stop();
+        mediaStream?.removeTrack(track);
+      });
+    };
   }, [setSoundCheck]);
 
   const [isApplicationSpeaking, setIsApplicationSpeaking] =
     useDebouncedState<boolean>(false, 600);
 
   const disconnect = useCallback(() => {
-    if (roomRef.current == null) {
+    const room = roomRef.current;
+    if (room == null) {
       return;
     }
-    roomRef.current.disconnect().catch((err) => {
+    room.disconnect().catch((err) => {
       // eslint-disable-next-line no-console
       console.warn(err);
     });
     void handler.terminateVoiceCall();
-    roomRef.current = null;
-    // Not 100% sure this is necessary but it seems to help
-    if (audioElementRef.current != null) {
-      audioElementRef.current.pause();
-      audioElementRef.current = null;
+    if (trackRef.current != null) {
+      trackRef.current.stop();
+      trackRef.current = null;
     }
+    roomRef.current = null;
     setRoomData(null);
   }, [setRoomData]);
 
@@ -194,9 +207,9 @@ export const useVoice = ({
 
       const handleTrackSubscribed = (track: RemoteTrack): void => {
         if (track.kind === Track.Kind.Audio) {
+          trackRef.current = track;
           const element = track.attach();
           void element.play();
-          audioElementRef.current = element;
         }
       };
 
