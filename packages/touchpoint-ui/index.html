@@ -90,7 +90,12 @@
     </p>
   </main>
   <script type="module">
-    import {create} from "/src/index.tsx";
+    import {create, html} from "/src/index.tsx";
+    const Something = () => {
+      return html`
+        <p>Hello, world</p>
+      `;
+    };
     const touchpoint = await create({
       config: {
         applicationUrl:
@@ -101,48 +106,10 @@
         userId: "1234-5678",
         languageCode: "en-US",
       },
-      windowSize: "full",
-      input: "text",
+      input: "voice",
+      customModalities: {Something},
       initializeConversation: () => { }
     });
-    touchpoint.conversationHandler.setRequestOverride((req, append) => {
-      if (req.request.unstructured?.text != null) {
-        setTimeout(() => {
-          append({
-            messages: [{
-              text: "Yo", choices: [
-                {choiceId: "a", choiceText: "A"}
-                , {choiceId: "b", choiceText: "B"}
-                , {choiceId: "c", choiceText: "C"}
-                , {choiceId: "c", choiceText: "C"}
-                , {choiceId: "c", choiceText: "C"}
-                , {choiceId: "c", choiceText: "C"}
-                , {choiceId: "c", choiceText: "C"}
-                , {choiceId: "c", choiceText: "C"}
-                , {choiceId: "c", choiceText: "C"}
-              ]
-            }],
-            metadata: {
-              sources: [
-                {fileName: "my-source.pdf", presignedUrl: "https://abcd"},
-                {fileName: "my-source.pdf", presignedUrl: "https://abcd"},
-              ]
-            }
-          });
-        }, 1000)
-      } else {
-        setTimeout(() => {
-          append({
-            messages: [{
-              text: "Yo", choices: [
-              ]
-            }]
-          });
-        }, 1000)
-      }
-    });
-    touchpoint.conversationHandler.sendText("hello");
-    touchpoint.expanded = true;
   </script>
 </body>
 

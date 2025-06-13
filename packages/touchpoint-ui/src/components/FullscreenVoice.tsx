@@ -27,7 +27,11 @@ import {
   Volume,
   VolumeOff,
 } from "./ui/Icons";
-import { type SoundCheck, useVoice } from "../voice";
+import {
+  type SoundCheck,
+  type ModalitiesWithContext,
+  useVoice,
+} from "../voice";
 
 interface Props {
   colorMode: ColorMode;
@@ -39,7 +43,7 @@ interface Props {
   setActive: Dispatch<SetStateAction<boolean>>;
   context?: Context;
   initializeConversation: InitializeConversation;
-  customModalities?: Record<string, CustomModalityComponent<any>>;
+  customModalities?: Record<string, CustomModalityComponent<unknown>>;
 }
 
 export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
@@ -47,7 +51,7 @@ export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
 }) => {
   return (
     <div className="space-y-4 text-primary-80">
-      <p>
+      <p className="px-1">
         Get ready to join a voice experience. Please ensure your microphone and
         speakers are turned on and functioning.
       </p>
@@ -63,7 +67,7 @@ export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
               {soundCheck.micAllowed ? <Mic /> : <MicOff />}
             </span>
             <input
-              className="p-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
+              className="px-3 py-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
               value={soundCheck.micNames[0]}
               placeholder="Mic not found"
               disabled
@@ -79,7 +83,7 @@ export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
               {soundCheck.speakerNames[0] != null ? <Volume /> : <VolumeOff />}
             </span>
             <input
-              className="p-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
+              className="px-3 py-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
               value={soundCheck.speakerNames[0]}
               placeholder="Speaker not found"
               disabled
@@ -103,6 +107,43 @@ const Container: FC<{ className?: string; children: ReactNode }> = ({
   >
     {children}
   </div>
+);
+
+export const VoiceModalities: FC<{
+  Wrapper?: FC<{ children: ReactNode }>;
+  roomData: ModalitiesWithContext;
+  customModalities: Record<string, CustomModalityComponent<unknown>>;
+  handler: ConversationHandler;
+}> = ({ Wrapper, roomData, customModalities, handler }) => {
+  const modalityEntries = Object.entries(roomData.modalities);
+  const customModalityComponents = modalityEntries
+    .map(([key, value]) => {
+      const Component = customModalities[key];
+      if (Component != null) {
+        return (
+          <Component
+            key={key}
+            data={value}
+            conversationHandler={handler}
+            enabled={true}
+          />
+        );
+      }
+      return null;
+    })
+    .filter(Boolean);
+
+  if (customModalityComponents.length > 0) {
+    return Wrapper == null ? (
+      customModalityComponents
+    ) : (
+      <Wrapper>{customModalityComponents}</Wrapper>
+    );
+  }
+};
+
+const VoiceModalitiesWrapper: FC<{ children: ReactNode }> = ({ children }) => (
+  <div className="absolute top-4 left-4 right-4">{children}</div>
 );
 
 export const FullscreenVoice: FC<Props> = ({
@@ -209,36 +250,14 @@ export const FullscreenVoice: FC<Props> = ({
         </div>
         {isApplicationSpeaking ? <Ripple className="rounded-full" /> : null}
       </div>
-      {(() => {
-        if (roomData == null) {
-          return null;
-        }
-        const modalityEntries = Object.entries(roomData.modalities);
-        const customModalityComponents = modalityEntries
-          .map(([key, value]) => {
-            const Component = customModalities[key];
-            if (Component != null) {
-              return (
-                <Component
-                  key={key}
-                  data={value}
-                  conversationHandler={handler}
-                  enabled={true}
-                />
-              );
-            }
-            return null;
-          })
-          .filter(Boolean);
-
-        if (customModalityComponents.length > 0) {
-          return (
-            <div className="absolute top-4 left-4 right-4">
-              {customModalityComponents}
-            </div>
-          );
-        }
-      })()}
+      {roomData != null ? (
+        <VoiceModalities
+          Wrapper={VoiceModalitiesWrapper}
+          roomData={roomData}
+          customModalities={customModalities}
+          handler={handler}
+        />
+      ) : null}
       <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2">
         {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
         <IconButton

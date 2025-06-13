@@ -26,7 +26,7 @@ export interface MessagesProps {
   colorMode: ColorMode;
   uploadedFiles: Record<string, File>;
   lastBotResponseIndex?: number;
-  customModalities: Record<string, CustomModalityComponent<any>>;
+  customModalities: Record<string, CustomModalityComponent<unknown>>;
   className?: string;
   enabled: boolean;
 }
