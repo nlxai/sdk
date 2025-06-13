@@ -108,9 +108,11 @@ export const useVoice = ({
   }, [speakersEnabled]);
 
   useEffect(() => {
+    let mediaStream: MediaStream | null = null;
+
     const checkMic = async (): Promise<void> => {
       try {
-        await navigator.mediaDevices.getUserMedia({
+        mediaStream = await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -140,6 +142,17 @@ export const useVoice = ({
     // This function call will never throw, therefore the floating promises rule should not apply
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     checkMic();
+
+    return () => {
+      if (mediaStream == null) {
+        return;
+      }
+      const tracks = mediaStream.getTracks();
+      tracks.forEach((track) => {
+        track.stop();
+        mediaStream?.removeTrack(track);
+      });
+    };
   }, [setSoundCheck]);
 
   const [isApplicationSpeaking, setIsApplicationSpeaking] =
