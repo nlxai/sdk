@@ -1,5 +1,6 @@
-import { type FC, useEffect, useRef, type ReactNode } from "react";
+import { type FC, useRef, type ReactNode } from "react";
 import { type Config, isConfigValid } from "@nlxai/chat-core";
+import { useDebouncedEffect } from "@react-hookz/web";
 
 import { TouchpointIcon } from "../components/Icons";
 import { Toggle } from "../components/Toggle";
@@ -142,33 +143,38 @@ export const Content: FC<unknown> = () => {
       : config;
   };
 
-  useEffect(() => {
-    if (!isConfigValid(config)) {
-      return;
-    }
-
-    // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
-    import("@nlxai/touchpoint-ui/lib/index.js")
-      .then(async ({ create }) => {
-        const touchpointConfig = generateAndSetUserId(config);
-        touchpointInstance.current = await create({
-          config: touchpointConfig,
-          theme,
-          colorMode,
-          input,
-          launchIcon: false,
-        });
-      })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.warn(err);
-      });
-    return () => {
-      if (touchpointInstance.current != null) {
-        touchpointInstance.current.teardown();
+  useDebouncedEffect(
+    () => {
+      if (!isConfigValid(config)) {
+        return;
       }
-    };
-  }, [config, theme, colorMode, input]);
+
+      // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
+      import("@nlxai/touchpoint-ui/lib/index.js")
+        .then(async ({ create }) => {
+          const touchpointConfig = generateAndSetUserId(config);
+          touchpointInstance.current = await create({
+            config: touchpointConfig,
+            theme,
+            colorMode,
+            input,
+            launchIcon: false,
+          });
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn(err);
+        });
+      return () => {
+        if (touchpointInstance.current != null) {
+          touchpointInstance.current.teardown();
+        }
+      };
+    },
+    [config, theme, colorMode, input],
+    200,
+    500,
+  );
 
   return (
     <>
