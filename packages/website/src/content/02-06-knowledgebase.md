@@ -1,5 +1,3 @@
-
-
 ## Modality Schemas
 
 **MuseumKBCitations**
@@ -24,7 +22,8 @@ Used to render the source details component
 <Name>
 <Card>
 <Carousel>
-```
+
+````
 
 ```json
 [
@@ -35,7 +34,7 @@ Used to render the source details component
     "detailImageUrl": "https://nlx-kb-onboarding-images.s3.us-east-1.amazonaws.com/exhibit-1/alt-image-1.jpg",
     "name": "Typography and Visual Communication",
     "summary": "Explore the cutting edge of contemporary design through bold typographic installations, conceptual case studies, and experimental visual languages. This exhibition showcases how today's designers are reimagining communication, breaking boundaries between art and design, and creating new visual vocabularies for our digital age.",
-    "endDate": "July 3",  
+    "endDate": "July 3",
     "galleryLocation": "Gallery A, Floor 2, West Wing"
   },
   {
@@ -66,7 +65,8 @@ Used to render the source details component
     "galleryLocation": "Studio D, Floor 4, West Wing"
   }
 ]
-```
+````
+
 **ExhibitDetails**
 
 ```json
@@ -116,11 +116,11 @@ Used to render the source details component
 
 ```html
 <Card>
-<OtherImage/>
-<Name/>
-<Summary/>
-<Dates/>
-<Gallery-Location/>
-<Other-Exhibits-Button/><Exit-Button/>
+  <OtherImage />
+  <Name />
+  <summary />
+  <Dates />
+  <Gallery-Location />
+  <Other-Exhibits-Button /><Exit-Button />
 </Card>
 ```

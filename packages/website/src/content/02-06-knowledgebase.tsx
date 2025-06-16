@@ -1,6 +1,10 @@
 import { type FC, useState, useEffect, useRef, type ReactNode } from "react";
 import { type Config, isConfigValid } from "@nlxai/chat-core";
-import { MuseumExhibitCarousel, MuseumExhibitDetails, MuseumKBCitationsNoButton } from "../components/exampleComponents/kbHTMLcomponents";;
+import {
+  MuseumExhibitCarousel,
+  MuseumExhibitDetails,
+  MuseumKBCitationsNoButton,
+} from "../components/exampleComponents/kbHTMLcomponents";
 import { TouchpointIcon } from "../components/Icons";
 import { Toggle } from "../components/Toggle";
 import { Labeled, inputClass } from "../components/Ui";
@@ -21,20 +25,14 @@ export const content = `Touchpoint can be extended with Custom Components to pro
 
 This example demonstrates using Touchpoint to render Museum Exhibit selection carousel, additional information info card, and show Knowledge Base cited sources.`;
 
-export const snippetContent = ({
-  config,
-}: {
-  config: Config;
-}): string => `
+export const snippetContent = ({ config }: { config: Config }): string => `
 
 ### Setup snippet
 
 \`\`\`html
-${kbTouchpointDemo({ config})}
+${kbTouchpointDemo({ config })}
 \`\`\`
 `;
-
-
 
 interface EditableTheme {
   fontFamily: string;
@@ -94,75 +92,70 @@ export const Content: FC<unknown> = () => {
 
     const initializeTouchpoint = async () => {
       try {
-        const { Icons, html, create, React, BaseText, TextButton, SmallText} = await import("@nlxai/touchpoint-ui/lib/index.js");
-        
-        const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
-            const [selected, setSelected] = React.useState(null);
+        const { Icons, html, create, React, BaseText, TextButton, SmallText } =
+          await import("@nlxai/touchpoint-ui/lib/index.js");
 
-            return html`
-                <Carousel>
-                ${data.map((exhibit, index) => html`
-                    <CustomCard
+        const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
+          const [selected, setSelected] = React.useState(null);
+
+          return html`
+            <Carousel>
+              ${data.map(
+                (exhibit, index) =>
+                  html` <CustomCard
                     key=${index}
                     selected=${selected === index}
                     onClick=${() => {
-                    setSelected(index);
-                    conversationHandler.sendChoice(exhibit.id);
-                }}
-                    >
-                    <CustomCardImageRow 
-                        src=${exhibit.imageUrl} 
-                        alt=${exhibit.name}
+                      setSelected(index);
+                      conversationHandler.sendChoice(exhibit.id);
+                    }}
+                  >
+                    <CustomCardImageRow
+                      src=${exhibit.imageUrl}
+                      alt=${exhibit.name}
                     />
                     <CustomCardRow
-                        left=${html`<BaseText faded><div/></BaseText>`}
-                        right=${html`<BaseText>${exhibit.name}</BaseText>`}
+                      left=${html`<BaseText faded><div /></BaseText>`}
+                      right=${html`<BaseText>${exhibit.name}</BaseText>`}
                     />
                     <CustomCardRow
-                        left=${html`<BaseText faded>Dates:</BaseText>`}
-                        right=${html`<BaseText>Through ${exhibit.endDate}</BaseText>`}
+                      left=${html`<BaseText faded>Dates:</BaseText>`}
+                      right=${html`<BaseText
+                        >Through ${exhibit.endDate}</BaseText
+                      >`}
                     />
-                    </CustomCard>`
-            )}
-                </Carousel>
-            `;
+                  </CustomCard>`,
+              )}
+            </Carousel>
+          `;
         };
-
 
         const MuseumExhibitDetails = ({ data, conversationHandler }) => {
-            console.log("MuseumExhibitDetails data", data);
-            // put other imagees into a carousel
-            const detailedUrls = data.detailImageUrls;
-            return html`
-                <Carousel>
-                    <CustomCard>
-                        <CustomCardImageRow 
-                            src=${data.imageUrl} 
-                            alt=${data.name}
-                        />
-                    </CustomCard>
-                    ${detailedUrls.map((imageUrl) => html`
-                        <CustomCard>
-                            <CustomCardImageRow 
-                                src=${imageUrl} 
-                                alt=${data.name}
-                            />
-                        </CustomCard>`
-                    )}
-                </Carousel>
-                <BaseText faded>Dates</BaseText>
-                <BaseText>Through ${data.endDate}</BaseText>
-                
-                <BaseText faded>Location</BaseText>
-                <BaseText>${data.galleryLocation}</BaseText>
-                
-                <BaseText faded>About this exhibition</BaseText>
-                <BaseText>${data.summary}</BaseText>
-            `;
+          console.log("MuseumExhibitDetails data", data);
+          // put other imagees into a carousel
+          const detailedUrls = data.detailImageUrls;
+          return html`
+            <Carousel>
+              <CustomCard>
+                <CustomCardImageRow src=${data.imageUrl} alt=${data.name} />
+              </CustomCard>
+              ${detailedUrls.map(
+                (imageUrl) =>
+                  html` <CustomCard>
+                    <CustomCardImageRow src=${imageUrl} alt=${data.name} />
+                  </CustomCard>`,
+              )}
+            </Carousel>
+            <BaseText faded>Dates</BaseText>
+            <BaseText>Through ${data.endDate}</BaseText>
+
+            <BaseText faded>Location</BaseText>
+            <BaseText>${data.galleryLocation}</BaseText>
+
+            <BaseText faded>About this exhibition</BaseText>
+            <BaseText>${data.summary}</BaseText>
+          `;
         };
-
-
-
 
         const touchpointConfig = generateAndSetUserId(config);
         touchpointInstance.current = await create({
@@ -173,8 +166,8 @@ export const Content: FC<unknown> = () => {
           launchIcon: false,
           customModalities: {
             MuseumExhibitDetails: MuseumExhibitDetails,
-            MuseumExhibitCarousel: MuseumExhibitCarousel
-          }
+            MuseumExhibitCarousel: MuseumExhibitCarousel,
+          },
         });
       } catch (err) {
         // eslint-disable-next-line no-console

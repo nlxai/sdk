@@ -31,11 +31,7 @@ function defaultTo(
   return value != null && value !== "" ? value : defaultValue;
 }
 
-export const kbTouchpointDemo = ({
-  config
-}: {
-  config: Config;
-}) => {
+export const kbTouchpointDemo = ({ config }: { config: Config }) => {
   return `<!-- Touchpoint sample HTML -->
 <!-- Downloaded from https://developers.nlx.ai -->
 <html lang="en">
@@ -167,8 +163,6 @@ export const kbTouchpointDemo = ({
 </html>
 `;
 };
-
-
 
 export const touchpointUiSetupSnippet = ({
   config,

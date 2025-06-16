@@ -94,26 +94,27 @@ A structured representation of your forms for NLX to understand - This context i
           type: "text",
           placeholder: "First Name",
           label: "First Name",
-          required: false
+          required: false,
         },
         {
           id: "email",
-          name: "email", 
+          name: "email",
           type: "email",
           placeholder: "Email",
           label: "Email",
-          required: true
-        }
+          required: true,
+        },
         // ... more fields
-      ]
-    }
-  ]
+      ],
+    },
+  ];
 }
 ```
 
 **Purpose**:
 
 #### formElements Object
+
 A key-value mapping of form field IDs to their DOM elements. Store this reference to quickly access form elements when processing voice commands. The IDs in this object will match the field IDs sent back by NLX in voice commands.
 
 ```javascript
@@ -125,7 +126,6 @@ A key-value mapping of form field IDs to their DOM elements. Store this referenc
   "message": HTMLTextAreaElement
 }
 ```
-
 
 ### Sending Context to NLX
 
@@ -242,7 +242,7 @@ function handleFormInput(command) {
   //     { id: "email", value: "john@example.com" }
   //   ]
   // }
-  
+
   if (!command.fields) return;
 
   command.fields.forEach((field) => {
@@ -255,10 +255,10 @@ function handleFormInput(command) {
       // Uncomment if your framework needs these events
       // element.dispatchEvent(new Event('input', { bubbles: true }));
       // element.dispatchEvent(new Event('change', { bubbles: true }));
-      
+
       // Optional: Add visual feedback
-      element.classList.add('voice-updated');
-      setTimeout(() => element.classList.remove('voice-updated'), 2000);
+      element.classList.add("voice-updated");
+      setTimeout(() => element.classList.remove("voice-updated"), 2000);
     } else {
       console.warn(`Field with id "${field.id}" not found in formElements`);
     }
@@ -267,6 +267,7 @@ function handleFormInput(command) {
 ```
 
 **Important Notes:**
+
 - The `field.id` in the command will match the element IDs in your `formElements` object
 - Always check if the element exists before trying to update it
 - Some frameworks (React, Vue) may require dispatching events to trigger updates
