@@ -35,7 +35,6 @@ export const kbTouchpointDemo = ({
   config
 }: {
   config: Config;
-
 }) => {
   return `<!-- Touchpoint sample HTML -->
 <!-- Downloaded from https://developers.nlx.ai -->
@@ -84,8 +83,12 @@ export const kbTouchpointDemo = ({
                         alt=\${exhibit.name}
                     />
                     <CustomCardRow
-                        left=\${html\`<BaseText>\${exhibit.name}</BaseText>\`}
-                        right=\${html\`<SmallText>Through \${exhibit.endDate}</SmallText>\`}
+                        left=\${html\`<BaseText faded><div/></BaseText>\`}
+                        right=\${html\`<BaseText>\${exhibit.name}</BaseText>\`}
+                    />
+                    <CustomCardRow
+                        left=\${html\`<BaseText faded>Dates:</BaseText>\`}
+                        right=\${html\`<BaseText>Through \${exhibit.endDate}</BaseText>\`}
                     />
                     </CustomCard>\`
             )}
@@ -93,81 +96,67 @@ export const kbTouchpointDemo = ({
             \`;
         };
 
+
         const MuseumExhibitDetails = ({ data, conversationHandler }) => {
             console.log("MuseumExhibitDetails data", data);
             // put other imagees into a carousel
+            const detailedUrls = data.detailImageUrls;
             return html\`
-            <CustomCard>
-                <CustomCardImageRow 
-                    src=\${data.detailImageUrl} 
-                    alt=\${data.name}
-                />
-                <CustomCardRow
-                    left=\${html\`<BaseText>\${data.name}</BaseText>\`}
-                    right=\${html\`<BaseText>Through \${data.endDate}</BaseText>\`}
-                />
-                <CustomCardRow
-                    left=\${html\`<BaseText>Location:</BaseText>\`}
-                    right=\${html\`<BaseText>\${data.galleryLocation}</BaseText>\`}
-                />
-                <CustomCardRow
-                    left=\${html\`<SmallText>\${data.summary}</SmallText>\`}
-                    right=\${html\`<div/>\`}
-                />
-                </CustomCard>
+                <Carousel>
+                    <CustomCard>
+                        <CustomCardImageRow 
+                            src=\${data.imageUrl} 
+                            alt=\${data.name}
+                        />
+                    </CustomCard>
+                    \${detailedUrls.map((imageUrl) => html\`
+                        <CustomCard>
+                            <CustomCardImageRow 
+                                src=\${imageUrl} 
+                                alt=\${data.name}
+                            />
+                        </CustomCard>\`
+                    )}
+                </Carousel>
+                <BaseText faded>Dates</BaseText>
+                <BaseText>Through \${data.endDate}</BaseText>
+                
+                <BaseText faded>Location</BaseText>
+                <BaseText>\${data.galleryLocation}</BaseText>
+                
+                <BaseText faded>About this exhibition</BaseText>
+                <BaseText>\${data.summary}</BaseText>
             \`;
         };
 
-
-        const MuseumKBCitationsNoButton = ({ data, conversationHandler }) => {
-            const [expanded, setExpanded] = React.useState(false);
-
-            const expandedContent = html\`
-                \${data.map((citation, index) => html\`
-                    <div key=\${index}>
-                        \${html\`<SmallText>• [\${index + 1}] \${citation.fileName} (Page \${citation.pageNumber})</SmallText>\`}
-                    </div>
-                \`)}
-            \`;
-
-            return html\`
-                <div>
-                    <div onClick=\${() => setExpanded(!expanded)}>
-                        \${html\`<BaseText>Sources \${expanded ? '▴' : '▾'}</BaseText>\`}
-                    </div>
-                    \${expanded ? expandedContent : null}
-                </div>
-            \`;
-        };
 
         const touchpoint = await nlxai.touchpointUi.create({
             config: {
-              applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
+              applicationUrl: "${config.applicationUrl || "hREPLACE_WITH_APPLICATION_URL"}",
               headers: {
-                "nlx-api-key": "${defaultTo(
-                  config.headers?.["nlx-api-key"],
-                  "REPLACE_WITH_API_KEY",
-                )}"
+                "nlx-api-key": "${config.headers?.["nlx-api-key"] || "REPLACE_WITH_API_KEY"}"
               },
-              languageCode: "${config.languageCode}",
-              userId: "${defaultTo(config.userId, "REPLACE_WITH_USER_ID")}"
+              languageCode: "${config.languageCode || "en-US"}",
+              userId: "${config.userId || "REPLACE_WITH_USER_ID"}"
             },
             colorMode: "dark",
             input: "text",
             theme: { "fontFamily": "\\"Neue Haas Grotesk\\", sans-serif", "accent": "#AECAFF" },
             customModalities: {
                 MuseumExhibitDetails: MuseumExhibitDetails,
-                MuseumExhibitCarousel: MuseumExhibitCarousel,
-                MuseumKBCitations: MuseumKBCitationsNoButton
+                MuseumExhibitCarousel: MuseumExhibitCarousel
             }
         });
         const conversationHandler = touchpoint.conversationHandler;
         const myListenerFunction = (history, message) => {
             // Only process if we have a new bot message
+            console.log("---message---");
+            console.log(JSON.stringify(message, null, 2));
+            console.log("---<message>---");
             if (!message || message.type !== "bot") return;
             const modalities = message.payload?.modalities;
             if (!modalities) return;
-            console.log("Modalities received:", modalities);
+            // console.log("Modalities received:", modalities);
         };
 
         // Start listening to the conversation

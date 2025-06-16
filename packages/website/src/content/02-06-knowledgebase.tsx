@@ -115,8 +115,12 @@ export const Content: FC<unknown> = () => {
                         alt=${exhibit.name}
                     />
                     <CustomCardRow
-                        left=${html`<BaseText>${exhibit.name}</BaseText>`}
-                        right=${html`<SmallText>Through ${exhibit.endDate}</SmallText>`}
+                        left=${html`<BaseText faded><div/></BaseText>`}
+                        right=${html`<BaseText>${exhibit.name}</BaseText>`}
+                    />
+                    <CustomCardRow
+                        left=${html`<BaseText faded>Dates:</BaseText>`}
+                        right=${html`<BaseText>Through ${exhibit.endDate}</BaseText>`}
                     />
                     </CustomCard>`
             )}
@@ -124,50 +128,36 @@ export const Content: FC<unknown> = () => {
             `;
         };
 
+
         const MuseumExhibitDetails = ({ data, conversationHandler }) => {
             console.log("MuseumExhibitDetails data", data);
             // put other imagees into a carousel
+            const detailedUrls = data.detailImageUrls;
             return html`
-            <CustomCard>
-                <CustomCardImageRow 
-                    src=${data.detailImageUrl} 
-                    alt=${data.name}
-                />
-                <CustomCardRow
-                    left=${html`<BaseText>${data.name}</BaseText>`}
-                    right=${html`<BaseText>Through ${data.endDate}</BaseText>`}
-                />
-                <CustomCardRow
-                    left=${html`<BaseText>Location:</BaseText>`}
-                    right=${html`<BaseText>${data.galleryLocation}</BaseText>`}
-                />
-                <CustomCardRow
-                    left=${html`<SmallText>${data.summary}</SmallText>`}
-                    right=${html`<div/>`}
-                />
-                </CustomCard>
-            `;
-        };
-
-
-        const MuseumKBCitationsNoButton = ({ data, conversationHandler }) => {
-            const [expanded, setExpanded] = React.useState(false);
-
-            const expandedContent = html`
-                ${data.map((citation, index) => html`
-                    <div key=${index}>
-                        ${html`<SmallText>• [${index + 1}] ${citation.fileName} (Page ${citation.pageNumber})</SmallText>`}
-                    </div>
-                `)}
-            `;
-
-            return html`
-                <div>
-                    <div onClick=${() => setExpanded(!expanded)}>
-                        ${html`<BaseText>Sources ${expanded ? '▴' : '▾'}</BaseText>`}
-                    </div>
-                    ${expanded ? expandedContent : null}
-                </div>
+                <Carousel>
+                    <CustomCard>
+                        <CustomCardImageRow 
+                            src=${data.imageUrl} 
+                            alt=${data.name}
+                        />
+                    </CustomCard>
+                    ${detailedUrls.map((imageUrl) => html`
+                        <CustomCard>
+                            <CustomCardImageRow 
+                                src=${imageUrl} 
+                                alt=${data.name}
+                            />
+                        </CustomCard>`
+                    )}
+                </Carousel>
+                <BaseText faded>Dates</BaseText>
+                <BaseText>Through ${data.endDate}</BaseText>
+                
+                <BaseText faded>Location</BaseText>
+                <BaseText>${data.galleryLocation}</BaseText>
+                
+                <BaseText faded>About this exhibition</BaseText>
+                <BaseText>${data.summary}</BaseText>
             `;
         };
 
@@ -183,8 +173,7 @@ export const Content: FC<unknown> = () => {
           launchIcon: false,
           customModalities: {
             MuseumExhibitDetails: MuseumExhibitDetails,
-            MuseumExhibitCarousel: MuseumExhibitCarousel,
-            MuseumKBCitations: MuseumKBCitationsNoButton
+            MuseumExhibitCarousel: MuseumExhibitCarousel
           }
         });
       } catch (err) {
