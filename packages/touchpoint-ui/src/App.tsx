@@ -218,6 +218,84 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     );
   }
 
+  const textContent = () => {
+    if (isSettingsOpen) {
+      return (
+        <Settings
+          reset={() => {
+            reset();
+            setIsSettingsOpen(false);
+          }}
+          className={clsx(
+            "flex-none",
+            windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
+          )}
+          onClose={() => {
+            setIsSettingsOpen(false);
+          }}
+          handler={handler}
+        />
+      );
+    }
+    if (!configValid) {
+      return <FullscreenError />;
+    }
+    return (
+      <>
+        <Messages
+          enabled={props.enabled}
+          userMessageBubble={props.userMessageBubble ?? false}
+          agentMessageBubble={props.agentMessageBubble ?? false}
+          chatMode={props.chatMode ?? false}
+          isWaiting={isWaiting}
+          lastBotResponseIndex={lastBotResponse?.index}
+          responses={responses}
+          colorMode={colorMode}
+          handler={handler}
+          uploadedFiles={uploadedFiles}
+          customModalities={customModalities}
+          className={clsx(
+            "flex-grow",
+            windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
+          )}
+        />
+        <div
+          className={clsx(
+            "p-2 md:p-3 flex flex-col flex-none gap-2",
+            windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
+          )}
+        >
+          {choiceMessage != null ? (
+            <MessageChoices {...choiceMessage} handler={handler} />
+          ) : null}
+          {choiceMessage?.message.selectedChoiceId != null ? null : (
+            <Input
+              enabled={props.enabled}
+              handler={handler}
+              uploadUrl={
+                lastBotResponse?.response.payload.metadata?.uploadUrls?.[0]
+              }
+              onFileUpload={({ uploadId, file }) => {
+                setUploadedFiles((prev) => ({
+                  ...prev,
+                  [uploadId]: file,
+                }));
+              }}
+            />
+          )}
+        </div>
+      </>
+    );
+  };
+
+  const reset = () => {
+    handler.reset({ clearResponses: true });
+    if (input !== "voice") {
+      props.initializeConversation(handler, props.initialContext);
+    }
+    setVoiceActive(false);
+  };
+
   return (
     <CustomPropertiesContainer
       theme={props.theme}
@@ -269,94 +347,43 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             setVoiceActive(false);
             onClose(event);
           }}
-          reset={() => {
-            handler.reset({ clearResponses: true });
-            if (input !== "voice") {
-              props.initializeConversation(handler);
-            }
-            setVoiceActive(false);
-          }}
+          reset={reset}
         />
-        {isSettingsOpen ? (
-          <Settings
-            className={clsx(
-              "flex-none",
-              windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
-            )}
-            onClose={() => {
-              setIsSettingsOpen(false);
-            }}
-            handler={handler}
-          />
-        ) : input === "text" ? (
-          <>
-            {configValid ? (
-              <>
-                <Messages
-                  enabled={props.enabled}
-                  userMessageBubble={props.userMessageBubble ?? false}
-                  agentMessageBubble={props.agentMessageBubble ?? false}
-                  chatMode={props.chatMode ?? false}
-                  isWaiting={isWaiting}
-                  lastBotResponseIndex={lastBotResponse?.index}
-                  responses={responses}
-                  colorMode={colorMode}
-                  handler={handler}
-                  uploadedFiles={uploadedFiles}
-                  customModalities={customModalities}
-                  className={clsx(
-                    "flex-grow",
-                    windowSize === "full"
-                      ? "w-full md:max-w-content md:mx-auto"
-                      : "",
-                  )}
-                />
-                <div
-                  className={clsx(
-                    "p-2 md:p-3 flex flex-col flex-none gap-2",
-                    windowSize === "full"
-                      ? "w-full md:max-w-content md:mx-auto"
-                      : "",
-                  )}
-                >
-                  {choiceMessage != null ? (
-                    <MessageChoices {...choiceMessage} handler={handler} />
-                  ) : null}
-                  {choiceMessage?.message.selectedChoiceId != null ? null : (
-                    <Input
-                      enabled={props.enabled}
-                      handler={handler}
-                      uploadUrl={
-                        lastBotResponse?.response.payload.metadata
-                          ?.uploadUrls?.[0]
-                      }
-                      onFileUpload={({ uploadId, file }) => {
-                        setUploadedFiles((prev) => ({
-                          ...prev,
-                          [uploadId]: file,
-                        }));
-                      }}
-                    />
-                  )}
-                </div>
-              </>
-            ) : (
-              <FullscreenError />
-            )}
-          </>
+        {input === "text" ? (
+          textContent()
         ) : (
-          <FullscreenVoice
-            active={voiceActive}
-            initializeConversation={props.initializeConversation}
-            setActive={setVoiceActive}
-            brandIcon={props.brandIcon}
-            handler={handler}
-            speakersEnabled={fullscreenVoiceSpeakersEnabled}
-            colorMode={colorMode}
-            className="flex-grow"
-            context={props.initialContext}
-            customModalities={customModalities}
-          />
+          <>
+            {isSettingsOpen ? (
+              <Settings
+                className={clsx(
+                  "flex-none",
+                  windowSize === "full"
+                    ? "w-full md:max-w-content md:mx-auto"
+                    : "",
+                )}
+                onClose={() => {
+                  setIsSettingsOpen(false);
+                }}
+                reset={() => {
+                  reset();
+                  setIsSettingsOpen(false);
+                }}
+                handler={handler}
+              />
+            ) : null}
+            <FullscreenVoice
+              active={voiceActive}
+              initializeConversation={props.initializeConversation}
+              setActive={setVoiceActive}
+              brandIcon={props.brandIcon}
+              handler={handler}
+              speakersEnabled={fullscreenVoiceSpeakersEnabled}
+              colorMode={colorMode}
+              className={isSettingsOpen ? "hidden" : "flex-grow"}
+              context={props.initialContext}
+              customModalities={customModalities}
+            />
+          </>
         )}
       </div>
     </CustomPropertiesContainer>
