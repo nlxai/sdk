@@ -16,6 +16,7 @@
     "packages/voice-plus-core",
     "packages/voice-plus-web",
     "packages/touchpoint-ui",
+    "packages/touchpoint-components",
     "packages/website"
   ],
   "version": "1.0.5-alpha.13",
