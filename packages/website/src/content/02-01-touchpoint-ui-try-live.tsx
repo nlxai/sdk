@@ -1,4 +1,4 @@
-import { type FC, useEffect, useRef, type ReactNode } from "react";
+import { type FC, useRef, type ReactNode } from "react";
 import { type Config, isConfigValid } from "@nlxai/chat-core";
 import { useDebouncedEffect } from "@react-hookz/web";
 
