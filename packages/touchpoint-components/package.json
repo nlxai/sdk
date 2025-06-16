@@ -7,6 +7,9 @@
   "main": "./src/index.ts",
   "module": "./src/index.ts",
   "types": "./src/index.ts",
+  "browser": "./dist/touchpoint-components.umd.js",
+  "unpkg": "./dist/touchpoint-components.umd.js",
+  "jsdelivr": "./dist/touchpoint-components.umd.js",
   "exports": {
     ".": {
       "types": "./src/index.ts",
@@ -15,10 +18,13 @@
     }
   },
   "files": [
-    "src"
+    "src",
+    "dist"
   ],
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build": "rollup -c",
+    "prepublishOnly": "npm run build"
   },
   "author": "NLX <support@nlx.ai> (https://nlx.ai)",
   "repository": {
@@ -33,7 +39,12 @@
     "url": "https://github.com/nlxai/sdk/issues"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.1.1",
     "@types/react": "^18.2.12",
+    "rollup": "^3.25.1",
     "typescript": "^5.1.3"
   },
   "peerDependencies": {

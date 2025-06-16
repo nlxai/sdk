@@ -1,18 +1,28 @@
 # @nlxai/touchpoint-components
 
-Pre-built custom components for NLX Touchpoint UI that provide rich, interactive experiences for conversational interfaces.
+Pre-built custom components for NLX Touchpoint UI.
 
 ## Installation
 
+### NPM/Yarn (for build tools)
 ```bash
 npm install @nlxai/touchpoint-components
 ```
 
+### CDN (for script tags)
+```html
+<!-- Load after touchpoint-ui -->
+<script src="https://unpkg.com/@nlxai/touchpoint-components/dist/touchpoint-components.umd.js"></script>
+```
+
+
 ## Usage
 
-Import the components you need and register them as custom modalities when creating your touchpoint:
+### With Build Tools (Webpack, Vite, etc.)
 
-```javascript
+Import components directly - your build system will handle compilation:
+
+```typescript
 import { create } from '@nlxai/touchpoint-ui';
 import { 
   MuseumExhibitCarousel, 
@@ -21,9 +31,8 @@ import {
 
 const touchpoint = await create({
   config: {
-    botId: 'your-bot-id',
+    applicationId: 'your-YOUR_APPLICATION_ID-id',
     apiKey: 'your-api-key',
-    // ... other config
   },
   customModalities: {
     MuseumExhibitCarousel,
@@ -32,12 +41,43 @@ const touchpoint = await create({
 });
 ```
 
+### With Script Tags (No Build Tools)
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Touchpoint with Custom Components</title>
+</head>
+<body>
+  <!-- 1. Load Touchpoint UI -->
+  <script src="https://unpkg.com/@nlxai/touchpoint-ui/dist/touchpoint-ui.umd.js"></script>
+  
+  <!-- 2. Load Touchpoint Components -->
+  <script src="https://unpkg.com/@nlxai/touchpoint-components/dist/touchpoint-components.umd.js"></script>
+  
+  <!-- 3. Initialize with components -->
+  <script>
+    nlxai.touchpointUi.create({
+      config: {
+        applicationId: 'YOUR_APPLICATION_ID',
+        apiKey: 'YOUR_API_KEY',
+      },
+      customModalities: {
+        // Components are available globally
+        MuseumExhibitCarousel: TouchpointComponents.MuseumExhibitCarousel,
+        MuseumExhibitDetails: TouchpointComponents.MuseumExhibitDetails
+      }
+    });
+  </script>
+</body>
+</html>
+```
+
 ## Available Components
 
-### Display Components
-
-#### MuseumExhibitCarousel
-A carousel component for displaying multiple museum exhibits with images, names, and dates.
+### MuseumExhibitCarousel
+A carousel component for displaying multiple museum exhibits.
 
 **Data Structure:**
 ```typescript
@@ -49,13 +89,8 @@ interface ExhibitData {
 }
 ```
 
-**Features:**
-- Horizontal scrollable carousel
-- Selection state tracking
-- Sends selected exhibit ID back to the conversation
-
-#### MuseumExhibitDetails
-A detailed view component for displaying comprehensive information about a single museum exhibit.
+### MuseumExhibitDetails
+A detailed view component for a single museum exhibit.
 
 **Data Structure:**
 ```typescript
@@ -70,39 +105,12 @@ interface MuseumExhibitDetailsData {
 }
 ```
 
-**Features:**
-- Image carousel with main and detail images
-- Formatted exhibit information display
-- Structured layout for dates, location, and description
+## Package Details
 
-## Component Development
-
-All components follow the standard NLX custom modality pattern:
-
-```typescript
-const MyComponent = ({ data, conversationHandler }) => {
-  // Component implementation
-  return html`<!-- Your component markup -->`;
-};
-```
-
-### Props
-
-- `data`: The modality data sent from your NLX bot
-- `conversationHandler`: Object for sending data back to the conversation
-  - `sendChoice(choiceId)`: Send a user selection
-  - `sendSlots(slots)`: Send slot values
-  - `sendText(text)`: Send a text message
-
-## Contributing
-
-We welcome contributions! Please follow these guidelines:
-
-1. Components should be reusable and configurable
-2. Include TypeScript types for all data structures
-3. Follow the existing code style
-4. Add documentation for new components
-5. Test components thoroughly
+- **Source code**: TypeScript/JSX (for bundlers)
+- **Browser build**: UMD bundle (for CDN usage)
+- **Size**: ~47KB minified
+- **Dependencies**: None (uses peer dependencies)
 
 ## License
 
