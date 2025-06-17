@@ -1,6 +1,5 @@
-import { type FC, useRef, type ReactNode } from "react";
+import { type FC, useEffect, useRef, type ReactNode } from "react";
 import { type Config, isConfigValid } from "@nlxai/chat-core";
-import { useDebouncedEffect } from "@react-hookz/web";
 
 import { TouchpointIcon } from "../components/Icons";
 import { Toggle } from "../components/Toggle";
@@ -11,7 +10,7 @@ import {
   getInitialConfig,
 } from "../components/ChatConfiguration";
 import { Note } from "../components/Note";
-import { touchpointUiSetupSnippet } from "../snippets";
+import { touchpointUiSetupSnippet, kbTouchpointDemo } from "../snippets";
 import { clsx } from "clsx";
 import useUrlState from "../useUrlState";
 
@@ -22,16 +21,30 @@ You can try your applications directly on this configuration page. Then you can 
 `;
 
 export const snippetContent = ({
-  config,
-  theme,
-  input,
-  colorMode,
-}: {
+                                 config,
+                                 theme,
+                                 input,
+                                 colorMode,
+                                 kbMode,
+                               }: {
   config: Config;
   theme: EditableTheme;
   input: string;
   colorMode: "light" | "dark";
-}): string => `
+  kbMode: string;
+}): string => {
+  if (kbMode === "kbComponents") {
+    return `
+
+### Knowledge Base Components Demo
+
+\`\`\`html
+${kbTouchpointDemo({ config })}
+\`\`\`
+`;
+  }
+
+  return `
 
 ### Setup snippet
 
@@ -39,6 +52,7 @@ export const snippetContent = ({
 ${touchpointUiSetupSnippet({ config, theme, input, colorMode })}
 \`\`\`
 `;
+};
 
 export const navGroup: string = "Touchpoint Setup";
 
@@ -128,6 +142,7 @@ export const Content: FC<unknown> = () => {
   });
 
   const [input, setInput] = useUrlState<any>("input", "text");
+  const [kbMode, setKbMode] = useUrlState<any>("kbMode", "noComponents");
 
   const [colorMode, setColorMode] = useUrlState<"light" | "dark">(
     "color-mode",
@@ -143,38 +158,111 @@ export const Content: FC<unknown> = () => {
       : config;
   };
 
-  useDebouncedEffect(
-    () => {
-      if (!isConfigValid(config)) {
-        return;
-      }
+  useEffect(() => {
+    if (!isConfigValid(config)) {
+      return;
+    }
 
-      // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
-      import("@nlxai/touchpoint-ui/lib/index.js")
-        .then(async ({ create }) => {
-          const touchpointConfig = generateAndSetUserId(config);
-          touchpointInstance.current = await create({
-            config: touchpointConfig,
-            theme,
-            colorMode,
-            input,
-            launchIcon: false,
-          });
-        })
-        .catch((err) => {
-          // eslint-disable-next-line no-console
-          console.warn(err);
+    // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
+    import("@nlxai/touchpoint-ui/lib/index.js")
+      .then(async (touchpointModule) => {
+        const { create, React, html } = touchpointModule;
+        const touchpointConfig = generateAndSetUserId(config);
+
+        // Define KB components when kbMode is "kbComponents"
+        const customModalities =
+          kbMode === "kbComponents"
+            ? {
+              MuseumExhibitCarousel: ({ data, conversationHandler }: any) => {
+                const [selected, setSelected] = React.useState<number | null>(
+                  null,
+                );
+
+                return html`
+                    <Carousel>
+                      ${data.map(
+                  (exhibit: any, index: number) =>
+                    html` <CustomCard
+                            key=${index}
+                            selected=${selected === index}
+                            onClick=${() => {
+                      setSelected(index);
+                      conversationHandler.sendChoice(exhibit.id);
+                    }}
+                          >
+                            <CustomCardImageRow
+                              src=${exhibit.imageUrl}
+                              alt=${exhibit.name}
+                            />
+                            <CustomCardRow
+                              left=${html`<BaseText faded><div /></BaseText>`}
+                              right=${html`<BaseText
+                                >${exhibit.name}</BaseText
+                              >`}
+                            />
+                            <CustomCardRow
+                              left=${html`<BaseText faded>Dates:</BaseText>`}
+                              right=${html`<BaseText
+                                >Through ${exhibit.endDate}</BaseText
+                              >`}
+                            />
+                          </CustomCard>`,
+                )}
+                    </Carousel>
+                  `;
+              },
+              MuseumExhibitDetails: ({ data }: any) => {
+                const detailedUrls = data.detailImageUrls;
+                return html`
+                    <Carousel>
+                      <CustomCard>
+                        <CustomCardImageRow
+                          src=${data.imageUrl}
+                          alt=${data.name}
+                        />
+                      </CustomCard>
+                      ${detailedUrls.map(
+                  (imageUrl: string) =>
+                    html` <CustomCard>
+                            <CustomCardImageRow
+                              src=${imageUrl}
+                              alt=${data.name}
+                            />
+                          </CustomCard>`,
+                )}
+                    </Carousel>
+                    <BaseText faded>Dates</BaseText>
+                    <BaseText>Through ${data.endDate}</BaseText>
+
+                    <BaseText faded>Location</BaseText>
+                    <BaseText>${data.galleryLocation}</BaseText>
+
+                    <BaseText faded>About this exhibition</BaseText>
+                    <BaseText>${data.summary}</BaseText>
+                  `;
+              },
+            }
+            : undefined;
+
+        touchpointInstance.current = await create({
+          config: touchpointConfig,
+          theme,
+          colorMode,
+          input,
+          launchIcon: false,
+          ...(customModalities && { customModalities }),
         });
-      return () => {
-        if (touchpointInstance.current != null) {
-          touchpointInstance.current.teardown();
-        }
-      };
-    },
-    [config, theme, colorMode, input],
-    200,
-    500,
-  );
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.warn(err);
+      });
+    return () => {
+      if (touchpointInstance.current != null) {
+        touchpointInstance.current.teardown();
+      }
+    };
+  }, [config, theme, colorMode, input, kbMode]);
 
   return (
     <>
@@ -217,17 +305,28 @@ export const Content: FC<unknown> = () => {
                 ]}
               />
             </Labeled>
+            <Labeled label="Knowledge Base Components">
+              <Toggle
+                className="w-full"
+                value={kbMode}
+                onChange={setKbMode}
+                options={[
+                  { value: "noComponents", label: "No Components" },
+                  { value: "kbComponents", label: "Knowledge Base" },
+                ]}
+              />
+            </Labeled>
           </div>
         </div>
         <FullscreenButton
           onClick={
             isConfigValid(config)
               ? () => {
-                  const instance = touchpointInstance.current;
-                  if (instance != null) {
-                    instance.expanded = true;
-                  }
+                const instance = touchpointInstance.current;
+                if (instance != null) {
+                  instance.expanded = true;
                 }
+              }
               : undefined
           }
           icon={<TouchpointIcon />}
@@ -240,6 +339,7 @@ export const Content: FC<unknown> = () => {
           theme,
           input,
           colorMode,
+          kbMode,
         })}
       />
     </>
