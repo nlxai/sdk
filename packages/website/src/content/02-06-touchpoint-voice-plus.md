@@ -20,7 +20,7 @@
 
 ## Getting Started
 
-Enhanced Voice Plus requires the `voiceMini` input mode, which automatically enables bidirectional communication:
+Voice Plus with bidirectional mode enabled requires the `voiceMini` input mode. This mode allows your application to handle voice commands while still maintaining a conversational flow with the user.:
 
 ```javascript
 import { create, analyzePageForms } from "@nlxai/touchpoint-ui";
@@ -111,22 +111,6 @@ A structured representation of your forms for NLX to understand - This context i
 }
 ```
 
-**Purpose**:
-
-#### formElements Object
-
-A key-value mapping of form field IDs to their DOM elements. Store this reference to quickly access form elements when processing voice commands. The IDs in this object will match the field IDs sent back by NLX in voice commands.
-
-```javascript
-{
-  "firstName": HTMLInputElement,
-  "lastName": HTMLInputElement,
-  "email": HTMLInputElement,
-  "phone": HTMLInputElement,
-  "message": HTMLTextAreaElement
-}
-```
-
 ### Sending Context to NLX
 
 ```javascript
@@ -138,13 +122,17 @@ const { context, formElements } = analyzePageForms();
 // Store formElements for later use when handling commands
 window.formElements = formElements; // or use state management
 
-// Send form context specifically for voice plus
-touchpoint.conversationHandler.sendVoicePlusContext({
-  context: context,
-});
+// Array of destinations for navigation commands
+const destinations = ["about", "contact", "pricing"];
 
-// Or send general context without triggering a message
-touchpoint.conversationHandler.sendContext(context);
+// Send general context without triggering a message
+touchpoint.conversationHandler.sendContext({
+  "nlx:vpContext": {
+    url: window.location.origin,
+    fields: context,
+    destinations: destinations,
+  },
+});
 ```
 
 ### When to Send Context
@@ -192,6 +180,21 @@ touchpoint.conversationHandler.addEventListener(
 
 Handle voice-driven navigation between pages:
 
+#### Payload from NLX
+
+```javascript
+// Navigation command structure:
+{
+  classification: "navigation",
+  action: "page_next", // or "page_previous", "page_custom"
+    data: {
+        destination: "/about" // Relative or absolute URL
+    }
+}
+```
+
+#### Sample Handler
+
 ```javascript
 function handleNavigation(action, data) {
   switch (action) {
@@ -224,6 +227,26 @@ function handleNavigation(action, data) {
 
 Automatically fill form fields based on voice input. The voice agent sends back commands with field IDs that match the IDs from your `formElements` object:
 
+**Important Notes:**
+
+- The `field.id` in the command will match the element IDs in your `formElements` object
+- Always check if the element exists before trying to update it
+
+#### Payload from NLX
+
+```javascript
+// Voice command structure:
+{
+  classification: "input",
+  fields: [
+    { id: "firstName", value: "John" },
+    { id: "email", value: "john@example.com" }
+  ]
+}
+```
+
+#### Sample Handler
+
 ```javascript
 import { create, analyzePageForms } from "@nlxai/touchpoint-ui";
 
@@ -234,15 +257,6 @@ const { context, formElements } = analyzePageForms();
 touchpoint.conversationHandler.sendContext(context);
 
 function handleFormInput(command) {
-  // Voice command structure:
-  // {
-  //   classification: "input",
-  //   fields: [
-  //     { id: "firstName", value: "John" },
-  //     { id: "email", value: "john@example.com" }
-  //   ]
-  // }
-
   if (!command.fields) return;
 
   command.fields.forEach((field) => {
@@ -250,15 +264,6 @@ function handleFormInput(command) {
     if (formElements[field.id]) {
       const element = formElements[field.id];
       element.value = field.value;
-
-      // Optional: Trigger events for framework compatibility
-      // Uncomment if your framework needs these events
-      // element.dispatchEvent(new Event('input', { bubbles: true }));
-      // element.dispatchEvent(new Event('change', { bubbles: true }));
-
-      // Optional: Add visual feedback
-      element.classList.add("voice-updated");
-      setTimeout(() => element.classList.remove("voice-updated"), 2000);
     } else {
       console.warn(`Field with id "${field.id}" not found in formElements`);
     }
@@ -266,16 +271,9 @@ function handleFormInput(command) {
 }
 ```
 
-**Important Notes:**
-
-- The `field.id` in the command will match the element IDs in your `formElements` object
-- Always check if the element exists before trying to update it
-- Some frameworks (React, Vue) may require dispatching events to trigger updates
-- Consider adding visual feedback to show which fields were updated by voice
-
 ### Custom Commands
 
-Implement application-specific voice commands:
+Implement application-specific voice commands by attaching a knowledge base to your Voice+ node in the flow builder. This allows you to define custom actions that can be triggered by voice commands.
 
 ```javascript
 function handleCustomCommand(action, data) {
@@ -393,8 +391,17 @@ A comprehensive example implementing voice-driven form filling, navigation:
           nlxai.touchpointUi.analyzePageForms();
         formElements = elements;
 
+        // Array of destinations for navigation commands
+        const destinations = ["home", "about", "contact", "products"];
+
         // Send context using the new sendContext method
-        touchpoint.conversationHandler.sendContext(context);
+        touchpoint.conversationHandler.sendContext({
+          "nlx:vpContext": {
+            url: window.location.origin,
+            fields: context,
+            destinations: destinations,
+          },
+        });
       }
 
       // Set up voice command handler
@@ -531,8 +538,17 @@ function sendPageContext(touchpoint) {
   const { context, formElements: elements } = analyzePageForms();
   formElements = elements;
 
+  // Array of destinations for navigation commands
+  const destinations = ["home", "about", "contact", "products"];
+
   // Use sendContext for silent context updates
-  touchpoint.conversationHandler.sendContext(context);
+  touchpoint.conversationHandler.sendContext({
+    "nlx:vpContext": {
+      url: window.location.origin,
+      fields: context,
+      destinations: destinations,
+    },
+  });
 }
 
 // Set up voice command handler
@@ -584,9 +600,3 @@ if (document.readyState === "loading") {
 ```
 
 </details>
-
-## Related Documentation
-
-- [Touchpoint UI Setup Guide](./02-01-touchpoint-setup)
-- [Voice Configuration](./02-03-touchpoint-customization#voice-configuration)
-- [Conversation Handlers](./02-04-touchpoint-advanced#conversation-handlers)
