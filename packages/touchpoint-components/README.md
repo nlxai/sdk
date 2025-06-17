@@ -25,8 +25,8 @@ Import components directly - your build system will handle compilation:
 ```typescript
 import { create } from '@nlxai/touchpoint-ui';
 import { 
-  MuseumExhibitCarousel, 
-  MuseumExhibitDetails 
+  BaseCarouselComponent, 
+  BaseCardComponent 
 } from '@nlxai/touchpoint-components';
 
 const touchpoint = await create({
@@ -35,8 +35,8 @@ const touchpoint = await create({
     apiKey: 'your-api-key',
   },
   customModalities: {
-    MuseumExhibitCarousel,
-    MuseumExhibitDetails
+    BaseCarouselComponent,
+    BaseCardComponent
   }
 });
 ```
@@ -65,8 +65,8 @@ const touchpoint = await create({
       },
       customModalities: {
         // Components are available globally
-        MuseumExhibitCarousel: TouchpointComponents.MuseumExhibitCarousel,
-        MuseumExhibitDetails: TouchpointComponents.MuseumExhibitDetails
+        BaseCarouselComponent: TouchpointComponents.BaseCarouselComponent,
+        BaseCardComponent: TouchpointComponents.BaseCardComponent
       }
     });
   </script>
@@ -76,25 +76,27 @@ const touchpoint = await create({
 
 ## Available Components
 
-### MuseumExhibitCarousel
-A carousel component for displaying multiple museum exhibits.
+### BaseCarouselComponent
+A carousel component for displaying multiple items with selection capability.
 
-**Data Structure:**
+**Data Structures:**
 ```typescript
-interface ExhibitData {
+interface BaseCarouselCardData {
   id: string;
   name: string;
   imageUrl: string;
   endDate: string;
 }
+
+type BaseCarouselComponentData = BaseCarouselCardData[];
 ```
 
-### MuseumExhibitDetails
-A detailed view component for a single museum exhibit.
+### BaseCardComponent
+A card component for displaying detailed information with image gallery.
 
 **Data Structure:**
 ```typescript
-interface MuseumExhibitDetailsData {
+interface BaseCardComponentData {
   id: string;
   name: string;
   imageUrl: string;

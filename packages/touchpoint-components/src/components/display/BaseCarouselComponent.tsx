@@ -9,16 +9,16 @@ import {
   React
 } from "@nlxai/touchpoint-ui";
 
-interface ExhibitData {
+interface BaseCarouselCardData {
   id: string;
   name: string;
   imageUrl: string;
   endDate: string;
 }
 
-type MuseumExhibitCarouselData = ExhibitData[];
+type BaseCarouselComponentData = BaseCarouselCardData[];
 
-export const MuseumExhibitCarousel: CustomModalityComponent<MuseumExhibitCarouselData> = ({ data, conversationHandler }) => {
+export const BaseCarouselComponent: CustomModalityComponent<BaseCarouselComponentData> = ({ data, conversationHandler }) => {
   const [selected, setSelected] = React.useState<number | null>(null);
 
   return (

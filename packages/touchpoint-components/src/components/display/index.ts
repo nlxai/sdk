@@ -1,2 +1,2 @@
-export { MuseumExhibitCarousel } from "./MuseumExhibitCarousel";
-export { MuseumExhibitDetails } from "./MuseumExhibitDetails";
+export { BaseCarouselComponent } from "./BaseCarouselComponent";
+export { BaseCardComponent } from "./BaseCardComponent";

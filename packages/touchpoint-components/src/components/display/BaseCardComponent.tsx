@@ -6,7 +6,7 @@ import {
   BaseText 
 } from "@nlxai/touchpoint-ui";
 
-interface MuseumExhibitDetailsData {
+interface BaseCardComponentData {
   id: string;
   name: string;
   imageUrl: string;
@@ -16,7 +16,7 @@ interface MuseumExhibitDetailsData {
   summary: string;
 }
 
-export const MuseumExhibitDetails: CustomModalityComponent<MuseumExhibitDetailsData> = ({ data }) => {
+export const BaseCardComponent: CustomModalityComponent<BaseCardComponentData> = ({ data }) => {
   const detailImageUrls = data.detailImageUrls;
   return (
     <>

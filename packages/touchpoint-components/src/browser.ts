@@ -1,23 +1,23 @@
 // Browser entry point that expects touchpoint-ui to be available globally
-import { MuseumExhibitCarousel, MuseumExhibitDetails } from './components/display';
+import { BaseCarouselComponent, BaseCardComponent } from './components/display';
 
 // Extend the global window object
 declare global {
   interface Window {
     TouchpointComponents: {
-      MuseumExhibitCarousel: typeof MuseumExhibitCarousel;
-      MuseumExhibitDetails: typeof MuseumExhibitDetails;
+      BaseCarouselComponent: typeof BaseCarouselComponent;
+      BaseCardComponent: typeof BaseCardComponent;
     };
   }
 }
 
 // Export for UMD build
-export { MuseumExhibitCarousel, MuseumExhibitDetails };
+export { BaseCarouselComponent, BaseCardComponent };
 
 // Also attach to window for direct script access
 if (typeof window !== 'undefined') {
   window.TouchpointComponents = {
-    MuseumExhibitCarousel,
-    MuseumExhibitDetails
+    BaseCarouselComponent,
+    BaseCardComponent
   };
 }
