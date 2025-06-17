@@ -43,7 +43,7 @@ ${kbTouchpointDemo({ config })}
 \`\`\`
 `;
   }
-  
+
   return `
 
 ### Setup snippet
