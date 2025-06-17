@@ -17,9 +17,9 @@ import { Note } from "../components/Note";
 import { kbTouchpointDemo } from "../snippets";
 import { clsx } from "clsx";
 
-export const navGroup: string = "Touchpoint";
+export const navGroup: string = "Custom Components";
 
-export const title: string = "Knowledge Base with Touchpoint";
+export const title: string = "Museum Exhibits Demo";
 
 export const content = `Touchpoint can be extended with Custom Components to provide a more tailored experience for your users. This allows you to create a unique and engaging interface that meets the specific needs of your application.
 
