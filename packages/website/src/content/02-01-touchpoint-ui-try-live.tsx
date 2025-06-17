@@ -173,7 +173,10 @@ export const Content: FC<unknown> = () => {
         const customModalities =
           kbMode === "kbComponents"
             ? {
-                MuseumExhibitCarousel: ({ data, conversationHandler }: any) => {
+                MuseumExhibitCarousel: ({
+                  data,
+                  conversationHandler,
+                }: any): any => {
                   const [selected, setSelected] = React.useState<number | null>(
                     null,
                   );
@@ -211,7 +214,7 @@ export const Content: FC<unknown> = () => {
                     </Carousel>
                   `;
                 },
-                MuseumExhibitDetails: ({ data }: any) => {
+                MuseumExhibitDetails: ({ data }: any): any => {
                   const detailedUrls = data.detailImageUrls;
                   return html`
                     <Carousel>
