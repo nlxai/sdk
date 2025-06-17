@@ -136,12 +136,12 @@ export const kbTouchpointDemo = ({ config }: { config: Config }): string => {
 };
 
 export const touchpointUiSetupSnippet = ({
-                                           config,
-                                           theme,
-                                           customModalitiesExample = false,
-                                           input = "text",
-                                           colorMode = "light",
-                                         }: {
+  config,
+  theme,
+  customModalitiesExample = false,
+  input = "text",
+  colorMode = "light",
+}: {
   config: Config;
   theme?: {
     fontFamily: string;
@@ -179,25 +179,25 @@ export const touchpointUiSetupSnippet = ({
             applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
             headers: {
               "nlx-api-key": "${defaultTo(
-    config.headers?.["nlx-api-key"],
-    "REPLACE_WITH_API_KEY",
-  )}"
+                config.headers?.["nlx-api-key"],
+                "REPLACE_WITH_API_KEY",
+              )}"
             },
             languageCode: "${config.languageCode}",
             userId: "${defaultTo(config.userId, "REPLACE_WITH_USER_ID")}"
           },
           colorMode: "${colorMode}",
           input: "${input}",${
-    theme != null
-      ? `
+            theme != null
+              ? `
           theme: ${JSON.stringify(theme)}`
-      : ""
-  }${
-    renderCustomModalitiesExample
-      ? `
+              : ""
+          }${
+            renderCustomModalitiesExample
+              ? `
           customModalities: { REPLACE_WITH_CUSTOM_MODALITIES }`
-      : ""
-  }
+              : ""
+          }
         })
       }); 
     </script>
@@ -206,12 +206,12 @@ export const touchpointUiSetupSnippet = ({
 };
 
 export const setupSnippet = ({
-                               config,
-                               titleBar,
-                               theme,
-                               behavior,
-                               customModalitiesExample,
-                             }: {
+  config,
+  titleBar,
+  theme,
+  behavior,
+  customModalitiesExample,
+}: {
   config: Config;
   titleBar: TitleBar;
   theme?: Partial<Theme>;
@@ -227,11 +227,11 @@ export const setupSnippet = ({
   </head>
   <body>
     ${umdScriptTags.chatWidget}${
-    customModalitiesExample != null
-      ? `
+      customModalitiesExample != null
+        ? `
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/htm/3.1.1/htm.js" integrity="sha512-RilD4H0wcNNxG2GvB+L1LRXCntT0zgRvRLnmGu+e9wWaLKGkPifz3Ozb6+WPsyEkTBLw6zWCwwEjs9JLL1KIHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>`
-      : ""
-  }
+        : ""
+    }
     <script>
       const contentLoaded = () => {
         if (document.readyState === "loading") {
@@ -246,8 +246,8 @@ export const setupSnippet = ({
       };
 
       contentLoaded().then(() => {${
-    customModalitiesExample != null
-      ? `
+        customModalitiesExample != null
+          ? `
 
         // EMBEDDABLE COMPONENT SETUP
         // Destructure dependencies
@@ -268,33 +268,33 @@ export const setupSnippet = ({
         };
         // EMBEDDABLE COMPONENT SETUP END
 `
-      : ""
-  }
+          : ""
+      }
         const widget = nlxai.chatWidget.create({
           config: {
             botUrl: "${defaultTo(config.botUrl, "REPLACE_WITH_BOT_URL")}",
             headers: {
               "nlx-api-key": "${defaultTo(
-    config.headers?.["nlx-api-key"],
-    "REPLACE_WITH_API_KEY",
-  )}"
+                config.headers?.["nlx-api-key"],
+                "REPLACE_WITH_API_KEY",
+              )}"
             },
             languageCode: "${config.languageCode}"
           },${
-    customModalitiesExample != null
-      ? `
+            customModalitiesExample != null
+              ? `
           // Include custom embeddable component under the 'customModalities' field
           customModalities: { SendExampleSlot },`
-      : ""
-  }
+              : ""
+          }
           titleBar: ${indentBy(
-    "          ",
-    JSON.stringify(titleBar, null, 2),
-  )},${
-    behavior === Behavior.WelcomeIntentOnOpen
-      ? indentBy(
-        "          ",
-        `
+            "          ",
+            JSON.stringify(titleBar, null, 2),
+          )},${
+            behavior === Behavior.WelcomeIntentOnOpen
+              ? indentBy(
+                  "          ",
+                  `
 // CUSTOM BEHAVIOR SNIPPET
 onExpand: (conversationHandler) => {
   const checkMessages = (messages) => {
@@ -306,56 +306,56 @@ onExpand: (conversationHandler) => {
   conversationHandler.subscribe(checkMessages);
 },
 // CUSTOM BEHAVIOR SNIPPET END`,
-      )
-      : behavior === Behavior.UseSessionStorage
-        ? indentBy(
-          "          ",
-          `
+                )
+              : behavior === Behavior.UseSessionStorage
+                ? indentBy(
+                    "          ",
+                    `
 // CUSTOM BEHAVIOR SNIPPET
 storeIn: "sessionStorage",
 // CUSTOM BEHAVIOR SNIPPET END`,
-        )
-        : behavior === Behavior.UseLocalStorage
-          ? indentBy(
-            "          ",
-            `
+                  )
+                : behavior === Behavior.UseLocalStorage
+                  ? indentBy(
+                      "          ",
+                      `
 // CUSTOM BEHAVIOR SNIPPET
 storeIn: "localStorage",
 // CUSTOM BEHAVIOR SNIPPET END`,
-          )
-          : ""
-  }
+                    )
+                  : ""
+          }
           ${
-    theme != null
-      ? `theme: ${indentBy(
-        "          ",
-        JSON.stringify(theme, null, 2),
-      )}`
-      : ""
-  }
+            theme != null
+              ? `theme: ${indentBy(
+                  "          ",
+                  JSON.stringify(theme, null, 2),
+                )}`
+              : ""
+          }
         });${
-    behavior === Behavior.CustomIntentOnInactivity
-      ? indentBy(
-        "        ",
-        `
+          behavior === Behavior.CustomIntentOnInactivity
+            ? indentBy(
+                "        ",
+                `
 
 // CUSTOM BEHAVIOR SNIPPET
 ${sendWelcomeOnTimeoutSnippet}
 // CUSTOM BEHAVIOR SNIPPET END`,
-      )
-      : ""
-  }${
-    behavior === Behavior.InitializeWithContext
-      ? indentBy(
-        "        ",
-        `
+              )
+            : ""
+        }${
+          behavior === Behavior.InitializeWithContext
+            ? indentBy(
+                "        ",
+                `
 
 // CUSTOM BEHAVIOR SNIPPET
 ${initializeWithContextSnippet}
 // CUSTOM BEHAVIOR SNIPPET END`,
-      )
-      : ""
-  }
+              )
+            : ""
+        }
       });
     </script>
   </body>
@@ -404,9 +404,9 @@ convo.subscribe((responses, newResponse) => {
 convo.sendText("hello");`;
 
 export const voicePlusSnippet = ({
-                                   config,
-                                   environment,
-                                 }: {
+  config,
+  environment,
+}: {
   config?: Partial<VoicePlusConfig>;
   environment?: Environment;
 }): string => {
@@ -468,13 +468,13 @@ export const umdScriptTags: ScriptTagsType = (
 );
 
 export const voicePlusWebSnippet = ({
-                                      digressionButton,
-                                    }: {
+  digressionButton,
+}: {
   digressionButton: boolean;
 }): string => `<html>
   <head>${
-  digressionButton
-    ? `
+    digressionButton
+      ? `
     <style>
       @keyframes fadeInKeyframes {
         0% {
@@ -515,8 +515,8 @@ export const voicePlusWebSnippet = ({
         background-color: rgba(30, 86, 196, 1);
       }
     </style>`
-    : ""
-}
+      : ""
+  }
     ${umdScriptTags.voicePlusWeb}
     <script>
       // Get conversation ID from the URL, assuming it is included as a 'cid' search param (and save in session storage)

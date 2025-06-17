@@ -21,12 +21,12 @@ You can try your applications directly on this configuration page. Then you can 
 `;
 
 export const snippetContent = ({
-                                 config,
-                                 theme,
-                                 input,
-                                 colorMode,
-                                 kbMode,
-                               }: {
+  config,
+  theme,
+  input,
+  colorMode,
+  kbMode,
+}: {
   config: Config;
   theme: EditableTheme;
   input: string;
@@ -173,22 +173,22 @@ export const Content: FC<unknown> = () => {
         const customModalities =
           kbMode === "kbComponents"
             ? {
-              MuseumExhibitCarousel: ({ data, conversationHandler }: any) => {
-                const [selected, setSelected] = React.useState<number | null>(
-                  null,
-                );
+                MuseumExhibitCarousel: ({ data, conversationHandler }: any) => {
+                  const [selected, setSelected] = React.useState<number | null>(
+                    null,
+                  );
 
-                return html`
+                  return html`
                     <Carousel>
                       ${data.map(
-                  (exhibit: any, index: number) =>
-                    html` <CustomCard
+                        (exhibit: any, index: number) =>
+                          html` <CustomCard
                             key=${index}
                             selected=${selected === index}
                             onClick=${() => {
-                      setSelected(index);
-                      conversationHandler.sendChoice(exhibit.id);
-                    }}
+                              setSelected(index);
+                              conversationHandler.sendChoice(exhibit.id);
+                            }}
                           >
                             <CustomCardImageRow
                               src=${exhibit.imageUrl}
@@ -207,13 +207,13 @@ export const Content: FC<unknown> = () => {
                               >`}
                             />
                           </CustomCard>`,
-                )}
+                      )}
                     </Carousel>
                   `;
-              },
-              MuseumExhibitDetails: ({ data }: any) => {
-                const detailedUrls = data.detailImageUrls;
-                return html`
+                },
+                MuseumExhibitDetails: ({ data }: any) => {
+                  const detailedUrls = data.detailImageUrls;
+                  return html`
                     <Carousel>
                       <CustomCard>
                         <CustomCardImageRow
@@ -222,14 +222,14 @@ export const Content: FC<unknown> = () => {
                         />
                       </CustomCard>
                       ${detailedUrls.map(
-                  (imageUrl: string) =>
-                    html` <CustomCard>
+                        (imageUrl: string) =>
+                          html` <CustomCard>
                             <CustomCardImageRow
                               src=${imageUrl}
                               alt=${data.name}
                             />
                           </CustomCard>`,
-                )}
+                      )}
                     </Carousel>
                     <BaseText faded>Dates</BaseText>
                     <BaseText>Through ${data.endDate}</BaseText>
@@ -240,8 +240,8 @@ export const Content: FC<unknown> = () => {
                     <BaseText faded>About this exhibition</BaseText>
                     <BaseText>${data.summary}</BaseText>
                   `;
-              },
-            }
+                },
+              }
             : undefined;
 
         touchpointInstance.current = await create({
@@ -322,11 +322,11 @@ export const Content: FC<unknown> = () => {
           onClick={
             isConfigValid(config)
               ? () => {
-                const instance = touchpointInstance.current;
-                if (instance != null) {
-                  instance.expanded = true;
+                  const instance = touchpointInstance.current;
+                  if (instance != null) {
+                    instance.expanded = true;
+                  }
                 }
-              }
               : undefined
           }
           icon={<TouchpointIcon />}
