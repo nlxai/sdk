@@ -32,34 +32,21 @@ function defaultTo(
 }
 
 export const kbTouchpointDemo = ({ config }: { config: Config }): string => {
-  return `<!-- Touchpoint sample HTML -->
+  return `<!-- Knowledge Base Components Sample HTML -->
 <!-- Downloaded from https://developers.nlx.ai -->
 <html lang="en">
 
 <head>
-    <title>Touchpoint Sample HTML</title>
+    <title>Knowledge Base Components Sample HTML</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 </head>
 
 <body>
-    <script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
     <script type="module">
-        const contentLoaded = () => {
-            if (document.readyState === "loading") {
-                return new Promise((resolve) => {
-                    window.addEventListener("DOMContentLoaded", () => {
-                        resolve();
-                    });
-                });
-            } else {
-                return Promise.resolve();
-            }
-        };
+        import { create, React, html } from "https://unpkg.com/@nlxai/touchpoint-ui@1.0.5-alpha.13/lib/index.js?module";
 
-        await contentLoaded();
-        const { Icons, html, create, React, BaseText, TextButton, SmallText } = nlxai.touchpointUi;
         const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
             const [selected, setSelected] = React.useState(null);
 
@@ -92,10 +79,7 @@ export const kbTouchpointDemo = ({ config }: { config: Config }): string => {
             \`;
         };
 
-
         const MuseumExhibitDetails = ({ data, conversationHandler }) => {
-            console.log("MuseumExhibitDetails data", data);
-            // put other imagees into a carousel
             const detailedUrls = data.detailImageUrls;
             return html\`
                 <Carousel>
@@ -126,9 +110,9 @@ export const kbTouchpointDemo = ({ config }: { config: Config }): string => {
         };
 
 
-        const touchpoint = await nlxai.touchpointUi.create({
+        const touchpoint = await create({
             config: {
-              applicationUrl: "${config.applicationUrl ?? "hREPLACE_WITH_APPLICATION_URL"}",
+              applicationUrl: "${config.applicationUrl ?? "REPLACE_WITH_APPLICATION_URL"}",
               headers: {
                 "nlx-api-key": "${config.headers?.["nlx-api-key"] ?? "REPLACE_WITH_API_KEY"}"
               },
