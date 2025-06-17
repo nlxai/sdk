@@ -143,20 +143,7 @@ export const kbTouchpointDemo = ({ config }: { config: Config }) => {
                 MuseumExhibitCarousel: MuseumExhibitCarousel
             }
         });
-        const conversationHandler = touchpoint.conversationHandler;
-        const myListenerFunction = (history, message) => {
-            // Only process if we have a new bot message
-            console.log("---message---");
-            console.log(JSON.stringify(message, null, 2));
-            console.log("---<message>---");
-            if (!message || message.type !== "bot") return;
-            const modalities = message.payload?.modalities;
-            if (!modalities) return;
-            // console.log("Modalities received:", modalities);
-        };
 
-        // Start listening to the conversation
-        conversationHandler.subscribe(myListenerFunction);
     </script>
 </body>
 
