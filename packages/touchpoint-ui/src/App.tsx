@@ -1,5 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import {
+  type ReactNode,
   useRef,
   useEffect,
   useState,
@@ -218,7 +219,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     );
   }
 
-  const textContent = () => {
+  const textContent = (): ReactNode => {
     if (isSettingsOpen) {
       return (
         <Settings
@@ -288,7 +289,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     );
   };
 
-  const reset = () => {
+  const reset = (): void => {
     handler.reset({ clearResponses: true });
     if (input !== "voice") {
       props.initializeConversation(handler, props.initialContext);
