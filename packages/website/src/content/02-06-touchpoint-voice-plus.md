@@ -314,10 +314,6 @@ A comprehensive example implementing voice-driven form filling, navigation:
     <meta charset="UTF-8" />
     <title>Enhanced Voice Plus Example</title>
     <style>
-      .voice-updated {
-        animation: highlight 2s ease-out;
-      }
-
       @keyframes highlight {
         0% {
           background-color: #ffeb3b;
@@ -350,11 +346,14 @@ A comprehensive example implementing voice-driven form filling, navigation:
       <button type="submit">Submit</button>
     </form>
 
-    <script
-      defer
-      src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"
-    ></script>
-    <script>
+    <script type="module">
+      import {
+        create,
+        React,
+        html,
+        analyzePageForms,
+      } from "https://unpkg.com/@nlxai/touchpoint-ui@1.0.5-alpha.13/lib/index.js?module";
+
       // Initialize Enhanced Voice Plus with bidirectional support
       const userId = crypto.randomUUID();
       const conversationId = crypto.randomUUID();
@@ -362,7 +361,7 @@ A comprehensive example implementing voice-driven form filling, navigation:
 
       async function initializeVoicePlus() {
         // Create touchpoint with voiceMini and bidirectional enabled
-        const touchpoint = await nlxai.touchpointUi.create({
+        const touchpoint = await create({
           config: {
             applicationUrl: "YOUR_APPLICATION_URL",
             headers: {
@@ -387,8 +386,7 @@ A comprehensive example implementing voice-driven form filling, navigation:
 
       // Send page context to NLX
       function sendPageContext(touchpoint) {
-        const { context, formElements: elements } =
-          nlxai.touchpointUi.analyzePageForms();
+        const { context, formElements: elements } = analyzePageForms();
         formElements = elements;
 
         // Array of destinations for navigation commands
