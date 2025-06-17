@@ -31,7 +31,7 @@ function defaultTo(
   return value != null && value !== "" ? value : defaultValue;
 }
 
-export const kbTouchpointDemo = ({ config }: { config: Config }) => {
+export const kbTouchpointDemo = ({ config }: { config: Config }): string => {
   return `<!-- Touchpoint sample HTML -->
 <!-- Downloaded from https://developers.nlx.ai -->
 <html lang="en">
@@ -128,12 +128,12 @@ export const kbTouchpointDemo = ({ config }: { config: Config }) => {
 
         const touchpoint = await nlxai.touchpointUi.create({
             config: {
-              applicationUrl: "${config.applicationUrl || "hREPLACE_WITH_APPLICATION_URL"}",
+              applicationUrl: "${config.applicationUrl ?? "hREPLACE_WITH_APPLICATION_URL"}",
               headers: {
-                "nlx-api-key": "${config.headers?.["nlx-api-key"] || "REPLACE_WITH_API_KEY"}"
+                "nlx-api-key": "${config.headers?.["nlx-api-key"] ?? "REPLACE_WITH_API_KEY"}"
               },
-              languageCode: "${config.languageCode || "en-US"}",
-              userId: "${config.userId || "REPLACE_WITH_USER_ID"}"
+              languageCode: "${config.languageCode ?? "en-US"}",
+              userId: "${config.userId ?? "REPLACE_WITH_USER_ID"}"
             },
             colorMode: "dark",
             input: "text",

@@ -10,7 +10,7 @@ import {
   getInitialConfig,
 } from "../components/ChatConfiguration";
 import { Note } from "../components/Note";
-import { touchpointUiSetupSnippet } from "../snippets";
+import { touchpointUiSetupSnippet, kbTouchpointDemo } from "../snippets";
 import { clsx } from "clsx";
 import useUrlState from "../useUrlState";
 
@@ -25,12 +25,26 @@ export const snippetContent = ({
   theme,
   input,
   colorMode,
+  kbMode,
 }: {
   config: Config;
   theme: EditableTheme;
   input: string;
   colorMode: "light" | "dark";
-}): string => `
+  kbMode: string;
+}): string => {
+  if (kbMode === "kbComponents") {
+    return `
+
+### Knowledge Base Components Demo
+
+\`\`\`html
+${kbTouchpointDemo({ config })}
+\`\`\`
+`;
+  }
+  
+  return `
 
 ### Setup snippet
 
@@ -38,6 +52,7 @@ export const snippetContent = ({
 ${touchpointUiSetupSnippet({ config, theme, input, colorMode })}
 \`\`\`
 `;
+};
 
 export const navGroup: string = "Touchpoint Setup";
 
@@ -127,6 +142,7 @@ export const Content: FC<unknown> = () => {
   });
 
   const [input, setInput] = useUrlState<any>("input", "text");
+  const [kbMode, setKbMode] = useUrlState<any>("kbMode", "noComponents");
 
   const [colorMode, setColorMode] = useUrlState<"light" | "dark">(
     "color-mode",
@@ -168,7 +184,7 @@ export const Content: FC<unknown> = () => {
         touchpointInstance.current.teardown();
       }
     };
-  }, [config, theme, colorMode, input]);
+  }, [config, theme, colorMode, input, kbMode]);
 
   return (
     <>
@@ -211,6 +227,17 @@ export const Content: FC<unknown> = () => {
                 ]}
               />
             </Labeled>
+            <Labeled label="Knowledge Base Components">
+              <Toggle
+                className="w-full"
+                value={kbMode}
+                onChange={setKbMode}
+                options={[
+                  { value: "noComponents", label: "No Components" },
+                  { value: "kbComponents", label: "Knowledge Base" },
+                ]}
+              />
+            </Labeled>
           </div>
         </div>
         <FullscreenButton
@@ -234,6 +261,7 @@ export const Content: FC<unknown> = () => {
           theme,
           input,
           colorMode,
+          kbMode,
         })}
       />
     </>
