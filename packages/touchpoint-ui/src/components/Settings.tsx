@@ -8,6 +8,7 @@ import { clsx } from "clsx";
 
 interface SettingsProps {
   onClose: () => void;
+  reset: () => void;
   handler: ConversationHandler;
   className?: string;
 }
@@ -15,6 +16,7 @@ interface SettingsProps {
 export const Settings: FC<SettingsProps> = ({
   onClose,
   handler,
+  reset,
   className,
 }) => {
   return (
@@ -28,11 +30,7 @@ export const Settings: FC<SettingsProps> = ({
         label="Restart conversation"
         Icon={Restart}
         type="ghost"
-        onClick={() => {
-          handler.reset({ clearResponses: true });
-          handler.sendWelcomeIntent();
-          onClose();
-        }}
+        onClick={reset}
       />
       <TextButton
         label="Talk to an agent"

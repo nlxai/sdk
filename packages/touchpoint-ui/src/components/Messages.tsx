@@ -120,7 +120,7 @@ const Sources: FC<{ sources: KnowledgeBaseResponseSource[] }> = ({
       </summary>
       <ol className="space-y-2">
         {sources.map((source, sourceIndex) => {
-          const displayName = source.fileName ?? "Source";
+          const displayName = source.fileName ?? source.content ?? "Source";
           const sharedClassName =
             "p-3 bg-primary-5 rounded-inner w-full flex items-center justify-between text-primary-80";
           return (
