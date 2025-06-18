@@ -31,6 +31,90 @@ function defaultTo(
   return value != null && value !== "" ? value : defaultValue;
 }
 
+export const museumComponentDemo = ({ config }: { config: Config }): string => {
+  return `
+    const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
+        const [selected, setSelected] = React.useState(null);
+  
+        return html\`
+            <Carousel>
+            \${data.map((exhibit, index) => html\`
+                <CustomCard
+                key=\${index}
+                selected=\${selected === index}
+                onClick=\${() => {
+                setSelected(index);
+                conversationHandler.sendChoice(exhibit.id);
+            }}
+                >
+                <CustomCardImageRow 
+                    src=\${exhibit.imageUrl} 
+                    alt=\${exhibit.name}
+                />
+                <CustomCardRow
+                    left=\${html\`<BaseText faded><div/></BaseText>\`}
+                    right=\${html\`<BaseText>\${exhibit.name}</BaseText>\`}
+                />
+                <CustomCardRow
+                    left=\${html\`<BaseText faded>Dates:</BaseText>\`}
+                    right=\${html\`<BaseText>Through \${exhibit.endDate}</BaseText>\`}
+                />
+                </CustomCard>\`
+        )}
+            </Carousel>
+        \`;
+    };
+  
+    const MuseumExhibitDetails = ({ data, conversationHandler }) => {
+        const detailedUrls = data.detailImageUrls;
+        return html\`
+            <Carousel>
+                <CustomCard>
+                    <CustomCardImageRow 
+                        src=\${data.imageUrl} 
+                        alt=\${data.name}
+                    />
+                </CustomCard>
+                \${detailedUrls.map((imageUrl) => html\`
+                    <CustomCard>
+                        <CustomCardImageRow 
+                            src=\${imageUrl} 
+                            alt=\${data.name}
+                        />
+                    </CustomCard>\`
+                )}
+            </Carousel>
+            <BaseText faded>Dates</BaseText>
+            <BaseText>Through \${data.endDate}</BaseText>
+            
+            <BaseText faded>Location</BaseText>
+            <BaseText>\${data.galleryLocation}</BaseText>
+            
+            <BaseText faded>About this exhibition</BaseText>
+            <BaseText>\${data.summary}</BaseText>
+        \`;
+    };
+  
+  
+    const touchpoint = await create({
+        config: {
+          applicationUrl: "${config.applicationUrl ?? "REPLACE_WITH_APPLICATION_URL"}",
+          headers: {
+            "nlx-api-key": "${config.headers?.["nlx-api-key"] ?? "REPLACE_WITH_API_KEY"}"
+          },
+          languageCode: "${config.languageCode ?? "en-US"}",
+          userId: "${config.userId ?? "REPLACE_WITH_USER_ID"}"
+        },
+        colorMode: "dark",
+        input: "text",
+        theme: { "fontFamily": "\\"Neue Haas Grotesk\\", sans-serif", "accent": "#AECAFF" },
+        customModalities: {
+            MuseumExhibitDetails: MuseumExhibitDetails,
+            MuseumExhibitCarousel: MuseumExhibitCarousel
+        }
+    });`;
+};
+
 export const touchpointUiSetupSnippet = ({
   config,
   theme,
@@ -48,57 +132,31 @@ export const touchpointUiSetupSnippet = ({
   colorMode: "light" | "dark";
 }): string => {
   const renderCustomModalitiesExample = customModalitiesExample ?? false;
-  return `<!-- Touchpoint sample HTML -->
-<!-- Downloaded from https://developers.nlx.ai -->
-<html lang="en">
-  <head>
-    <title>Touchpoint Sample HTML</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-  <body>
-    <script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
-    <script>
-      const contentLoaded = () => {
-        if (document.readyState === "loading") {
-          return new Promise((resolve) => {
-            window.addEventListener("DOMContentLoaded", () => {
-              resolve();
-            });
-          });
-        } else {
-          return Promise.resolve();
-        }
-      };
-      contentLoaded().then(() => {
-        return nlxai.touchpointUi.create({
-          config: {
-            applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
-            headers: {
-              "nlx-api-key": "${defaultTo(
-                config.headers?.["nlx-api-key"],
-                "REPLACE_WITH_API_KEY",
-              )}"
-            },
-            languageCode: "${config.languageCode}",
-            userId: "${defaultTo(config.userId, "REPLACE_WITH_USER_ID")}"
-          },
-          colorMode: "${colorMode}",
-          input: "${input}",${
-            theme != null
-              ? `
-          theme: ${JSON.stringify(theme)}`
-              : ""
-          }${
-            renderCustomModalitiesExample
-              ? `
-          customModalities: { REPLACE_WITH_CUSTOM_MODALITIES }`
-              : ""
-          }
-        })
-      }); 
-    </script>
-  </body>
-</html>`;
+  return `create({
+  config: {
+    applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
+    headers: {
+      "nlx-api-key": "${defaultTo(
+        config.headers?.["nlx-api-key"],
+        "REPLACE_WITH_API_KEY",
+      )}"
+    },
+    languageCode: "${config.languageCode}",
+    userId: "${defaultTo(config.userId, "REPLACE_WITH_USER_ID")}"
+  },
+  colorMode: "${colorMode}",
+  input: "${input}",${
+    theme != null
+      ? `
+  theme: ${JSON.stringify(theme)}`
+      : ""
+  }${
+    renderCustomModalitiesExample
+      ? `
+  customModalities: { REPLACE_WITH_CUSTOM_MODALITIES }`
+      : ""
+  }
+});`;
 };
 
 export const setupSnippet = ({
