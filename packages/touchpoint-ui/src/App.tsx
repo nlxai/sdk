@@ -187,7 +187,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         colorMode={colorMode}
       >
         <LaunchButton
-          className="fixed z-100 bottom-2 right-2 backdrop-blur z-launchButton"
+          className="fixed bottom-2 right-2 backdrop-blur z-launchButton"
           iconUrl={
             typeof props.launchIcon === "string" ? props.launchIcon : undefined
           }
@@ -205,7 +205,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       <CustomPropertiesContainer
         theme={props.theme}
         colorMode={colorMode}
-        className="fixed bottom-2 right-2 w-fit"
+        className="fixed z-touchpoint bottom-2 right-2 w-fit"
       >
         <VoiceMini
           handler={handler}
