@@ -6,13 +6,14 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
-import { version } from "@nlxai/chat-core";
-
+import touchpointUiPackageJson from "@nlxai/touchpoint-ui/package.json";
 import { ReactContext } from "../context";
 import { type SnippetEnv } from "../types";
 import { indentBy } from "../snippets";
 import { Toggle } from "./Toggle";
 import { CheckIcon, ContentCopyIcon } from "./Icons";
+
+const { version } = touchpointUiPackageJson;
 
 const CopyToClipboardButton: FC<{ text: string; className?: string }> = ({
   text,
