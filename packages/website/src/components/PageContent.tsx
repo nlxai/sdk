@@ -68,9 +68,7 @@ const processTouchpointUiCode = (code: string, env: SnippetEnv): string => {
 
 ${code}
 `;
-    return `<!-- Touchpoint sample HTML -->
-<!-- Downloaded from https://developers.nlx.ai -->
-<html lang="en">
+    return `<html lang="en">
   <head>
     <title>Touchpoint Sample HTML</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -80,8 +78,7 @@ ${code}
       ${indentBy("      ", codeWithImport)}
     </script>
   </body>
-</html>
-`;
+</html>`;
   }
   return `import { ${touchpointUiImports.join(", ")} } from "@nlxai/touchpoint-ui";
 

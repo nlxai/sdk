@@ -16,6 +16,7 @@ import {
 } from "./components/ui/CustomCard";
 import { Carousel } from "./components/ui/Carousel";
 import { DateInput } from "./components/ui/DateInput";
+import packageJson from "../package.json";
 
 import { createElement, type FC } from "react";
 import type { TouchpointConfiguration } from "./types";
@@ -37,6 +38,8 @@ export {
  * be running in the same React context as the Touchpoint UI using the correct version of React.
  */
 export { default as React } from "react";
+
+export const version = packageJson.version;
 
 // Create a htm instance where components can be used
 const createHtml = (
