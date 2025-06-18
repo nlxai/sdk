@@ -109,4 +109,3 @@ const touchpoint = await create({
 
 - [Icons](/touchpoint-Icons) for list of Icons available in Touchpoint
 - [Theming Touchpoint](/touchpoint-ui-theming)
-- [Building Components without JSX](/guide-html-components)

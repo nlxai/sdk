@@ -105,4 +105,3 @@ const touchpoint = await create({
 - [Custom Cards](/touchpoint-CustomCards) for card components used within carousels
 - [Typography](/touchpoint-Typography) for text styling within cards
 - [Icons](/touchpoint-Icons) for visual elements in cards
-- [Building Components without JSX](/guide-html-components)

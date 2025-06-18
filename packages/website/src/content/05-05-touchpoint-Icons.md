@@ -102,4 +102,3 @@ const touchpoint = await create({
 - [Buttons](/touchpoint-Buttons)
 - [CustomCards](/touchpoint-CustomCards)
 - [Theming Touchpoint](/touchpoint-ui-theming)
-- [Building Components without JSX](/guide-html-components)

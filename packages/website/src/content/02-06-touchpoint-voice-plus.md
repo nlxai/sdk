@@ -19,7 +19,7 @@
 
 ## Getting Started
 
-Voice Plus with bidirectional mode enabled requires the `voiceMini` input mode. This mode allows your application to handle voice commands while still maintaining a conversational flow with the user.:
+Voice+ with bidirectional mode enabled requires `voiceMini` input mode. This mode allows your application to handle voice commands while still maintaining a conversational flow with the user.:
 
 ```html
 <script type="module">
@@ -174,7 +174,7 @@ Handle voice-driven navigation between pages:
 
 ### Sample Handler
 
-This is basic navigation handling logic that you should be updated based on your application's routing logic. For instance, if you are using a framework like React, Vue, or Angular, you would use their respective routing libraries to handle navigation.
+This is a basic navigation handling logic that should be updated based on your application's routing logic. For instance, if you are using a framework like React, Vue, or Angular, you would use their respective routing libraries to handle navigation.
 
 ```javascript
 function handleNavigation(action, command) {
@@ -211,8 +211,8 @@ Automatically fill form fields based on voice input. The voice agent sends back 
 **Important Notes:**
 
 - The `field.id` in the command will match the element IDs in your `formElements` object
-  - This is different from the element's own 'id' attribute. It is unique to Voice+.
-  - Voice+ generates its own id for reference as the HTML element may not have an `id` at all or the page might violate the HTML spec and assign the same id to multiple elements.
+  - This is different from the element's own `id` attribute. It is unique to Voice+.
+  - Voice+ generates its own `id` for reference as the HTML element may not have an `id` at all or the page might violate the HTML spec and assign the same id to multiple elements.
 - Always check if the element exists before trying to update it
 
 ### Payload from NLX
