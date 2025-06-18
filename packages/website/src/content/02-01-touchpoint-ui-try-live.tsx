@@ -48,7 +48,7 @@ ${kbTouchpointDemo({ config })}
 
 ### Setup snippet
 
-\`\`\`html
+\`\`\`touchpointui
 ${touchpointUiSetupSnippet({ config, theme, input, colorMode })}
 \`\`\`
 `;
