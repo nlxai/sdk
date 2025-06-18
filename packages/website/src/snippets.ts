@@ -48,57 +48,31 @@ export const touchpointUiSetupSnippet = ({
   colorMode: "light" | "dark";
 }): string => {
   const renderCustomModalitiesExample = customModalitiesExample ?? false;
-  return `<!-- Touchpoint sample HTML -->
-<!-- Downloaded from https://developers.nlx.ai -->
-<html lang="en">
-  <head>
-    <title>Touchpoint Sample HTML</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-  <body>
-    <script defer src="https://unpkg.com/@nlxai/touchpoint-ui/lib/index.umd.js"></script>
-    <script>
-      const contentLoaded = () => {
-        if (document.readyState === "loading") {
-          return new Promise((resolve) => {
-            window.addEventListener("DOMContentLoaded", () => {
-              resolve();
-            });
-          });
-        } else {
-          return Promise.resolve();
-        }
-      };
-      contentLoaded().then(() => {
-        return nlxai.touchpointUi.create({
-          config: {
-            applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
-            headers: {
-              "nlx-api-key": "${defaultTo(
-                config.headers?.["nlx-api-key"],
-                "REPLACE_WITH_API_KEY",
-              )}"
-            },
-            languageCode: "${config.languageCode}",
-            userId: "${defaultTo(config.userId, "REPLACE_WITH_USER_ID")}"
-          },
-          colorMode: "${colorMode}",
-          input: "${input}",${
-            theme != null
-              ? `
-          theme: ${JSON.stringify(theme)}`
-              : ""
-          }${
-            renderCustomModalitiesExample
-              ? `
-          customModalities: { REPLACE_WITH_CUSTOM_MODALITIES }`
-              : ""
-          }
-        })
-      }); 
-    </script>
-  </body>
-</html>`;
+  return `create({
+  config: {
+    applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
+    headers: {
+      "nlx-api-key": "${defaultTo(
+        config.headers?.["nlx-api-key"],
+        "REPLACE_WITH_API_KEY",
+      )}"
+    },
+    languageCode: "${config.languageCode}",
+    userId: "${defaultTo(config.userId, "REPLACE_WITH_USER_ID")}"
+  },
+  colorMode: "${colorMode}",
+  input: "${input}",${
+    theme != null
+      ? `
+  theme: ${JSON.stringify(theme)}`
+      : ""
+  }${
+    renderCustomModalitiesExample
+      ? `
+  customModalities: { REPLACE_WITH_CUSTOM_MODALITIES }`
+      : ""
+  }
+});`;
 };
 
 export const setupSnippet = ({
