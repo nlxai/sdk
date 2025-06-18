@@ -1,10 +1,12 @@
+<!-- TOC -->
+
 - [Getting Started](#getting-started)
 - [Voice Commands Concepts](#voice-commands-concepts)
 - [Sending Page Context](#sending-page-context)
   - [When to Send Context](#when-to-send-context)
   - [Best Practices](#best-practices)
   - [Sending Context Example](#sending-context-example)
-- [Handling Voice Commands](#handling-voice-commands)
+- [Your Voice Plus Command Handler](#your-voice-plus-command-handler)
 - [Navigation Command Handler](#navigation-command-handler)
   - [Payload from NLX](#payload-from-nlx)
   - [Sample Handler](#sample-handler)
@@ -16,6 +18,7 @@
   - [Example Payloads](#example-payloads)
   - [Sample Handler](#sample-handler-2)
 - [Complete Implementation Example](#complete-implementation-example)
+<!-- TOC -->
 
 ## Getting Started
 
@@ -127,7 +130,7 @@ const { context, formElements } = analyzePageForms();
 </script>
 ```
 
-## Handling Voice Commands
+## Your Voice Plus Command Handler
 
 Register a handler to process voice commands from NLX:
 
@@ -158,12 +161,19 @@ Handle voice-driven navigation between pages:
 
 ### Payload from NLX
 
-```javascript
-// Navigation command structure:
+| Key              | Value                                       | Description                             |
+| ---------------- | ------------------------------------------- | --------------------------------------- |
+| `classification` | `navigation`                                | Indicates this is a navigation command  |
+| `action`         | `page_next`, `page_previous`, `page_custom` | Type of navigation action               |
+| `destination`    | `/about`                                    | Relative or absolute URL to navigate to |
+
+**Example Payload:**
+
+```json
 {
-  classification: "navigation",
-  action: "page_next", // or "page_previous", "page_custom"
-  destination: "/about" // Relative or absolute URL
+  "classification": "navigation",
+  "action": "page_next",
+  "destination": "/about"
 }
 ```
 
@@ -208,13 +218,21 @@ Automatically fill form fields based on voice input. The voice agent sends back 
 
 ### Payload from NLX
 
-```javascript
-// Voice command structure:
+| Key              | Value                                | Description                           |
+| ---------------- | ------------------------------------ | ------------------------------------- |
+| `classification` | `input`                              | Indicates this is a form fill command |
+| `fields`         | Array of field objects               | Each object contains `id` and `value` |
+| `id`             | Unique identifier for the form field | Matches the ID in your formElements   |
+| `value`          | Value to set for the form field      | The value to fill in the form field   |
+
+**Example Payload:**
+
+```json
 {
-  classification: "input",
-  fields: [
-    { id: "firstName", value: "John" },
-    { id: "email", value: "john@example.com" }
+  "classification": "input",
+  "fields": [
+    { "id": "firstName", "value": "John" },
+    { "id": "email", "value": "john@example.com" }
   ]
 }
 ```
@@ -243,7 +261,7 @@ Implement application-specific voice commands by attaching a knowledge base to y
 
 ### Enriching the Knowledge Base
 
-To enrich the article Q&A Knowledge Base Responses with custom voice+ commands you will need to add MetaData to each of the responses.
+To enrich the article Q&A Knowledge Base Responses with custom voice+ commands, you will need to add MetaData to each of the responses.
 
 There are built in metadata keys that will trigger the `input` or `navigation` classifications, but you can also define your own custom actions.
 
@@ -272,21 +290,25 @@ I create a new Article in the Knowledge Base attached to the Voice+ Node with th
 
 I will receive **TWO** payloads from NLX when this article is triggered, one for the navigation command and one for the custom command.
 
-```javascript
-// Navigation command structure:
-{
-  classification: "navigation",
-  action: "page_custom",
-  destination: "contact" // Relative or absolute URL
-}
+**Example Navigation Command:**
 
-// Custom command structure:
+```json
 {
-  classification: "custom",
-  action: "animalPolicy",
-  payload: {
-    dog: true,
-    cat: true
+  "classification": "navigation",
+  "action": "page_custom",
+  "destination": "contact"
+}
+```
+
+**Example Custom Command:**
+
+```json
+{
+  "classification": "custom",
+  "action": "animalPolicy",
+  "payload": {
+    "dog": true,
+    "cat": true
   }
 }
 ```
