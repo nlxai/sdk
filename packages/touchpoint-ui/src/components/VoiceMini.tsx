@@ -14,14 +14,14 @@ import { SoundCheckUi, VoiceModalities } from "./FullscreenVoice";
 import { ErrorMessage } from "./ErrorMessage";
 
 const containerClass =
-  "bg-background text-primary-80 rounded-outer p-2 w-[calc(100vw-16px)] max-w-[360px] space-y-4";
+  "bg-background backdrop-blur text-primary-80 rounded-outer p-2 w-[calc(100vw-16px)] max-w-[360px] space-y-4";
 
 const Container: FC<{ children: ReactNode; onClose: () => void }> = ({
   children,
   onClose,
 }) => (
   <div className={containerClass}>
-    <div className="flex items-center justify-end ">
+    <div className="flex items-center justify-end">
       <IconButton onClick={onClose} Icon={Close} type="ghost" label="Close" />
     </div>
     {children}
