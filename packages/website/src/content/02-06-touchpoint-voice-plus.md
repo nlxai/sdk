@@ -1,4 +1,3 @@
-<!-- TOC -->
 
 - [Getting Started](#getting-started)
 - [Voice Commands Concepts](#voice-commands-concepts)
@@ -18,7 +17,7 @@
   - [Example Payloads](#example-payloads)
   - [Sample Handler](#sample-handler-2)
 - [Complete Implementation Example](#complete-implementation-example)
-<!-- TOC -->
+
 
 ## Getting Started
 
@@ -42,7 +41,6 @@ Voice Plus with bidirectional mode enabled requires the `voiceMini` input mode. 
       bidirectional: true, // Explicitly enable bidirectional mode
       languageCode: "en-US",
       userId: crypto.randomUUID(), // Required for voice
-      conversationId: crypto.randomUUID(),
     },
     input: "voiceMini", // Enables voice input with bidirectional support
   };
@@ -56,7 +54,7 @@ Voice Plus with bidirectional mode enabled requires the `voiceMini` input mode. 
 Enhanced Voice Plus supports three command types:
 
 | Classification | Actions                                     | Description                          |
-| -------------- | ------------------------------------------- | ------------------------------------ |
+|----------------|---------------------------------------------|--------------------------------------|
 | `navigation`   | `page_next`, `page_previous`, `page_custom` | Navigate between pages               |
 | `input`        | Form field updates                          | Fill form fields with voice data     |
 | `custom`       | Application-specific                        | Custom commands defined by your flow |
@@ -83,8 +81,8 @@ const { context, formElements } = analyzePageForms();
 
 - Always store the `formElements` reference for use in your command handlers
 - Re-analyze and resend context when your page structure changes
-- Include meaningful IDs and labels on form fields for better voice recognition
-- Consider adding `aria-label` attributes for better accessibility and voice context
+- Use good form accessibility practices such as [labeling fields](https://www.w3.org/WAI/tutorials/forms/labels/) 
+- Provide [form instructions](https://www.w3.org/WAI/tutorials/forms/instructions/) for better voice recognition
 
 ### Sending Context Example
 
@@ -106,7 +104,6 @@ const { context, formElements } = analyzePageForms();
       bidirectional: true, // Explicitly enable bidirectional mode
       languageCode: "en-US",
       userId: crypto.randomUUID(), // Required for voice
-      conversationId: crypto.randomUUID(),
     },
     input: "voiceMini", // Enables voice input with bidirectional support
   };
@@ -179,6 +176,8 @@ Handle voice-driven navigation between pages:
 
 ### Sample Handler
 
+This is basic navigation handling logic that you should be updated based on your application's routing logic. For instance, if you are using a framework like React, Vue, or Angular, you would use their respective routing libraries to handle navigation.
+
 ```javascript
 function handleNavigation(action, command) {
   switch (action) {
@@ -218,12 +217,12 @@ Automatically fill form fields based on voice input. The voice agent sends back 
 
 ### Payload from NLX
 
-| Key              | Value                                | Description                           |
-| ---------------- | ------------------------------------ | ------------------------------------- |
-| `classification` | `input`                              | Indicates this is a form fill command |
-| `fields`         | Array of field objects               | Each object contains `id` and `value` |
-| `id`             | Unique identifier for the form field | Matches the ID in your formElements   |
-| `value`          | Value to set for the form field      | The value to fill in the form field   |
+| Key              | Value                                      | Description                                                                                                                                        |
+|------------------|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `classification` | `input`                                    | Indicates this is a form fill command                                                                                                              |
+| `fields`         | Array of field objects                     | Each object contains `id` and `value`                                                                                                              |
+| `id`             | NLX's unique identifier for the form field | Pairs and will be use to match the ID in your formElements. <br/><br/> This is not the same as the element's own 'id' attribute. It is unique to Voice+ |
+| `value`          | Value to set for the form field            | The value to fill in the form field                                                                                                                |
 
 **Example Payload:**
 
@@ -266,7 +265,7 @@ To enrich the article Q&A Knowledge Base Responses with custom voice+ commands, 
 There are built in metadata keys that will trigger the `input` or `navigation` classifications, but you can also define your own custom actions.
 
 | Key                 | Classification | Action             | Description                                                                                                                                                                     |
-| ------------------- | -------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|---------------------|----------------|--------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `nlx:destination`   | `navigation`   | `page_custom`      | Navigate to a specific page or section                                                                                                                                          |
 | `nlx:action`        | `custom`       | Custom action name | Send custom actions to the frontend.                                                                                                                                            |
 | `nlx:actionPayload` | `custom`       | Custom action data | Optional value **only** taken into account if `nlx:action` key is present. Sent as payload key to the frontend along with command type custom and action = nlx:action key value |
@@ -281,7 +280,7 @@ I create a new Article in the Knowledge Base attached to the Voice+ Node with th
 - **Answer**: You can contact us about animal policy by visiting our Contact Page.
 
 | metadata key            | value          |
-| ----------------------- | -------------- |
+|-------------------------|----------------|
 | `nlx:destination`       | `contact`      |
 | `nlx:action`            | `animalPolicy` |
 | `nlx:actionPayload`     | `{}`           |

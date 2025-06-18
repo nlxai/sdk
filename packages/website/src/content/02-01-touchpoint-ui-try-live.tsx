@@ -1,6 +1,6 @@
-import { type FC, useEffect, useRef, type ReactNode } from "react";
+import { type FC, useRef, type ReactNode } from "react";
 import { type Config, isConfigValid } from "@nlxai/chat-core";
-
+import { useDebouncedEffect } from "@react-hookz/web";
 import { TouchpointIcon } from "../components/Icons";
 import { Toggle } from "../components/Toggle";
 import { Labeled, inputClass } from "../components/Ui";
@@ -142,7 +142,7 @@ export const Content: FC<unknown> = () => {
   });
 
   const [input, setInput] = useUrlState<any>("input", "text");
-  const [kbMode, setKbMode] = useUrlState<any>("kbMode", "noComponents");
+  const [kbMode, setKbMode] = useUrlState<"noComponents" | "kbComponents">("kbMode", "noComponents");
 
   const [colorMode, setColorMode] = useUrlState<"light" | "dark">(
     "color-mode",
@@ -158,7 +158,7 @@ export const Content: FC<unknown> = () => {
       : config;
   };
 
-  useEffect(() => {
+  useDebouncedEffect(() => {
     if (!isConfigValid(config)) {
       return;
     }
