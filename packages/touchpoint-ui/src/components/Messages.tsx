@@ -99,6 +99,20 @@ const UserMessage: FC<{ text: string; files?: File[]; bubble: boolean }> = ({
   );
 };
 
+const TextWithNumber: FC<{ text: string; number: number }> = ({
+  text,
+  number,
+}) => {
+  return (
+    <span className="flex items-center gap-2">
+      <span className="bg-primary-10 text-primary-60 text-xs px-1.5 py-0.5 rounded-inner">
+        {number}
+      </span>
+      {text}
+    </span>
+  );
+};
+
 const Sources: FC<{ sources: KnowledgeBaseResponseSource[] }> = ({
   sources,
 }) => {
@@ -130,11 +144,13 @@ const Sources: FC<{ sources: KnowledgeBaseResponseSource[] }> = ({
                   href={source.presignedUrl}
                   className={clsx(sharedClassName, "hover:bg-primary-10")}
                 >
-                  {displayName}
+                  <TextWithNumber text={displayName} number={sourceIndex + 1} />
                   <OpenLink className="w-4 h-4 text-primary-60" />
                 </a>
               ) : (
-                <div className={sharedClassName}>{displayName}</div>
+                <div className={sharedClassName}>
+                  <TextWithNumber text={displayName} number={sourceIndex + 1} />
+                </div>
               )}
             </li>
           );
