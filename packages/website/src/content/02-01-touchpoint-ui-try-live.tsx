@@ -160,114 +160,119 @@ export const Content: FC<unknown> = () => {
       : config;
   };
 
-  useDebouncedEffect(() => {
-    if (!isConfigValid(config)) {
-      return;
-    }
-
-    // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
-    import("@nlxai/touchpoint-ui/lib/index.js")
-      .then(async (touchpointModule) => {
-        const { create, React, html } = touchpointModule;
-        const touchpointConfig = generateAndSetUserId(config);
-
-        // Define KB components when museumComponentMode is "museumComponents"
-        const customModalities =
-          museumComponentMode === "museumComponents"
-            ? {
-                MuseumExhibitCarousel: ({
-                  data,
-                  conversationHandler,
-                }: any): any => {
-                  const [selected, setSelected] = React.useState<number | null>(
-                    null,
-                  );
-
-                  return html`
-                    <Carousel>
-                      ${data.map(
-                        (exhibit: any, index: number) =>
-                          html` <CustomCard
-                            key=${index}
-                            selected=${selected === index}
-                            onClick=${() => {
-                              setSelected(index);
-                              conversationHandler.sendChoice(exhibit.id);
-                            }}
-                          >
-                            <CustomCardImageRow
-                              src=${exhibit.imageUrl}
-                              alt=${exhibit.name}
-                            />
-                            <CustomCardRow
-                              left=${html`<BaseText faded><div /></BaseText>`}
-                              right=${html`<BaseText
-                                >${exhibit.name}</BaseText
-                              >`}
-                            />
-                            <CustomCardRow
-                              left=${html`<BaseText faded>Dates:</BaseText>`}
-                              right=${html`<BaseText
-                                >Through ${exhibit.endDate}</BaseText
-                              >`}
-                            />
-                          </CustomCard>`,
-                      )}
-                    </Carousel>
-                  `;
-                },
-                MuseumExhibitDetails: ({ data }: any): any => {
-                  const detailedUrls = data.detailImageUrls;
-                  return html`
-                    <Carousel>
-                      <CustomCard>
-                        <CustomCardImageRow
-                          src=${data.imageUrl}
-                          alt=${data.name}
-                        />
-                      </CustomCard>
-                      ${detailedUrls.map(
-                        (imageUrl: string) =>
-                          html` <CustomCard>
-                            <CustomCardImageRow
-                              src=${imageUrl}
-                              alt=${data.name}
-                            />
-                          </CustomCard>`,
-                      )}
-                    </Carousel>
-                    <BaseText faded>Dates</BaseText>
-                    <BaseText>Through ${data.endDate}</BaseText>
-
-                    <BaseText faded>Location</BaseText>
-                    <BaseText>${data.galleryLocation}</BaseText>
-
-                    <BaseText faded>About this exhibition</BaseText>
-                    <BaseText>${data.summary}</BaseText>
-                  `;
-                },
-              }
-            : undefined;
-
-        touchpointInstance.current = await create({
-          config: touchpointConfig,
-          theme,
-          colorMode,
-          input,
-          launchIcon: false,
-          ...(customModalities && { customModalities }),
-        });
-      })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.warn(err);
-      });
-    return () => {
-      if (touchpointInstance.current != null) {
-        touchpointInstance.current.teardown();
+  useDebouncedEffect(
+    () => {
+      if (!isConfigValid(config)) {
+        return;
       }
-    };
-  }, [config, theme, colorMode, input, museumComponentMode]);
+
+      // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
+      import("@nlxai/touchpoint-ui/lib/index.js")
+        .then(async (touchpointModule) => {
+          const { create, React, html } = touchpointModule;
+          const touchpointConfig = generateAndSetUserId(config);
+
+          // Define KB components when museumComponentMode is "museumComponents"
+          const customModalities =
+            museumComponentMode === "museumComponents"
+              ? {
+                  MuseumExhibitCarousel: ({
+                    data,
+                    conversationHandler,
+                  }: any): any => {
+                    const [selected, setSelected] = React.useState<
+                      number | null
+                    >(null);
+
+                    return html`
+                      <Carousel>
+                        ${data.map(
+                          (exhibit: any, index: number) =>
+                            html` <CustomCard
+                              key=${index}
+                              selected=${selected === index}
+                              onClick=${() => {
+                                setSelected(index);
+                                conversationHandler.sendChoice(exhibit.id);
+                              }}
+                            >
+                              <CustomCardImageRow
+                                src=${exhibit.imageUrl}
+                                alt=${exhibit.name}
+                              />
+                              <CustomCardRow
+                                left=${html`<BaseText faded><div /></BaseText>`}
+                                right=${html`<BaseText
+                                  >${exhibit.name}</BaseText
+                                >`}
+                              />
+                              <CustomCardRow
+                                left=${html`<BaseText faded>Dates:</BaseText>`}
+                                right=${html`<BaseText
+                                  >Through ${exhibit.endDate}</BaseText
+                                >`}
+                              />
+                            </CustomCard>`,
+                        )}
+                      </Carousel>
+                    `;
+                  },
+                  MuseumExhibitDetails: ({ data }: any): any => {
+                    const detailedUrls = data.detailImageUrls;
+                    return html`
+                      <Carousel>
+                        <CustomCard>
+                          <CustomCardImageRow
+                            src=${data.imageUrl}
+                            alt=${data.name}
+                          />
+                        </CustomCard>
+                        ${detailedUrls.map(
+                          (imageUrl: string) =>
+                            html` <CustomCard>
+                              <CustomCardImageRow
+                                src=${imageUrl}
+                                alt=${data.name}
+                              />
+                            </CustomCard>`,
+                        )}
+                      </Carousel>
+                      <BaseText faded>Dates</BaseText>
+                      <BaseText>Through ${data.endDate}</BaseText>
+
+                      <BaseText faded>Location</BaseText>
+                      <BaseText>${data.galleryLocation}</BaseText>
+
+                      <BaseText faded>About this exhibition</BaseText>
+                      <BaseText>${data.summary}</BaseText>
+                    `;
+                  },
+                }
+              : undefined;
+
+          touchpointInstance.current = await create({
+            config: touchpointConfig,
+            theme,
+            colorMode,
+            input,
+            launchIcon: false,
+            ...(customModalities && { customModalities }),
+          });
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn(err);
+        });
+      return () => {
+        if (touchpointInstance.current != null) {
+          touchpointInstance.current.teardown();
+        }
+      };
+    },
+    [config, theme, colorMode, input, museumComponentMode],
+    200,
+    500,
+  );
 
   return (
     <>
