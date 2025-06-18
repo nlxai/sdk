@@ -197,7 +197,7 @@ export const FullscreenVoice: FC<Props> = ({
             ) : (
               <TextButton
                 type="ghost"
-                label="Retry soundcheck"
+                label="Retry sound check"
                 Icon={Restart}
                 onClick={retrySoundCheck}
               />

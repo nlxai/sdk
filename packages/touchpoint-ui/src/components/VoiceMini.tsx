@@ -115,7 +115,7 @@ export const VoiceMini: FC<{
           ) : (
             <TextButton
               type="ghost"
-              label="Retry soundcheck"
+              label="Retry sound check"
               Icon={Restart}
               onClick={retrySoundCheck}
             />
