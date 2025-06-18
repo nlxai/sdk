@@ -31,108 +31,88 @@ function defaultTo(
   return value != null && value !== "" ? value : defaultValue;
 }
 
-export const kbTouchpointDemo = ({ config }: { config: Config }): string => {
-  return `<!-- Knowledge Base Components Sample HTML -->
-<!-- Downloaded from https://developers.nlx.ai -->
-<html lang="en">
-
-<head>
-    <title>Knowledge Base Components Sample HTML</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-</head>
-
-<body>
-    <script type="module">
-        import { create, React, html } from "https://unpkg.com/@nlxai/touchpoint-ui@1.0.5-alpha.13/lib/index.js?module";
-
-        const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
-            const [selected, setSelected] = React.useState(null);
-
-            return html\`
-                <Carousel>
-                \${data.map((exhibit, index) => html\`
-                    <CustomCard
-                    key=\${index}
-                    selected=\${selected === index}
-                    onClick=\${() => {
-                    setSelected(index);
-                    conversationHandler.sendChoice(exhibit.id);
-                }}
-                    >
+export const museumComponentDemo = ({ config }: { config: Config }): string => {
+  return `
+    const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
+        const [selected, setSelected] = React.useState(null);
+  
+        return html\`
+            <Carousel>
+            \${data.map((exhibit, index) => html\`
+                <CustomCard
+                key=\${index}
+                selected=\${selected === index}
+                onClick=\${() => {
+                setSelected(index);
+                conversationHandler.sendChoice(exhibit.id);
+            }}
+                >
+                <CustomCardImageRow 
+                    src=\${exhibit.imageUrl} 
+                    alt=\${exhibit.name}
+                />
+                <CustomCardRow
+                    left=\${html\`<BaseText faded><div/></BaseText>\`}
+                    right=\${html\`<BaseText>\${exhibit.name}</BaseText>\`}
+                />
+                <CustomCardRow
+                    left=\${html\`<BaseText faded>Dates:</BaseText>\`}
+                    right=\${html\`<BaseText>Through \${exhibit.endDate}</BaseText>\`}
+                />
+                </CustomCard>\`
+        )}
+            </Carousel>
+        \`;
+    };
+  
+    const MuseumExhibitDetails = ({ data, conversationHandler }) => {
+        const detailedUrls = data.detailImageUrls;
+        return html\`
+            <Carousel>
+                <CustomCard>
                     <CustomCardImageRow 
-                        src=\${exhibit.imageUrl} 
-                        alt=\${exhibit.name}
+                        src=\${data.imageUrl} 
+                        alt=\${data.name}
                     />
-                    <CustomCardRow
-                        left=\${html\`<BaseText faded><div/></BaseText>\`}
-                        right=\${html\`<BaseText>\${exhibit.name}</BaseText>\`}
-                    />
-                    <CustomCardRow
-                        left=\${html\`<BaseText faded>Dates:</BaseText>\`}
-                        right=\${html\`<BaseText>Through \${exhibit.endDate}</BaseText>\`}
-                    />
-                    </CustomCard>\`
-            )}
-                </Carousel>
-            \`;
-        };
-
-        const MuseumExhibitDetails = ({ data, conversationHandler }) => {
-            const detailedUrls = data.detailImageUrls;
-            return html\`
-                <Carousel>
+                </CustomCard>
+                \${detailedUrls.map((imageUrl) => html\`
                     <CustomCard>
                         <CustomCardImageRow 
-                            src=\${data.imageUrl} 
+                            src=\${imageUrl} 
                             alt=\${data.name}
                         />
-                    </CustomCard>
-                    \${detailedUrls.map((imageUrl) => html\`
-                        <CustomCard>
-                            <CustomCardImageRow 
-                                src=\${imageUrl} 
-                                alt=\${data.name}
-                            />
-                        </CustomCard>\`
-                    )}
-                </Carousel>
-                <BaseText faded>Dates</BaseText>
-                <BaseText>Through \${data.endDate}</BaseText>
-                
-                <BaseText faded>Location</BaseText>
-                <BaseText>\${data.galleryLocation}</BaseText>
-                
-                <BaseText faded>About this exhibition</BaseText>
-                <BaseText>\${data.summary}</BaseText>
-            \`;
-        };
-
-
-        const touchpoint = await create({
-            config: {
-              applicationUrl: "${config.applicationUrl ?? "REPLACE_WITH_APPLICATION_URL"}",
-              headers: {
-                "nlx-api-key": "${config.headers?.["nlx-api-key"] ?? "REPLACE_WITH_API_KEY"}"
-              },
-              languageCode: "${config.languageCode ?? "en-US"}",
-              userId: "${config.userId ?? "REPLACE_WITH_USER_ID"}"
-            },
-            colorMode: "dark",
-            input: "text",
-            theme: { "fontFamily": "\\"Neue Haas Grotesk\\", sans-serif", "accent": "#AECAFF" },
-            customModalities: {
-                MuseumExhibitDetails: MuseumExhibitDetails,
-                MuseumExhibitCarousel: MuseumExhibitCarousel
-            }
-        });
-
-    </script>
-</body>
-
-</html>
-`;
+                    </CustomCard>\`
+                )}
+            </Carousel>
+            <BaseText faded>Dates</BaseText>
+            <BaseText>Through \${data.endDate}</BaseText>
+            
+            <BaseText faded>Location</BaseText>
+            <BaseText>\${data.galleryLocation}</BaseText>
+            
+            <BaseText faded>About this exhibition</BaseText>
+            <BaseText>\${data.summary}</BaseText>
+        \`;
+    };
+  
+  
+    const touchpoint = await create({
+        config: {
+          applicationUrl: "${config.applicationUrl ?? "REPLACE_WITH_APPLICATION_URL"}",
+          headers: {
+            "nlx-api-key": "${config.headers?.["nlx-api-key"] ?? "REPLACE_WITH_API_KEY"}"
+          },
+          languageCode: "${config.languageCode ?? "en-US"}",
+          userId: "${config.userId ?? "REPLACE_WITH_USER_ID"}"
+        },
+        colorMode: "dark",
+        input: "text",
+        theme: { "fontFamily": "\\"Neue Haas Grotesk\\", sans-serif", "accent": "#AECAFF" },
+        customModalities: {
+            MuseumExhibitDetails: MuseumExhibitDetails,
+            MuseumExhibitCarousel: MuseumExhibitCarousel
+        }
+    });`;
 };
 
 export const touchpointUiSetupSnippet = ({

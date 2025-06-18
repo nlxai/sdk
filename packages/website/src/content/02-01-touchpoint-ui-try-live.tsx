@@ -10,7 +10,7 @@ import {
   getInitialConfig,
 } from "../components/ChatConfiguration";
 import { Note } from "../components/Note";
-import { touchpointUiSetupSnippet, kbTouchpointDemo } from "../snippets";
+import { touchpointUiSetupSnippet, museumComponentDemo } from "../snippets";
 import { clsx } from "clsx";
 import useUrlState from "../useUrlState";
 
@@ -25,21 +25,21 @@ export const snippetContent = ({
   theme,
   input,
   colorMode,
-  kbMode,
+  museumComponentsMode,
 }: {
   config: Config;
   theme: EditableTheme;
   input: string;
   colorMode: "light" | "dark";
-  kbMode: string;
+  museumComponentsMode: string;
 }): string => {
-  if (kbMode === "kbComponents") {
+  if (museumComponentsMode === "museumComponents") {
     return `
 
-### Knowledge Base Components Demo
+### Museum Components Demo
 
-\`\`\`html
-${kbTouchpointDemo({ config })}
+\`\`\`touchpointui
+${museumComponentDemo({ config })}
 \`\`\`
 `;
   }
@@ -142,7 +142,9 @@ export const Content: FC<unknown> = () => {
   });
 
   const [input, setInput] = useUrlState<any>("input", "text");
-  const [kbMode, setKbMode] = useUrlState<"noComponents" | "kbComponents">("kbMode", "noComponents");
+  const [museumComponentMode, setMuseumComponentMode] = useUrlState<
+    "noComponents" | "museumComponents"
+  >("museumComponentMode", "noComponents");
 
   const [colorMode, setColorMode] = useUrlState<"light" | "dark">(
     "color-mode",
@@ -169,9 +171,9 @@ export const Content: FC<unknown> = () => {
         const { create, React, html } = touchpointModule;
         const touchpointConfig = generateAndSetUserId(config);
 
-        // Define KB components when kbMode is "kbComponents"
+        // Define KB components when museumComponentMode is "museumComponents"
         const customModalities =
-          kbMode === "kbComponents"
+          museumComponentMode === "museumComponents"
             ? {
                 MuseumExhibitCarousel: ({
                   data,
@@ -265,7 +267,7 @@ export const Content: FC<unknown> = () => {
         touchpointInstance.current.teardown();
       }
     };
-  }, [config, theme, colorMode, input, kbMode]);
+  }, [config, theme, colorMode, input, museumComponentMode]);
 
   return (
     <>
@@ -308,14 +310,17 @@ export const Content: FC<unknown> = () => {
                 ]}
               />
             </Labeled>
-            <Labeled label="Knowledge Base Components">
+            <Labeled label="Museum Demo Components">
               <Toggle
                 className="w-full"
-                value={kbMode}
-                onChange={setKbMode}
+                value={museumComponentMode}
+                onChange={setMuseumComponentMode}
                 options={[
                   { value: "noComponents", label: "No Components" },
-                  { value: "kbComponents", label: "Knowledge Base" },
+                  {
+                    value: "museumComponents",
+                    label: "Show Components",
+                  },
                 ]}
               />
             </Labeled>
@@ -342,7 +347,7 @@ export const Content: FC<unknown> = () => {
           theme,
           input,
           colorMode,
-          kbMode,
+          museumComponentsMode: museumComponentMode,
         })}
       />
     </>
