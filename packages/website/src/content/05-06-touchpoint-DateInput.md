@@ -69,4 +69,3 @@ const touchpoint = await create({
 ## Related Documents
 
 - [Theming Touchpoint](/touchpoint-ui-theming)
-- [Building Components without JSX](/guide-html-components)

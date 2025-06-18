@@ -154,7 +154,7 @@ const touchpointConfig = {
     },
     languageCode: "en-US",
     userId: crypto.randomUUID()
-  }
+  },
   windowSize: "half",
   colorMode: "dark",
   brandIcon: "https://yoursite.com/logo.png",
@@ -185,7 +185,7 @@ const touchpointConfig = {
     },
     languageCode: "en-US",
     userId: crypto.randomUUID()
-  }
+  },
   chatMode: true,
   userMessageBubble: true,
   agentMessageBubble: true
@@ -215,7 +215,7 @@ const touchpointConfig = {
     },
     languageCode: "en-US",
     userId: crypto.randomUUID()
-  }
+  },
   theme: {
     fontFamily: '"Helvetica Neue", sans-serif',
     accent: "rgb(28, 99, 218)"

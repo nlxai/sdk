@@ -15,7 +15,7 @@ You use the `conversationHandler.subscribe()` method to register a callback func
 
 ### `subscribe(callback)`
 
-The `subscribe` method takes a call function that will be called with `(allResponses: Response[], newResponse?: Response)`
+The `subscribe` method takes a callback function that will be called with `(allResponses: Response[], newResponse?: Response)`
 
 | Parameter      | Type         | Description                                                                                                                                                        |
 | :------------- | :----------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -53,7 +53,7 @@ const unsubscribeListener = conversationHandler.subscribe(
 
 ## Example Use Case: Reacting to Modalities
 
-A common use for `subscribe` is to detect and act upon custom modalities sent by NLX. This example looks for the Modalities to be defined in NLX: `MapDisplay`, `TrackOrder`
+A common use for `subscribe` is to detect and act upon custom modalities sent by NLX. This example looks for the Modalities to be defined in NLX: `MapDisplay` and `TrackOrder`
 
 ```js
 // Assuming 'conversationHandler' is obtained

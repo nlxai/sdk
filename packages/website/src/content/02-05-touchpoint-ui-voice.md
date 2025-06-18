@@ -75,7 +75,7 @@ Use **voice** when:
 
 Use **voiceMini** when:
 
-- You're using Enhanced Voice+
+- You're using Voice+ in Bidirectional mode
 - Voice is an optional input method alongside other UI
 - You need to preserve screen space
 - Users need access to other page content during voice interaction

@@ -61,7 +61,7 @@ The `launchIcon` is displayed on the floating action button when the Touchpoint 
 | File Format            | SVG or PNG                                  | A single-color SVG is ideal                                                                                                                          |
 | Color and Contrast     | Single Color                                | Should contrast well with background color. (Check both light and dark mode)                                                                         |
 | Background and Borders | Icon **must have a transparent background** | The icon should not have any embedded borders; the button handles its own border and rounding (`rounded-outer` which uses `theme.outerBorderRadius`) |
-| Shape and Proportions  | 32x32 pixels                                | Encuse the icon is clear and recognizable at this size                                                                                               |
+| Shape and Proportions  | 32x32 pixels                                | Ensure the icon is clear and recognizable at this size                                                                                               |
 
 **Configuration:**
 

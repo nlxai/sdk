@@ -134,4 +134,3 @@ const touchpoint = await create({
 - [Typography](/touchpoint-Typography) for Typography components
 - [Icons](/touchpoint-Icons) for visual elements
 - [Theming Touchpoint](/touchpoint-ui-theming)
-- [Building Components without JSX](/guide-html-components)

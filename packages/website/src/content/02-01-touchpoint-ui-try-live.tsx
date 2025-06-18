@@ -15,7 +15,7 @@ import { clsx } from "clsx";
 import useUrlState from "../useUrlState";
 
 export const content = `
-Touchpoint-UI provides a customizable chat interface that you can embed in your web applications. Touchpoint UI allows users to interact with your application and provides a seamless conversational experience.
+Touchpoint UI provides a customizable chat interface that you can embed in your web applications. Touchpoint UI allows users to interact with your application and provides a seamless conversational experience.
 
 You can try your applications directly on this configuration page. Then you can copy the code snippet to your HTML file.
 `;
