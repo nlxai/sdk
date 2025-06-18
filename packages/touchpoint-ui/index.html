@@ -101,24 +101,9 @@
           userId: "1234-5678",
           languageCode: "en-US",
         },
-        input: "text",
+        input: "voiceMini",
         initializeConversation: () => {},
       });
-
-      touchpoint.conversationHandler.setRequestOverride((req, append) => {
-        append({
-          messages: [],
-          metadata: {
-            sources: [
-              {
-                fileName: "abcd",
-              },
-            ],
-          },
-        });
-      });
-
-      touchpoint.conversationHandler.sendWelcomeIntent();
     </script>
   </body>
 </html>

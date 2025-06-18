@@ -8,7 +8,14 @@ import { useVoice } from "../voice";
 import { LoaderAnimation } from "./ui/Loader";
 import { Ripple } from "./Ripple";
 import { IconButton } from "./ui/IconButton";
-import { ArrowForward, Close, Mic, Volume, VolumeOff } from "./ui/Icons";
+import {
+  ArrowForward,
+  Close,
+  Mic,
+  Volume,
+  VolumeOff,
+  Restart,
+} from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
 import { SoundCheckUi, VoiceModalities } from "./FullscreenVoice";
 import { ErrorMessage } from "./ErrorMessage";
@@ -80,6 +87,7 @@ export const VoiceMini: FC<{
     soundCheck,
     isUserSpeaking,
     isApplicationSpeaking,
+    retrySoundCheck,
     roomData,
   } = useVoice({
     active,
@@ -93,14 +101,26 @@ export const VoiceMini: FC<{
     return (
       <Container onClose={onClose}>
         <SoundCheckUi soundCheck={soundCheck} />
-        <TextButton
-          type="main"
-          label="I'm ready"
-          Icon={ArrowForward}
-          onClick={() => {
-            setActive(true);
-          }}
-        />
+
+        {soundCheck != null ? (
+          soundCheck.micAllowed ? (
+            <TextButton
+              type="main"
+              label="I'm ready"
+              Icon={ArrowForward}
+              onClick={() => {
+                setActive(true);
+              }}
+            />
+          ) : (
+            <TextButton
+              type="ghost"
+              label="Retry soundcheck"
+              Icon={Restart}
+              onClick={retrySoundCheck}
+            />
+          )
+        ) : null}
       </Container>
     );
   }

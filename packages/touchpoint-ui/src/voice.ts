@@ -34,6 +34,7 @@ interface VoiceHookReturn {
   isApplicationSpeaking: boolean;
   soundCheck: null | SoundCheck;
   roomData: null | ModalitiesWithContext;
+  retrySoundCheck: () => void;
 }
 
 interface UseVoiceParams {
@@ -82,6 +83,10 @@ export const useVoice = ({
     100,
   );
 
+  const [testMediaStream, setTestMediaStream] = useState<MediaStream | null>(
+    null,
+  );
+
   const trackRef = useRef<RemoteTrack | null>(null);
 
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(
@@ -103,6 +108,49 @@ export const useVoice = ({
     });
   }, [micEnabled]);
 
+  const checkMic = useCallback(async (): Promise<void> => {
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const speakers = devices
+        .filter((device) => device.kind === "audiooutput")
+        .map((device) => device.label);
+      setSoundCheck({
+        micAllowed: true,
+        micNames: devices
+          .filter((device) => device.kind === "audioinput")
+          .map((device) => device.label),
+        speakerNames:
+          // Safari does not return speaker names, so we default to just assuming there is a system default speaker
+          speakers.length > 0 ? speakers : ["System Default Speaker Device"],
+      });
+      setTestMediaStream(mediaStream);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.warn(err);
+      setSoundCheck({
+        micAllowed: false,
+        micNames: [],
+        speakerNames: [],
+      });
+    }
+  }, [setSoundCheck, setTestMediaStream]);
+
+  useEffect(() => {
+    return () => {
+      if (testMediaStream == null) {
+        return;
+      }
+      const tracks = testMediaStream.getTracks();
+      tracks.forEach((track) => {
+        track.stop();
+        testMediaStream?.removeTrack(track);
+      });
+    };
+  }, [testMediaStream]);
+
   useEffect(() => {
     if (audioElement == null) {
       return;
@@ -112,52 +160,10 @@ export const useVoice = ({
   }, [audioElement, speakersEnabled]);
 
   useEffect(() => {
-    let mediaStream: MediaStream | null = null;
-
-    const checkMic = async (): Promise<void> => {
-      try {
-        mediaStream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const speakers = devices
-          .filter((device) => device.kind === "audiooutput")
-          .map((device) => device.label);
-        setSoundCheck({
-          micAllowed: true,
-          micNames: devices
-            .filter((device) => device.kind === "audioinput")
-            .map((device) => device.label),
-          speakerNames:
-            // Safari does not return speaker names, so we default to just assuming there is a system default speaker
-            speakers.length > 0 ? speakers : ["System Default Speaker Device"],
-        });
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.warn(err);
-        setSoundCheck({
-          micAllowed: false,
-          micNames: [],
-          speakerNames: [],
-        });
-      }
-    };
-
     // This function call will never throw, therefore the floating promises rule should not apply
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     checkMic();
-
-    return () => {
-      if (mediaStream == null) {
-        return;
-      }
-      const tracks = mediaStream.getTracks();
-      tracks.forEach((track) => {
-        track.stop();
-        mediaStream?.removeTrack(track);
-      });
-    };
-  }, [setSoundCheck]);
+  }, [checkMic]);
 
   const [isApplicationSpeaking, setIsApplicationSpeaking] =
     useDebouncedState<boolean>(false, 600);
@@ -270,6 +276,12 @@ export const useVoice = ({
     setAudioElement,
   ]);
 
+  const retrySoundCheck = useCallback(() => {
+    // This function call will never throw, therefore the floating promises rule should not apply
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    checkMic();
+  }, [checkMic]);
+
   useEffect(() => {
     if (active) {
       void setupRoom();
@@ -282,6 +294,7 @@ export const useVoice = ({
     isUserSpeaking,
     isApplicationSpeaking,
     soundCheck,
+    retrySoundCheck,
     roomData,
   };
 };
