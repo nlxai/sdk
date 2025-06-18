@@ -39,7 +39,10 @@ export {
  */
 export { default as React } from "react";
 
-export const version = packageJson.version;
+/**
+ * Package version
+ */
+export const version: string = packageJson.version;
 
 // Create a htm instance where components can be used
 const createHtml = (
