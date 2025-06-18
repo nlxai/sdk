@@ -79,10 +79,14 @@ export const useVoice = ({
 
   const [isUserSpeaking, setIsUserSpeaking] = useDebouncedState<boolean>(
     false,
-    600,
+    100,
   );
 
   const trackRef = useRef<RemoteTrack | null>(null);
+
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(
+    null,
+  );
 
   const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
 
@@ -100,12 +104,12 @@ export const useVoice = ({
   }, [micEnabled]);
 
   useEffect(() => {
-    const track = trackRef.current;
-    if (track == null) {
+    if (audioElement == null) {
       return;
     }
-    track.setMuted(!speakersEnabled);
-  }, [speakersEnabled]);
+    const newVolume = speakersEnabled ? 1 : 0;
+    audioElement.volume = newVolume;
+  }, [audioElement, speakersEnabled]);
 
   useEffect(() => {
     let mediaStream: MediaStream | null = null;
@@ -172,9 +176,10 @@ export const useVoice = ({
       trackRef.current.stop();
       trackRef.current = null;
     }
+    setAudioElement(null);
     roomRef.current = null;
     setRoomData(null);
-  }, [setRoomData]);
+  }, [setRoomData, setAudioElement]);
 
   useEffect(() => {
     const handleBeforeUnload = (): void => {
@@ -209,6 +214,7 @@ export const useVoice = ({
         if (track.kind === Track.Kind.Audio) {
           trackRef.current = track;
           const element = track.attach();
+          setAudioElement(element);
           void element.play();
         }
       };
@@ -256,7 +262,13 @@ export const useVoice = ({
         console.warn(err);
       });
     }
-  }, [setRoomState, handler, setIsUserSpeaking, setIsApplicationSpeaking]);
+  }, [
+    setRoomState,
+    handler,
+    setIsUserSpeaking,
+    setIsApplicationSpeaking,
+    setAudioElement,
+  ]);
 
   useEffect(() => {
     if (active) {
