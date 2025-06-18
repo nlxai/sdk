@@ -108,7 +108,7 @@ export const VoiceMini: FC<{
   if (roomState === "error") {
     return (
       <Container onClose={onClose}>
-        <ErrorMessage message="Something went wrong" />
+        <ErrorMessage message="Connection failed" />
         <CloseButton onClick={onClose} />
       </Container>
     );
