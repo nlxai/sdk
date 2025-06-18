@@ -25,6 +25,7 @@ import {
   Mic,
   MicOff,
   Volume,
+  Restart,
   VolumeOff,
 } from "./ui/Icons";
 import {
@@ -46,9 +47,9 @@ interface Props {
   customModalities?: Record<string, CustomModalityComponent<unknown>>;
 }
 
-export const SoundCheckUi: FC<{ soundCheck: SoundCheck | null }> = ({
-  soundCheck,
-}) => {
+export const SoundCheckUi: FC<{
+  soundCheck: SoundCheck | null;
+}> = ({ soundCheck }) => {
   return (
     <div className="space-y-4 text-primary-80">
       <p className="px-1">
@@ -165,6 +166,7 @@ export const FullscreenVoice: FC<Props> = ({
     soundCheck,
     isUserSpeaking,
     isApplicationSpeaking,
+    retrySoundCheck,
     roomData,
   } = useVoice({
     active,
@@ -179,15 +181,28 @@ export const FullscreenVoice: FC<Props> = ({
       <Container className={className}>
         <div className="p-4 h-full flex flex-col justify-between">
           <SoundCheckUi soundCheck={soundCheck} />
-          <TextButton
-            type="main"
-            label="I'm ready"
-            Icon={ArrowForward}
-            onClick={() => {
-              setActive(true);
-              initializeConversation(handler, context);
-            }}
-          />
+          {soundCheck != null ? (
+            soundCheck.micAllowed ? (
+              <TextButton
+                type="main"
+                label="I'm ready"
+                Icon={ArrowForward}
+                onClick={() => {
+                  setActive(true);
+                  // Might not be supported on the backend and is implemented inconsistently compared to voice mini
+                  // TODO: look into improvements
+                  initializeConversation(handler, context);
+                }}
+              />
+            ) : (
+              <TextButton
+                type="ghost"
+                label="Retry soundcheck"
+                Icon={Restart}
+                onClick={retrySoundCheck}
+              />
+            )
+          ) : null}
         </div>
       </Container>
     );
