@@ -96,6 +96,7 @@ export {
   type WindowSize,
   type CustomModalityComponent,
   type TouchpointConfiguration,
+  type CustomLaunchButton,
 } from "./types";
 
 /**

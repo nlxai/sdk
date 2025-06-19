@@ -191,6 +191,11 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           iconUrl={
             typeof props.launchIcon === "string" ? props.launchIcon : undefined
           }
+          Custom={
+            typeof props.launchIcon === "function"
+              ? props.launchIcon
+              : undefined
+          }
           onClick={() => {
             setIsExpanded(true);
           }}
