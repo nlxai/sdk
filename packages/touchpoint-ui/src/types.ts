@@ -255,7 +255,7 @@ export interface TouchpointConfiguration {
          *
          * Defaults to `false`.
          */
-        automaticContext: true;
+        automaticContext?: true;
 
         /**
          * Navigation handler for bidirectional mode.
@@ -292,7 +292,7 @@ export interface TouchpointConfiguration {
         custom?: (action: string, payload: unknown) => void;
       }
     | {
-        automaticContext?: false;
+        automaticContext: false;
 
         navigation?: (
           action: "page_next" | "page_previous" | "page_custom",

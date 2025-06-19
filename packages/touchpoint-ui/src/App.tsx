@@ -136,14 +136,11 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   });
 
   useEffect(() => {
-    if (props.bidirectional?.automaticContext) {
-      return gatherAutomaticContext(handler, setPageState);
-    }
     if (
       props.bidirectional?.navigation != null ||
       props.bidirectional?.input != null ||
       props.bidirectional?.custom != null ||
-      props.bidirectional?.automaticContext
+      props.bidirectional?.automaticContext !== false
     ) {
       handler.addEventListener("voicePlusCommand", (event) => {
         switch (event.classification) {
@@ -208,6 +205,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             break;
         }
       });
+      if (props.bidirectional?.automaticContext !== false) {
+        return gatherAutomaticContext(handler, setPageState);
+      }
     }
   }, [props.bidirectional, handler]);
 
