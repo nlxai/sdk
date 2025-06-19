@@ -117,6 +117,8 @@ class NlxTouchpointElement extends HTMLElement {
    * When set to false, will render a button that opens the touchpoint in a separate DOM location.
    *
    * When set to true, you get the touchpoint directly, and can control its size and placement.
+   *
+   * @internal
    */
   embedded: boolean = true;
 
