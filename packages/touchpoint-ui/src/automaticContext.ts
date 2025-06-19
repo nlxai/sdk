@@ -4,6 +4,7 @@ import { computeAccessibleName } from "dom-accessibility-api";
 
 import type { ConversationHandler } from "@nlxai/chat-core";
 import { analyzePageForms } from "./analyzePageForms";
+import { equals } from "ramda";
 
 export const gatherAutomaticContext = (
   handler: ConversationHandler,
@@ -12,12 +13,18 @@ export const gatherAutomaticContext = (
     links: Record<string, string>;
   }) => void,
 ): (() => void) => {
+  let previousContext: {
+    "nlx:vpContext": { url: string; fields: any; destinations: any };
+  } = { "nlx:vpContext": { url: "", fields: {}, destinations: {} } };
   const go = async (): Promise<void> => {
     const [context, pageState] = gatherContext();
-    try {
-      await handler.sendContext(context);
-    } catch (error) {}
-    setPageState(pageState);
+    if (equals(previousContext, context)) {
+      try {
+        await handler.sendContext(context);
+      } catch (error) {}
+      setPageState(pageState);
+      previousContext = context;
+    }
   };
 
   void go();
