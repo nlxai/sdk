@@ -17,7 +17,23 @@
   </head>
 
   <body>
-    <main>
+    <nav>
+      <ul
+        onclick="event.preventDefault(); window.history.pushState({}, '', event.target.href); render(event.target.href.split('/').pop());"
+      >
+        <li>
+          <a href="/index.html">Home</a>
+        </li>
+        <li>
+          <a href="/form.html">Form</a>
+        </li>
+      </ul>
+    </nav>
+    <div id="app"></div>
+    <script type="module">
+      window.render = (url) => {
+        if (url == "index.html") {
+          app.innerHTML = `<main>
       <h1>Loreum ipsum dolor sit amet</h1>
 
       <p>
@@ -87,21 +103,43 @@
         volutpat tellus lectus sit amet enim. Duis laoreet lorem vitae lorem
         aliquam bibendum.
       </p>
-    </main>
+    </main>`;
+        } else if (url == "form.html") {
+          app.innerHTML = ` <form>
+      <label for="input">Name:</label>
+      <input type="text" id="input" name="input" value="" />
+      <label for="input2">Email:</label>
+      <input type="email" id="input2" name="input2" value="" />
+      <label for="input3">Message:</label>
+      <textarea id="input3" name="input3"></textarea>
+      <label for="input4">Favourite fruit:</label>
+      <select id="input4" name="input4">
+        <option value="apple">Apple</option>
+        <option value="banana">Banana</option>
+        <option value="cherry">Cherry</option>
+        <option value="date">Date</option>
+      <button type="submit">Submit</button>
+    </form>`;
+        }
+      };
+      render(window.location.pathname.split("/").pop());
+    </script>
+
     <script type="module">
       import { create, html } from "/src/index.tsx";
 
       const touchpoint = await create({
         config: {
           applicationUrl:
-            "https://bots.dev.studio.nlx.ai/c/kQwAgKCx86vJ4r0PUSxYR/ON4zgwWnVofsz2NaiD38Z",
+            "https://bots.dev.studio.nlx.ai/c/CBuQ3LpsClG5EQoSObVkK/IPzJitiaN8qtJFL3Wz1Jp",
           headers: {
-            "nlx-api-key": "XDE2Th70VhBSlhz2YA",
+            "nlx-api-key": "m3kVBd9QeCc5bXInhWIPG3ns",
           },
           userId: "1234-5678",
           languageCode: "en-US",
         },
         input: "voiceMini",
+        bidirectional: { automaticContext: true },
         initializeConversation: () => {},
       });
     </script>

@@ -35,6 +35,7 @@ import type {
 } from "./types";
 import { CustomPropertiesContainer } from "./components/Theme";
 import { VoiceMini } from "./components/VoiceMini";
+import { gatherAutomaticContext } from "./automaticContext";
 
 /**
  * Main Touchpoint creation properties object
@@ -125,6 +126,90 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     conversationInitialized.current = true;
     props.initializeConversation(handler, props.initialContext);
   }, [props.initializeConversation, props.initialContext, handler, isExpanded]);
+
+  const [pageState, setPageState] = useState<{
+    formElements: Record<string, Element>;
+    links: Record<string, string>;
+  }>({
+    formElements: {},
+    links: {},
+  });
+
+  useEffect(() => {
+    if (props.bidirectional?.automaticContext) {
+      return gatherAutomaticContext(handler, setPageState);
+    }
+    if (
+      props.bidirectional?.navigation != null ||
+      props.bidirectional?.input != null ||
+      props.bidirectional?.custom != null ||
+      props.bidirectional?.automaticContext
+    ) {
+      handler.addEventListener("voicePlusCommand", (event) => {
+        switch (event.classification) {
+          case "navigation":
+            if (props.bidirectional?.navigation != null) {
+              props.bidirectional.navigation(
+                event.action as "page_next" | "page_previous" | "page_custom",
+                event.destination as string | undefined,
+                pageState.links,
+              );
+            } else if (props.bidirectional?.automaticContext) {
+              switch (event.action) {
+                case "page_next":
+                  window.history.forward();
+                  break;
+                case "page_previous":
+                  window.history.back();
+
+                  break;
+                case "page_custom":
+                  if (event.destination != null) {
+                    const url = pageState.links[event.destination];
+                    if (url != null) {
+                      window.location.href = url;
+                    }
+                  }
+                  break;
+              }
+            }
+            break;
+          case "input":
+            if (props.bidirectional?.input != null) {
+              props.bidirectional.input(
+                event.fields as Array<{ id: string; value: string }>,
+                pageState.formElements,
+              );
+            } else if (props.bidirectional?.automaticContext) {
+              event.fields.forEach((field: { id: string; value: string }) => {
+                if (pageState.formElements[field.id] != null) {
+                  const element = pageState.formElements[field.id] as
+                    | HTMLInputElement
+                    | HTMLTextAreaElement
+                    | HTMLSelectElement;
+                  element.value = field.value;
+                  element.classList.add("voice-updated");
+
+                  // Trigger events for frameworks that listen to them
+                  element.dispatchEvent(new Event("input", { bubbles: true }));
+                  element.dispatchEvent(new Event("change", { bubbles: true }));
+
+                  setTimeout(() => {
+                    element.classList.remove("voice-updated");
+                  }, 2000);
+                }
+              });
+            }
+            break;
+          case "custom":
+            if (props.bidirectional?.custom != null) {
+              props.bidirectional.custom(event.action as string, event.payload);
+            }
+            break;
+        }
+      });
+    }
+  }, [props.bidirectional, handler]);
 
   const windowSize: WindowSize =
     props.windowSize ?? (props.embedded ? "full" : "half");
