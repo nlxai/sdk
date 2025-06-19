@@ -31,89 +31,71 @@ function defaultTo(
   return value != null && value !== "" ? value : defaultValue;
 }
 
-export const museumComponentDemo = ({ config }: { config: Config }): string => {
-  return `
-    const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
-        const [selected, setSelected] = React.useState(null);
-  
-        return html\`
-            <Carousel>
-            \${data.map((exhibit, index) => html\`
-                <CustomCard
-                key=\${index}
-                selected=\${selected === index}
-                onClick=\${() => {
-                setSelected(index);
-                conversationHandler.sendChoice(exhibit.id);
-            }}
-                >
-                <CustomCardImageRow 
-                    src=\${exhibit.imageUrl} 
-                    alt=\${exhibit.name}
-                />
-                <CustomCardRow
-                    left=\${html\`<BaseText faded><div/></BaseText>\`}
-                    right=\${html\`<BaseText>\${exhibit.name}</BaseText>\`}
-                />
-                <CustomCardRow
-                    left=\${html\`<BaseText faded>Dates:</BaseText>\`}
-                    right=\${html\`<BaseText>Through \${exhibit.endDate}</BaseText>\`}
-                />
-                </CustomCard>\`
-        )}
-            </Carousel>
-        \`;
-    };
-  
-    const MuseumExhibitDetails = ({ data, conversationHandler }) => {
-        const detailedUrls = data.detailImageUrls;
-        return html\`
-            <Carousel>
-                <CustomCard>
-                    <CustomCardImageRow 
-                        src=\${data.imageUrl} 
-                        alt=\${data.name}
-                    />
-                </CustomCard>
-                \${detailedUrls.map((imageUrl) => html\`
-                    <CustomCard>
-                        <CustomCardImageRow 
-                            src=\${imageUrl} 
-                            alt=\${data.name}
-                        />
-                    </CustomCard>\`
-                )}
-            </Carousel>
-            <BaseText faded>Dates</BaseText>
-            <BaseText>Through \${data.endDate}</BaseText>
-            
-            <BaseText faded>Location</BaseText>
-            <BaseText>\${data.galleryLocation}</BaseText>
-            
-            <BaseText faded>About this exhibition</BaseText>
-            <BaseText>\${data.summary}</BaseText>
-        \`;
-    };
-  
-  
-    const touchpoint = await create({
-        config: {
-          applicationUrl: "${config.applicationUrl ?? "REPLACE_WITH_APPLICATION_URL"}",
-          headers: {
-            "nlx-api-key": "${config.headers?.["nlx-api-key"] ?? "REPLACE_WITH_API_KEY"}"
-          },
-          languageCode: "${config.languageCode ?? "en-US"}",
-          userId: "${config.userId ?? "REPLACE_WITH_USER_ID"}"
-        },
-        colorMode: "dark",
-        input: "text",
-        theme: { "fontFamily": "\\"Neue Haas Grotesk\\", sans-serif", "accent": "#AECAFF" },
-        customModalities: {
-            MuseumExhibitDetails: MuseumExhibitDetails,
-            MuseumExhibitCarousel: MuseumExhibitCarousel
-        }
-    });`;
+const museumComponents = `
+const MuseumExhibitCarousel = ({ data, conversationHandler }) => {
+  const [selected, setSelected] = React.useState(null);
+
+  return html\`
+    <Carousel>
+      \${data.map((exhibit, index) => html\`
+        <CustomCard
+          key=\${index}
+          selected=\${selected === index}
+          onClick=\${() => {
+          setSelected(index);
+          conversationHandler.sendChoice(exhibit.id);
+          }}
+        >
+          <CustomCardImageRow 
+            src=\${exhibit.imageUrl} 
+            alt=\${exhibit.name}
+          />
+          <CustomCardRow
+            left=\${html\`<BaseText faded><div/></BaseText>\`}
+            right=\${html\`<BaseText>\${exhibit.name}</BaseText>\`}
+          />
+          <CustomCardRow
+            left=\${html\`<BaseText faded>Dates:</BaseText>\`}
+            right=\${html\`<BaseText>Through \${exhibit.endDate}</BaseText>\`}
+          />
+        </CustomCard>\`
+      )}
+    </Carousel>
+  \`;
 };
+
+const MuseumExhibitDetails = ({ data, conversationHandler }) => {
+  const detailedUrls = data.detailImageUrls;
+  return html\`
+    <Carousel>
+      <CustomCard>
+        <CustomCardImageRow 
+          src=\${data.imageUrl} 
+          alt=\${data.name}
+        />
+      </CustomCard>
+      \${detailedUrls.map((imageUrl) => html\`
+        <CustomCard>
+          <CustomCardImageRow 
+            src=\${imageUrl} 
+            alt=\${data.name}
+          />
+        </CustomCard>\`
+      )}
+    </Carousel>
+    <BaseText faded>Dates</BaseText>
+    <BaseText>Through \${data.endDate}</BaseText>
+        
+    <BaseText faded>Location</BaseText>
+    <BaseText>\${data.galleryLocation}</BaseText>
+        
+    <BaseText faded>About this exhibition</BaseText>
+    <BaseText>\${data.summary}</BaseText>
+  \`;
+};
+`;
+
+export type TemplateComponents = "noComponents" | "museumComponents";
 
 export const touchpointUiSetupSnippet = ({
   config,
@@ -121,6 +103,7 @@ export const touchpointUiSetupSnippet = ({
   customModalitiesExample = false,
   input = "text",
   colorMode = "light",
+  templateComponents = "noComponents",
 }: {
   config: Config;
   theme?: {
@@ -130,9 +113,10 @@ export const touchpointUiSetupSnippet = ({
   customModalitiesExample?: boolean;
   input: string;
   colorMode: "light" | "dark";
+  templateComponents?: TemplateComponents;
 }): string => {
   const renderCustomModalitiesExample = customModalitiesExample ?? false;
-  return `create({
+  return `${templateComponents === "museumComponents" ? `${museumComponents}\n\n` : ""}create({
   config: {
     applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
     headers: {
@@ -150,10 +134,10 @@ export const touchpointUiSetupSnippet = ({
       ? `
   theme: ${JSON.stringify(theme)}`
       : ""
-  }${
-    renderCustomModalitiesExample
+  },${
+    templateComponents === "museumComponents"
       ? `
-  customModalities: { REPLACE_WITH_CUSTOM_MODALITIES }`
+  customModalities: { MuseumExhibitDetails, MuseumExhibitCarousel }`
       : ""
   }
 });`;

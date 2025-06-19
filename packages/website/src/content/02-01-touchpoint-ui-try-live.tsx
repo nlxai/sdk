@@ -10,7 +10,7 @@ import {
   getInitialConfig,
 } from "../components/ChatConfiguration";
 import { Note } from "../components/Note";
-import { touchpointUiSetupSnippet, museumComponentDemo } from "../snippets";
+import { touchpointUiSetupSnippet } from "../snippets";
 import { clsx } from "clsx";
 import useUrlState from "../useUrlState";
 
@@ -25,31 +25,20 @@ export const snippetContent = ({
   theme,
   input,
   colorMode,
-  museumComponentsMode,
+  templateComponents,
 }: {
   config: Config;
   theme: EditableTheme;
   input: string;
   colorMode: "light" | "dark";
-  museumComponentsMode: string;
+  templateComponents: TemplateComponents;
 }): string => {
-  if (museumComponentsMode === "museumComponents") {
-    return `
-
-### Museum Components Demo
-
-\`\`\`touchpointui
-${museumComponentDemo({ config })}
-\`\`\`
-`;
-  }
-
   return `
 
 ### Setup snippet
 
 \`\`\`touchpointui
-${touchpointUiSetupSnippet({ config, theme, input, colorMode })}
+${touchpointUiSetupSnippet({ config, theme, input, colorMode, templateComponents })}
 \`\`\`
 `;
 };
@@ -133,6 +122,69 @@ const FullscreenButton: FC<{
   );
 };
 
+export type TemplateComponents = "noComponents" | "museumComponents";
+
+const createCustomModalities = (React: any, html: any) => {
+  return {
+    MuseumExhibitCarousel: ({ data, conversationHandler }: any): any => {
+      const [selected, setSelected] = React.useState(null);
+
+      return html`
+        <Carousel>
+          ${data.map(
+            (exhibit: any, index: number) =>
+              html` <CustomCard
+                key=${index}
+                selected=${selected === index}
+                onClick=${() => {
+                  setSelected(index);
+                  conversationHandler.sendChoice(exhibit.id);
+                }}
+              >
+                <CustomCardImageRow
+                  src=${exhibit.imageUrl}
+                  alt=${exhibit.name}
+                />
+                <CustomCardRow
+                  left=${html`<BaseText faded><div /></BaseText>`}
+                  right=${html`<BaseText>${exhibit.name}</BaseText>`}
+                />
+                <CustomCardRow
+                  left=${html`<BaseText faded>Dates:</BaseText>`}
+                  right=${html`<BaseText>Through ${exhibit.endDate}</BaseText>`}
+                />
+              </CustomCard>`,
+          )}
+        </Carousel>
+      `;
+    },
+    MuseumExhibitDetails: ({ data }: any): any => {
+      const detailedUrls = data.detailImageUrls;
+      return html`
+        <Carousel>
+          <CustomCard>
+            <CustomCardImageRow src=${data.imageUrl} alt=${data.name} />
+          </CustomCard>
+          ${detailedUrls.map(
+            (imageUrl: string) =>
+              html` <CustomCard>
+                <CustomCardImageRow src=${imageUrl} alt=${data.name} />
+              </CustomCard>`,
+          )}
+        </Carousel>
+        <BaseText faded>Dates</BaseText>
+        <BaseText>Through ${data.endDate}</BaseText>
+
+        <BaseText faded>Location</BaseText>
+        <BaseText>${data.galleryLocation}</BaseText>
+
+        <BaseText faded>About this exhibition</BaseText>
+        <BaseText>${data.summary}</BaseText>
+      `;
+    },
+  };
+};
+
 export const Content: FC<unknown> = () => {
   const [config, setConfig] = useUrlState<Config>("config", getInitialConfig());
 
@@ -142,9 +194,8 @@ export const Content: FC<unknown> = () => {
   });
 
   const [input, setInput] = useUrlState<any>("input", "text");
-  const [museumComponentMode, setMuseumComponentMode] = useUrlState<
-    "noComponents" | "museumComponents"
-  >("museumComponentMode", "noComponents");
+  const [templateComponents, setTemplateComponents] =
+    useUrlState<TemplateComponents>("templateComponents", "noComponents");
 
   const [colorMode, setColorMode] = useUrlState<"light" | "dark">(
     "color-mode",
@@ -172,91 +223,13 @@ export const Content: FC<unknown> = () => {
           const { create, React, html } = touchpointModule;
           const touchpointConfig = generateAndSetUserId(config);
 
-          // Define KB components when museumComponentMode is "museumComponents"
-          const customModalities =
-            museumComponentMode === "museumComponents"
-              ? {
-                  MuseumExhibitCarousel: ({
-                    data,
-                    conversationHandler,
-                  }: any): any => {
-                    const [selected, setSelected] = React.useState<
-                      number | null
-                    >(null);
-
-                    return html`
-                      <Carousel>
-                        ${data.map(
-                          (exhibit: any, index: number) =>
-                            html` <CustomCard
-                              key=${index}
-                              selected=${selected === index}
-                              onClick=${() => {
-                                setSelected(index);
-                                conversationHandler.sendChoice(exhibit.id);
-                              }}
-                            >
-                              <CustomCardImageRow
-                                src=${exhibit.imageUrl}
-                                alt=${exhibit.name}
-                              />
-                              <CustomCardRow
-                                left=${html`<BaseText faded><div /></BaseText>`}
-                                right=${html`<BaseText
-                                  >${exhibit.name}</BaseText
-                                >`}
-                              />
-                              <CustomCardRow
-                                left=${html`<BaseText faded>Dates:</BaseText>`}
-                                right=${html`<BaseText
-                                  >Through ${exhibit.endDate}</BaseText
-                                >`}
-                              />
-                            </CustomCard>`,
-                        )}
-                      </Carousel>
-                    `;
-                  },
-                  MuseumExhibitDetails: ({ data }: any): any => {
-                    const detailedUrls = data.detailImageUrls;
-                    return html`
-                      <Carousel>
-                        <CustomCard>
-                          <CustomCardImageRow
-                            src=${data.imageUrl}
-                            alt=${data.name}
-                          />
-                        </CustomCard>
-                        ${detailedUrls.map(
-                          (imageUrl: string) =>
-                            html` <CustomCard>
-                              <CustomCardImageRow
-                                src=${imageUrl}
-                                alt=${data.name}
-                              />
-                            </CustomCard>`,
-                        )}
-                      </Carousel>
-                      <BaseText faded>Dates</BaseText>
-                      <BaseText>Through ${data.endDate}</BaseText>
-
-                      <BaseText faded>Location</BaseText>
-                      <BaseText>${data.galleryLocation}</BaseText>
-
-                      <BaseText faded>About this exhibition</BaseText>
-                      <BaseText>${data.summary}</BaseText>
-                    `;
-                  },
-                }
-              : undefined;
-
           touchpointInstance.current = await create({
             config: touchpointConfig,
             theme,
             colorMode,
             input,
             launchIcon: false,
-            ...(customModalities && { customModalities }),
+            customModalities: createCustomModalities(React, html),
           });
         })
         .catch((err) => {
@@ -269,7 +242,7 @@ export const Content: FC<unknown> = () => {
         }
       };
     },
-    [config, theme, colorMode, input, museumComponentMode],
+    [config, theme, colorMode, input, templateComponents],
     200,
     500,
   );
@@ -315,16 +288,16 @@ export const Content: FC<unknown> = () => {
                 ]}
               />
             </Labeled>
-            <Labeled label="Museum Demo Components">
+            <Labeled label="Template components">
               <Toggle
                 className="w-full"
-                value={museumComponentMode}
-                onChange={setMuseumComponentMode}
+                value={templateComponents}
+                onChange={setTemplateComponents}
                 options={[
-                  { value: "noComponents", label: "No Components" },
+                  { value: "noComponents", label: "No components" },
                   {
                     value: "museumComponents",
-                    label: "Show Components",
+                    label: "Museum",
                   },
                 ]}
               />
@@ -352,7 +325,7 @@ export const Content: FC<unknown> = () => {
           theme,
           input,
           colorMode,
-          museumComponentsMode: museumComponentMode,
+          templateComponents,
         })}
       />
     </>
