@@ -14,11 +14,21 @@ export const gatherAutomaticContext = (
   }) => void,
 ): (() => void) => {
   let previousContext: {
-    "nlx:vpContext": { url: string; fields: any; destinations: any };
-  } = { "nlx:vpContext": { url: "", fields: {}, destinations: {} } };
+    "nlx:vpContext": {
+      // url: string;
+      fields: any;
+      destinations: any;
+    };
+  } = {
+    "nlx:vpContext": {
+      // url: "",
+      fields: {},
+      destinations: {},
+    },
+  };
   const go = async (): Promise<void> => {
     const [context, pageState] = gatherContext();
-    if (equals(previousContext, context)) {
+    if (!equals(previousContext, context)) {
       try {
         await handler.sendContext(context);
       } catch (error) {}
@@ -43,14 +53,20 @@ export const gatherAutomaticContext = (
 };
 
 const gatherContext = (): [
-  { "nlx:vpContext": { url: string; fields: any; destinations: any } },
+  {
+    "nlx:vpContext": {
+      // url: string;
+      fields: any;
+      destinations: any;
+    };
+  },
   { formElements: any; links: Record<string, string> },
 ] => {
   const { context: fields, formElements } = analyzePageForms();
   const { context: destinations, links } = analyzePageLinks();
 
   const context = {
-    url: window.location.href,
+    // url: window.location.href,
     fields,
     destinations,
   };

@@ -127,7 +127,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     props.initializeConversation(handler, props.initialContext);
   }, [props.initializeConversation, props.initialContext, handler, isExpanded]);
 
-  const [pageState, setPageState] = useState<{
+  const pageState = useRef<{
     formElements: Record<string, Element>;
     links: Record<string, string>;
   }>({
@@ -143,15 +143,17 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       props.bidirectional?.automaticContext !== false
     ) {
       handler.addEventListener("voicePlusCommand", (event) => {
+        console.log(event);
         switch (event.classification) {
           case "navigation":
+            console.log(props.bidirectional?.navigation);
             if (props.bidirectional?.navigation != null) {
               props.bidirectional.navigation(
                 event.action as "page_next" | "page_previous" | "page_custom",
                 event.destination as string | undefined,
-                pageState.links,
+                pageState.current.links,
               );
-            } else if (props.bidirectional?.automaticContext) {
+            } else if (props.bidirectional?.automaticContext !== false) {
               switch (event.action) {
                 case "page_next":
                   window.history.forward();
@@ -162,7 +164,13 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                   break;
                 case "page_custom":
                   if (event.destination != null) {
-                    const url = pageState.links[event.destination];
+                    console.log(
+                      "Navigating to custom link:",
+                      event.destination,
+                      pageState.links,
+                    );
+                    const url = pageState.current.links[event.destination];
+                    console.log("Resolved URL:", url);
                     if (url != null) {
                       window.location.href = url;
                     }
@@ -175,12 +183,12 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             if (props.bidirectional?.input != null) {
               props.bidirectional.input(
                 event.fields as Array<{ id: string; value: string }>,
-                pageState.formElements,
+                pageState.current.formElements,
               );
-            } else if (props.bidirectional?.automaticContext) {
+            } else if (props.bidirectional?.automaticContext !== false) {
               event.fields.forEach((field: { id: string; value: string }) => {
-                if (pageState.formElements[field.id] != null) {
-                  const element = pageState.formElements[field.id] as
+                if (pageState.current.formElements[field.id] != null) {
+                  const element = pageState.current.formElements[field.id] as
                     | HTMLInputElement
                     | HTMLTextAreaElement
                     | HTMLSelectElement;
@@ -206,7 +214,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         }
       });
       if (props.bidirectional?.automaticContext !== false) {
-        return gatherAutomaticContext(handler, setPageState);
+        return gatherAutomaticContext(handler, (val) => {
+          pageState.current = val;
+        });
       }
     }
   }, [props.bidirectional, handler]);
