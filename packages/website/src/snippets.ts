@@ -100,7 +100,6 @@ export type TemplateComponents = "noComponents" | "museumComponents";
 export const touchpointUiSetupSnippet = ({
   config,
   theme,
-  customModalitiesExample = false,
   input = "text",
   colorMode = "light",
   templateComponents = "noComponents",
@@ -115,7 +114,6 @@ export const touchpointUiSetupSnippet = ({
   colorMode: "light" | "dark";
   templateComponents?: TemplateComponents;
 }): string => {
-  const renderCustomModalitiesExample = customModalitiesExample ?? false;
   return `${templateComponents === "museumComponents" ? `${museumComponents}\n\n` : ""}create({
   config: {
     applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",

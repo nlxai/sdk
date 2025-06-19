@@ -124,7 +124,7 @@ const FullscreenButton: FC<{
 
 export type TemplateComponents = "noComponents" | "museumComponents";
 
-const createCustomModalities = (React: any, html: any) => {
+const createCustomModalities = (React: any, html: any): any => {
   return {
     MuseumExhibitCarousel: ({ data, conversationHandler }: any): any => {
       const [selected, setSelected] = React.useState(null);
