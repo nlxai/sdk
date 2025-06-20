@@ -149,7 +149,10 @@ class NlxTouchpointElement extends HTMLElement {
    *  You may call `preventDefault` to prevent the touchpoint from closing and handle closing yourself.
    */
   onClose: ((event: Event) => void) | null = null;
-  /** Render the settings button  */
+  /**
+   * Render the settings button
+   * @internal
+   */
   enableSettings: boolean = false;
 
   // TODO: revisit enabled vs. enableSettings naming
