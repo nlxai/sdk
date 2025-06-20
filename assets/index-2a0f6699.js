@@ -2483,7 +2483,7 @@ A comprehensive example implementing voice-driven form filling, navigation:
 
 Bidirectional Voice Plus enables voice-driven web experiences through bidirectional communication between your application and NLX. Users can navigate pages, fill forms, and interact with your site using natural voice commands.
 ${wge}
-`,Age="Touchpoint Setup",Rge="Bidiretional Voice Plus",Ige=()=>T.jsx(me,{md:mF}),kge=Object.freeze(Object.defineProperty({__proto__:null,Content:Ige,content:mF,navGroup:Age,title:Rge},Symbol.toStringTag,{value:"Module"})),Nge=`<a name="readmemd"></a>
+`,Age="Touchpoint Setup",Rge="Bidirectional Voice Plus",Ige=()=>T.jsx(me,{md:mF}),kge=Object.freeze(Object.defineProperty({__proto__:null,Content:Ige,content:mF,navGroup:Age,title:Rge},Symbol.toStringTag,{value:"Module"})),Nge=`<a name="readmemd"></a>
 
 # @nlxai/touchpoint-ui
 
