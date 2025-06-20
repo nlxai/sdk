@@ -95,7 +95,7 @@ export const VoiceMini: FC<{
           soundCheck.micAllowed ? (
             <TextButton
               type="main"
-              label="I'm ready"
+              label="I’m ready"
               Icon={ArrowForward}
               onClick={() => {
                 setActive(true);
@@ -117,7 +117,7 @@ export const VoiceMini: FC<{
   if (roomState === "error") {
     return (
       <Container onClose={onClose}>
-        <ErrorMessage message="I couldn't connect" />
+        <ErrorMessage message="I couldn’t connect" />
       </Container>
     );
   }

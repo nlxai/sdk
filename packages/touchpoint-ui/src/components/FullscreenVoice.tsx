@@ -117,7 +117,7 @@ export const SoundCheckUi: FC<{
         </p>
       ) : (
         <p className="px-1">
-          The voice experience could not begin because I'm unable to detect your
+          The voice experience could not begin because I’m unable to detect your
           microphone and speaker. Check your browser settings.
         </p>
       )}
@@ -229,7 +229,7 @@ export const FullscreenVoice: FC<Props> = ({
             soundCheck.micAllowed ? (
               <TextButton
                 type="main"
-                label="I'm ready"
+                label="I’m ready"
                 Icon={ArrowForward}
                 onClick={() => {
                   setActive(true);
