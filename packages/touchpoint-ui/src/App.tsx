@@ -210,14 +210,16 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       <CustomPropertiesContainer
         theme={props.theme}
         colorMode={colorMode}
-        className="fixed z-touchpoint bottom-2 right-2 w-fit"
+        className={clsx(
+          "w-fit",
+          props.embedded ? "" : "fixed z-touchpoint bottom-2 right-2",
+        )}
       >
         <VoiceMini
           handler={handler}
           context={props.initialContext}
-          onClose={() => {
-            setIsExpanded(false);
-          }}
+          renderCollapse={props.onClose != null}
+          onClose={onClose}
           customModalities={customModalities}
         />
       </CustomPropertiesContainer>
@@ -306,7 +308,10 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     <CustomPropertiesContainer
       theme={props.theme}
       colorMode={colorMode}
-      className="grid grid-cols-2 xl:grid-cols-[1fr_632px] fixed inset-0 z-touchpoint"
+      className={clsx(
+        "grid grid-cols-2 xl:grid-cols-[1fr_632px]",
+        props.embedded ? "w-full h-full" : "fixed inset-0 z-touchpoint",
+      )}
     >
       {windowSize === "half" ? (
         <div className="hidden md:block bg-overlay" />
