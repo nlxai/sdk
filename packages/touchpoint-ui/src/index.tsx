@@ -99,6 +99,25 @@ export {
 } from "./types";
 
 /**
+ * Injects some sane default styling for embedded toucbhpoints.
+ * This is only done once, so if you create multiple touchpoints, they will all share the same styles.
+ * Done using a style tag so that there is low specificity and it can be overridden by the user.
+ */
+let injectDefaultStyles: () => void = () => {
+  const style = document.createElement("style");
+  style.textContent = `:where(nlx-touchpoint.nlx-text, nlx-touchpoint.nlx-voice) {
+    display: block;
+    height: 350px;
+  }
+  :where(nlx-touchpoint.nlx-voiceMini) {
+   display: inline-block;
+
+  }`;
+  document.head.appendChild(style);
+  injectDefaultStyles = () => {};
+};
+
+/**
  * A custom element implementing touchpoint.
  *
  * Note that when you create this element using the `create` function, it will have different defaults.
@@ -110,6 +129,7 @@ class NlxTouchpointElement extends HTMLElement {
 
   /**
    * Returns an imperative reference allowing control over the application
+   * @internal
    */
   onRef: ((ref: AppRef) => void) | null = null;
 
@@ -135,7 +155,10 @@ class NlxTouchpointElement extends HTMLElement {
   // TODO: revisit enabled vs. enableSettings naming
   #enabled: boolean = true;
 
-  /** Disable the whole UI */
+  /**
+   * Disable the whole UI
+   * @internal
+   */
   set enabled(value: boolean) {
     if (this.#enabled === value) {
       return;
@@ -180,6 +203,30 @@ class NlxTouchpointElement extends HTMLElement {
             }}
           />
         </>,
+      );
+    }
+  }
+
+  connectedCallback(): void {
+    if (
+      this.#touchpointConfiguration == null &&
+      this.getAttribute("configuration") != null
+    ) {
+      try {
+        this.touchpointConfiguration = JSON.parse(
+          this.getAttribute("configuration") ?? "",
+        );
+      } catch (error) {
+        throw new Error(
+          "Failed to parse touchpoint configuration: " +
+            (error instanceof Error ? error.message : String(error)),
+        );
+      }
+    }
+    if (this.embedded) {
+      injectDefaultStyles();
+      this.classList.add(
+        `nlx-${this.#touchpointConfiguration?.input ?? "text"}`,
       );
     }
   }
