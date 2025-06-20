@@ -49,17 +49,6 @@ const CompactContainer: FC<{ children: ReactNode; className?: string }> = ({
   </div>
 );
 
-const CloseButton: FC<{ onClick: () => void }> = ({ onClick }) => {
-  return (
-    <button
-      className="text-sm text-primary-60 hover:text-primary-80 text-center block w-full"
-      onClick={onClick}
-    >
-      Close
-    </button>
-  );
-};
-
 const VoiceModalitiesWrapper: FC<{ children: ReactNode }> = ({ children }) => (
   <div
     className={clsx(
@@ -100,13 +89,13 @@ export const VoiceMini: FC<{
   if (!active) {
     return (
       <Container onClose={onClose}>
-        <SoundCheckUi soundCheck={soundCheck} />
+        <SoundCheckUi soundCheck={soundCheck} showDevices={false} />
 
         {soundCheck != null ? (
           soundCheck.micAllowed ? (
             <TextButton
               type="main"
-              label="I'm ready"
+              label="I’m ready"
               Icon={ArrowForward}
               onClick={() => {
                 setActive(true);
@@ -128,8 +117,7 @@ export const VoiceMini: FC<{
   if (roomState === "error") {
     return (
       <Container onClose={onClose}>
-        <ErrorMessage message="Connection failed" />
-        <CloseButton onClick={onClose} />
+        <ErrorMessage message="I couldn’t connect" />
       </Container>
     );
   }

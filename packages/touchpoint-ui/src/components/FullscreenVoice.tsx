@@ -88,8 +88,9 @@ const SoundCheckDevices: FC<{ soundCheck: SoundCheck }> = ({ soundCheck }) => {
 };
 
 export const SoundCheckUi: FC<{
+  showDevices: boolean;
   soundCheck: SoundCheck | null;
-}> = ({ soundCheck }) => {
+}> = ({ showDevices, soundCheck }) => {
   const [longerThanUsual, setLongerThanUsual] = useState<boolean>(false);
 
   const loading = soundCheck == null;
@@ -109,12 +110,21 @@ export const SoundCheckUi: FC<{
 
   return (
     <div className="space-y-4 text-primary-80">
-      <p className="px-1">
-        Get ready to join a voice experience. Please ensure your microphone and
-        speakers are turned on and enabled on this page.
-      </p>
+      {soundCheck == null || soundCheck.micAllowed ? (
+        <p className="px-1">
+          Get ready to join a voice experience. Please ensure your microphone
+          and speakers are on.
+        </p>
+      ) : (
+        <p className="px-1">
+          The voice experience could not begin because I’m unable to detect your
+          microphone and speaker. Check your browser settings.
+        </p>
+      )}
       {soundCheck != null ? (
-        <SoundCheckDevices soundCheck={soundCheck} />
+        showDevices ? (
+          <SoundCheckDevices soundCheck={soundCheck} />
+        ) : null
       ) : longerThanUsual ? (
         <div className="flex gap-2 bg-primary-10 rounded-outer p-2">
           <span className="text-accent inline-block flex-none w-5 h-5">
@@ -214,12 +224,12 @@ export const FullscreenVoice: FC<Props> = ({
     return (
       <Container className={className}>
         <div className="p-4 h-full flex flex-col justify-between">
-          <SoundCheckUi soundCheck={soundCheck} />
+          <SoundCheckUi soundCheck={soundCheck} showDevices={true} />
           {soundCheck != null ? (
             soundCheck.micAllowed ? (
               <TextButton
                 type="main"
-                label="I'm ready"
+                label="I’m ready"
                 Icon={ArrowForward}
                 onClick={() => {
                   setActive(true);
