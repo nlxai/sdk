@@ -245,7 +245,7 @@ export const Content: FC<unknown> = () => {
             const handleNavigationCommand = (
               action: string,
               destination: string,
-            ) => {
+            ): void => {
               switch (action) {
                 case "page_next":
                   window.history.forward();
@@ -254,47 +254,60 @@ export const Content: FC<unknown> = () => {
                   window.history.back();
                   break;
                 case "page_custom":
-                  if (destination) {
+                  if (destination !== null && destination !== undefined) {
                     window.location.href = destination;
                   }
                   break;
                 default:
+                  // eslint-disable-next-line no-console
                   console.log("Unknown navigation action:", action);
               }
             };
 
-            const handleInputCommand = (fields: any[] = []) => {
+            const handleInputCommand = (fields: any[] = []): void => {
               fields.forEach((field) => {
-                if (!field?.id) {
+                if (field?.id == null) {
                   return;
                 }
-                if (pageForms.formElements[field.id]) {
+                if (
+                  pageForms.formElements[field.id] != null &&
+                  pageForms.formElements[field.id] !== undefined
+                ) {
                   const element = pageForms.formElements[field.id] as any;
                   element.value = field.value ?? "";
                 } else {
+                  // eslint-disable-next-line no-console
                   console.warn(`Form element with id ${field.id} not found`);
                 }
               });
             };
 
-            const handleCustomCommand = (action: string, payload: any) => {
+            const handleCustomCommand = (
+              action: string,
+              payload: any,
+            ): void => {
+              // eslint-disable-next-line no-console
               console.log("custom command:", action, payload);
             };
 
-            const handleVoicePlusCommand = (command: any) => {
+            const handleVoicePlusCommand = (command: any): void => {
               const { classification, action, destination, payload } = command;
 
               switch (classification) {
                 case "navigation":
-                  handleNavigationCommand(action, destination);
+                  handleNavigationCommand(
+                    action as string,
+                    destination as string,
+                  );
                   break;
                 case "input":
-                  handleInputCommand(command?.fields);
+                  handleInputCommand(command?.fields as any[]);
                   break;
                 case "custom":
-                  handleCustomCommand(action, payload);
+                  handleCustomCommand(action as string, payload);
                   break;
                 default:
+                  // eslint-disable-next-line no-console
                   console.log("Unknown command:", classification);
               }
             };
