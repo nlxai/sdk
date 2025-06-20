@@ -35,7 +35,7 @@ export const snippetContent = ({
 }): string => {
   return `
 
-### Setup snippet
+### Setup snippet${templateComponents === "museumComponents" ? ": Museum template" : ""}
 
 \`\`\`touchpointui
 ${touchpointUiSetupSnippet({ config, theme, input, colorMode, templateComponents })}
