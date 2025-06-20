@@ -1,13 +1,18 @@
 /* eslint-disable accessor-pairs */
+import { createElement, type FC } from "react";
 import { type Root, createRoot } from "react-dom/client";
 import htm from "htm";
+import { equals } from "ramda";
+
 import { type ConversationHandler } from "@nlxai/chat-core";
 
+import packageJson from "../package.json";
 import App, { type AppRef } from "./App";
 import cssRaw from "./index.css?inline";
 import * as Icons from "./components/ui/Icons";
 import { TextButton } from "./components/ui/TextButton";
 import { IconButton } from "./components/ui/IconButton";
+import { Ripple } from "./components/Ripple";
 import { BaseText, SmallText } from "./components/ui/Typography";
 import {
   CustomCard,
@@ -16,11 +21,7 @@ import {
 } from "./components/ui/CustomCard";
 import { Carousel } from "./components/ui/Carousel";
 import { DateInput } from "./components/ui/DateInput";
-import packageJson from "../package.json";
-
-import { createElement, type FC } from "react";
 import type { TouchpointConfiguration } from "./types";
-import { equals } from "ramda";
 export {
   analyzePageForms,
   type InteractiveElementInfo,
@@ -61,6 +62,7 @@ export const html = createHtml({
   CustomCard,
   CustomCardRow,
   CustomCardImageRow,
+  Ripple,
   ...Icons,
 });
 
@@ -75,6 +77,7 @@ export {
   CustomCardRow,
   CustomCardImageRow,
   Icons,
+  Ripple,
 };
 
 // Export types for all components
@@ -96,6 +99,7 @@ export {
   type WindowSize,
   type CustomModalityComponent,
   type TouchpointConfiguration,
+  type CustomLaunchButton,
 } from "./types";
 
 /**

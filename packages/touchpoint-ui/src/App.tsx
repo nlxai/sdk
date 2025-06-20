@@ -182,14 +182,19 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   if (!isExpanded) {
     return props.launchIcon !== false ? (
       <CustomPropertiesContainer
-        className="font-sans"
+        className="fixed z-launchButton bottom-2 right-2 w-fit"
         theme={props.theme}
         colorMode={colorMode}
       >
         <LaunchButton
-          className="fixed bottom-2 right-2 backdrop-blur z-launchButton"
+          className="backdrop-blur"
           iconUrl={
             typeof props.launchIcon === "string" ? props.launchIcon : undefined
+          }
+          Custom={
+            typeof props.launchIcon === "function"
+              ? props.launchIcon
+              : undefined
           }
           onClick={() => {
             setIsExpanded(true);
