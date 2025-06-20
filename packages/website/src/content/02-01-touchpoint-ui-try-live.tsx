@@ -35,7 +35,7 @@ export const snippetContent = ({
 }): string => {
   return `
 
-### Setup snippet${templateComponents === "museumComponents" ? ": Museum template" : ""}
+### Setup snippet${templateComponents === "museumComponents" ? ": Museum template" : templateComponents === "bidirectionalVoicePlus" ? ": Bidirectional Voice Plus template" : ""}
 
 \`\`\`touchpointui
 ${touchpointUiSetupSnippet({ config, theme, input, colorMode, templateComponents })}
@@ -122,7 +122,10 @@ const FullscreenButton: FC<{
   );
 };
 
-export type TemplateComponents = "noComponents" | "museumComponents";
+export type TemplateComponents =
+  | "noComponents"
+  | "museumComponents"
+  | "bidirectionalVoicePlus";
 
 const createCustomModalities = (React: any, html: any): any => {
   return {
@@ -220,17 +223,104 @@ export const Content: FC<unknown> = () => {
       // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
       import("@nlxai/touchpoint-ui/lib/index.js")
         .then(async (touchpointModule) => {
-          const { create, React, html } = touchpointModule;
+          const { create, React, html, analyzePageForms } = touchpointModule;
           const touchpointConfig = generateAndSetUserId(config);
 
-          touchpointInstance.current = await create({
-            config: touchpointConfig,
-            theme,
-            colorMode,
-            input,
-            launchIcon: false,
-            customModalities: createCustomModalities(React, html),
-          });
+          if (templateComponents === "bidirectionalVoicePlus") {
+            // Handle bidirectional voice plus setup
+            touchpointInstance.current = await create({
+              config: {
+                ...touchpointConfig,
+                bidirectional: true,
+              },
+              theme,
+              colorMode,
+              input: "voiceMini",
+              launchIcon: false,
+            });
+
+            // Set up Voice Plus functionality
+            const pageForms = analyzePageForms();
+
+            const handleNavigationCommand = (
+              action: string,
+              destination: string,
+            ) => {
+              switch (action) {
+                case "page_next":
+                  window.history.forward();
+                  break;
+                case "page_previous":
+                  window.history.back();
+                  break;
+                case "page_custom":
+                  if (destination) {
+                    window.location.href = destination;
+                  }
+                  break;
+                default:
+                  console.log("Unknown navigation action:", action);
+              }
+            };
+
+            const handleInputCommand = (fields: any[] = []) => {
+              fields.forEach((field) => {
+                if (!field?.id) {
+                  return;
+                }
+                if (pageForms.formElements[field.id]) {
+                  const element = pageForms.formElements[field.id] as any;
+                  element.value = field.value ?? "";
+                } else {
+                  console.warn(`Form element with id ${field.id} not found`);
+                }
+              });
+            };
+
+            const handleCustomCommand = (action: string, payload: any) => {
+              console.log("custom command:", action, payload);
+            };
+
+            const handleVoicePlusCommand = (command: any) => {
+              const { classification, action, destination, payload } = command;
+
+              switch (classification) {
+                case "navigation":
+                  handleNavigationCommand(action, destination);
+                  break;
+                case "input":
+                  handleInputCommand(command?.fields);
+                  break;
+                case "custom":
+                  handleCustomCommand(action, payload);
+                  break;
+                default:
+                  console.log("Unknown command:", classification);
+              }
+            };
+
+            touchpointInstance.current.conversationHandler.sendContext({
+              "nlx:vpContext": {
+                url: window.location.href,
+                fields: pageForms.context,
+              },
+            });
+
+            touchpointInstance.current.conversationHandler.addEventListener(
+              "voicePlusCommand",
+              handleVoicePlusCommand,
+            );
+          } else {
+            // Handle regular touchpoint setup
+            touchpointInstance.current = await create({
+              config: touchpointConfig,
+              theme,
+              colorMode,
+              input,
+              launchIcon: false,
+              customModalities: createCustomModalities(React, html),
+            });
+          }
         })
         .catch((err) => {
           // eslint-disable-next-line no-console
@@ -298,6 +388,10 @@ export const Content: FC<unknown> = () => {
                   {
                     value: "museumComponents",
                     label: "Museum",
+                  },
+                  {
+                    value: "bidirectionalVoicePlus",
+                    label: "Bidirectional Voice Plus",
                   },
                 ]}
               />
