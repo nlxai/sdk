@@ -26,10 +26,10 @@ const containerClass =
 const Container: FC<{
   children: ReactNode;
   onClose: () => void;
-  renderCollapsed: boolean;
-}> = ({ children, renderCollapsed, onClose }) => (
+  renderCollapse: boolean;
+}> = ({ children, renderCollapse, onClose }) => (
   <div className={containerClass}>
-    {renderCollapsed && (
+    {renderCollapse && (
       <div className="flex items-center justify-end">
         <IconButton onClick={onClose} Icon={Close} type="ghost" label="Close" />
       </div>
@@ -77,10 +77,10 @@ const VoiceModalitiesWrapper: FC<{ children: ReactNode }> = ({ children }) => (
 export const VoiceMini: FC<{
   customModalities: Record<string, CustomModalityComponent<unknown>>;
   handler: ConversationHandler;
-  renderCollapsed: boolean;
+  renderCollapse: boolean;
   onClose: (event: Event) => void;
   context?: Context;
-}> = ({ handler, context, onClose, renderCollapsed, customModalities }) => {
+}> = ({ handler, context, onClose, renderCollapse, customModalities }) => {
   const onCloseHandler = (): void => {
     onClose(new Event("close"));
   };
@@ -106,7 +106,7 @@ export const VoiceMini: FC<{
 
   if (!active) {
     return (
-      <Container renderCollapsed={renderCollapsed} onClose={onCloseHandler}>
+      <Container renderCollapse={renderCollapse} onClose={onCloseHandler}>
         <SoundCheckUi soundCheck={soundCheck} />
 
         {soundCheck != null ? (
@@ -134,9 +134,9 @@ export const VoiceMini: FC<{
 
   if (roomState === "error") {
     return (
-      <Container renderCollapsed={renderCollapsed} onClose={onCloseHandler}>
+      <Container renderCollapse={renderCollapse} onClose={onCloseHandler}>
         <ErrorMessage message="Connection failed" />
-        {renderCollapsed && <CloseButton onClick={onCloseHandler} />}
+        {renderCollapse && <CloseButton onClick={onCloseHandler} />}
       </Container>
     );
   }
