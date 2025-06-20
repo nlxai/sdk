@@ -95,7 +95,105 @@ const MuseumExhibitDetails = ({ data, conversationHandler }) => {
 };
 `;
 
-export type TemplateComponents = "noComponents" | "museumComponents";
+const bidirectionalVoicePlus = (
+  config: Config,
+): string => `import { analyzePageForms } from "https://unpkg.com/@nlxai/touchpoint-ui@1.1.0/lib/index.js?module";
+
+const touchpoint = await create({
+  config: {
+    applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
+    headers: {
+      "nlx-api-key": "${defaultTo(
+        config.headers?.["nlx-api-key"],
+        "REPLACE_WITH_API_KEY",
+      )}"
+    },
+    bidirectional: true,
+    languageCode: "${config.languageCode}",
+    userId: "${defaultTo(config.userId, "REPLACE_WITH_USER_ID")}"
+
+  },
+  input: "voiceMini",
+});
+
+const pageForms = analyzePageForms();
+
+const handleNavigationCommand = (action, destination) => {
+  switch (action) {
+    case "page_next":
+      // Use browser's forward navigation
+      window.history.forward();
+      break;
+    case "page_previous":
+      // Use browser's back navigation
+      window.history.back();
+      break;
+    case "page_custom":
+      // Navigate to specific page using destination field
+      if (destination) {
+        window.location.href = destination;
+      }
+      break;
+    default:
+      console.log("Unknown navigation action:", action);
+  }
+};
+
+const handleInputCommand = (fields = []) => {
+  fields.forEach((field) => {
+    if (!field?.id) {
+      return;
+    }
+    if (pageForms.formElements[field.id]) {
+      const element = pageForms.formElements[field.id];
+      element.value = field.value ?? "";
+    } else {
+      console.warn(\`Form element with id \${field.id} not found\`);
+    }
+  });
+};
+
+const handleCustomCommand = (action, payload) => {
+  console.log("custom command:", action, payload);
+};
+
+const handleVoicePlusCommand = (command) => {
+  const { classification, action, destination, payload } = command;
+
+  switch (classification) {
+    case "navigation":
+      handleNavigationCommand(action, destination);
+      break;
+    case "input":
+      handleInputCommand(command?.fields);
+      break;
+    case "custom":
+      handleCustomCommand(action, payload);
+      break;
+    default:
+      console.log("Unknown command:", classification);
+  }
+};
+
+touchpoint.conversationHandler.sendContext({
+  "nlx:vpContext": {
+    url: window.location.href,
+    fields: pageForms.context,
+  },
+});
+
+touchpoint.conversationHandler.addEventListener(
+  "voicePlusCommand",
+  (command) => {
+    handleVoicePlusCommand(command);
+  },
+);
+`;
+
+export type TemplateComponents =
+  | "noComponents"
+  | "museumComponents"
+  | "bidirectionalVoicePlus";
 
 export const touchpointUiSetupSnippet = ({
   config,
@@ -114,6 +212,10 @@ export const touchpointUiSetupSnippet = ({
   colorMode: "light" | "dark";
   templateComponents?: TemplateComponents;
 }): string => {
+  if (templateComponents === "bidirectionalVoicePlus") {
+    return bidirectionalVoicePlus(config);
+  }
+
   return `${templateComponents === "museumComponents" ? `${museumComponents}\n\n` : ""}create({
   config: {
     applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
