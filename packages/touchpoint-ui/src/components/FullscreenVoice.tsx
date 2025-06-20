@@ -5,6 +5,7 @@ import {
   type SetStateAction,
   type FC,
   type ReactNode,
+  useEffect,
 } from "react";
 import { clsx } from "clsx";
 import type { Context, ConversationHandler } from "@nlxai/chat-core";
@@ -16,7 +17,7 @@ import type {
 
 import { FullscreenError } from "./FullscreenError";
 import { Ripple } from "./Ripple";
-import { Loader } from "./ui/Loader";
+import { Loader, LoaderAnimation } from "./ui/Loader";
 import { IconButton } from "./ui/IconButton";
 import { TextButton } from "./ui/TextButton";
 import {
@@ -47,50 +48,83 @@ interface Props {
   customModalities?: Record<string, CustomModalityComponent<unknown>>;
 }
 
+const SoundCheckDevices: FC<{ soundCheck: SoundCheck }> = ({ soundCheck }) => {
+  return (
+    <>
+      <div className="flex items-center gap-2 text-primary-80">
+        <span
+          className={clsx(
+            "block w-10 h-10 p-2 flex-none",
+            soundCheck.micAllowed ? "" : "text-error-primary",
+          )}
+        >
+          {soundCheck.micAllowed ? <Mic /> : <MicOff />}
+        </span>
+        <input
+          className="px-3 py-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
+          value={soundCheck.micNames[0]}
+          placeholder="Mic not found"
+          disabled
+        />
+      </div>
+      <div className="flex items-center gap-2 text-primary-80">
+        <span
+          className={clsx(
+            "block w-10 h-10 p-2 flex-none",
+            soundCheck.speakerNames[0] != null ? "" : "text-error-primary",
+          )}
+        >
+          {soundCheck.speakerNames[0] != null ? <Volume /> : <VolumeOff />}
+        </span>
+        <input
+          className="px-3 py-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
+          value={soundCheck.speakerNames[0]}
+          placeholder="Speaker not found"
+          disabled
+        />
+      </div>
+    </>
+  );
+};
+
 export const SoundCheckUi: FC<{
   soundCheck: SoundCheck | null;
 }> = ({ soundCheck }) => {
+  const [longerThanUsual, setLongerThanUsual] = useState<boolean>(false);
+
+  const loading = soundCheck == null;
+
+  useEffect(() => {
+    if (!loading) {
+      setLongerThanUsual(false);
+      return;
+    }
+    const timeout = setTimeout(() => {
+      setLongerThanUsual(true);
+    }, 3000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [loading, setLongerThanUsual]);
+
   return (
     <div className="space-y-4 text-primary-80">
       <p className="px-1">
         Get ready to join a voice experience. Please ensure your microphone and
-        speakers are turned on and functioning.
+        speakers are turned on and enabled on this page.
       </p>
       {soundCheck != null ? (
-        <>
-          <div className="flex items-center gap-2 text-primary-80">
-            <span
-              className={clsx(
-                "block w-10 h-10 p-2 flex-none",
-                soundCheck.micAllowed ? "" : "text-error-primary",
-              )}
-            >
-              {soundCheck.micAllowed ? <Mic /> : <MicOff />}
-            </span>
-            <input
-              className="px-3 py-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
-              value={soundCheck.micNames[0]}
-              placeholder="Mic not found"
-              disabled
-            />
-          </div>
-          <div className="flex items-center gap-2 text-primary-80">
-            <span
-              className={clsx(
-                "block w-10 h-10 p-2 flex-none",
-                soundCheck.speakerNames[0] != null ? "" : "text-error-primary",
-              )}
-            >
-              {soundCheck.speakerNames[0] != null ? <Volume /> : <VolumeOff />}
-            </span>
-            <input
-              className="px-3 py-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
-              value={soundCheck.speakerNames[0]}
-              placeholder="Speaker not found"
-              disabled
-            />
-          </div>
-        </>
+        <SoundCheckDevices soundCheck={soundCheck} />
+      ) : longerThanUsual ? (
+        <div className="flex gap-2 bg-primary-10 rounded-outer p-2">
+          <span className="text-accent inline-block flex-none w-5 h-5">
+            <LoaderAnimation />
+          </span>
+          <p className="text-base">
+            I cannot access your microphone. Check your browser settings and
+            refresh the page.
+          </p>
+        </div>
       ) : null}
     </div>
   );
