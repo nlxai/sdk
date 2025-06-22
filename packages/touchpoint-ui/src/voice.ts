@@ -2,6 +2,7 @@
 import type {
   Context,
   ConversationHandler,
+  VoiceCredentials,
   ModalityPayloads,
 } from "@nlxai/chat-core";
 import { useDebouncedState } from "@react-hookz/web";
@@ -15,34 +16,10 @@ import {
 } from "livekit-client";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-type VoiceRoomState =
-  | "inactive"
-  | "pending"
-  | "active"
-  | "error"
-  | "terminated";
-
 export interface SoundCheck {
   micAllowed: boolean;
   micNames: string[];
   speakerNames: string[];
-}
-
-interface VoiceHookReturn {
-  roomState: VoiceRoomState;
-  isUserSpeaking: boolean;
-  isApplicationSpeaking: boolean;
-  soundCheck: null | SoundCheck;
-  roomData: null | ModalitiesWithContext;
-  retrySoundCheck: () => void;
-}
-
-interface UseVoiceParams {
-  active: boolean;
-  micEnabled: boolean;
-  speakersEnabled: boolean;
-  handler: ConversationHandler;
-  context?: Context;
 }
 
 export interface ModalitiesWithContext {
@@ -67,21 +44,223 @@ const decodeModalities = (val: Uint8Array): ModalityPayloads | null => {
   }
 };
 
+// Voice
+
+type VoiceRoomState =
+  | "noAudioPermissions"
+  | "pending"
+  | "active"
+  | "error"
+  | "terminated";
+
+interface VoiceHookReturn {
+  roomState: VoiceRoomState;
+  isUserSpeaking: boolean;
+  isApplicationSpeaking: boolean;
+  roomData: null | ModalitiesWithContext;
+  retry: () => void;
+}
+
+interface VoiceHookParams {
+  micEnabled: boolean;
+  speakersEnabled: boolean;
+  handler: ConversationHandler;
+  context?: Context;
+}
+
 export const useVoice = ({
-  active,
-  micEnabled,
-  speakersEnabled,
   handler,
   context,
-}: UseVoiceParams): VoiceHookReturn => {
-  const roomRef = useRef<Room | null>(null);
-
-  const [roomState, setRoomState] = useState<VoiceRoomState>("inactive");
+  speakersEnabled,
+  micEnabled,
+}: VoiceHookParams): VoiceHookReturn => {
+  const [roomState, setRoomState] = useState<VoiceRoomState>("pending");
 
   const [isUserSpeaking, setIsUserSpeaking] = useDebouncedState<boolean>(
     false,
     100,
   );
+
+  const [isApplicationSpeaking, setIsApplicationSpeaking] =
+    useDebouncedState<boolean>(false, 100);
+
+  const [roomData, setRoomData] = useState<ModalitiesWithContext | null>(null);
+
+  const roomRef = useRef<Room | null>(null);
+
+  const trackRef = useRef<RemoteTrack | null>(null);
+
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(
+    null,
+  );
+
+  const disconnect = useCallback(async () => {
+    const room = roomRef.current;
+    if (room == null) {
+      return;
+    }
+    if (trackRef.current != null) {
+      trackRef.current.stop();
+      trackRef.current = null;
+    }
+    setAudioElement(null);
+    roomRef.current = null;
+    setRoomData(null);
+    return room.disconnect();
+  }, [setRoomData, setAudioElement]);
+
+  useEffect(() => {
+    const room = roomRef.current;
+    if (room == null) {
+      return;
+    }
+    void room.localParticipant.setMicrophoneEnabled(micEnabled);
+  }, [micEnabled]);
+
+  useEffect(() => {
+    if (audioElement == null) {
+      return;
+    }
+    const newVolume = speakersEnabled ? 1 : 0;
+    audioElement.volume = newVolume;
+  }, [audioElement, speakersEnabled]);
+
+  const setup = useCallback(async (): Promise<void> => {
+    let creds: VoiceCredentials | null = null;
+
+    try {
+      creds = await handler.getVoiceCredentials(context);
+    } catch (err) {
+      setRoomState("error");
+      return;
+    }
+
+    if (creds == null) {
+      return;
+    }
+
+    const handleActiveSpeakersChanged = (participants: Participant[]): void => {
+      const hasAgent = participants.some((participant) => participant.isAgent);
+      const hasLocal = participants.some((participant) => participant.isLocal);
+      setIsApplicationSpeaking(hasAgent);
+      setIsUserSpeaking(hasLocal);
+    };
+
+    const handleTrackSubscribed = (track: RemoteTrack): void => {
+      if (track.kind === Track.Kind.Audio) {
+        trackRef.current = track;
+        const element = track.attach();
+        setAudioElement(element);
+        void element.play();
+      }
+    };
+
+    const handleIsSpeakingChanged = (speaking: boolean): void => {
+      setIsUserSpeaking(speaking);
+    };
+
+    try {
+      const room = new Room();
+      roomRef.current = room;
+
+      await room.connect(creds.url, creds.token, { autoSubscribe: true });
+      await room.localParticipant.setMicrophoneEnabled(true);
+
+      room.on(RoomEvent.TrackSubscribed, handleTrackSubscribed);
+      room.on(RoomEvent.ActiveSpeakersChanged, handleActiveSpeakersChanged);
+      room.localParticipant.on(
+        ParticipantEvent.IsSpeakingChanged,
+        handleIsSpeakingChanged,
+      );
+      room.on(RoomEvent.Disconnected, () => {
+        setRoomState("terminated");
+        setIsUserSpeaking(false);
+        setIsApplicationSpeaking(false);
+        disconnect();
+      });
+
+      // Handle incoming data from the room/agent
+      room.on(RoomEvent.DataReceived, (payload, participant) => {
+        setRoomData({
+          modalities: decodeModalities(payload) ?? {},
+          from: participant?.identity,
+          timestamp: Date.now(),
+        });
+      });
+
+      void room.startAudio();
+      setRoomState("active");
+    } catch (err) {
+      setRoomState("error");
+      return;
+    }
+  }, [
+    handler,
+    context,
+    setRoomState,
+    setIsApplicationSpeaking,
+    setIsApplicationSpeaking,
+    setAudioElement,
+    setRoomData,
+  ]);
+
+  const retry = async () => {
+    await disconnect();
+    void setup();
+  };
+
+  useEffect(() => {
+    void setup();
+    return disconnect;
+  }, [setup, disconnect]);
+
+  return { roomState, isUserSpeaking, isApplicationSpeaking, retry, roomData };
+};
+
+// Legacy voice
+
+type LegacyVoiceRoomState =
+  | "inactive"
+  | "pending"
+  | "active"
+  | "error"
+  | "terminated";
+
+interface LegacyVoiceHookReturn {
+  roomState: LegacyVoiceRoomState;
+  isUserSpeaking: boolean;
+  isApplicationSpeaking: boolean;
+  soundCheck: null | SoundCheck;
+  roomData: null | ModalitiesWithContext;
+  retrySoundCheck: () => void;
+}
+
+interface LegacyVoiceHookParams {
+  active: boolean;
+  micEnabled: boolean;
+  speakersEnabled: boolean;
+  handler: ConversationHandler;
+  context?: Context;
+}
+
+export const useVoiceLegacy = ({
+  active,
+  micEnabled,
+  speakersEnabled,
+  handler,
+  context,
+}: LegacyVoiceHookParams): LegacyVoiceHookReturn => {
+  const roomRef = useRef<Room | null>(null);
+
+  const [roomState, setRoomState] = useState<LegacyVoiceRoomState>("inactive");
+
+  const [isUserSpeaking, setIsUserSpeaking] = useDebouncedState<boolean>(
+    false,
+    100,
+  );
+
+  const [isApplicationSpeaking, setIsApplicationSpeaking] =
+    useDebouncedState<boolean>(false, 100);
 
   const [testMediaStream, setTestMediaStream] = useState<MediaStream | null>(
     null,
@@ -102,10 +281,7 @@ export const useVoice = ({
     if (room == null) {
       return;
     }
-    room.localParticipant.setMicrophoneEnabled(micEnabled).catch((err) => {
-      // eslint-disable-next-line no-console
-      console.warn(err);
-    });
+    void room.localParticipant.setMicrophoneEnabled(micEnabled);
   }, [micEnabled]);
 
   const checkMic = useCallback(async (): Promise<void> => {
@@ -164,9 +340,6 @@ export const useVoice = ({
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     checkMic();
   }, [checkMic]);
-
-  const [isApplicationSpeaking, setIsApplicationSpeaking] =
-    useDebouncedState<boolean>(false, 600);
 
   const disconnect = useCallback(() => {
     const room = roomRef.current;
@@ -263,10 +436,6 @@ export const useVoice = ({
       setRoomState("error");
       // eslint-disable-next-line no-console
       console.warn(err);
-      handler.terminateVoiceCall().catch((err: any) => {
-        // eslint-disable-next-line no-console
-        console.warn(err);
-      });
     }
   }, [
     setRoomState,
