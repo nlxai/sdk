@@ -2,6 +2,7 @@
 import type {
   Context,
   ConversationHandler,
+  VoiceCredentials,
   ModalityPayloads,
 } from "@nlxai/chat-core";
 import { useDebouncedState } from "@react-hookz/web";
@@ -15,34 +16,10 @@ import {
 } from "livekit-client";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-type VoiceRoomState =
-  | "inactive"
-  | "pending"
-  | "active"
-  | "error"
-  | "terminated";
-
 export interface SoundCheck {
   micAllowed: boolean;
   micNames: string[];
   speakerNames: string[];
-}
-
-interface VoiceHookReturn {
-  roomState: VoiceRoomState;
-  isUserSpeaking: boolean;
-  isApplicationSpeaking: boolean;
-  soundCheck: null | SoundCheck;
-  roomData: null | ModalitiesWithContext;
-  retrySoundCheck: () => void;
-}
-
-interface UseVoiceParams {
-  active: boolean;
-  micEnabled: boolean;
-  speakersEnabled: boolean;
-  handler: ConversationHandler;
-  context?: Context;
 }
 
 export interface ModalitiesWithContext {
@@ -67,25 +44,49 @@ const decodeModalities = (val: Uint8Array): ModalityPayloads | null => {
   }
 };
 
+// Voice
+
+type VoiceRoomState =
+  | "noAudioPermissions"
+  | "pending"
+  | "active"
+  | "error"
+  | "terminated";
+
+interface VoiceHookReturn {
+  roomState: VoiceRoomState;
+  isUserSpeaking: boolean;
+  isApplicationSpeaking: boolean;
+  roomData: null | ModalitiesWithContext;
+  retry: () => Promise<void>;
+}
+
+interface VoiceHookParams {
+  micEnabled: boolean;
+  speakersEnabled: boolean;
+  handler: ConversationHandler;
+  context?: Context;
+}
+
 export const useVoice = ({
-  active,
-  micEnabled,
-  speakersEnabled,
   handler,
   context,
-}: UseVoiceParams): VoiceHookReturn => {
-  const roomRef = useRef<Room | null>(null);
-
-  const [roomState, setRoomState] = useState<VoiceRoomState>("inactive");
+  speakersEnabled,
+  micEnabled,
+}: VoiceHookParams): VoiceHookReturn => {
+  const [roomState, setRoomState] = useState<VoiceRoomState>("pending");
 
   const [isUserSpeaking, setIsUserSpeaking] = useDebouncedState<boolean>(
     false,
     100,
   );
 
-  const [testMediaStream, setTestMediaStream] = useState<MediaStream | null>(
-    null,
-  );
+  const [isApplicationSpeaking, setIsApplicationSpeaking] =
+    useDebouncedState<boolean>(false, 100);
+
+  const [roomData, setRoomData] = useState<ModalitiesWithContext | null>(null);
+
+  const roomRef = useRef<Room | null>(null);
 
   const trackRef = useRef<RemoteTrack | null>(null);
 
@@ -93,63 +94,28 @@ export const useVoice = ({
     null,
   );
 
-  const [soundCheck, setSoundCheck] = useState<SoundCheck | null>(null);
-
-  const [roomData, setRoomData] = useState<ModalitiesWithContext | null>(null);
+  const disconnect = useCallback(async () => {
+    const room = roomRef.current;
+    if (room == null) {
+      return;
+    }
+    if (trackRef.current != null) {
+      trackRef.current.stop();
+      trackRef.current = null;
+    }
+    setAudioElement(null);
+    roomRef.current = null;
+    setRoomData(null);
+    await room.disconnect();
+  }, [setRoomData, setAudioElement]);
 
   useEffect(() => {
     const room = roomRef.current;
     if (room == null) {
       return;
     }
-    room.localParticipant.setMicrophoneEnabled(micEnabled).catch((err) => {
-      // eslint-disable-next-line no-console
-      console.warn(err);
-    });
+    void room.localParticipant.setMicrophoneEnabled(micEnabled);
   }, [micEnabled]);
-
-  const checkMic = useCallback(async (): Promise<void> => {
-    try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-      });
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      const speakers = devices
-        .filter((device) => device.kind === "audiooutput")
-        .map((device) => device.label);
-      setSoundCheck({
-        micAllowed: true,
-        micNames: devices
-          .filter((device) => device.kind === "audioinput")
-          .map((device) => device.label),
-        speakerNames:
-          // Safari does not return speaker names, so we default to just assuming there is a system default speaker
-          speakers.length > 0 ? speakers : ["System Default Speaker Device"],
-      });
-      setTestMediaStream(mediaStream);
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.warn(err);
-      setSoundCheck({
-        micAllowed: false,
-        micNames: [],
-        speakerNames: [],
-      });
-    }
-  }, [setSoundCheck, setTestMediaStream]);
-
-  useEffect(() => {
-    return () => {
-      if (testMediaStream == null) {
-        return;
-      }
-      const tracks = testMediaStream.getTracks();
-      tracks.forEach((track) => {
-        track.stop();
-        testMediaStream?.removeTrack(track);
-      });
-    };
-  }, [testMediaStream]);
 
   useEffect(() => {
     if (audioElement == null) {
@@ -159,91 +125,65 @@ export const useVoice = ({
     audioElement.volume = newVolume;
   }, [audioElement, speakersEnabled]);
 
-  useEffect(() => {
-    // This function call will never throw, therefore the floating promises rule should not apply
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    checkMic();
-  }, [checkMic]);
+  const setup = useCallback(async (): Promise<void> => {
+    setRoomState("pending");
 
-  const [isApplicationSpeaking, setIsApplicationSpeaking] =
-    useDebouncedState<boolean>(false, 600);
+    let creds: VoiceCredentials | null = null;
 
-  const disconnect = useCallback(() => {
-    const room = roomRef.current;
-    if (room == null) {
+    try {
+      creds = await handler.getVoiceCredentials(context);
+    } catch (err) {
+      setRoomState("error");
       return;
     }
-    room.disconnect().catch((err) => {
-      // eslint-disable-next-line no-console
-      console.warn(err);
-    });
-    void handler.terminateVoiceCall();
-    if (trackRef.current != null) {
-      trackRef.current.stop();
-      trackRef.current = null;
+
+    if (creds == null) {
+      return;
     }
-    setAudioElement(null);
-    roomRef.current = null;
-    setRoomData(null);
-  }, [setRoomData, setAudioElement]);
 
-  useEffect(() => {
-    const handleBeforeUnload = (): void => {
-      disconnect();
+    const handleActiveSpeakersChanged = (participants: Participant[]): void => {
+      const hasAgent = participants.some((participant) => participant.isAgent);
+      const hasLocal = participants.some((participant) => participant.isLocal);
+      setIsApplicationSpeaking(hasAgent);
+      setIsUserSpeaking(hasLocal);
     };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [disconnect]);
 
-  const setupRoom = useCallback(async (): Promise<void> => {
+    const handleTrackSubscribed = (track: RemoteTrack): void => {
+      if (track.kind === Track.Kind.Audio) {
+        trackRef.current = track;
+        const element = track.attach();
+        setAudioElement(element);
+        void element.play();
+      }
+    };
+
+    const handleIsSpeakingChanged = (speaking: boolean): void => {
+      setIsUserSpeaking(speaking);
+    };
+
     try {
-      setRoomState("pending");
-
-      const creds = await handler.getVoiceCredentials(context);
-
-      const handleActiveSpeakersChanged = (
-        participants: Participant[],
-      ): void => {
-        const hasAgent = participants.some(
-          (participant) => participant.isAgent,
-        );
-        const hasLocal = participants.some(
-          (participant) => participant.isLocal,
-        );
-        setIsApplicationSpeaking(hasAgent);
-        setIsUserSpeaking(hasLocal);
-      };
-
-      const handleTrackSubscribed = (track: RemoteTrack): void => {
-        if (track.kind === Track.Kind.Audio) {
-          trackRef.current = track;
-          const element = track.attach();
-          setAudioElement(element);
-          void element.play();
-        }
-      };
-
-      const handleIsSpeakingChanged = (speaking: boolean): void => {
-        setIsUserSpeaking(speaking);
-      };
-
       const room = new Room();
       roomRef.current = room;
 
-      await room.prepareConnection(creds.url, creds.token);
+      console.log("connect");
+      await room.connect(creds.url, creds.token, { autoSubscribe: true });
+      console.log("set microphone enabled");
+      await room.localParticipant.setMicrophoneEnabled(true);
+
       room.on(RoomEvent.TrackSubscribed, handleTrackSubscribed);
       room.on(RoomEvent.ActiveSpeakersChanged, handleActiveSpeakersChanged);
       room.localParticipant.on(
         ParticipantEvent.IsSpeakingChanged,
         handleIsSpeakingChanged,
       );
+      room.on(RoomEvent.MediaDevicesError, () => {
+        console.log("media devices error");
+      });
       room.on(RoomEvent.Disconnected, () => {
         setRoomState("terminated");
         setIsUserSpeaking(false);
         setIsApplicationSpeaking(false);
-        disconnect();
+        void disconnect();
       });
 
       // Handle incoming data from the room/agent
@@ -255,46 +195,32 @@ export const useVoice = ({
         });
       });
 
-      await room.connect(creds.url, creds.token, { autoSubscribe: true });
-      await room.localParticipant.setMicrophoneEnabled(true);
-      await room.startAudio();
+      console.log("starting audio");
+      void room.startAudio();
       setRoomState("active");
     } catch (err) {
+      console.log(err);
       setRoomState("error");
-      // eslint-disable-next-line no-console
-      console.warn(err);
-      handler.terminateVoiceCall().catch((err: any) => {
-        // eslint-disable-next-line no-console
-        console.warn(err);
-      });
     }
   }, [
-    setRoomState,
     handler,
-    setIsUserSpeaking,
+    context,
+    setRoomState,
+    setIsApplicationSpeaking,
     setIsApplicationSpeaking,
     setAudioElement,
+    setRoomData,
   ]);
 
-  const retrySoundCheck = useCallback(() => {
-    // This function call will never throw, therefore the floating promises rule should not apply
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    checkMic();
-  }, [checkMic]);
+  const retry = async (): Promise<void> => {
+    await disconnect();
+    void setup();
+  };
 
   useEffect(() => {
-    if (active) {
-      void setupRoom();
-    }
+    void setup();
     return disconnect;
-  }, [active, disconnect, setupRoom]);
+  }, [setup, disconnect]);
 
-  return {
-    roomState,
-    isUserSpeaking,
-    isApplicationSpeaking,
-    soundCheck,
-    retrySoundCheck,
-    roomData,
-  };
+  return { roomState, isUserSpeaking, isApplicationSpeaking, retry, roomData };
 };
