@@ -70,6 +70,38 @@
         porttitor nec.
       </p>
 
+      <h2>Embedded touchpoint</h2>
+
+      <h3>Text touchpoint defined in HTML</h3>
+      <nlx-touchpoint
+        configuration='{
+        "config": {
+          "applicationUrl":
+            "https://bots.dev.studio.nlx.ai/c/kQwAgKCx86vJ4r0PUSxYR/ON4zgwWnVofsz2NaiD38Z",
+          "headers": {
+            "nlx-api-key": "XDE2Th70VhBSlhz2YA"
+          },
+          "userId": "1234-5678",
+          "languageCode": "en-US"
+        },
+        "input": "text"
+      }'
+      ></nlx-touchpoint>
+
+      <h3>Voice touchpoint defined in code</h3>
+      <button id="voiceTouchpointTrigger">Open Voice Touchpoint</button>
+
+      <div id="voiceTouchpoint" style="height: 300px"></div>
+
+      <h3>Voice mini defined in HTML (inline) late initialization</h3>
+
+      <p>
+        <nlx-touchpoint id="voiceMini"></nlx-touchpoint>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, cum
+        repellendus distinctio eveniet id odit sit velit? Vel, autem, quaerat
+        quidem natus molestias ea vero cumque et, numquam ab aut!
+      </p>
+
       <p>
         Orci varius natoque penatibus et magnis dis parturient montes, nascetur
         ridiculus mus. Nunc elementum non urna vel vulputate. Vestibulum vitae
@@ -88,6 +120,7 @@
         aliquam bibendum.
       </p>
     </main>
+
     <script type="module">
       import { create, html } from "/src/index.tsx";
 
@@ -147,6 +180,42 @@
         launchIcon: CustomLaunchButton,
         initializeConversation: () => {},
       });
+
+      voiceTouchpointTrigger.addEventListener("click", () => {
+        voiceTouchpointTrigger.parentElement.removeChild(
+          voiceTouchpointTrigger,
+        );
+        const embeddedVoiceTouchpoint =
+          document.createElement("nlx-touchpoint");
+        embeddedVoiceTouchpoint.touchpointConfiguration = {
+          config: {
+            applicationUrl:
+              "https://bots.dev.studio.nlx.ai/c/CBuQ3LpsClG5EQoSObVkK/IPzJitiaN8qtJFL3Wz1Jp",
+            headers: {
+              "nlx-api-key": "m3kVBd9QeCc5bXInhWIPG3ns",
+            },
+            userId: "1234-5678",
+            languageCode: "en-US",
+          },
+          input: "voice",
+          initializeConversation: () => {},
+        };
+        voiceTouchpoint.appendChild(embeddedVoiceTouchpoint);
+      });
+
+      voiceMini.touchpointConfiguration = {
+        config: {
+          applicationUrl:
+            "https://bots.dev.studio.nlx.ai/c/CBuQ3LpsClG5EQoSObVkK/IPzJitiaN8qtJFL3Wz1Jp",
+          headers: {
+            "nlx-api-key": "m3kVBd9QeCc5bXInhWIPG3ns",
+          },
+          userId: "1234-5678",
+          languageCode: "en-US",
+        },
+        input: "voiceMini",
+        initializeConversation: () => {},
+      };
     </script>
   </body>
 </html>

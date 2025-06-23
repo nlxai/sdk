@@ -23,14 +23,17 @@ import { ErrorMessage } from "./ErrorMessage";
 const containerClass =
   "bg-background backdrop-blur text-primary-80 rounded-outer p-2 w-[calc(100vw-16px)] max-w-[360px] space-y-4";
 
-const Container: FC<{ children: ReactNode; onClose: () => void }> = ({
-  children,
-  onClose,
-}) => (
+const Container: FC<{
+  children: ReactNode;
+  onClose: () => void;
+  renderCollapse: boolean;
+}> = ({ children, renderCollapse, onClose }) => (
   <div className={containerClass}>
-    <div className="flex items-center justify-end">
-      <IconButton onClick={onClose} Icon={Close} type="ghost" label="Close" />
-    </div>
+    {renderCollapse && (
+      <div className="flex items-center justify-end">
+        <IconButton onClick={onClose} Icon={Close} type="ghost" label="Close" />
+      </div>
+    )}
     {children}
   </div>
 );
@@ -63,9 +66,13 @@ const VoiceModalitiesWrapper: FC<{ children: ReactNode }> = ({ children }) => (
 export const VoiceMini: FC<{
   customModalities: Record<string, CustomModalityComponent<unknown>>;
   handler: ConversationHandler;
-  onClose: () => void;
+  renderCollapse: boolean;
+  onClose: (event: Event) => void;
   context?: Context;
-}> = ({ handler, context, onClose, customModalities }) => {
+}> = ({ handler, context, onClose, renderCollapse, customModalities }) => {
+  const onCloseHandler = (): void => {
+    onClose(new Event("close"));
+  };
   const [active, setActive] = useState<boolean>(false);
 
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
@@ -88,7 +95,7 @@ export const VoiceMini: FC<{
 
   if (!active) {
     return (
-      <Container onClose={onClose}>
+      <Container renderCollapse={renderCollapse} onClose={onCloseHandler}>
         <SoundCheckUi soundCheck={soundCheck} showDevices={false} />
 
         {soundCheck != null ? (
@@ -116,7 +123,7 @@ export const VoiceMini: FC<{
 
   if (roomState === "error") {
     return (
-      <Container onClose={onClose}>
+      <Container renderCollapse={renderCollapse} onClose={onCloseHandler}>
         <ErrorMessage message="I couldn’t connect" />
       </Container>
     );
@@ -180,7 +187,7 @@ export const VoiceMini: FC<{
         type="error"
         onClick={() => {
           setActive(false);
-          onClose();
+          onCloseHandler();
         }}
       />
       {roomData != null ? (
