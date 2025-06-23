@@ -76,8 +76,9 @@ export const VoiceMini: FC<{
   handler: ConversationHandler;
   onClose: () => void;
   context?: Context;
-}> = ({ handler, context, onClose, customModalities }) => {
-  const [active, setActive] = useState<boolean>(false);
+  restore: boolean;
+}> = ({ handler, context, onClose, customModalities, restore }) => {
+  const [active, setActive] = useState<boolean>(restore);
 
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
   const [speakersEnabled, setSpeakersEnabled] = useState<boolean>(true);

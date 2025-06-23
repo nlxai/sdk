@@ -30,22 +30,21 @@ import { Input } from "./components/Input";
 import type {
   WindowSize,
   ChoiceMessage,
-  TouchpointConfiguration,
-  InitializeConversation,
+  NormalizedTouchpointConfiguration,
 } from "./types";
 import { CustomPropertiesContainer } from "./components/Theme";
 import { VoiceMini } from "./components/VoiceMini";
-import { gatherAutomaticContext } from "./automaticContext";
+import { gatherAutomaticContext } from "./voice-plus/automaticContext";
+import { commandHandler } from "./voice-plus/commandHandler";
 
 /**
  * Main Touchpoint creation properties object
  */
-interface Props extends TouchpointConfiguration {
+interface Props extends NormalizedTouchpointConfiguration {
   embedded: boolean;
   onClose: ((event: Event) => void) | null;
   enableSettings: boolean;
   enabled: boolean;
-  initializeConversation: InitializeConversation;
 }
 
 export interface AppRef {
@@ -55,6 +54,12 @@ export interface AppRef {
 }
 
 const App = forwardRef<AppRef, Props>((props, ref) => {
+  const restoredConversation = Boolean(
+    sessionStorage.getItem("nlxConversationActive") ?? false,
+  );
+
+  console.log("nlxConversationActive", restoredConversation);
+
   const handler = useMemo(() => {
     return createConversation(props.config);
   }, [props.config]);
@@ -65,13 +70,15 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const colorMode = props.colorMode ?? "dark";
 
-  const [isExpanded, setIsExpanded] = useState(props.embedded);
+  const [isExpanded, setIsExpanded] = useState(
+    props.embedded || restoredConversation,
+  );
 
   const configValid = isConfigValid(props.config);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
-  const isExpandedRef = useRef<boolean>(props.embedded);
+  const isExpandedRef = useRef<boolean>(props.embedded || restoredConversation);
 
   const input = props.input ?? "text";
 
@@ -79,6 +86,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     (event: Event) => {
       if (props.onClose != null) {
         props.onClose(event);
+        sessionStorage.removeItem("nlxConversationActive");
         if (!event.defaultPrevented) {
           setIsExpanded(false);
         }
@@ -117,7 +125,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     };
   }, [handler, setResponses]);
 
-  const conversationInitialized = useRef<boolean>(false);
+  const conversationInitialized = useRef<boolean>(restoredConversation);
 
   useEffect(() => {
     if (!isExpanded || conversationInitialized.current) {
@@ -136,88 +144,22 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   });
 
   useEffect(() => {
-    if (
-      props.bidirectional?.navigation != null ||
-      props.bidirectional?.input != null ||
-      props.bidirectional?.custom != null ||
-      props.bidirectional?.automaticContext !== false
-    ) {
-      handler.addEventListener("voicePlusCommand", (event) => {
-        console.log(event);
-        switch (event.classification) {
-          case "navigation":
-            console.log(props.bidirectional?.navigation);
-            if (props.bidirectional?.navigation != null) {
-              props.bidirectional.navigation(
-                event.action as "page_next" | "page_previous" | "page_custom",
-                event.destination as string | undefined,
-                pageState.current.links,
-              );
-            } else if (props.bidirectional?.automaticContext !== false) {
-              switch (event.action) {
-                case "page_next":
-                  window.history.forward();
-                  break;
-                case "page_previous":
-                  window.history.back();
-
-                  break;
-                case "page_custom":
-                  if (event.destination != null) {
-                    console.log(
-                      "Navigating to custom link:",
-                      event.destination,
-                      pageState.links,
-                    );
-                    const url = pageState.current.links[event.destination];
-                    console.log("Resolved URL:", url);
-                    if (url != null) {
-                      window.location.href = url;
-                    }
-                  }
-                  break;
-              }
-            }
-            break;
-          case "input":
-            if (props.bidirectional?.input != null) {
-              props.bidirectional.input(
-                event.fields as Array<{ id: string; value: string }>,
-                pageState.current.formElements,
-              );
-            } else if (props.bidirectional?.automaticContext !== false) {
-              event.fields.forEach((field: { id: string; value: string }) => {
-                if (pageState.current.formElements[field.id] != null) {
-                  const element = pageState.current.formElements[field.id] as
-                    | HTMLInputElement
-                    | HTMLTextAreaElement
-                    | HTMLSelectElement;
-                  element.value = field.value;
-                  element.classList.add("voice-updated");
-
-                  // Trigger events for frameworks that listen to them
-                  element.dispatchEvent(new Event("input", { bubbles: true }));
-                  element.dispatchEvent(new Event("change", { bubbles: true }));
-
-                  setTimeout(() => {
-                    element.classList.remove("voice-updated");
-                  }, 2000);
-                }
-              });
-            }
-            break;
-          case "custom":
-            if (props.bidirectional?.custom != null) {
-              props.bidirectional.custom(event.action as string, event.payload);
-            }
-            break;
-        }
+    if (props.bidirectional?.automaticContext !== false) {
+      return gatherAutomaticContext(handler, (val) => {
+        pageState.current = val;
       });
-      if (props.bidirectional?.automaticContext !== false) {
-        return gatherAutomaticContext(handler, (val) => {
-          pageState.current = val;
-        });
-      }
+    }
+  }, [handler, props.bidirectional?.automaticContext]);
+
+  useEffect(() => {
+    if (
+      props.bidirectional != null &&
+      (props.bidirectional.navigation != null ||
+        props.bidirectional.input != null ||
+        props.bidirectional.custom != null ||
+        props.bidirectional.automaticContext !== false)
+    ) {
+      return commandHandler(handler, props.bidirectional, pageState);
     }
   }, [props.bidirectional, handler]);
 
@@ -306,9 +248,10 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           handler={handler}
           context={props.initialContext}
           onClose={() => {
-            setIsExpanded(false);
+            onClose(new Event("close"));
           }}
           customModalities={customModalities}
+          restore={restoredConversation}
         />
       </CustomPropertiesContainer>
     );

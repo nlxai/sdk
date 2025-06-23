@@ -19,14 +19,17 @@ import { DateInput } from "./components/ui/DateInput";
 import packageJson from "../package.json";
 
 import { createElement, type FC } from "react";
-import type { TouchpointConfiguration } from "./types";
+import type {
+  NormalizedTouchpointConfiguration,
+  TouchpointConfiguration,
+} from "./types";
 import { equals } from "ramda";
 export {
   analyzePageForms,
   type InteractiveElementInfo,
   type PageForms,
   type AccessibilityInformation,
-} from "./analyzePageForms";
+} from "./voice-plus/analyzePageForms";
 /**
  * If you wish to build custom modalities using JSX, you will want to
  *
@@ -98,6 +101,45 @@ export {
   type TouchpointConfiguration,
 } from "./types";
 
+const defaultConversationId = (): string => {
+  const id = crypto.randomUUID();
+  sessionStorage.setItem("nlxConversationId", id);
+  return id;
+};
+
+const defaultUserId = (): string => {
+  const id = crypto.randomUUID();
+  localStorage.setItem("nlxUserId", id);
+  return id;
+};
+
+const normalizeConfiguration = (
+  configuration: TouchpointConfiguration,
+): NormalizedTouchpointConfiguration => {
+  return {
+    ...configuration,
+    config: {
+      ...configuration.config,
+      conversationId:
+        configuration.config.conversationId ??
+        sessionStorage.getItem("nlxConversationId") ??
+        defaultConversationId(),
+      userId:
+        configuration.config.userId ??
+        localStorage.getItem("nlxUserId") ??
+        defaultUserId(),
+      bidirectional: configuration.config.bidirectional ?? false,
+    },
+    input: configuration.input ?? "text",
+    initializeConversation:
+      configuration.initializeConversation ??
+      ((handler, context) => {
+        if ((configuration?.input ?? "text") === "text")
+          handler.sendWelcomeFlow(context);
+      }),
+  };
+};
+
 /**
  * A custom element implementing touchpoint.
  *
@@ -155,19 +197,15 @@ class NlxTouchpointElement extends HTMLElement {
     this.#shadowRoot ??= this.attachShadow({ mode: "closed" });
     this.#root ??= createRoot(this.#shadowRoot);
     if (this.#touchpointConfiguration != null) {
+      const configuration = normalizeConfiguration(
+        this.#touchpointConfiguration,
+      );
       this.#root.render(
         <>
           <style>{cssRaw}</style>
           <App
-            {...this.#touchpointConfiguration}
+            {...configuration}
             embedded={this.embedded}
-            initializeConversation={
-              this.#touchpointConfiguration.initializeConversation ??
-              ((handler, context) => {
-                if ((this.#touchpointConfiguration?.input ?? "text") === "text")
-                  handler.sendWelcomeFlow(context);
-              })
-            }
             onClose={this.onClose}
             enableSettings={this.enableSettings}
             enabled={this.#enabled}

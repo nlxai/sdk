@@ -201,6 +201,16 @@ export const useVoice = ({
     try {
       setRoomState("pending");
 
+      // let creds;
+      // if (localStorage.getItem("voiceCredentials") != null) {
+      //   creds = JSON.parse(localStorage.getItem("voiceCredentials") ?? "") as {
+      //     url: string;
+      //     token: string;
+      //   };
+      // } else {
+      //   creds = await handler.getVoiceCredentials(context);
+      //   localStorage.setItem("voiceCredentials", JSON.stringify(creds));
+      // }
       const creds = await handler.getVoiceCredentials(context);
 
       const handleActiveSpeakersChanged = (
@@ -258,6 +268,7 @@ export const useVoice = ({
       await room.connect(creds.url, creds.token, { autoSubscribe: true });
       await room.localParticipant.setMicrophoneEnabled(true);
       await room.startAudio();
+      sessionStorage.setItem("nlxConversationActive", "true");
       setRoomState("active");
     } catch (err) {
       setRoomState("error");

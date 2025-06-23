@@ -183,6 +183,64 @@ export type InitializeConversation = (
 export type Input = "text" | "voice" | "voiceMini";
 
 /**
+ * Configuration for bidirectional mode of voice+.
+ */
+export type BidirectionalConfig =
+  | {
+      /**
+       * Attempt to gather and send page context automatically. This will work well on semantically coded pages without too many custom form controls.
+       * This enables a number of automatic features.
+       *
+       * Defaults to `false`.
+       */
+      automaticContext?: true;
+
+      /**
+       * Navigation handler for bidirectional mode.
+       *
+       * If automatic context gathering is enabled, the default implementation will navigate to those pages using standard `window.location` APIs.
+       * @param action - The navigation action to perform.
+       * @param destination - The name of the destination to navigate to if `action` is `"page_custom"`.
+       * @param destinations - A map of destination names to URLs for custom navigation. Only present if `automaticContext` is enabled.
+       */
+      navigation?: (
+        action: "page_next" | "page_previous" | "page_custom",
+        destination: string | undefined,
+        destinations: Record<string, string>,
+      ) => void;
+
+      /**
+       * A callback for filling out form fields in bidirectional mode.
+       *
+       * If automatic context gathering is enabled, the default implementation will fill out the form fields using standard DOM APIs.
+       * @param fields - An array of field objects with `id` and `value` properties.
+       * @param pageFields - A map of field IDs to DOM elements for custom form filling. Only present if `automaticContext` is enabled.
+       */
+      input?: (
+        fields: Array<{ id: string; value: string }>,
+        pageFields: Record<string, Element>,
+      ) => void;
+
+      /**
+       * A callback for custom actions in bidirectional mode.
+       * @param action - The custom name of your action.
+       * @param payload - The payload defined for the custom action.
+       * @returns
+       */
+      custom?: (action: string, payload: unknown) => void;
+    }
+  | {
+      automaticContext: false;
+
+      navigation?: (
+        action: "page_next" | "page_previous" | "page_custom",
+        destination?: string,
+      ) => void;
+      input?: (fields: Array<{ id: string; value: string }>) => void;
+      custom?: (action: string, payload: unknown) => void;
+    };
+
+/**
  * Main Touchpoint creation properties object
  */
 export interface TouchpointConfiguration {
@@ -247,58 +305,11 @@ export interface TouchpointConfiguration {
    * Enables bidirectional mode of voice+. Will automatically set the bidirectional flag in the config.
    *
    */
-  bidirectional?:
-    | {
-        /**
-         * Attempt to gather and send page context automatically. This will work well on semantically coded pages without too many custom form controls.
-         * This enables a number of automatic features.
-         *
-         * Defaults to `false`.
-         */
-        automaticContext?: true;
-
-        /**
-         * Navigation handler for bidirectional mode.
-         *
-         * If automatic context gathering is enabled, the default implementation will navigate to those pages using standard `window.location` APIs.
-         * @param action - The navigation action to perform.
-         * @param destination - The name of the destination to navigate to if `action` is `"page_custom"`.
-         * @param destinations - A map of destination names to URLs for custom navigation. Only present if `automaticContext` is enabled.
-         */
-        navigation?: (
-          action: "page_next" | "page_previous" | "page_custom",
-          destination: string | undefined,
-          destinations: Record<string, string>,
-        ) => void;
-
-        /**
-         * A callback for filling out form fields in bidirectional mode.
-         *
-         * If automatic context gathering is enabled, the default implementation will fill out the form fields using standard DOM APIs.
-         * @param fields - An array of field objects with `id` and `value` properties.
-         * @param pageFields - A map of field IDs to DOM elements for custom form filling. Only present if `automaticContext` is enabled.
-         */
-        input?: (
-          fields: Array<{ id: string; value: string }>,
-          pageFields: Record<string, Element>,
-        ) => void;
-
-        /**
-         * A callback for custom actions in bidirectional mode.
-         * @param action - The custom name of your action.
-         * @param payload - The payload defined for the custom action.
-         * @returns
-         */
-        custom?: (action: string, payload: unknown) => void;
-      }
-    | {
-        automaticContext: false;
-
-        navigation?: (
-          action: "page_next" | "page_previous" | "page_custom",
-          destination?: string,
-        ) => void;
-        input?: (fields: Array<{ id: string; value: string }>) => void;
-        custom?: (action: string, payload: unknown) => void;
-      };
+  bidirectional?: BidirectionalConfig;
 }
+
+/**
+ * @internal
+ */
+export type NormalizedTouchpointConfiguration = TouchpointConfiguration &
+  Required<Pick<TouchpointConfiguration, "initializeConversation" | "input">>;

@@ -105,7 +105,7 @@
       </p>
     </main>`;
         } else if (url == "form.html") {
-          app.innerHTML = ` <form>
+          app.innerHTML = `<form style="display: grid; grid-template-columns: 100px 300px; gap: 10px;">
       <label for="input">Name:</label>
       <input type="text" id="input" name="input" value="" />
       <label for="input2">Email:</label>
@@ -118,6 +118,7 @@
         <option value="banana">Banana</option>
         <option value="cherry">Cherry</option>
         <option value="date">Date</option>
+      </select>
       <button type="submit">Submit</button>
     </form>`;
         }
