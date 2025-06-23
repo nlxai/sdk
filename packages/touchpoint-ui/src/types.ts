@@ -178,6 +178,20 @@ export type InitializeConversation = (
 ) => void;
 
 /**
+ * Fully custom launch icon
+ */
+export type CustomLaunchButton = ComponentType<{
+  /**
+   * Class name injected into the component mainly to take care of positioning and z-index. Can be combined with more presentational and sizing-related class names.
+   */
+  className?: string;
+  /**
+   * Click handler that expands Touchpoint, without the caller having to implement this based on Touchpoint instance methods.
+   */
+  onClick?: () => void;
+}>;
+
+/**
  * Input type for the experience
  */
 export type Input = "text" | "voice" | "voiceMini";
@@ -207,7 +221,7 @@ export interface TouchpointConfiguration {
    *
    * When set to `false`, no launch button is shown at all. When not set or set to `true`, the default launch icon is rendered.
    */
-  launchIcon?: string | boolean;
+  launchIcon?: string | boolean | CustomLaunchButton;
   /**
    * Specifies whether the user message has bubbles or not
    */

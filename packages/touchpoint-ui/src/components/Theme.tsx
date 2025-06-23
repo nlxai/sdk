@@ -159,7 +159,7 @@ export const CustomPropertiesContainer: FC<{
   );
   return (
     <div
-      className={clsx(className)}
+      className={clsx(className, "font-sans")}
       style={{
         ...toCustomProperties(themeWithOverrides),
         colorScheme: colorMode,
