@@ -157,7 +157,6 @@
       };
       render(window.location.pathname.split("/").pop());
       window.addEventListener("popstate", (event) => {
-        console.log("popstate event", event);
         render(window.location.pathname.split("/").pop());
         history.pushState(null, null, document.URL);
       });

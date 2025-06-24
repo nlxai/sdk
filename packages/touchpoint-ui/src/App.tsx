@@ -54,9 +54,9 @@ export interface AppRef {
 }
 
 const App = forwardRef<AppRef, Props>((props, ref) => {
-  const restoredConversation = Boolean(
-    sessionStorage.getItem("nlxConversationActive") ?? false,
-  );
+  const restoredConversation =
+    sessionStorage.getItem("nlxActiveVoiceConversationId") ===
+    props.config.conversationId;
 
   const handler = useMemo(() => {
     return createConversation(props.config);
@@ -84,7 +84,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     (event: Event) => {
       if (props.onClose != null) {
         props.onClose(event);
-        sessionStorage.removeItem("nlxConversationActive");
+        sessionStorage.removeItem("nlxActiveVoiceConversationId");
         if (!event.defaultPrevented) {
           setIsExpanded(false);
         }

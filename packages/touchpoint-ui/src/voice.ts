@@ -268,7 +268,9 @@ export const useVoice = ({
       await room.connect(creds.url, creds.token, { autoSubscribe: true });
       await room.localParticipant.setMicrophoneEnabled(true);
       await room.startAudio();
-      sessionStorage.setItem("nlxConversationActive", "true");
+      const convId = handler.currentConversationId();
+      if (convId != null)
+        sessionStorage.setItem("nlxActiveVoiceConversationId", convId);
       setRoomState("active");
     } catch (err) {
       setRoomState("error");

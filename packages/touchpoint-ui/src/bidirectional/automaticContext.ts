@@ -30,6 +30,11 @@ export const gatherAutomaticContext = (
     const [context, pageState] = gatherContext();
     if (!equals(previousContext, context)) {
       try {
+        // eslint-disable-next-line no-console
+        console.debug(
+          "Bidirectional automatic context sent:",
+          context["nlx:vpContext"],
+        );
         await handler.sendContext(context);
       } catch (error) {}
       setPageState(pageState);
@@ -70,9 +75,6 @@ const gatherContext = (): [
     fields,
     destinations,
   };
-
-  // eslint-disable-next-line no-console
-  console.debug("Automatic context", context);
 
   return [
     {
