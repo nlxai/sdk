@@ -29,7 +29,7 @@ export {
   type InteractiveElementInfo,
   type PageForms,
   type AccessibilityInformation,
-} from "./voice-plus/analyzePageForms";
+} from "./bidirectional/analyzePageForms";
 /**
  * If you wish to build custom modalities using JSX, you will want to
  *

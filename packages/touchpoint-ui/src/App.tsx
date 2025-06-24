@@ -34,8 +34,8 @@ import type {
 } from "./types";
 import { CustomPropertiesContainer } from "./components/Theme";
 import { VoiceMini } from "./components/VoiceMini";
-import { gatherAutomaticContext } from "./voice-plus/automaticContext";
-import { commandHandler } from "./voice-plus/commandHandler";
+import { gatherAutomaticContext } from "./bidirectional/automaticContext";
+import { commandHandler } from "./bidirectional/commandHandler";
 
 /**
  * Main Touchpoint creation properties object
@@ -57,8 +57,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   const restoredConversation = Boolean(
     sessionStorage.getItem("nlxConversationActive") ?? false,
   );
-
-  console.log("nlxConversationActive", restoredConversation);
 
   const handler = useMemo(() => {
     return createConversation(props.config);

@@ -32,11 +32,6 @@ export const commandHandler = (
               break;
             case "page_custom":
               if (event.destination != null) {
-                console.log(
-                  "Navigating to custom link:",
-                  event.destination,
-                  pageState.current.links,
-                );
                 const url = pageState.current.links[event.destination];
                 if (url != null) {
                   window.location.href = url;
