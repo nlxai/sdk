@@ -177,7 +177,6 @@ export const useVoice = ({
       // eslint-disable-next-line no-console
       console.warn(err);
     });
-    void handler.terminateVoiceCall();
     if (trackRef.current != null) {
       trackRef.current.stop();
       trackRef.current = null;
@@ -276,10 +275,6 @@ export const useVoice = ({
       setRoomState("error");
       // eslint-disable-next-line no-console
       console.warn(err);
-      handler.terminateVoiceCall().catch((err: any) => {
-        // eslint-disable-next-line no-console
-        console.warn(err);
-      });
     }
   }, [
     setRoomState,
