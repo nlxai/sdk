@@ -104,6 +104,7 @@ export {
   type CustomModalityComponent,
   type TouchpointConfiguration,
   type CustomLaunchButton,
+  type BidirectionalConfig,
 } from "./types";
 
 const defaultConversationId = (): string => {

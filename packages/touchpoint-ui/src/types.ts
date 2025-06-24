@@ -244,13 +244,38 @@ export type BidirectionalConfig =
       custom?: (action: string, payload: unknown) => void;
     }
   | {
+      /**
+       * Attempt to gather and send page context automatically. This will work well on semantically coded pages without too many custom form controls.
+       * This enables a number of automatic features.
+       *
+       * Defaults to `false`.
+       */
       automaticContext: false;
 
+      /**
+       * Navigation handler for bidirectional mode.
+       *
+       * If automatic context gathering is enabled, the default implementation will navigate to those pages using standard `window.location` APIs.
+       * @param action - The navigation action to perform.
+       * @param destination - The name of the destination to navigate to if `action` is `"page_custom"`.
+       */
       navigation?: (
         action: "page_next" | "page_previous" | "page_custom",
         destination?: string,
       ) => void;
+      /**
+       * A callback for filling out form fields in bidirectional mode.
+       *
+       * If automatic context gathering is enabled, the default implementation will fill out the form fields using standard DOM APIs.
+       * @param fields - An array of field objects with `id` and `value` properties.
+       */
       input?: (fields: Array<{ id: string; value: string }>) => void;
+      /**
+       * A callback for custom actions in bidirectional mode.
+       * @param action - The custom name of your action.
+       * @param payload - The payload defined for the custom action.
+       * @returns
+       */
       custom?: (action: string, payload: unknown) => void;
     };
 
