@@ -36,16 +36,20 @@ Voice+ with bidirectional mode enabled requires `voiceMini` input mode. This mod
       headers: {
         "nlx-api-key": "YOUR_API_KEY",
       },
-      bidirectional: true, // Explicitly enable bidirectional mode
       languageCode: "en-US",
       userId: crypto.randomUUID(), // Required for voice
     },
     input: "voiceMini", // Enables voice input with bidirectional support
+    bidirectional: {},
   };
 
   const touchpoint = await create(touchpointOptions);
 </script>
 ```
+
+This is **all you need** to get an out of the box experience that allows you to navigate your site and fill out forms.
+
+The following is if you wish to customise the how this works.
 
 ## Voice Commands Concepts
 
@@ -99,11 +103,13 @@ const { context, formElements } = analyzePageForms();
       headers: {
         "nlx-api-key": "YOUR_API_KEY",
       },
-      bidirectional: true, // Explicitly enable bidirectional mode
       languageCode: "en-US",
       userId: crypto.randomUUID(), // Required for voice
     },
     input: "voiceMini", // Enables voice input with bidirectional support
+    bidirectional: {
+      automaticContext: false,
+    }, // Explicitly enable bidirectional mode.
   };
 
   const touchpoint = await create(touchpointOptions);
@@ -125,42 +131,16 @@ const { context, formElements } = analyzePageForms();
 </script>
 ```
 
-## Your Voice Plus Command Handler
-
-Register a handler to process voice commands from NLX:
-
-```javascript
-touchpoint.conversationHandler.addEventListener(
-  "voicePlusCommand",
-  (command) => {
-    const { classification, action } = command;
-
-    switch (classification) {
-      case "navigation":
-        handleNavigation(action, command);
-        break;
-      case "input":
-        handleFormInput(command);
-        break;
-      case "custom":
-        handleCustomCommand(action, command);
-        break;
-    }
-  },
-);
-```
-
 ## Navigation Command Handler
 
 Handle voice-driven navigation between pages:
 
 ### Payload from NLX
 
-| Key              | Value                                       | Description                             |
-| ---------------- | ------------------------------------------- | --------------------------------------- |
-| `classification` | `navigation`                                | Indicates this is a navigation command  |
-| `action`         | `page_next`, `page_previous`, `page_custom` | Type of navigation action               |
-| `destination`    | `/about`                                    | Relative or absolute URL to navigate to |
+| Key           | Value                                       | Description                             |
+| ------------- | ------------------------------------------- | --------------------------------------- |
+| `action`      | `page_next`, `page_previous`, `page_custom` | Type of navigation action               |
+| `destination` | `/about`                                    | Relative or absolute URL to navigate to |
 
 **Example Payload:**
 
@@ -177,7 +157,7 @@ Handle voice-driven navigation between pages:
 This is a basic navigation handling logic that should be updated based on your application's routing logic. For instance, if you are using a framework like React, Vue, or Angular, you would use their respective routing libraries to handle navigation.
 
 ```javascript
-function handleNavigation(action, command) {
+function handleNavigation(action, destination) {
   switch (action) {
     case "page_next":
       // Navigate to next page
@@ -190,18 +170,32 @@ function handleNavigation(action, command) {
       break;
 
     case "page_custom":
-      // Navigate to specific page
-      if (command.destination) {
-        // Handle relative or absolute navigation
-        if (command.destination.startsWith("/")) {
-          window.location.pathname = command.destination;
-        } else {
-          window.location.href = command.destination;
-        }
+      // Handle relative or absolute navigation
+      if (destination.startsWith("/")) {
+        window.location.pathname = destination;
+      } else {
+        window.location.href = destination;
       }
+
       break;
   }
 }
+
+const touchpointOptions = {
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: {
+      "nlx-api-key": "YOUR_API_KEY",
+    },
+    languageCode: "en-US",
+    userId: crypto.randomUUID(), // Required for voice
+  },
+  input: "voiceMini", // Enables voice input with bidirectional support
+  bidirectional: {
+    automaticContext: false,
+    navigation: handleNavigation,
+  }, // Explicitly enable bidirectional mode.
+};
 ```
 
 ## Form Fill Command Handler
@@ -239,10 +233,8 @@ Automatically fill form fields based on voice input. The voice agent sends back 
 ### Sample Handler
 
 ```javascript
-function handleFormInput(command) {
-  if (!command.fields) return;
-
-  command.fields.forEach((field) => {
+function handleFormInput(fields, formElements) {
+  fields.forEach((field) => {
     // Use the stored formElements to find the DOM element
     if (formElements[field.id]) {
       const element = formElements[field.id];
@@ -252,6 +244,21 @@ function handleFormInput(command) {
     }
   });
 }
+
+const touchpointOptions = {
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: {
+      "nlx-api-key": "YOUR_API_KEY",
+    },
+    languageCode: "en-US",
+    userId: crypto.randomUUID(), // Required for voice
+  },
+  input: "voiceMini", // Enables voice input with bidirectional support
+  bidirectional: {
+    input: handleFormInput,
+  }, // Explicitly enable bidirectional mode.
+};
 ```
 
 ## Custom Command Handler
@@ -315,13 +322,28 @@ I will receive **TWO** payloads from NLX when this article is triggered, one for
 ### Sample Handler
 
 ```javascript
-function handleCustomCommand(action, command) {
+function handleCustomCommand(action, payload) {
   // Example: Voice-enabled product search
   if (action === "animalPolicy") {
-    setDogPolicy(command.payload.dog);
-    setCatPolicy(command.payload.cat);
+    setDogPolicy(payload.dog);
+    setCatPolicy(payload.cat);
   }
 }
+
+const touchpointOptions = {
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: {
+      "nlx-api-key": "YOUR_API_KEY",
+    },
+    languageCode: "en-US",
+    userId: crypto.randomUUID(), // Required for voice
+  },
+  input: "voiceMini", // Enables voice input with bidirectional support
+  bidirectional: {
+    custom: handleCustomCommand,
+  }, // Explicitly enable bidirectional mode.
+};
 ```
 
 ## Complete Implementation Example
@@ -388,12 +410,17 @@ A comprehensive example implementing voice-driven form filling, navigation:
             headers: {
               "nlx-api-key": "YOUR_API_KEY",
             },
-            bidirectional: true, // Enable bidirectional communication
             languageCode: "en-US",
             userId,
             conversationId,
           },
           input: "voiceMini",
+          bidirectional: {
+            automaticContext: false,
+            navigation: handleNavigation,
+            input: handleFormInput,
+            custom: handleCustom,
+          },
         });
 
         // Send initial page context
@@ -423,34 +450,8 @@ A comprehensive example implementing voice-driven form filling, navigation:
         });
       }
 
-      // Set up voice command handler
-      function setupCommandHandler(touchpoint) {
-        touchpoint.conversationHandler.addEventListener(
-          "voicePlusCommand",
-          (command) => {
-            console.log("Voice command received:", command);
-
-            switch (command.classification) {
-              case "navigation":
-                handleNavigation(command.action, command);
-                break;
-
-              case "input":
-                handleFormInput(command);
-                break;
-
-              case "custom":
-                handleCustomCommand(command.action, command);
-                break;
-            }
-          },
-        );
-      }
-
       // Handle navigation commands
-      function handleNavigation(action, command) {
-        const destination = command.destination || command.data?.destination;
-
+      function handleNavigation(action, destination) {
         switch (action) {
           case "page_next":
             window.history.forward();
@@ -461,22 +462,19 @@ A comprehensive example implementing voice-driven form filling, navigation:
             break;
 
           case "page_custom":
-            if (destination) {
-              if (destination.startsWith("/")) {
-                window.location.pathname = destination;
-              } else {
-                window.location.href = destination;
-              }
+            if (destination.startsWith("/")) {
+              window.location.pathname = destination;
+            } else {
+              window.location.href = destination;
             }
+
             break;
         }
       }
 
       // Handle form input commands with new structure
-      function handleFormInput(command) {
-        if (!command.fields) return;
-
-        command.fields.forEach((field) => {
+      function handleFormInput(fields) {
+        fields.forEach((field) => {
           if (formElements[field.id]) {
             const element = formElements[field.id];
             element.value = field.value;
@@ -494,13 +492,13 @@ A comprehensive example implementing voice-driven form filling, navigation:
       }
 
       // Handle custom commands
-      function handleCustomCommand(action, command) {
-        console.log("Custom command:", action, command.payload);
+      function handleCustomCommand(action, payload) {
+        console.log("Custom command:", action, payload);
 
         // Example: Handle custom search command
         if (action === "search") {
           // Implement search functionality
-          console.log("Searching for:", command.payload.query);
+          console.log("Searching for:", payload.query);
         }
       }
 

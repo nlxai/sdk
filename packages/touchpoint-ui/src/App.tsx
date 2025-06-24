@@ -30,21 +30,21 @@ import { Input } from "./components/Input";
 import type {
   WindowSize,
   ChoiceMessage,
-  TouchpointConfiguration,
-  InitializeConversation,
+  NormalizedTouchpointConfiguration,
 } from "./types";
 import { CustomPropertiesContainer } from "./components/Theme";
 import { VoiceMini } from "./components/VoiceMini";
+import { gatherAutomaticContext } from "./bidirectional/automaticContext";
+import { commandHandler } from "./bidirectional/commandHandler";
 
 /**
  * Main Touchpoint creation properties object
  */
-interface Props extends TouchpointConfiguration {
+interface Props extends NormalizedTouchpointConfiguration {
   embedded: boolean;
   onClose: ((event: Event) => void) | null;
   enableSettings: boolean;
   enabled: boolean;
-  initializeConversation: InitializeConversation;
 }
 
 export interface AppRef {
@@ -54,6 +54,10 @@ export interface AppRef {
 }
 
 const App = forwardRef<AppRef, Props>((props, ref) => {
+  const restoredConversation =
+    sessionStorage.getItem("nlxActiveVoiceConversationId") ===
+    props.config.conversationId;
+
   const handler = useMemo(() => {
     return createConversation(props.config);
   }, [props.config]);
@@ -64,13 +68,15 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const colorMode = props.colorMode ?? "dark";
 
-  const [isExpanded, setIsExpanded] = useState(props.embedded);
+  const [isExpanded, setIsExpanded] = useState(
+    props.embedded || restoredConversation,
+  );
 
   const configValid = isConfigValid(props.config);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
-  const isExpandedRef = useRef<boolean>(props.embedded);
+  const isExpandedRef = useRef<boolean>(props.embedded || restoredConversation);
 
   const input = props.input ?? "text";
 
@@ -78,6 +84,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     (event: Event) => {
       if (props.onClose != null) {
         props.onClose(event);
+        sessionStorage.removeItem("nlxActiveVoiceConversationId");
         if (!event.defaultPrevented) {
           setIsExpanded(false);
         }
@@ -116,7 +123,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     };
   }, [handler, setResponses]);
 
-  const conversationInitialized = useRef<boolean>(false);
+  const conversationInitialized = useRef<boolean>(restoredConversation);
 
   useEffect(() => {
     if (!isExpanded || conversationInitialized.current) {
@@ -125,6 +132,34 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     conversationInitialized.current = true;
     props.initializeConversation(handler, props.initialContext);
   }, [props.initializeConversation, props.initialContext, handler, isExpanded]);
+
+  const pageState = useRef<{
+    formElements: Record<string, Element>;
+    links: Record<string, string>;
+  }>({
+    formElements: {},
+    links: {},
+  });
+
+  useEffect(() => {
+    if (props.bidirectional?.automaticContext !== false) {
+      return gatherAutomaticContext(handler, (val) => {
+        pageState.current = val;
+      });
+    }
+  }, [handler, props.bidirectional?.automaticContext]);
+
+  useEffect(() => {
+    if (
+      props.bidirectional != null &&
+      (props.bidirectional.navigation != null ||
+        props.bidirectional.input != null ||
+        props.bidirectional.custom != null ||
+        props.bidirectional.automaticContext !== false)
+    ) {
+      return commandHandler(handler, props.bidirectional, pageState);
+    }
+  }, [props.bidirectional, handler]);
 
   const windowSize: WindowSize =
     props.windowSize ?? (props.embedded ? "full" : "half");
@@ -218,9 +253,12 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         <VoiceMini
           handler={handler}
           context={props.initialContext}
+          onClose={() => {
+            onClose(new Event("close"));
+          }}
           renderCollapse={props.onClose != null}
-          onClose={onClose}
           customModalities={customModalities}
+          restore={restoredConversation}
         />
       </CustomPropertiesContainer>
     );

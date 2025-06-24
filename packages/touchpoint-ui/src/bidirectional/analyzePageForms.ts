@@ -54,6 +54,11 @@ const toAccessibilityInformation = (
       description: computeAccessibleDescription(element),
       type: element.type,
       value: element.value,
+      options: Array.from(element.options).map((option) => ({
+        value: option.value,
+        text: option.text,
+        selected: option.selected,
+      })),
     };
   }
   throw new TypeError("Unsupported element type");

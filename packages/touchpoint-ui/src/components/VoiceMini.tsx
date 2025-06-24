@@ -69,11 +69,19 @@ export const VoiceMini: FC<{
   renderCollapse: boolean;
   onClose: (event: Event) => void;
   context?: Context;
-}> = ({ handler, context, onClose, renderCollapse, customModalities }) => {
+  restore: boolean;
+}> = ({
+  handler,
+  context,
+  onClose,
+  customModalities,
+  restore,
+  renderCollapse,
+}) => {
   const onCloseHandler = (): void => {
     onClose(new Event("close"));
   };
-  const [active, setActive] = useState<boolean>(false);
+  const [active, setActive] = useState<boolean>(restore);
 
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
   const [speakersEnabled, setSpeakersEnabled] = useState<boolean>(true);
