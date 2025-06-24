@@ -1,13 +1,18 @@
 /* eslint-disable accessor-pairs */
+import { createElement, type FC } from "react";
 import { type Root, createRoot } from "react-dom/client";
 import htm from "htm";
+import { equals } from "ramda";
+
 import { type ConversationHandler } from "@nlxai/chat-core";
 
+import packageJson from "../package.json";
 import App, { type AppRef } from "./App";
 import cssRaw from "./index.css?inline";
 import * as Icons from "./components/ui/Icons";
 import { TextButton } from "./components/ui/TextButton";
 import { IconButton } from "./components/ui/IconButton";
+import { Ripple } from "./components/Ripple";
 import { BaseText, SmallText } from "./components/ui/Typography";
 import {
   CustomCard,
@@ -16,14 +21,11 @@ import {
 } from "./components/ui/CustomCard";
 import { Carousel } from "./components/ui/Carousel";
 import { DateInput } from "./components/ui/DateInput";
-import packageJson from "../package.json";
 
-import { createElement, type FC } from "react";
 import type {
   NormalizedTouchpointConfiguration,
   TouchpointConfiguration,
 } from "./types";
-import { equals } from "ramda";
 export {
   analyzePageForms,
   type InteractiveElementInfo,
@@ -64,6 +66,7 @@ export const html = createHtml({
   CustomCard,
   CustomCardRow,
   CustomCardImageRow,
+  Ripple,
   ...Icons,
 });
 
@@ -78,6 +81,7 @@ export {
   CustomCardRow,
   CustomCardImageRow,
   Icons,
+  Ripple,
 };
 
 // Export types for all components
@@ -99,6 +103,7 @@ export {
   type WindowSize,
   type CustomModalityComponent,
   type TouchpointConfiguration,
+  type CustomLaunchButton,
 } from "./types";
 
 const defaultConversationId = (): string => {
@@ -141,6 +146,25 @@ const normalizeConfiguration = (
 };
 
 /**
+ * Injects some sane default styling for embedded toucbhpoints.
+ * This is only done once, so if you create multiple touchpoints, they will all share the same styles.
+ * Done using a style tag so that there is low specificity and it can be overridden by the user.
+ */
+let injectDefaultStyles: () => void = () => {
+  const style = document.createElement("style");
+  style.textContent = `:where(nlx-touchpoint.nlx-text, nlx-touchpoint.nlx-voice) {
+    display: block;
+    height: 350px;
+  }
+  :where(nlx-touchpoint.nlx-voiceMini) {
+   display: inline-block;
+
+  }`;
+  document.head.appendChild(style);
+  injectDefaultStyles = () => {};
+};
+
+/**
  * A custom element implementing touchpoint.
  *
  * Note that when you create this element using the `create` function, it will have different defaults.
@@ -152,6 +176,7 @@ class NlxTouchpointElement extends HTMLElement {
 
   /**
    * Returns an imperative reference allowing control over the application
+   * @internal
    */
   onRef: ((ref: AppRef) => void) | null = null;
 
@@ -159,6 +184,7 @@ class NlxTouchpointElement extends HTMLElement {
    * When set to false, will render a button that opens the touchpoint in a separate DOM location.
    *
    * When set to true, you get the touchpoint directly, and can control its size and placement.
+   * @internal
    */
   embedded: boolean = true;
 
@@ -169,13 +195,19 @@ class NlxTouchpointElement extends HTMLElement {
    *  You may call `preventDefault` to prevent the touchpoint from closing and handle closing yourself.
    */
   onClose: ((event: Event) => void) | null = null;
-  /** Render the settings button  */
+  /**
+   * Render the settings button
+   * @internal
+   */
   enableSettings: boolean = false;
 
   // TODO: revisit enabled vs. enableSettings naming
   #enabled: boolean = true;
 
-  /** Disable the whole UI */
+  /**
+   * Disable the whole UI
+   * @internal
+   */
   set enabled(value: boolean) {
     if (this.#enabled === value) {
       return;
@@ -216,6 +248,30 @@ class NlxTouchpointElement extends HTMLElement {
             }}
           />
         </>,
+      );
+    }
+  }
+
+  connectedCallback(): void {
+    if (
+      this.#touchpointConfiguration == null &&
+      this.getAttribute("configuration") != null
+    ) {
+      try {
+        this.touchpointConfiguration = JSON.parse(
+          this.getAttribute("configuration") ?? "",
+        );
+      } catch (error) {
+        throw new Error(
+          "Failed to parse touchpoint configuration: " +
+            (error instanceof Error ? error.message : String(error)),
+        );
+      }
+    }
+    if (this.embedded) {
+      injectDefaultStyles();
+      this.classList.add(
+        `nlx-${this.#touchpointConfiguration?.input ?? "text"}`,
       );
     }
   }

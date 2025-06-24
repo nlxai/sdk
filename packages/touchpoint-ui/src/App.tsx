@@ -217,14 +217,19 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   if (!isExpanded) {
     return props.launchIcon !== false ? (
       <CustomPropertiesContainer
-        className="font-sans"
+        className="fixed z-launchButton bottom-2 right-2 w-fit"
         theme={props.theme}
         colorMode={colorMode}
       >
         <LaunchButton
-          className="fixed bottom-2 right-2 backdrop-blur z-launchButton"
+          className="backdrop-blur"
           iconUrl={
             typeof props.launchIcon === "string" ? props.launchIcon : undefined
+          }
+          Custom={
+            typeof props.launchIcon === "function"
+              ? props.launchIcon
+              : undefined
           }
           onClick={() => {
             setIsExpanded(true);
@@ -240,7 +245,10 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       <CustomPropertiesContainer
         theme={props.theme}
         colorMode={colorMode}
-        className="fixed z-touchpoint bottom-2 right-2 w-fit"
+        className={clsx(
+          "w-fit",
+          props.embedded ? "" : "fixed z-touchpoint bottom-2 right-2",
+        )}
       >
         <VoiceMini
           handler={handler}
@@ -248,6 +256,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           onClose={() => {
             onClose(new Event("close"));
           }}
+          renderCollapse={props.onClose != null}
           customModalities={customModalities}
           restore={restoredConversation}
         />
@@ -337,7 +346,10 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     <CustomPropertiesContainer
       theme={props.theme}
       colorMode={colorMode}
-      className="grid grid-cols-2 xl:grid-cols-[1fr_632px] fixed inset-0 z-touchpoint"
+      className={clsx(
+        "grid grid-cols-2 xl:grid-cols-[1fr_632px]",
+        props.embedded ? "w-full h-full" : "fixed inset-0 z-touchpoint",
+      )}
     >
       {windowSize === "half" ? (
         <div className="hidden md:block bg-overlay" />
