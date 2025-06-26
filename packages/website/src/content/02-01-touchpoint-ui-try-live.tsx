@@ -223,7 +223,7 @@ export const Content: FC<unknown> = () => {
       // Import has to happen dynamically after mount because the bundle has an issue with server rendering at the moment
       import("@nlxai/touchpoint-ui/lib/index.js")
         .then(async (touchpointModule) => {
-          const { create, React, html, analyzePageForms } = touchpointModule;
+          const { create, React, html } = touchpointModule;
           const touchpointConfig = generateAndSetUserId(config);
 
           if (templateComponents === "bidirectionalVoicePlus") {
