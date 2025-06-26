@@ -11,7 +11,7 @@ ${configOptions}
 
 export const navGroup: string = "Touchpoint Setup";
 
-export const title: string = "Bidiretional Voice Plus";
+export const title: string = "Bidirectional Voice Plus";
 
 export const Content: FC<unknown> = () => {
   return <PageContent md={content} />;

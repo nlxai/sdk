@@ -177,7 +177,6 @@ export const useVoice = ({
       // eslint-disable-next-line no-console
       console.warn(err);
     });
-    void handler.terminateVoiceCall();
     if (trackRef.current != null) {
       trackRef.current.stop();
       trackRef.current = null;
@@ -201,6 +200,16 @@ export const useVoice = ({
     try {
       setRoomState("pending");
 
+      // let creds;
+      // if (localStorage.getItem("voiceCredentials") != null) {
+      //   creds = JSON.parse(localStorage.getItem("voiceCredentials") ?? "") as {
+      //     url: string;
+      //     token: string;
+      //   };
+      // } else {
+      //   creds = await handler.getVoiceCredentials(context);
+      //   localStorage.setItem("voiceCredentials", JSON.stringify(creds));
+      // }
       const creds = await handler.getVoiceCredentials(context);
 
       const handleActiveSpeakersChanged = (
@@ -258,15 +267,14 @@ export const useVoice = ({
       await room.connect(creds.url, creds.token, { autoSubscribe: true });
       await room.localParticipant.setMicrophoneEnabled(true);
       await room.startAudio();
+      const convId = handler.currentConversationId();
+      if (convId != null)
+        sessionStorage.setItem("nlxActiveVoiceConversationId", convId);
       setRoomState("active");
     } catch (err) {
       setRoomState("error");
       // eslint-disable-next-line no-console
       console.warn(err);
-      handler.terminateVoiceCall().catch((err: any) => {
-        // eslint-disable-next-line no-console
-        console.warn(err);
-      });
     }
   }, [
     setRoomState,
