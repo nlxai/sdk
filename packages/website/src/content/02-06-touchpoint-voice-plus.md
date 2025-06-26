@@ -374,7 +374,11 @@ A comprehensive example implementing voice-driven form filling, navigation:
     </form>
 
     <script type="module">
-      import { create, React, html } from "https://unpkg.com/@nlxai/touchpoint-ui@1.1.3/lib/index.js?module";
+      import {
+        create,
+        React,
+        html,
+      } from "https://unpkg.com/@nlxai/touchpoint-ui@1.1.3/lib/index.js?module";
 
       // Initialize Enhanced Voice Plus with bidirectional support
       const userId = crypto.randomUUID();
