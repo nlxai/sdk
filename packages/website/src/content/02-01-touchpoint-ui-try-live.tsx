@@ -231,98 +231,13 @@ export const Content: FC<unknown> = () => {
             touchpointInstance.current = await create({
               config: {
                 ...touchpointConfig,
-                bidirectional: true,
               },
               theme,
               colorMode,
               input: "voiceMini",
               launchIcon: false,
+              bidirectional: {},
             });
-
-            // Set up Voice Plus functionality
-            const pageForms = analyzePageForms();
-
-            const handleNavigationCommand = (
-              action: string,
-              destination: string,
-            ): void => {
-              switch (action) {
-                case "page_next":
-                  window.history.forward();
-                  break;
-                case "page_previous":
-                  window.history.back();
-                  break;
-                case "page_custom":
-                  if (destination !== null && destination !== undefined) {
-                    window.location.href = destination;
-                  }
-                  break;
-                default:
-                  // eslint-disable-next-line no-console
-                  console.log("Unknown navigation action:", action);
-              }
-            };
-
-            const handleInputCommand = (fields: any[] = []): void => {
-              fields.forEach((field) => {
-                if (field?.id == null) {
-                  return;
-                }
-                if (
-                  pageForms.formElements[field.id] != null &&
-                  pageForms.formElements[field.id] !== undefined
-                ) {
-                  const element = pageForms.formElements[field.id] as any;
-                  element.value = field.value ?? "";
-                } else {
-                  // eslint-disable-next-line no-console
-                  console.warn(`Form element with id ${field.id} not found`);
-                }
-              });
-            };
-
-            const handleCustomCommand = (
-              action: string,
-              payload: any,
-            ): void => {
-              // eslint-disable-next-line no-console
-              console.log("custom command:", action, payload);
-            };
-
-            const handleVoicePlusCommand = (command: any): void => {
-              const { classification, action, destination, payload } = command;
-
-              switch (classification) {
-                case "navigation":
-                  handleNavigationCommand(
-                    action as string,
-                    destination as string,
-                  );
-                  break;
-                case "input":
-                  handleInputCommand(command?.fields as any[]);
-                  break;
-                case "custom":
-                  handleCustomCommand(action as string, payload);
-                  break;
-                default:
-                  // eslint-disable-next-line no-console
-                  console.log("Unknown command:", classification);
-              }
-            };
-
-            touchpointInstance.current.conversationHandler.sendContext({
-              "nlx:vpContext": {
-                url: window.location.href,
-                fields: pageForms.context,
-              },
-            });
-
-            touchpointInstance.current.conversationHandler.addEventListener(
-              "voicePlusCommand",
-              handleVoicePlusCommand,
-            );
           } else {
             // Handle regular touchpoint setup
             touchpointInstance.current = await create({
