@@ -95,6 +95,7 @@ const MuseumExhibitDetails = ({ data, conversationHandler }) => {
 };
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const bidirectionalVoicePlus = (
   config: Config,
 ): string => `const touchpoint = await create({

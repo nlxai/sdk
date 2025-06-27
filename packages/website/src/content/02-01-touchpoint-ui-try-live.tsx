@@ -322,7 +322,9 @@ export const Content: FC<unknown> = () => {
                   value={bidirectional ? "on" : "off"}
                   onChange={
                     input === "voiceMini"
-                      ? (value) => setBidirectional(value === "on")
+                      ? (value) => {
+                          setBidirectional(value === "on");
+                        }
                       : undefined
                   }
                   options={[
@@ -333,8 +335,8 @@ export const Content: FC<unknown> = () => {
               </Labeled>
               {input !== "voiceMini" && (
                 <p className="text-xs text-primary-60 px-2 py-1">
-                  Input must be set to "Voice mini" to enable bidirectional
-                  voice+
+                  Input must be set to &quot;Voice mini&quot; to enable
+                  bidirectional voice+
                 </p>
               )}
             </div>
