@@ -95,7 +95,29 @@ const MuseumExhibitDetails = ({ data, conversationHandler }) => {
 };
 `;
 
-export type TemplateComponents = "noComponents" | "museumComponents";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const bidirectionalVoicePlus = (
+  config: Config,
+): string => `const touchpoint = await create({
+  config: {
+    applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
+    headers: {
+      "nlx-api-key": "${defaultTo(
+        config.headers?.["nlx-api-key"],
+        "REPLACE_WITH_API_KEY",
+      )}"
+    },
+    languageCode: "${config.languageCode}",
+    userId: "${defaultTo(config.userId, "REPLACE_WITH_USER_ID")}",
+  },
+  input: "voiceMini",
+  bidirectional: {},
+});`;
+
+export type TemplateComponents =
+  | "noComponents"
+  | "museumComponents"
+  | "bidirectionalVoicePlus";
 
 export const touchpointUiSetupSnippet = ({
   config,
@@ -103,6 +125,7 @@ export const touchpointUiSetupSnippet = ({
   input = "text",
   colorMode = "light",
   templateComponents = "noComponents",
+  bidirectional = false,
 }: {
   config: Config;
   theme?: {
@@ -113,8 +136,9 @@ export const touchpointUiSetupSnippet = ({
   input: string;
   colorMode: "light" | "dark";
   templateComponents?: TemplateComponents;
+  bidirectional?: boolean;
 }): string => {
-  return `${templateComponents === "museumComponents" ? `${museumComponents}\n\n` : ""}create({
+  return `${templateComponents === "museumComponents" ? `${museumComponents}\n\n` : ""}const touchpoint = await create({
   config: {
     applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
     headers: {
@@ -136,6 +160,11 @@ export const touchpointUiSetupSnippet = ({
     templateComponents === "museumComponents"
       ? `
   customModalities: { MuseumExhibitDetails, MuseumExhibitCarousel }`
+      : ""
+  },${
+    input === "voiceMini" && bidirectional
+      ? `
+  bidirectional: {}`
       : ""
   }
 });`;
