@@ -28,7 +28,6 @@ const touchpointOptions = {
       "nlx-api-key": "YOUR_API_KEY",
     },
     languageCode: "en-US",
-    userId: crypto.randomUUID(), // Required for voice
   },
   input: "voiceMini", // Enables voice input with bidirectional support
   bidirectional: {},
