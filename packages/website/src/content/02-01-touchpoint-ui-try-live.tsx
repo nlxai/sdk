@@ -26,19 +26,21 @@ export const snippetContent = ({
   input,
   colorMode,
   templateComponents,
+  bidirectional,
 }: {
   config: Config;
   theme: EditableTheme;
   input: string;
   colorMode: "light" | "dark";
   templateComponents: TemplateComponents;
+  bidirectional: boolean;
 }): string => {
   return `
 
-### Setup snippet${templateComponents === "museumComponents" ? ": Museum template" : templateComponents === "bidirectionalVoicePlus" ? ": Bidirectional Voice Plus template" : ""}
+### Setup snippet${templateComponents === "museumComponents" ? ": Museum template" : input === "voiceMini" && bidirectional ? ": Bidirectional Voice Plus template" : ""}
 
 \`\`\`touchpointui
-${touchpointUiSetupSnippet({ config, theme, input, colorMode, templateComponents })}
+${touchpointUiSetupSnippet({ config, theme, input, colorMode, templateComponents, bidirectional })}
 \`\`\`
 `;
 };
@@ -197,6 +199,10 @@ export const Content: FC<unknown> = () => {
   });
 
   const [input, setInput] = useUrlState<any>("input", "text");
+  const [bidirectional, setBidirectional] = useUrlState<boolean>(
+    "bidirectional",
+    false,
+  );
   const [templateComponents, setTemplateComponents] =
     useUrlState<TemplateComponents>("templateComponents", "noComponents");
 
@@ -226,7 +232,7 @@ export const Content: FC<unknown> = () => {
           const { create, React, html } = touchpointModule;
           const touchpointConfig = generateAndSetUserId(config);
 
-          if (templateComponents === "bidirectionalVoicePlus") {
+          if (input === "voiceMini" && bidirectional) {
             // Handle bidirectional voice plus setup
             touchpointInstance.current = await create({
               config: {
@@ -246,7 +252,10 @@ export const Content: FC<unknown> = () => {
               colorMode,
               input,
               launchIcon: false,
-              customModalities: createCustomModalities(React, html),
+              customModalities:
+                templateComponents === "museumComponents"
+                  ? createCustomModalities(React, html)
+                  : undefined,
             });
           }
         })
@@ -260,7 +269,7 @@ export const Content: FC<unknown> = () => {
         }
       };
     },
-    [config, theme, colorMode, input, templateComponents],
+    [config, theme, colorMode, input, templateComponents, bidirectional],
     200,
     500,
   );
@@ -306,6 +315,29 @@ export const Content: FC<unknown> = () => {
                 ]}
               />
             </Labeled>
+            <div className="space-y-1">
+              <Labeled label="Bidirectional Voice+">
+                <Toggle
+                  className="w-full"
+                  value={bidirectional ? "on" : "off"}
+                  onChange={
+                    input === "voiceMini"
+                      ? (value) => setBidirectional(value === "on")
+                      : undefined
+                  }
+                  options={[
+                    { value: "off", label: "Off" },
+                    { value: "on", label: "On" },
+                  ]}
+                />
+              </Labeled>
+              {input !== "voiceMini" && (
+                <p className="text-xs text-primary-60 px-2 py-1">
+                  Input must be set to "Voice mini" to enable bidirectional
+                  voice+
+                </p>
+              )}
+            </div>
             <Labeled label="Template components">
               <Toggle
                 className="w-full"
@@ -316,10 +348,6 @@ export const Content: FC<unknown> = () => {
                   {
                     value: "museumComponents",
                     label: "Museum",
-                  },
-                  {
-                    value: "bidirectionalVoicePlus",
-                    label: "Bidirectional Voice Plus",
                   },
                 ]}
               />
@@ -348,6 +376,7 @@ export const Content: FC<unknown> = () => {
           input,
           colorMode,
           templateComponents,
+          bidirectional,
         })}
       />
     </>

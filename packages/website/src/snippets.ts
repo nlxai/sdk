@@ -124,6 +124,7 @@ export const touchpointUiSetupSnippet = ({
   input = "text",
   colorMode = "light",
   templateComponents = "noComponents",
+  bidirectional = false,
 }: {
   config: Config;
   theme?: {
@@ -134,11 +135,8 @@ export const touchpointUiSetupSnippet = ({
   input: string;
   colorMode: "light" | "dark";
   templateComponents?: TemplateComponents;
+  bidirectional?: boolean;
 }): string => {
-  if (templateComponents === "bidirectionalVoicePlus") {
-    return bidirectionalVoicePlus(config);
-  }
-
   return `${templateComponents === "museumComponents" ? `${museumComponents}\n\n` : ""}const touchpoint = await create({
   config: {
     applicationUrl: "${defaultTo(config.applicationUrl, "REPLACE_WITH_APPLICATION_URL")}",
@@ -161,6 +159,11 @@ export const touchpointUiSetupSnippet = ({
     templateComponents === "museumComponents"
       ? `
   customModalities: { MuseumExhibitDetails, MuseumExhibitCarousel }`
+      : ""
+  },${
+    input === "voiceMini" && bidirectional
+      ? `
+  bidirectional: {}`
       : ""
   }
 });`;
