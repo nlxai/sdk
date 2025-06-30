@@ -48,7 +48,8 @@ export const Header: FC<HeaderProps> = ({
         {
           "md:absolute md:w-fit md:flex-col md:left-0 md:-translate-x-full":
             windowSize === "half",
-          "md:absolute md:left-0 md:right-0 md:top-0": windowSize === "full",
+          "md:absolute md:left-0 md:right-0 md:top-0":
+            windowSize === "full" || windowSize === "embedded",
         },
       )}
     >
