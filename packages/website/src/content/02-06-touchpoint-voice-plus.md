@@ -75,7 +75,7 @@ const { context, formElements } = analyzePageForms();
 ### Sending Context Example
 
 ```touchpointui
-import { analyzePageForms } from "@nlxai/touchpoint-ui";
+import { create, analyzePageForms } from "@nlxai/touchpoint-ui";
 
 const touchpointOptions = {
   config: {
