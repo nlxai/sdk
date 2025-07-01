@@ -69,7 +69,7 @@ const processTouchpointUiCode = (code: string, env: SnippetEnv): string => {
   const containsImports = code.includes(`"${moduleUrl}"`);
   if (env === "html") {
     const codeWithImport = containsImports
-      ? code.replace(moduleUrl, cdnUrl)
+      ? code.replace(`"${moduleUrl}"`, `"${cdnUrl}"`)
       : `import { ${touchpointUiImports.join(", ")} } from "${cdnUrl}";
 
 ${code}
