@@ -18,7 +18,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(),
   },
 });
 
@@ -63,7 +62,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(),
   },
   launchIcon: false, // Disable the default launch button
 });
@@ -92,7 +90,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(),
   },
 });
 
@@ -114,7 +111,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(),
   },
 });
 
