@@ -66,7 +66,7 @@ const touchpointUiImports = ["create", "React", "html"];
 const processTouchpointUiCode = (code: string, env: SnippetEnv): string => {
   const cdnUrl = `https://unpkg.com/@nlxai/touchpoint-ui@${version}/lib/index.js?module`;
   const moduleUrl = "@nlxai/touchpoint-ui";
-  const containsImports = code.includes("@nlxai/touchpoint-ui");
+  const containsImports = code.includes(`"${moduleUrl}"`);
   if (env === "html") {
     const codeWithImport = containsImports
       ? code.replace(moduleUrl, cdnUrl)
