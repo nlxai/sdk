@@ -122,6 +122,8 @@ interface SourceWithIndices {
  * The NLU currently sends multiple sources that are identical. This is because eventually there will be differences in page numbers,
  * but these are neither surfaced nor designed for, hence the need to de-duplicate it for the user while persisting the index (this is then
  * matched with [i] source index markers in the message body)
+ * @param sources - Sources as returned by the application
+ * @returns sources with indices
  */
 const consolidateSources = (
   sources: KnowledgeBaseResponseSource[],
