@@ -84,7 +84,6 @@ const touchpointOptions = {
       "nlx-api-key": "YOUR_API_KEY",
     },
     languageCode: "en-US",
-    userId: crypto.randomUUID(), // Required for voice
   },
   input: "voiceMini", // Enables voice input with bidirectional support
   bidirectional: {
@@ -169,7 +168,6 @@ const touchpointOptions = {
       "nlx-api-key": "YOUR_API_KEY",
     },
     languageCode: "en-US",
-    userId: crypto.randomUUID(), // Required for voice
   },
   input: "voiceMini", // Enables voice input with bidirectional support
   bidirectional: {
@@ -235,7 +233,6 @@ const touchpointOptions = {
       "nlx-api-key": "YOUR_API_KEY",
     },
     languageCode: "en-US",
-    userId: crypto.randomUUID(), // Required for voice
   },
   input: "voiceMini", // Enables voice input with bidirectional support
   bidirectional: {
@@ -320,7 +317,6 @@ const touchpointOptions = {
       "nlx-api-key": "YOUR_API_KEY",
     },
     languageCode: "en-US",
-    userId: crypto.randomUUID(), // Required for voice
   },
   input: "voiceMini", // Enables voice input with bidirectional support
   bidirectional: {
@@ -380,7 +376,6 @@ A comprehensive example implementing voice-driven form filling, navigation:
       } from "https://unpkg.com/@nlxai/touchpoint-ui@1.1.3/lib/index.js?module";
 
       // Initialize Enhanced Voice Plus with bidirectional support
-      const userId = crypto.randomUUID();
       let formElements = {};
 
       async function initializeVoicePlus() {
@@ -392,7 +387,6 @@ A comprehensive example implementing voice-driven form filling, navigation:
               "nlx-api-key": "YOUR_API_KEY",
             },
             languageCode: "en-US",
-            userId,
           },
           input: "voiceMini",
           bidirectional: {

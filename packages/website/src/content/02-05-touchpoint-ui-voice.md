@@ -18,7 +18,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(), // Required for voice
   },
   input: "voice", // Enable full voice mode
 });
@@ -34,7 +33,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(), // Required for voice
   },
   input: "voiceMini", // Enable compact voice mode
 });
@@ -51,12 +49,11 @@ const touchpoint = await create({
 
 All voice modes require:
 
-| Item                      | Description                                                                |
-| ------------------------- | -------------------------------------------------------------------------- |
-| `config.userId`           | A unique identifier in your config (required for voice session management) |
-| Voice-enabled Application | Your NLX application must be configured for voice on API channels          |
-| Browser support           | WebRTC APIs must be available                                              |
-| User permissions          | Microphone access must be granted when prompted                            |
+| Item                      | Description                                                       |
+| ------------------------- | ----------------------------------------------------------------- |
+| Voice-enabled Application | Your NLX application must be configured for voice on API channels |
+| Browser support           | WebRTC APIs must be available                                     |
+| User permissions          | Microphone access must be granted when prompted                   |
 
 ## When to Use Immersive Voice mode
 

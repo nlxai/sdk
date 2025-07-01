@@ -24,7 +24,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(),
   },
   theme: {
     // The primary color for buttons and highlights
@@ -73,7 +72,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(),
   },
   launchIcon: "https://yourdomain.com/path/to/your-launch-icon.svg",
   theme: {
@@ -104,7 +102,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(),
   },
   brandIcon: "https://yourdomain.com/path/to/your-brand-icon.svg",
 });
@@ -120,7 +117,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(),
   },
   brandIcon: "https://yourdomain.com/path/to/your-brand-icon.svg",
   launchIcon: false,
@@ -151,7 +147,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(),
   },
   colorMode: "dark", // or "light"
   theme: {
@@ -195,7 +190,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(),
   },
   colorMode: userColorModePreference,
   theme: userColorModePreference === "dark" ? darkTheme : lightTheme,
@@ -322,7 +316,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(),
   },
   theme: completeTheme,
   launchIcon: "https://yoursite.com/chat-icon.svg",
