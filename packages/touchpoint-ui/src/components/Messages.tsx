@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type FC, Fragment, useEffect, useRef, useState } from "react";
+import { type FC, Fragment, useEffect, useRef, useState, useMemo } from "react";
 import {
   type Response,
   type ConversationHandler,
@@ -99,7 +99,7 @@ const UserMessage: FC<{ text: string; files?: File[]; bubble: boolean }> = ({
   );
 };
 
-const TextWithNumber: FC<{ text: string; number: number }> = ({
+const NumberPill: FC<{ text: string; number: number | string }> = ({
   text,
   number,
 }) => {
@@ -113,10 +113,48 @@ const TextWithNumber: FC<{ text: string; number: number }> = ({
   );
 };
 
+interface SourceWithIndices {
+  source: KnowledgeBaseResponseSource;
+  indices: number[];
+}
+
+const consolidateSources = (
+  sources: KnowledgeBaseResponseSource[],
+): SourceWithIndices[] => {
+  const map = new Map<string, SourceWithIndices>();
+
+  sources.forEach((source, index) => {
+    const normalizedSource = {
+      fileName: source.fileName,
+      content: source.content,
+      presignedUrl: source.presignedUrl,
+      // These fields are currently ignored (also the reason why duplicates show up)
+      metadata: undefined,
+      pageNumber: undefined,
+    };
+    const key = JSON.stringify(normalizedSource);
+    const existingEntry = map.get(key);
+    map.set(
+      key,
+      existingEntry == null
+        ? { source: normalizedSource, indices: [index] }
+        : {
+            ...existingEntry,
+            indices: [...existingEntry.indices, index],
+          },
+    );
+  });
+  return [...map.values()];
+};
+
 const Sources: FC<{ sources: KnowledgeBaseResponseSource[] }> = ({
   sources,
 }) => {
   const [open, setOpen] = useState<boolean>(false);
+  const consolidatedSources = useMemo(
+    () => consolidateSources(sources),
+    [sources],
+  );
   return (
     <details
       className="space-y-2"
@@ -133,10 +171,13 @@ const Sources: FC<{ sources: KnowledgeBaseResponseSource[] }> = ({
         Sources
       </summary>
       <ol className="space-y-2">
-        {sources.map((source, sourceIndex) => {
+        {consolidatedSources.map(({ source, indices }, sourceIndex) => {
           const displayName = source.fileName ?? source.content ?? "Source";
           const sharedClassName =
             "p-3 bg-primary-5 rounded-inner w-full flex items-center justify-between text-primary-80";
+          const indicesDisplay = indices
+            .map((index) => String(index + 1))
+            .join(", ");
           return (
             <li key={sourceIndex}>
               {source.presignedUrl != null ? (
@@ -144,12 +185,12 @@ const Sources: FC<{ sources: KnowledgeBaseResponseSource[] }> = ({
                   href={source.presignedUrl}
                   className={clsx(sharedClassName, "hover:bg-primary-10")}
                 >
-                  <TextWithNumber text={displayName} number={sourceIndex + 1} />
+                  <NumberPill text={displayName} number={indicesDisplay} />
                   <OpenLink className="w-4 h-4 text-primary-60" />
                 </a>
               ) : (
                 <div className={sharedClassName}>
-                  <TextWithNumber text={displayName} number={sourceIndex + 1} />
+                  <NumberPill text={displayName} number={indicesDisplay} />
                 </div>
               )}
             </li>
