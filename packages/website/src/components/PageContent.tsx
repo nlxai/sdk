@@ -64,8 +64,13 @@ export const Prose: FC<{ children: ReactNode; className?: string }> = ({
 const touchpointUiImports = ["create", "React", "html"];
 
 const processTouchpointUiCode = (code: string, env: SnippetEnv): string => {
+  const cdnUrl = `https://unpkg.com/@nlxai/touchpoint-ui@${version}/lib/index.js?module`;
+  const moduleUrl = "@nlxai/touchpoint-ui";
+  const containsImports = code.includes("@nlxai/touchpoint-ui");
   if (env === "html") {
-    const codeWithImport = `import { ${touchpointUiImports.join(", ")} } from "https://unpkg.com/@nlxai/touchpoint-ui@${version}/lib/index.js?module";
+    const codeWithImport = containsImports
+      ? code.replace(moduleUrl, cdnUrl)
+      : `import { ${touchpointUiImports.join(", ")} } from "${cdnUrl}";
 
 ${code}
 `;
@@ -81,7 +86,9 @@ ${code}
   </body>
 </html>`;
   }
-  return `import { ${touchpointUiImports.join(", ")} } from "@nlxai/touchpoint-ui";
+  return containsImports
+    ? code
+    : `import { ${touchpointUiImports.join(", ")} } from "${moduleUrl}";
 
 ${code}
 `;
