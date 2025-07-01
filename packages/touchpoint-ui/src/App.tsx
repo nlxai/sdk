@@ -142,12 +142,15 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   });
 
   useEffect(() => {
-    if (props.bidirectional?.automaticContext !== false) {
+    if (
+      props.bidirectional != null &&
+      props.bidirectional.automaticContext !== false
+    ) {
       return gatherAutomaticContext(handler, (val) => {
         pageState.current = val;
       });
     }
-  }, [handler, props.bidirectional?.automaticContext]);
+  }, [handler, props.bidirectional]);
 
   useEffect(() => {
     if (
