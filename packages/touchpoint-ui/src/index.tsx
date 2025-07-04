@@ -21,13 +21,17 @@ import {
 } from "./components/ui/CustomCard";
 import { Carousel } from "./components/ui/Carousel";
 import { DateInput } from "./components/ui/DateInput";
-import type { TouchpointConfiguration } from "./types";
+
+import type {
+  NormalizedTouchpointConfiguration,
+  TouchpointConfiguration,
+} from "./types";
 export {
   analyzePageForms,
   type InteractiveElementInfo,
   type PageForms,
   type AccessibilityInformation,
-} from "./analyzePageForms";
+} from "./bidirectional/analyzePageForms";
 /**
  * If you wish to build custom modalities using JSX, you will want to
  *
@@ -100,7 +104,66 @@ export {
   type CustomModalityComponent,
   type TouchpointConfiguration,
   type CustomLaunchButton,
+  type BidirectionalConfig,
 } from "./types";
+
+const defaultConversationId = (): string => {
+  const id = crypto.randomUUID();
+  sessionStorage.setItem("nlxConversationId", id);
+  return id;
+};
+
+const defaultUserId = (): string => {
+  const id = crypto.randomUUID();
+  localStorage.setItem("nlxUserId", id);
+  return id;
+};
+
+const normalizeConfiguration = (
+  configuration: TouchpointConfiguration,
+): NormalizedTouchpointConfiguration => {
+  return {
+    ...configuration,
+    config: {
+      ...configuration.config,
+      conversationId:
+        configuration.config.conversationId ??
+        sessionStorage.getItem("nlxConversationId") ??
+        defaultConversationId(),
+      userId:
+        configuration.config.userId ??
+        localStorage.getItem("nlxUserId") ??
+        defaultUserId(),
+      bidirectional: configuration.config.bidirectional ?? false,
+    },
+    input: configuration.input ?? "text",
+    initializeConversation:
+      configuration.initializeConversation ??
+      ((handler, context) => {
+        if ((configuration?.input ?? "text") === "text")
+          handler.sendWelcomeFlow(context);
+      }),
+  };
+};
+
+/**
+ * Injects some sane default styling for embedded toucbhpoints.
+ * This is only done once, so if you create multiple touchpoints, they will all share the same styles.
+ * Done using a style tag so that there is low specificity and it can be overridden by the user.
+ */
+let injectDefaultStyles: () => void = () => {
+  const style = document.createElement("style");
+  style.textContent = `:where(nlx-touchpoint.nlx-text, nlx-touchpoint.nlx-voice) {
+    display: block;
+    height: 350px;
+  }
+  :where(nlx-touchpoint.nlx-voiceMini) {
+   display: inline-block;
+
+  }`;
+  document.head.appendChild(style);
+  injectDefaultStyles = () => {};
+};
 
 /**
  * A custom element implementing touchpoint.
@@ -114,6 +177,7 @@ class NlxTouchpointElement extends HTMLElement {
 
   /**
    * Returns an imperative reference allowing control over the application
+   * @internal
    */
   onRef: ((ref: AppRef) => void) | null = null;
 
@@ -121,6 +185,7 @@ class NlxTouchpointElement extends HTMLElement {
    * When set to false, will render a button that opens the touchpoint in a separate DOM location.
    *
    * When set to true, you get the touchpoint directly, and can control its size and placement.
+   * @internal
    */
   embedded: boolean = true;
 
@@ -131,13 +196,19 @@ class NlxTouchpointElement extends HTMLElement {
    *  You may call `preventDefault` to prevent the touchpoint from closing and handle closing yourself.
    */
   onClose: ((event: Event) => void) | null = null;
-  /** Render the settings button  */
+  /**
+   * Render the settings button
+   * @internal
+   */
   enableSettings: boolean = false;
 
   // TODO: revisit enabled vs. enableSettings naming
   #enabled: boolean = true;
 
-  /** Disable the whole UI */
+  /**
+   * Disable the whole UI
+   * @internal
+   */
   set enabled(value: boolean) {
     if (this.#enabled === value) {
       return;
@@ -159,19 +230,15 @@ class NlxTouchpointElement extends HTMLElement {
     this.#shadowRoot ??= this.attachShadow({ mode: "closed" });
     this.#root ??= createRoot(this.#shadowRoot);
     if (this.#touchpointConfiguration != null) {
+      const configuration = normalizeConfiguration(
+        this.#touchpointConfiguration,
+      );
       this.#root.render(
         <>
           <style>{cssRaw}</style>
           <App
-            {...this.#touchpointConfiguration}
+            {...configuration}
             embedded={this.embedded}
-            initializeConversation={
-              this.#touchpointConfiguration.initializeConversation ??
-              ((handler, context) => {
-                if ((this.#touchpointConfiguration?.input ?? "text") === "text")
-                  handler.sendWelcomeFlow(context);
-              })
-            }
             onClose={this.onClose}
             enableSettings={this.enableSettings}
             enabled={this.#enabled}
@@ -182,6 +249,30 @@ class NlxTouchpointElement extends HTMLElement {
             }}
           />
         </>,
+      );
+    }
+  }
+
+  connectedCallback(): void {
+    if (
+      this.#touchpointConfiguration == null &&
+      this.getAttribute("configuration") != null
+    ) {
+      try {
+        this.touchpointConfiguration = JSON.parse(
+          this.getAttribute("configuration") ?? "",
+        );
+      } catch (error) {
+        throw new Error(
+          "Failed to parse touchpoint configuration: " +
+            (error instanceof Error ? error.message : String(error)),
+        );
+      }
+    }
+    if (this.embedded) {
+      injectDefaultStyles();
+      this.classList.add(
+        `nlx-${this.#touchpointConfiguration?.input ?? "text"}`,
       );
     }
   }
@@ -230,6 +321,9 @@ export const create = (
   props: TouchpointConfiguration,
   // eslint-disable-next-line @typescript-eslint/promise-function-async
 ): Promise<TouchpointInstance> => {
+  if (props.bidirectional != null) {
+    props.config.bidirectional = true;
+  }
   return new Promise((resolve) => {
     const element: any = document.createElement("nlx-touchpoint");
     element.embedded = false;

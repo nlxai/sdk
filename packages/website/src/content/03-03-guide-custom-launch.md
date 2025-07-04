@@ -30,8 +30,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    // userId is required if input is "voice" or "voiceMini"
-    userId: crypto.randomUUID(),
   },
   // userTier and current page must be defined as context variables in your NLX workspace
   initialContext: {
@@ -85,7 +83,6 @@ const touchpoint = await create({
     applicationUrl: "YOUR_APPLICATION_URL",
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
-    userId: crypto.randomUUID(), // Required for voice
   },
   // userTier and firstName must be defined as context variables in your NLX workspace
   initialContext: {
