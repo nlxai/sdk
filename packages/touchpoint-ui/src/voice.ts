@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable jsdoc/require-jsdoc */
 import type {
   Context,
@@ -165,10 +166,10 @@ export const useVoice = ({
       const room = new Room();
       roomRef.current = room;
 
-      console.log("connect");
-      await room.connect(creds.url, creds.token, { autoSubscribe: true });
-      console.log("set microphone enabled");
-      await room.localParticipant.setMicrophoneEnabled(true);
+      // prompt for permissions
+      await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
 
       room.on(RoomEvent.TrackSubscribed, handleTrackSubscribed);
       room.on(RoomEvent.ActiveSpeakersChanged, handleActiveSpeakersChanged);
@@ -177,7 +178,7 @@ export const useVoice = ({
         handleIsSpeakingChanged,
       );
       room.on(RoomEvent.MediaDevicesError, () => {
-        console.log("media devices error");
+        console.info("media devices error");
       });
       room.on(RoomEvent.Disconnected, () => {
         setRoomState("terminated");
@@ -195,11 +196,13 @@ export const useVoice = ({
         });
       });
 
-      console.log("starting audio");
+      await room.connect(creds.url, creds.token, { autoSubscribe: true });
+
+      await room.localParticipant.setMicrophoneEnabled(true);
+
       void room.startAudio();
       setRoomState("active");
     } catch (err) {
-      console.log(err);
       setRoomState("error");
     }
   }, [
