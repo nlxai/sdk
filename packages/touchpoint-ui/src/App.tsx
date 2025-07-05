@@ -266,7 +266,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           }}
           renderCollapse={props.onClose != null}
           customModalities={customModalities}
-          restore={restoredConversation}
         />
       </CustomPropertiesContainer>
     );

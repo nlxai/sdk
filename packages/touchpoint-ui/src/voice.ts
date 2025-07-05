@@ -222,7 +222,9 @@ export const useVoice = ({
 
   useEffect(() => {
     void setup();
-    return disconnect;
+    return () => {
+      disconnect();
+    };
   }, [setup, disconnect]);
 
   return { roomState, isUserSpeaking, isApplicationSpeaking, retry, roomData };
