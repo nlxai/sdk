@@ -223,7 +223,7 @@ export const useVoice = ({
   useEffect(() => {
     void setup();
     return () => {
-      disconnect();
+      void disconnect();
     };
   }, [setup, disconnect]);
 

@@ -134,7 +134,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     if (props.config.conversationId != null)
       sessionStorage.setItem(
         "nlxActiveVoiceConversationId",
-        props.config.conversationId as string,
+        props.config.conversationId,
       );
   }, [props.initializeConversation, props.initialContext, handler, isExpanded]);
 
