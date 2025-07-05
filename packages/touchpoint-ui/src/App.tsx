@@ -131,6 +131,11 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     }
     conversationInitialized.current = true;
     props.initializeConversation(handler, props.initialContext);
+    if (props.config.conversationId != null)
+      sessionStorage.setItem(
+        "nlxActiveVoiceConversationId",
+        props.config.conversationId,
+      );
   }, [props.initializeConversation, props.initialContext, handler, isExpanded]);
 
   const pageState = useRef<{
@@ -261,7 +266,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           }}
           renderCollapse={props.onClose != null}
           customModalities={customModalities}
-          restore={restoredConversation}
         />
       </CustomPropertiesContainer>
     );
