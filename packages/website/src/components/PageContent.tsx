@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import remarkGfm from "remark-gfm";
-import remarkSectionize from "remark-sectionize";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import touchpointUiPackageJson from "@nlxai/touchpoint-ui/package.json";
@@ -13,12 +12,11 @@ import { type SnippetEnv } from "../types";
 import { indentBy } from "../snippets";
 import { Toggle } from "./Toggle";
 import { CheckIcon, ContentCopyIcon } from "./Icons";
-import { CONTINUE, SKIP, visit } from "unist-util-visit";
+import { CONTINUE, SKIP, visit, type Visitor } from "unist-util-visit";
 import { findAfter } from "unist-util-find-after";
 import { selectAll } from "hast-util-select";
-import { filter } from "unist-util-filter";
 import { remove } from "unist-util-remove";
-
+import type { Element, ElementContent, Literal, Node } from "hast";
 const { version } = touchpointUiPackageJson;
 
 const CopyToClipboardButton: FC<{ text: string; className?: string }> = ({
@@ -189,7 +187,7 @@ export const PageContent: FC<{ md: string; className?: string }> = ({
 };
 
 const rehypePostprocessDocs = () => {
-  const githubLink = (src) => ({
+  const githubLink = (src: string): Element => ({
     type: "element",
     tagName: "a",
     properties: {
@@ -228,7 +226,7 @@ const rehypePostprocessDocs = () => {
     ],
   });
 
-  const toDepth = (node) => {
+  const toDepth = (node: Element): number => {
     if (node.tagName === "h1") return 1;
     if (node.tagName === "h2") return 2;
     if (node.tagName === "h3") return 3;
@@ -238,24 +236,38 @@ const rehypePostprocessDocs = () => {
 
     return 0;
   };
-  function sectionize(node, index, parent) {
+  const sectionize: Visitor<Element, Element> = (
+    node: Element,
+    index: number | undefined,
+    parent: Element | undefined,
+  ) => {
     const start = node;
     const startIndex = index;
-    const depth = start.depth;
 
-    const isEnd = (n) =>
+    if (startIndex == null) return CONTINUE;
+
+    const isEnd = (n: Node): boolean =>
       n.type === "element" &&
-      ["h1", "h2", "h3", "h4", "h5", "h6"].includes(n.tagName) &&
-      toDepth(n) <= toDepth(node);
-    const end = findAfter(parent, start, isEnd);
-    const endIndex = parent.children.indexOf(end);
+      ["h1", "h2", "h3", "h4", "h5", "h6"].includes((n as Element).tagName) &&
+      toDepth(n as Element) <= toDepth(node);
+
+    if (parent == null) {
+      return CONTINUE;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const end = findAfter(parent as any, start as any, isEnd);
+    if (end == null) {
+      return CONTINUE;
+    }
+    const endIndex = parent.children.indexOf(end as ElementContent);
 
     const between = parent.children.slice(
       startIndex,
       endIndex > 0 ? endIndex : undefined,
     );
 
-    const section = {
+    const section: Element = {
       type: "element",
       tagName: "section",
       children: between,
@@ -270,12 +282,9 @@ const rehypePostprocessDocs = () => {
         ],
       },
     };
-    // console.log(
-    //   `Sectionizing ${node.tagName} at index ${startIndex} to ${endIndex}, looking for "h${toDepth(node) + 1}"`,
-    // );
 
-    let definedIn = selectAll(`h${toDepth(node) + 1}`, section).find(
-      (n) => n.children[0].value === "Defined in",
+    const definedIn = selectAll(`h${toDepth(node) + 1}`, section).find(
+      (n) => (n.children[0] as Literal).value === "Defined in",
     );
 
     if (definedIn != null) {
@@ -286,7 +295,7 @@ const rehypePostprocessDocs = () => {
         properties: {
           class: ["whitespace-pre-wrap", "!font-mono"],
         },
-        children: section.children[2].children,
+        children: (section.children[2] as Element).children,
       };
 
       const definedIndex = section.children.indexOf(definedIn);
@@ -295,7 +304,10 @@ const rehypePostprocessDocs = () => {
         definedIndex,
         3,
         githubLink(
-          section.children[definedIndex + 2].children[0].properties.href,
+          (
+            (section.children[definedIndex + 2] as Element)
+              .children[0] as Element
+          ).properties.href as string,
         ),
       );
       parent.children.splice(startIndex, section.children.length, section);
@@ -304,15 +316,17 @@ const rehypePostprocessDocs = () => {
       // console.log(`Not found`, node);
       return CONTINUE;
     }
-  }
-  return (tree: any) => {
+  };
+  return (tree: Node) => {
     visit(
       tree,
-      (node) =>
-        node.type === "element" && ["h2", "h3", "h4"].includes(node.tagName),
+      (node: Node) =>
+        node.type === "element" &&
+        ["h2", "h3", "h4"].includes((node as Element).tagName),
+      // @ts-expect-error These types are not great
       sectionize,
     );
-    remove(tree, (node) => node.tagName === "hr");
+    remove(tree, (node) => (node as Element).tagName === "hr");
   };
 };
 
@@ -337,8 +351,8 @@ export const ApiDocContent: FC<{ md: string; className?: string }> = ({
             }
             // TODO: when using a react-router redirect, scroll to heading ID if available
 
-            // eslint-disable-next-line react/prop-types
             return (
+              // eslint-disable-next-line react/prop-types
               <Link className={props.className} to={props.href ?? ""}>
                 {props.children}
               </Link>
