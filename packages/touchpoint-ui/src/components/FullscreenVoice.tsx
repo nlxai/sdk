@@ -117,14 +117,16 @@ export const FullscreenVoice: FC<Props> = ({
     return (
       <Container className={className}>
         <FullscreenError />
-        <TextButton
-          type="ghost"
-          label="Retry sound check"
-          Icon={Restart}
-          onClick={() => {
-            void retry();
-          }}
-        />
+        <div className="w-full px-3 h-20 flex items-center">
+          <TextButton
+            type="ghost"
+            label="Retry"
+            Icon={Restart}
+            onClick={() => {
+              void retry();
+            }}
+          />
+        </div>
       </Container>
     );
   }

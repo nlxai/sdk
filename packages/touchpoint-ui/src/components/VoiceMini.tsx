@@ -84,7 +84,7 @@ export const VoiceMini: FC<{
         <ErrorMessage message="I couldn’t connect" />
         <TextButton
           type="ghost"
-          label="Retry sound check"
+          label="Retry"
           Icon={Restart}
           onClick={() => {
             void retry();
