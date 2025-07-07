@@ -378,3 +378,7 @@ body {
 .linenumber {
   @apply text-primary-40;
 }
+
+.prose section > h3 {
+  margin-top: 1rem;
+}
