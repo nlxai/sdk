@@ -8,16 +8,9 @@ import { useVoice } from "../voice";
 import { LoaderAnimation } from "./ui/Loader";
 import { Ripple } from "./Ripple";
 import { IconButton } from "./ui/IconButton";
-import {
-  ArrowForward,
-  Close,
-  Mic,
-  Volume,
-  VolumeOff,
-  Restart,
-} from "./ui/Icons";
+import { Close, Mic, MicOff, Volume, VolumeOff, Restart } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
-import { SoundCheckUi, VoiceModalities } from "./FullscreenVoice";
+import { VoiceModalities } from "./FullscreenVoice";
 import { ErrorMessage } from "./ErrorMessage";
 
 const containerClass =
@@ -69,70 +62,34 @@ export const VoiceMini: FC<{
   renderCollapse: boolean;
   onClose: (event: Event) => void;
   context?: Context;
-  restore: boolean;
-}> = ({
-  handler,
-  context,
-  onClose,
-  customModalities,
-  restore,
-  renderCollapse,
-}) => {
-  const onCloseHandler = (): void => {
-    onClose(new Event("close"));
-  };
-  const [active, setActive] = useState<boolean>(restore);
-
+}> = ({ handler, context, onClose, customModalities, renderCollapse }) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
   const [speakersEnabled, setSpeakersEnabled] = useState<boolean>(true);
 
-  const {
-    roomState,
-    soundCheck,
-    isUserSpeaking,
-    isApplicationSpeaking,
-    retrySoundCheck,
-    roomData,
-  } = useVoice({
-    active,
-    micEnabled,
-    speakersEnabled,
-    handler,
-    context,
-  });
+  const onCloseHandler = (): void => {
+    onClose(new Event("close"));
+  };
 
-  if (!active) {
-    return (
-      <Container renderCollapse={renderCollapse} onClose={onCloseHandler}>
-        <SoundCheckUi soundCheck={soundCheck} showDevices={false} />
-
-        {soundCheck != null ? (
-          soundCheck.micAllowed ? (
-            <TextButton
-              type="main"
-              label="I’m ready"
-              Icon={ArrowForward}
-              onClick={() => {
-                setActive(true);
-              }}
-            />
-          ) : (
-            <TextButton
-              type="ghost"
-              label="Retry sound check"
-              Icon={Restart}
-              onClick={retrySoundCheck}
-            />
-          )
-        ) : null}
-      </Container>
-    );
-  }
+  const { roomState, isUserSpeaking, isApplicationSpeaking, retry, roomData } =
+    useVoice({
+      micEnabled,
+      speakersEnabled,
+      handler,
+      context,
+    });
 
   if (roomState === "error") {
     return (
       <Container renderCollapse={renderCollapse} onClose={onCloseHandler}>
         <ErrorMessage message="I couldn’t connect" />
+        <TextButton
+          type="ghost"
+          label="Retry"
+          Icon={Restart}
+          onClick={() => {
+            void retry();
+          }}
+        />
       </Container>
     );
   }
@@ -170,7 +127,7 @@ export const VoiceMini: FC<{
       <div className="w-fit relative">
         {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
         <IconButton
-          Icon={Mic}
+          Icon={micEnabled ? Mic : MicOff}
           label="Microphone"
           type={micEnabled ? "activated" : "ghost"}
           onClick={() => {
@@ -194,7 +151,6 @@ export const VoiceMini: FC<{
         Icon={Close}
         type="error"
         onClick={() => {
-          setActive(false);
           onCloseHandler();
         }}
       />

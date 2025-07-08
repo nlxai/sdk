@@ -5,7 +5,6 @@ import {
   type SetStateAction,
   type FC,
   type ReactNode,
-  useEffect,
 } from "react";
 import { clsx } from "clsx";
 import type { Context, ConversationHandler } from "@nlxai/chat-core";
@@ -17,23 +16,11 @@ import type {
 
 import { FullscreenError } from "./FullscreenError";
 import { Ripple } from "./Ripple";
-import { Loader, LoaderAnimation } from "./ui/Loader";
+import { Loader } from "./ui/Loader";
 import { IconButton } from "./ui/IconButton";
 import { TextButton } from "./ui/TextButton";
-import {
-  Touchpoint,
-  ArrowForward,
-  Mic,
-  MicOff,
-  Volume,
-  Restart,
-  VolumeOff,
-} from "./ui/Icons";
-import {
-  type SoundCheck,
-  type ModalitiesWithContext,
-  useVoice,
-} from "../voice";
+import { Touchpoint, Mic, MicOff, Restart } from "./ui/Icons";
+import { type ModalitiesWithContext, useVoice } from "../voice";
 
 interface Props {
   colorMode: ColorMode;
@@ -47,98 +34,6 @@ interface Props {
   initializeConversation: InitializeConversation;
   customModalities?: Record<string, CustomModalityComponent<unknown>>;
 }
-
-const SoundCheckDevices: FC<{ soundCheck: SoundCheck }> = ({ soundCheck }) => {
-  return (
-    <>
-      <div className="flex items-center gap-2 text-primary-80">
-        <span
-          className={clsx(
-            "block w-10 h-10 p-2 flex-none",
-            soundCheck.micAllowed ? "" : "text-error-primary",
-          )}
-        >
-          {soundCheck.micAllowed ? <Mic /> : <MicOff />}
-        </span>
-        <input
-          className="px-3 py-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
-          value={soundCheck.micNames[0]}
-          placeholder="Mic not found"
-          disabled
-        />
-      </div>
-      <div className="flex items-center gap-2 text-primary-80">
-        <span
-          className={clsx(
-            "block w-10 h-10 p-2 flex-none",
-            soundCheck.speakerNames[0] != null ? "" : "text-error-primary",
-          )}
-        >
-          {soundCheck.speakerNames[0] != null ? <Volume /> : <VolumeOff />}
-        </span>
-        <input
-          className="px-3 py-2 rounded-inner bg-primary-5 w-full flex-grow text-primary-80"
-          value={soundCheck.speakerNames[0]}
-          placeholder="Speaker not found"
-          disabled
-        />
-      </div>
-    </>
-  );
-};
-
-export const SoundCheckUi: FC<{
-  showDevices: boolean;
-  soundCheck: SoundCheck | null;
-}> = ({ showDevices, soundCheck }) => {
-  const [longerThanUsual, setLongerThanUsual] = useState<boolean>(false);
-
-  const loading = soundCheck == null;
-
-  useEffect(() => {
-    if (!loading) {
-      setLongerThanUsual(false);
-      return;
-    }
-    const timeout = setTimeout(() => {
-      setLongerThanUsual(true);
-    }, 3000);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [loading, setLongerThanUsual]);
-
-  return (
-    <div className="space-y-4 text-primary-80">
-      {soundCheck == null || soundCheck.micAllowed ? (
-        <p className="px-1">
-          Get ready to join a voice experience. Please ensure your microphone
-          and speakers are on.
-        </p>
-      ) : (
-        <p className="px-1">
-          The voice experience could not begin because I’m unable to detect your
-          microphone and speaker. Check your browser settings.
-        </p>
-      )}
-      {soundCheck != null ? (
-        showDevices ? (
-          <SoundCheckDevices soundCheck={soundCheck} />
-        ) : null
-      ) : longerThanUsual ? (
-        <div className="flex gap-2 bg-primary-10 rounded-outer p-2">
-          <span className="text-accent inline-block flex-none w-5 h-5">
-            <LoaderAnimation />
-          </span>
-          <p className="text-base">
-            I cannot access your microphone. Check your browser settings and
-            refresh the page.
-          </p>
-        </div>
-      ) : null}
-    </div>
-  );
-};
 
 const Container: FC<{ className?: string; children: ReactNode }> = ({
   className,
@@ -197,60 +92,18 @@ export const FullscreenVoice: FC<Props> = ({
   colorMode,
   brandIcon,
   className,
-  active,
-  setActive,
-  initializeConversation,
   context,
   customModalities = {},
 }) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
 
-  const {
-    roomState,
-    soundCheck,
-    isUserSpeaking,
-    isApplicationSpeaking,
-    retrySoundCheck,
-    roomData,
-  } = useVoice({
-    active,
-    micEnabled,
-    speakersEnabled,
-    handler,
-    context,
-  });
-
-  if (!active) {
-    return (
-      <Container className={className}>
-        <div className="p-4 h-full flex flex-col justify-between">
-          <SoundCheckUi soundCheck={soundCheck} showDevices={true} />
-          {soundCheck != null ? (
-            soundCheck.micAllowed ? (
-              <TextButton
-                type="main"
-                label="I’m ready"
-                Icon={ArrowForward}
-                onClick={() => {
-                  setActive(true);
-                  // Might not be supported on the backend and is implemented inconsistently compared to voice mini
-                  // TODO: look into improvements
-                  initializeConversation(handler, context);
-                }}
-              />
-            ) : (
-              <TextButton
-                type="ghost"
-                label="Retry sound check"
-                Icon={Restart}
-                onClick={retrySoundCheck}
-              />
-            )
-          ) : null}
-        </div>
-      </Container>
-    );
-  }
+  const { roomState, isUserSpeaking, isApplicationSpeaking, retry, roomData } =
+    useVoice({
+      micEnabled,
+      speakersEnabled,
+      handler,
+      context,
+    });
 
   if (roomState === "pending") {
     return (
@@ -264,6 +117,16 @@ export const FullscreenVoice: FC<Props> = ({
     return (
       <Container className={className}>
         <FullscreenError />
+        <div className="w-full px-3 h-20 flex items-center">
+          <TextButton
+            type="ghost"
+            label="Retry"
+            Icon={Restart}
+            onClick={() => {
+              void retry();
+            }}
+          />
+        </div>
       </Container>
     );
   }
