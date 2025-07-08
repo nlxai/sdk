@@ -1,4 +1,3 @@
-
 <a name="readmemd"></a>
 
 # @nlxai/chat-core
@@ -37,7 +36,7 @@
 
 [index.ts:18](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L18)
 
-___
+---
 
 ### SlotsRecord
 
@@ -56,7 +55,7 @@ A `SlotsRecord` is equivalent to an array of [SlotValue](#interfacesslotvaluemd)
 
 [index.ts:47](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L47)
 
-___
+---
 
 ### SlotsRecordOrArray
 
@@ -70,7 +69,7 @@ Supports either a [SlotsRecord](#slotsrecord) or an array of [SlotValue](#interf
 
 [index.ts:54](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L54)
 
-___
+---
 
 ### ModalityPayloads
 
@@ -82,11 +81,11 @@ Payloads for modalities as a key-value pair by modality name
 
 [index.ts:117](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L117)
 
-___
+---
 
 ### UserResponsePayload
 
-Ƭ **UserResponsePayload**: \{ `type`: ``"text"`` ; `text`: `string` ; `context?`: [`Context`](#context)  } \| \{ `type`: ``"choice"`` ; `choiceId`: `string` ; `context?`: [`Context`](#context)  } \| \{ `type`: ``"structured"`` ; `context?`: [`Context`](#context)  } & [`StructuredRequest`](#interfacesstructuredrequestmd)
+Ƭ **UserResponsePayload**: \{ `type`: `"text"` ; `text`: `string` ; `context?`: [`Context`](#context) } \| \{ `type`: `"choice"` ; `choiceId`: `string` ; `context?`: [`Context`](#context) } \| \{ `type`: `"structured"` ; `context?`: [`Context`](#context) } & [`StructuredRequest`](#interfacesstructuredrequestmd)
 
 The payload of the user response
 
@@ -94,7 +93,7 @@ The payload of the user response
 
 [index.ts:282](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L282)
 
-___
+---
 
 ### Response
 
@@ -106,7 +105,7 @@ A response from the application or the user.
 
 [index.ts:351](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L351)
 
-___
+---
 
 ### Time
 
@@ -118,11 +117,11 @@ The time value in milliseconds since midnight, January 1, 1970 UTC.
 
 [index.ts:356](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L356)
 
-___
+---
 
 ### NormalizedStructuredRequest
 
-Ƭ **NormalizedStructuredRequest**: [`StructuredRequest`](#interfacesstructuredrequestmd) & \{ `slots?`: [`SlotValue`](#interfacesslotvaluemd)[]  }
+Ƭ **NormalizedStructuredRequest**: [`StructuredRequest`](#interfacesstructuredrequestmd) & \{ `slots?`: [`SlotValue`](#interfacesslotvaluemd)[] }
 
 Normalized structured request with a single way to represent slots
 
@@ -130,7 +129,7 @@ Normalized structured request with a single way to represent slots
 
 [index.ts:505](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L505)
 
-___
+---
 
 ### BotRequest
 
@@ -146,7 +145,7 @@ use [ApplicationRequest](#interfacesapplicationrequestmd)
 
 [index.ts:557](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L557)
 
-___
+---
 
 ### LanguageCode
 
@@ -158,7 +157,7 @@ Language code named for clarity, may restrict it to a finite list
 
 [index.ts:611](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L611)
 
-___
+---
 
 ### RequestOverride
 
@@ -172,9 +171,9 @@ Instead of sending a request to the application, handle it in a custom fashion
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `botRequest` | [`BotRequest`](#botrequest) | The [BotRequest](#botrequest) that is being overridden |
+| Name             | Type                                                                       | Description                                                                                         |
+| :--------------- | :------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------- |
+| `botRequest`     | [`BotRequest`](#botrequest)                                                | The [BotRequest](#botrequest) that is being overridden                                              |
 | `appendResponse` | (`res`: [`BotResponsePayload`](#interfacesbotresponsepayloadmd)) => `void` | A method to append the [BotResponsePayload](#interfacesbotresponsepayloadmd) to the message history |
 
 ##### Returns
@@ -185,7 +184,7 @@ Instead of sending a request to the application, handle it in a custom fashion
 
 [index.ts:618](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L618)
 
-___
+---
 
 ### BotRequestOverride
 
@@ -201,7 +200,7 @@ use [RequestOverride](#requestoverride) instead
 
 [index.ts:627](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L627)
 
-___
+---
 
 ### VoicePlusContext
 
@@ -213,11 +212,11 @@ Voice+ context, type to be defined
 
 [index.ts:632](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L632)
 
-___
+---
 
 ### ConversationHandlerEvent
 
-Ƭ **ConversationHandlerEvent**: ``"voicePlusCommand"``
+Ƭ **ConversationHandlerEvent**: `"voicePlusCommand"`
 
 Handler events
 
@@ -225,7 +224,7 @@ Handler events
 
 [index.ts:647](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L647)
 
-___
+---
 
 ### Subscriber
 
@@ -239,10 +238,10 @@ The callback function for listening to all responses.
 
 ##### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `response` | [`Response`](#response)[] |
-| `newResponse?` | [`Response`](#response) |
+| Name           | Type                      |
+| :------------- | :------------------------ |
+| `response`     | [`Response`](#response)[] |
+| `newResponse?` | [`Response`](#response)   |
 
 ##### Returns
 
@@ -277,8 +276,8 @@ The order of configs doesn't matter.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name      | Type                            |
+| :-------- | :------------------------------ |
 | `config1` | [`Config`](#interfacesconfigmd) |
 | `config2` | [`Config`](#interfacesconfigmd) |
 
@@ -292,7 +291,7 @@ true if `createConversation` should be called again
 
 [index.ts:836](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L836)
 
-___
+---
 
 ### isConfigValid
 
@@ -302,8 +301,8 @@ Check whether a configuration is value.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name     | Type                            | Description        |
+| :------- | :------------------------------ | :----------------- |
 | `config` | [`Config`](#interfacesconfigmd) | Chat configuration |
 
 #### Returns
@@ -316,7 +315,7 @@ isValid - Whether the configuration is valid
 
 [index.ts:891](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L891)
 
-___
+---
 
 ### createConversation
 
@@ -326,8 +325,8 @@ Call this to create a conversation handler.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name     | Type                            |
+| :------- | :------------------------------ |
 | `config` | [`Config`](#interfacesconfigmd) |
 
 #### Returns
@@ -340,23 +339,23 @@ The [ConversationHandler](#interfacesconversationhandlermd) is a bundle of funct
 
 [index.ts:903](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L903)
 
-___
+---
 
 ### getCurrentExpirationTimestamp
 
-▸ **getCurrentExpirationTimestamp**(`responses`): ``null`` \| `number`
+▸ **getCurrentExpirationTimestamp**(`responses`): `null` \| `number`
 
 Get current expiration timestamp from the current list of reponses
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name        | Type                      | Description                                                                           |
+| :---------- | :------------------------ | :------------------------------------------------------------------------------------ |
 | `responses` | [`Response`](#response)[] | the current list of user and bot responses (first argument in the subscribe callback) |
 
 #### Returns
 
-``null`` \| `number`
+`null` \| `number`
 
 an expiration timestamp in Unix Epoch (`new Date().getTime()`), or `null` if this is not known (typically occurs if the bot has not responded yet)
 
@@ -364,11 +363,11 @@ an expiration timestamp in Unix Epoch (`new Date().getTime()`), or `null` if thi
 
 [index.ts:1488](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L1488)
 
-___
+---
 
 ### promisify
 
-▸ **promisify**\<`T`\>(`fn`, `convo`, `timeout?`): (`payload`: `T`) => `Promise`\<[`Response`](#response) \| ``null``\>
+▸ **promisify**\<`T`\>(`fn`, `convo`, `timeout?`): (`payload`: `T`) => `Promise`\<[`Response`](#response) \| `null`\>
 
 This package is intentionally designed with a subscription-based API as opposed to a promise-based one where each message corresponds to a single bot response, available asynchronously.
 
@@ -376,17 +375,17 @@ If you need a promise-based wrapper, you can use the `promisify` helper availabl
 
 #### Type parameters
 
-| Name | Description |
-| :------ | :------ |
-| `T` | the type of the function's params, e.g. for `sendText` it's `text: string, context?: Context` |
+| Name | Description                                                                                   |
+| :--- | :-------------------------------------------------------------------------------------------- |
+| `T`  | the type of the function's params, e.g. for `sendText` it's `text: string, context?: Context` |
 
 #### Parameters
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `fn` | (`payload`: `T`) => `void` | `undefined` | the function to wrap (e.g. `convo.sendText`, `convo.sendChoice`, etc.) |
-| `convo` | [`ConversationHandler`](#interfacesconversationhandlermd) | `undefined` | the `ConversationHandler` (from [createConversation](#createconversation)) |
-| `timeout` | `number` | `10000` | the timeout in milliseconds |
+| Name      | Type                                                      | Default value | Description                                                                |
+| :-------- | :-------------------------------------------------------- | :------------ | :------------------------------------------------------------------------- |
+| `fn`      | (`payload`: `T`) => `void`                                | `undefined`   | the function to wrap (e.g. `convo.sendText`, `convo.sendChoice`, etc.)     |
+| `convo`   | [`ConversationHandler`](#interfacesconversationhandlermd) | `undefined`   | the `ConversationHandler` (from [createConversation](#createconversation)) |
+| `timeout` | `number`                                                  | `10000`       | the timeout in milliseconds                                                |
 
 #### Returns
 
@@ -394,17 +393,17 @@ If you need a promise-based wrapper, you can use the `promisify` helper availabl
 
 A promise-wrapped version of the function. The function, when called, returns a promise that resolves to the Conversation's next response.
 
-▸ (`payload`): `Promise`\<[`Response`](#response) \| ``null``\>
+▸ (`payload`): `Promise`\<[`Response`](#response) \| `null`\>
 
 ##### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `payload` | `T` |
+| Name      | Type |
+| :-------- | :--- |
+| `payload` | `T`  |
 
 ##### Returns
 
-`Promise`\<[`Response`](#response) \| ``null``\>
+`Promise`\<[`Response`](#response) \| `null`\>
 
 **`Example`**
 
@@ -424,12 +423,9 @@ sendTextWrapped("Hello").then((response) => {
 
 [index.ts:1525](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L1525)
 
-
 <a name="indexmd"></a>
 
-
 # Interfaces
-
 
 <a name="interfacesapplicationrequestmd"></a>
 
@@ -449,7 +445,7 @@ The current conversation ID
 
 [index.ts:519](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L519)
 
-___
+---
 
 #### userId
 
@@ -461,7 +457,7 @@ The current user ID
 
 [index.ts:523](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L523)
 
-___
+---
 
 #### context
 
@@ -473,7 +469,7 @@ Request context, if applicable
 
 [index.ts:527](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L527)
 
-___
+---
 
 #### request
 
@@ -483,16 +479,15 @@ Main request
 
 ##### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `unstructured?` | \{ `text`: `string`  } | Unstructured request |
-| `unstructured.text` | `string` | Request body text |
-| `structured?` | [`StructuredRequest`](#interfacesstructuredrequestmd) & \{ `slots?`: [`SlotValue`](#interfacesslotvaluemd)[]  } | Structured request |
+| Name                | Type                                                                                                           | Description          |
+| :------------------ | :------------------------------------------------------------------------------------------------------------- | :------------------- |
+| `unstructured?`     | \{ `text`: `string` }                                                                                          | Unstructured request |
+| `unstructured.text` | `string`                                                                                                       | Request body text    |
+| `structured?`       | [`StructuredRequest`](#interfacesstructuredrequestmd) & \{ `slots?`: [`SlotValue`](#interfacesslotvaluemd)[] } | Structured request   |
 
 ##### Defined in
 
 [index.ts:531](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L531)
-
 
 <a name="interfacesbotmessagemd"></a>
 
@@ -512,7 +507,7 @@ A unique identifier for the message.
 
 [index.ts:198](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L198)
 
-___
+---
 
 #### nodeId
 
@@ -525,7 +520,7 @@ This is must be sent with a choice when the user is changing a previously sent c
 
 [index.ts:203](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L203)
 
-___
+---
 
 #### text
 
@@ -537,7 +532,7 @@ The body of the message. Show this to the user.
 
 [index.ts:207](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L207)
 
-___
+---
 
 #### choices
 
@@ -549,7 +544,7 @@ A selection of choices to show to the user. They may choose one of them.
 
 [index.ts:211](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L211)
 
-___
+---
 
 #### metadata
 
@@ -561,7 +556,7 @@ Metadata
 
 [index.ts:215](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L215)
 
-___
+---
 
 #### selectedChoiceId
 
@@ -573,7 +568,6 @@ This field is set locally and does not come from the application.
 ##### Defined in
 
 [index.ts:220](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L220)
-
 
 <a name="interfacesbotmessagemetadatamd"></a>
 
@@ -594,7 +588,6 @@ The message node's intent
 
 [index.ts:188](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L188)
 
-
 <a name="interfacesbotresponsemd"></a>
 
 ## Interface: BotResponse
@@ -602,6 +595,7 @@ The message node's intent
 A message from the application
 
 See also:
+
 - [UserResponse](#interfacesuserresponsemd)
 - [FailureMessage](#interfacesfailuremessagemd)
 - [Response](#response)
@@ -610,7 +604,7 @@ See also:
 
 #### type
 
-• **type**: ``"bot"``
+• **type**: `"bot"`
 
 The type of the response is `"bot"` for bot and `"user"` for user, and "failure" for failure.
 
@@ -618,7 +612,7 @@ The type of the response is `"bot"` for bot and `"user"` for user, and "failure"
 
 [index.ts:68](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L68)
 
-___
+---
 
 #### receivedAt
 
@@ -630,7 +624,7 @@ When the response was received
 
 [index.ts:72](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L72)
 
-___
+---
 
 #### payload
 
@@ -641,7 +635,6 @@ The payload of the response
 ##### Defined in
 
 [index.ts:76](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L76)
-
 
 <a name="interfacesbotresponsemetadatamd"></a>
 
@@ -662,7 +655,7 @@ The conversation's intent
 
 [index.ts:127](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L127)
 
-___
+---
 
 #### escalation
 
@@ -674,7 +667,7 @@ Whether the current conversation has been marked as incomprehension.
 
 [index.ts:131](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L131)
 
-___
+---
 
 #### frustration
 
@@ -686,7 +679,7 @@ Whether the current conversation has been marked frustrated
 
 [index.ts:135](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L135)
 
-___
+---
 
 #### incomprehension
 
@@ -698,7 +691,7 @@ Whether the current conversation has been marked as incomprehension.
 
 [index.ts:139](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L139)
 
-___
+---
 
 #### uploadUrls
 
@@ -710,7 +703,7 @@ Upload URL's
 
 [index.ts:143](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L143)
 
-___
+---
 
 #### hasPendingDataRequest
 
@@ -722,7 +715,7 @@ Whether the client should poll for more application responses.
 
 [index.ts:147](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L147)
 
-___
+---
 
 #### sources
 
@@ -733,7 +726,6 @@ Knowledge base sources
 ##### Defined in
 
 [index.ts:151](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L151)
-
 
 <a name="interfacesbotresponsepayloadmd"></a>
 
@@ -753,7 +745,7 @@ If there isn't some interaction by this time, the conversation will expire.
 
 [index.ts:86](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L86)
 
-___
+---
 
 #### conversationId
 
@@ -765,7 +757,7 @@ The active conversation ID. If not set, a new conversation will be started.
 
 [index.ts:90](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L90)
 
-___
+---
 
 #### messages
 
@@ -777,7 +769,7 @@ Any messages from the bot.
 
 [index.ts:94](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L94)
 
-___
+---
 
 #### metadata
 
@@ -790,7 +782,7 @@ as well as whether the client should poll for more application responses.
 
 [index.ts:99](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L99)
 
-___
+---
 
 #### payload
 
@@ -802,7 +794,7 @@ If configured, the [node's payload.](#add-functionality)
 
 [index.ts:103](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L103)
 
-___
+---
 
 #### modalities
 
@@ -814,7 +806,7 @@ If configured, the node's modalities and their payloads.
 
 [index.ts:107](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L107)
 
-___
+---
 
 #### context
 
@@ -825,7 +817,6 @@ If the node is set to send context, the whole context associated with the conver
 ##### Defined in
 
 [index.ts:111](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L111)
-
 
 <a name="interfaceschoicemd"></a>
 
@@ -845,7 +836,7 @@ A choices to show to the user.
 
 [index.ts:244](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L244)
 
-___
+---
 
 #### choiceText
 
@@ -857,7 +848,7 @@ The text of the choice
 
 [index.ts:248](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L248)
 
-___
+---
 
 #### choicePayload
 
@@ -868,7 +859,6 @@ An optional, schemaless payload for the choice.
 ##### Defined in
 
 [index.ts:252](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L252)
-
 
 <a name="interfaceschoicerequestmetadatamd"></a>
 
@@ -890,7 +880,7 @@ It is not sent to the application.
 
 [index.ts:590](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L590)
 
-___
+---
 
 #### messageIndex
 
@@ -904,7 +894,7 @@ It is not sent to the application.
 
 [index.ts:596](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L596)
 
-___
+---
 
 #### nodeId
 
@@ -917,7 +907,7 @@ The `nodeId` can be found in the corresponding [BotMessage](#interfacesbotmessag
 
 [index.ts:601](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L601)
 
-___
+---
 
 #### intentId
 
@@ -928,7 +918,6 @@ Intent ID, used for sending to the NLU to allow it to double-check
 ##### Defined in
 
 [index.ts:605](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L605)
-
 
 <a name="interfacesconfigmd"></a>
 
@@ -948,7 +937,7 @@ Fetch this from the application's Deployment page.
 
 [index.ts:372](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L372)
 
-___
+---
 
 #### botUrl
 
@@ -964,11 +953,11 @@ use the applicationUrl field instead
 
 [index.ts:377](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L377)
 
-___
+---
 
 #### headers
 
-• **headers**: `Record`\<`string`, `string`\> & \{ `nlx-api-key`: `string`  }
+• **headers**: `Record`\<`string`, `string`\> & \{ `nlx-api-key`: `string` }
 
 Headers to forward to the NLX API.
 
@@ -976,7 +965,7 @@ Headers to forward to the NLX API.
 
 [index.ts:381](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L381)
 
-___
+---
 
 #### conversationId
 
@@ -988,7 +977,7 @@ Set `conversationId` to continue an existing conversation. If not set, a new con
 
 [index.ts:391](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L391)
 
-___
+---
 
 #### userId
 
@@ -1000,7 +989,7 @@ Setting the `userID` allows it to be searchable in application history, as well 
 
 [index.ts:395](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L395)
 
-___
+---
 
 #### responses
 
@@ -1012,7 +1001,7 @@ When `responses` is set, initialize the chatHandler with historical messages.
 
 [index.ts:399](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L399)
 
-___
+---
 
 #### failureMessage
 
@@ -1024,7 +1013,7 @@ When set, this overrides the default failure message ("We encountered an issue. 
 
 [index.ts:403](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L403)
 
-___
+---
 
 #### languageCode
 
@@ -1037,7 +1026,7 @@ If you don't have translations, hard-code this to the language code you support.
 
 [index.ts:408](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L408)
 
-___
+---
 
 #### bidirectional
 
@@ -1049,7 +1038,7 @@ Specifies whether the conversation is bidirectional
 
 [index.ts:417](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L417)
 
-___
+---
 
 #### experimental
 
@@ -1059,15 +1048,14 @@ Experimental settings
 
 ##### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `channelType?` | `string` | Simulate alternative channel types |
+| Name              | Type      | Description                                                                                                                                                        |
+| :---------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `channelType?`    | `string`  | Simulate alternative channel types                                                                                                                                 |
 | `completeBotUrl?` | `boolean` | Prevent the `languageCode` parameter to be appended to the application URL - used in special deployment environments such as the sandbox chat inside Dialog Studio |
 
 ##### Defined in
 
 [index.ts:421](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L421)
-
 
 <a name="interfacesconversationhandlermd"></a>
 
@@ -1089,9 +1077,9 @@ Send user's message
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `text` | `string` | the user's message |
+| Name       | Type                  | Description                                                                                                                               |
+| :--------- | :-------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `text`     | `string`              | the user's message                                                                                                                        |
 | `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
 
 ###### Returns
@@ -1102,7 +1090,7 @@ Send user's message
 
 [index.ts:668](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L668)
 
-___
+---
 
 #### sendSlots
 
@@ -1116,10 +1104,10 @@ Send [slots](https://docs.studio.nlx.ai/workspacesettings/introduction-to-settin
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `slots` | [`SlotsRecordOrArray`](#slotsrecordorarray) | The slots to populate |
-| `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
+| Name       | Type                                        | Description                                                                                                                               |
+| :--------- | :------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `slots`    | [`SlotsRecordOrArray`](#slotsrecordorarray) | The slots to populate                                                                                                                     |
+| `context?` | [`Context`](#context)                       | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
 
 ###### Returns
 
@@ -1129,7 +1117,7 @@ Send [slots](https://docs.studio.nlx.ai/workspacesettings/introduction-to-settin
 
 [index.ts:674](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L674)
 
-___
+---
 
 #### sendChoice
 
@@ -1143,11 +1131,11 @@ Respond to [a choice](https://docs.studio.nlx.ai/intentflows/documentation-flows
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `choiceId` | `string` | - |
-| `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
-| `metadata?` | [`ChoiceRequestMetadata`](#interfaceschoicerequestmetadatamd) | links the choice to the specific message and node in the conversation. |
+| Name        | Type                                                          | Description                                                                                                                               |
+| :---------- | :------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `choiceId`  | `string`                                                      | -                                                                                                                                         |
+| `context?`  | [`Context`](#context)                                         | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
+| `metadata?` | [`ChoiceRequestMetadata`](#interfaceschoicerequestmetadatamd) | links the choice to the specific message and node in the conversation.                                                                    |
 
 ###### Returns
 
@@ -1157,7 +1145,7 @@ Respond to [a choice](https://docs.studio.nlx.ai/intentflows/documentation-flows
 
 [index.ts:681](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L681)
 
-___
+---
 
 #### sendWelcomeFlow
 
@@ -1171,8 +1159,8 @@ Trigger the welcome flow. This should be done when the user starts interacting w
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name       | Type                  | Description                                                                                                                               |
+| :--------- | :-------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
 | `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
 
 ###### Returns
@@ -1183,7 +1171,7 @@ Trigger the welcome flow. This should be done when the user starts interacting w
 
 [index.ts:691](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L691)
 
-___
+---
 
 #### sendWelcomeIntent
 
@@ -1201,8 +1189,8 @@ use `sendWelcomeFlow` instead
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name       | Type                  | Description                                                                                                                               |
+| :--------- | :-------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
 | `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
 
 ###### Returns
@@ -1213,7 +1201,7 @@ use `sendWelcomeFlow` instead
 
 [index.ts:698](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L698)
 
-___
+---
 
 #### sendFlow
 
@@ -1227,9 +1215,9 @@ Trigger a specific flow.
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `flowId` | `string` | the flow to trigger. The id is the name under the application's _Intents_. |
+| Name       | Type                  | Description                                                                                                                               |
+| :--------- | :-------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `flowId`   | `string`              | the flow to trigger. The id is the name under the application's _Intents_.                                                                |
 | `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
 
 ###### Returns
@@ -1240,7 +1228,7 @@ Trigger a specific flow.
 
 [index.ts:705](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L705)
 
-___
+---
 
 #### sendIntent
 
@@ -1258,9 +1246,9 @@ use `sendFlow` instead
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `intentId` | `string` | the intent to trigger. The id is the name under the application's _Intents_. |
+| Name       | Type                  | Description                                                                                                                               |
+| :--------- | :-------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `intentId` | `string`              | the intent to trigger. The id is the name under the application's _Intents_.                                                              |
 | `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
 
 ###### Returns
@@ -1271,7 +1259,7 @@ use `sendFlow` instead
 
 [index.ts:713](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L713)
 
-___
+---
 
 #### sendContext
 
@@ -1285,8 +1273,8 @@ Send context without sending a message
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                  | Description                                                                                                                               |
+| :-------- | :-------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
 | `context` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
 
 ###### Returns
@@ -1297,7 +1285,7 @@ Send context without sending a message
 
 [index.ts:719](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L719)
 
-___
+---
 
 #### getVoiceCredentials
 
@@ -1311,8 +1299,8 @@ Obtain Voice credentials to run the experience in voice.
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name       | Type                  |
+| :--------- | :-------------------- |
 | `context?` | [`Context`](#context) |
 
 ###### Returns
@@ -1323,7 +1311,7 @@ Obtain Voice credentials to run the experience in voice.
 
 [index.ts:726](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L726)
 
-___
+---
 
 #### sendStructured
 
@@ -1337,10 +1325,10 @@ Send a combination of choice, slots, and intent in one request.
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `request` | [`StructuredRequest`](#interfacesstructuredrequestmd) |  |
-| `context?` | [`Context`](#context) | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
+| Name       | Type                                                  | Description                                                                                                                               |
+| :--------- | :---------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `request`  | [`StructuredRequest`](#interfacesstructuredrequestmd) |                                                                                                                                           |
+| `context?` | [`Context`](#context)                                 | [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent. |
 
 ###### Returns
 
@@ -1350,7 +1338,7 @@ Send a combination of choice, slots, and intent in one request.
 
 [index.ts:733](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L733)
 
-___
+---
 
 #### subscribe
 
@@ -1364,8 +1352,8 @@ Subscribe a callback to the conversation. On subscribe, the subscriber will rece
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name         | Type                        | Description               |
+| :----------- | :-------------------------- | :------------------------ |
 | `subscriber` | [`Subscriber`](#subscriber) | The callback to subscribe |
 
 ###### Returns
@@ -1382,7 +1370,7 @@ Subscribe a callback to the conversation. On subscribe, the subscriber will rece
 
 [index.ts:738](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L738)
 
-___
+---
 
 #### unsubscribe
 
@@ -1396,8 +1384,8 @@ Unsubscribe a callback from the conversation.
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name         | Type                        | Description                 |
+| :----------- | :-------------------------- | :-------------------------- |
 | `subscriber` | [`Subscriber`](#subscriber) | The callback to unsubscribe |
 
 ###### Returns
@@ -1408,7 +1396,7 @@ Unsubscribe a callback from the conversation.
 
 [index.ts:743](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L743)
 
-___
+---
 
 #### unsubscribeAll
 
@@ -1428,7 +1416,7 @@ Unsubscribe all callback from the conversation.
 
 [index.ts:747](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L747)
 
-___
+---
 
 #### currentConversationId
 
@@ -1448,7 +1436,7 @@ Get the current conversation ID if it's set, or undefined if there is no convers
 
 [index.ts:751](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L751)
 
-___
+---
 
 #### currentLanguageCode
 
@@ -1468,7 +1456,7 @@ Get the current language code
 
 [index.ts:755](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L755)
 
-___
+---
 
 #### setLanguageCode
 
@@ -1482,8 +1470,8 @@ Set the language code
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name           | Type     |
+| :------------- | :------- |
 | `languageCode` | `string` |
 
 ###### Returns
@@ -1494,11 +1482,11 @@ Set the language code
 
 [index.ts:759](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L759)
 
-___
+---
 
 #### reset
 
-• **reset**: (`options?`: \{ `clearResponses?`: `boolean`  }) => `void`
+• **reset**: (`options?`: \{ `clearResponses?`: `boolean` }) => `void`
 
 Forces a new conversation. If `clearResponses` is set to true, will also clear historical responses passed to subscribers.
 Retains all existing subscribers.
@@ -1509,9 +1497,9 @@ Retains all existing subscribers.
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options?` | `Object` | - |
+| Name                      | Type      | Description                                                            |
+| :------------------------ | :-------- | :--------------------------------------------------------------------- |
+| `options?`                | `Object`  | -                                                                      |
 | `options.clearResponses?` | `boolean` | If set to true, will clear historical responses passed to subscribers. |
 
 ###### Returns
@@ -1522,7 +1510,7 @@ Retains all existing subscribers.
 
 [index.ts:764](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L764)
 
-___
+---
 
 #### destroy
 
@@ -1542,7 +1530,7 @@ Removes all subscribers and, if using websockets, closes the connection.
 
 [index.ts:773](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L773)
 
-___
+---
 
 #### setBotRequestOverride
 
@@ -1560,8 +1548,8 @@ use `setRequestOverride` instead
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name       | Type                                                 |
+| :--------- | :--------------------------------------------------- |
 | `override` | `undefined` \| [`RequestOverride`](#requestoverride) |
 
 ###### Returns
@@ -1572,7 +1560,7 @@ use `setRequestOverride` instead
 
 [index.ts:778](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L778)
 
-___
+---
 
 #### setRequestOverride
 
@@ -1586,8 +1574,8 @@ Optional [RequestOverride](#requestoverride) function used to bypass the bot req
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name       | Type                                                 |
+| :--------- | :--------------------------------------------------- |
 | `override` | `undefined` \| [`RequestOverride`](#requestoverride) |
 
 ###### Returns
@@ -1598,11 +1586,11 @@ Optional [RequestOverride](#requestoverride) function used to bypass the bot req
 
 [index.ts:782](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L782)
 
-___
+---
 
 #### addEventListener
 
-• **addEventListener**: (`event`: ``"voicePlusCommand"``, `handler`: (`payload`: `any`) => `void`) => `void`
+• **addEventListener**: (`event`: `"voicePlusCommand"`, `handler`: (`payload`: `any`) => `void`) => `void`
 
 Add a listener to one of the handler's custom events
 
@@ -1612,9 +1600,9 @@ Add a listener to one of the handler's custom events
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `event` | ``"voicePlusCommand"`` |
+| Name      | Type                         |
+| :-------- | :--------------------------- |
+| `event`   | `"voicePlusCommand"`         |
 | `handler` | (`payload`: `any`) => `void` |
 
 ###### Returns
@@ -1625,11 +1613,11 @@ Add a listener to one of the handler's custom events
 
 [index.ts:786](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L786)
 
-___
+---
 
 #### removeEventListener
 
-• **removeEventListener**: (`event`: ``"voicePlusCommand"``, `handler`: (`payload`: `any`) => `void`) => `void`
+• **removeEventListener**: (`event`: `"voicePlusCommand"`, `handler`: (`payload`: `any`) => `void`) => `void`
 
 Remove a listener to one of the handler's custom events
 
@@ -1639,9 +1627,9 @@ Remove a listener to one of the handler's custom events
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `event` | ``"voicePlusCommand"`` |
+| Name      | Type                         |
+| :-------- | :--------------------------- |
+| `event`   | `"voicePlusCommand"`         |
 | `handler` | (`payload`: `any`) => `void` |
 
 ###### Returns
@@ -1652,7 +1640,7 @@ Remove a listener to one of the handler's custom events
 
 [index.ts:793](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L793)
 
-___
+---
 
 #### sendVoicePlusContext
 
@@ -1666,8 +1654,8 @@ Send voicePlus message
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name      | Type  |
+| :-------- | :---- |
 | `context` | `any` |
 
 ###### Returns
@@ -1677,7 +1665,6 @@ Send voicePlus message
 ##### Defined in
 
 [index.ts:800](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L800)
-
 
 <a name="interfaceseventhandlersmd"></a>
 
@@ -1699,8 +1686,8 @@ Voice+ command event handler
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name      | Type  |
+| :-------- | :---- |
 | `payload` | `any` |
 
 ###### Returns
@@ -1710,7 +1697,6 @@ Voice+ command event handler
 ##### Defined in
 
 [index.ts:656](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L656)
-
 
 <a name="interfacesfailuremessagemd"></a>
 
@@ -1722,7 +1708,7 @@ A failure message is received when the NLX api is unreachable, or sends an unpar
 
 #### type
 
-• **type**: ``"failure"``
+• **type**: `"failure"`
 
 The type of the response is `"bot"` for bot and `"user"` for user.
 
@@ -1730,7 +1716,7 @@ The type of the response is `"bot"` for bot and `"user"` for user.
 
 [index.ts:332](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L332)
 
-___
+---
 
 #### payload
 
@@ -1740,15 +1726,15 @@ The payload only includes an error message.
 
 ##### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name   | Type     | Description                                                                                                |
+| :----- | :------- | :--------------------------------------------------------------------------------------------------------- |
 | `text` | `string` | The error message is either the default, or the `failureMessage` set in the [Config](#interfacesconfigmd). |
 
 ##### Defined in
 
 [index.ts:336](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L336)
 
-___
+---
 
 #### receivedAt
 
@@ -1759,7 +1745,6 @@ When the failure occurred.
 ##### Defined in
 
 [index.ts:345](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L345)
-
 
 <a name="interfacesknowledgebaseresponsesourcemd"></a>
 
@@ -1779,7 +1764,7 @@ File name
 
 [index.ts:161](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L161)
 
-___
+---
 
 #### pageNumber
 
@@ -1791,7 +1776,7 @@ Page number
 
 [index.ts:165](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L165)
 
-___
+---
 
 #### content
 
@@ -1803,7 +1788,7 @@ Content
 
 [index.ts:169](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L169)
 
-___
+---
 
 #### metadata
 
@@ -1815,7 +1800,7 @@ Metadata
 
 [index.ts:173](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L173)
 
-___
+---
 
 #### presignedUrl
 
@@ -1826,7 +1811,6 @@ Presigned URL for direct retrieval
 ##### Defined in
 
 [index.ts:177](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L177)
-
 
 <a name="interfacesslotvaluemd"></a>
 
@@ -1848,7 +1832,7 @@ The attached slot's name
 
 [index.ts:29](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L29)
 
-___
+---
 
 #### value
 
@@ -1860,7 +1844,6 @@ for custom slots, this can optionally be the value's ID.
 ##### Defined in
 
 [index.ts:34](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L34)
-
 
 <a name="interfacesstructuredrequestmd"></a>
 
@@ -1881,7 +1864,7 @@ The `choiceId` is in the [BotResponse](#interfacesbotresponsemd)'s `.payload.mes
 
 [index.ts:468](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L468)
 
-___
+---
 
 #### nodeId
 
@@ -1894,7 +1877,7 @@ The `nodeId` can be found in the corresponding [BotMessage](#interfacesbotmessag
 
 [index.ts:473](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L473)
 
-___
+---
 
 #### intentId
 
@@ -1910,7 +1893,7 @@ use `flowId` instead.
 
 [index.ts:478](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L478)
 
-___
+---
 
 #### flowId
 
@@ -1922,7 +1905,7 @@ The flow to trigger. The `flowId` is the name under the application's _Flows_.
 
 [index.ts:482](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L482)
 
-___
+---
 
 #### slots
 
@@ -1934,7 +1917,7 @@ The slots to populate
 
 [index.ts:486](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L486)
 
-___
+---
 
 #### uploadIds
 
@@ -1946,7 +1929,7 @@ Upload ID
 
 [index.ts:490](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L490)
 
-___
+---
 
 #### utterance
 
@@ -1957,7 +1940,6 @@ Upload utterance
 ##### Defined in
 
 [index.ts:494](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L494)
-
 
 <a name="interfacesuploadurlmd"></a>
 
@@ -1977,7 +1959,7 @@ The URL of the upload
 
 [index.ts:230](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L230)
 
-___
+---
 
 #### uploadId
 
@@ -1989,7 +1971,6 @@ The ID of the upload
 
 [index.ts:234](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L234)
 
-
 <a name="interfacesuserresponsemd"></a>
 
 ## Interface: UserResponse
@@ -1997,6 +1978,7 @@ The ID of the upload
 A message from the user
 
 See also:
+
 - [BotResponse](#interfacesbotresponsemd)
 - [FailureMessage](#interfacesfailuremessagemd)
 - [Response](#response)
@@ -2005,7 +1987,7 @@ See also:
 
 #### type
 
-• **type**: ``"user"``
+• **type**: `"user"`
 
 The type of the response is `"bot"` for bot and `"user"` for user, and "failure" for failure.
 
@@ -2013,7 +1995,7 @@ The type of the response is `"bot"` for bot and `"user"` for user, and "failure"
 
 [index.ts:268](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L268)
 
-___
+---
 
 #### receivedAt
 
@@ -2025,7 +2007,7 @@ When the response was received
 
 [index.ts:272](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L272)
 
-___
+---
 
 #### payload
 
@@ -2036,7 +2018,6 @@ The payload of the response
 ##### Defined in
 
 [index.ts:276](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L276)
-
 
 <a name="interfacesvoicecredentialsmd"></a>
 
@@ -2056,7 +2037,7 @@ Voice Connection URL
 
 [index.ts:566](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L566)
 
-___
+---
 
 #### roomName
 
@@ -2068,7 +2049,7 @@ Voice room name
 
 [index.ts:570](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L570)
 
-___
+---
 
 #### token
 
@@ -2080,7 +2061,7 @@ Voice token
 
 [index.ts:574](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L574)
 
-___
+---
 
 #### participantName
 
@@ -2091,7 +2072,6 @@ Voice participant name
 ##### Defined in
 
 [index.ts:578](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-core/src/index.ts#L578)
-
 
 <a name="interfacesvoiceplusmessagemd"></a>
 

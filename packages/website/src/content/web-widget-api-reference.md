@@ -1,4 +1,3 @@
-
 <a name="readmemd"></a>
 
 # @nlxai/chat-widget
@@ -16,7 +15,7 @@
 
 ### StorageType
 
-Ƭ **StorageType**: ``"localStorage"`` \| ``"sessionStorage"``
+Ƭ **StorageType**: `"localStorage"` \| `"sessionStorage"`
 
 When this option is set to `"localStorage"` or `"sessionStorage"`,
 the state of the chat conversation is persisted in [local](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
@@ -33,20 +32,20 @@ full page refreshes.
 
 [packages/chat-widget/src/props.ts:45](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L45)
 
-___
+---
 
 ### CustomModalityComponent
 
-Ƭ **CustomModalityComponent**\<`T`\>: `ComponentType`\<\{ `key`: `string` ; `data`: `T` ; `conversationHandler`: `ConversationHandler`  }\>
+Ƭ **CustomModalityComponent**\<`T`\>: `ComponentType`\<\{ `key`: `string` ; `data`: `T` ; `conversationHandler`: `ConversationHandler` }\>
 
 Custom Modalities allow rendering of rich components from nodes.
 See: https://docs.studio.nlx.ai/build/resources/modalities
 
 #### Type parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | `unknown` |
+| Name | Type      |
+| :--- | :-------- |
+| `T`  | `unknown` |
 
 #### Defined in
 
@@ -68,19 +67,19 @@ the default theme
 
 ### getCurrentExpirationTimestamp
 
-▸ **getCurrentExpirationTimestamp**(`responses`): ``null`` \| `number`
+▸ **getCurrentExpirationTimestamp**(`responses`): `null` \| `number`
 
 Get current expiration timestamp from the current list of reponses
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name        | Type         | Description                                                                           |
+| :---------- | :----------- | :------------------------------------------------------------------------------------ |
 | `responses` | `Response`[] | the current list of user and bot responses (first argument in the subscribe callback) |
 
 #### Returns
 
-``null`` \| `number`
+`null` \| `number`
 
 an expiration timestamp in Unix Epoch (`new Date().getTime()`), or `null` if this is not known (typically occurs if the bot has not responded yet)
 
@@ -88,7 +87,7 @@ an expiration timestamp in Unix Epoch (`new Date().getTime()`), or `null` if thi
 
 packages/chat-core/lib/index.d.ts:735
 
-___
+---
 
 ### create
 
@@ -98,8 +97,8 @@ Create a new chat widget and renders it as the last element in the body.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name    | Type                          |
+| :------ | :---------------------------- |
 | `props` | [`Props`](#interfacespropsmd) |
 
 #### Returns
@@ -112,7 +111,7 @@ the WidgetInstance to script widget behavior.
 
 [packages/chat-widget/src/index.tsx:114](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/index.tsx#L114)
 
-___
+---
 
 ### clearSession
 
@@ -122,8 +121,8 @@ Clears stored session history.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                          | Description                 |
+| :-------- | :---------------------------- | :-------------------------- |
 | `storeIn` | [`StorageType`](#storagetype) | where to clear the session. |
 
 #### Returns
@@ -134,11 +133,11 @@ Clears stored session history.
 
 [packages/chat-widget/src/index.tsx:357](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/index.tsx#L357)
 
-___
+---
 
 ### useConversationHandler
 
-▸ **useConversationHandler**(): ``null`` \| `ConversationHandler`
+▸ **useConversationHandler**(): `null` \| `ConversationHandler`
 
 Hook to get the ConversationHandler for the widget.
 This may be called before the Widget has been created.
@@ -146,7 +145,7 @@ It will return null until the Widget has been created and the conversation has b
 
 #### Returns
 
-``null`` \| `ConversationHandler`
+`null` \| `ConversationHandler`
 
 the ConversationHandler if the widget has been created and its conversation has been established, otherwise it returns null.
 
@@ -154,7 +153,7 @@ the ConversationHandler if the widget has been created and its conversation has 
 
 [packages/chat-widget/src/index.tsx:480](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/index.tsx#L480)
 
-___
+---
 
 ### Widget
 
@@ -162,8 +161,8 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name    | Type                                                                                     |
+| :------ | :--------------------------------------------------------------------------------------- |
 | `props` | [`Props`](#interfacespropsmd) & `RefAttributes`\<[`WidgetRef`](#interfaceswidgetrefmd)\> |
 
 #### Returns
@@ -174,12 +173,9 @@ ___
 
 [packages/chat-widget/src/index.tsx:484](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/index.tsx#L484)
 
-
 <a name="indexmd"></a>
 
-
 # Interfaces
-
 
 <a name="interfacesnudgemd"></a>
 
@@ -203,7 +199,7 @@ The text content of the nudge. Markdown is supported.
 
 [packages/chat-widget/src/props.ts:78](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L78)
 
-___
+---
 
 #### showAfter
 
@@ -216,7 +212,7 @@ Defaults to 3000 (3s) if not set.
 
 [packages/chat-widget/src/props.ts:83](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L83)
 
-___
+---
 
 #### hideAfter
 
@@ -228,7 +224,6 @@ Defaults to 20000 (20s) if not set.
 ##### Defined in
 
 [packages/chat-widget/src/props.ts:88](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L88)
-
 
 <a name="interfacespropsmd"></a>
 
@@ -248,7 +243,7 @@ The configuration to create a conversation.
 
 [packages/chat-widget/src/props.ts:98](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L98)
 
-___
+---
 
 #### theme
 
@@ -260,7 +255,7 @@ The theme to apply to the chat widget.
 
 [packages/chat-widget/src/props.ts:102](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L102)
 
-___
+---
 
 #### titleBar
 
@@ -272,7 +267,7 @@ How to configure the title bar. When missing, the widget will not have a title b
 
 [packages/chat-widget/src/props.ts:106](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L106)
 
-___
+---
 
 #### chatIcon
 
@@ -284,7 +279,7 @@ If you want a custom chat icon, set this to the URL of an image to use.
 
 [packages/chat-widget/src/props.ts:110](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L110)
 
-___
+---
 
 #### nudge
 
@@ -296,7 +291,7 @@ An optional [Nudge](#interfacesnudgemd) configuration object.
 
 [packages/chat-widget/src/props.ts:114](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L114)
 
-___
+---
 
 #### inputPlaceholder
 
@@ -308,7 +303,7 @@ The placeholder in the input field. When not set, the default placeholder is "Ty
 
 [packages/chat-widget/src/props.ts:118](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L118)
 
-___
+---
 
 #### loaderMessage
 
@@ -320,7 +315,7 @@ A message to display to the user while the bot is still processing the previous 
 
 [packages/chat-widget/src/props.ts:122](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L122)
 
-___
+---
 
 #### showLoaderMessageAfter
 
@@ -332,7 +327,7 @@ How long to wait, in milliseconds, before the loader message is displayed. Defau
 
 [packages/chat-widget/src/props.ts:126](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L126)
 
-___
+---
 
 #### allowChoiceReselection
 
@@ -344,7 +339,7 @@ If set to true, previously selected choices in the chat can be changed.
 
 [packages/chat-widget/src/props.ts:130](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L130)
 
-___
+---
 
 #### storeIn
 
@@ -356,7 +351,7 @@ When set, chat history & conversation will be stored in the browser.
 
 [packages/chat-widget/src/props.ts:134](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L134)
 
-___
+---
 
 #### onExpand
 
@@ -370,8 +365,8 @@ Optional callback to be called when the chat is expanded.
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name                  | Type                  |
+| :-------------------- | :-------------------- |
 | `conversationHandler` | `ConversationHandler` |
 
 ###### Returns
@@ -382,7 +377,7 @@ Optional callback to be called when the chat is expanded.
 
 [packages/chat-widget/src/props.ts:138](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L138)
 
-___
+---
 
 #### onCollapse
 
@@ -396,8 +391,8 @@ Optional callback to be called when the chat is collapsed. This is also called w
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name                  | Type                  |
+| :-------------------- | :-------------------- |
 | `conversationHandler` | `ConversationHandler` |
 
 ###### Returns
@@ -408,7 +403,7 @@ Optional callback to be called when the chat is collapsed. This is also called w
 
 [packages/chat-widget/src/props.ts:142](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L142)
 
-___
+---
 
 #### onClose
 
@@ -428,7 +423,7 @@ Optional callback to be called when the chat is closed via the close button.
 
 [packages/chat-widget/src/props.ts:146](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L146)
 
-___
+---
 
 #### onNudgeClose
 
@@ -442,8 +437,8 @@ Optional callback to be called when the nudge element is closed explicitly by th
 
 ###### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name                  | Type                  |
+| :-------------------- | :-------------------- |
 | `conversationHandler` | `ConversationHandler` |
 
 ###### Returns
@@ -454,7 +449,7 @@ Optional callback to be called when the nudge element is closed explicitly by th
 
 [packages/chat-widget/src/props.ts:150](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L150)
 
-___
+---
 
 #### customModalities
 
@@ -467,13 +462,12 @@ See: https://docs.studio.nlx.ai/build/resources/modalities
 
 [packages/chat-widget/src/props.ts:155](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L155)
 
-
 <a name="interfacesthememd"></a>
 
 ## Interface: Theme
 
 The theme to apply to the chat widget.
- Colors may be in any CSS-compatible format like rgb(50, 50, 50) or #aaa
+Colors may be in any CSS-compatible format like rgb(50, 50, 50) or #aaa
 
 ### Properties
 
@@ -487,7 +481,7 @@ Primary color for interactive UI elements like buttons
 
 [packages/chat-widget/src/theme.ts:7](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/theme.ts#L7)
 
-___
+---
 
 #### darkMessageColor
 
@@ -499,7 +493,7 @@ Background color for the dark chat bubbles (sent by the user)
 
 [packages/chat-widget/src/theme.ts:9](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/theme.ts#L9)
 
-___
+---
 
 #### lightMessageColor
 
@@ -511,7 +505,7 @@ Background color for the light chat bubbles (sent by the application)
 
 [packages/chat-widget/src/theme.ts:11](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/theme.ts#L11)
 
-___
+---
 
 #### white
 
@@ -523,7 +517,7 @@ Customized shade of white
 
 [packages/chat-widget/src/theme.ts:13](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/theme.ts#L13)
 
-___
+---
 
 #### fontFamily
 
@@ -535,7 +529,7 @@ Widget font family
 
 [packages/chat-widget/src/theme.ts:15](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/theme.ts#L15)
 
-___
+---
 
 #### spacing
 
@@ -547,7 +541,7 @@ Main spacing unit
 
 [packages/chat-widget/src/theme.ts:17](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/theme.ts#L17)
 
-___
+---
 
 #### borderRadius
 
@@ -559,7 +553,7 @@ Chat border radius
 
 [packages/chat-widget/src/theme.ts:19](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/theme.ts#L19)
 
-___
+---
 
 #### chatWindowMaxHeight
 
@@ -570,7 +564,6 @@ Max height of the chat window
 ##### Defined in
 
 [packages/chat-widget/src/theme.ts:21](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/theme.ts#L21)
-
 
 <a name="interfacestitlebarmd"></a>
 
@@ -591,7 +584,7 @@ Optional URL to a logo image to be displayed on to the left of the title.
 
 [packages/chat-widget/src/props.ts:13](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L13)
 
-___
+---
 
 #### title
 
@@ -603,20 +596,20 @@ The title string.
 
 [packages/chat-widget/src/props.ts:17](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L17)
 
-___
+---
 
 #### withCollapseButton
 
 • `Optional` **withCollapseButton**: `boolean`
 
-Setting this to true shows the collapse button ("_").
+Setting this to true shows the collapse button ("\_").
 Pressing the collapse button will hide the chat overlay but keep it active.
 
 ##### Defined in
 
 [packages/chat-widget/src/props.ts:22](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L22)
 
-___
+---
 
 #### withCloseButton
 
@@ -624,6 +617,7 @@ ___
 
 Setting this to true shows the close button ("X").
 Pressing the close button will
+
 - hide the chat overlay
 - terminate the ongoing conversation
 - call the chat's onClose handler if provided.
@@ -631,7 +625,6 @@ Pressing the close button will
 ##### Defined in
 
 [packages/chat-widget/src/props.ts:30](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/props.ts#L30)
-
 
 <a name="interfaceswidgetinstancemd"></a>
 
@@ -660,7 +653,7 @@ If you want to additionally clear a stored session, explicitly call [clearSessio
 
 [packages/chat-widget/src/index.tsx:74](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/index.tsx#L74)
 
-___
+---
 
 #### expand
 
@@ -680,7 +673,7 @@ Expand the widget and call the `onExpand` callback if present.
 
 [packages/chat-widget/src/index.tsx:78](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/index.tsx#L78)
 
-___
+---
 
 #### collapse
 
@@ -700,7 +693,7 @@ Collapse the widget and call the `onCollapse` callback if present.
 
 [packages/chat-widget/src/index.tsx:82](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/index.tsx#L82)
 
-___
+---
 
 #### getConversationHandler
 
@@ -721,7 +714,6 @@ See: https://developers.nlx.ai/headless-api-reference#interfacesconversationhand
 ##### Defined in
 
 [packages/chat-widget/src/index.tsx:88](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/index.tsx#L88)
-
 
 <a name="interfaceswidgetrefmd"></a>
 
@@ -749,7 +741,7 @@ Expand the widget and call the `onExpand` callback if present.
 
 [packages/chat-widget/src/index.tsx:98](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/index.tsx#L98)
 
-___
+---
 
 #### collapse
 
@@ -769,7 +761,7 @@ Collapse the widget and call the `onCollapse` callback if present.
 
 [packages/chat-widget/src/index.tsx:102](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/chat-widget/src/index.tsx#L102)
 
-___
+---
 
 #### conversationHandler
 

@@ -1,4 +1,3 @@
-
 <a name="readmemd"></a>
 
 # @nlxai/touchpoint-ui
@@ -32,11 +31,11 @@ Accessibility information
 
 [packages/touchpoint-ui/src/bidirectional/analyzePageForms.ts:9](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/bidirectional/analyzePageForms.ts#L9)
 
-___
+---
 
 ### IconButtonType
 
-Ƭ **IconButtonType**: ``"main"`` \| ``"ghost"`` \| ``"activated"`` \| ``"coverup"`` \| ``"error"`` \| ``"overlay"``
+Ƭ **IconButtonType**: `"main"` \| `"ghost"` \| `"activated"` \| `"coverup"` \| `"error"` \| `"overlay"`
 
 Represents the different types of icon buttons available in the application.
 
@@ -50,11 +49,11 @@ Represents the different types of icon buttons available in the application.
 
 [packages/touchpoint-ui/src/components/ui/IconButton.tsx:16](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L16)
 
-___
+---
 
 ### WindowSize
 
-Ƭ **WindowSize**: ``"half"`` \| ``"full"``
+Ƭ **WindowSize**: `"half"` \| `"full"`
 
 Window size configuration
 
@@ -62,11 +61,11 @@ Window size configuration
 
 [packages/touchpoint-ui/src/types.ts:12](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L12)
 
-___
+---
 
 ### ColorMode
 
-Ƭ **ColorMode**: ``"light"`` \| ``"dark"``
+Ƭ **ColorMode**: `"light"` \| `"dark"`
 
 Color mode configuration (light/dark modes)
 
@@ -74,26 +73,26 @@ Color mode configuration (light/dark modes)
 
 [packages/touchpoint-ui/src/types.ts:17](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L17)
 
-___
+---
 
 ### CustomModalityComponent
 
-Ƭ **CustomModalityComponent**\<`Data`\>: `ComponentType`\<\{ `data`: `Data` ; `conversationHandler`: `ConversationHandler` ; `enabled`: `boolean`  }\>
+Ƭ **CustomModalityComponent**\<`Data`\>: `ComponentType`\<\{ `data`: `Data` ; `conversationHandler`: `ConversationHandler` ; `enabled`: `boolean` }\>
 
 Custom Modalities allow rendering of rich components from nodes.
 See: https://docs.studio.nlx.ai/build/resources/modalities
 
 #### Type parameters
 
-| Name |
-| :------ |
+| Name   |
+| :----- |
 | `Data` |
 
 #### Defined in
 
 [packages/touchpoint-ui/src/types.ts:41](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L41)
 
-___
+---
 
 ### InitializeConversation
 
@@ -107,10 +106,10 @@ Custom conversation init method. Defaults to sending the welcome intent
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `handler` | `ConversationHandler` | the conversation handler. |
-| `context?` | `Context` | context set via TouchpointConfiguration.initialContext |
+| Name       | Type                  | Description                                            |
+| :--------- | :-------------------- | :----------------------------------------------------- |
+| `handler`  | `ConversationHandler` | the conversation handler.                              |
+| `context?` | `Context`             | context set via TouchpointConfiguration.initialContext |
 
 ##### Returns
 
@@ -120,11 +119,11 @@ Custom conversation init method. Defaults to sending the welcome intent
 
 [packages/touchpoint-ui/src/types.ts:175](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L175)
 
-___
+---
 
 ### CustomLaunchButton
 
-Ƭ **CustomLaunchButton**: `ComponentType`\<\{ `className?`: `string` ; `onClick?`: () => `void`  }\>
+Ƭ **CustomLaunchButton**: `ComponentType`\<\{ `className?`: `string` ; `onClick?`: () => `void` }\>
 
 Fully custom launch icon
 
@@ -132,11 +131,11 @@ Fully custom launch icon
 
 [packages/touchpoint-ui/src/types.ts:183](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L183)
 
-___
+---
 
 ### Input
 
-Ƭ **Input**: ``"text"`` \| ``"voice"`` \| ``"voiceMini"``
+Ƭ **Input**: `"text"` \| `"voice"` \| `"voiceMini"`
 
 Input type for the experience
 
@@ -144,11 +143,11 @@ Input type for the experience
 
 [packages/touchpoint-ui/src/types.ts:197](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L197)
 
-___
+---
 
 ### BidirectionalConfig
 
-Ƭ **BidirectionalConfig**: \{ `automaticContext?`: ``true`` ; `navigation?`: (`action`: ``"page_next"`` \| ``"page_previous"`` \| ``"page_custom"``, `destination`: `string` \| `undefined`, `destinations`: `Record`\<`string`, `string`\>) => `void` ; `input?`: (`fields`: \{ `id`: `string` ; `value`: `string`  }[], `pageFields`: `Record`\<`string`, `Element`\>) => `void` ; `custom?`: (`action`: `string`, `payload`: `unknown`) => `void`  } \| \{ `automaticContext`: ``false`` ; `navigation?`: (`action`: ``"page_next"`` \| ``"page_previous"`` \| ``"page_custom"``, `destination?`: `string`) => `void` ; `input?`: (`fields`: \{ `id`: `string` ; `value`: `string`  }[]) => `void` ; `custom?`: (`action`: `string`, `payload`: `unknown`) => `void`  }
+Ƭ **BidirectionalConfig**: \{ `automaticContext?`: `true` ; `navigation?`: (`action`: `"page_next"` \| `"page_previous"` \| `"page_custom"`, `destination`: `string` \| `undefined`, `destinations`: `Record`\<`string`, `string`\>) => `void` ; `input?`: (`fields`: \{ `id`: `string` ; `value`: `string` }[], `pageFields`: `Record`\<`string`, `Element`\>) => `void` ; `custom?`: (`action`: `string`, `payload`: `unknown`) => `void` } \| \{ `automaticContext`: `false` ; `navigation?`: (`action`: `"page_next"` \| `"page_previous"` \| `"page_custom"`, `destination?`: `string`) => `void` ; `input?`: (`fields`: \{ `id`: `string` ; `value`: `string` }[]) => `void` ; `custom?`: (`action`: `string`, `payload`: `unknown`) => `void` }
 
 Configuration for bidirectional mode of voice+.
 
@@ -186,7 +185,7 @@ pageForms
 
 [packages/touchpoint-ui/src/bidirectional/analyzePageForms.ts:71](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/bidirectional/analyzePageForms.ts#L71)
 
-___
+---
 
 ### Ripple
 
@@ -194,12 +193,12 @@ ___
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | `Object` | - |
-| `props.className?` | `string` | - |
-| `props.style?` | `CSSProperties` | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type            | Description                                                                                                                           |
+| :------------------------- | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | `Object`        | -                                                                                                                                     |
+| `props.className?`         | `string`        | -                                                                                                                                     |
+| `props.style?`             | `CSSProperties` | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`           | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 #### Returns
 
@@ -209,7 +208,7 @@ ___
 
 [packages/touchpoint-ui/src/components/Ripple.tsx:24](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/Ripple.tsx#L24)
 
-___
+---
 
 ### Carousel
 
@@ -217,11 +216,11 @@ ___
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | `Object` | - |
-| `props.children` | `ReactNode` | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type        | Description                                                                                                                           |
+| :------------------------- | :---------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | `Object`    | -                                                                                                                                     |
+| `props.children`           | `ReactNode` | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`       | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 #### Returns
 
@@ -231,7 +230,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Carousel.tsx:5](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Carousel.tsx#L5)
 
-___
+---
 
 ### CustomCard
 
@@ -239,10 +238,10 @@ ___
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`CustomCardProps`](#interfacescustomcardpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                              | Description                                                                                                                           |
+| :------------------------- | :------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`CustomCardProps`](#interfacescustomcardpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                             | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 #### Returns
 
@@ -252,7 +251,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/CustomCard.tsx:33](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L33)
 
-___
+---
 
 ### CustomCardImageRow
 
@@ -260,12 +259,12 @@ ___
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | `Object` | - |
-| `props.src` | `string` | - |
-| `props.alt?` | `string` | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type     | Description                                                                                                                           |
+| :------------------------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | `Object` | -                                                                                                                                     |
+| `props.src`                | `string` | -                                                                                                                                     |
+| `props.alt?`               | `string` | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`    | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 #### Returns
 
@@ -275,7 +274,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/CustomCard.tsx:76](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L76)
 
-___
+---
 
 ### CustomCardRow
 
@@ -283,10 +282,10 @@ ___
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`CustomCardRowProps`](#interfacescustomcardrowpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                                    | Description                                                                                                                           |
+| :------------------------- | :------------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`CustomCardRowProps`](#interfacescustomcardrowpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                                   | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 #### Returns
 
@@ -296,7 +295,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/CustomCard.tsx:101](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L101)
 
-___
+---
 
 ### DateInput
 
@@ -304,10 +303,10 @@ ___
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`DateInputProps`](#interfacesdateinputpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                            | Description                                                                                                                           |
+| :------------------------- | :---------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`DateInputProps`](#interfacesdateinputpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                           | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 #### Returns
 
@@ -317,7 +316,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/DateInput.tsx:25](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/DateInput.tsx#L25)
 
-___
+---
 
 ### IconButton
 
@@ -325,10 +324,10 @@ ___
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconButtonProps`](#interfacesiconbuttonpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                              | Description                                                                                                                           |
+| :------------------------- | :------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconButtonProps`](#interfacesiconbuttonpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                             | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 #### Returns
 
@@ -338,7 +337,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/IconButton.tsx:94](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L94)
 
-___
+---
 
 ### TextButton
 
@@ -346,10 +345,10 @@ ___
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`TextButtonProps`](#interfacestextbuttonpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                              | Description                                                                                                                           |
+| :------------------------- | :------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`TextButtonProps`](#interfacestextbuttonpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                             | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 #### Returns
 
@@ -359,7 +358,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/TextButton.tsx:33](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L33)
 
-___
+---
 
 ### BaseText
 
@@ -367,12 +366,12 @@ ___
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | `Object` | - |
-| `props.children` | `ReactNode` | - |
-| `props.faded?` | `boolean` | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type        | Description                                                                                                                           |
+| :------------------------- | :---------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | `Object`    | -                                                                                                                                     |
+| `props.children`           | `ReactNode` | -                                                                                                                                     |
+| `props.faded?`             | `boolean`   | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`       | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 #### Returns
 
@@ -382,7 +381,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Typography.tsx:5](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Typography.tsx#L5)
 
-___
+---
 
 ### SmallText
 
@@ -390,11 +389,11 @@ ___
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | `Object` | - |
-| `props.children` | `ReactNode` | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type        | Description                                                                                                                           |
+| :------------------------- | :---------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | `Object`    | -                                                                                                                                     |
+| `props.children`           | `ReactNode` | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`       | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 #### Returns
 
@@ -404,7 +403,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Typography.tsx:16](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Typography.tsx#L16)
 
-___
+---
 
 ### html
 
@@ -412,10 +411,10 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `strings` | `TemplateStringsArray` |
-| `...values` | `any`[] |
+| Name        | Type                   |
+| :---------- | :--------------------- |
+| `strings`   | `TemplateStringsArray` |
+| `...values` | `any`[]                |
 
 #### Returns
 
@@ -425,7 +424,7 @@ ___
 
 [packages/touchpoint-ui/src/index.tsx:59](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/index.tsx#L59)
 
-___
+---
 
 ### create
 
@@ -435,8 +434,8 @@ Creates a new Touchpoint UI instance and appends it to the document body
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name    | Type                                                              | Description                        |
+| :------ | :---------------------------------------------------------------- | :--------------------------------- |
 | `props` | [`TouchpointConfiguration`](#interfacestouchpointconfigurationmd) | Configuration props for Touchpoint |
 
 #### Returns
@@ -449,7 +448,7 @@ A promise that resolves to a TouchpointInstance
 
 [packages/touchpoint-ui/src/index.tsx:320](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/index.tsx#L320)
 
-___
+---
 
 ### PreviewContainer
 
@@ -457,13 +456,13 @@ ___
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | `Object` | - |
-| `props.children` | `ReactNode` | - |
-| `props.mode` | [`ColorMode`](#colormode) | - |
-| `props.theme` | `Partial`\<[`Theme`](#interfacesthememd)\> | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | `Object`                                   | -                                                                                                                                     |
+| `props.children`           | `ReactNode`                                | -                                                                                                                                     |
+| `props.mode`               | [`ColorMode`](#colormode)                  | -                                                                                                                                     |
+| `props.theme`              | `Partial`\<[`Theme`](#interfacesthememd)\> | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 #### Returns
 
@@ -473,12 +472,9 @@ ___
 
 [packages/touchpoint-ui/src/preview.tsx:10](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/preview.tsx#L10)
 
-
 <a name="indexmd"></a>
 
-
 # Interfaces
-
 
 <a name="interfacescustomcardpropsmd"></a>
 
@@ -498,7 +494,7 @@ Content to be rendered inside the card.
 
 [packages/touchpoint-ui/src/components/ui/CustomCard.tsx:14](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L14)
 
-___
+---
 
 #### selected
 
@@ -510,7 +506,7 @@ Whether the card is in a selected state. Used to highlight the card.
 
 [packages/touchpoint-ui/src/components/ui/CustomCard.tsx:18](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L18)
 
-___
+---
 
 #### onClick
 
@@ -530,7 +526,7 @@ Handler function for when the card is clicked
 
 [packages/touchpoint-ui/src/components/ui/CustomCard.tsx:22](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L22)
 
-___
+---
 
 #### href
 
@@ -542,7 +538,7 @@ Transform the card into an anchor tag with the href specified
 
 [packages/touchpoint-ui/src/components/ui/CustomCard.tsx:26](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L26)
 
-___
+---
 
 #### newTab
 
@@ -553,7 +549,6 @@ Specify whether the URL should take the user to a new tab
 ##### Defined in
 
 [packages/touchpoint-ui/src/components/ui/CustomCard.tsx:30](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L30)
-
 
 <a name="interfacescustomcardrowpropsmd"></a>
 
@@ -573,7 +568,7 @@ Content to be displayed on the left side of the row
 
 [packages/touchpoint-ui/src/components/ui/CustomCard.tsx:90](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L90)
 
-___
+---
 
 #### right
 
@@ -585,7 +580,7 @@ Content to be displayed on the right side of the row
 
 [packages/touchpoint-ui/src/components/ui/CustomCard.tsx:94](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L94)
 
-___
+---
 
 #### icon
 
@@ -596,7 +591,6 @@ Optional icon to be displayed in the center of the row
 ##### Defined in
 
 [packages/touchpoint-ui/src/components/ui/CustomCard.tsx:98](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/CustomCard.tsx#L98)
-
 
 <a name="interfacesdateinputpropsmd"></a>
 
@@ -618,8 +612,8 @@ Handler function called when the date is submitted
 
 ###### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name   | Type     | Description                             |
+| :----- | :------- | :-------------------------------------- |
 | `date` | `string` | The submitted date in YYYY-MM-DD format |
 
 ###### Returns
@@ -629,7 +623,6 @@ Handler function called when the date is submitted
 ##### Defined in
 
 [packages/touchpoint-ui/src/components/ui/DateInput.tsx:16](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/DateInput.tsx#L16)
-
 
 <a name="interfacesiconbuttonpropsmd"></a>
 
@@ -657,7 +650,7 @@ Handler function called when the button is clicked
 
 [packages/touchpoint-ui/src/components/ui/IconButton.tsx:31](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L31)
 
-___
+---
 
 #### label
 
@@ -669,7 +662,7 @@ Accessible label for the button
 
 [packages/touchpoint-ui/src/components/ui/IconButton.tsx:35](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L35)
 
-___
+---
 
 #### className
 
@@ -681,7 +674,7 @@ Additional CSS classes to apply to the button
 
 [packages/touchpoint-ui/src/components/ui/IconButton.tsx:39](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L39)
 
-___
+---
 
 #### type
 
@@ -693,7 +686,7 @@ Visual style variant of the button. One of IconButtonType.
 
 [packages/touchpoint-ui/src/components/ui/IconButton.tsx:43](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L43)
 
-___
+---
 
 #### Icon
 
@@ -704,7 +697,6 @@ Icon component to display inside the button
 ##### Defined in
 
 [packages/touchpoint-ui/src/components/ui/IconButton.tsx:47](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/IconButton.tsx#L47)
-
 
 <a name="interfacesiconsiconpropsmd"></a>
 
@@ -726,7 +718,7 @@ Additional CSS classes to apply to the icon
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:11](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L11)
 
-___
+---
 
 #### size
 
@@ -737,7 +729,6 @@ Custom size in pixels for the icon
 ##### Defined in
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:15](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L15)
-
 
 <a name="interfacesinteractiveelementinfomd"></a>
 
@@ -763,7 +754,6 @@ Form element ID (assigned by the analysis logic, not necessarily equal to the DO
 
 [packages/touchpoint-ui/src/bidirectional/analyzePageForms.ts:18](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/bidirectional/analyzePageForms.ts#L18)
 
-
 <a name="interfacespageformsmd"></a>
 
 ## Interface: PageForms
@@ -782,7 +772,7 @@ Page context
 
 [packages/touchpoint-ui/src/bidirectional/analyzePageForms.ts:28](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/bidirectional/analyzePageForms.ts#L28)
 
-___
+---
 
 #### formElements
 
@@ -793,7 +783,6 @@ Form element references
 ##### Defined in
 
 [packages/touchpoint-ui/src/bidirectional/analyzePageForms.ts:32](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/bidirectional/analyzePageForms.ts#L32)
-
 
 <a name="interfacestextbuttonpropsmd"></a>
 
@@ -821,7 +810,7 @@ Handler function called when the button is clicked
 
 [packages/touchpoint-ui/src/components/ui/TextButton.tsx:13](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L13)
 
-___
+---
 
 #### label
 
@@ -833,7 +822,7 @@ Text to display on the button
 
 [packages/touchpoint-ui/src/components/ui/TextButton.tsx:17](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L17)
 
-___
+---
 
 #### className
 
@@ -845,11 +834,11 @@ Additional CSS classes to apply to the button
 
 [packages/touchpoint-ui/src/components/ui/TextButton.tsx:21](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L21)
 
-___
+---
 
 #### type
 
-• `Optional` **type**: ``"main"`` \| ``"ghost"``
+• `Optional` **type**: `"main"` \| `"ghost"`
 
 Visual style variant of the button
 Default value is "ghost"
@@ -858,7 +847,7 @@ Default value is "ghost"
 
 [packages/touchpoint-ui/src/components/ui/TextButton.tsx:26](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L26)
 
-___
+---
 
 #### Icon
 
@@ -869,7 +858,6 @@ Icon component to display inside the button.
 ##### Defined in
 
 [packages/touchpoint-ui/src/components/ui/TextButton.tsx:30](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/TextButton.tsx#L30)
-
 
 <a name="interfacesthememd"></a>
 
@@ -889,7 +877,7 @@ Font family
 
 [packages/touchpoint-ui/src/types.ts:66](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L66)
 
-___
+---
 
 #### primary80
 
@@ -901,7 +889,7 @@ Primary color with 80% opacity
 
 [packages/touchpoint-ui/src/types.ts:71](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L71)
 
-___
+---
 
 #### primary60
 
@@ -913,7 +901,7 @@ Primary color with 60% opacity
 
 [packages/touchpoint-ui/src/types.ts:75](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L75)
 
-___
+---
 
 #### primary40
 
@@ -925,7 +913,7 @@ Primary color with 40% opacity
 
 [packages/touchpoint-ui/src/types.ts:79](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L79)
 
-___
+---
 
 #### primary20
 
@@ -937,7 +925,7 @@ Primary color with 20% opacity
 
 [packages/touchpoint-ui/src/types.ts:83](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L83)
 
-___
+---
 
 #### primary10
 
@@ -949,7 +937,7 @@ Primary color with 10% opacity
 
 [packages/touchpoint-ui/src/types.ts:87](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L87)
 
-___
+---
 
 #### primary5
 
@@ -961,7 +949,7 @@ Primary color with 5% opacity
 
 [packages/touchpoint-ui/src/types.ts:91](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L91)
 
-___
+---
 
 #### primary1
 
@@ -973,7 +961,7 @@ Primary color with 1% opacity
 
 [packages/touchpoint-ui/src/types.ts:95](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L95)
 
-___
+---
 
 #### secondary80
 
@@ -985,7 +973,7 @@ Secondary color with 80% opacity
 
 [packages/touchpoint-ui/src/types.ts:100](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L100)
 
-___
+---
 
 #### secondary60
 
@@ -997,7 +985,7 @@ Secondary color with 60% opacity
 
 [packages/touchpoint-ui/src/types.ts:104](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L104)
 
-___
+---
 
 #### secondary40
 
@@ -1009,7 +997,7 @@ Secondary color with 40% opacity
 
 [packages/touchpoint-ui/src/types.ts:108](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L108)
 
-___
+---
 
 #### secondary20
 
@@ -1021,7 +1009,7 @@ Secondary color with 20% opacity
 
 [packages/touchpoint-ui/src/types.ts:112](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L112)
 
-___
+---
 
 #### secondary10
 
@@ -1033,7 +1021,7 @@ Secondary color with 10% opacity
 
 [packages/touchpoint-ui/src/types.ts:116](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L116)
 
-___
+---
 
 #### secondary5
 
@@ -1045,7 +1033,7 @@ Secondary color with 5% opacity
 
 [packages/touchpoint-ui/src/types.ts:120](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L120)
 
-___
+---
 
 #### secondary1
 
@@ -1057,7 +1045,7 @@ Secondary color with 1% opacity
 
 [packages/touchpoint-ui/src/types.ts:124](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L124)
 
-___
+---
 
 #### accent
 
@@ -1069,7 +1057,7 @@ Accent color used e.g. for prominent buttons, the loader animation as well as se
 
 [packages/touchpoint-ui/src/types.ts:129](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L129)
 
-___
+---
 
 #### accent20
 
@@ -1081,7 +1069,7 @@ Accent color with 20% opacity
 
 [packages/touchpoint-ui/src/types.ts:133](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L133)
 
-___
+---
 
 #### background
 
@@ -1093,7 +1081,7 @@ The background color of the main Touchpoint interface
 
 [packages/touchpoint-ui/src/types.ts:137](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L137)
 
-___
+---
 
 #### overlay
 
@@ -1105,7 +1093,7 @@ The color of the overlay covering the visible portion of the website when the To
 
 [packages/touchpoint-ui/src/types.ts:141](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L141)
 
-___
+---
 
 #### warningPrimary
 
@@ -1117,7 +1105,7 @@ Primary warning color
 
 [packages/touchpoint-ui/src/types.ts:146](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L146)
 
-___
+---
 
 #### warningSecondary
 
@@ -1129,7 +1117,7 @@ Secondary warning color
 
 [packages/touchpoint-ui/src/types.ts:150](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L150)
 
-___
+---
 
 #### errorPrimary
 
@@ -1141,7 +1129,7 @@ Primary error color
 
 [packages/touchpoint-ui/src/types.ts:154](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L154)
 
-___
+---
 
 #### errorSecondary
 
@@ -1153,7 +1141,7 @@ Secondary error color
 
 [packages/touchpoint-ui/src/types.ts:158](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L158)
 
-___
+---
 
 #### innerBorderRadius
 
@@ -1165,7 +1153,7 @@ Inner border radius: used for most buttons
 
 [packages/touchpoint-ui/src/types.ts:163](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L163)
 
-___
+---
 
 #### outerBorderRadius
 
@@ -1176,7 +1164,6 @@ Outer border radius: generally used for elements that contain buttons that have 
 ##### Defined in
 
 [packages/touchpoint-ui/src/types.ts:167](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L167)
-
 
 <a name="interfacestouchpointconfigurationmd"></a>
 
@@ -1196,7 +1183,7 @@ Connection information for the @nlxai/chat-core conversation handler
 
 [packages/touchpoint-ui/src/types.ts:289](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L289)
 
-___
+---
 
 #### windowSize
 
@@ -1208,7 +1195,7 @@ Optional window size for the chat window, defaults to `half`
 
 [packages/touchpoint-ui/src/types.ts:293](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L293)
 
-___
+---
 
 #### colorMode
 
@@ -1220,7 +1207,7 @@ Optional color mode for the chat window, defaults to `dark`
 
 [packages/touchpoint-ui/src/types.ts:297](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L297)
 
-___
+---
 
 #### brandIcon
 
@@ -1232,7 +1219,7 @@ URL of icon used to display the brand in the chat header
 
 [packages/touchpoint-ui/src/types.ts:301](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L301)
 
-___
+---
 
 #### launchIcon
 
@@ -1246,7 +1233,7 @@ When set to `false`, no launch button is shown at all. When not set or set to `t
 
 [packages/touchpoint-ui/src/types.ts:307](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L307)
 
-___
+---
 
 #### userMessageBubble
 
@@ -1258,7 +1245,7 @@ Specifies whether the user message has bubbles or not
 
 [packages/touchpoint-ui/src/types.ts:311](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L311)
 
-___
+---
 
 #### agentMessageBubble
 
@@ -1270,7 +1257,7 @@ Specifies whether the agent message has bubbles or not
 
 [packages/touchpoint-ui/src/types.ts:315](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L315)
 
-___
+---
 
 #### chatMode
 
@@ -1282,7 +1269,7 @@ Enables chat mode, a classic chat experience with inline loaders and the chat hi
 
 [packages/touchpoint-ui/src/types.ts:319](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L319)
 
-___
+---
 
 #### theme
 
@@ -1294,7 +1281,7 @@ Optional theme object to override default theme values
 
 [packages/touchpoint-ui/src/types.ts:323](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L323)
 
-___
+---
 
 #### customModalities
 
@@ -1306,7 +1293,7 @@ Optional custom modality components to render in Touchpoint
 
 [packages/touchpoint-ui/src/types.ts:327](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L327)
 
-___
+---
 
 #### initializeConversation
 
@@ -1326,19 +1313,19 @@ the context object
 
 [packages/touchpoint-ui/src/types.ts:333](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L333)
 
-___
+---
 
 #### input
 
 • `Optional` **input**: [`Input`](#input)
 
-Controls the ways in which  the user can communicate with the application. Defaults to `"text"`
+Controls the ways in which the user can communicate with the application. Defaults to `"text"`
 
 ##### Defined in
 
 [packages/touchpoint-ui/src/types.ts:337](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L337)
 
-___
+---
 
 #### initialContext
 
@@ -1350,7 +1337,7 @@ Context sent with the initial request.
 
 [packages/touchpoint-ui/src/types.ts:341](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L341)
 
-___
+---
 
 #### bidirectional
 
@@ -1361,7 +1348,6 @@ Enables bidirectional mode of voice+. Will automatically set the bidirectional f
 ##### Defined in
 
 [packages/touchpoint-ui/src/types.ts:347](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/types.ts#L347)
-
 
 <a name="interfacestouchpointinstancemd"></a>
 
@@ -1381,7 +1367,7 @@ Controls whether the Touchpoint UI is expanded or collapsed
 
 [packages/touchpoint-ui/src/index.tsx:304](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/index.tsx#L304)
 
-___
+---
 
 #### conversationHandler
 
@@ -1393,7 +1379,7 @@ The conversation handler instance for interacting with the application
 
 [packages/touchpoint-ui/src/index.tsx:308](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/index.tsx#L308)
 
-___
+---
 
 #### teardown
 
@@ -1414,7 +1400,6 @@ Method to remove the Touchpoint UI from the DOM
 [packages/touchpoint-ui/src/index.tsx:312](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/index.tsx#L312)
 
 # Modules
-
 
 <a name="modulesiconsmd"></a>
 
@@ -1444,10 +1429,10 @@ Type definition for an icon component
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1457,7 +1442,7 @@ Type definition for an icon component
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:29](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L29)
 
-___
+---
 
 #### Touchpoint
 
@@ -1465,10 +1450,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1478,7 +1463,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:40](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L40)
 
-___
+---
 
 #### AssistantOld
 
@@ -1486,10 +1471,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1499,7 +1484,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:67](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L67)
 
-___
+---
 
 #### Add
 
@@ -1507,10 +1492,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1520,7 +1505,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:78](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L78)
 
-___
+---
 
 #### ArrowDown
 
@@ -1528,10 +1513,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1541,7 +1526,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:86](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L86)
 
-___
+---
 
 #### ArrowLeft
 
@@ -1549,10 +1534,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1562,7 +1547,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:97](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L97)
 
-___
+---
 
 #### ArrowRight
 
@@ -1570,10 +1555,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1583,7 +1568,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:108](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L108)
 
-___
+---
 
 #### ArrowUp
 
@@ -1591,10 +1576,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1604,7 +1589,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:119](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L119)
 
-___
+---
 
 #### ArrowForward
 
@@ -1612,10 +1597,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1625,7 +1610,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:130](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L130)
 
-___
+---
 
 #### Attachment
 
@@ -1633,10 +1618,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1646,7 +1631,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:141](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L141)
 
-___
+---
 
 #### Camera
 
@@ -1654,10 +1639,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1667,7 +1652,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:152](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L152)
 
-___
+---
 
 #### Check
 
@@ -1675,10 +1660,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1688,7 +1673,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:167](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L167)
 
-___
+---
 
 #### Close
 
@@ -1696,10 +1681,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1709,7 +1694,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:178](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L178)
 
-___
+---
 
 #### Copy
 
@@ -1717,10 +1702,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1730,7 +1715,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:189](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L189)
 
-___
+---
 
 #### Date
 
@@ -1738,10 +1723,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1751,7 +1736,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:200](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L200)
 
-___
+---
 
 #### Delete
 
@@ -1759,10 +1744,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1772,7 +1757,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:211](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L211)
 
-___
+---
 
 #### Escalate
 
@@ -1780,10 +1765,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1793,7 +1778,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:225](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L225)
 
-___
+---
 
 #### Error
 
@@ -1801,10 +1786,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1814,7 +1799,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:248](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L248)
 
-___
+---
 
 #### FullScreen
 
@@ -1822,10 +1807,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1835,7 +1820,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:259](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L259)
 
-___
+---
 
 #### Mic
 
@@ -1843,10 +1828,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1856,7 +1841,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:270](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L270)
 
-___
+---
 
 #### MicOff
 
@@ -1864,10 +1849,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1877,7 +1862,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:281](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L281)
 
-___
+---
 
 #### Location
 
@@ -1885,10 +1870,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1898,7 +1883,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:292](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L292)
 
-___
+---
 
 #### Volume
 
@@ -1906,10 +1891,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1919,7 +1904,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:303](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L303)
 
-___
+---
 
 #### VolumeOff
 
@@ -1927,10 +1912,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1940,7 +1925,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:314](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L314)
 
-___
+---
 
 #### Translate
 
@@ -1948,10 +1933,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1961,7 +1946,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:325](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L325)
 
-___
+---
 
 #### OpenInNew
 
@@ -1969,10 +1954,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -1982,7 +1967,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:336](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L336)
 
-___
+---
 
 #### Play
 
@@ -1990,10 +1975,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2003,7 +1988,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:347](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L347)
 
-___
+---
 
 #### Preview
 
@@ -2011,10 +1996,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2024,7 +2009,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:355](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L355)
 
-___
+---
 
 #### Reorder
 
@@ -2032,10 +2017,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2045,7 +2030,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:372](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L372)
 
-___
+---
 
 #### Restart
 
@@ -2053,10 +2038,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2066,7 +2051,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:383](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L383)
 
-___
+---
 
 #### Settings
 
@@ -2074,10 +2059,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2087,7 +2072,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:394](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L394)
 
-___
+---
 
 #### Search
 
@@ -2095,10 +2080,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2108,7 +2093,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:405](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L405)
 
-___
+---
 
 #### Share
 
@@ -2116,10 +2101,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2129,7 +2114,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:416](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L416)
 
-___
+---
 
 #### Warning
 
@@ -2137,10 +2122,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2150,7 +2135,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:427](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L427)
 
-___
+---
 
 #### ThumbDown
 
@@ -2158,10 +2143,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2171,7 +2156,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:438](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L438)
 
-___
+---
 
 #### ThumbUp
 
@@ -2179,10 +2164,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2192,7 +2177,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:449](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L449)
 
-___
+---
 
 #### Time
 
@@ -2200,10 +2185,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2213,7 +2198,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:460](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L460)
 
-___
+---
 
 #### Undo
 
@@ -2221,10 +2206,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2234,7 +2219,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:477](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L477)
 
-___
+---
 
 #### Refresh
 
@@ -2242,10 +2227,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2255,7 +2240,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:488](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L488)
 
-___
+---
 
 #### Help
 
@@ -2263,10 +2248,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
@@ -2276,7 +2261,7 @@ ___
 
 [packages/touchpoint-ui/src/components/ui/Icons.tsx:499](https://github.com/nlxai/sdk/blob/0ffb6c1566a0c22d1f12b3a120556d8931f7df65/packages/touchpoint-ui/src/components/ui/Icons.tsx#L499)
 
-___
+---
 
 #### OpenLink
 
@@ -2284,10 +2269,10 @@ ___
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `props` | [`IconProps`](#interfacesiconsiconpropsmd) | - |
-| `deprecatedLegacyContext?` | `any` | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
+| Name                       | Type                                       | Description                                                                                                                           |
+| :------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `props`                    | [`IconProps`](#interfacesiconsiconpropsmd) | -                                                                                                                                     |
+| `deprecatedLegacyContext?` | `any`                                      | **`Deprecated`** **`See`** [React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ##### Returns
 
