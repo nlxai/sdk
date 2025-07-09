@@ -3,8 +3,8 @@
 import type {
   Context,
   ConversationHandler,
-  VoiceCredentials,
   ModalityPayloads,
+  VoiceCredentials,
 } from "@nlxai/chat-core";
 import { useDebouncedState } from "@react-hookz/web";
 import {
@@ -59,6 +59,7 @@ interface VoiceHookReturn {
   isUserSpeaking: boolean;
   isApplicationSpeaking: boolean;
   roomData: null | ModalitiesWithContext;
+  transcription: null | Transcription;
   retry: () => Promise<void>;
 }
 
@@ -67,6 +68,11 @@ interface VoiceHookParams {
   speakersEnabled: boolean;
   handler: ConversationHandler;
   context?: Context;
+}
+
+interface Transcription {
+  identity: string;
+  message: string;
 }
 
 export const useVoice = ({
@@ -95,6 +101,10 @@ export const useVoice = ({
     null,
   );
 
+  const [transcription, setTranscription] = useState<Transcription | null>(
+    null,
+  );
+
   const disconnect = useCallback(async () => {
     const room = roomRef.current;
     if (room == null) {
@@ -107,8 +117,9 @@ export const useVoice = ({
     setAudioElement(null);
     roomRef.current = null;
     setRoomData(null);
+    setTranscription(null);
     await room.disconnect();
-  }, [setRoomData, setAudioElement]);
+  }, [setRoomData, setAudioElement, setTranscription]);
 
   useEffect(() => {
     const room = roomRef.current;
@@ -196,6 +207,23 @@ export const useVoice = ({
         });
       });
 
+      room.registerTextStreamHandler(
+        "lk.transcription",
+        async (reader, participantInfo) => {
+          if (
+            reader?.info?.attributes == null ||
+            reader.info.attributes["lk.transcribed_track_id"] == null
+          ) {
+            return setTranscription(null);
+          }
+
+          const message = await reader.readAll();
+          if (reader.info.attributes["lk.transcribed_track_id"]) {
+            setTranscription({ identity: participantInfo.identity, message });
+          }
+        },
+      );
+
       await room.connect(creds.url, creds.token, { autoSubscribe: true });
 
       await room.localParticipant.setMicrophoneEnabled(true);
@@ -213,6 +241,7 @@ export const useVoice = ({
     setIsApplicationSpeaking,
     setAudioElement,
     setRoomData,
+    setTranscription,
   ]);
 
   const retry = async (): Promise<void> => {
@@ -227,5 +256,12 @@ export const useVoice = ({
     };
   }, [setup, disconnect]);
 
-  return { roomState, isUserSpeaking, isApplicationSpeaking, retry, roomData };
+  return {
+    roomState,
+    isUserSpeaking,
+    isApplicationSpeaking,
+    retry,
+    roomData,
+    transcription,
+  };
 };
