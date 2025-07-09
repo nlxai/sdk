@@ -1,0 +1,19 @@
+{
+  "name": "NLX Platform",
+  "short_name": "NLX Platform",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "rgba(0, 64, 255, 1)",
+  "background_color": "#F2F1F0",
+  "display": "standalone"
+}
