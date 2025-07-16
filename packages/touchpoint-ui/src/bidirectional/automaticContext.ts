@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable jsdoc/require-jsdoc */
 import { computeAccessibleName } from "dom-accessibility-api";
 
