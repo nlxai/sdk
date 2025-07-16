@@ -1,11 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import {
-  useState,
-  type Dispatch,
-  type SetStateAction,
-  type FC,
-  type ReactNode,
-} from "react";
+import { useState, type FC, type ReactNode } from "react";
 import { clsx } from "clsx";
 import type { Context, ConversationHandler } from "@nlxai/chat-core";
 import type {
@@ -28,8 +22,6 @@ interface Props {
   speakersEnabled: boolean;
   brandIcon?: string;
   className?: string;
-  active: boolean;
-  setActive: Dispatch<SetStateAction<boolean>>;
   context?: Context;
   initializeConversation: InitializeConversation;
   customModalities?: Record<string, CustomModalityComponent<unknown>>;

@@ -209,14 +209,15 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     };
   }, [lastBotResponse]);
 
-  const [voiceActive, setVoiceActive] = useState<boolean>(false);
-
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({});
 
   const customModalities = props.customModalities ?? {};
 
   const [fullscreenVoiceSpeakersEnabled, setFullscreenVoiceSpeakersEnabled] =
     useState<boolean>(true);
+
+  // Used as key to voice components so they are destroyed and re-initialized e.g. on conversation reset
+  const [voiceKey, setVoiceKey] = useState<number>(0);
 
   if (handler == null) {
     return null;
@@ -259,6 +260,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         )}
       >
         <VoiceMini
+          key={voiceKey}
           handler={handler}
           context={props.initialContext}
           onClose={() => {
@@ -346,7 +348,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     if (input !== "voice") {
       props.initializeConversation(handler, props.initialContext);
     }
-    setVoiceActive(false);
+    setVoiceKey((prev) => prev + 1);
   };
 
   return (
@@ -372,9 +374,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       >
         <Header
           windowSize={props.embedded ? "embedded" : windowSize}
-          errorThemedCloseButton={input === "voice" && voiceActive}
+          errorThemedCloseButton={input === "voice"}
           speakerControls={
-            input === "voice" && voiceActive
+            input === "voice"
               ? {
                   enabled: fullscreenVoiceSpeakersEnabled,
                   setEnabled: setFullscreenVoiceSpeakersEnabled,
@@ -400,7 +402,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             if (input === "voice") {
               handler.reset({ clearResponses: true });
             }
-            setVoiceActive(false);
             onClose(event);
           }}
           reset={reset}
@@ -428,9 +429,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               />
             ) : null}
             <FullscreenVoice
-              active={voiceActive}
+              key={voiceKey}
               initializeConversation={props.initializeConversation}
-              setActive={setVoiceActive}
               brandIcon={props.brandIcon}
               handler={handler}
               speakersEnabled={fullscreenVoiceSpeakersEnabled}
