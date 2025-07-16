@@ -1,10 +1,41 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable jsdoc/require-jsdoc */
 import { computeAccessibleName } from "dom-accessibility-api";
 
 import type { ConversationHandler } from "@nlxai/chat-core";
 import { analyzePageForms } from "./analyzePageForms";
-import { equals } from "ramda";
+import { equals, uniq } from "ramda";
+
+const debounceAsync = <T extends any[]>(
+  func: (...args: T) => Promise<void>,
+  wait: number = 50,
+  maxWait: number = Infinity,
+) => {
+  let timeout: NodeJS.Timeout | null = null;
+  let firstRequestTime: number | null = null;
+  let lastPromise: Promise<void> = Promise.resolve();
+
+  return (...args: T) => {
+    firstRequestTime ??= Date.now();
+    const call = (): void => {
+      lastPromise = lastPromise.then(async () => {
+        try {
+          await func.apply(null, args);
+        } catch (error) {}
+      });
+      firstRequestTime = null; // Reset the first request time
+    };
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    if (Date.now() - firstRequestTime > maxWait) {
+      call();
+    } else {
+      timeout = setTimeout(() => {
+        call();
+      }, wait);
+    }
+  };
+};
 
 export const gatherAutomaticContext = (
   handler: ConversationHandler,
@@ -26,23 +57,28 @@ export const gatherAutomaticContext = (
       destinations: {},
     },
   };
-  const go = async (): Promise<void> => {
-    const [context, pageState] = gatherContext();
-    if (!equals(previousContext, context)) {
-      try {
-        // eslint-disable-next-line no-console
-        console.debug(
-          "Bidirectional automatic context sent:",
-          context["nlx:vpContext"],
-        );
-        await handler.sendContext(context);
-      } catch (error) {}
-      setPageState(pageState);
-      previousContext = context;
-    }
-  };
 
-  void go();
+  const go = debounceAsync(
+    async () => {
+      const [context, pageState] = gatherContext();
+      if (!equals(previousContext, context)) {
+        try {
+          // eslint-disable-next-line no-console
+          console.debug(
+            "Bidirectional automatic context sent:",
+            context["nlx:vpContext"],
+          );
+          await handler.sendContext(context);
+        } catch (error) {}
+        setPageState(pageState);
+        previousContext = context;
+      }
+    },
+    50,
+    300,
+  );
+
+  go();
 
   const observer = new MutationObserver(go);
   observer.observe(document.body, {
@@ -89,10 +125,12 @@ const analyzePageLinks = (): {
   links: Record<string, string>;
 } => {
   const links = Object.fromEntries(
-    Array.from(document.querySelectorAll("nav a, footer a")).map((link) => [
-      computeAccessibleName(link),
-      link.getAttribute("href") ?? "",
-    ]),
+    uniq(
+      Array.from(document.querySelectorAll("a")).map((link) => [
+        computeAccessibleName(link),
+        link.getAttribute("href") ?? "",
+      ]),
+    ),
   );
 
   return { context: Object.keys(links), links };
