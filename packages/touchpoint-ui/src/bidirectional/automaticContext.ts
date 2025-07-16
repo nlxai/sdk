@@ -6,27 +6,33 @@ import type { ConversationHandler } from "@nlxai/chat-core";
 import { analyzePageForms } from "./analyzePageForms";
 import { equals, uniq } from "ramda";
 
-const debounce = <T extends any[]>(
-  func: (...args: T) => void,
+const debounceAsync = <T extends any[]>(
+  func: (...args: T) => Promise<void>,
   wait: number = 50,
   maxWait: number = Infinity,
 ) => {
   let timeout: NodeJS.Timeout | null = null;
   let firstRequestTime: number | null = null;
+  let lastPromise: Promise<void> = Promise.resolve();
 
   return (...args: T) => {
     firstRequestTime ??= Date.now();
+    const call = (): void => {
+      lastPromise = lastPromise.then(async () => {
+        try {
+          await func.apply(null, args);
+        } catch (error) {}
+      });
+      firstRequestTime = null; // Reset the first request time
+    };
     if (timeout) {
       clearTimeout(timeout);
     }
     if (Date.now() - firstRequestTime > maxWait) {
-      // If the time since the first request exceeds maxWait, call the function immediately
-      func.apply(null, args);
-      firstRequestTime = null; // Reset the first request time
+      call();
     } else {
       timeout = setTimeout(() => {
-        firstRequestTime = null; // Reset the first request time
-        func.apply(null, args);
+        call();
       }, wait);
     }
   };
@@ -53,8 +59,8 @@ export const gatherAutomaticContext = (
     },
   };
 
-  const go = debounce(
-    async (): Promise<void> => {
+  const go = debounceAsync(
+    async () => {
       const [context, pageState] = gatherContext();
       if (!equals(previousContext, context)) {
         try {

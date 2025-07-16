@@ -233,6 +233,7 @@ class NlxTouchpointElement extends HTMLElement {
       const configuration = normalizeConfiguration(
         this.#touchpointConfiguration,
       );
+
       this.#root.render(
         <>
           <style>{cssRaw}</style>
@@ -321,9 +322,6 @@ export const create = (
   props: TouchpointConfiguration,
   // eslint-disable-next-line @typescript-eslint/promise-function-async
 ): Promise<TouchpointInstance> => {
-  if (props.bidirectional != null) {
-    props.config.bidirectional = true;
-  }
   return new Promise((resolve) => {
     const element: any = document.createElement("nlx-touchpoint");
     element.embedded = false;
