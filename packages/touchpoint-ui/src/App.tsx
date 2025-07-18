@@ -219,6 +219,14 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   // Used as key to voice components so they are destroyed and re-initialized e.g. on conversation reset
   const [voiceKey, setVoiceKey] = useState<number>(0);
 
+  const reset = (): void => {
+    handler.reset({ clearResponses: true });
+    if (input !== "voice") {
+      props.initializeConversation(handler, props.initialContext);
+    }
+    setVoiceKey((prev) => prev + 1);
+  };
+
   if (handler == null) {
     return null;
   }
@@ -268,6 +276,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           }}
           renderCollapse={props.onClose != null}
           customModalities={customModalities}
+          reset={reset}
         />
       </CustomPropertiesContainer>
     );
@@ -341,14 +350,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         </div>
       </>
     );
-  };
-
-  const reset = (): void => {
-    handler.reset({ clearResponses: true });
-    if (input !== "voice") {
-      props.initializeConversation(handler, props.initialContext);
-    }
-    setVoiceKey((prev) => prev + 1);
   };
 
   return (
