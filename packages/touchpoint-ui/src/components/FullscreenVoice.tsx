@@ -75,7 +75,7 @@ export const VoiceModalities: FC<{
 };
 
 const VoiceModalitiesWrapper: FC<{ children: ReactNode }> = ({ children }) => (
-  <div className="absolute top-4 left-4 right-4">{children}</div>
+  <div className="absolute top-4 left-4 right-4 z-10">{children}</div>
 );
 
 export const FullscreenVoice: FC<Props> = ({
