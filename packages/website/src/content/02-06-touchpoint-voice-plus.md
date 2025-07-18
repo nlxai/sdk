@@ -41,7 +41,7 @@ const touchpoint = await create(touchpointOptions);
 
 ### Voice Commands Concepts
 
-Enhanced Voice Plus supports three command types:
+Enhanced Voice+ supports three command types:
 
 | Classification | Actions                                     | Description                          |
 | -------------- | ------------------------------------------- | ------------------------------------ |
@@ -348,7 +348,7 @@ A comprehensive example implementing voice-driven form filling, navigation:
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Enhanced Voice Plus Example</title>
+    <title>Enhanced Voice+ Example</title>
     <style>
       @keyframes highlight {
         0% {
@@ -361,7 +361,7 @@ A comprehensive example implementing voice-driven form filling, navigation:
     </style>
   </head>
   <body>
-    <h1>Enhanced Voice Plus Demo</h1>
+    <h1>Enhanced Voice+ Demo</h1>
 
     <form id="contact-form">
       <input
