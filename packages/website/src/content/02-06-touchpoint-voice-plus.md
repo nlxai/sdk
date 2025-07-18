@@ -1,19 +1,22 @@
 - [Getting Started](#getting-started)
-- [Voice Commands Concepts](#voice-commands-concepts)
-- [Sending Page Context](#sending-page-context)
-  - [When to Send Context](#when-to-send-context)
-  - [Best Practices](#best-practices)
-  - [Sending Context Example](#sending-context-example)
-- [Navigation Command Handler](#navigation-command-handler)
+  - [Voice Commands Concepts](#voice-commands-concepts)
+- [Voice+ Page Navigation](#voice-page-navigation)
+  - [Ensuring Persistence During Navigation](#ensuring-persistence-during-navigation)
   - [Payload from NLX](#payload-from-nlx)
-  - [Sample Handler](#sample-handler)
-- [Form Fill Command Handler](#form-fill-command-handler)
+  - [Sample Custom Navigation Handler](#sample-custom-navigation-handler)
+- [Voice+ Form Fill](#voice-form-fill)
+  - [Customizing Form Fill Behavior](#customizing-form-fill-behavior)
   - [Payload from NLX](#payload-from-nlx-1)
-  - [Sample Handler](#sample-handler-1)
-- [Custom Command Handler](#custom-command-handler)
+  - [Sample Custom Form Handler](#sample-custom-form-handler)
+- [Voice+ Knowledge Base Enhanced Responses](#voice-knowledge-base-enhanced-responses)
   - [Enriching the Knowledge Base](#enriching-the-knowledge-base)
   - [Example Payloads](#example-payloads)
-  - [Sample Handler](#sample-handler-2)
+  - [Sample Knowledge Base Response Handler](#sample-knowledge-base-response-handler)
+- [Sending Page Context](#sending-page-context)
+  - [Directly Sending Page Context](#directly-sending-page-context)
+    - [Best Practices](#best-practices)
+  - [When to Send Context](#when-to-send-context)
+  - [Sending Context Example](#sending-context-example)
 - [Complete Custom Implementation Example](#complete-custom-implementation-example)
 
 ## Getting Started
@@ -36,7 +39,7 @@ const touchpointOptions = {
 const touchpoint = await create(touchpointOptions);
 ```
 
-## Voice Commands Concepts
+### Voice Commands Concepts
 
 Enhanced Voice Plus supports three command types:
 
@@ -46,76 +49,18 @@ Enhanced Voice Plus supports three command types:
 | `input`        | Form field updates                          | Fill form fields with voice data     |
 | `custom`       | Application-specific                        | Custom commands defined by your flow |
 
-## Sending Page Context
 
-Provide NLX with information about your page structure using the Voice Plus context API. This powers the input / formfill commands for NLX to have context of which fields are available and their types.
+## Voice+ Page Navigation
 
-The `analyzePageForms` function scans your page for form elements and returns two important objects:
+Touchpoint has default handlers for bidirectional voice+ commands from the user such as "page back", "next page", and basic "navigate to the {} page". 
 
-```js
-import { analyzePageForms } from "@nlxai/touchpoint-ui";
-// Analyze forms on the current page
-const { context, formElements } = analyzePageForms();
-```
+### Ensuring Persistence During Navigation 
 
-### When to Send Context
-
-1. **On page load** - Send initial context after touchpoint initialization
-2. **On route changes** - In SPAs, resend context when navigating to new pages
-3. **After dynamic form updates** - If forms are added/removed dynamically
-4. **After significant DOM changes** - When form structure changes
-
-### Best Practices
-
-- Always store the `formElements` reference for use in your command handlers
-- Re-analyze and resend context when your page structure changes
-- Use good form accessibility practices such as [labeling fields](https://www.w3.org/WAI/tutorials/forms/labels/)
-- Provide [form instructions](https://www.w3.org/WAI/tutorials/forms/instructions/) for better voice recognition
-
-### Sending Context Example
-
-```touchpointui
-import { create, analyzePageForms } from "@nlxai/touchpoint-ui";
-
-const touchpointOptions = {
-  config: {
-    applicationUrl: "YOUR_APPLICATION_URL",
-    headers: {
-      "nlx-api-key": "YOUR_API_KEY",
-    },
-    languageCode: "en-US",
-  },
-  input: "voiceMini", // Enables voice input with bidirectional support
-  bidirectional: {
-    automaticContext: false,
-  }, // Explicitly enable bidirectional mode.
-};
-
-const touchpoint = await create(touchpointOptions);
-
-const { context, formElements } = analyzePageForms();
-// Store formElements for later use when handling commands
-window.formElements = formElements; // or use state management
-
-// Array of destinations for navigation commands
-const destinations = ["about", "contact", "pricing"];
-
-touchpoint.conversationHandler.sendContext({
-  "nlx:vpContext": {
-    url: window.location.origin,
-    fields: context,
-    destinations: destinations,
-  },
-});
-```
-
-## Navigation Command Handler
-
-Customize the handler for voice-driven navigation between pages:
+If you are using a framework like [React](https://reactrouter.com/api/components/Navigate#navigate), [Vue](https://vuejs.org/guide/extras/ways-of-using-vue#single-page-application-spa), or [Angular](https://angular.dev/guide/routing/navigate-to-routes#), you should use their respective routing libraries to handle navigation in a custom navigation handler.
 
 ### Payload from NLX
 
-| Key           | Value                                       | Description                             |
+| Key           | Example Value                                       | Description                             |
 | ------------- | ------------------------------------------- | --------------------------------------- |
 | `action`      | `page_next`, `page_previous`, `page_custom` | Type of navigation action               |
 | `destination` | `/about`                                    | Relative or absolute URL to navigate to |
@@ -130,11 +75,9 @@ Customize the handler for voice-driven navigation between pages:
 }
 ```
 
-### Sample Handler
+### Sample Custom Navigation Handler
 
-Touchpoint includes an application-agnostic navigation handler built in to the SDK that leverages `window` based navigation.
-
-If you are using a framework like React, Vue, or Angular, you would use their respective routing libraries to handle navigation in a custom navigation handler.
+Touchpoint includes an application-agnostic navigation handler built in to the SDK that leverages `window` based navigation. If you're using a web framework or would like to change routing behavior, you will build your own navigation handler.
 
 ```touchpointui
 function handleNavigation(action, destination) {
@@ -149,6 +92,10 @@ function handleNavigation(action, destination) {
       window.history.back();
       break;
 
+    /**
+    * If you are using a framework like React, Vue, or Angular. 
+    * Use their respective routing libraries to handle navigation.
+    **/ 
     case "page_custom":
       // Handle relative or absolute navigation
       if (destination.startsWith("/")) {
@@ -171,17 +118,18 @@ const touchpointOptions = {
   },
   input: "voiceMini", // Enables voice input with bidirectional support
   bidirectional: {
-    automaticContext: false,
     navigation: handleNavigation,
-  }, // Explicitly enable bidirectional mode.
+  },
 };
 ```
 
-## Form Fill Command Handler
+## Voice+ Form Fill
 
 Touchpoint includes an application-agnostic form-input handler built in to the SDK that sets the values received from NLX during a conversation.
 
-To customize the formfill behavior build and specify a custom input handler. NLX will send input commands with field IDs that match the IDs from your `formElements` object returned from analyzePageForms():
+### Customizing Form Fill Behavior 
+
+To customize the formfill behavior build and specify a custom input handler. NLX will send input commands with field IDs that match the IDs from your `formElements` object returned from analyzePageForms().
 
 **Important Notes:**
 
@@ -211,7 +159,7 @@ To customize the formfill behavior build and specify a custom input handler. NLX
 }
 ```
 
-### Sample Handler
+### Sample Custom Form Handler
 
 ```touchpointui
 function handleFormInput(fields, formElements) {
@@ -241,7 +189,7 @@ const touchpointOptions = {
 };
 ```
 
-## Custom Command Handler
+## Voice+ Knowledge Base Enhanced Responses
 
 Implement application-specific voice commands by attaching a knowledge base to your Voice+ node in the flow builder. This allows you to define custom actions that can be triggered by voice commands.
 
@@ -299,7 +247,7 @@ I will receive **TWO** payloads from NLX when this article is triggered, one for
 }
 ```
 
-### Sample Handler
+### Sample Knowledge Base Response Handler
 
 ```touchpointui
 function handleCustomCommand(action, payload) {
@@ -321,8 +269,76 @@ const touchpointOptions = {
   input: "voiceMini", // Enables voice input with bidirectional support
   bidirectional: {
     custom: handleCustomCommand,
-  }, // Explicitly enable bidirectional mode.
+  },
 };
+```
+
+## Sending Page Context
+
+Touchpoint provides NLX with information about your page structure on page load, after filling forms, and on page refresh. All available forms information and any available href links found on the page are analyzed by NLX and then used to send payloads and smalltalk during user interactions. 
+
+### Directly Sending Page Context
+
+You shouldn't need to send context for basic bidirectional Voice+ interactions. If you have other page interactions that change the DOM, you should send the context manually after processing those changes.
+
+The `analyzePageForms` function scans your page for form elements and returns two important objects:
+
+```js
+import { analyzePageForms } from "@nlxai/touchpoint-ui";
+// Analyze forms on the current page
+const { context, formElements } = analyzePageForms();
+```
+
+#### Best Practices
+
+- Always store the `formElements` reference for use in your command handlers
+- Re-analyze and resend context when your page structure changes
+- Use good form accessibility practices such as [labeling fields](https://www.w3.org/WAI/tutorials/forms/labels/)
+- Provide [form instructions](https://www.w3.org/WAI/tutorials/forms/instructions/) for better voice recognition
+
+
+### When to Send Context
+
+1. **On page load** - Send initial context after touchpoint initialization
+2. **On route changes** - In SPAs, resend context when navigating to new pages
+3. **After dynamic form updates** - If forms are added/removed dynamically
+4. **After significant DOM changes** - When form structure changes
+
+### Sending Context Example
+
+```touchpointui
+import { create, analyzePageForms } from "@nlxai/touchpoint-ui";
+
+const touchpointOptions = {
+  config: {
+    applicationUrl: "YOUR_APPLICATION_URL",
+    headers: {
+      "nlx-api-key": "YOUR_API_KEY",
+    },
+    languageCode: "en-US",
+  },
+  input: "voiceMini", // Enables voice input with bidirectional support
+  bidirectional: {
+    automaticContext: false,
+  }, 
+};
+
+const touchpoint = await create(touchpointOptions);
+
+const { context, formElements } = analyzePageForms();
+// Store formElements for later use when handling commands
+window.formElements = formElements; // or use state management
+
+// Array of destinations for navigation commands
+const destinations = ["about", "contact", "pricing"];
+
+touchpoint.conversationHandler.sendContext({
+  "nlx:vpContext": {
+    url: window.location.origin,
+    fields: context,
+    destinations: destinations,
+  },
+});
 ```
 
 ## Complete Custom Implementation Example
@@ -373,10 +389,8 @@ A comprehensive example implementing voice-driven form filling, navigation:
         create,
         React,
         html,
-      } from "https://unpkg.com/@nlxai/touchpoint-ui@1.1.3/lib/index.js?module";
-
-      // Initialize Enhanced Voice Plus with bidirectional support
-      let formElements = {};
+        analyzePageForms,
+      } from "https://unpkg.com/@nlxai/touchpoint-ui@1.1.5/lib/index.js?module";
 
       async function initializeVoicePlus() {
         // Create touchpoint with voiceMini and bidirectional enabled
@@ -384,48 +398,25 @@ A comprehensive example implementing voice-driven form filling, navigation:
           config: {
             applicationUrl: "YOUR_APPLICATION_URL",
             headers: {
-              "nlx-api-key": "YOUR_API_KEY",
+              "nlx-api-key": "YOUR_API_KEY"
             },
             languageCode: "en-US",
           },
           input: "voiceMini",
           bidirectional: {
-            automaticContext: false,
             navigation: handleNavigation,
             input: handleFormInput,
             custom: handleCustom,
           },
         });
 
-        // Send initial page context
-        sendPageContext(touchpoint);
-
-        // Set up voice command handler
-        setupCommandHandler(touchpoint);
-
         return touchpoint;
       }
 
-      // Send page context to NLX
-      function sendPageContext(touchpoint) {
-        const { context, formElements: elements } = analyzePageForms();
-        formElements = elements;
-
-        // Array of destinations for navigation commands
-        const destinations = ["home", "about", "contact", "products"];
-
-        // Send context using the new sendContext method
-        touchpoint.conversationHandler.sendContext({
-          "nlx:vpContext": {
-            url: window.location.origin,
-            fields: context,
-            destinations: destinations,
-          },
-        });
-      }
 
       // Handle navigation commands
       function handleNavigation(action, destination) {
+        console.log("Navigation command:", action, destination);
         switch (action) {
           case "page_next":
             window.history.forward();
@@ -447,7 +438,8 @@ A comprehensive example implementing voice-driven form filling, navigation:
       }
 
       // Handle form input commands with new structure
-      function handleFormInput(fields) {
+      function handleFormInput(fields, formElements) {
+        console.log("Form input fields received:", fields);
         fields.forEach((field) => {
           if (formElements[field.id]) {
             const element = formElements[field.id];
@@ -466,7 +458,7 @@ A comprehensive example implementing voice-driven form filling, navigation:
       }
 
       // Handle custom commands
-      function handleCustomCommand(action, payload) {
+      function handleCustom(action, payload) {
         console.log("Custom command:", action, payload);
 
         // Example: Handle custom search command
@@ -475,7 +467,6 @@ A comprehensive example implementing voice-driven form filling, navigation:
           console.log("Searching for:", payload.query);
         }
       }
-
       // Initialize when page loads
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", initializeVoicePlus);
