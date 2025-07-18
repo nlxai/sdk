@@ -49,18 +49,17 @@ Enhanced Voice Plus supports three command types:
 | `input`        | Form field updates                          | Fill form fields with voice data     |
 | `custom`       | Application-specific                        | Custom commands defined by your flow |
 
-
 ## Voice+ Page Navigation
 
-Touchpoint has default handlers for bidirectional voice+ commands from the user such as "page back", "next page", and basic "navigate to the {} page". 
+Touchpoint has default handlers for bidirectional voice+ commands from the user such as "page back", "next page", and basic "navigate to the {} page".
 
-### Ensuring Persistence During Navigation 
+### Ensuring Persistence During Navigation
 
 If you are using a framework like [React](https://reactrouter.com/api/components/Navigate#navigate), [Vue](https://vuejs.org/guide/extras/ways-of-using-vue#single-page-application-spa), or [Angular](https://angular.dev/guide/routing/navigate-to-routes#), you should use their respective routing libraries to handle navigation in a custom navigation handler.
 
 ### Payload from NLX
 
-| Key           | Example Value                                       | Description                             |
+| Key           | Example Value                               | Description                             |
 | ------------- | ------------------------------------------- | --------------------------------------- |
 | `action`      | `page_next`, `page_previous`, `page_custom` | Type of navigation action               |
 | `destination` | `/about`                                    | Relative or absolute URL to navigate to |
@@ -93,9 +92,9 @@ function handleNavigation(action, destination) {
       break;
 
     /**
-    * If you are using a framework like React, Vue, or Angular. 
+    * If you are using a framework like React, Vue, or Angular.
     * Use their respective routing libraries to handle navigation.
-    **/ 
+    **/
     case "page_custom":
       // Handle relative or absolute navigation
       if (destination.startsWith("/")) {
@@ -127,7 +126,7 @@ const touchpointOptions = {
 
 Touchpoint includes an application-agnostic form-input handler built in to the SDK that sets the values received from NLX during a conversation.
 
-### Customizing Form Fill Behavior 
+### Customizing Form Fill Behavior
 
 To customize the formfill behavior build and specify a custom input handler. NLX will send input commands with field IDs that match the IDs from your `formElements` object returned from analyzePageForms().
 
@@ -275,7 +274,7 @@ const touchpointOptions = {
 
 ## Sending Page Context
 
-Touchpoint provides NLX with information about your page structure on page load, after filling forms, and on page refresh. All available forms information and any available href links found on the page are analyzed by NLX and then used to send payloads and smalltalk during user interactions. 
+Touchpoint provides NLX with information about your page structure on page load, after filling forms, and on page refresh. All available forms information and any available href links found on the page are analyzed by NLX and then used to send payloads and smalltalk during user interactions.
 
 ### Directly Sending Page Context
 
@@ -295,7 +294,6 @@ const { context, formElements } = analyzePageForms();
 - Re-analyze and resend context when your page structure changes
 - Use good form accessibility practices such as [labeling fields](https://www.w3.org/WAI/tutorials/forms/labels/)
 - Provide [form instructions](https://www.w3.org/WAI/tutorials/forms/instructions/) for better voice recognition
-
 
 ### When to Send Context
 
@@ -320,7 +318,7 @@ const touchpointOptions = {
   input: "voiceMini", // Enables voice input with bidirectional support
   bidirectional: {
     automaticContext: false,
-  }, 
+  },
 };
 
 const touchpoint = await create(touchpointOptions);
@@ -398,7 +396,7 @@ A comprehensive example implementing voice-driven form filling, navigation:
           config: {
             applicationUrl: "YOUR_APPLICATION_URL",
             headers: {
-              "nlx-api-key": "YOUR_API_KEY"
+              "nlx-api-key": "YOUR_API_KEY",
             },
             languageCode: "en-US",
           },
@@ -412,7 +410,6 @@ A comprehensive example implementing voice-driven form filling, navigation:
 
         return touchpoint;
       }
-
 
       // Handle navigation commands
       function handleNavigation(action, destination) {
