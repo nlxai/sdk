@@ -218,7 +218,7 @@ export type BidirectionalConfig =
        * @param destinations - A map of destination names to URLs for custom navigation. Only present if `automaticContext` is enabled.
        */
       navigation?: (
-        action: "page_next" | "page_previous" | "page_custom",
+        action: "page_next" | "page_previous" | "page_custom" | "page_unknown",
         destination: string | undefined,
         destinations: Record<string, string>,
       ) => void;
@@ -260,7 +260,7 @@ export type BidirectionalConfig =
        * @param destination - The name of the destination to navigate to if `action` is `"page_custom"`.
        */
       navigation?: (
-        action: "page_next" | "page_previous" | "page_custom",
+        action: "page_next" | "page_previous" | "page_custom" | "page_unknown",
         destination?: string,
       ) => void;
       /**

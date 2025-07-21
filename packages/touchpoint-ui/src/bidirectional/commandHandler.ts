@@ -1,6 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import type { ConversationHandler } from "@nlxai/chat-core";
 import type { BidirectionalConfig } from "../types";
+import { debug } from "./debug";
 
 export const commandHandler = (
   handler: ConversationHandler,
@@ -13,11 +14,16 @@ export const commandHandler = (
   },
 ) => {
   const impl = (event: any): void => {
+    debug("Command received", event);
     switch (event.classification) {
       case "navigation":
         if (bidirectional.navigation != null) {
           bidirectional.navigation(
-            event.action as "page_next" | "page_previous" | "page_custom",
+            event.action as
+              | "page_next"
+              | "page_previous"
+              | "page_custom"
+              | "page_unknown",
             event.destination as string | undefined,
             pageState.current.links,
           );
@@ -35,9 +41,24 @@ export const commandHandler = (
                 const url = pageState.current.links[event.destination];
                 if (url != null) {
                   window.location.href = url;
+                } else {
+                  try {
+                    // eslint-disable-next-line no-new -- Throws an error if the URL is invalid
+                    new URL(event.destination as string);
+                    window.location.href = event.destination as string;
+                  } catch (error) {
+                    debug(
+                      `Custom page navigation action received, but no URL found for destination".`,
+                      event.destination,
+                    );
+                  }
                 }
               }
               break;
+            case "page_unknown":
+              debug(
+                "Unknown page navigation action received, no automatic handling available.",
+              );
           }
         }
         break;
