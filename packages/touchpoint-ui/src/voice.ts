@@ -91,6 +91,8 @@ export const useVoice = ({
 
   const trackRef = useRef<RemoteTrack | null>(null);
 
+  const streamRef = useRef<MediaStream | null>(null);
+
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(
     null,
   );
@@ -103,6 +105,12 @@ export const useVoice = ({
     if (trackRef.current != null) {
       trackRef.current.stop();
       trackRef.current = null;
+    }
+    if (streamRef.current != null) {
+      streamRef.current.getTracks().forEach((track) => {
+        track.stop();
+      });
+      streamRef.current = null;
     }
     setAudioElement(null);
     roomRef.current = null;
@@ -167,7 +175,7 @@ export const useVoice = ({
       roomRef.current = room;
 
       // prompt for permissions
-      await navigator.mediaDevices.getUserMedia({
+      streamRef.current = await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
 
