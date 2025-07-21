@@ -233,7 +233,7 @@ export const Content: FC<unknown> = () => {
           const touchpointConfig = generateAndSetUserId(config);
 
           if (input === "voiceMini" && bidirectional) {
-            // Handle bidirectional voice+ setup
+            // Handle bidirectional Voice+ setup
             touchpointInstance.current = await create({
               config: {
                 ...touchpointConfig,
