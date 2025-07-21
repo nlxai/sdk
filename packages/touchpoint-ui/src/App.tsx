@@ -85,6 +85,12 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       if (props.onClose != null) {
         props.onClose(event);
         sessionStorage.removeItem("nlxActiveVoiceConversationId");
+        // In text mode, collapsing should leave the conversation intact so re-expanding fully resumes it.
+        // In voice, the behavior is designed to be consistent with voice mini, where the close button also hangs up the call.
+        // Subsequently re-expanding the experience should start a brand new call.
+        if (input === "voice" || input === "voiceMini") {
+          handler.reset({ clearResponses: true });
+        }
         if (!event.defaultPrevented) {
           setIsExpanded(false);
         }
@@ -276,7 +282,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           }}
           renderCollapse={props.onClose != null}
           customModalities={customModalities}
-          reset={reset}
         />
       </CustomPropertiesContainer>
     );
@@ -396,15 +401,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               : undefined
           }
           renderCollapse={props.onClose != null}
-          collapse={(event) => {
-            // In text mode, collapsing should leave the conversation intact so re-expanding fully resumes it.
-            // In voice, the behavior is designed to be consistent with voice mini, where the close button also hangs up the call.
-            // Subsequently re-expanding the experience should start a brand new call.
-            if (input === "voice") {
-              handler.reset({ clearResponses: true });
-            }
-            onClose(event);
-          }}
+          collapse={onClose}
           reset={reset}
         />
         {input === "text" ? (
