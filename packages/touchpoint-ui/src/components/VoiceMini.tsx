@@ -8,15 +8,7 @@ import { useVoice } from "../voice";
 import { LoaderAnimation } from "./ui/Loader";
 import { Ripple } from "./Ripple";
 import { IconButton } from "./ui/IconButton";
-import {
-  Close,
-  Mic,
-  MicOff,
-  Volume,
-  VolumeOff,
-  Restart,
-  Undo,
-} from "./ui/Icons";
+import { Close, Mic, MicOff, Volume, VolumeOff, Restart } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
 import { VoiceModalities } from "./FullscreenVoice";
 import { ErrorMessage } from "./ErrorMessage";
