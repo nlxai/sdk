@@ -8,15 +8,7 @@ import { useVoice } from "../voice";
 import { LoaderAnimation } from "./ui/Loader";
 import { Ripple } from "./Ripple";
 import { IconButton } from "./ui/IconButton";
-import {
-  Close,
-  Mic,
-  MicOff,
-  Volume,
-  VolumeOff,
-  Restart,
-  Undo,
-} from "./ui/Icons";
+import { Close, Mic, MicOff, Volume, VolumeOff, Restart } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
 import { VoiceModalities } from "./FullscreenVoice";
 import { ErrorMessage } from "./ErrorMessage";
@@ -65,20 +57,12 @@ const VoiceModalitiesWrapper: FC<{ children: ReactNode }> = ({ children }) => (
 );
 
 export const VoiceMini: FC<{
-  reset: () => void;
   customModalities: Record<string, CustomModalityComponent<unknown>>;
   handler: ConversationHandler;
   renderCollapse: boolean;
   onClose: (event: Event) => void;
   context?: Context;
-}> = ({
-  handler,
-  context,
-  onClose,
-  customModalities,
-  renderCollapse,
-  reset,
-}) => {
+}> = ({ handler, context, onClose, customModalities, renderCollapse }) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
   const [speakersEnabled, setSpeakersEnabled] = useState<boolean>(true);
 
@@ -162,7 +146,6 @@ export const VoiceMini: FC<{
           }}
         />
       </div>
-      <IconButton label="Reset" type="ghost" onClick={reset} Icon={Undo} />
       <IconButton
         label="Close"
         Icon={Close}
