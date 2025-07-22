@@ -59,17 +59,17 @@ If you are using a framework like [React](https://reactrouter.com/api/components
 
 ### Payload from NLX
 
-| Key           | Example Value                               | Description                                                                      |
-| ------------- | ------------------------------------------- | -------------------------------------------------------------------------------- |
-| `action`      | `page_next`, `page_previous`, `page_custom` | Type of navigation action                                                        |
-| `destination` | `/about`, `home page`, `https://google.com` | Navigation object to navigate to.<br>A URL slug `/`<br>Link Text<br>Absolute URL |
+| Key           | Example Value                                   | Description                                                             |
+| ------------- | ----------------------------------------------- | ----------------------------------------------------------------------- |
+| `action`      | `page_next`, `page_previous`, `page_custom`     | Type of navigation action                                               |
+| `destination` | `/about`<br>`home page`<br>`https://google.com` | A URL slug starting with `/`<br>The URL Text<br>Absolute URL `https://` |
 
 **Example Payload:**
 
 ```json
 {
   "classification": "navigation",
-  "action": "page_next",
+  "action": "page_custom",
   "destination": "/about"
 }
 ```
