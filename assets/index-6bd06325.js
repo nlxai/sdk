@@ -1081,7 +1081,7 @@ Touchpoint UI provides a customizable chat interface that you can embed in your 
 You can try your applications directly on this configuration page. Then you can copy the code snippet to your HTML file.
 `,QB=({config:e,theme:t,input:n,colorMode:r,templateComponents:a,bidirectional:i})=>`
 
-### Setup snippet${a==="museumComponents"?": Museum template":n==="voiceMini"&&i?": Bidirectional Voice Plus template":""}
+### Setup snippet${a==="museumComponents"?": Museum template":n==="voiceMini"&&i?": Bidirectional Voice+ template":""}
 
 \`\`\`touchpointui
 ${kpe({config:e,theme:t,input:n,colorMode:r,templateComponents:a,bidirectional:i})}
@@ -1990,7 +1990,7 @@ const touchpoint = await create(touchpointOptions);
 
 ### Voice Commands Concepts
 
-Enhanced Voice Plus supports three command types:
+Enhanced Voice+ supports three command types:
 
 | Classification | Actions                                     | Description                          |
 | -------------- | ------------------------------------------- | ------------------------------------ |
@@ -2297,7 +2297,7 @@ A comprehensive example implementing voice-driven form filling, navigation:
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Enhanced Voice Plus Example</title>
+    <title>Enhanced Voice+ Example</title>
     <style>
       @keyframes highlight {
         0% {
@@ -2310,7 +2310,7 @@ A comprehensive example implementing voice-driven form filling, navigation:
     </style>
   </head>
   <body>
-    <h1>Enhanced Voice Plus Demo</h1>
+    <h1>Enhanced Voice+ Demo</h1>
 
     <form id="contact-form">
       <input
@@ -2425,7 +2425,7 @@ A comprehensive example implementing voice-driven form filling, navigation:
 \`\`\`
 `,r8=`
 
-Bidirectional Voice Plus enables voice-driven web experiences through bidirectional communication between your application and NLX. Users can navigate pages, fill forms, and interact with your site using natural voice commands.
+Bidirectional Voice+ enables voice-driven web experiences through bidirectional communication between your application and NLX. Users can navigate pages, fill forms, and interact with your site using natural voice commands.
 ${q0e}
 `,j0e="Touchpoint Setup",z0e="Bidirectional Voice+",G0e=()=>_.jsx(xe,{md:r8}),V0e=Object.freeze(Object.defineProperty({__proto__:null,Content:G0e,content:r8,navGroup:j0e,title:z0e},Symbol.toStringTag,{value:"Module"})),W0e=`<a name="readmemd"></a>
 
