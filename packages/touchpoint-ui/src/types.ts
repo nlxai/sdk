@@ -205,7 +205,7 @@ export type BidirectionalConfig =
        * Attempt to gather and send page context automatically. This will work well on semantically coded pages without too many custom form controls.
        * This enables a number of automatic features.
        *
-       * Defaults to `false`.
+       * Defaults to `true`.
        */
       automaticContext?: true;
 
@@ -248,7 +248,7 @@ export type BidirectionalConfig =
        * Attempt to gather and send page context automatically. This will work well on semantically coded pages without too many custom form controls.
        * This enables a number of automatic features.
        *
-       * Defaults to `false`.
+       * Defaults to `true`.
        */
       automaticContext: false;
 
@@ -351,4 +351,10 @@ export interface TouchpointConfiguration {
  * @internal
  */
 export type NormalizedTouchpointConfiguration = TouchpointConfiguration &
-  Required<Pick<TouchpointConfiguration, "initializeConversation" | "input">>;
+  Required<
+    Pick<TouchpointConfiguration, "initializeConversation" | "input">
+  > & {
+    config: Required<
+      Pick<Config, "conversationId" | "userId" | "bidirectional">
+    >;
+  };

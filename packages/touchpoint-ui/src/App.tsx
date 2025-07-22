@@ -58,9 +58,22 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     sessionStorage.getItem("nlxActiveVoiceConversationId") ===
     props.config.conversationId;
 
+  const responseData = useMemo(() => {
+    const responsesData =
+      sessionStorage.getItem("nlxActiveConversationResponses") ?? "{}";
+    try {
+      const responses = JSON.parse(responsesData);
+      if (Array.isArray(responses[props.config.conversationId])) {
+        return responses[props.config.conversationId];
+      }
+    } catch (err) {
+      return null;
+    }
+  }, [props.config.conversationId]);
+
   const handler = useMemo(() => {
-    return createConversation(props.config);
-  }, [props.config]);
+    return createConversation({ responses: responseData, ...props.config });
+  }, [props.config, responseData]);
 
   const [responses, setResponses] = useState<Response[]>([]);
 
@@ -122,6 +135,13 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   useEffect(() => {
     const fn: Subscriber = (responses) => {
       setResponses(responses);
+      const conversationId = handler.currentConversationId();
+      if (input === "text" && conversationId != null) {
+        sessionStorage.setItem(
+          "nlxActiveConversationResponses",
+          JSON.stringify({ [conversationId]: responses }),
+        );
+      }
     };
     handler.subscribe(fn);
     return () => {
@@ -136,7 +156,10 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       return;
     }
     conversationInitialized.current = true;
-    props.initializeConversation(handler, props.initialContext);
+
+    if (input !== "text" || responseData == null || responseData.length === 0) {
+      props.initializeConversation(handler, props.initialContext);
+    }
     if (props.config.conversationId != null)
       sessionStorage.setItem(
         "nlxActiveVoiceConversationId",
@@ -230,6 +253,18 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     handler.reset({ clearResponses: true });
     if (input !== "voice") {
       props.initializeConversation(handler, props.initialContext);
+    }
+    const newConversationId = handler.currentConversationId();
+    if (sessionStorage.getItem("nlxConversationId") !== null) {
+      if (newConversationId == null) {
+        sessionStorage.removeItem("nlxConversationId");
+      } else {
+        sessionStorage.setItem("nlxConversationId", newConversationId);
+      }
+    }
+
+    if (newConversationId != null) {
+      sessionStorage.setItem("nlxActiveVoiceConversationId", newConversationId);
     }
     setVoiceKey((prev) => prev + 1);
   };
