@@ -135,10 +135,11 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   useEffect(() => {
     const fn: Subscriber = (responses) => {
       setResponses(responses);
-      if (input === "text") {
+      const conversationId = handler.currentConversationId();
+      if (input === "text" && conversationId != null) {
         sessionStorage.setItem(
           "nlxActiveConversationResponses",
-          JSON.stringify({ [props.config.conversationId]: responses }),
+          JSON.stringify({ [conversationId]: responses }),
         );
       }
     };
@@ -146,7 +147,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     return () => {
       handler.unsubscribe(fn);
     };
-  }, [handler, setResponses, props.config.conversationId]);
+  }, [handler, setResponses]);
 
   const conversationInitialized = useRef<boolean>(restoredConversation);
 
@@ -252,6 +253,18 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     handler.reset({ clearResponses: true });
     if (input !== "voice") {
       props.initializeConversation(handler, props.initialContext);
+    }
+    const newConversationId = handler.currentConversationId();
+    if (sessionStorage.getItem("nlxConversationId") !== null) {
+      if (newConversationId == null) {
+        sessionStorage.removeItem("nlxConversationId");
+      } else {
+        sessionStorage.setItem("nlxConversationId", newConversationId);
+      }
+    }
+
+    if (newConversationId != null) {
+      sessionStorage.setItem("nlxActiveVoiceConversationId", newConversationId);
     }
     setVoiceKey((prev) => prev + 1);
   };
