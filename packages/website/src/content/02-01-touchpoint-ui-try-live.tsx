@@ -37,7 +37,7 @@ export const snippetContent = ({
 }): string => {
   return `
 
-### Setup snippet${templateComponents === "museumComponents" ? ": Museum template" : input === "voiceMini" && bidirectional ? ": Bidirectional Voice Plus template" : ""}
+### Setup snippet${templateComponents === "museumComponents" ? ": Museum template" : input === "voiceMini" && bidirectional ? ": Bidirectional Voice+ template" : ""}
 
 \`\`\`touchpointui
 ${touchpointUiSetupSnippet({ config, theme, input, colorMode, templateComponents, bidirectional })}
@@ -233,7 +233,7 @@ export const Content: FC<unknown> = () => {
           const touchpointConfig = generateAndSetUserId(config);
 
           if (input === "voiceMini" && bidirectional) {
-            // Handle bidirectional voice plus setup
+            // Handle bidirectional Voice+ setup
             touchpointInstance.current = await create({
               config: {
                 ...touchpointConfig,
