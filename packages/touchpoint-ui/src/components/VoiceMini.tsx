@@ -93,6 +93,21 @@ export const VoiceMini: FC<{
       </Container>
     );
   }
+  if (roomState === "noAudioPermissions") {
+    return (
+      <Container renderCollapse={renderCollapse} onClose={onCloseHandler}>
+        <ErrorMessage message="Connect your microphone and speaker" />
+        <TextButton
+          type="ghost"
+          label="Retry"
+          Icon={Restart}
+          onClick={() => {
+            void retry();
+          }}
+        />
+      </Container>
+    );
+  }
 
   if (roomState === "pending") {
     return (

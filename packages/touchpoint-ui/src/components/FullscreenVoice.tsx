@@ -105,7 +105,7 @@ export const FullscreenVoice: FC<Props> = ({
     );
   }
 
-  if (roomState === "error") {
+  if (roomState === "error" || roomState === "noAudioPermissions") {
     return (
       <Container className={className}>
         <FullscreenError />

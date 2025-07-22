@@ -211,7 +211,11 @@ export const useVoice = ({
       void room.startAudio();
       setRoomState("active");
     } catch (err) {
-      setRoomState("error");
+      if (err instanceof DOMException && err.name === "NotAllowedError") {
+        setRoomState("noAudioPermissions");
+      } else {
+        setRoomState("error");
+      }
     }
   }, [
     handler,
