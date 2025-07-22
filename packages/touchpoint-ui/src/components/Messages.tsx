@@ -162,6 +162,9 @@ const Sources: FC<{ sources: KnowledgeBaseResponseSource[] }> = ({
     () => consolidateSources(sources),
     [sources],
   );
+  if (consolidateSources.length === 0) {
+    return null;
+  }
   return (
     <details
       className="space-y-2"
