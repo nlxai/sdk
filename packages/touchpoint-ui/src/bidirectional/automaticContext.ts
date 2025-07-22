@@ -4,6 +4,7 @@ import { computeAccessibleName } from "dom-accessibility-api";
 import type { ConversationHandler } from "@nlxai/chat-core";
 import { analyzePageForms } from "./analyzePageForms";
 import { equals, uniq } from "ramda";
+import { debug } from "./debug";
 
 const debounceAsync = <T extends any[]>(
   func: (...args: T) => Promise<void>,
@@ -63,11 +64,7 @@ export const gatherAutomaticContext = (
       const [context, pageState] = gatherContext();
       if (!equals(previousContext, context)) {
         try {
-          // eslint-disable-next-line no-console
-          console.debug(
-            "Bidirectional automatic context sent:",
-            context["nlx:vpContext"],
-          );
+          debug("Automatic context sent:", context["nlx:vpContext"]);
           await handler.sendContext(context);
         } catch (error) {}
         setPageState(pageState);

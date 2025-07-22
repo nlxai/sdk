@@ -134,7 +134,10 @@ const normalizeConfiguration = (
         configuration.config.userId ??
         localStorage.getItem("nlxUserId") ??
         defaultUserId(),
-      bidirectional: configuration.config.bidirectional ?? false,
+      bidirectional:
+        configuration.bidirectional == null
+          ? configuration.config.bidirectional ?? false
+          : true,
     },
     input: configuration.input ?? "text",
     initializeConversation:

@@ -154,6 +154,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   useEffect(() => {
     if (
+      isExpanded &&
       props.bidirectional != null &&
       props.bidirectional.automaticContext !== false
     ) {
@@ -161,7 +162,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         pageState.current = val;
       });
     }
-  }, [handler, props.bidirectional]);
+  }, [isExpanded, handler, props.bidirectional]);
 
   useEffect(() => {
     if (

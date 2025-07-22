@@ -11,6 +11,7 @@ import {
   ParticipantEvent,
   Room,
   RoomEvent,
+  setLogLevel,
   Track,
   type Participant,
   type RemoteTrack,
@@ -27,6 +28,11 @@ export interface ModalitiesWithContext {
   modalities: ModalityPayloads;
   from?: string;
   timestamp: number;
+}
+if (process.env.NODE_ENV === "development") {
+  setLogLevel("info");
+} else {
+  setLogLevel("error");
 }
 
 const decodeModalities = (val: Uint8Array): ModalityPayloads | null => {
