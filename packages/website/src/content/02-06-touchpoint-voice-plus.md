@@ -62,7 +62,7 @@ If you are using a framework like [React](https://reactrouter.com/api/components
 | Key           | Example Value                               | Description                             |
 | ------------- | ------------------------------------------- | --------------------------------------- |
 | `action`      | `page_next`, `page_previous`, `page_custom` | Type of navigation action               |
-| `destination` | `/about`                                    | Relative or absolute URL to navigate to |
+| `destination` | `/about`, `home page`, `https://google.com` | Navigation object to navigate to.<br>A URL slug `/`<br>Link Text<br>Absolute URL |
 
 **Example Payload:**
 
@@ -77,9 +77,10 @@ If you are using a framework like [React](https://reactrouter.com/api/components
 ### Sample Custom Navigation Handler
 
 Touchpoint includes an application-agnostic navigation handler built in to the SDK that leverages `window` based navigation. If you're using a web framework or would like to change routing behavior, you will build your own navigation handler.
+When touchpoint sends the 
 
 ```touchpointui
-function handleNavigation(action, destination) {
+function handleNavigation(action, destinationText, destinationUrls) {
   switch (action) {
     case "page_next":
       // Navigate to next page
@@ -94,16 +95,44 @@ function handleNavigation(action, destination) {
     /**
     * If you are using a framework like React, Vue, or Angular.
     * Use their respective routing libraries to handle navigation.
+    * Your Custom Handler should deference the actual URL from the text provided.
     **/
     case "page_custom":
-      // Handle relative or absolute navigation
-      if (destination.startsWith("/")) {
-        window.location.pathname = destination;
-      } else {
-        window.location.href = destination;
+      // If we don't have any text, then we can't process
+      if (destinationText === null) {
+        break;
       }
-
+      // If the destination is a path, we can go directly there
+      if (destination.startsWith("/")){
+        window.location.pathname = destination;
+        break;
+      }
+      // Otherwise, let's pull the actual URL based on the text from NLX
+      const url = destinationUrls[destinationText];
+      if (url != null) { 
+        window.location.href = url;
+        break;
+      } 
+      // finally, parse the URL from the text and navigate if full URL
+      try {
+        //Parse the URL from the destination 
+        new URL(destinationText);
+        window.location.href = destinationText;
+      } catch (error) {
+        console.log(
+          `Custom page navigation action received, but no URL found for destination".`,
+          destinationText,
+        );
+      }
       break;
+
+    /** 
+    * Handle the unknown edge case
+    */
+    case "page_unknown":
+      console.log(
+        "Unknown page navigation action received, no automatic handling available.",
+      );
   }
 }
 
@@ -276,6 +305,10 @@ const touchpointOptions = {
 
 Touchpoint provides NLX with information about your page structure on page load, after filling forms, and on page refresh. All available forms information and any available href links found on the page are analyzed by NLX and then used to send payloads and smalltalk during user interactions.
 
+When autocontext is enabled, Touchpoint:
+* Gathers and sends the DOM details to NLX and will update NLX on changes
+* Scans for `hrefs` and creates a list of all link text and their corresponding URLs
+
 ### Directly Sending Page Context
 
 You shouldn't need to send context for basic bidirectional Voice+ interactions. If you have other page interactions that change the DOM, you should send the context manually after processing those changes.
@@ -388,7 +421,7 @@ A comprehensive example implementing voice-driven form filling, navigation:
         React,
         html,
         analyzePageForms,
-      } from "https://unpkg.com/@nlxai/touchpoint-ui@1.1.5/lib/index.js?module";
+      } from "https://unpkg.com/@nlxai/touchpoint-ui@1.1.7/lib/index.js?module";
 
       async function initializeVoicePlus() {
         // Create touchpoint with voiceMini and bidirectional enabled
@@ -411,26 +444,59 @@ A comprehensive example implementing voice-driven form filling, navigation:
         return touchpoint;
       }
 
-      // Handle navigation commands
-      function handleNavigation(action, destination) {
-        console.log("Navigation command:", action, destination);
+      function handleNavigation(action, destinationText, destinationUrls) {
         switch (action) {
           case "page_next":
+            // Navigate to next page
             window.history.forward();
             break;
 
           case "page_previous":
+            // Navigate to previous page
             window.history.back();
             break;
 
+          /**
+          * If you are using a framework like React, Vue, or Angular.
+          * Use their respective routing libraries to handle navigation.
+          * Your Custom Handler should deference the actual URL from the text provided.
+          **/
           case "page_custom":
-            if (destination.startsWith("/")) {
-              window.location.pathname = destination;
-            } else {
-              window.location.href = destination;
+            // If we don't have any text, then we can't process
+            if (destinationText === null) {
+              break;
             }
-
+            // If the destination is a path, we can go directly there
+            if (destinationText.startsWith("/")){
+              window.location.pathname = destination;
+              break;
+            }
+            // Otherwise, let's pull the actual URL based on the text from NLX
+            const url = destinationUrls[destinationText];
+            if (url != null) { 
+              window.location.href = url;
+              break;
+            } 
+            // finally, parse the URL from the text and navigate if full URL
+            try {
+              //Parse the URL from the destination 
+              new URL(destinationText);
+              window.location.href = destinationText;
+            } catch (error) {
+              console.log(
+                `Custom page navigation action received, but no URL found for destination".`,
+                destinationText,
+              );
+            }
             break;
+
+          /** 
+          * Handle the unknown edge case
+          */
+          case "page_unknown":
+            console.log(
+              "Unknown page navigation action received, no automatic handling available.",
+            );
         }
       }
 
