@@ -2,6 +2,7 @@
 import type { Context, ConversationHandler } from "@nlxai/core";
 import { type ReactNode, useState, type FC } from "react";
 import { clsx } from "clsx";
+import { findLast } from "ramda";
 
 import type { CustomModalityComponent } from "../types";
 import { useVoice } from "../voice";
@@ -70,13 +71,23 @@ export const VoiceMini: FC<{
     onClose(new Event("close"));
   };
 
-  const { roomState, isUserSpeaking, isApplicationSpeaking, retry, roomData } =
-    useVoice({
-      micEnabled,
-      speakersEnabled,
-      handler,
-      context,
-    });
+  const {
+    roomState,
+    isUserSpeaking,
+    isApplicationSpeaking,
+    retry,
+    modalities,
+  } = useVoice({
+    micEnabled,
+    speakersEnabled,
+    handler,
+    context,
+  });
+
+  const lastNonEmptyModalities = useMemo(
+    () => findLast((mod) => Object.keys(mod.modalities).length > 0, modalities),
+    [modalities],
+  );
 
   if (roomState === "error") {
     return (
@@ -169,10 +180,11 @@ export const VoiceMini: FC<{
           onCloseHandler();
         }}
       />
-      {roomData != null ? (
+      {lastNonEmptyModalities != null ? (
         <VoiceModalities
+          key={lastNonEmptyModalities.timestamp}
           Wrapper={VoiceModalitiesWrapper}
-          roomData={roomData}
+          modalities={lastNonEmptyModalities}
           customModalities={customModalities}
           handler={handler}
         />

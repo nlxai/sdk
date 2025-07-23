@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { useState, type FC, type ReactNode } from "react";
+import { useState, useMemo, type FC, type ReactNode } from "react";
 import { clsx } from "clsx";
 import type { Context, ConversationHandler } from "@nlxai/core";
 import type {
@@ -43,11 +43,11 @@ const Container: FC<{ className?: string; children: ReactNode }> = ({
 
 export const VoiceModalities: FC<{
   Wrapper?: FC<{ children: ReactNode }>;
-  roomData: ModalitiesWithContext;
+  modalities: ModalitiesWithContext;
   customModalities: Record<string, CustomModalityComponent<unknown>>;
   handler: ConversationHandler;
-}> = ({ Wrapper, roomData, customModalities, handler }) => {
-  const modalityEntries = Object.entries(roomData.modalities);
+}> = ({ Wrapper, modalities, customModalities, handler }) => {
+  const modalityEntries = Object.entries(modalities.modalities);
   const customModalityComponents = modalityEntries
     .map(([key, value]) => {
       const Component = customModalities[key];
@@ -89,13 +89,23 @@ export const FullscreenVoice: FC<Props> = ({
 }) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
 
-  const { roomState, isUserSpeaking, isApplicationSpeaking, retry, roomData } =
-    useVoice({
-      micEnabled,
-      speakersEnabled,
-      handler,
-      context,
-    });
+  const {
+    roomState,
+    isUserSpeaking,
+    isApplicationSpeaking,
+    retry,
+    modalities,
+  } = useVoice({
+    micEnabled,
+    speakersEnabled,
+    handler,
+    context,
+  });
+
+  const lastNonEmptyModalities = useMemo(
+    () => findLast((mod) => Object.keys(mod.modalities).length > 0, modalities),
+    [modalities],
+  );
 
   if (roomState === "pending") {
     return (
@@ -164,10 +174,11 @@ export const FullscreenVoice: FC<Props> = ({
         </div>
         {isApplicationSpeaking ? <Ripple className="rounded-full" /> : null}
       </div>
-      {roomData != null ? (
+      {lastNonEmptyModalities != null ? (
         <VoiceModalities
           Wrapper={VoiceModalitiesWrapper}
-          roomData={roomData}
+          key={lastNonEmptyModalities.timestamp}
+          modalities={lastNonEmptyModalities}
           customModalities={customModalities}
           handler={handler}
         />

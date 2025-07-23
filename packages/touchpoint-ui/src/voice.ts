@@ -29,6 +29,7 @@ export interface ModalitiesWithContext {
   from?: string;
   timestamp: number;
 }
+
 if (process.env.NODE_ENV === "development") {
   setLogLevel("info");
 } else {
@@ -64,7 +65,7 @@ interface VoiceHookReturn {
   roomState: VoiceRoomState;
   isUserSpeaking: boolean;
   isApplicationSpeaking: boolean;
-  roomData: null | ModalitiesWithContext;
+  modalities: ModalitiesWithContext[];
   retry: () => Promise<void>;
 }
 
@@ -91,7 +92,7 @@ export const useVoice = ({
   const [isApplicationSpeaking, setIsApplicationSpeaking] =
     useDebouncedState<boolean>(false, 100);
 
-  const [roomData, setRoomData] = useState<ModalitiesWithContext | null>(null);
+  const [modalities, setModalities] = useState<ModalitiesWithContext[]>([]);
 
   const roomRef = useRef<Room | null>(null);
 
@@ -120,9 +121,9 @@ export const useVoice = ({
     }
     setAudioElement(null);
     roomRef.current = null;
-    setRoomData(null);
+    setModalities([]);
     await room.disconnect();
-  }, [setRoomData, setAudioElement]);
+  }, [setModalities, setAudioElement]);
 
   useEffect(() => {
     const room = roomRef.current;
@@ -203,11 +204,14 @@ export const useVoice = ({
 
       // Handle incoming data from the room/agent
       room.on(RoomEvent.DataReceived, (payload, participant) => {
-        setRoomData({
-          modalities: decodeModalities(payload) ?? {},
-          from: participant?.identity,
-          timestamp: Date.now(),
-        });
+        setModalities((prev) => [
+          ...prev,
+          {
+            modalities: decodeModalities(payload) ?? {},
+            from: participant?.identity,
+            timestamp: Date.now(),
+          },
+        ]);
       });
 
       await room.connect(creds.url, creds.token, { autoSubscribe: true });
@@ -230,7 +234,7 @@ export const useVoice = ({
     setIsApplicationSpeaking,
     setIsApplicationSpeaking,
     setAudioElement,
-    setRoomData,
+    setModalities,
   ]);
 
   const retry = async (): Promise<void> => {
@@ -245,5 +249,11 @@ export const useVoice = ({
     };
   }, [setup, disconnect]);
 
-  return { roomState, isUserSpeaking, isApplicationSpeaking, retry, roomData };
+  return {
+    roomState,
+    isUserSpeaking,
+    isApplicationSpeaking,
+    retry,
+    modalities,
+  };
 };
