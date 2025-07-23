@@ -269,7 +269,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     setVoiceKey((prev) => prev + 1);
   };
 
-  if (handler == null) {
+  if (handler == null || input === "incognito") {
     return null;
   }
 
