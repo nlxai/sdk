@@ -1,7 +1,7 @@
-import { createConversation, type Config } from "../../../packages/core/lib";
+import { createConversation, type Config } from "@nlxai/core";
 
 const config: Config = {
-  botUrl: "", // obtain from NLX deployments page
+  applicationUrl: "", // obtain from NLX deployments page
   headers: {
     "nlx-api-key": "", // obtain from NLX deployments page
   },
