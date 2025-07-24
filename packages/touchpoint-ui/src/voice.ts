@@ -123,7 +123,7 @@ export const useVoice = ({
     roomRef.current = null;
     setModalities([]);
     await room.disconnect();
-  }, [setModalities, setAudioElement]);
+  }, [setRoomData, setAudioElement, handler]);
 
   useEffect(() => {
     const room = roomRef.current;
@@ -200,6 +200,10 @@ export const useVoice = ({
         setIsUserSpeaking(false);
         setIsApplicationSpeaking(false);
         void disconnect();
+      });
+
+      handler.setRequestOverride((req) => {
+        // TODO: Send room events based on req.request, it has .structured and .unstructured etc., see types
       });
 
       // Handle incoming data from the room/agent
