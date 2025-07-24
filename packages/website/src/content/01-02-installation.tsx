@@ -17,16 +17,10 @@ The following packages are available as direct script tags:
 ${umdScriptTags.touchpointUi}
 ~~~
 
-* [@nlxai/chat-widget](${packageUrls.chatWidget}) - add a chat widget to your website with only HTML ( Chat Widget will be deprecated in Q1 2025 - use Touchpoint UI for new projects):
+* [@nlxai/core](${packageUrls.core}) - talk to a bot in plain JavaScript without a bundler:
 
 ~~~html
-${umdScriptTags.chatWidget}
-~~~
-
-* [@nlxai/chat-core](${packageUrls.chatCore}) - talk to a bot in plain JavaScript without a bundler:
-
-~~~html
-${umdScriptTags.chatCore}
+${umdScriptTags.core}
 ~~~
 
 * [@nlxai/voice-plus-core](${packageUrls.voicePlusCore}) - add Voice+ capabilities to a plain HTML page:
@@ -43,17 +37,8 @@ All packages are available on npm as CommonJS modules. They are written in TypeS
 # Touchpoint UI
 npm install @nlxai/touchpoint-ui
 
-# The Chat widget - will be deprecated in Q1 2025 - use Touchpoint UI for new projects.
-npm install @nlxai/chat-widget
-
-# React hooks, along with peer dependencies
-npm install @nlxai/chat-react react react-dom
-
-# Preact hooks, along with peer dependencies
-npm install @nlxai/chat-preact preact
-
 # Core chat SDK
-npm install @nlxai/chat-core
+npm install @nlxai/core
 
 # Voice+
 npm install @nlxai/voice-plus-core

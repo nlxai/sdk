@@ -12,7 +12,7 @@ import {
   type ConversationHandler,
   type UploadUrl,
   type Subscriber,
-} from "@nlxai/chat-core";
+} from "../../../core/lib";
 import { clsx } from "clsx";
 
 import { IconButton } from "./ui/IconButton";

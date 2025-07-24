@@ -5,7 +5,7 @@ import {
   type ConversationHandler,
   type BotMessage,
   type KnowledgeBaseResponseSource,
-} from "@nlxai/chat-core";
+} from "../../../core/lib";
 import { clsx } from "clsx";
 import { marked } from "marked";
 

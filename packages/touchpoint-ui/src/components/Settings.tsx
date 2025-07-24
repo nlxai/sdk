@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { type FC } from "react";
-import { type ConversationHandler } from "@nlxai/chat-core";
+import { type ConversationHandler } from "../../../core/lib";
 
 import { Escalate, Restart } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";

@@ -61,11 +61,11 @@ export type SlotsRecordOrArray = SlotsRecord | SlotValue[];
  * - {@link FailureMessage}
  * - {@link Response}
  */
-export interface BotResponse {
+export interface ApplicationResponse {
   /**
-   * The type of the response is `"bot"` for bot and `"user"` for user, and "failure" for failure.
+   * The type of the response is `"application"` for an application and `"user"` for user, and "failure" for failure.
    */
-  type: "bot";
+  type: "application";
   /**
    * When the response was received
    */
@@ -73,13 +73,13 @@ export interface BotResponse {
   /**
    * The payload of the response
    */
-  payload: BotResponsePayload;
+  payload: ApplicationResponsePayload;
 }
 
 /**
- * The payload of the bot response
+ * The payload of the application response
  */
-export interface BotResponsePayload {
+export interface ApplicationResponsePayload {
   /**
    * If there isn't some interaction by this time, the conversation will expire.
    */
@@ -89,14 +89,14 @@ export interface BotResponsePayload {
    */
   conversationId?: string;
   /**
-   * Any messages from the bot.
+   * Any messages from the application.
    */
-  messages: BotMessage[];
+  messages: ApplicationMessage[];
   /**
    * Global state about the current conversation
    * as well as whether the client should poll for more application responses.
    */
-  metadata?: BotResponseMetadata;
+  metadata?: ApplicationResponseMetadata;
   /**
    * If configured, the [node's payload.](See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/advanced-messaging-+-functionality#add-functionality)
    */
@@ -120,7 +120,7 @@ export type ModalityPayloads = Record<string, any>;
  * Global state about the current conversation
  * as well as whether the client should poll for more application responses.
  */
-export interface BotResponseMetadata {
+export interface ApplicationResponseMetadata {
   /**
    * The conversation's intent
    */
@@ -181,7 +181,7 @@ export interface KnowledgeBaseResponseSource {
  * Metadata for the individual application message
  * as well as whether the client should poll for more application responses.
  */
-export interface BotMessageMetadata {
+export interface ApplicationMessageMetadata {
   /**
    * The message node's intent
    */
@@ -191,7 +191,7 @@ export interface BotMessageMetadata {
 /**
  * A message from the application, as well as any choices the user can make.
  */
-export interface BotMessage {
+export interface ApplicationMessage {
   /**
    * A unique identifier for the message.
    */
@@ -212,7 +212,7 @@ export interface BotMessage {
   /**
    * Metadata
    */
-  metadata?: BotMessageMetadata;
+  metadata?: ApplicationMessageMetadata;
   /**
    * After a choice has been made by the user, this will be updated locally to the selected choice id.
    * This field is set locally and does not come from the application.
@@ -256,14 +256,14 @@ export interface Choice {
  * A message from the user
  *
  * See also:
- * - {@link BotResponse}
+ * - {@link ApplicationResponse}
  * - {@link FailureMessage}
  * - {@link Response}
  *
  */
 export interface UserResponse {
   /**
-   * The type of the response is `"bot"` for bot and `"user"` for user, and "failure" for failure.
+   * The type of the response is `"application"` for application and `"user"` for user, and "failure" for failure.
    */
   type: "user";
   /**
@@ -301,7 +301,7 @@ export type UserResponsePayload =
       type: "choice";
       /**
        * The `choiceId` passed to `sendChoice`
-       * Correlates to a `choiceId` in the {@link BotResponse}'s `.payload.messages[].choices[].choiceId` fields
+       * Correlates to a `choiceId` in the {@link ApplicationResponse}'s `.payload.messages[].choices[].choiceId` fields
        */
       choiceId: string;
       /**
@@ -327,7 +327,7 @@ export type UserResponsePayload =
  */
 export interface FailureMessage {
   /**
-   * The type of the response is `"bot"` for bot and `"user"` for user.
+   * The type of the response is `"application"` for application and `"user"` for user.
    */
   type: "failure";
   /**
@@ -348,7 +348,7 @@ export interface FailureMessage {
 /**
  * A response from the application or the user.
  */
-export type Response = BotResponse | UserResponse | FailureMessage;
+export type Response = ApplicationResponse | UserResponse | FailureMessage;
 
 /**
  * The time value in milliseconds since midnight, January 1, 1970 UTC.
@@ -370,11 +370,6 @@ export interface Config {
    * Fetch this from the application's Deployment page.
    */
   applicationUrl?: string;
-  /**
-   * Legacy name for application URL
-   * @deprecated use the applicationUrl field instead
-   */
-  botUrl?: string;
   /**
    * Headers to forward to the NLX API.
    */
@@ -426,7 +421,7 @@ export interface Config {
     /**
      * Prevent the `languageCode` parameter to be appended to the application URL - used in special deployment environments such as the sandbox chat inside Dialog Studio
      */
-    completeBotUrl?: boolean;
+    completeApplicationUrl?: boolean;
   };
 }
 
@@ -463,12 +458,12 @@ const normalizeStructuredRequest = (
  */
 export interface StructuredRequest {
   /**
-   * The `choiceId` is in the {@link BotResponse}'s `.payload.messages[].choices[].choiceId` fields
+   * The `choiceId` is in the {@link ApplicationResponse}'s `.payload.messages[].choices[].choiceId` fields
    */
   choiceId?: string;
   /**
    * Required if you want to change a choice that's already been sent.
-   * The `nodeId` can be found in the corresponding {@link BotMessage}.
+   * The `nodeId` can be found in the corresponding {@link ApplicationMessage}.
    */
   nodeId?: string;
   /**
@@ -551,12 +546,6 @@ export interface ApplicationRequest {
 }
 
 /**
- * Legacy name for application request
- * @deprecated use {@link ApplicationRequest}
- */
-export type BotRequest = ApplicationRequest;
-
-/**
  * Credentials to connect to a Voice channel
  */
 export interface VoiceCredentials {
@@ -584,19 +573,19 @@ export interface VoiceCredentials {
 export interface ChoiceRequestMetadata {
   /**
    * The index of the {@link Response} associated with this choice.
-   * Setting this ensures that local state's `selectedChoiceId` on the corresponding {@link BotResponse} is set.
+   * Setting this ensures that local state's `selectedChoiceId` on the corresponding {@link ApplicationResponse} is set.
    * It is not sent to the application.
    */
   responseIndex?: number;
   /**
-   * The index of the {@link BotMessage} associated with this choice.
-   * Setting this ensures that local state's `selectedChoiceId` on the corresponding {@link BotResponse} is set.
+   * The index of the {@link ApplicationMessage} associated with this choice.
+   * Setting this ensures that local state's `selectedChoiceId` on the corresponding {@link ApplicationResponse} is set.
    * It is not sent to the application.
    */
   messageIndex?: number;
   /**
    * Required if you want to change a choice that's already been sent.
-   * The `nodeId` can be found in the corresponding {@link BotMessage}.
+   * The `nodeId` can be found in the corresponding {@link ApplicationMessage}.
    */
   nodeId?: string;
   /**
@@ -612,19 +601,13 @@ export type LanguageCode = string;
 
 /**
  * Instead of sending a request to the application, handle it in a custom fashion
- * @param botRequest - The {@link BotRequest} that is being overridden
- * @param appendResponse - A method to append the {@link BotResponsePayload} to the message history
+ * @param applicationRequest - The {@link ApplicationRequest} that is being overridden
+ * @param appendResponse - A method to append the {@link ApplicationResponsePayload} to the message history
  */
 export type RequestOverride = (
-  botRequest: BotRequest,
-  appendResponse: (res: BotResponsePayload) => void,
+  applicationRequest: ApplicationRequest,
+  appendResponse: (res: ApplicationResponsePayload) => void,
 ) => void;
-
-/**
- * Legacy name for bot request override
- * @deprecated use {@link RequestOverride} instead
- */
-export type BotRequestOverride = RequestOverride;
 
 /**
  * Voice+ context, type to be defined
@@ -674,7 +657,7 @@ export interface ConversationHandler {
   sendSlots: (slots: SlotsRecordOrArray, context?: Context) => void;
   /**
    * Respond to [a choice](https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/nodes#user-choice) from the application.
-   * @param choidId - The `choiceId` is in the {@link BotResponse}'s `.payload.messages[].choices[].choiceId` fields
+   * @param choidId - The `choiceId` is in the {@link ApplicationResponse}'s `.payload.messages[].choices[].choiceId` fields
    * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
    * @param metadata - links the choice to the specific message and node in the conversation.
    */
@@ -771,13 +754,9 @@ export interface ConversationHandler {
    * Removes all subscribers and, if using websockets, closes the connection.
    */
   destroy: () => void;
+
   /**
-   * Optional {@link RequestOverride} function used to bypass the bot request and handle them in a custom fashion
-   * @deprecated use `setRequestOverride` instead
-   */
-  setBotRequestOverride: (override: RequestOverride | undefined) => void;
-  /**
-   * Optional {@link RequestOverride} function used to bypass the bot request and handle them in a custom fashion
+   * Optional {@link RequestOverride} function used to bypass the application request and handle them in a custom fashion
    */
   setRequestOverride: (override: RequestOverride | undefined) => void;
   /**
@@ -889,7 +868,7 @@ const isWebsocketUrl = (url: string): boolean => {
  * @returns isValid - Whether the configuration is valid
  */
 export const isConfigValid = (config: Config): boolean => {
-  const applicationUrl = config.applicationUrl ?? config.botUrl ?? "";
+  const applicationUrl = config.applicationUrl ?? "";
   return applicationUrl.length > 0;
 };
 
@@ -902,16 +881,16 @@ type Timer = ReturnType<typeof setInterval>;
  */
 export function createConversation(config: Config): ConversationHandler {
   let socket: ReconnectingWebSocket | undefined;
-  let socketMessageQueue: BotRequest[] = [];
+  let socketMessageQueue: ApplicationRequest[] = [];
   let socketMessageQueueCheckInterval: Timer | null = null;
 
   let voicePlusSocket: ReconnectingWebSocket | undefined;
   let voicePlusSocketMessageQueue: VoicePlusMessage[] = [];
   let voicePlusSocketMessageQueueCheckInterval: Timer | null = null;
 
-  const applicationUrl = config.applicationUrl ?? config.botUrl ?? "";
+  const applicationUrl = config.applicationUrl ?? "";
 
-  // Check if the bot URL has a language code appended to it
+  // Check if the application URL has a language code appended to it
   if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(applicationUrl)) {
     Console.warn(
       "Since v1.0.0, the language code is no longer added at the end of the application URL. Please remove the modifier (e.g. '-en-US') from the URL, and specify it in the `languageCode` parameter instead.",
@@ -934,7 +913,7 @@ export function createConversation(config: Config): ConversationHandler {
 
   const fullApplicationHttpUrl = (): string =>
     `${normalizeToHttp(applicationUrl)}${
-      config.experimental?.completeBotUrl === true
+      config.experimental?.completeApplicationUrl === true
         ? ""
         : `-${state.languageCode}`
     }`;
@@ -972,7 +951,7 @@ export function createConversation(config: Config): ConversationHandler {
   const messageResponseHandler = (response: any): void => {
     if (response?.messages.length > 0) {
       const newResponse: Response = {
-        type: "bot",
+        type: "application",
         receivedAt: new Date().getTime(),
         payload: {
           ...response,
@@ -993,7 +972,7 @@ export function createConversation(config: Config): ConversationHandler {
       if (response.metadata.hasPendingDataRequest as boolean) {
         appendStructuredUserResponse({ poll: true });
         setTimeout(() => {
-          void sendToBot({
+          void sendToApplication({
             request: {
               structured: {
                 poll: true,
@@ -1020,11 +999,13 @@ export function createConversation(config: Config): ConversationHandler {
     }
   };
 
-  const sendToBot = async (body: BotRequest): Promise<unknown> => {
+  const sendToApplication = async (
+    body: ApplicationRequest,
+  ): Promise<unknown> => {
     if (requestOverride != null) {
       requestOverride(body, (payload) => {
         const newResponse: Response = {
-          type: "bot",
+          type: "application",
           receivedAt: new Date().getTime(),
           payload,
         };
@@ -1079,7 +1060,7 @@ export function createConversation(config: Config): ConversationHandler {
 
   const checkSocketQueue = async (): Promise<void> => {
     if (socket?.readyState === 1 && socketMessageQueue[0] != null) {
-      await sendToBot(socketMessageQueue[0]);
+      await sendToApplication(socketMessageQueue[0]);
       socketMessageQueue = socketMessageQueue.slice(1);
     }
   };
@@ -1098,7 +1079,7 @@ export function createConversation(config: Config): ConversationHandler {
     // If the socket is already set up, tear it down first
     teardownWebsocket();
     const url = new URL(applicationUrl);
-    if (config.experimental?.completeBotUrl !== true) {
+    if (config.experimental?.completeApplicationUrl !== true) {
       url.searchParams.set("languageCode", state.languageCode);
       url.searchParams.set(
         "channelKey",
@@ -1139,7 +1120,7 @@ export function createConversation(config: Config): ConversationHandler {
       return;
     }
     const url = new URL(normalizeToWebsocket(applicationUrl));
-    if (config.experimental?.completeBotUrl !== true) {
+    if (config.experimental?.completeApplicationUrl !== true) {
       url.searchParams.set("languageCode", state.languageCode);
       url.searchParams.set(
         "channelKey",
@@ -1219,7 +1200,7 @@ export function createConversation(config: Config): ConversationHandler {
 
   const sendFlow = (intentId: string, context?: Context): void => {
     appendStructuredUserResponse({ intentId }, context);
-    void sendToBot({
+    void sendToApplication({
       context,
       request: {
         structured: {
@@ -1245,7 +1226,7 @@ export function createConversation(config: Config): ConversationHandler {
       },
       newResponse,
     );
-    void sendToBot({
+    void sendToApplication({
       context,
       request: {
         unstructured: {
@@ -1278,7 +1259,7 @@ export function createConversation(config: Config): ConversationHandler {
       newResponses = adjust(
         responseIndex,
         (response) =>
-          response.type === "bot"
+          response.type === "application"
             ? {
                 ...response,
                 payload: {
@@ -1304,7 +1285,7 @@ export function createConversation(config: Config): ConversationHandler {
       choiceResponse,
     );
 
-    void sendToBot({
+    void sendToApplication({
       context,
       request: {
         structured: {
@@ -1353,7 +1334,7 @@ export function createConversation(config: Config): ConversationHandler {
     },
     sendStructured: (structured: StructuredRequest, context) => {
       appendStructuredUserResponse(structured, context);
-      void sendToBot({
+      void sendToApplication({
         context,
         request: {
           structured: normalizeStructuredRequest(structured),
@@ -1362,7 +1343,7 @@ export function createConversation(config: Config): ConversationHandler {
     },
     sendSlots: (slots, context) => {
       appendStructuredUserResponse({ slots }, context);
-      void sendToBot({
+      void sendToApplication({
         context,
         request: {
           structured: {
@@ -1457,12 +1438,6 @@ export function createConversation(config: Config): ConversationHandler {
       }
       teardownCommandWebsocket();
     },
-    setBotRequestOverride: (val: RequestOverride | undefined) => {
-      Console.warn(
-        "Calling `setBotRequestOverride` is deprecated and will be removed in a future version of the SDK. Use `setRequestOverride` instead.",
-      );
-      requestOverride = val;
-    },
     setRequestOverride: (val: RequestOverride | undefined) => {
       requestOverride = val;
     },
@@ -1482,8 +1457,8 @@ export function createConversation(config: Config): ConversationHandler {
 
 /**
  * Get current expiration timestamp from the current list of reponses
- * @param responses - the current list of user and bot responses (first argument in the subscribe callback)
- * @returns an expiration timestamp in Unix Epoch (`new Date().getTime()`), or `null` if this is not known (typically occurs if the bot has not responded yet)
+ * @param responses - the current list of user and application responses (first argument in the subscribe callback)
+ * @returns an expiration timestamp in Unix Epoch (`new Date().getTime()`), or `null` if this is not known (typically occurs if the application has not responded yet)
  */
 export const getCurrentExpirationTimestamp = (
   responses: Response[],
@@ -1491,7 +1466,7 @@ export const getCurrentExpirationTimestamp = (
   let expirationTimestamp: number | null = null;
   responses.forEach((response) => {
     if (
-      response.type === "bot" &&
+      response.type === "application" &&
       response.payload.expirationTimestamp != null
     ) {
       expirationTimestamp = response.payload.expirationTimestamp;
@@ -1501,12 +1476,12 @@ export const getCurrentExpirationTimestamp = (
 };
 
 /**
- * This package is intentionally designed with a subscription-based API as opposed to a promise-based one where each message corresponds to a single bot response, available asynchronously.
+ * This package is intentionally designed with a subscription-based API as opposed to a promise-based one where each message corresponds to a single application response, available asynchronously.
  *
  * If you need a promise-based wrapper, you can use the `promisify` helper available in the package:
  * @example
  * ```typescript
- * import { createConversation, promisify } from "@nlxai/chat-core";
+ * import { createConversation, promisify } from "@nlxai/core";
  *
  * const convo = createConversation(config);
  *
@@ -1537,7 +1512,10 @@ export function promisify<T>(
         _responses: Response[],
         newResponse: Response | undefined,
       ): void => {
-        if (newResponse?.type === "bot" || newResponse?.type === "failure") {
+        if (
+          newResponse?.type === "application" ||
+          newResponse?.type === "failure"
+        ) {
           clearTimeout(timeoutId);
           convo.unsubscribe(subscription);
           resolve(newResponse);

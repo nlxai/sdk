@@ -1,7 +1,7 @@
 import { type FC } from "react";
 import { type PartialDeep } from "type-fest";
 import { type Theme, type TitleBar, defaultTheme } from "@nlxai/chat-widget";
-import { type Config } from "@nlxai/chat-core";
+import { type Config } from "../../../core/lib";
 
 import { Behavior } from "../snippets";
 import { Labeled, inputClass } from "./Ui";

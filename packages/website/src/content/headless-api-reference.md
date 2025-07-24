@@ -1,6 +1,6 @@
 <a name="readmemd"></a>
 
-# @nlxai/chat-core
+# @nlxai/core
 
 ## Interfaces
 
@@ -408,7 +408,7 @@ A promise-wrapped version of the function. The function, when called, returns a 
 **`Example`**
 
 ```typescript
-import { createConversation, promisify } from "@nlxai/chat-core";
+import { createConversation, promisify } from "@nlxai/core";
 
 const convo = createConversation(config);
 

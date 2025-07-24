@@ -7,14 +7,11 @@
     <title>chat-core minimal test repo</title>
   </head>
   <body>
-    <script
-      defer
-      src="https://unpkg.com/@nlxai/chat-core/lib/index.umd.js"
-    ></script>
+    <script defer src="https://unpkg.com/@nlxai/core/lib/index.umd.js"></script>
     <script>
       window.addEventListener("DOMContentLoaded", () => {
         const config = {
-          botUrl: "", // obtain from NLX deployments page
+          applicationUrl: "", // obtain from NLX deployments page
           headers: {
             "nlx-api-key": "", // obtain from NLX deployments page
           },
@@ -25,7 +22,7 @@
         };
 
         // TODO stop using default here
-        nlxai.chatCore.default(config);
+        nlx.default(config);
         console.log("✅ browser test passed");
       });
     </script>

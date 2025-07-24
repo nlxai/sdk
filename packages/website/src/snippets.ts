@@ -1,4 +1,4 @@
-import { type Config } from "@nlxai/chat-core";
+import { type Config } from "../../core/lib";
 import { type TitleBar, type Theme } from "@nlxai/chat-widget";
 import { umdScriptSrc } from "./constants";
 import { type Config as VoicePlusConfig } from "./components/VoicePlusConfiguration";
@@ -343,7 +343,7 @@ const context = {
 
 conversationHandler.sendWelcomeIntent(context);`;
 
-export const headlessSetupSnippet: string = `import { createConversation } from "@nlxai/chat-core";
+export const headlessSetupSnippet: string = `import { createConversation } from "@nlxai/core";
 
 // Create some configuration
 const config = {

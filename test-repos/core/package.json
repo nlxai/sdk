@@ -1,5 +1,5 @@
 {
-  "name": "chat-core",
+  "name": "core",
   "version": "1.0.0",
   "description": "",
   "type": "module",
@@ -16,6 +16,6 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@nlxai/chat-core": "file:../../packages/chat-core"
+    "@nlxai/core": "file:../../packages/core"
   }
 }

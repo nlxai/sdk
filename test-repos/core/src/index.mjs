@@ -1,7 +1,7 @@
-import { createConversation } from "@nlxai/chat-core";
+import { createConversation } from "@nlxai/core";
 
 const config = {
-  botUrl: "", // obtain from NLX deployments page
+  applicationUrl: "", // obtain from NLX deployments page
   headers: {
     "nlx-api-key": "", // obtain from NLX deployments page
   },

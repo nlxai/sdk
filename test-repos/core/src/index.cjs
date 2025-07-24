@@ -1,7 +1,7 @@
-import { createConversation, type Config } from "@nlxai/chat-core";
+const { createConversation } = require("@nlxai/core");
 
-const config: Config = {
-  botUrl: "", // obtain from NLX deployments page
+const config = {
+  applicationUrl: "", // obtain from NLX deployments page
   headers: {
     "nlx-api-key": "", // obtain from NLX deployments page
   },
@@ -13,4 +13,4 @@ const config: Config = {
 
 createConversation(config);
 
-console.log("✅ typescript test passed!");
+console.log("✅ CJS test passed!");

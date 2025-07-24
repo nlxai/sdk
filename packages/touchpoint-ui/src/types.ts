@@ -3,7 +3,7 @@ import type {
   BotMessage,
   ConversationHandler,
   Context,
-} from "@nlxai/chat-core";
+} from "../../core/lib";
 import { type ComponentType } from "react";
 
 /**
@@ -284,7 +284,7 @@ export type BidirectionalConfig =
  */
 export interface TouchpointConfiguration {
   /**
-   * Connection information for the \@nlxai/chat-core conversation handler
+   * Connection information for the \@nlxai/core conversation handler
    */
   config: Config;
   /**

@@ -5,7 +5,7 @@ import type {
   ConversationHandler,
   VoiceCredentials,
   ModalityPayloads,
-} from "@nlxai/chat-core";
+} from "../../core/lib";
 import { useDebouncedState } from "@react-hookz/web";
 import {
   ParticipantEvent,

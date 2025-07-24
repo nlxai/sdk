@@ -16,7 +16,7 @@ import {
   type Subscriber,
   type Response,
   type BotResponse,
-} from "@nlxai/chat-core";
+} from "../../core/lib";
 import { clsx } from "clsx";
 import { findLastIndex } from "ramda";
 
@@ -116,21 +116,17 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     isExpandedRef.current = isExpanded;
   }, [isExpanded]);
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        setExpanded: setIsExpanded,
-        getExpanded() {
-          return isExpandedRef.current;
-        },
-        getConversationHandler() {
-          return handler;
-        },
-      };
-    },
-    [handler, setIsExpanded],
-  );
+  useImperativeHandle(ref, () => {
+    return {
+      setExpanded: setIsExpanded,
+      getExpanded() {
+        return isExpandedRef.current;
+      },
+      getConversationHandler() {
+        return handler;
+      },
+    };
+  }, [handler, setIsExpanded]);
 
   useEffect(() => {
     const fn: Subscriber = (responses) => {

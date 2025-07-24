@@ -1,7 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { useState, type FC, type ReactNode } from "react";
 import { clsx } from "clsx";
-import type { Context, ConversationHandler } from "@nlxai/chat-core";
+import type { Context, ConversationHandler } from "../../../core/lib";
 import type {
   ColorMode,
   InitializeConversation,
