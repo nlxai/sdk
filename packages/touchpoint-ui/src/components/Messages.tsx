@@ -3,7 +3,7 @@ import { type FC, Fragment, useEffect, useRef, useState, useMemo } from "react";
 import {
   type Response,
   type ConversationHandler,
-  type BotMessage,
+  type ApplicationMessage,
   type KnowledgeBaseResponseSource,
 } from "../../../core/lib";
 import { clsx } from "clsx";
@@ -25,7 +25,7 @@ export interface MessagesProps {
   chatMode: boolean;
   colorMode: ColorMode;
   uploadedFiles: Record<string, File>;
-  lastBotResponseIndex?: number;
+  lastApplicationResponseIndex?: number;
   customModalities: Record<string, CustomModalityComponent<unknown>>;
   className?: string;
   enabled: boolean;
@@ -33,7 +33,7 @@ export interface MessagesProps {
 
 export const MessageChoices: FC<{
   handler: ConversationHandler;
-  message: BotMessage;
+  message: ApplicationMessage;
   responseIndex: number;
   messageIndex: number;
 }> = ({ handler, message, responseIndex, messageIndex }) => {
@@ -218,7 +218,7 @@ export const Messages: FC<MessagesProps> = ({
   uploadedFiles,
   userMessageBubble,
   agentMessageBubble,
-  lastBotResponseIndex,
+  lastApplicationResponseIndex,
   isWaiting,
   customModalities,
   handler,
@@ -227,12 +227,14 @@ export const Messages: FC<MessagesProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const lastBotMessageRef = useRef<HTMLDivElement | null>(null);
+  const lastApplicationMessageRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!chatMode && !isWaiting) {
       setTimeout(() => {
-        lastBotMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+        lastApplicationMessageRef.current?.scrollIntoView({
+          behavior: "smooth",
+        });
       });
     }
   }, [isWaiting, chatMode]);
@@ -304,10 +306,10 @@ export const Messages: FC<MessagesProps> = ({
               />
             );
           }
-          // Bot response
+          // Application response
           const isLast =
-            lastBotResponseIndex != null &&
-            responseIndex === lastBotResponseIndex;
+            lastApplicationResponseIndex != null &&
+            responseIndex === lastApplicationResponseIndex;
           return (
             <Fragment key={responseIndex}>
               <div
@@ -315,7 +317,7 @@ export const Messages: FC<MessagesProps> = ({
                   "space-y-2",
                   !chatMode && isLast ? "min-h-full" : "",
                 )}
-                ref={isLast ? lastBotMessageRef : undefined}
+                ref={isLast ? lastApplicationMessageRef : undefined}
               >
                 {response.payload.messages.map((message, messageIndex) => {
                   return (

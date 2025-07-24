@@ -10,11 +10,11 @@ export default defineConfig({
   },
   base: "./",
   optimizeDeps: {
-    include: ["@nlxai/core", "@nlxai/chat-react", "@nlxai/chat-widget"],
+    include: ["@nlxai/core"],
   },
   build: {
     commonjsOptions: {
-      include: [/node_modules/, /core/, /chat-react/, /chat-widget/],
+      include: [/node_modules/, /core/],
     },
   },
   ssr: {

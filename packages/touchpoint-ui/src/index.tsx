@@ -127,7 +127,11 @@ const normalizeConfiguration = (
     config: {
       ...configuration.config,
       applicationUrl:
-        configuration.config.applicationUrl ?? configuration.config.botUrl,
+        configuration.config.applicationUrl ??
+        // Make this not break and require a major version bump
+        ("botUrl" in configuration.config
+          ? (configuration.config.botUrl as string)
+          : undefined),
       conversationId:
         configuration.config.conversationId ??
         sessionStorage.getItem("nlxConversationId") ??

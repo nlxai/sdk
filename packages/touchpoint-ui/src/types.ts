@@ -1,6 +1,6 @@
 import type {
   Config,
-  BotMessage,
+  ApplicationMessage,
   ConversationHandler,
   Context,
 } from "../../core/lib";
@@ -23,7 +23,7 @@ export interface ChoiceMessage {
   /**
    * Message contents
    */
-  message: BotMessage;
+  message: ApplicationMessage;
   /**
    * Index in the response transcript history
    */

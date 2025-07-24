@@ -15,7 +15,7 @@ import {
   isConfigValid,
   type Subscriber,
   type Response,
-  type BotResponse,
+  type ApplicationResponse,
 } from "../../core/lib";
 import { clsx } from "clsx";
 import { findLastIndex } from "ramda";
@@ -198,42 +198,42 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   const windowSize: WindowSize =
     props.windowSize ?? (props.embedded ? "full" : "half");
 
-  const lastBotResponse = useMemo<{
+  const lastApplicationResponse = useMemo<{
     index: number;
-    response: BotResponse;
+    response: ApplicationResponse;
   } | null>(() => {
-    const index = findLastIndex((res) => res.type === "bot", responses);
+    const index = findLastIndex((res) => res.type === "application", responses);
     if (index === -1) {
       return null;
     }
     const response = responses[index];
-    if (response?.type !== "bot") {
+    if (response?.type !== "application") {
       return null;
     }
     return { index, response };
   }, [responses]);
 
   const choiceMessage = useMemo<ChoiceMessage | undefined>(() => {
-    if (lastBotResponse == null) {
+    if (lastApplicationResponse == null) {
       return;
     }
     const choiceMessageIndex = findLastIndex((message) => {
       return message.choices.length > 0;
-    }, lastBotResponse.response.payload.messages);
+    }, lastApplicationResponse.response.payload.messages);
     if (choiceMessageIndex === -1) {
       return;
     }
     const choiceMessage =
-      lastBotResponse.response.payload.messages[choiceMessageIndex];
+      lastApplicationResponse.response.payload.messages[choiceMessageIndex];
     if (choiceMessage == null) {
       return;
     }
     return {
       message: choiceMessage,
       messageIndex: choiceMessageIndex,
-      responseIndex: lastBotResponse.index,
+      responseIndex: lastApplicationResponse.index,
     };
-  }, [lastBotResponse]);
+  }, [lastApplicationResponse]);
 
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({});
 
@@ -349,7 +349,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           agentMessageBubble={props.agentMessageBubble ?? false}
           chatMode={props.chatMode ?? false}
           isWaiting={isWaiting}
-          lastBotResponseIndex={lastBotResponse?.index}
+          lastApplicationResponseIndex={lastApplicationResponse?.index}
           responses={responses}
           colorMode={colorMode}
           handler={handler}
@@ -374,7 +374,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               enabled={props.enabled}
               handler={handler}
               uploadUrl={
-                lastBotResponse?.response.payload.metadata?.uploadUrls?.[0]
+                lastApplicationResponse?.response.payload.metadata
+                  ?.uploadUrls?.[0]
               }
               onFileUpload={({ uploadId, file }) => {
                 setUploadedFiles((prev) => ({
