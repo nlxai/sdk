@@ -203,7 +203,7 @@ export const useVoice = ({
       });
 
       handler.setRequestOverride((req) => {
-        // TODO: Send room events based on req.request, it has .structured and .unstructured etc., see types
+        void room.localParticipant.sendText(JSON.stringify(req.request));
       });
 
       // Handle incoming data from the room/agent
