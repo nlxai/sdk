@@ -2,7 +2,6 @@
 import type { Context, ConversationHandler } from "@nlxai/core";
 import { type ReactNode, useState, type FC } from "react";
 import { clsx } from "clsx";
-import { findLast } from "ramda";
 
 import type { CustomModalityComponent } from "../types";
 import { useVoice } from "../voice";
@@ -46,17 +45,6 @@ const CompactContainer: FC<{ children: ReactNode; className?: string }> = ({
   </div>
 );
 
-const VoiceModalitiesWrapper: FC<{ children: ReactNode }> = ({ children }) => (
-  <div
-    className={clsx(
-      containerClass,
-      "absolute right-0 -top-2 transform -translate-y-full",
-    )}
-  >
-    {children}
-  </div>
-);
-
 export const VoiceMini: FC<{
   customModalities: Record<string, CustomModalityComponent<unknown>>;
   handler: ConversationHandler;
@@ -83,11 +71,6 @@ export const VoiceMini: FC<{
     handler,
     context,
   });
-
-  const lastNonEmptyModalities = useMemo(
-    () => findLast((mod) => Object.keys(mod.modalities).length > 0, modalities),
-    [modalities],
-  );
 
   if (roomState === "error") {
     return (
@@ -180,15 +163,15 @@ export const VoiceMini: FC<{
           onCloseHandler();
         }}
       />
-      {lastNonEmptyModalities != null ? (
-        <VoiceModalities
-          key={lastNonEmptyModalities.timestamp}
-          Wrapper={VoiceModalitiesWrapper}
-          modalities={lastNonEmptyModalities}
-          customModalities={customModalities}
-          handler={handler}
-        />
-      ) : null}
+      <VoiceModalities
+        className={clsx(
+          containerClass,
+          "absolute right-0 -top-2 transform -translate-y-full max-h-[360px] overflow-auto",
+        )}
+        modalities={modalities}
+        customModalities={customModalities}
+        handler={handler}
+      />
     </CompactContainer>
   );
 };

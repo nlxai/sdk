@@ -54,6 +54,10 @@ export type CustomModalityComponent<Data> = ComponentType<{
    * @internal
    */
   enabled: boolean;
+  /**
+   * Class name to propagate to the container
+   */
+  className?: string;
 }>;
 
 /**

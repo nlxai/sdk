@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { useState, useMemo, type FC, type ReactNode } from "react";
+import { useState, type FC, type ReactNode, useRef, useEffect } from "react";
 import { clsx } from "clsx";
 import type { Context, ConversationHandler } from "@nlxai/core";
 import type {
@@ -41,42 +41,73 @@ const Container: FC<{ className?: string; children: ReactNode }> = ({
   </div>
 );
 
+interface ModalityEntry {
+  key: string;
+  value: any;
+  Component: CustomModalityComponent<unknown>;
+}
+
 export const VoiceModalities: FC<{
-  Wrapper?: FC<{ children: ReactNode }>;
-  modalities: ModalitiesWithContext;
+  className?: string;
+  modalities: ModalitiesWithContext[];
   customModalities: Record<string, CustomModalityComponent<unknown>>;
   handler: ConversationHandler;
-}> = ({ Wrapper, modalities, customModalities, handler }) => {
-  const modalityEntries = Object.entries(modalities.modalities);
-  const customModalityComponents = modalityEntries
-    .map(([key, value]) => {
-      const Component = customModalities[key];
-      if (Component != null) {
-        return (
-          <Component
-            key={key}
-            data={value}
-            conversationHandler={handler}
-            enabled={true}
-          />
-        );
+}> = ({ className, modalities, customModalities, handler }) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const customModalityComponents = modalities
+    .map((m) => {
+      const entries: ModalityEntry[] = Object.entries(m.modalities)
+        .map(([key, value]) => {
+          const Component = customModalities[key];
+          if (Component == null) {
+            return null;
+          }
+          return { key, value, Component };
+        })
+        .filter((entry): entry is ModalityEntry => entry != null);
+      if (entries.length === 0) {
+        return null;
       }
-      return null;
+      return (
+        <div className="space-y-2 last:h-full" key={m.timestamp}>
+          {entries.map(({ key, value, Component }) => {
+            return (
+              <Component
+                key={key}
+                className="backdrop-blur-overlay"
+                data={value}
+                conversationHandler={handler}
+                enabled={true}
+              />
+            );
+          })}
+        </div>
+      );
     })
     .filter(Boolean);
 
-  if (customModalityComponents.length > 0) {
-    return Wrapper == null ? (
-      customModalityComponents
-    ) : (
-      <Wrapper>{customModalityComponents}</Wrapper>
-    );
-  }
-};
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container == null) {
+      return;
+    }
+    const lastChild = container.lastChild;
+    if (lastChild instanceof HTMLElement) {
+      lastChild.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [customModalityComponents.length]);
 
-const VoiceModalitiesWrapper: FC<{ children: ReactNode }> = ({ children }) => (
-  <div className="absolute top-4 left-4 right-4 z-10">{children}</div>
-);
+  if (customModalityComponents.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className={className} ref={containerRef}>
+      {customModalityComponents}
+    </div>
+  );
+};
 
 export const FullscreenVoice: FC<Props> = ({
   handler,
@@ -101,11 +132,6 @@ export const FullscreenVoice: FC<Props> = ({
     handler,
     context,
   });
-
-  const lastNonEmptyModalities = useMemo(
-    () => findLast((mod) => Object.keys(mod.modalities).length > 0, modalities),
-    [modalities],
-  );
 
   if (roomState === "pending") {
     return (
@@ -174,15 +200,12 @@ export const FullscreenVoice: FC<Props> = ({
         </div>
         {isApplicationSpeaking ? <Ripple className="rounded-full" /> : null}
       </div>
-      {lastNonEmptyModalities != null ? (
-        <VoiceModalities
-          Wrapper={VoiceModalitiesWrapper}
-          key={lastNonEmptyModalities.timestamp}
-          modalities={lastNonEmptyModalities}
-          customModalities={customModalities}
-          handler={handler}
-        />
-      ) : null}
+      <VoiceModalities
+        className="absolute p-4 top-0 left-0 right-0 bottom-[72px] z-10 space-y-2 max-h-full overflow-auto border-b border-primary-10"
+        modalities={modalities}
+        customModalities={customModalities}
+        handler={handler}
+      />
       <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2">
         {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
         <IconButton
