@@ -203,7 +203,14 @@ export const useVoice = ({
       });
 
       handler.setRequestOverride((req) => {
-        void room.localParticipant.sendText(JSON.stringify(req.request));
+        const encoder = new TextEncoder();
+        const encodedData = encoder.encode(JSON.stringify(req.request));
+        room.localParticipant
+          .publishData(encodedData)
+          .then(() => {})
+          .catch((err) => {
+            console.error("Failed to publish data to LiveKit:", err);
+          });
       });
 
       // Handle incoming data from the room/agent
