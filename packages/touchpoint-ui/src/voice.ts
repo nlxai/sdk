@@ -123,7 +123,7 @@ export const useVoice = ({
     roomRef.current = null;
     setModalities([]);
     await room.disconnect();
-  }, [setRoomData, setAudioElement, handler]);
+  }, [setModalities, setAudioElement, handler]);
 
   useEffect(() => {
     const room = roomRef.current;
@@ -205,12 +205,9 @@ export const useVoice = ({
       handler.setRequestOverride((req) => {
         const encoder = new TextEncoder();
         const encodedData = encoder.encode(JSON.stringify(req.request));
-        room.localParticipant
-          .publishData(encodedData)
-          .then(() => {})
-          .catch((err) => {
-            console.error("Failed to publish data to LiveKit:", err);
-          });
+        room.localParticipant.publishData(encodedData).catch((err) => {
+          console.error("Failed to publish data to LiveKit:", err);
+        });
       });
 
       // Handle incoming data from the room/agent
