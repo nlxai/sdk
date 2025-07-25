@@ -5,6 +5,7 @@ import {
   type ConversationHandler,
   type ApplicationMessage,
   type KnowledgeBaseResponseSource,
+  ResponseType,
 } from "@nlxai/core";
 import { clsx } from "clsx";
 import { marked } from "marked";
@@ -269,7 +270,7 @@ export const Messages: FC<MessagesProps> = ({
       >
         {responses.map((response, responseIndex) => {
           // User response
-          if (response.type === "user") {
+          if (response.type === ResponseType.User) {
             if (response.payload.type === "text") {
               return (
                 <UserMessage
@@ -298,7 +299,7 @@ export const Messages: FC<MessagesProps> = ({
             }
           }
           // Failure
-          if (response.type === "failure") {
+          if (response.type === ResponseType.Failure) {
             return (
               <ErrorMessage
                 key={responseIndex}

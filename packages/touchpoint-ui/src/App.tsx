@@ -12,6 +12,7 @@ import {
 import {
   type ConversationHandler,
   createConversation,
+  ResponseType,
   isConfigValid,
   type Subscriber,
   type Response,
@@ -77,7 +78,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const [responses, setResponses] = useState<Response[]>([]);
 
-  const isWaiting = responses[responses.length - 1]?.type === "user";
+  const isWaiting = responses[responses.length - 1]?.type === ResponseType.User;
 
   const colorMode = props.colorMode ?? "dark";
 
@@ -116,17 +117,21 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     isExpandedRef.current = isExpanded;
   }, [isExpanded]);
 
-  useImperativeHandle(ref, () => {
-    return {
-      setExpanded: setIsExpanded,
-      getExpanded() {
-        return isExpandedRef.current;
-      },
-      getConversationHandler() {
-        return handler;
-      },
-    };
-  }, [handler, setIsExpanded]);
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        setExpanded: setIsExpanded,
+        getExpanded() {
+          return isExpandedRef.current;
+        },
+        getConversationHandler() {
+          return handler;
+        },
+      };
+    },
+    [handler, setIsExpanded],
+  );
 
   useEffect(() => {
     const fn: Subscriber = (responses) => {
