@@ -14,6 +14,10 @@ export interface DateInputProps {
    * @param date - The submitted date in YYYY-MM-DD format
    */
   onSubmit?: (date: string) => void;
+  /**
+   * Class name
+   */
+  className?: string;
 }
 
 const options = {
@@ -22,7 +26,7 @@ const options = {
   showMask: true,
 };
 
-export const DateInput: FC<DateInputProps> = ({ onSubmit }) => {
+export const DateInput: FC<DateInputProps> = ({ onSubmit, className }) => {
   const isDisabled = onSubmit == null;
 
   const [parsedInput, setParsedInput] = useState<string | null>(null);
@@ -32,6 +36,7 @@ export const DateInput: FC<DateInputProps> = ({ onSubmit }) => {
       className={clsx(
         "relative bg-primary-5 flex items-center justify-between pl-4 py-2 pr-2 rounded-outer transition-colors duration-500 before:content-[''] before:absolute before:transition-colors before:-z-10 before:inset-0 before:bg-transparent",
         isDisabled ? "" : "hover:bg-secondary-20",
+        className,
       )}
     >
       <div className="flex items-center">

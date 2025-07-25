@@ -45,17 +45,6 @@ const CompactContainer: FC<{ children: ReactNode; className?: string }> = ({
   </div>
 );
 
-const VoiceModalitiesWrapper: FC<{ children: ReactNode }> = ({ children }) => (
-  <div
-    className={clsx(
-      containerClass,
-      "absolute right-0 -top-2 transform -translate-y-full",
-    )}
-  >
-    {children}
-  </div>
-);
-
 export const VoiceMini: FC<{
   customModalities: Record<string, CustomModalityComponent<unknown>>;
   handler: ConversationHandler;
@@ -70,13 +59,18 @@ export const VoiceMini: FC<{
     onClose(new Event("close"));
   };
 
-  const { roomState, isUserSpeaking, isApplicationSpeaking, retry, roomData } =
-    useVoice({
-      micEnabled,
-      speakersEnabled,
-      handler,
-      context,
-    });
+  const {
+    roomState,
+    isUserSpeaking,
+    isApplicationSpeaking,
+    retry,
+    modalities,
+  } = useVoice({
+    micEnabled,
+    speakersEnabled,
+    handler,
+    context,
+  });
 
   if (roomState === "error") {
     return (
@@ -169,14 +163,15 @@ export const VoiceMini: FC<{
           onCloseHandler();
         }}
       />
-      {roomData != null ? (
-        <VoiceModalities
-          Wrapper={VoiceModalitiesWrapper}
-          roomData={roomData}
-          customModalities={customModalities}
-          handler={handler}
-        />
-      ) : null}
+      <VoiceModalities
+        className={clsx(
+          containerClass,
+          "absolute right-0 -top-2 transform -translate-y-full max-h-[360px] overflow-auto",
+        )}
+        modalities={modalities}
+        customModalities={customModalities}
+        handler={handler}
+      />
     </CompactContainer>
   );
 };

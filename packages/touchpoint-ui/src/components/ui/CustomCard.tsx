@@ -9,6 +9,10 @@ import { type Icon } from "../ui/Icons";
  */
 export interface CustomCardProps {
   /**
+   * Class name
+   */
+  className?: string;
+  /**
    * Content to be rendered inside the card.
    */
   children: ReactNode;
@@ -32,16 +36,18 @@ export interface CustomCardProps {
 
 export const CustomCard: FC<CustomCardProps> = ({
   children,
+  className,
   selected,
   onClick,
   href,
   newTab,
 }) => {
-  const className = clsx(
+  const containerClassName = clsx(
     "block shrink-0 rounded-inner overflow-hidden",
     "w-80 space-y-px",
     selected ? "outline outline-2 outline-accent" : "",
     onClick != null || href != null ? "hover:bg-primary-5" : "",
+    className,
   );
   useEffect(() => {
     if (href == null && newTab != null) {
@@ -54,7 +60,7 @@ export const CustomCard: FC<CustomCardProps> = ({
   if (href != null) {
     return (
       <a
-        className={className}
+        className={containerClassName}
         href={href}
         onClick={onClick}
         {...(newTab ? { target: "_blank", rel: "noreferrer" } : {})}
@@ -65,12 +71,12 @@ export const CustomCard: FC<CustomCardProps> = ({
   }
   if (onClick != null) {
     return (
-      <button className={className} onClick={onClick}>
+      <button className={containerClassName} onClick={onClick}>
         {children}
       </button>
     );
   }
-  return <div className={className}>{children}</div>;
+  return <div className={containerClassName}>{children}</div>;
 };
 
 export const CustomCardImageRow: FC<{ src: string; alt?: string }> = ({
