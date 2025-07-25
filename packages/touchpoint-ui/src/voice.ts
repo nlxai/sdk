@@ -122,6 +122,7 @@ export const useVoice = ({
     setAudioElement(null);
     roomRef.current = null;
     setModalities([]);
+    handler.setRequestOverride(undefined);
     await room.disconnect();
   }, [setModalities, setAudioElement, handler]);
 
