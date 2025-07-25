@@ -81,7 +81,7 @@ export type SlotsRecordOrArray = SlotsRecord | SlotValue[];
  */
 export interface ApplicationResponse {
   /**
-   * The type of the response is `"bot"` for an application and `"user"` for user, and "failure" for failure.
+   * The application response type
    */
   type: ResponseType.Application;
   /**
@@ -281,9 +281,9 @@ export interface Choice {
  */
 export interface UserResponse {
   /**
-   * The type of the response is `"application"` for application and `"user"` for user, and "failure" for failure.
+   * The user response type
    */
-  type: "user";
+  type: ResponseType.User;
   /**
    * When the response was received
    */
@@ -345,7 +345,7 @@ export type UserResponsePayload =
  */
 export interface FailureMessage {
   /**
-   * The type of the response is `"application"` for application and `"user"` for user.
+   * The failure response type
    */
   type: ResponseType.Failure;
   /**
