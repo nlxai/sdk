@@ -1230,7 +1230,7 @@ export function createConversation(config: Config): ConversationHandler {
 
   const sendText = (text: string, context?: Context): void => {
     const newResponse: Response = {
-      type: "user",
+      type: ResponseType.User,
       receivedAt: new Date().getTime(),
       payload: {
         type: "text",
@@ -1262,7 +1262,7 @@ export function createConversation(config: Config): ConversationHandler {
     let newResponses: Response[] = [...state.responses];
 
     const choiceResponse: Response = {
-      type: "user",
+      type: ResponseType.User,
       receivedAt: new Date().getTime(),
       payload: {
         type: "choice",
