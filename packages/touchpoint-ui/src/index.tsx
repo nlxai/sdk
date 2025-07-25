@@ -4,7 +4,7 @@ import { type Root, createRoot } from "react-dom/client";
 import htm from "htm";
 import { equals } from "ramda";
 
-import { type ConversationHandler } from "../../core/lib";
+import { type ConversationHandler } from "@nlxai/core";
 
 import packageJson from "../package.json";
 import App, { type AppRef } from "./App";

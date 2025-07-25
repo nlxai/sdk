@@ -1,4 +1,4 @@
-import { type Config } from "../../core/lib";
+import { type Config } from "@nlxai/core";
 import { umdScriptSrc } from "./constants";
 import { type Config as VoicePlusConfig } from "./components/VoicePlusConfiguration";
 

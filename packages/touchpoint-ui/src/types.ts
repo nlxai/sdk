@@ -3,7 +3,7 @@ import type {
   ApplicationMessage,
   ConversationHandler,
   Context,
-} from "../../core/lib";
+} from "@nlxai/core";
 import { type ComponentType } from "react";
 
 /**

@@ -16,7 +16,7 @@ import {
   type Subscriber,
   type Response,
   type ApplicationResponse,
-} from "../../core/lib";
+} from "@nlxai/core";
 import { clsx } from "clsx";
 import { findLastIndex } from "ramda";
 

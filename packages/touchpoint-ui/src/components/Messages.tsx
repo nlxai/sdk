@@ -5,7 +5,7 @@ import {
   type ConversationHandler,
   type ApplicationMessage,
   type KnowledgeBaseResponseSource,
-} from "../../../core/lib";
+} from "@nlxai/core";
 import { clsx } from "clsx";
 import { marked } from "marked";
 

@@ -1,6 +1,6 @@
 import { type FC } from "react";
 import { type PartialDeep } from "type-fest";
-import { type Config } from "../../../core/lib";
+import { type Config } from "@nlxai/core";
 import { Labeled, inputClass } from "./Ui";
 
 function defaultInitialConfig({

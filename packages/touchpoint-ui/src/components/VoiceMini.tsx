@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import type { Context, ConversationHandler } from "../../../core/lib";
+import type { Context, ConversationHandler } from "@nlxai/core";
 import { type ReactNode, useState, type FC } from "react";
 import { clsx } from "clsx";
 
