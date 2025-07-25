@@ -1,7 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { computeAccessibleName } from "dom-accessibility-api";
 
-import type { ConversationHandler } from "@nlxai/chat-core";
+import type { ConversationHandler } from "@nlxai/core";
 import { analyzePageForms } from "./analyzePageForms";
 import { equals, uniq } from "ramda";
 import { debug } from "./debug";

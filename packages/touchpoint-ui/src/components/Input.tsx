@@ -12,7 +12,7 @@ import {
   type ConversationHandler,
   type UploadUrl,
   type Subscriber,
-} from "@nlxai/chat-core";
+} from "@nlxai/core";
 import { clsx } from "clsx";
 
 import { IconButton } from "./ui/IconButton";
@@ -80,9 +80,9 @@ export const Input: FC<InputProps> = ({
       return;
     }
 
-    // Before sending a bot message, subscribe to its response and clear the input only then
+    // Before sending a application message, subscribe to its response and clear the input only then
     const subscriber: Subscriber = (_responses, newResponse) => {
-      if (newResponse?.type === "bot") {
+      if (newResponse?.type === "application") {
         setIsWaiting(false);
         handler.unsubscribe(subscriber);
         setInputValue("");

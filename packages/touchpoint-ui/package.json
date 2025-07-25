@@ -24,7 +24,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@nlxai/chat-core": "^1.1.4",
+    "@nlxai/core": "^1.0.0",
     "@react-hookz/web": "^25.0.1",
     "@react-input/mask": "^2.0.4",
     "clsx": "^2.1.1",

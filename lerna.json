@@ -9,10 +9,7 @@
   },
   "npmClient": "npm",
   "packages": [
-    "packages/chat-core",
-    "packages/chat-react",
-    "packages/chat-preact",
-    "packages/chat-widget",
+    "packages/core",
     "packages/voice-plus-core",
     "packages/voice-plus-web",
     "packages/touchpoint-ui",

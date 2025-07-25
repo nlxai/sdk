@@ -1,5 +1,5 @@
 import { type FC, useRef, type ReactNode } from "react";
-import { type Config, isConfigValid } from "@nlxai/chat-core";
+import { type Config, isConfigValid } from "@nlxai/core";
 import { useDebouncedEffect } from "@react-hookz/web";
 import { TouchpointIcon } from "../components/Icons";
 import { Toggle } from "../components/Toggle";

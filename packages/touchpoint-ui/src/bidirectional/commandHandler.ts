@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import type { ConversationHandler } from "@nlxai/chat-core";
+import type { ConversationHandler } from "@nlxai/core";
 import type { BidirectionalConfig } from "../types";
 import { debug } from "./debug";
 

@@ -1,9 +1,9 @@
 import type {
   Config,
-  BotMessage,
+  ApplicationMessage,
   ConversationHandler,
   Context,
-} from "@nlxai/chat-core";
+} from "@nlxai/core";
 import { type ComponentType } from "react";
 
 /**
@@ -23,7 +23,7 @@ export interface ChoiceMessage {
   /**
    * Message contents
    */
-  message: BotMessage;
+  message: ApplicationMessage;
   /**
    * Index in the response transcript history
    */
@@ -284,7 +284,7 @@ export type BidirectionalConfig =
  */
 export interface TouchpointConfiguration {
   /**
-   * Connection information for the \@nlxai/chat-core conversation handler
+   * Connection information for the \@nlxai/core conversation handler
    */
   config: Config;
   /**

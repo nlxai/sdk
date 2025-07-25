@@ -4,7 +4,7 @@ import { type Root, createRoot } from "react-dom/client";
 import htm from "htm";
 import { equals } from "ramda";
 
-import { type ConversationHandler } from "@nlxai/chat-core";
+import { type ConversationHandler } from "@nlxai/core";
 
 import packageJson from "../package.json";
 import App, { type AppRef } from "./App";
@@ -126,6 +126,12 @@ const normalizeConfiguration = (
     ...configuration,
     config: {
       ...configuration.config,
+      applicationUrl:
+        configuration.config.applicationUrl ??
+        // Make this not break and require a major version bump
+        ("botUrl" in configuration.config
+          ? (configuration.config.botUrl as string)
+          : undefined),
       conversationId:
         configuration.config.conversationId ??
         sessionStorage.getItem("nlxConversationId") ??
@@ -136,7 +142,7 @@ const normalizeConfiguration = (
         defaultUserId(),
       bidirectional:
         configuration.bidirectional == null
-          ? configuration.config.bidirectional ?? false
+          ? (configuration.config.bidirectional ?? false)
           : true,
     },
     input: configuration.input ?? "text",
