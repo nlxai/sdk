@@ -12,6 +12,7 @@ import {
   type ConversationHandler,
   type UploadUrl,
   type Subscriber,
+  ResponseType,
 } from "@nlxai/core";
 import { clsx } from "clsx";
 
@@ -82,7 +83,7 @@ export const Input: FC<InputProps> = ({
 
     // Before sending a application message, subscribe to its response and clear the input only then
     const subscriber: Subscriber = (_responses, newResponse) => {
-      if (newResponse?.type === "application") {
+      if (newResponse?.type === ResponseType.Application) {
         setIsWaiting(false);
         handler.unsubscribe(subscriber);
         setInputValue("");

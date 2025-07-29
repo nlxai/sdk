@@ -207,12 +207,15 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     index: number;
     response: ApplicationResponse;
   } | null>(() => {
-    const index = findLastIndex((res) => res.type === "application", responses);
+    const index = findLastIndex(
+      (res) => res.type === ResponseType.Application,
+      responses,
+    );
     if (index === -1) {
       return null;
     }
     const response = responses[index];
-    if (response?.type !== "application") {
+    if (response?.type !== ResponseType.Application) {
       return null;
     }
     return { index, response };
