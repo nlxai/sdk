@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable jsdoc/require-jsdoc */
 import { type SaveAs } from "./types";
 import { type CustomModalityComponent } from "../../types";
@@ -12,6 +13,9 @@ export const DefaultDateInput: CustomModalityComponent<{
         const { $saveAs } = data;
         if ($saveAs.type === "slot") {
           conversationHandler.sendSlots({ [$saveAs.id]: date });
+        }
+        if ($saveAs.type === "context") {
+          conversationHandler.sendContext({ [$saveAs.id]: date });
         }
       }}
     />
