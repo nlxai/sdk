@@ -12,6 +12,7 @@ import {
 import {
   type ConversationHandler,
   createConversation,
+  ResponseType,
   isConfigValid,
   type Subscriber,
   type Response,
@@ -77,7 +78,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const [responses, setResponses] = useState<Response[]>([]);
 
-  const isWaiting = responses[responses.length - 1]?.type === "user";
+  const isWaiting = responses[responses.length - 1]?.type === ResponseType.User;
 
   const colorMode = props.colorMode ?? "dark";
 
@@ -116,17 +117,21 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     isExpandedRef.current = isExpanded;
   }, [isExpanded]);
 
-  useImperativeHandle(ref, () => {
-    return {
-      setExpanded: setIsExpanded,
-      getExpanded() {
-        return isExpandedRef.current;
-      },
-      getConversationHandler() {
-        return handler;
-      },
-    };
-  }, [handler, setIsExpanded]);
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        setExpanded: setIsExpanded,
+        getExpanded() {
+          return isExpandedRef.current;
+        },
+        getConversationHandler() {
+          return handler;
+        },
+      };
+    },
+    [handler, setIsExpanded],
+  );
 
   useEffect(() => {
     const fn: Subscriber = (responses) => {
@@ -202,12 +207,15 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     index: number;
     response: ApplicationResponse;
   } | null>(() => {
-    const index = findLastIndex((res) => res.type === "application", responses);
+    const index = findLastIndex(
+      (res) => res.type === ResponseType.Application,
+      responses,
+    );
     if (index === -1) {
       return null;
     }
     const response = responses[index];
-    if (response?.type !== "application") {
+    if (response?.type !== ResponseType.Application) {
       return null;
     }
     return { index, response };

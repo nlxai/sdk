@@ -35,6 +35,24 @@ export interface SlotValue {
 }
 
 /**
+ * Response type
+ */
+export enum ResponseType {
+  /**
+   * Response from the application
+   */
+  Application = "bot",
+  /**
+   * Response from the user
+   */
+  User = "user",
+  /**
+   * Generic failure (cannot be attributed to the application)
+   */
+  Failure = "failure",
+}
+
+/**
  * Values to fill an intent's [attached slots](https://docs.studio.nlx.ai/intents/documentation-intents/intents-attached-slots).
  *
  * `SlotRecord` Keys are the attached slot's name
@@ -63,9 +81,9 @@ export type SlotsRecordOrArray = SlotsRecord | SlotValue[];
  */
 export interface ApplicationResponse {
   /**
-   * The type of the response is `"application"` for an application and `"user"` for user, and "failure" for failure.
+   * The application response type
    */
-  type: "application";
+  type: ResponseType.Application;
   /**
    * When the response was received
    */
@@ -263,9 +281,9 @@ export interface Choice {
  */
 export interface UserResponse {
   /**
-   * The type of the response is `"application"` for application and `"user"` for user, and "failure" for failure.
+   * The user response type
    */
-  type: "user";
+  type: ResponseType.User;
   /**
    * When the response was received
    */
@@ -327,9 +345,9 @@ export type UserResponsePayload =
  */
 export interface FailureMessage {
   /**
-   * The type of the response is `"application"` for application and `"user"` for user.
+   * The failure response type
    */
-  type: "failure";
+  type: ResponseType.Failure;
   /**
    * The payload only includes an error message.
    */
@@ -934,7 +952,7 @@ export function createConversation(config: Config): ConversationHandler {
 
   const failureHandler = (): void => {
     const newResponse: Response = {
-      type: "failure",
+      type: ResponseType.Failure,
       receivedAt: new Date().getTime(),
       payload: {
         text: config.failureMessage ?? defaultFailureMessage,
@@ -951,7 +969,7 @@ export function createConversation(config: Config): ConversationHandler {
   const messageResponseHandler = (response: any): void => {
     if (response?.messages.length > 0) {
       const newResponse: Response = {
-        type: "application",
+        type: ResponseType.Application,
         receivedAt: new Date().getTime(),
         payload: {
           ...response,
@@ -1005,7 +1023,7 @@ export function createConversation(config: Config): ConversationHandler {
     if (requestOverride != null) {
       requestOverride(body, (payload) => {
         const newResponse: Response = {
-          type: "application",
+          type: ResponseType.Application,
           receivedAt: new Date().getTime(),
           payload,
         };
@@ -1182,7 +1200,7 @@ export function createConversation(config: Config): ConversationHandler {
     context?: Context,
   ): void => {
     const newResponse: Response = {
-      type: "user",
+      type: ResponseType.User,
       receivedAt: new Date().getTime(),
       payload: {
         type: "structured",
@@ -1212,7 +1230,7 @@ export function createConversation(config: Config): ConversationHandler {
 
   const sendText = (text: string, context?: Context): void => {
     const newResponse: Response = {
-      type: "user",
+      type: ResponseType.User,
       receivedAt: new Date().getTime(),
       payload: {
         type: "text",
@@ -1244,7 +1262,7 @@ export function createConversation(config: Config): ConversationHandler {
     let newResponses: Response[] = [...state.responses];
 
     const choiceResponse: Response = {
-      type: "user",
+      type: ResponseType.User,
       receivedAt: new Date().getTime(),
       payload: {
         type: "choice",
@@ -1259,7 +1277,7 @@ export function createConversation(config: Config): ConversationHandler {
       newResponses = adjust(
         responseIndex,
         (response) =>
-          response.type === "application"
+          response.type === ResponseType.Application
             ? {
                 ...response,
                 payload: {
@@ -1466,7 +1484,7 @@ export const getCurrentExpirationTimestamp = (
   let expirationTimestamp: number | null = null;
   responses.forEach((response) => {
     if (
-      response.type === "application" &&
+      response.type === ResponseType.Application &&
       response.payload.expirationTimestamp != null
     ) {
       expirationTimestamp = response.payload.expirationTimestamp;
@@ -1513,8 +1531,8 @@ export function promisify<T>(
         newResponse: Response | undefined,
       ): void => {
         if (
-          newResponse?.type === "application" ||
-          newResponse?.type === "failure"
+          newResponse?.type === ResponseType.Application ||
+          newResponse?.type === ResponseType.Failure
         ) {
           clearTimeout(timeoutId);
           convo.unsubscribe(subscription);
