@@ -130,7 +130,7 @@ const normalizeConfiguration = (
     ("botUrl" in configuration.config
       ? (configuration.config.botUrl as string)
       : undefined);
-  if (configuration.config.applicationUrl !== applicationUrl) {
+  if ("botUrl" in configuration.config) {
     // eslint-disable-next-line no-console
     console.warn(
       "The 'botUrl' configuration option is deprecated. Use 'applicationUrl' instead.",
