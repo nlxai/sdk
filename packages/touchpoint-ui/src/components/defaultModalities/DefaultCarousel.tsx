@@ -9,11 +9,10 @@ import {
   CustomCardRow,
 } from "../ui/CustomCard";
 import { BaseText } from "../ui/Typography";
-import { type Cd } from "./DefaultCard";
-import { type SaveAs, saveFn } from "./shared";
+import { type SaveAs, type CardData, saveFn } from "./shared";
 
 export const DefaultCarousel: CustomModalityComponent<{
-  items: Cd[];
+  cards: CardData[];
   $saveAs: SaveAs;
 }> = ({ data, conversationHandler }) => {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
@@ -30,19 +29,29 @@ export const DefaultCarousel: CustomModalityComponent<{
 
   return (
     <Carousel>
-      {data.items.map((item) => (
+      {data.cards.map((card, index) => (
         <CustomCard
-          key={item.id}
-          selected={item.id === selectedCard}
-          onClick={() => {
-            handleClick(item.id);
-          }}
+          key={card.id ?? index}
+          selected={card.id === selectedCard}
+          onClick={
+            card.id != null
+              ? () => {
+                  if (card.id != null) {
+                    handleClick(card.id);
+                  }
+                }
+              : undefined
+          }
         >
-          <CustomCardImageRow src={item.thumbnail} alt={item.thumbnailAlt} />
-          <CustomCardRow
-            left={<BaseText faded>{item.label}</BaseText>}
-            right={<BaseText>{item.value}</BaseText>}
-          />
+          {card.thumbnail != null ? (
+            <CustomCardImageRow src={card.thumbnail} alt={card.thumbnailAlt} />
+          ) : null}
+          {card.label != null && card.value != null ? (
+            <CustomCardRow
+              left={<BaseText faded>{card.label}</BaseText>}
+              right={<BaseText>{card.value}</BaseText>}
+            />
+          ) : null}
         </CustomCard>
       ))}
     </Carousel>

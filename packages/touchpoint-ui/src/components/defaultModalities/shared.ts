@@ -6,6 +6,14 @@ export interface SaveAs {
   id: string;
 }
 
+export interface CardData {
+  id?: string;
+  thumbnail?: string;
+  thumbnailAlt?: string;
+  label?: string;
+  value?: string;
+}
+
 export const saveFn = (
   $saveAs: SaveAs,
   conversationHandler: ConversationHandler,

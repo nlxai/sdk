@@ -7,23 +7,20 @@ import {
   CustomCardRow,
 } from "../ui/CustomCard";
 import { BaseText } from "../ui/Typography";
+import { type CardData } from "./shared";
 
-export interface Cd {
-  id: string;
-  thumbnail: string;
-  thumbnailAlt: string;
-  label: string;
-  value: string;
-}
-
-export const DefaultCard: CustomModalityComponent<Cd> = ({ data }) => {
+export const DefaultCard: CustomModalityComponent<CardData> = ({ data }) => {
   return (
     <CustomCard>
-      <CustomCardImageRow src={data.thumbnail} alt={data.thumbnailAlt} />
-      <CustomCardRow
-        left={<BaseText faded>{data.label}</BaseText>}
-        right={<BaseText>{data.value}</BaseText>}
-      />
+      {data.thumbnail != null ? (
+        <CustomCardImageRow src={data.thumbnail} alt={data.thumbnailAlt} />
+      ) : null}
+      {data.label != null && data.value != null ? (
+        <CustomCardRow
+          left={<BaseText faded>{data.label}</BaseText>}
+          right={<BaseText>{data.value}</BaseText>}
+        />
+      ) : null}
     </CustomCard>
   );
 };
