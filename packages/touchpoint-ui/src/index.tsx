@@ -22,6 +22,8 @@ import {
 import { Carousel } from "./components/ui/Carousel";
 import { DateInput } from "./components/ui/DateInput";
 import { DefaultDateInput } from "./components/defaultModalities/DefaultDateInput";
+import { DefaultCard } from "./components/defaultModalities/DefaultCard";
+import { DefaultCarousel } from "./components/defaultModalities/DefaultCarousel";
 
 import type {
   NormalizedTouchpointConfiguration,
@@ -139,6 +141,8 @@ const normalizeConfiguration = (
   const customModalities: Record<string, CustomModalityComponent<unknown>> = {
     ...(configuration.customModalities ?? {}),
     DefaultDateInput: DefaultDateInput as CustomModalityComponent<unknown>,
+    DefaultCard: DefaultCard as CustomModalityComponent<unknown>,
+    DefaultCarousel: DefaultCarousel as CustomModalityComponent<unknown>,
   };
   return {
     ...configuration,
