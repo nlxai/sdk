@@ -23,7 +23,7 @@ export const DefaultCarousel: CustomModalityComponent<{
     [data.$saveAs, conversationHandler],
   );
 
-  const handleClick = (cardId: string) => {
+  const handleClick = (cardId: string): void => {
     setSelectedCard(cardId);
     save(cardId);
   };

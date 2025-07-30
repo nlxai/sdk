@@ -15,7 +15,7 @@ export const saveFn = (
       conversationHandler.sendSlots({ [$saveAs.id]: val });
     }
     if ($saveAs.type === "context") {
-      conversationHandler.sendContext({ [$saveAs.id]: val });
+      void conversationHandler.sendContext({ [$saveAs.id]: val });
     }
   };
 };
