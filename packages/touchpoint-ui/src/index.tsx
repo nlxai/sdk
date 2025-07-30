@@ -21,10 +21,14 @@ import {
 } from "./components/ui/CustomCard";
 import { Carousel } from "./components/ui/Carousel";
 import { DateInput } from "./components/ui/DateInput";
+import { DefaultDateInput } from "./components/defaultModalities/DefaultDateInput";
+import { DefaultCard } from "./components/defaultModalities/DefaultCard";
+import { DefaultCarousel } from "./components/defaultModalities/DefaultCarousel";
 
 import type {
   NormalizedTouchpointConfiguration,
   TouchpointConfiguration,
+  CustomModalityComponent,
 } from "./types";
 export {
   analyzePageForms,
@@ -122,16 +126,29 @@ const defaultUserId = (): string => {
 const normalizeConfiguration = (
   configuration: TouchpointConfiguration,
 ): NormalizedTouchpointConfiguration => {
+  const applicationUrl =
+    configuration.config.applicationUrl ??
+    // Make this not break and require a major version bump
+    ("botUrl" in configuration.config
+      ? (configuration.config.botUrl as string)
+      : undefined);
+  if ("botUrl" in configuration.config) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "The 'botUrl' configuration option is deprecated. Use 'applicationUrl' instead.",
+    );
+  }
+  const customModalities: Record<string, CustomModalityComponent<unknown>> = {
+    ...(configuration.customModalities ?? {}),
+    DefaultDateInput: DefaultDateInput as CustomModalityComponent<unknown>,
+    DefaultCard: DefaultCard as CustomModalityComponent<unknown>,
+    DefaultCarousel: DefaultCarousel as CustomModalityComponent<unknown>,
+  };
   return {
     ...configuration,
     config: {
       ...configuration.config,
-      applicationUrl:
-        configuration.config.applicationUrl ??
-        // Make this not break and require a major version bump
-        ("botUrl" in configuration.config
-          ? (configuration.config.botUrl as string)
-          : undefined),
+      applicationUrl,
       conversationId:
         configuration.config.conversationId ??
         sessionStorage.getItem("nlxConversationId") ??
@@ -142,10 +159,11 @@ const normalizeConfiguration = (
         defaultUserId(),
       bidirectional:
         configuration.bidirectional == null
-          ? (configuration.config.bidirectional ?? false)
+          ? configuration.config.bidirectional ?? false
           : true,
     },
     input: configuration.input ?? "text",
+    customModalities,
     initializeConversation:
       configuration.initializeConversation ??
       ((handler, context) => {
