@@ -46,12 +46,15 @@ export const DefaultCarousel: CustomModalityComponent<{
           {card.thumbnail != null ? (
             <CustomCardImageRow src={card.thumbnail} alt={card.thumbnailAlt} />
           ) : null}
-          {card.label != null && card.value != null ? (
-            <CustomCardRow
-              left={<BaseText faded>{card.label}</BaseText>}
-              right={<BaseText>{card.value}</BaseText>}
-            />
-          ) : null}
+          {card.rows != null
+            ? card.rows.map((row, rowIndex) => (
+                <CustomCardRow
+                  key={rowIndex}
+                  left={<BaseText faded>{row.label}</BaseText>}
+                  right={<BaseText>{row.value}</BaseText>}
+                />
+              ))
+            : null}
         </CustomCard>
       ))}
     </Carousel>
