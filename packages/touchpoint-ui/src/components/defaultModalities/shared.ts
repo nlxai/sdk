@@ -6,10 +6,16 @@ export interface SaveAs {
   id: string;
 }
 
+export interface CardRow {
+  label: string;
+  value: string;
+}
+
 export interface CardData {
   id?: string;
   thumbnail?: string;
   thumbnailAlt?: string;
+  rows?: CardRow[];
   label?: string;
   value?: string;
 }

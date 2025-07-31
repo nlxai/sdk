@@ -15,12 +15,15 @@ export const DefaultCard: CustomModalityComponent<CardData> = ({ data }) => {
       {data.thumbnail != null ? (
         <CustomCardImageRow src={data.thumbnail} alt={data.thumbnailAlt} />
       ) : null}
-      {data.label != null && data.value != null ? (
-        <CustomCardRow
-          left={<BaseText faded>{data.label}</BaseText>}
-          right={<BaseText>{data.value}</BaseText>}
-        />
-      ) : null}
+      {data.rows != null
+        ? data.rows.map((row, rowIndex) => (
+            <CustomCardRow
+              key={rowIndex}
+              left={<BaseText faded>{row.label}</BaseText>}
+              right={<BaseText>{row.value}</BaseText>}
+            />
+          ))
+        : null}
     </CustomCard>
   );
 };
