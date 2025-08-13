@@ -1,7 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import type { Config } from "@nlxai/core";
 import type { TouchpointConfiguration } from "./interface";
-import type { InteractiveElementInfo } from "./bidirectional/analyzePageForms";
 
 export type NormalizedTouchpointConfiguration = TouchpointConfiguration &
   Required<
@@ -22,22 +21,4 @@ export interface DowncastCustomCommand {
   values?: any[];
   multipleValues?: boolean;
   handler: (arg: any) => void;
-}
-
-export interface PageState {
-  formElements: Record<string, Element>;
-  links: Record<string, string>;
-  customCommands: Map<string, { values: any[]; handler: (arg: any) => void }>;
-}
-
-export interface BidirectionalContext {
-  uri?: string;
-  fields?: InteractiveElementInfo[];
-  destinations?: string[];
-  actions?: Array<{
-    name: string;
-    description?: string;
-    values?: any[];
-    multipleValues?: boolean;
-  }>;
 }

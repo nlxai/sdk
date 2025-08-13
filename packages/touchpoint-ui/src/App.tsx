@@ -32,11 +32,11 @@ import type {
   WindowSize,
   ChoiceMessage,
   BidirectionalCustomCommand,
+  PageState,
 } from "./interface";
 import type {
   NormalizedTouchpointConfiguration,
   DowncastCustomCommand,
-  PageState,
 } from "./types";
 import { CustomPropertiesContainer } from "./components/Theme";
 import { VoiceMini } from "./components/VoiceMini";
@@ -185,9 +185,19 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     customCommands: new Map(),
   });
 
+  const initialCustomCommands = useRef<DowncastCustomCommand[]>([]);
+
   const customCommandsChangeHandler = useRef<
     (commands: DowncastCustomCommand[]) => void
-  >(() => {});
+  >((cmds) => {
+    if (props.bidirectional?.automaticContext !== false) {
+      initialCustomCommands.current = cmds;
+    } else {
+      throw new Error(
+        "Custom commands can only be set when automatic context is enabled.",
+      );
+    }
+  });
 
   useEffect(() => {
     if (
@@ -197,6 +207,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     ) {
       const { teardown, onCustomCommandsChange } = gatherAutomaticContext(
         handler,
+        initialCustomCommands.current,
+        props.bidirectional.customizeAutomaticContext ?? ((arg) => arg),
         (val) => {
           pageState.current = val;
         },

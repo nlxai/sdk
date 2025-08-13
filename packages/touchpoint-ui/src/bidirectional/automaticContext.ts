@@ -5,11 +5,8 @@ import type { ConversationHandler } from "@nlxai/core";
 import { analyzePageForms } from "./analyzePageForms";
 import { equals, uniq } from "ramda";
 import { debug } from "./debug";
-import type {
-  BidirectionalContext,
-  DowncastCustomCommand,
-  PageState,
-} from "../types";
+import type { DowncastCustomCommand } from "../types";
+import type { BidirectionalContext, PageState } from "../interface";
 
 const debounceAsync = <T extends any[]>(
   func: (...args: T) => Promise<void>,
@@ -45,29 +42,32 @@ const debounceAsync = <T extends any[]>(
 
 export const gatherAutomaticContext = (
   handler: ConversationHandler,
+  customCommands: DowncastCustomCommand[],
+  override: (arg: { context: BidirectionalContext; state: PageState }) => {
+    context: BidirectionalContext;
+    state: PageState;
+  },
   setPageState: (state: PageState) => void,
 ): {
   teardown: () => void;
   onCustomCommandsChange: (commands: DowncastCustomCommand[]) => void;
 } => {
   let previousContext: BidirectionalContext = {
-    uri: "",
+    // uri: "",
     fields: [],
     destinations: [],
     actions: [],
   };
 
-  let customCommands: DowncastCustomCommand[] = [];
-
   const go = debounceAsync(
     async () => {
-      const [context, pageState] = gatherContext(customCommands);
+      const { context, state } = override(gatherContext(customCommands));
       if (!equals(previousContext, context)) {
         try {
           debug("Automatic context sent:", context);
           await handler.sendContext({ "nlx:vpContext": context });
         } catch (error) {}
-        setPageState(pageState);
+        setPageState(state);
         previousContext = context;
       }
     },
@@ -98,12 +98,12 @@ export const gatherAutomaticContext = (
 
 const gatherContext = (
   customCommands: DowncastCustomCommand[],
-): [BidirectionalContext, PageState] => {
+): { context: BidirectionalContext; state: PageState } => {
   const { context: fields, formElements } = analyzePageForms();
   const { context: destinations, links } = analyzePageLinks();
 
   const context = {
-    uri: window.location.href,
+    uri: window.location.pathname,
     fields,
     destinations,
     actions: customCommands.map((command) => {
@@ -112,9 +112,9 @@ const gatherContext = (
     }),
   };
 
-  return [
+  return {
     context,
-    {
+    state: {
       formElements,
       links,
       customCommands: new Map(
@@ -124,7 +124,7 @@ const gatherContext = (
         ]),
       ),
     },
-  ];
+  };
 };
 
 const analyzePageLinks = (): {

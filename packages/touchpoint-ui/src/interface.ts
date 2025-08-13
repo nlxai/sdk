@@ -5,6 +5,7 @@ import type {
   Context,
 } from "@nlxai/core";
 import { type ComponentType } from "react";
+import type { InteractiveElementInfo } from "./bidirectional/analyzePageForms";
 
 /**
  * Window size configuration
@@ -201,6 +202,37 @@ export type CustomLaunchButton = ComponentType<{
 export type Input = "text" | "voice" | "voiceMini";
 
 /**
+ * Internal state that the automatic context maintains.
+ */
+export interface PageState {
+  /** Mapping from form element IDs to their DOM elements */
+  formElements: Record<string, Element>;
+  /** Mapping from link element names to their URLs */
+  links: Record<string, string>;
+  /** Mapping from custom commans to their handlers (and values used to validate LLM output) */
+  customCommands: Map<string, { values: any[]; handler: (arg: any) => void }>;
+}
+
+/**
+ * Bidirectional context information that is sent to the LLM.
+ */
+export interface BidirectionalContext {
+  /** Identifier for which page you are currently on. This can be used to filter the relevant KB pages. */
+  uri?: string;
+  /** The active form fields that can be filled in. */
+  fields?: InteractiveElementInfo[];
+  /** Human readable location names that can be navigated to. */
+  destinations?: string[];
+  /** Custom actions that can be performed. */
+  actions?: Array<{
+    name: string;
+    description?: string;
+    values?: any[];
+    multipleValues?: boolean;
+  }>;
+}
+
+/**
  * Configuration for bidirectional mode of voice+.
  */
 export type BidirectionalConfig =
@@ -243,9 +275,22 @@ export type BidirectionalConfig =
        * A callback for custom actions in bidirectional mode.
        * @param action - The custom name of your action.
        * @param payload - The payload defined for the custom action.
+       * @deprecated Use {@link TouchpointInstance.setCustomBidirectionalCommands} instead.
        * @returns
        */
       custom?: (action: string, payload: unknown) => void;
+
+      /**
+       * A callback for customizing the automatic context gathering.
+       *
+       * This allows you to modify the context and state before they are sent to the LLM.
+       * @param arg - An object containing the current context and state.
+       * @returns The modified context and state. If the state is identical to the previous state, the call to the server will be skipped.
+       */
+      customizeAutomaticContext?: (arg: {
+        context: BidirectionalContext;
+        state: PageState;
+      }) => { context: BidirectionalContext; state: PageState };
     }
   | {
       /**
