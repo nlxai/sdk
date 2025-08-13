@@ -26,10 +26,11 @@ import { DefaultCard } from "./components/defaultModalities/DefaultCard";
 import { DefaultCarousel } from "./components/defaultModalities/DefaultCarousel";
 
 import type {
-  NormalizedTouchpointConfiguration,
   TouchpointConfiguration,
   CustomModalityComponent,
-} from "./types";
+  BidirectionalCustomCommand,
+} from "./interface";
+import type { NormalizedTouchpointConfiguration } from "./types";
 export {
   analyzePageForms,
   type InteractiveElementInfo,
@@ -99,17 +100,7 @@ export {
   type IconButtonType,
 } from "./components/ui/IconButton";
 export { type TextButtonProps } from "./components/ui/TextButton";
-export {
-  type InitializeConversation,
-  type ColorMode,
-  type Input,
-  type Theme,
-  type WindowSize,
-  type CustomModalityComponent,
-  type TouchpointConfiguration,
-  type CustomLaunchButton,
-  type BidirectionalConfig,
-} from "./types";
+export type * from "./interface";
 
 const defaultConversationId = (): string => {
   const id = crypto.randomUUID();
@@ -338,6 +329,32 @@ export interface TouchpointInstance {
    * Method to remove the Touchpoint UI from the DOM
    */
   teardown: () => void;
+
+  /**
+   * Sets currently available custom bidirectional commands.
+   * This allows you to define custom commands that can be used in the voice bot.
+   * The commands will be available in the voice bot and can be used to trigger actions.
+   *
+   * Example:
+   * ```javascript
+   * client.setCustomBidirectionalCommands([
+   *     {
+   *       name: "Meal",
+   *       description: "add a meal to your flight",
+   *       values: ["standard", "vegetarian", "vegan", "gluten-free"],
+   *       multipleValues: false,
+   *       handler: (value) => {
+   *         console.log("Meal option:", value);
+   *       },
+   *     },
+   *   ]);
+   * ```
+   * This will allow the voice bot to use the command `myCommand` with the values `value1` and `value2`.
+   * @param commands - A list containing the custom commands to set.
+   */
+  setCustomBidirectionalCommands: <T extends unknown[]>(commands: {
+    [I in keyof T]: BidirectionalCustomCommand<T[I]>;
+  }) => void;
 }
 
 /**
@@ -365,6 +382,9 @@ export const create = (
         },
         teardown: () => {
           document.body.removeChild(element);
+        },
+        setCustomBidirectionalCommands(commands) {
+          ref.setCustomBidirectionalCommands(commands);
         },
       });
     };

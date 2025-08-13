@@ -1,16 +1,15 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import type { ConversationHandler } from "@nlxai/core";
-import type { BidirectionalConfig } from "../types";
+import type { BidirectionalConfig } from "../interface";
 import { debug } from "./debug";
+import type { PageState } from "../types";
+import { equals } from "ramda";
 
 export const commandHandler = (
   handler: ConversationHandler,
   bidirectional: BidirectionalConfig,
   pageState: {
-    current: {
-      formElements: Record<string, Element>;
-      links: Record<string, string>;
-    };
+    current: PageState;
   },
 ) => {
   const impl = (event: any): void => {
@@ -90,7 +89,35 @@ export const commandHandler = (
         }
         break;
       case "custom":
+        if (pageState.current.customCommands.has(event.action as string)) {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          const { handler, values } = pageState.current.customCommands.get(
+            event.action as string,
+          )!;
+          if (
+            event.payload != null &&
+            (values.some((v) => equals(v, event.payload)) ||
+              (Array.isArray(event.payload) &&
+                (event.payload as any[]).every((payload) =>
+                  values.some((v) => equals(v, payload)),
+                )))
+          ) {
+            handler(event.payload);
+            break;
+          } else {
+            debug(
+              `Custom command "${event.action}" received, but the payload ${event.payload} does not match the expected values.`,
+              values,
+            );
+          }
+        }
         if (bidirectional?.custom != null) {
+          if (bidirectional.automaticContext !== false) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              "bidirectional.custom is deprecated in automatic context mode. Please use `setCustomBidirectionalCommands` instead.",
+            );
+          }
           bidirectional.custom(event.action as string, event.payload);
         }
         break;

@@ -31,7 +31,12 @@ import { Input } from "./components/Input";
 import type {
   WindowSize,
   ChoiceMessage,
+  BidirectionalCustomCommand,
+} from "./interface";
+import type {
   NormalizedTouchpointConfiguration,
+  DowncastCustomCommand,
+  PageState,
 } from "./types";
 import { CustomPropertiesContainer } from "./components/Theme";
 import { VoiceMini } from "./components/VoiceMini";
@@ -52,6 +57,9 @@ export interface AppRef {
   setExpanded: (val: boolean) => void;
   getExpanded: () => boolean;
   getConversationHandler: () => ConversationHandler;
+  setCustomBidirectionalCommands: <T extends unknown[]>(commands: {
+    [I in keyof T]: BidirectionalCustomCommand<T[I]>;
+  }) => void;
 }
 
 const App = forwardRef<AppRef, Props>((props, ref) => {
@@ -128,6 +136,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         getConversationHandler() {
           return handler;
         },
+        setCustomBidirectionalCommands: (commands: DowncastCustomCommand[]) => {
+          customCommandsChangeHandler.current(commands);
+        },
       };
     },
     [handler, setIsExpanded],
@@ -168,13 +179,15 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       );
   }, [props.initializeConversation, props.initialContext, handler, isExpanded]);
 
-  const pageState = useRef<{
-    formElements: Record<string, Element>;
-    links: Record<string, string>;
-  }>({
+  const pageState = useRef<PageState>({
     formElements: {},
     links: {},
+    customCommands: new Map(),
   });
+
+  const customCommandsChangeHandler = useRef<
+    (commands: DowncastCustomCommand[]) => void
+  >(() => {});
 
   useEffect(() => {
     if (
@@ -182,9 +195,15 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       props.bidirectional != null &&
       props.bidirectional.automaticContext !== false
     ) {
-      return gatherAutomaticContext(handler, (val) => {
-        pageState.current = val;
-      });
+      const { teardown, onCustomCommandsChange } = gatherAutomaticContext(
+        handler,
+        (val) => {
+          pageState.current = val;
+        },
+      );
+      customCommandsChangeHandler.current = onCustomCommandsChange;
+
+      return teardown;
     }
   }, [isExpanded, handler, props.bidirectional]);
 

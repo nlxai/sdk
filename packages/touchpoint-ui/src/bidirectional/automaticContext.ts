@@ -5,6 +5,11 @@ import type { ConversationHandler } from "@nlxai/core";
 import { analyzePageForms } from "./analyzePageForms";
 import { equals, uniq } from "ramda";
 import { debug } from "./debug";
+import type {
+  BidirectionalContext,
+  DowncastCustomCommand,
+  PageState,
+} from "../types";
 
 const debounceAsync = <T extends any[]>(
   func: (...args: T) => Promise<void>,
@@ -40,32 +45,27 @@ const debounceAsync = <T extends any[]>(
 
 export const gatherAutomaticContext = (
   handler: ConversationHandler,
-  setPageState: (state: {
-    formElements: any;
-    links: Record<string, string>;
-  }) => void,
-): (() => void) => {
-  let previousContext: {
-    "nlx:vpContext": {
-      // url: string;
-      fields: any;
-      destinations: any;
-    };
-  } = {
-    "nlx:vpContext": {
-      // url: "",
-      fields: {},
-      destinations: {},
-    },
+  setPageState: (state: PageState) => void,
+): {
+  teardown: () => void;
+  onCustomCommandsChange: (commands: DowncastCustomCommand[]) => void;
+} => {
+  let previousContext: BidirectionalContext = {
+    uri: "",
+    fields: [],
+    destinations: [],
+    actions: [],
   };
+
+  let customCommands: DowncastCustomCommand[] = [];
 
   const go = debounceAsync(
     async () => {
-      const [context, pageState] = gatherContext();
+      const [context, pageState] = gatherContext(customCommands);
       if (!equals(previousContext, context)) {
         try {
-          debug("Automatic context sent:", context["nlx:vpContext"]);
-          await handler.sendContext(context);
+          debug("Automatic context sent:", context);
+          await handler.sendContext({ "nlx:vpContext": context });
         } catch (error) {}
         setPageState(pageState);
         previousContext = context;
@@ -85,35 +85,45 @@ export const gatherAutomaticContext = (
   });
 
   // Return a cleanup function to disconnect the observer
-  return () => {
-    observer.disconnect();
+  return {
+    teardown: () => {
+      observer.disconnect();
+    },
+    onCustomCommandsChange: (commands) => {
+      customCommands = commands;
+      go();
+    },
   };
 };
 
-const gatherContext = (): [
-  {
-    "nlx:vpContext": {
-      // url: string;
-      fields: any;
-      destinations: any;
-    };
-  },
-  { formElements: any; links: Record<string, string> },
-] => {
+const gatherContext = (
+  customCommands: DowncastCustomCommand[],
+): [BidirectionalContext, PageState] => {
   const { context: fields, formElements } = analyzePageForms();
   const { context: destinations, links } = analyzePageLinks();
 
   const context = {
-    // url: window.location.href,
+    uri: window.location.href,
     fields,
     destinations,
+    actions: customCommands.map((command) => {
+      const { handler: _, ...commandWithoutHandler } = command;
+      return commandWithoutHandler;
+    }),
   };
 
   return [
+    context,
     {
-      "nlx:vpContext": context,
+      formElements,
+      links,
+      customCommands: new Map(
+        customCommands.map((c) => [
+          c.name,
+          { handler: c.handler, values: c.values ?? [] },
+        ]),
+      ),
     },
-    { formElements, links },
   ];
 };
 
