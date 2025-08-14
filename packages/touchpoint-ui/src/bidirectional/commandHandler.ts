@@ -1,8 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import type { ConversationHandler } from "@nlxai/core";
-import type { BidirectionalConfig } from "../interface";
+import type { PageState, BidirectionalConfig } from "../interface";
 import { debug } from "./debug";
-import type { PageState } from "../types";
 import { equals } from "ramda";
 
 export const commandHandler = (

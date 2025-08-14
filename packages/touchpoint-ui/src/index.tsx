@@ -100,7 +100,22 @@ export {
   type IconButtonType,
 } from "./components/ui/IconButton";
 export { type TextButtonProps } from "./components/ui/TextButton";
-export type * from "./interface";
+export type {
+  WindowSize,
+  ColorMode,
+  ChoiceMessage,
+  CustomModalityComponent,
+  Theme,
+  InitializeConversation,
+  CustomLaunchButton,
+  Input,
+  PageState,
+  BidirectionalContext,
+  BidirectionalConfig,
+  TouchpointConfiguration,
+  BidirectionalCustomCommand,
+  BidirectionalCustomCommands,
+} from "./interface";
 
 const defaultConversationId = (): string => {
   const id = crypto.randomUUID();

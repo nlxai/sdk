@@ -210,7 +210,15 @@ export interface PageState {
   /** Mapping from link element names to their URLs */
   links: Record<string, string>;
   /** Mapping from custom commans to their handlers (and values used to validate LLM output) */
-  customCommands: Map<string, { values: any[]; handler: (arg: any) => void }>;
+  customCommands: Map<
+    string,
+    {
+      /** Available values, used for validation. */
+      values: any[];
+      /** Handler that will be called when the command is invoked */
+      handler: (arg: any) => void;
+    }
+  >;
 }
 
 /**
@@ -223,13 +231,10 @@ export interface BidirectionalContext {
   fields?: InteractiveElementInfo[];
   /** Human readable location names that can be navigated to. */
   destinations?: string[];
-  /** Custom actions that can be performed. */
-  actions?: Array<{
-    name: string;
-    description?: string;
-    values?: any[];
-    multipleValues?: boolean;
-  }>;
+  /**
+   * Custom actions that can be performed.
+   */
+  actions?: Array<Omit<BidirectionalCustomCommand<any>, "handler">>;
 }
 
 /**
@@ -290,7 +295,16 @@ export type BidirectionalConfig =
       customizeAutomaticContext?: (arg: {
         context: BidirectionalContext;
         state: PageState;
-      }) => { context: BidirectionalContext; state: PageState };
+      }) => {
+        /**
+         * The current context being sent to the LLM
+         */
+        context: BidirectionalContext;
+        /**
+         * The current state of the page - this is stuff not sent to the LLM, but needed to connect the results back to actions to take on the page.
+         */
+        state: PageState;
+      };
     }
   | {
       /**
