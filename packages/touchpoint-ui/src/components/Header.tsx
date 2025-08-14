@@ -3,7 +3,7 @@ import { type SetStateAction, type Dispatch, type FC } from "react";
 import { clsx } from "clsx";
 
 import { IconButton, type IconButtonType } from "./ui/IconButton";
-import { type WindowSize, type ColorMode } from "../types";
+import { type WindowSize, type ColorMode } from "../interface";
 import { useTailwindMediaQuery } from "../hooks";
 import { Close, Settings, Undo, Volume, VolumeOff } from "./ui/Icons";
 

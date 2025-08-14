@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { clsx } from "clsx";
 
 import "./index.css";
-import { type ColorMode } from "./types";
+import { type ColorMode } from "./interface";
 import { TextButton } from "./components/ui/TextButton";
 import { IconButton } from "./components/ui/IconButton";
 import { Loader } from "./components/ui/Loader";

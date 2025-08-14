@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsdoc/require-jsdoc */
-import { type CustomModalityComponent } from "../../types";
+import { type CustomModalityComponent } from "../../interface";
 import {
   CustomCard,
   CustomCardImageRow,

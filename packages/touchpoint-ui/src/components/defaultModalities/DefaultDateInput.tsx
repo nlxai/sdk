@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 
 import { type SaveAs, saveFn } from "./shared";
-import { type CustomModalityComponent } from "../../types";
+import { type CustomModalityComponent } from "../../interface";
 import { DateInput } from "../ui/DateInput";
 
 export const DefaultDateInput: CustomModalityComponent<{

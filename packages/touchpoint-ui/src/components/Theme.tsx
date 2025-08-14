@@ -2,7 +2,7 @@
 import { type FC, type ReactNode, type CSSProperties } from "react";
 import { clsx } from "clsx";
 
-import { type ColorMode, type Theme } from "../types";
+import { type ColorMode, type Theme } from "../interface";
 
 const toCustomProperties = (theme: Theme): CSSProperties => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions

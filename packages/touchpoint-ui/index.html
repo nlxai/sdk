@@ -143,10 +143,26 @@
           userId: "1234-5678",
           languageCode: "en-US",
         },
-        input: "voice",
+        input: "voiceMini",
         launchIcon: CustomLaunchButton,
-        initializeConversation: () => {},
+        bidirectional: {
+          customizeAutomaticContext(arg) {
+            console.log("Customizing automatic context with arg:", arg);
+            arg.context.uri = "foo";
+            return arg;
+          },
+        },
       });
+
+      touchpoint.setCustomBidirectionalCommands([
+        {
+          name: "Eat a burger",
+          description: "Eat a delicious hamburger",
+          handler: () => {
+            console.log("Custom command executed with args:", args);
+          },
+        },
+      ]);
     </script>
   </body>
 </html>

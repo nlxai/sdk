@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsdoc/require-jsdoc */
 import { useState, useMemo } from "react";
-import { type CustomModalityComponent } from "../../types";
+import { type CustomModalityComponent } from "../../interface";
 import { Carousel } from "../ui/Carousel";
 import {
   CustomCard,
