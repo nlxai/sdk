@@ -46,6 +46,9 @@ const toAccessibilityInformation = (
       type: element.type,
       placeholder: element.placeholder,
       value: element.value,
+      ...(element instanceof HTMLInputElement
+        ? { checked: element.checked }
+        : {}),
     };
   } else if (element instanceof HTMLSelectElement) {
     const accessibleName = computeAccessibleName(element) ?? "";
