@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import type { ConversationHandler } from "@nlxai/core";
-import type { BidirectionalConfig } from "../types";
+import type { BidirectionalConfig, InputField } from "../types";
 import { debug } from "./debug";
 
 export const commandHandler = (
@@ -65,17 +65,24 @@ export const commandHandler = (
       case "input":
         if (bidirectional?.input != null) {
           bidirectional.input(
-            event.fields as Array<{ id: string; value: string }>,
+            event.fields as Array<InputField>,
             pageState.current.formElements,
           );
         } else if (bidirectional?.automaticContext !== false) {
-          event.fields.forEach((field: { id: string; value: string }) => {
+          event.fields.forEach((field: InputField) => {
             if (pageState.current.formElements[field.id] != null) {
               const element = pageState.current.formElements[field.id] as
                 | HTMLInputElement
                 | HTMLTextAreaElement
                 | HTMLSelectElement;
-              element.value = field.value;
+              if (typeof field.value === "string") {
+                element.value = field.value;
+              } else if (
+                element instanceof HTMLInputElement &&
+                element.type === "checkbox"
+              ) {
+                element.checked = field.value;
+              }
               element.classList.add("voice-updated");
 
               // Trigger events for frameworks that listen to them
