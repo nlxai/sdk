@@ -102,7 +102,6 @@ export const commandHandler = (
                 )))
           ) {
             handler(event.payload);
-            break;
           } else {
             debug(
               `Custom command "${event.action}" received, but the payload ${event.payload} does not match the expected values.`,

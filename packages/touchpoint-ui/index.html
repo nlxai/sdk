@@ -134,18 +134,22 @@
       };
 
       const touchpoint = await create({
+        // https://dev.platform.nlx.ai/applications/fe041de0-bc87-4120-a6db-443ab1107ad3 in the dev workspace
         config: {
           applicationUrl:
-            "https://bots.dev.studio.nlx.ai/c/CBuQ3LpsClG5EQoSObVkK/IPzJitiaN8qtJFL3Wz1Jp",
+            "https://bots.dev.studio.nlx.ai/c/XeHWunu1RQOVcVzKIQoo5/cKdh8IsqmA0syks0R9oBh",
           headers: {
-            "nlx-api-key": "m3kVBd9QeCc5bXInhWIPG3ns",
+            "nlx-api-key": "8afGyqKJoObPj4g-UFNUc65s",
           },
-          userId: "1234-5678",
+          userId: "sdk-test-user",
           languageCode: "en-US",
         },
         input: "voiceMini",
         launchIcon: CustomLaunchButton,
         bidirectional: {
+          custom(action, payload) {
+            console.log("Custom bidirectional action:", action, payload);
+          },
           customizeAutomaticContext(arg) {
             console.log("Customizing automatic context with arg:", arg);
             arg.context.uri = "foo";
@@ -156,8 +160,8 @@
 
       touchpoint.setCustomBidirectionalCommands([
         {
-          name: "Eat a burger",
-          description: "Eat a delicious hamburger",
+          name: "burger",
+          description: "Eat a hamburger",
           handler: () => {
             console.log("Custom command executed with args:", args);
           },
