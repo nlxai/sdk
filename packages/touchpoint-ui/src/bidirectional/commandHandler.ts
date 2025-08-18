@@ -65,7 +65,7 @@ export const commandHandler = (
       case "input":
         if (bidirectional?.input != null) {
           bidirectional.input(
-            event.fields as Array<InputField>,
+            event.fields as InputField[],
             pageState.current.formElements,
           );
         } else if (bidirectional?.automaticContext !== false) {
