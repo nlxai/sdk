@@ -202,6 +202,20 @@ export type CustomLaunchButton = ComponentType<{
 export type Input = "text" | "voice" | "voiceMini";
 
 /**
+ * Input field value
+ */
+export interface InputField {
+  /**
+   * Field ID
+   */
+  id: string;
+  /**
+   * Field value
+   */
+  value: string | boolean;
+}
+
+/**
  * Internal state that the automatic context maintains.
  */
 export interface PageState {
@@ -272,7 +286,7 @@ export type BidirectionalConfig =
        * @param pageFields - A map of field IDs to DOM elements for custom form filling. Only present if `automaticContext` is enabled.
        */
       input?: (
-        fields: Array<{ id: string; value: string }>,
+        fields: InputField[],
         pageFields: Record<string, Element>,
       ) => void;
 
@@ -332,7 +346,7 @@ export type BidirectionalConfig =
        * If automatic context gathering is enabled, the default implementation will fill out the form fields using standard DOM APIs.
        * @param fields - An array of field objects with `id` and `value` properties.
        */
-      input?: (fields: Array<{ id: string; value: string }>) => void;
+      input?: (fields: InputField[]) => void;
       /**
        * A callback for custom actions in bidirectional mode.
        * @param action - The custom name of your action.

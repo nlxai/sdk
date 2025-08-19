@@ -109,6 +109,7 @@ export type {
   InitializeConversation,
   CustomLaunchButton,
   Input,
+  InputField,
   PageState,
   BidirectionalContext,
   BidirectionalConfig,
