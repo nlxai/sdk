@@ -232,6 +232,10 @@ export const Content: FC<unknown> = () => {
           const { create, React, html } = touchpointModule;
           const touchpointConfig = generateAndSetUserId(config);
 
+          if (touchpointInstance.current != null) {
+            touchpointInstance.current.teardown();
+          }
+
           if (input === "voiceMini" && bidirectional) {
             // Handle bidirectional Voice+ setup
             touchpointInstance.current = await create({
