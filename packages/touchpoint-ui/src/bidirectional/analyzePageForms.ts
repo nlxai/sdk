@@ -32,6 +32,24 @@ export interface PageForms {
   formElements: Record<string, Element>;
 }
 
+const inputAndTextareaSpecificAccessibilityInformation = (
+  element: HTMLInputElement | HTMLTextAreaElement,
+): { value: any; options?: any } => {
+  if (element instanceof HTMLTextAreaElement) {
+    return { value: element.value };
+  }
+  if (element.type === "checkbox") {
+    return {
+      value: element.checked,
+      options: [
+        { value: true, selected: element.checked, text: "checked" },
+        { value: false, selected: !element.checked, text: "unchecked" },
+      ],
+    };
+  }
+  return { value: element.value };
+};
+
 const toAccessibilityInformation = (
   element: Element,
 ): AccessibilityInformation => {
@@ -45,7 +63,7 @@ const toAccessibilityInformation = (
       description: computeAccessibleDescription(element),
       type: element.type,
       placeholder: element.placeholder,
-      value: element.value,
+      ...inputAndTextareaSpecificAccessibilityInformation(element),
     };
   } else if (element instanceof HTMLSelectElement) {
     const accessibleName = computeAccessibleName(element) ?? "";

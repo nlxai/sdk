@@ -109,6 +109,7 @@ export {
   type TouchpointConfiguration,
   type CustomLaunchButton,
   type BidirectionalConfig,
+  type InputField,
 } from "./types";
 
 const defaultConversationId = (): string => {
