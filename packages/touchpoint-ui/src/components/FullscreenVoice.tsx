@@ -6,7 +6,7 @@ import type {
   ColorMode,
   InitializeConversation,
   CustomModalityComponent,
-} from "../types";
+} from "../interface";
 
 import { FullscreenError } from "./FullscreenError";
 import { Ripple } from "./Ripple";

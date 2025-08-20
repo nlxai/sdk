@@ -3,7 +3,7 @@ import type { Context, ConversationHandler } from "@nlxai/core";
 import { type ReactNode, useState, type FC } from "react";
 import { clsx } from "clsx";
 
-import type { CustomModalityComponent } from "../types";
+import type { CustomModalityComponent } from "../interface";
 import { useVoice } from "../voice";
 import { LoaderAnimation } from "./ui/Loader";
 import { Ripple } from "./Ripple";

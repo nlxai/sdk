@@ -15,7 +15,7 @@ import { LoaderAnimation, Loader } from "./ui/Loader";
 import { TextButton } from "./ui/TextButton";
 import { ArrowForward, ArrowRight, ArrowDown, OpenLink } from "./ui/Icons";
 import { UnsemanticIconButton } from "./ui/IconButton";
-import { type CustomModalityComponent, type ColorMode } from "../types";
+import { type CustomModalityComponent, type ColorMode } from "../interface";
 
 export interface MessagesProps {
   isWaiting: boolean;
