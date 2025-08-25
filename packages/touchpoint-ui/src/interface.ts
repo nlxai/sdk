@@ -6,6 +6,7 @@ import type {
 } from "@nlxai/core";
 import { type ComponentType } from "react";
 import type { InteractiveElementInfo } from "./bidirectional/analyzePageForms";
+import type * as z4 from "zod/v4/core";
 
 /**
  * Window size configuration
@@ -228,7 +229,7 @@ export interface PageState {
     string,
     {
       /** Available values, used for validation. */
-      values: any[];
+      schema: z4.$ZodType | undefined;
       /** Handler that will be called when the command is invoked */
       handler: (arg: any) => void;
     }
@@ -248,7 +249,14 @@ export interface BidirectionalContext {
   /**
    * Custom actions that can be performed.
    */
-  actions?: Array<Omit<BidirectionalCustomCommand<any>, "handler">>;
+  actions?: Array<{
+    /** The name of the command, used to invoke it. */
+    action: string;
+    /** A short description of the command */
+    description?: string;
+    /** A schema for validating the command's input. */
+    schema?: z4.JSONSchema.BaseSchema;
+  }>;
 }
 
 /**
@@ -427,14 +435,13 @@ export interface TouchpointConfiguration {
 /**
  * During a Voice+ bidirectional conversation, you can indicate to the application the availability of
  * custom commands that the user can invoke.
- * @typeParam T - Commands can take a single parameter which will be selected from the list of values.
- * These must be serializable to JSON.
+ * @typeParam Schema - Commands can take a single parameter which will be generated from this schema.
  */
-export type BidirectionalCustomCommand<T> = {
+export type BidirectionalCustomCommand<Schema extends z4.$ZodType> = {
   /**
    * The name of the command, used to invoke it. Should be unique and descriptive in the context of the LLM.
    */
-  name: string;
+  action: string;
   /**
    * A short description of the command, used to help the LLM understand its purpose.
    */
@@ -442,33 +449,17 @@ export type BidirectionalCustomCommand<T> = {
 } & (
   | {
       /**
-       * An array of values that the user can select from when invoking the command.
-       * {@label VALUES}
+       * A [Zod](https://zod.dev) schema that defines the structure of the command's input.
+       *
+       * Use descriptive names and `.description` to give the underlying LLM plenty of context for
+       * it to generate reasonable parameters. Note that the LLM output will be validated (and transformed)
+       * with this Zod schema, so you are guaranteed type safe inputs to your handler.
        */
-      values: T[];
+      schema: Schema;
       /**
-       * The command can take multiple values.
+       * A handler that will be called with an argument matching the schema when the command is invoked.
        */
-      multipleValues: true;
-      /**
-       * A handler that will be called with the selected values when the command is invoked.
-       */
-      handler: (values: T[]) => void;
-    }
-  | {
-      /**
-       * An array of values that the user can select from when invoking the command.
-       * {@label VALUES}
-       */
-      values: T[];
-      /**
-       * The command cannot take multiple values.
-       */
-      multipleValues?: false;
-      /**
-       * A handler that will be called with the selected value when the command is invoked.
-       */
-      handler: (value: T) => void;
+      handler: (value: z4.output<Schema>) => void;
     }
   | {
       /**
@@ -481,6 +472,6 @@ export type BidirectionalCustomCommand<T> = {
 /**
  * A type that represents a collection of custom commands, where each command can have a different type of value.
  */
-export type BidirectionalCustomCommands<T extends unknown[]> = {
+export type BidirectionalCustomCommands<T extends z4.$ZodType[]> = {
   [I in keyof T]: BidirectionalCustomCommand<T[I]>;
 };
