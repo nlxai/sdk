@@ -359,7 +359,7 @@ export interface TouchpointInstance {
    *
    * client.setCustomBidirectionalCommands([
    *     {
-   *       name: "Meal",
+   *       action: "Meal",
    *       description: "add a meal to your flight",
    *       schema: z.enum(["standard", "vegetarian", "vegan", "gluten-free"]),
    *       handler: (value) => {
