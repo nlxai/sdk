@@ -2,7 +2,7 @@
 import type { ConversationHandler } from "@nlxai/core";
 import type { PageState, BidirectionalConfig, InputField } from "../interface";
 import { debug } from "./debug";
-import { equals } from "ramda";
+import * as z4 from "zod/v4/core";
 
 export const commandHandler = (
   handler: ConversationHandler,
@@ -97,23 +97,24 @@ export const commandHandler = (
       case "custom":
         if (pageState.current.customCommands.has(event.action as string)) {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          const { handler, values } = pageState.current.customCommands.get(
+          const { handler, schema } = pageState.current.customCommands.get(
             event.action as string,
           )!;
-          if (
-            event.payload != null &&
-            (values.some((v) => equals(v, event.payload)) ||
-              (Array.isArray(event.payload) &&
-                (event.payload as any[]).every((payload) =>
-                  values.some((v) => equals(v, payload)),
-                )))
-          ) {
-            handler(event.payload);
-          } else {
-            debug(
-              `Custom command "${event.action}" received, but the payload ${event.payload} does not match the expected values.`,
-              values,
-            );
+
+          if (event.payload != null) {
+            if (schema == null) {
+              handler(undefined);
+            } else {
+              const result = z4.safeParse(schema, event.payload);
+              if (result.success) {
+                handler(result.data);
+              } else {
+                debug(
+                  `Custom command "${event.action}" received, but the payload ${event.payload} does not match the schema.`,
+                  result.error,
+                );
+              }
+            }
           }
         }
         if (bidirectional?.custom != null) {

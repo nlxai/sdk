@@ -90,6 +90,7 @@
     </main>
     <script type="module">
       import { create, html } from "/src/index.tsx";
+      import * as z from "zod/v4";
 
       const CustomLaunchButton = ({ className, onClick }) => {
         return html`
@@ -160,10 +161,21 @@
 
       touchpoint.setCustomBidirectionalCommands([
         {
-          name: "burger",
-          description: "Eat a hamburger",
-          handler: () => {
-            console.log("Custom command executed with args:", args);
+          action: "burger",
+          description: "Order a hamburger",
+          schema: z.object({
+            type: z
+              .enum(["cheeseburger", "veggieburger", "hamburger"])
+              .describe("Which variety of burger to order"),
+            count: z
+              .number()
+              .min(1)
+              .max(200)
+              .default(1)
+              .describe("How many burgers to order"),
+          }),
+          handler: (burgerType) => {
+            console.log("Custom command executed with args:", burgerType);
           },
         },
       ]);

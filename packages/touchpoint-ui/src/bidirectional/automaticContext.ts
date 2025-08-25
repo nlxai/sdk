@@ -7,6 +7,7 @@ import { equals, uniq } from "ramda";
 import { debug } from "./debug";
 import type { DowncastCustomCommand } from "../types";
 import type { BidirectionalContext, PageState } from "../interface";
+import * as z4 from "zod/v4/core";
 
 const debounceAsync = <T extends any[]>(
   func: (...args: T) => Promise<void>,
@@ -107,8 +108,13 @@ const gatherContext = (
     fields,
     destinations,
     actions: customCommands.map((command) => {
-      const { handler: _, ...commandWithoutHandler } = command;
-      return commandWithoutHandler;
+      const { handler: _, schema, ...commandWithoutHandler } = command;
+      if (schema != null) {
+        return {
+          schema: z4.toJSONSchema(schema, { io: "input" }),
+          ...commandWithoutHandler,
+        };
+      } else return commandWithoutHandler;
     }),
   };
 
@@ -119,8 +125,8 @@ const gatherContext = (
       links,
       customCommands: new Map(
         customCommands.map((c) => [
-          c.name,
-          { handler: c.handler, values: c.values ?? [] },
+          c.action,
+          { handler: c.handler, schema: c.schema },
         ]),
       ),
     },

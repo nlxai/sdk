@@ -31,6 +31,8 @@ import type {
   BidirectionalCustomCommand,
 } from "./interface";
 import type { NormalizedTouchpointConfiguration } from "./types";
+import type * as z4 from "zod/v4/core";
+
 export {
   analyzePageForms,
   type InteractiveElementInfo,
@@ -353,12 +355,13 @@ export interface TouchpointInstance {
    *
    * Example:
    * ```javascript
+   * import * as z from "zod/v4";
+   *
    * client.setCustomBidirectionalCommands([
    *     {
-   *       name: "Meal",
+   *       action: "Meal",
    *       description: "add a meal to your flight",
-   *       values: ["standard", "vegetarian", "vegan", "gluten-free"],
-   *       multipleValues: false,
+   *       schema: z.enum(["standard", "vegetarian", "vegan", "gluten-free"]),
    *       handler: (value) => {
    *         console.log("Meal option:", value);
    *       },
@@ -368,7 +371,7 @@ export interface TouchpointInstance {
    * This will allow the voice bot to use the command `myCommand` with the values `value1` and `value2`.
    * @param commands - A list containing the custom commands to set.
    */
-  setCustomBidirectionalCommands: <T extends unknown[]>(commands: {
+  setCustomBidirectionalCommands: <T extends z4.$ZodType[]>(commands: {
     [I in keyof T]: BidirectionalCustomCommand<T[I]>;
   }) => void;
 }
