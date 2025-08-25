@@ -8,7 +8,7 @@ import { type ConversationHandler } from "@nlxai/core";
 
 import packageJson from "../package.json";
 import App, { type AppRef } from "./App";
-import cssRaw from "./index.css?inline";
+import cssRaw from "./index.css";
 import * as Icons from "./components/ui/Icons";
 import { TextButton } from "./components/ui/TextButton";
 import { IconButton } from "./components/ui/IconButton";
@@ -270,7 +270,7 @@ class NlxTouchpointElement extends HTMLElement {
 
       this.#root.render(
         <>
-          <style>{cssRaw}</style>
+          <style>{cssRaw as unknown as string}</style>
           <App
             {...configuration}
             embedded={this.embedded}

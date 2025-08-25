@@ -3,16 +3,24 @@
   "version": "1.1.8-alpha.1",
   "description": "Web UI for Touchpoint",
   "type": "module",
-  "main": "lib/index.js",
   "license": "MIT",
   "author": "Peter Szerzo <peter@nlx.ai>",
-  "module": "lib/index.js",
+  "module": "lib/index.mjs",
   "browser": "lib/index.umd.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    "import": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.mjs"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "design-system": "vite --mode design-system",
-    "build": "tsc && vite build",
+    "build:es": "rollup -c --environment BUILD:es",
+    "build:umd": "rollup -c --environment BUILD:umd",
+    "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir lib",
+    "build": "npm run build:es && npm run build:umd && npm run build:types",
     "docs": "rm -rf docs/ && typedoc && concat-md --decrease-title-levels --dir-name-as-title docs/ > docs/index.md",
     "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0",
     "prepublish": "npm run build",
@@ -24,23 +32,27 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@nlxai/core": "^1.1.8-alpha.0",
     "@react-hookz/web": "^25.0.1",
     "@react-input/mask": "^2.0.4",
     "clsx": "^2.1.1",
-    "hast": "^0.0.2",
+    "dom-accessibility-api": "^0.7.0",
     "htm": "^3.1.1",
     "livekit-client": "^2.9.9",
     "marked": "^15.0.4",
     "ramda": "^0.30.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "react-indiana-drag-scroll": "^2.2.0",
-    "react-textarea-autosize": "^8.5.6",
-    "unist": "^0.0.1"
+    "react-textarea-autosize": "^8.5.6"
+  },
+  "peerDependencies": {
+    "@nlxai/core": "^1.1.8-alpha.0",
+    "react": "^18.3",
+    "react-dom": "^18.3"
   },
   "devDependencies": {
+    "@nlxai/core": "^1.1.8-alpha.0",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-replace": "^6.0.2",
+    "@rollup/plugin-terser": "^0.4.4",
     "@types/node": "^20.12.8",
     "@types/ramda": "^0.30.2",
     "@types/react": "^18.3.1",
@@ -49,9 +61,12 @@
     "@typescript-eslint/parser": "^7.8.0",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.19",
-    "dom-accessibility-api": "^0.7.0",
     "eslint-config-nlx": "*",
     "postcss": "^8.4.38",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5",
     "vite": "^5.4.19",

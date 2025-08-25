@@ -3,7 +3,7 @@
 import { type FC, type ReactNode } from "react";
 import type { ColorMode, Theme } from "./interface";
 import { CustomPropertiesContainer } from "./components/Theme";
-import cssRaw from "./index.css?inline";
+import cssRaw from "./index.css";
 /**
  * @internal
  */
@@ -14,7 +14,7 @@ export const Container: FC<{
 }> = ({ children, mode, theme }) => {
   return (
     <>
-      <style>{cssRaw}</style>
+  <style>{cssRaw as unknown as string}</style>
       <CustomPropertiesContainer
         className="bg-background p-4 rounded-outer space-y-4"
         theme={theme}
