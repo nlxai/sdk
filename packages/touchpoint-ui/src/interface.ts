@@ -224,7 +224,7 @@ export interface PageState {
   formElements: Record<string, Element>;
   /** Mapping from link element names to their URLs */
   links: Record<string, string>;
-  /** Mapping from custom commans to their handlers */
+  /** Mapping from custom commands to their handlers */
   customCommands: Map<string, (arg: any) => void>;
 }
 
