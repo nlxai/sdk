@@ -1,6 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import type { Config } from "@nlxai/core";
 import type { TouchpointConfiguration } from "./interface";
+import type * as z4 from "zod/v4/core";
 
 export type NormalizedTouchpointConfiguration = TouchpointConfiguration &
   Required<
@@ -16,9 +17,8 @@ export type NormalizedTouchpointConfiguration = TouchpointConfiguration &
  * @internal
  */
 export interface DowncastCustomCommand {
-  name: string;
+  action: string;
   description?: string;
-  values?: any[];
-  multipleValues?: boolean;
+  schema?: z4.$ZodType | z4.JSONSchema.BaseSchema;
   handler: (arg: any) => void;
 }

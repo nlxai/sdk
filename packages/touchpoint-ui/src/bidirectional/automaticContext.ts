@@ -7,6 +7,7 @@ import { equals, uniq } from "ramda";
 import { debug } from "./debug";
 import type { DowncastCustomCommand } from "../types";
 import type { BidirectionalContext, PageState } from "../interface";
+import * as z4 from "zod/v4/core";
 
 const debounceAsync = <T extends any[]>(
   func: (...args: T) => Promise<void>,
@@ -107,8 +108,16 @@ const gatherContext = (
     fields,
     destinations,
     actions: customCommands.map((command) => {
-      const { handler: _, ...commandWithoutHandler } = command;
-      return commandWithoutHandler;
+      const { handler: _, schema, ...commandWithoutHandler } = command;
+      if (schema != null) {
+        return {
+          schema:
+            schema instanceof z4.$ZodType
+              ? z4.toJSONSchema(schema, { io: "input" })
+              : schema,
+          ...commandWithoutHandler,
+        };
+      } else return commandWithoutHandler;
     }),
   };
 
@@ -118,10 +127,25 @@ const gatherContext = (
       formElements,
       links,
       customCommands: new Map(
-        customCommands.map((c) => [
-          c.name,
-          { handler: c.handler, values: c.values ?? [] },
-        ]),
+        customCommands.map((c) => {
+          const schema = c.schema;
+          return [
+            c.action,
+            schema instanceof z4.$ZodType
+              ? (data: z4.input<typeof schema>) => {
+                  const result = z4.safeParse(schema, data);
+                  if (result.success) {
+                    c.handler(result.data);
+                  } else {
+                    debug(
+                      `Custom command "${c.action}" received, but the payload ${JSON.stringify(data, null, 2)} does not match the schema.`,
+                      result.error,
+                    );
+                  }
+                }
+              : c.handler,
+          ];
+        }),
       ),
     },
   };

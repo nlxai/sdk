@@ -2,7 +2,6 @@
 import type { ConversationHandler } from "@nlxai/core";
 import type { PageState, BidirectionalConfig, InputField } from "../interface";
 import { debug } from "./debug";
-import { equals } from "ramda";
 
 export const commandHandler = (
   handler: ConversationHandler,
@@ -97,23 +96,12 @@ export const commandHandler = (
       case "custom":
         if (pageState.current.customCommands.has(event.action as string)) {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          const { handler, values } = pageState.current.customCommands.get(
+          const handler = pageState.current.customCommands.get(
             event.action as string,
           )!;
-          if (
-            event.payload != null &&
-            (values.some((v) => equals(v, event.payload)) ||
-              (Array.isArray(event.payload) &&
-                (event.payload as any[]).every((payload) =>
-                  values.some((v) => equals(v, payload)),
-                )))
-          ) {
+
+          if (event.payload != null) {
             handler(event.payload);
-          } else {
-            debug(
-              `Custom command "${event.action}" received, but the payload ${event.payload} does not match the expected values.`,
-              values,
-            );
           }
         }
         if (bidirectional?.custom != null) {
