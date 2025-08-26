@@ -112,6 +112,11 @@ export const loginCommand = new Command("login")
 
 // Example usage: get a valid access token
 
-export async function getAccessToken(): Promise<string | null> {
-  return await refreshTokenIfNeeded();
+export async function ensureToken(): Promise<string> {
+  const accessToken = await refreshTokenIfNeeded();
+  if (!accessToken) {
+    console.error("Not authenticated. Please run 'login' first.");
+    process.exit(1);
+  }
+  return accessToken;
 }

@@ -1,36 +1,14 @@
 import { Command } from "commander";
-import { getAccessToken } from "./login";
 import { compile } from "json-schema-to-typescript";
 import fs from "fs";
 import path from "path";
-
-const API_BASE_URL =
-  process.env.NLX_API_BASE_URL || "https://api.dev.studio.nlx.ai/v1";
+import { fetchManagementApi } from "../utils";
 
 export const modalitiesCommand = new Command("modalities")
   .description("Fetch modalities and generate TypeScript interfaces")
   .option("-o, --out <file>", "Output TypeScript file", "modalities-types.d.ts")
   .action(async (opts: { out: string }) => {
-    const accessToken = await getAccessToken();
-    if (!accessToken) {
-      console.error("Not authenticated. Please run 'login' first.");
-      process.exit(1);
-    }
-    const res = await fetch(`${API_BASE_URL}/models`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        Accept: "application/json",
-      },
-    });
-    if (!res.ok) {
-      console.error(
-        "Failed to fetch modalities:",
-        res.status,
-        await res.text(),
-      );
-      process.exit(1);
-    }
-    const data: any = await res.json();
+    const data: any = await fetchManagementApi(`models`);
 
     // Generate TypeScript interfaces for each modelId
     let output =
