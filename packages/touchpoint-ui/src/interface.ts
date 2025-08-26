@@ -224,16 +224,8 @@ export interface PageState {
   formElements: Record<string, Element>;
   /** Mapping from link element names to their URLs */
   links: Record<string, string>;
-  /** Mapping from custom commans to their handlers (and values used to validate LLM output) */
-  customCommands: Map<
-    string,
-    {
-      /** Available values, used for validation. */
-      schema: z4.$ZodType | undefined;
-      /** Handler that will be called when the command is invoked */
-      handler: (arg: any) => void;
-    }
-  >;
+  /** Mapping from custom commans to their handlers */
+  customCommands: Map<string, (arg: any) => void>;
 }
 
 /**
@@ -460,6 +452,21 @@ export type BidirectionalCustomCommand<Schema extends z4.$ZodType> = {
        * A handler that will be called with an argument matching the schema when the command is invoked.
        */
       handler: (value: z4.output<Schema>) => void;
+    }
+  | {
+      /**
+       * A JSON Schema that defines the structure of the command's input. Prefer using Zod schemas when possible,
+       * as this will preserve type safety for your handlers.
+       *
+       * Use descriptive names and `description` fields to give the underlying LLM plenty of context for
+       * it to generate reasonable parameters. Note that the LLM output will be validated (and transformed)
+       * with this schema, so you are guaranteed type safe inputs to your handler.
+       */
+      schema: z4.JSONSchema.BaseSchema;
+      /**
+       * A handler that will be called with an argument matching the schema when the command is invoked.
+       */
+      handler: (value: any) => void;
     }
   | {
       /**

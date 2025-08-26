@@ -2,7 +2,6 @@
 import type { ConversationHandler } from "@nlxai/core";
 import type { PageState, BidirectionalConfig, InputField } from "../interface";
 import { debug } from "./debug";
-import * as z4 from "zod/v4/core";
 
 export const commandHandler = (
   handler: ConversationHandler,
@@ -97,24 +96,12 @@ export const commandHandler = (
       case "custom":
         if (pageState.current.customCommands.has(event.action as string)) {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          const { handler, schema } = pageState.current.customCommands.get(
+          const handler = pageState.current.customCommands.get(
             event.action as string,
           )!;
 
           if (event.payload != null) {
-            if (schema == null) {
-              handler(undefined);
-            } else {
-              const result = z4.safeParse(schema, event.payload);
-              if (result.success) {
-                handler(result.data);
-              } else {
-                debug(
-                  `Custom command "${event.action}" received, but the payload ${event.payload} does not match the schema.`,
-                  result.error,
-                );
-              }
-            }
+            handler(event.payload);
           }
         }
         if (bidirectional?.custom != null) {

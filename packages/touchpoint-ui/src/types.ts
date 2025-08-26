@@ -19,6 +19,6 @@ export type NormalizedTouchpointConfiguration = TouchpointConfiguration &
 export interface DowncastCustomCommand {
   action: string;
   description?: string;
-  schema?: z4.$ZodType;
+  schema?: z4.$ZodType | z4.JSONSchema.BaseSchema;
   handler: (arg: any) => void;
 }
