@@ -5,6 +5,7 @@ import path from "path";
 import { fetchManagementApi } from "../../utils";
 import OASNormalize from "oas-normalize";
 import Oas from "oas";
+import { consola } from "consola";
 
 const categorizeServers = (spec: Oas) => {
   const { servers } = spec.getDefinition();
@@ -96,7 +97,7 @@ The following features are not supported and will be silently ignored:
       try {
         await oas.validate();
       } catch (error) {
-        console.error("Failed to validate OpenAPI Specification:", error);
+        consola.error("Failed to validate OpenAPI Specification:", error);
         process.exit(1);
       }
       const spec = Oas.init((await oas.convert()) as any);
@@ -123,7 +124,7 @@ The following features are not supported and will be silently ignored:
               ) {
                 return true;
               } else {
-                console.warn(
+                consola.warn(
                   `Skipping operation ${operation.getOperationId()} due to unsupported security schemes: ${keys.join(", ")}`,
                 );
                 return false;
@@ -139,7 +140,7 @@ The following features are not supported and will be silently ignored:
                 .getParameters()
                 .filter((op) => ["cookie", "query"].includes(op.in))
                 .forEach((param) => {
-                  console.warn(
+                  consola.warn(
                     `${param.in} param ${param.name} not supported, skipping.`,
                   );
                 });
@@ -251,7 +252,7 @@ The following features are not supported and will be silently ignored:
               return eq(value, existing[key]);
             })
           ) {
-            console.log(
+            consola.info(
               `Updating data request ${dataRequest.variableId} ${dataRequest.webhook.method} ${dataRequest.webhook.environments.production.url}`,
             );
             if (!options.dryRun)
@@ -262,7 +263,7 @@ The following features are not supported and will be silently ignored:
               );
           }
         } else {
-          console.log(
+          consola.info(
             `Creating new data request ${dataRequest.variableId} ${dataRequest.webhook.method} ${dataRequest.webhook.environments.production.url}`,
           );
           if (!options.dryRun)

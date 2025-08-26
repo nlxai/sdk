@@ -3,6 +3,7 @@ import fs from "fs";
 import open from "open";
 import os from "os";
 import path from "path";
+import { consola } from "consola";
 
 const TOKEN_PATH = path.join(os.homedir(), ".nlx-cli-auth.json");
 
@@ -18,6 +19,17 @@ function loadTokens(): any | null {
     return JSON.parse(data);
   } catch {
     return null;
+  }
+}
+
+export function clearTokens(): void {
+  try {
+    const tokenFileExists = fs.existsSync(TOKEN_PATH);
+    if (!tokenFileExists) return;
+    fs.unlinkSync(TOKEN_PATH);
+  } catch (err: any) {
+    consola.error(`Failed to clear tokens: ${err?.message || err}`);
+    throw err;
   }
 }
 
@@ -78,7 +90,7 @@ export const loginCommand = new Command("login")
     const deviceCodeData: any = await deviceCodeRes.json();
 
     open(deviceCodeData.verification_uri_complete);
-    console.log(
+    consola.info(
       `Please visit ${deviceCodeData.verification_uri_complete} and enter code: ${deviceCodeData.user_code}`,
     );
 
@@ -99,7 +111,7 @@ export const loginCommand = new Command("login")
       if (resData.access_token) {
         tokenData = resData;
       } else if (resData.error !== "authorization_pending") {
-        console.error("Error:", resData.error_description || resData.error);
+        consola.error("Error:", resData.error_description || resData.error);
         return;
       }
     }
@@ -107,7 +119,7 @@ export const loginCommand = new Command("login")
     // Step 3: Store token securely
     tokenData.obtained_at = Math.floor(Date.now() / 1000);
     saveTokens(tokenData);
-    console.log("Login successful! Access token stored securely.");
+    consola.success("Login successful! Access token stored securely.");
   });
 
 // Example usage: get a valid access token
@@ -115,7 +127,7 @@ export const loginCommand = new Command("login")
 export async function ensureToken(): Promise<string> {
   const accessToken = await refreshTokenIfNeeded();
   if (!accessToken) {
-    console.error("Not authenticated. Please run 'login' first.");
+    consola.error("Not authenticated. Please run 'login' first.");
     process.exit(1);
   }
   return accessToken;

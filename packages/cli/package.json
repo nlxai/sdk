@@ -28,10 +28,12 @@
   "scripts": {
     "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest",
     "build": "tsc",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "dev": "ts-node src/index.ts"
   },
   "dependencies": {
     "commander": "^14.0",
+    "consola": "^3.4.2",
     "json-schema-to-typescript": "^15.0.4",
     "oas": "^28.1.0",
     "oas-normalize": "^15.0.1",

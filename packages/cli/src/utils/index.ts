@@ -1,4 +1,5 @@
 import { ensureToken } from "../commands/login";
+import { consola } from "consola";
 
 const API_BASE_URL =
   process.env.NLX_API_BASE_URL || "https://api.dev.studio.nlx.ai/v1";
@@ -18,7 +19,7 @@ export const fetchManagementApi = async (
     body: body ? JSON.stringify(body) : undefined,
   });
   if (!res.ok) {
-    console.error("Failed to fetch:", res.status, await res.text());
+    consola.error("Failed to fetch:", res.status, await res.text());
     process.exit(1);
   }
   return await res.json();
