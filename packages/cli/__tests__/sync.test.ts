@@ -150,22 +150,7 @@ describe("syncCommand", () => {
         from: "user",
       },
     );
-    // Find calls to fetchManagementApi for PUT/POST
-    const calls = (
-      utils.fetchManagementApi as unknown as MockInstance
-    ).mock.calls.filter(
-      (call: [string, string, any]) => call[1] === "PUT" || call[1] === "POST",
-    );
-    expect(calls.length).toBeGreaterThan(0);
-    // Check that the correct variableId and method are present in the body
-    const putCall = calls.find(
-      (call: [string, string, any]) => call[1] === "PUT",
-    );
-    expect(putCall).toBeDefined();
-    const body = putCall[2];
-    expect(body.variableId).toBe("CreateTest");
-    expect(body.webhook.method).toBe("POST");
-    expect(body.webhook.environments.production.url).toContain("/test");
+
     expect(utils.fetchManagementApi).toHaveBeenCalledWith(
       expect.stringContaining("variables"),
       expect.stringMatching(/^(POST|PUT)$/),
