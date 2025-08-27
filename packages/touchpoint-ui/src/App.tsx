@@ -42,7 +42,6 @@ import { CustomPropertiesContainer } from "./components/Theme";
 import { VoiceMini } from "./components/VoiceMini";
 import { gatherAutomaticContext } from "./bidirectional/automaticContext";
 import { commandHandler } from "./bidirectional/commandHandler";
-import type * as z4 from "zod/v4/core";
 
 /**
  * Main Touchpoint creation properties object
@@ -58,9 +57,9 @@ export interface AppRef {
   setExpanded: (val: boolean) => void;
   getExpanded: () => boolean;
   getConversationHandler: () => ConversationHandler;
-  setCustomBidirectionalCommands: <T extends z4.$ZodType[]>(commands: {
-    [I in keyof T]: BidirectionalCustomCommand<T[I]>;
-  }) => void;
+  setCustomBidirectionalCommands: (
+    commands: BidirectionalCustomCommand[],
+  ) => void;
 }
 
 const App = forwardRef<AppRef, Props>((props, ref) => {
