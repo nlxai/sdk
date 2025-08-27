@@ -1,8 +1,8 @@
 import { Command } from "commander";
 import { compile } from "json-schema-to-typescript";
-import fs from "fs";
-import path from "path";
-import { fetchManagementApi } from "../utils";
+import * as fs from "fs";
+import * as path from "path";
+import { fetchManagementApi } from "../utils/index.js";
 
 export const modalitiesCommand = new Command("modalities")
   .description("Fetch modalities and generate TypeScript interfaces")

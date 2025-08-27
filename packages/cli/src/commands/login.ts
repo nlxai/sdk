@@ -1,8 +1,8 @@
 import { Command } from "commander";
-import fs from "fs";
+import * as fs from "fs";
 import open from "open";
-import os from "os";
-import path from "path";
+import * as os from "os";
+import * as path from "path";
 
 const TOKEN_PATH = path.join(os.homedir(), ".nlx-cli-auth.json");
 

@@ -7,6 +7,7 @@
     "AI",
     "typescript"
   ],
+  "type": "module",
   "author": "Jakub Hampl <jakub@nlx.ai>",
   "homepage": "https://github.com/nlxai/sdk#readme",
   "license": "MIT",
@@ -26,11 +27,14 @@
     "url": "git+https://github.com/nlxai/sdk.git"
   },
   "scripts": {
-    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest",
+    "test": "vitest run",
     "build": "tsc",
     "tsc": "tsc"
   },
   "dependencies": {
+    "@inquirer/prompts": "^7.8.4",
+    "boxen": "^8.0.1",
+    "chalk": "^4.1.0",
     "commander": "^14.0",
     "json-schema-to-typescript": "^15.0.4",
     "oas": "^28.1.0",
@@ -42,8 +46,12 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
+    "@vitest/coverage-istanbul": "^3.2.4",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
     "jest": "^29.7.0",
     "ts-jest": "^29.4.1",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^3.2.4"
   }
 }

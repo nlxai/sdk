@@ -1,18 +1,18 @@
+import { editor, expand, select } from "@inquirer/prompts";
+import boxen from "boxen";
+import chalk from "chalk";
 import { Command } from "commander";
-import { compile } from "json-schema-to-typescript";
-import fs from "fs";
-import path from "path";
-import { fetchManagementApi } from "../../utils";
+import { fetchManagementApi } from "../../utils/index.js";
 import OASNormalize from "oas-normalize";
 import Oas from "oas";
+import { MediaTypeObject, SchemaObject } from "oas/types";
 
-const categorizeServers = (spec: Oas) => {
+const categorizeServers = async (spec: Oas, interactive: boolean) => {
   const { servers } = spec.getDefinition();
   if (servers == null)
     throw new Error("No servers defined in the specification");
   if (servers.length === 1) return { production: 0 };
-
-  return servers.reduce(
+  const guess = servers.reduce(
     (
       acc: Record<string, number>,
       server: { description?: string },
@@ -33,6 +33,34 @@ const categorizeServers = (spec: Oas) => {
     },
     {},
   );
+  if (interactive) {
+    const servers = spec.getDefinition().servers;
+    if (servers && servers.length > 1) {
+      const serverChoices = servers.map((srv, idx) => ({
+        name: `${srv.url}`,
+        value: idx as number | undefined,
+        description: srv.description,
+      }));
+      const prodIdx = await select({
+        message: "Select production server:",
+        choices: serverChoices,
+        default: guess.production,
+      });
+      const devIdx: number | undefined = await select({
+        message: "Select development server:",
+        choices: serverChoices.concat([
+          {
+            name: "No development server",
+            value: undefined,
+            description: undefined,
+          },
+        ]),
+        default: guess.development,
+      });
+      return { production: prodIdx, development: devIdx };
+    }
+  }
+  return guess;
 };
 
 const capitalize = (str: string) => {
@@ -66,7 +94,7 @@ The following features are not supported and will be silently ignored:
     "--folder <folder>",
     "Folder where the data requests will be organized",
   )
-  .option("--dry-run", "Simulate the sync process without making any changes")
+
   .optionsGroup("Security mechanism:")
   .option(
     "--api-key-secret <secret>",
@@ -76,6 +104,13 @@ The following features are not supported and will be silently ignored:
     "--bearer-secret <secret>",
     "Name of the NLX Secret containing the secret to use for the Bearer token security mechanism",
   )
+  .optionsGroup("Run modes:")
+  .option("--dry-run", "Simulate the sync process without making any changes")
+  .option(
+    "--interactive",
+    "Prompt for each operation before syncing, allowing user to approve, skip, or resolve ambiguities",
+  )
+
   .action(
     async (
       inputSpec: string,
@@ -84,6 +119,7 @@ The following features are not supported and will be silently ignored:
         dryRun: boolean;
         apiKeySecret?: string;
         bearerSecret?: string;
+        interactive?: boolean;
       },
     ) => {
       const currentData = new Map(
@@ -102,7 +138,10 @@ The following features are not supported and will be silently ignored:
       const spec = Oas.init((await oas.convert()) as any);
 
       await spec.dereference();
-      const serverIndices = categorizeServers(spec);
+      const serverIndices = await categorizeServers(
+        spec,
+        options.interactive ?? false,
+      );
 
       const newData = Object.entries(spec.getPaths()).flatMap(
         ([path, methods]) => {
@@ -200,6 +239,16 @@ The following features are not supported and will be silently ignored:
                 }
               }
 
+              let responseSchema = codes
+                ? operation.getResponseAsJSONSchema(codes)
+                : { schema: undefined };
+
+              if (Array.isArray(responseSchema) && responseSchema.length > 0) {
+                responseSchema = responseSchema[0];
+              }
+              if ("schema" in responseSchema) {
+                responseSchema = responseSchema.schema;
+              }
               return {
                 variableId: capitalize(
                   operation
@@ -212,11 +261,12 @@ The following features are not supported and will be silently ignored:
                 type: "text",
                 description:
                   operation.getSummary() || operation.getDescription(),
-                requestSchema:
+                requestSchema: extractSchema(
                   operation.getRequestBody("application/json") || undefined,
-                responseSchema: codes
-                  ? operation.getResponseAsJSONSchema(codes)
-                  : undefined,
+                ),
+                responseSchema: extractSchema(
+                  codes ? operation.getResponseAsJSONSchema(codes) : undefined,
+                ),
                 webhook: {
                   implementation: "external",
                   method: operation.method.toUpperCase(),
@@ -244,33 +294,104 @@ The following features are not supported and will be silently ignored:
       );
 
       for (const dataRequest of newData) {
-        const existing: any = currentData.get(dataRequest.variableId);
+        let proceed = true;
+        let resolvedRequest = { ...dataRequest };
+        if (options.interactive) {
+          const preview = [
+            chalk.bold(
+              dataRequest.webhook.method +
+                " " +
+                chalk.underline(
+                  dataRequest.webhook.environments.production.url,
+                ),
+            ),
+            chalk.dim(dataRequest.description),
+            "",
+            chalk.bold.magenta(`Request Schema:`),
+            chalk.white(JSON.stringify(dataRequest.requestSchema, null, 2)),
+            "",
+            chalk.bold.magenta(`Response Schema:`),
+            chalk.white(JSON.stringify(dataRequest.responseSchema, null, 2)),
+          ].join("\n");
+          console.log(
+            boxen(preview, {
+              padding: 1,
+              margin: 1,
+              borderStyle: "round",
+              borderColor: "cyan",
+              backgroundColor: "black",
+              title: dataRequest.variableId,
+            }),
+          );
+          const action = await expand({
+            message: "Sync this operation?",
+            choices: [
+              { key: "y", name: "Sync", value: "sync" },
+              { key: "s", name: "Skip", value: "skip" },
+              { key: "e", name: "Edit in your $EDITOR", value: "edit" },
+            ],
+            default: "y",
+          });
+          if (action === "skip") {
+            proceed = false;
+          } else if (action === "edit") {
+            const res = await editor({
+              message: "Open JSON in your editor",
+              default: JSON.stringify(dataRequest, null, 2),
+              postfix: ".json",
+              waitForUseInput: false,
+              validate: (text) => {
+                try {
+                  JSON.parse(text);
+                  return true;
+                } catch {
+                  return "Invalid JSON";
+                }
+              },
+            });
+            resolvedRequest = JSON.parse(res);
+          }
+        }
+        if (!proceed) continue;
+        const existing: any = currentData.get(resolvedRequest.variableId);
         if (existing) {
           if (
-            !Object.entries(dataRequest).every(([key, value]) => {
+            !Object.entries(resolvedRequest).every(([key, value]) => {
               return eq(value, existing[key]);
             })
           ) {
             console.log(
-              `Updating data request ${dataRequest.variableId} ${dataRequest.webhook.method} ${dataRequest.webhook.environments.production.url}`,
+              `Updating data request ${resolvedRequest.variableId} ${resolvedRequest.webhook.method} ${resolvedRequest.webhook.environments.production.url}`,
             );
             if (!options.dryRun)
               await fetchManagementApi(
-                `variables/${dataRequest.variableId}`,
+                `variables/${resolvedRequest.variableId}`,
                 "POST",
-                dataRequest,
+                resolvedRequest,
               );
           }
         } else {
           console.log(
-            `Creating new data request ${dataRequest.variableId} ${dataRequest.webhook.method} ${dataRequest.webhook.environments.production.url}`,
+            `Creating new data request ${resolvedRequest.variableId} ${resolvedRequest.webhook.method} ${resolvedRequest.webhook.environments.production.url}`,
           );
           if (!options.dryRun)
-            await fetchManagementApi("variables", "PUT", dataRequest);
+            await fetchManagementApi("variables", "PUT", resolvedRequest);
         }
       }
     },
   );
+
+const extractSchema = (schema: SchemaObject | MediaTypeObject | undefined) => {
+  if (schema == null) return undefined;
+
+  if (Array.isArray(schema) && schema.length > 0) {
+    schema = schema[0];
+  }
+  if (schema != null && "schema" in schema) {
+    schema = schema.schema;
+  }
+  return schema;
+};
 
 const eq = (a: any, b: any): boolean => {
   if (a === b) return true;

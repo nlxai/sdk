@@ -1,4 +1,4 @@
-import { ensureToken } from "../commands/login";
+import { ensureToken } from "../commands/login.js";
 
 const API_BASE_URL =
   process.env.NLX_API_BASE_URL || "https://api.dev.studio.nlx.ai/v1";
