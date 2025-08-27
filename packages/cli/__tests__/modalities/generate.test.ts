@@ -1,9 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { modalitiesCommand } from "../src/commands/modalities";
+import { modalitiesCommand } from "../../src/commands/modalities/index.js";
+import { modalitiesGenerateCommand } from "../../src/commands/modalities/generate.js";
 import { Command } from "commander";
 import fs from "fs";
 import path from "path";
-import * as login from "../src/commands/login";
+import * as login from "../../src/commands/login.js";
 
 describe("modalitiesCommand", () => {
   beforeEach(() => {
@@ -14,12 +15,18 @@ describe("modalitiesCommand", () => {
     expect(modalitiesCommand).toBeDefined();
     expect(modalitiesCommand.name()).toBe("modalities");
   });
+});
+
+describe("modalitiesGenerateCommand", () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
 
   it("should generate TypeScript file from models", async () => {
     vi.spyOn(login, "ensureToken").mockResolvedValue("test-token");
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      json: async (): Promise<{ items: Array<{ modelId: string; schema: any }> }> => ({
+      json: async () => ({
         items: [
           {
             modelId: "TestModel",
@@ -27,13 +34,13 @@ describe("modalitiesCommand", () => {
           },
         ],
       }),
-    }) as any;
+    });
 
     const outFile = path.resolve(__dirname, "test-modalities-types.d.ts");
     if (fs.existsSync(outFile)) fs.unlinkSync(outFile);
-    await modalitiesCommand.parseAsync([
+    await modalitiesGenerateCommand.parseAsync([
       "node",
-      "modalities",
+      "generate",
       "--out",
       outFile,
     ]);

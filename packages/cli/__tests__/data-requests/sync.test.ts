@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from "vitest";
 import type { MockInstance } from "vitest";
-import { syncCommand } from "../src/commands/data-requests/sync";
+import { syncCommand } from "../../src/commands/data-requests/sync.js";
 import { Command } from "commander";
-import * as utils from "../src/utils";
+import * as utils from "../../src/utils/index.js";
 import { select, expand, editor } from "@inquirer/prompts";
 
 vi.mock("../src/utils", () => ({

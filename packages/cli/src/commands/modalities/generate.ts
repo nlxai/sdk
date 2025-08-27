@@ -2,9 +2,9 @@ import { Command } from "commander";
 import { compile } from "json-schema-to-typescript";
 import * as fs from "fs";
 import * as path from "path";
-import { fetchManagementApi } from "../utils/index.js";
+import { fetchManagementApi } from "../../utils/index.js";
 
-export const modalitiesCommand = new Command("modalities")
+export const modalitiesGenerateCommand = new Command("generate")
   .description("Fetch modalities and generate TypeScript interfaces")
   .option("-o, --out <file>", "Output TypeScript file", "modalities-types.d.ts")
   .action(async (opts: { out: string }) => {

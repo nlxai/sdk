@@ -1,6 +1,6 @@
 import { program } from "commander";
 import { loginCommand } from "./commands/login.js";
-import { modalitiesCommand } from "./commands/modalities.js";
+import { modalitiesCommand } from "./commands/modalities/index.js";
 import { dataRequestsCommand } from "./commands/data-requests/index.js";
 
 program.description(
