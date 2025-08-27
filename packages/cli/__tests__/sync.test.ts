@@ -22,7 +22,7 @@ describe("syncCommand", () => {
     const cmd = new Command();
     cmd.addCommand(syncCommand);
     await cmd.parseAsync(
-      ["sync", "__tests__/sample-openapi.yaml", "--dry-run"],
+      ["sync", "__tests__/input-files/sample-openapi.yaml", "--dry-run"],
       {
         from: "user",
       },
@@ -35,7 +35,7 @@ describe("syncCommand", () => {
     cmd.addCommand(syncCommand);
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     await cmd.parseAsync(
-      ["sync", "__tests__/secure-openapi.yaml", "--dry-run"],
+      ["sync", "__tests__/input-files/secure-openapi.yaml", "--dry-run"],
       {
         from: "user",
       },
@@ -56,7 +56,7 @@ describe("syncCommand", () => {
     const cmd = new Command();
     cmd.addCommand(syncCommand);
     await cmd.parseAsync(
-      ["sync", "__tests__/deprecated-openapi.yaml", "--dry-run"],
+      ["sync", "__tests__/input-files/deprecated-openapi.yaml", "--dry-run"],
       {
         from: "user",
       },
@@ -73,7 +73,7 @@ describe("syncCommand", () => {
   it("should skip non-JSON content types", async () => {
     const cmd = new Command();
     cmd.addCommand(syncCommand);
-    await cmd.parseAsync(["sync", "__tests__/xml-openapi.yaml"], {
+    await cmd.parseAsync(["sync", "__tests__/input-files/xml-openapi.yaml"], {
       from: "user",
     });
     // Should not fire any PUT/POST requests
@@ -89,9 +89,12 @@ describe("syncCommand", () => {
     const cmd = new Command();
     cmd.addCommand(syncCommand);
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-    await cmd.parseAsync(["sync", "__tests__/params-openapi.yaml"], {
-      from: "user",
-    });
+    await cmd.parseAsync(
+      ["sync", "__tests__/input-files/params-openapi.yaml"],
+      {
+        from: "user",
+      },
+    );
     expect(warnSpy).toHaveBeenCalledWith(
       expect.stringContaining("param q not supported"),
     );
@@ -141,9 +144,12 @@ describe("syncCommand", () => {
   it("should fire correct PUT/POST requests for a real OpenAPI spec", async () => {
     const cmd = new Command();
     cmd.addCommand(syncCommand);
-    await cmd.parseAsync(["sync", "__tests__/sample-openapi.yaml"], {
-      from: "user",
-    });
+    await cmd.parseAsync(
+      ["sync", "__tests__/input-files/sample-openapi.yaml"],
+      {
+        from: "user",
+      },
+    );
     // Find calls to fetchManagementApi for PUT/POST
     const calls = (
       utils.fetchManagementApi as unknown as MockInstance

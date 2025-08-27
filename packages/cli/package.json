@@ -27,6 +27,7 @@
     "url": "git+https://github.com/nlxai/sdk.git"
   },
   "scripts": {
+    "dev": "vitest",
     "test": "vitest run",
     "build": "tsc",
     "tsc": "tsc"
@@ -45,12 +46,9 @@
     "url": "https://github.com/nlxai/sdk/issues"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.12",
     "@vitest/coverage-istanbul": "^3.2.4",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.4.1",
     "typescript": "^5.4.5",
     "vitest": "^3.2.4"
   }
