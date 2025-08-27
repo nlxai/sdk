@@ -1,8 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, beforeAll } from "vitest";
 import type { MockInstance } from "vitest";
 import { syncCommand } from "../src/commands/data-requests/sync";
 import { Command } from "commander";
 import * as utils from "../src/utils";
+import { select, expand, editor } from "@inquirer/prompts";
 
 vi.mock("../src/utils", () => ({
   fetchManagementApi: vi.fn(async (url: string, method: string, body: any) => {
@@ -189,5 +190,104 @@ describe("syncCommand", () => {
         },
       }),
     );
+  });
+});
+
+vi.mock("@inquirer/prompts", () => ({
+  expand: vi.fn(),
+  editor: vi.fn(),
+  select: vi.fn(),
+}));
+
+describe("syncCommand interactive mode", () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("should prompt and sync when user chooses 'sync'", async () => {
+    if (vi.isMockFunction(expand)) expand.mockResolvedValue("sync");
+
+    const cmd = new Command();
+    cmd.addCommand(syncCommand);
+    await cmd.parseAsync(
+      [
+        "sync",
+        "__tests__/input-files/sample-openapi.yaml",
+        "--interactive",
+        "--dry-run",
+      ],
+      { from: "user" },
+    );
+    expect(expand).toHaveBeenCalled();
+    expect(utils.fetchManagementApi).not.toHaveBeenCalledWith(
+      expect.stringContaining("variables"),
+      expect.stringMatching(/^(POST|PUT)$/),
+      expect.anything(),
+    ); // dry-run, so no actual sync
+  });
+
+  it("should prompt and skip when user chooses 'skip'", async () => {
+    if (vi.isMockFunction(expand)) expand.mockResolvedValue("skip");
+    const cmd = new Command();
+    cmd.addCommand(syncCommand);
+    await cmd.parseAsync(
+      [
+        "sync",
+        "__tests__/input-files/sample-openapi.yaml",
+        "--interactive",
+        "--dry-run",
+      ],
+      { from: "user" },
+    );
+    expect(expand).toHaveBeenCalled();
+    expect(utils.fetchManagementApi).not.toHaveBeenCalledWith(
+      expect.stringContaining("variables"),
+      expect.stringMatching(/^(POST|PUT)$/),
+      expect.anything(),
+    );
+  });
+
+  it("should allow editing the data request when user chooses 'edit'", async () => {
+    if (vi.isMockFunction(expand)) expand.mockResolvedValue("edit");
+    if (vi.isMockFunction(editor))
+      editor.mockResolvedValue(
+        JSON.stringify({
+          variableId: "EditedId",
+          webhook: {
+            method: "POST",
+            environments: { production: { url: "https://edited.com" } },
+          },
+        }),
+      );
+
+    const cmd = new Command();
+    cmd.addCommand(syncCommand);
+    await cmd.parseAsync(
+      [
+        "sync",
+        "__tests__/input-files/sample-openapi.yaml",
+        "--interactive",
+        "--dry-run",
+      ],
+      { from: "user" },
+    );
+    expect(expand).toHaveBeenCalled();
+    expect(editor).toHaveBeenCalled();
+  });
+
+  it("should prompt for server selection if multiple servers exist", async () => {
+    if (vi.isMockFunction(select)) select.mockResolvedValue(0);
+    const cmd = new Command();
+    cmd.addCommand(syncCommand);
+    await cmd.parseAsync(
+      [
+        "sync",
+        "__tests__/input-files/multi-server-openapi.yaml",
+        "--interactive",
+        "--dry-run",
+      ],
+      { from: "user" },
+    );
+    expect(select).toHaveBeenCalled();
   });
 });
