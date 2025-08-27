@@ -5,9 +5,12 @@ import type { ConversationHandler } from "@nlxai/core";
 import { analyzePageForms } from "./analyzePageForms";
 import { equals, uniq } from "ramda";
 import { debug } from "./debug";
-import type { DowncastCustomCommand } from "../types";
-import type { BidirectionalContext, PageState } from "../interface";
-import * as z4 from "zod/v4/core";
+
+import type {
+  BidirectionalContext,
+  BidirectionalCustomCommand,
+  PageState,
+} from "../interface";
 
 const debounceAsync = <T extends any[]>(
   func: (...args: T) => Promise<void>,
@@ -43,7 +46,7 @@ const debounceAsync = <T extends any[]>(
 
 export const gatherAutomaticContext = (
   handler: ConversationHandler,
-  customCommands: DowncastCustomCommand[],
+  customCommands: BidirectionalCustomCommand[],
   override: (arg: { context: BidirectionalContext; state: PageState }) => {
     context: BidirectionalContext;
     state: PageState;
@@ -51,7 +54,7 @@ export const gatherAutomaticContext = (
   setPageState: (state: PageState) => void,
 ): {
   teardown: () => void;
-  onCustomCommandsChange: (commands: DowncastCustomCommand[]) => void;
+  onCustomCommandsChange: (commands: BidirectionalCustomCommand[]) => void;
 } => {
   let previousContext: BidirectionalContext = {
     // uri: "",
@@ -98,7 +101,7 @@ export const gatherAutomaticContext = (
 };
 
 const gatherContext = (
-  customCommands: DowncastCustomCommand[],
+  customCommands: BidirectionalCustomCommand[],
 ): { context: BidirectionalContext; state: PageState } => {
   const { context: fields, formElements } = analyzePageForms();
   const { context: destinations, links } = analyzePageLinks();
@@ -108,16 +111,8 @@ const gatherContext = (
     fields,
     destinations,
     actions: customCommands.map((command) => {
-      const { handler: _, schema, ...commandWithoutHandler } = command;
-      if (schema != null) {
-        return {
-          schema:
-            schema instanceof z4.$ZodType
-              ? z4.toJSONSchema(schema, { io: "input" })
-              : schema,
-          ...commandWithoutHandler,
-        };
-      } else return commandWithoutHandler;
+      const { handler: _, ...commandWithoutHandler } = command;
+      return commandWithoutHandler;
     }),
   };
 
@@ -128,23 +123,7 @@ const gatherContext = (
       links,
       customCommands: new Map(
         customCommands.map((c) => {
-          const schema = c.schema;
-          return [
-            c.action,
-            schema instanceof z4.$ZodType
-              ? (data: z4.input<typeof schema>) => {
-                  const result = z4.safeParse(schema, data);
-                  if (result.success) {
-                    c.handler(result.data);
-                  } else {
-                    debug(
-                      `Custom command "${c.action}" received, but the payload ${JSON.stringify(data, null, 2)} does not match the schema.`,
-                      result.error,
-                    );
-                  }
-                }
-              : c.handler,
-          ];
+          return [c.action, c.handler];
         }),
       ),
     },

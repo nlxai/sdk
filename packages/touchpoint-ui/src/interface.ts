@@ -6,7 +6,6 @@ import type {
 } from "@nlxai/core";
 import { type ComponentType } from "react";
 import type { InteractiveElementInfo } from "./bidirectional/analyzePageForms";
-import type * as z4 from "zod/v4/core";
 
 /**
  * Window size configuration
@@ -246,8 +245,8 @@ export interface BidirectionalContext {
     action: string;
     /** A short description of the command */
     description?: string;
-    /** A schema for validating the command's input. */
-    schema?: z4.JSONSchema.BaseSchema;
+    /** A schema for validating the command's input. Should follow the JSON Schema specification. */
+    schema?: any;
   }>;
 }
 
@@ -427,9 +426,9 @@ export interface TouchpointConfiguration {
 /**
  * During a Voice+ bidirectional conversation, you can indicate to the application the availability of
  * custom commands that the user can invoke.
- * @typeParam Schema - Commands can take a single parameter which will be generated from this schema.
+ * @typeParam T - Commands can take a single parameter which will be generated from this schema.
  */
-export type BidirectionalCustomCommand<Schema extends z4.$ZodType> = {
+export interface BidirectionalCustomCommand {
   /**
    * The name of the command, used to invoke it. Should be unique and descriptive in the context of the LLM.
    */
@@ -438,47 +437,19 @@ export type BidirectionalCustomCommand<Schema extends z4.$ZodType> = {
    * A short description of the command, used to help the LLM understand its purpose.
    */
   description?: string;
-} & (
-  | {
-      /**
-       * A [Zod](https://zod.dev) schema that defines the structure of the command's input.
-       *
-       * Use descriptive names and `.description` to give the underlying LLM plenty of context for
-       * it to generate reasonable parameters. Note that the LLM output will be validated (and transformed)
-       * with this Zod schema, so you are guaranteed type safe inputs to your handler.
-       */
-      schema: Schema;
-      /**
-       * A handler that will be called with an argument matching the schema when the command is invoked.
-       */
-      handler: (value: z4.output<Schema>) => void;
-    }
-  | {
-      /**
-       * A JSON Schema that defines the structure of the command's input. Prefer using Zod schemas when possible,
-       * as this will preserve type safety for your handlers.
-       *
-       * Use descriptive names and `description` fields to give the underlying LLM plenty of context for
-       * it to generate reasonable parameters. Note that the LLM output will be validated (and transformed)
-       * with this schema, so you are guaranteed type safe inputs to your handler.
-       */
-      schema: z4.JSONSchema.BaseSchema;
-      /**
-       * A handler that will be called with an argument matching the schema when the command is invoked.
-       */
-      handler: (value: any) => void;
-    }
-  | {
-      /**
-       * A handler that will be called.
-       */
-      handler: () => void;
-    }
-);
 
-/**
- * A type that represents a collection of custom commands, where each command can have a different type of value.
- */
-export type BidirectionalCustomCommands<T extends z4.$ZodType[]> = {
-  [I in keyof T]: BidirectionalCustomCommand<T[I]>;
-};
+  /**
+   * A JSON Schema that defines the structure of the command's input.
+   *
+   * Use descriptive names and `description` fields to give the underlying LLM plenty of context for
+   * it to generate reasonable parameters. Note that the LLM output will be validated (and transformed)
+   * with this schema, so you are guaranteed type safe inputs to your handler.
+   *
+   * Should follow the JSONSchema specification.
+   */
+  schema: any;
+  /**
+   * A handler that will be called with an argument matching the schema when the command is invoked.
+   */
+  handler: (value: any) => void;
+}

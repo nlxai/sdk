@@ -31,7 +31,6 @@ import type {
   BidirectionalCustomCommand,
 } from "./interface";
 import type { NormalizedTouchpointConfiguration } from "./types";
-import type * as z4 from "zod/v4/core";
 
 export {
   analyzePageForms,
@@ -117,7 +116,6 @@ export type {
   BidirectionalConfig,
   TouchpointConfiguration,
   BidirectionalCustomCommand,
-  BidirectionalCustomCommands,
 } from "./interface";
 
 const defaultConversationId = (): string => {
@@ -355,25 +353,54 @@ export interface TouchpointInstance {
    *
    * Example:
    * ```javascript
-   * import * as z from "zod/v4";
-   *
    * client.setCustomBidirectionalCommands([
    *     {
    *       action: "Meal",
    *       description: "add a meal to your flight",
-   *       schema: z.enum(["standard", "vegetarian", "vegan", "gluten-free"]),
+   *       schema: {
+   *         enum: ["standard", "vegetarian", "vegan", "gluten-free"],
+   *       },
    *       handler: (value) => {
    *         console.log("Meal option:", value);
    *       },
    *     },
    *   ]);
    * ```
-   * This will allow the voice bot to use the command `myCommand` with the values `value1` and `value2`.
+   *
+   * This will allow the voice bot to use the command `Meal` with the value `standard`, `vegetarian`, `vegan`, or `gluten-free`.
+   *
+   * When using more complex arguments, a library such as [Zod](https://zod.dev) can be useful:
+   *
+   * ```javascript
+   * import * as z from "zod/v4";
+   *
+   * const schema = z.object({
+   *   "name": z.string().describe("The customer's name, such as John Doe"),
+   *   "email": z.string().email().describe("The customer's email address"),
+   * });
+   *
+   * client.setCustomBidirectionalCommands([
+   *     {
+   *       action: "Meal",
+   *       description: "add a meal to your flight",
+   *       schema: z.toJSONSchema(schema, {io: "input"}),
+   *       handler: (value) => {
+   *         const result = z.safeParse(schema, value);
+   *         if (result.success) {
+   *           // result.data is now type safe and TypeScript can reason about it
+   *           console.log("Meal option:", result.data);
+   *         } else {
+   *           console.error("Failed to parse Meal option:", result.error);
+   *         }
+   *       },
+   *     },
+   *   ]);
+   * ```
    * @param commands - A list containing the custom commands to set.
    */
-  setCustomBidirectionalCommands: <T extends z4.$ZodType[]>(commands: {
-    [I in keyof T]: BidirectionalCustomCommand<T[I]>;
-  }) => void;
+  setCustomBidirectionalCommands: (
+    commands: BidirectionalCustomCommand[],
+  ) => void;
 }
 
 /**

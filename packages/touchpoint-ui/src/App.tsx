@@ -34,15 +34,11 @@ import type {
   BidirectionalCustomCommand,
   PageState,
 } from "./interface";
-import type {
-  NormalizedTouchpointConfiguration,
-  DowncastCustomCommand,
-} from "./types";
+import type { NormalizedTouchpointConfiguration } from "./types";
 import { CustomPropertiesContainer } from "./components/Theme";
 import { VoiceMini } from "./components/VoiceMini";
 import { gatherAutomaticContext } from "./bidirectional/automaticContext";
 import { commandHandler } from "./bidirectional/commandHandler";
-import type * as z4 from "zod/v4/core";
 
 /**
  * Main Touchpoint creation properties object
@@ -58,9 +54,9 @@ export interface AppRef {
   setExpanded: (val: boolean) => void;
   getExpanded: () => boolean;
   getConversationHandler: () => ConversationHandler;
-  setCustomBidirectionalCommands: <T extends z4.$ZodType[]>(commands: {
-    [I in keyof T]: BidirectionalCustomCommand<T[I]>;
-  }) => void;
+  setCustomBidirectionalCommands: (
+    commands: BidirectionalCustomCommand[],
+  ) => void;
 }
 
 const App = forwardRef<AppRef, Props>((props, ref) => {
@@ -137,7 +133,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         getConversationHandler() {
           return handler;
         },
-        setCustomBidirectionalCommands: (commands: DowncastCustomCommand[]) => {
+        setCustomBidirectionalCommands: (
+          commands: BidirectionalCustomCommand[],
+        ) => {
           customCommandsChangeHandler.current(commands);
         },
       };
@@ -186,10 +184,10 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     customCommands: new Map(),
   });
 
-  const initialCustomCommands = useRef<DowncastCustomCommand[]>([]);
+  const initialCustomCommands = useRef<BidirectionalCustomCommand[]>([]);
 
   const customCommandsChangeHandler = useRef<
-    (commands: DowncastCustomCommand[]) => void
+    (commands: BidirectionalCustomCommand[]) => void
   >((cmds) => {
     if (props.bidirectional?.automaticContext !== false) {
       initialCustomCommands.current = cmds;
