@@ -439,8 +439,7 @@ export interface BidirectionalCustomCommand {
   description?: string;
 
   /**
-   * A JSON Schema that defines the structure of the command's input. Prefer using Zod schemas when possible,
-   * as this will preserve type safety for your handlers.
+   * A JSON Schema that defines the structure of the command's input.
    *
    * Use descriptive names and `description` fields to give the underlying LLM plenty of context for
    * it to generate reasonable parameters. Note that the LLM output will be validated (and transformed)

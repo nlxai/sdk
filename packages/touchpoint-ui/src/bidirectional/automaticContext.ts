@@ -5,8 +5,12 @@ import type { ConversationHandler } from "@nlxai/core";
 import { analyzePageForms } from "./analyzePageForms";
 import { equals, uniq } from "ramda";
 import { debug } from "./debug";
-import type { DowncastCustomCommand } from "../types";
-import type { BidirectionalContext, PageState } from "../interface";
+
+import type {
+  BidirectionalContext,
+  BidirectionalCustomCommand,
+  PageState,
+} from "../interface";
 
 const debounceAsync = <T extends any[]>(
   func: (...args: T) => Promise<void>,
@@ -42,7 +46,7 @@ const debounceAsync = <T extends any[]>(
 
 export const gatherAutomaticContext = (
   handler: ConversationHandler,
-  customCommands: DowncastCustomCommand[],
+  customCommands: BidirectionalCustomCommand[],
   override: (arg: { context: BidirectionalContext; state: PageState }) => {
     context: BidirectionalContext;
     state: PageState;
@@ -50,7 +54,7 @@ export const gatherAutomaticContext = (
   setPageState: (state: PageState) => void,
 ): {
   teardown: () => void;
-  onCustomCommandsChange: (commands: DowncastCustomCommand[]) => void;
+  onCustomCommandsChange: (commands: BidirectionalCustomCommand[]) => void;
 } => {
   let previousContext: BidirectionalContext = {
     // uri: "",
@@ -97,7 +101,7 @@ export const gatherAutomaticContext = (
 };
 
 const gatherContext = (
-  customCommands: DowncastCustomCommand[],
+  customCommands: BidirectionalCustomCommand[],
 ): { context: BidirectionalContext; state: PageState } => {
   const { context: fields, formElements } = analyzePageForms();
   const { context: destinations, links } = analyzePageLinks();

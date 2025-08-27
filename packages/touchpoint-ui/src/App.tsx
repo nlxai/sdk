@@ -34,10 +34,7 @@ import type {
   BidirectionalCustomCommand,
   PageState,
 } from "./interface";
-import type {
-  NormalizedTouchpointConfiguration,
-  DowncastCustomCommand,
-} from "./types";
+import type { NormalizedTouchpointConfiguration } from "./types";
 import { CustomPropertiesContainer } from "./components/Theme";
 import { VoiceMini } from "./components/VoiceMini";
 import { gatherAutomaticContext } from "./bidirectional/automaticContext";
@@ -136,7 +133,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         getConversationHandler() {
           return handler;
         },
-        setCustomBidirectionalCommands: (commands: DowncastCustomCommand[]) => {
+        setCustomBidirectionalCommands: (
+          commands: BidirectionalCustomCommand[],
+        ) => {
           customCommandsChangeHandler.current(commands);
         },
       };
@@ -185,10 +184,10 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     customCommands: new Map(),
   });
 
-  const initialCustomCommands = useRef<DowncastCustomCommand[]>([]);
+  const initialCustomCommands = useRef<BidirectionalCustomCommand[]>([]);
 
   const customCommandsChangeHandler = useRef<
-    (commands: DowncastCustomCommand[]) => void
+    (commands: BidirectionalCustomCommand[]) => void
   >((cmds) => {
     if (props.bidirectional?.automaticContext !== false) {
       initialCustomCommands.current = cmds;
