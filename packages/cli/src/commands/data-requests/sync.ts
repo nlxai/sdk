@@ -6,6 +6,7 @@ import { fetchManagementApi } from "../../utils/index.js";
 import OASNormalize from "oas-normalize";
 import Oas from "oas";
 import { MediaTypeObject, SchemaObject } from "oas/types";
+import open from "open";
 
 const categorizeServers = async (spec: Oas, interactive: boolean) => {
   const { servers } = spec.getDefinition();
@@ -63,6 +64,26 @@ const categorizeServers = async (spec: Oas, interactive: boolean) => {
   return guess;
 };
 
+const resolveAmbiguity = <T>(
+  arr: Array<T>,
+  interactive: boolean | undefined,
+  id: string,
+  label: string,
+): Promise<T | undefined> => {
+  if (arr.length === 0) return Promise.resolve(undefined);
+  if (arr.length === 1) return Promise.resolve(arr[0]);
+  if (interactive) {
+    return select({
+      message: `Select ${label} in ${id}:`,
+      choices: arr.map((item, index) => ({
+        name: JSON.stringify(item, null, 2),
+        value: item,
+      })),
+    });
+  }
+  return Promise.resolve(arr[0]);
+};
+
 const capitalize = (str: string) => {
   return str[0].toUpperCase() + str.slice(1);
 };
@@ -90,7 +111,7 @@ The following features are not supported and will be silently ignored:
 `,
   )
   .argument("<input-spec>", "Path to the OpenAPI Specification or Swagger file")
-  .option(
+  .requiredOption(
     "--folder <folder>",
     "Folder where the data requests will be organized",
   )
@@ -143,8 +164,8 @@ The following features are not supported and will be silently ignored:
         options.interactive ?? false,
       );
 
-      const newData = Object.entries(spec.getPaths()).flatMap(
-        ([path, methods]) => {
+      const newData = await Promise.all(
+        Object.entries(spec.getPaths()).flatMap(([path, methods]) => {
           return Object.values(methods)
             .filter((operation) => {
               return (
@@ -168,11 +189,23 @@ The following features are not supported and will be silently ignored:
                 return false;
               }
             })
-            .map((operation) => {
-              const codes = operation
-                .getResponseStatusCodes()
-                .map(parseInt)
-                .filter((r) => r >= 200 && r < 300)[0];
+            .map(async (operation) => {
+              const variableId = capitalize(
+                operation
+                  .getOperationId()
+                  .replace(/[^a-zA-Z0-9]+([a-zA-Z0-9]|$)/g, (_, v) => {
+                    return v.toUpperCase();
+                  }),
+              );
+              const codes = await resolveAmbiguity(
+                operation
+                  .getResponseStatusCodes()
+                  .map(parseInt)
+                  .filter((r) => r >= 200 && r < 300),
+                options.interactive,
+                variableId,
+                "response status codes",
+              );
 
               operation
                 .getParameters()
@@ -239,33 +272,23 @@ The following features are not supported and will be silently ignored:
                 }
               }
 
-              let responseSchema = codes
-                ? operation.getResponseAsJSONSchema(codes)
-                : { schema: undefined };
-
-              if (Array.isArray(responseSchema) && responseSchema.length > 0) {
-                responseSchema = responseSchema[0];
-              }
-              if ("schema" in responseSchema) {
-                responseSchema = responseSchema.schema;
-              }
               return {
-                variableId: capitalize(
-                  operation
-                    .getOperationId()
-                    .replace(/[^a-zA-Z0-9]+([a-zA-Z0-9]|$)/g, (_, v) => {
-                      return v.toUpperCase();
-                    }),
-                ),
+                variableId,
                 path: options.folder,
                 type: "text",
                 description:
                   operation.getSummary() || operation.getDescription(),
-                requestSchema: extractSchema(
+                requestSchema: await extractSchema(
                   operation.getRequestBody("application/json") || undefined,
+                  options.interactive,
+                  variableId,
+                  "request schema",
                 ),
-                responseSchema: extractSchema(
+                responseSchema: await extractSchema(
                   codes ? operation.getResponseAsJSONSchema(codes) : undefined,
+                  options.interactive,
+                  variableId,
+                  "response schema",
                 ),
                 webhook: {
                   implementation: "external",
@@ -290,12 +313,13 @@ The following features are not supported and will be silently ignored:
                 },
               };
             });
-        },
+        }),
       );
 
       for (const dataRequest of newData) {
         let proceed = true;
         let resolvedRequest = { ...dataRequest };
+        let action;
         if (options.interactive) {
           const preview = [
             chalk.bold(
@@ -323,12 +347,13 @@ The following features are not supported and will be silently ignored:
               title: dataRequest.variableId,
             }),
           );
-          const action = await expand({
+          action = await expand({
             message: "Sync this operation?",
             choices: [
               { key: "y", name: "Sync", value: "sync" },
-              { key: "s", name: "Skip", value: "skip" },
+              { key: "n", name: "Skip", value: "skip" },
               { key: "e", name: "Edit in your $EDITOR", value: "edit" },
+              { key: "u", name: "Sync then edit in UI", value: "edit-ui" },
             ],
             default: "y",
           });
@@ -369,23 +394,39 @@ The following features are not supported and will be silently ignored:
                 "POST",
                 resolvedRequest,
               );
+            if (action === "edit-ui") {
+              open(
+                `https://dev.platform.nlx.ai/data-requests/${resolvedRequest.variableId}`,
+              );
+            }
           }
         } else {
           console.log(
             `Creating new data request ${resolvedRequest.variableId} ${resolvedRequest.webhook.method} ${resolvedRequest.webhook.environments.production.url}`,
           );
-          if (!options.dryRun)
+          if (!options.dryRun) {
             await fetchManagementApi("variables", "PUT", resolvedRequest);
+            if (action === "edit-ui") {
+              open(
+                `https://dev.platform.nlx.ai/data-requests/${resolvedRequest.variableId}`,
+              );
+            }
+          }
         }
       }
     },
   );
 
-const extractSchema = (schema: SchemaObject | MediaTypeObject | undefined) => {
+const extractSchema = async (
+  schema: SchemaObject | MediaTypeObject | undefined,
+  interactive: boolean | undefined,
+  id: string,
+  label: string,
+) => {
   if (schema == null) return undefined;
 
   if (Array.isArray(schema) && schema.length > 0) {
-    schema = schema[0];
+    schema = await resolveAmbiguity(schema, interactive, id, label);
   }
   if (schema != null && "schema" in schema) {
     schema = schema.schema;
