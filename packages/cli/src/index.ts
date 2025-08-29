@@ -1,5 +1,5 @@
 import { program } from "commander";
-import { loginCommand } from "./commands/login.js";
+import { authCommand } from "./commands/auth/index.js";
 import { modalitiesCommand } from "./commands/modalities/index.js";
 import { dataRequestsCommand } from "./commands/data-requests/index.js";
 import { httpCommand } from "./commands/http.js";
@@ -7,7 +7,7 @@ import { httpCommand } from "./commands/http.js";
 program.description(
   "Keep your Typescript types and NLX schema definitions in sync",
 );
-program.addCommand(loginCommand);
+program.addCommand(authCommand);
 program.addCommand(modalitiesCommand);
 program.addCommand(dataRequestsCommand);
 program.addCommand(httpCommand);

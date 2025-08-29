@@ -6,7 +6,7 @@ import * as path from "path";
 import { consola } from "consola";
 import keytar from "keytar";
 
-const ACCOUNTS_PATH = path.join(os.homedir(), ".nlx-cli-auth.json");
+export const ACCOUNTS_PATH = path.join(os.homedir(), ".nlx-cli-auth.json");
 
 async function saveTokens(account: string, tokenData: any) {
   await keytar.setPassword("nlx-cli", account, JSON.stringify(tokenData));

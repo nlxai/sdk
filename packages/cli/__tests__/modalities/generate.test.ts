@@ -4,7 +4,7 @@ import { modalitiesGenerateCommand } from "../../src/commands/modalities/generat
 import { Command } from "commander";
 import fs from "fs";
 import path from "path";
-import * as login from "../../src/commands/login.js";
+import * as login from "../../src/commands/auth/login.js";
 
 describe("modalitiesCommand", () => {
   beforeEach(() => {

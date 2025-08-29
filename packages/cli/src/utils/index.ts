@@ -1,4 +1,4 @@
-import { ensureToken } from "../commands/login.js";
+import { ensureToken } from "../commands/auth/login.js";
 import { consola } from "consola";
 
 const API_BASE_URL =
