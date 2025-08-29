@@ -7,6 +7,7 @@ import OASNormalize from "oas-normalize";
 import Oas from "oas";
 import { MediaTypeObject, SchemaObject } from "oas/types";
 import open from "open";
+import { consola } from "consola";
 
 const categorizeServers = async (spec: Oas, interactive: boolean) => {
   const { servers } = spec.getDefinition();
@@ -153,7 +154,7 @@ The following features are not supported and will be silently ignored:
       try {
         await oas.validate();
       } catch (error) {
-        console.error("Failed to validate OpenAPI Specification:", error);
+        consola.error("Failed to validate OpenAPI Specification:", error);
         process.exit(1);
       }
       const spec = Oas.init((await oas.convert()) as any);
@@ -183,7 +184,7 @@ The following features are not supported and will be silently ignored:
               ) {
                 return true;
               } else {
-                console.warn(
+                consola.warn(
                   `Skipping operation ${operation.getOperationId()} due to unsupported security schemes: ${keys.join(", ")}`,
                 );
                 return false;
@@ -211,7 +212,7 @@ The following features are not supported and will be silently ignored:
                 .getParameters()
                 .filter((op) => ["cookie", "query"].includes(op.in))
                 .forEach((param) => {
-                  console.warn(
+                  consola.warn(
                     `${param.in} param ${param.name} not supported, skipping.`,
                   );
                 });
@@ -337,7 +338,7 @@ The following features are not supported and will be silently ignored:
             chalk.bold.magenta(`Response Schema:`),
             chalk.white(JSON.stringify(dataRequest.responseSchema, null, 2)),
           ].join("\n");
-          console.log(
+          consola.log(
             boxen(preview, {
               padding: 1,
               margin: 1,
@@ -385,37 +386,44 @@ The following features are not supported and will be silently ignored:
               return eq(value, existing[key]);
             })
           ) {
-            console.log(
-              `Updating data request ${resolvedRequest.variableId} ${resolvedRequest.webhook.method} ${resolvedRequest.webhook.environments.production.url}`,
-            );
-            if (!options.dryRun)
-              await fetchManagementApi(
-                `variables/${resolvedRequest.variableId}`,
-                "POST",
-                resolvedRequest,
-              );
-            if (action === "edit-ui") {
-              open(
-                `https://dev.platform.nlx.ai/data-requests/${resolvedRequest.variableId}`,
-              );
-            }
+            await wrapDataReqCU(false, resolvedRequest, options.dryRun, action);
           }
         } else {
-          console.log(
-            `Creating new data request ${resolvedRequest.variableId} ${resolvedRequest.webhook.method} ${resolvedRequest.webhook.environments.production.url}`,
-          );
-          if (!options.dryRun) {
-            await fetchManagementApi("variables", "PUT", resolvedRequest);
-            if (action === "edit-ui") {
-              open(
-                `https://dev.platform.nlx.ai/data-requests/${resolvedRequest.variableId}`,
-              );
-            }
-          }
+          await wrapDataReqCU(true, resolvedRequest, options.dryRun, action);
         }
       }
     },
   );
+
+const wrapDataReqCU = async (
+  create: boolean,
+  dataRequest: any,
+  dryRun: boolean,
+  action: string | undefined,
+): Promise<void> => {
+  if (dryRun) {
+    consola.info(
+      `Would ${create ? "create new" : "update existing"} data request ${dataRequest.variableId} ${dataRequest.webhook.method} ${dataRequest.webhook.environments.production.url}, but skipping because --dry-run.`,
+    );
+  } else {
+    consola.start(
+      `${create ? "Creating new" : "Updating existing"} data request ${dataRequest.variableId} ${dataRequest.webhook.method} ${dataRequest.webhook.environments.production.url}...`,
+    );
+    await fetchManagementApi(
+      `variables/${dataRequest.variableId}`,
+      "POST",
+      dataRequest,
+    );
+    consola.success(
+      `Successfully ${create ? "Created new" : "Updated existing"} data request ${dataRequest.variableId} ${dataRequest.webhook.method} ${dataRequest.webhook.environments.production.url}.`,
+    );
+    if (action === "edit-ui") {
+      open(
+        `https://dev.platform.nlx.ai/data-requests/${dataRequest.variableId}`,
+      );
+    }
+  }
+};
 
 const extractSchema = async (
   schema: SchemaObject | MediaTypeObject | undefined,

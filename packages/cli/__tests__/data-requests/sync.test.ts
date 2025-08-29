@@ -4,6 +4,7 @@ import { syncCommand } from "../../src/commands/data-requests/sync.js";
 import { Command } from "commander";
 import * as utils from "../../src/utils/index.js";
 import { select, expand, editor } from "@inquirer/prompts";
+import { consola } from "consola";
 
 vi.mock("../src/utils", () => ({
   fetchManagementApi: vi.fn(async (url: string, method: string, body: any) => {
@@ -15,8 +16,13 @@ vi.mock("../src/utils", () => ({
 }));
 
 describe("syncCommand", () => {
+  beforeAll(() => {
+    consola.wrapAll();
+  });
   beforeEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
+    consola.mockTypes(() => vi.fn());
+    process.exit = vi.fn() as any;
   });
 
   it("should sync a simple OpenAPI spec", async () => {
@@ -34,17 +40,15 @@ describe("syncCommand", () => {
   it("should skip unsupported security schemes", async () => {
     const cmd = new Command();
     cmd.addCommand(syncCommand);
-    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     await cmd.parseAsync(
       ["sync", "__tests__/input-files/secure-openapi.yaml", "--dry-run"],
       {
         from: "user",
       },
     );
-    expect(warnSpy).toHaveBeenCalledWith(
+    expect(consola.warn).toHaveBeenCalledWith(
       expect.stringContaining("unsupported security schemes"),
     );
-    warnSpy.mockRestore();
 
     expect(utils.fetchManagementApi).not.toHaveBeenCalledWith(
       expect.stringContaining("variables"),
@@ -89,20 +93,18 @@ describe("syncCommand", () => {
   it("should warn and skip query/cookie parameters", async () => {
     const cmd = new Command();
     cmd.addCommand(syncCommand);
-    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     await cmd.parseAsync(
       ["sync", "__tests__/input-files/params-openapi.yaml"],
       {
         from: "user",
       },
     );
-    expect(warnSpy).toHaveBeenCalledWith(
+    expect(consola.warn).toHaveBeenCalledWith(
       expect.stringContaining("param q not supported"),
     );
-    expect(warnSpy).toHaveBeenCalledWith(
+    expect(consola.warn).toHaveBeenCalledWith(
       expect.stringContaining("param c not supported"),
     );
-    warnSpy.mockRestore();
     // Should still fire a PUT/POST for the valid operation
 
     expect(utils.fetchManagementApi).toHaveBeenCalledWith(

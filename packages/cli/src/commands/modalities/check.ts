@@ -6,6 +6,7 @@ import { fetchManagementApi } from "../../utils/index.js";
 import ts from "typescript";
 import { compile } from "json-schema-to-typescript";
 import chalk from "chalk";
+import { consola } from "consola";
 
 export const modalitiesCheckCommand = new Command("check")
   .description("Type check local TypeScript definitions against server schemas")
@@ -25,7 +26,7 @@ export const modalitiesCheckCommand = new Command("check")
     // Read local TypeScript file
     const filePath = path.resolve(process.cwd(), file);
     if (!existsSync(filePath)) {
-      console.error(`File not found: ${filePath}`);
+      consola.error(`File not found: ${filePath}`);
       process.exit(1);
     }
     const tsSource = await fs.readFile(filePath, "utf8");
@@ -54,7 +55,7 @@ export const modalitiesCheckCommand = new Command("check")
     const localSourceFile = program.getSourceFile(filePath);
     const remoteSourceFile = program.getSourceFile(tmpRemotePath);
     if (!localSourceFile || !remoteSourceFile) {
-      console.error("Could not load source files for type checking.");
+      consola.error("Could not load source files for type checking.");
       process.exit(1);
     }
 
@@ -110,10 +111,10 @@ ${localSymbols[typeName].declarations?.[0]?.getText() ?? checker.typeToString(lo
     if (errors.length) {
       let errorMsg = "Type check failed:\n";
       for (const err of errors) errorMsg += `  - ${err}\n`;
-      console.error(errorMsg.trim());
+      consola.error(errorMsg.trim());
       process.exit(1);
     } else {
-      console.log(
+      consola.success(
         "Type check passed: all remote types are assignable to local types.",
       );
       process.exit(0);

@@ -3,6 +3,7 @@ import * as fs from "fs";
 import open from "open";
 import * as os from "os";
 import * as path from "path";
+import { consola } from "consola";
 
 const TOKEN_PATH = path.join(os.homedir(), ".nlx-cli-auth.json");
 
@@ -31,8 +32,10 @@ async function refreshTokenIfNeeded() {
     tokens.obtained_at &&
     now < tokens.obtained_at + tokens.expires_in - 60
   ) {
+    consola.debug("Access token is still valid.");
     return tokens.access_token;
   }
+  consola.debug("Access token is expired or invalid. Refreshing...");
   // Refresh
   const res = await fetch(`https://${AUTH0_DOMAIN}/oauth/token`, {
     method: "POST",
@@ -78,7 +81,7 @@ export const loginCommand = new Command("login")
     const deviceCodeData: any = await deviceCodeRes.json();
 
     open(deviceCodeData.verification_uri_complete);
-    console.log(
+    consola.box(
       `Please visit ${deviceCodeData.verification_uri_complete} and enter code: ${deviceCodeData.user_code}`,
     );
 
@@ -99,7 +102,7 @@ export const loginCommand = new Command("login")
       if (resData.access_token) {
         tokenData = resData;
       } else if (resData.error !== "authorization_pending") {
-        console.error("Error:", resData.error_description || resData.error);
+        consola.error("Error:", resData.error_description || resData.error);
         return;
       }
     }
@@ -107,7 +110,7 @@ export const loginCommand = new Command("login")
     // Step 3: Store token securely
     tokenData.obtained_at = Math.floor(Date.now() / 1000);
     saveTokens(tokenData);
-    console.log("Login successful! Access token stored securely.");
+    consola.success("Login successful! Access token stored securely.");
   });
 
 // Example usage: get a valid access token
@@ -115,7 +118,7 @@ export const loginCommand = new Command("login")
 export async function ensureToken(): Promise<string> {
   const accessToken = await refreshTokenIfNeeded();
   if (!accessToken) {
-    console.error("Not authenticated. Please run 'login' first.");
+    consola.error("Not authenticated. Please run 'login' first.");
     process.exit(1);
   }
   return accessToken;

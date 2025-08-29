@@ -3,6 +3,7 @@ import { compile } from "json-schema-to-typescript";
 import * as fs from "fs";
 import * as path from "path";
 import { fetchManagementApi } from "../../utils/index.js";
+import { consola } from "consola";
 
 export const modalitiesGenerateCommand = new Command("generate")
   .description("Fetch modalities and generate TypeScript interfaces")
@@ -26,5 +27,5 @@ export const modalitiesGenerateCommand = new Command("generate")
     // Write to file specified by flag or default
     const outPath = path.resolve(process.cwd(), opts.out);
     fs.writeFileSync(outPath, output);
-    console.log(`TypeScript interfaces written to ${outPath}`);
+    consola.success(`TypeScript interfaces written to ${outPath}`);
   });

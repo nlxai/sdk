@@ -37,6 +37,7 @@
     "boxen": "^8.0.1",
     "chalk": "^4.1.0",
     "commander": "^14.0",
+    "consola": "^3.4.2",
     "json-schema-to-typescript": "^15.0.4",
     "oas": "^28.1.0",
     "oas-normalize": "^15.0.1",

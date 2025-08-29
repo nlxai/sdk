@@ -2,6 +2,7 @@ import { Command } from "commander";
 import * as fs from "fs";
 import * as path from "path";
 import { fetchManagementApi } from "../utils/index.js";
+import { consola } from "consola";
 
 export const httpCommand = new Command("http")
   .description("Perform an authenticated request to the management API")
@@ -27,7 +28,7 @@ export const httpCommand = new Command("http")
         try {
           body = JSON.parse(body);
         } catch (ed) {
-          console.error("Invalid JSON string from stdin: " + ed);
+          consola.error("Invalid JSON string from stdin: " + ed);
           process.exit(1);
         }
       } else if (body != null) {
@@ -39,7 +40,7 @@ export const httpCommand = new Command("http")
             body = JSON.parse(body);
           }
         } catch {
-          console.error("Invalid JSON string or file path: " + body);
+          consola.error("Invalid JSON string or file path: " + body);
           process.exit(1);
         }
       }
