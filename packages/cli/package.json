@@ -39,6 +39,7 @@
     "commander": "^14.0",
     "consola": "^3.4.2",
     "json-schema-to-typescript": "^15.0.4",
+    "keytar": "^7.9.0",
     "oas": "^28.1.0",
     "oas-normalize": "^15.0.1",
     "open": "^8.4.2",

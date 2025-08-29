@@ -4,26 +4,36 @@ import open from "open";
 import * as os from "os";
 import * as path from "path";
 import { consola } from "consola";
+import keytar from "keytar";
 
-const TOKEN_PATH = path.join(os.homedir(), ".nlx-cli-auth.json");
+const ACCOUNTS_PATH = path.join(os.homedir(), ".nlx-cli-auth.json");
 
-function saveTokens(tokenData: any) {
-  fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokenData, null, 2), {
-    mode: 0o600,
-  });
+async function saveTokens(account: string, tokenData: any) {
+  await keytar.setPassword("nlx-cli", account, JSON.stringify(tokenData));
 }
 
-function loadTokens(): any | null {
+async function loadTokens(): Promise<[string, any]> {
   try {
-    const data = fs.readFileSync(TOKEN_PATH, "utf8");
-    return JSON.parse(data);
+    const data = fs.readFileSync(ACCOUNTS_PATH, "utf8");
+    const accounts = JSON.parse(data);
+    if (accounts.currentAccount) {
+      const res = await keytar.getPassword("nlx-cli", accounts.currentAccount);
+      if (res) return [accounts.currentAccount, JSON.parse(res)];
+    }
+    throw new Error("No tokens found for current account");
   } catch {
-    return null;
+    throw new Error("Failed to load tokens");
   }
 }
 
 async function refreshTokenIfNeeded() {
-  const tokens = loadTokens();
+  let account, tokens;
+  try {
+    [account, tokens] = await loadTokens();
+  } catch (error) {
+    consola.error("Error loading tokens");
+    return null;
+  }
   if (!tokens || !tokens.refresh_token) return null;
   // Check expiry
   const now = Math.floor(Date.now() / 1000);
@@ -50,7 +60,7 @@ async function refreshTokenIfNeeded() {
   if (newTokens.access_token) {
     newTokens.refresh_token = newTokens.refresh_token || tokens.refresh_token;
     newTokens.obtained_at = now;
-    saveTokens(newTokens);
+    await saveTokens(account, newTokens);
     return newTokens.access_token;
   }
   return null;
@@ -107,9 +117,44 @@ export const loginCommand = new Command("login")
       }
     }
 
-    // Step 3: Store token securely
+    // Step 3: Fetch user object
+
+    let accounts = { currentAccount: null, accounts: [] };
+
+    if (fs.existsSync(ACCOUNTS_PATH)) {
+      const data = fs.readFileSync(ACCOUNTS_PATH, "utf8");
+      accounts = JSON.parse(data);
+    }
+
+    const userRes = await fetch(`https://${AUTH0_DOMAIN}/userinfo`, {
+      headers: {
+        Authorization: `Bearer ${tokenData.access_token}`,
+      },
+    });
+    const userData: any = await userRes.json();
+
+    if (!accounts.currentAccount) {
+      await fs.promises.writeFile(
+        ACCOUNTS_PATH,
+        JSON.stringify({
+          currentAccount: userData.email,
+          accounts: [userData.email],
+        }),
+      );
+    } else if (accounts.currentAccount !== userData.email) {
+      accounts.currentAccount = userData.email;
+      await fs.promises.writeFile(
+        ACCOUNTS_PATH,
+        JSON.stringify({
+          currentAccount: userData.email,
+          accounts: [userData.email, ...accounts.accounts],
+        }),
+      );
+    }
+
+    // Step 4: Store token securely
     tokenData.obtained_at = Math.floor(Date.now() / 1000);
-    saveTokens(tokenData);
+    await saveTokens(userData.email, tokenData);
     consola.success("Login successful! Access token stored securely.");
   });
 
