@@ -223,16 +223,8 @@ export interface PageState {
   formElements: Record<string, Element>;
   /** Mapping from link element names to their URLs */
   links: Record<string, string>;
-  /** Mapping from custom commans to their handlers (and values used to validate LLM output) */
-  customCommands: Map<
-    string,
-    {
-      /** Available values, used for validation. */
-      values: any[];
-      /** Handler that will be called when the command is invoked */
-      handler: (arg: any) => void;
-    }
-  >;
+  /** Mapping from custom commands to their handlers */
+  customCommands: Map<string, (arg: any) => void>;
 }
 
 /**
@@ -248,7 +240,14 @@ export interface BidirectionalContext {
   /**
    * Custom actions that can be performed.
    */
-  actions?: Array<Omit<BidirectionalCustomCommand<any>, "handler">>;
+  actions?: Array<{
+    /** The name of the command, used to invoke it. */
+    action: string;
+    /** A short description of the command */
+    description?: string;
+    /** A schema for validating the command's input. Should follow the JSON Schema specification. */
+    schema?: any;
+  }>;
 }
 
 /**
@@ -427,60 +426,30 @@ export interface TouchpointConfiguration {
 /**
  * During a Voice+ bidirectional conversation, you can indicate to the application the availability of
  * custom commands that the user can invoke.
- * @typeParam T - Commands can take a single parameter which will be selected from the list of values.
- * These must be serializable to JSON.
+ * @typeParam T - Commands can take a single parameter which will be generated from this schema.
  */
-export type BidirectionalCustomCommand<T> = {
+export interface BidirectionalCustomCommand {
   /**
    * The name of the command, used to invoke it. Should be unique and descriptive in the context of the LLM.
    */
-  name: string;
+  action: string;
   /**
    * A short description of the command, used to help the LLM understand its purpose.
    */
   description?: string;
-} & (
-  | {
-      /**
-       * An array of values that the user can select from when invoking the command.
-       * {@label VALUES}
-       */
-      values: T[];
-      /**
-       * The command can take multiple values.
-       */
-      multipleValues: true;
-      /**
-       * A handler that will be called with the selected values when the command is invoked.
-       */
-      handler: (values: T[]) => void;
-    }
-  | {
-      /**
-       * An array of values that the user can select from when invoking the command.
-       * {@label VALUES}
-       */
-      values: T[];
-      /**
-       * The command cannot take multiple values.
-       */
-      multipleValues?: false;
-      /**
-       * A handler that will be called with the selected value when the command is invoked.
-       */
-      handler: (value: T) => void;
-    }
-  | {
-      /**
-       * A handler that will be called.
-       */
-      handler: () => void;
-    }
-);
 
-/**
- * A type that represents a collection of custom commands, where each command can have a different type of value.
- */
-export type BidirectionalCustomCommands<T extends unknown[]> = {
-  [I in keyof T]: BidirectionalCustomCommand<T[I]>;
-};
+  /**
+   * A JSON Schema that defines the structure of the command's input.
+   *
+   * Use descriptive names and `description` fields to give the underlying LLM plenty of context for
+   * it to generate reasonable parameters. Note that the LLM output will be validated (and transformed)
+   * with this schema, so you are guaranteed type safe inputs to your handler.
+   *
+   * Should follow the JSONSchema specification.
+   */
+  schema: any;
+  /**
+   * A handler that will be called with an argument matching the schema when the command is invoked.
+   */
+  handler: (value: any) => void;
+}
