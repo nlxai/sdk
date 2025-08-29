@@ -146,9 +146,11 @@ The following features are not supported and will be silently ignored:
     ) => {
       const currentData = new Map(
         (
-          (await fetchManagementApi("/variables?size=1000")) as any
+          (await fetchManagementApi("variables?size=1000")) as any
         ).variables.map((variable: any) => [variable.variableId, variable]),
       );
+
+      consola.log(currentData);
 
       let oas = new OASNormalize(inputSpec, { enablePaths: true });
       try {
@@ -411,7 +413,7 @@ const wrapDataReqCU = async (
     );
     await fetchManagementApi(
       `variables/${dataRequest.variableId}`,
-      "POST",
+      create ? "PUT" : "POST",
       dataRequest,
     );
     consola.success(
