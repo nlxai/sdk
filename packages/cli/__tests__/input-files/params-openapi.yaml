@@ -1,0 +1,40 @@
+openapi: 3.0.0
+info:
+  title: Params API
+  version: 1.0.0
+servers:
+  - url: https://api.example.com
+    description: production
+paths:
+  /params:
+    post:
+      summary: Params summary
+      operationId: postParams
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+        - in: cookie
+          name: c
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string

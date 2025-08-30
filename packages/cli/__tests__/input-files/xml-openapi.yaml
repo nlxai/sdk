@@ -1,0 +1,31 @@
+openapi: 3.0.0
+info:
+  title: XML API
+  version: 1.0.0
+servers:
+  - url: https://api.example.com
+    description: production
+paths:
+  /xml:
+    post:
+      summary: XML summary
+      operationId: postXml
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string

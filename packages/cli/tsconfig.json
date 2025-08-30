@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "outDir": "./lib",
+    "lib": ["es2023"],
+    "module": "nodenext",
+    "target": "es2022",
+    "strict": true,
+    "esModuleInterop": false,
+    "skipLibCheck": true,
+    "moduleResolution": "node16"
+  },
+  "include": ["./src/**/*"]
+}

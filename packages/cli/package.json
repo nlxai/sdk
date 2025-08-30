@@ -1,0 +1,57 @@
+{
+  "name": "cli",
+  "version": "1.0.0",
+  "description": "Tools for integrating with NLX apps",
+  "keywords": [
+    "NLX",
+    "AI",
+    "typescript"
+  ],
+  "type": "module",
+  "author": "Jakub Hampl <jakub@nlx.ai>",
+  "homepage": "https://github.com/nlxai/sdk#readme",
+  "license": "MIT",
+  "main": "lib/index.ts",
+  "bin": {
+    "npx": "bin/npx"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nlxai/sdk.git"
+  },
+  "scripts": {
+    "dev": "vitest",
+    "test": "vitest run",
+    "build": "tsc",
+    "tsc": "tsc"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^7.8.4",
+    "boxen": "^8.0.1",
+    "chalk": "^4.1.0",
+    "commander": "^14.0",
+    "consola": "^3.4.2",
+    "json-schema-to-typescript": "^15.0.4",
+    "keytar": "^7.9.0",
+    "oas": "^28.1.0",
+    "oas-normalize": "^15.0.1",
+    "open": "^8.4.2",
+    "typescript": "^5.4.5"
+  },
+  "bugs": {
+    "url": "https://github.com/nlxai/sdk/issues"
+  },
+  "devDependencies": {
+    "@vitest/coverage-istanbul": "^3.2.4",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "vitest": "^3.2.4"
+  }
+}
