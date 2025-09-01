@@ -202,9 +202,9 @@ const MuseumExhibitDetails = ({ data, conversationHandler }) => {
   },
   colorMode: "${r}",
   input: "${n}",${t!=null?`
-  theme: ${JSON.stringify(t)}`:""},${a==="museumComponents"?`
-  customModalities: { MuseumExhibitDetails, MuseumExhibitCarousel }`:""},${n==="voiceMini"&&i?`
-  bidirectional: {}`:""}
+  theme: ${JSON.stringify(t)},`:""}${a==="museumComponents"?`
+  customModalities: { MuseumExhibitDetails, MuseumExhibitCarousel },`:""}${n==="voiceMini"&&i?`
+  bidirectional: {},`:""}
 });`},Xue=`import { createConversation } from "@nlxai/core";
 
 // Create some configuration
