@@ -153,17 +153,17 @@ export const touchpointUiSetupSnippet = ({
   input: "${input}",${
     theme != null
       ? `
-  theme: ${JSON.stringify(theme)}`
+  theme: ${JSON.stringify(theme)},`
       : ""
-  },${
+  }${
     templateComponents === "museumComponents"
       ? `
-  customModalities: { MuseumExhibitDetails, MuseumExhibitCarousel }`
+  customModalities: { MuseumExhibitDetails, MuseumExhibitCarousel },`
       : ""
-  },${
+  }${
     input === "voiceMini" && bidirectional
       ? `
-  bidirectional: {}`
+  bidirectional: {},`
       : ""
   }
 });`;
