@@ -150,8 +150,6 @@ The following features are not supported and will be silently ignored:
         ).variables.map((variable: any) => [variable.variableId, variable]),
       );
 
-      consola.log(currentData);
-
       let oas = new OASNormalize(inputSpec, { enablePaths: true });
       try {
         await oas.validate();
