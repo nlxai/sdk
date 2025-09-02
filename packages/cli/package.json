@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/cli",
-  "version": "0.1.0",
+  "version": "1.1.8-alpha.3",
   "description": "Tools for integrating with NLX apps",
   "keywords": [
     "NLX",
