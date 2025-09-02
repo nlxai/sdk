@@ -4,13 +4,17 @@ import { useMediaQuery } from "@react-hookz/web";
 export const useTailwindMediaQuery = (
   queryPrefix: "sm" | "md" | "lg",
 ): boolean | undefined => {
-  if (queryPrefix === "sm") {
-    return useMediaQuery("(min-width: 640px)");
+  let query;
+  switch (queryPrefix) {
+    case "sm":
+      query = "(min-width: 640px)";
+      break;
+    case "md":
+      query = "(min-width: 768px)";
+      break;
+    case "lg":
+      query = "(min-width: 1024px)";
+      break;
   }
-  if (queryPrefix === "md") {
-    return useMediaQuery("(min-width: 768px)");
-  }
-  if (queryPrefix === "lg") {
-    return useMediaQuery("(min-width: 1024px)");
-  }
+  return useMediaQuery(query);
 };

@@ -99,23 +99,26 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const input = props.input ?? "text";
 
+  const hangUp = useCallback(() => {
+    sessionStorage.removeItem("nlxActiveVoiceConversationId");
+    if (input === "voice" || input === "voiceMini") {
+      conversationInitialized.current = false;
+      handler.reset({ clearResponses: true });
+      sessionStorage.removeItem("nlxConversationId");
+    }
+  }, [handler, input]);
+  const _onClose = props.onClose;
   const onClose = useCallback(
     (event: Event) => {
-      if (props.onClose != null) {
-        props.onClose(event);
-        sessionStorage.removeItem("nlxActiveVoiceConversationId");
-        // In text mode, collapsing should leave the conversation intact so re-expanding fully resumes it.
-        // In voice, the behavior is designed to be consistent with voice mini, where the close button also hangs up the call.
-        // Subsequently re-expanding the experience should start a brand new call.
-        if (input === "voice" || input === "voiceMini") {
-          handler.reset({ clearResponses: true });
-        }
+      if (_onClose != null) {
+        _onClose(event);
+        hangUp();
         if (!event.defaultPrevented) {
           setIsExpanded(false);
         }
       }
     },
-    [props.onClose, setIsExpanded],
+    [_onClose, setIsExpanded, hangUp],
   );
 
   useEffect(() => {
@@ -126,7 +129,14 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     ref,
     () => {
       return {
-        setExpanded: setIsExpanded,
+        setExpanded(val: boolean) {
+          if (val) {
+            setIsExpanded(true);
+          } else {
+            hangUp();
+            setIsExpanded(false);
+          }
+        },
         getExpanded() {
           return isExpandedRef.current;
         },
@@ -140,7 +150,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         },
       };
     },
-    [handler, setIsExpanded],
+    [handler, setIsExpanded, hangUp],
   );
 
   useEffect(() => {
@@ -158,7 +168,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     return () => {
       handler.unsubscribe(fn);
     };
-  }, [handler, setResponses]);
+  }, [handler, setResponses, input]);
 
   const conversationInitialized = useRef<boolean>(restoredConversation);
 
@@ -171,12 +181,10 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     if (input !== "text" || responseData == null || responseData.length === 0) {
       props.initializeConversation(handler, props.initialContext);
     }
-    if (props.config.conversationId != null)
-      sessionStorage.setItem(
-        "nlxActiveVoiceConversationId",
-        props.config.conversationId,
-      );
-  }, [props.initializeConversation, props.initialContext, handler, isExpanded]);
+    const newConversationId = handler.currentConversationId();
+    if (newConversationId != null)
+      sessionStorage.setItem("nlxActiveVoiceConversationId", newConversationId);
+  }, [handler, isExpanded, hangUp, input, props, responseData]);
 
   const pageState = useRef<PageState>({
     formElements: {},
@@ -285,6 +293,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const reset = (): void => {
     handler.reset({ clearResponses: true });
+    hangUp();
     if (input !== "voice") {
       props.initializeConversation(handler, props.initialContext);
     }

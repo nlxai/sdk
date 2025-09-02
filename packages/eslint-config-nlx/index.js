@@ -8,7 +8,7 @@ module.exports = {
     "love",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
-    "prettier" // note: order matters. prettier being last overrides standard-with-typescript formatting
+    "prettier", // note: order matters. prettier being last overrides standard-with-typescript formatting
   ],
   overrides: [
     {
@@ -25,9 +25,7 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: [
-    "react"
-  ],
+  plugins: ["react", "react-hooks"],
   ignorePatterns: ["dist", "node_modules", "vite-env.d.ts"],
   settings: {
     react: {
@@ -36,7 +34,13 @@ module.exports = {
   },
   rules: {
     "no-console": "error",
-    "@typescript-eslint/strict-boolean-expressions": ["error", { allowNullableBoolean: true, }],
+    "@typescript-eslint/strict-boolean-expressions": [
+      "error",
+      { allowNullableBoolean: true },
+    ],
+    // React Hooks rules
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
   },
-  reportUnusedDisableDirectives: true
+  reportUnusedDisableDirectives: true,
 };
