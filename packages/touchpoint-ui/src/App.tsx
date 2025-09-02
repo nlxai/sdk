@@ -106,19 +106,19 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       handler.reset({ clearResponses: true });
       sessionStorage.removeItem("nlxConversationId");
     }
-  }, []);
-
+  }, [handler, input]);
+  const _onClose = props.onClose;
   const onClose = useCallback(
     (event: Event) => {
-      if (props.onClose != null) {
-        props.onClose(event);
+      if (_onClose != null) {
+        _onClose(event);
         hangUp();
         if (!event.defaultPrevented) {
           setIsExpanded(false);
         }
       }
     },
-    [props.onClose, setIsExpanded],
+    [_onClose, setIsExpanded, hangUp],
   );
 
   useEffect(() => {
@@ -150,7 +150,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         },
       };
     },
-    [handler, setIsExpanded],
+    [handler, setIsExpanded, hangUp],
   );
 
   useEffect(() => {
@@ -168,7 +168,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     return () => {
       handler.unsubscribe(fn);
     };
-  }, [handler, setResponses]);
+  }, [handler, setResponses, input]);
 
   const conversationInitialized = useRef<boolean>(restoredConversation);
 
@@ -184,7 +184,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     const newConversationId = handler.currentConversationId();
     if (newConversationId != null)
       sessionStorage.setItem("nlxActiveVoiceConversationId", newConversationId);
-  }, [props.initializeConversation, props.initialContext, handler, isExpanded]);
+  }, [handler, isExpanded, hangUp, input, props, responseData]);
 
   const pageState = useRef<PageState>({
     formElements: {},

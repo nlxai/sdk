@@ -49,7 +49,7 @@ const UserStep: FC<
     return () => {
       clearInterval(interval);
     };
-  }, [onNext, message]);
+  }, [onNext, message, inputRef]);
   return <div className="text-primary-90 text-base">{previousBotMessage}</div>;
 };
 
@@ -63,7 +63,7 @@ const LoaderStep: FC<StepShared> = ({ onNext, inputRef }) => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [onNext]);
+  }, [onNext, inputRef]);
   return <Loader label="Thinking" className="absolute inset-0" />;
 };
 
@@ -82,7 +82,7 @@ const BotStep: FC<{ messages: BotMessage[] } & StepShared> = ({
     return () => {
       clearTimeout(timeout);
     };
-  }, [onNext]);
+  }, [onNext, inputRef]);
   return (
     <div className="space-y-2">
       {messages.map((message, messageIndex) => {

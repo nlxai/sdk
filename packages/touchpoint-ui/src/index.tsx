@@ -25,7 +25,6 @@ import type {
   TouchpointConfiguration,
   CustomModalityComponent,
   TouchpointInstance,
-  Input,
 } from "./interface";
 import type { NormalizedTouchpointConfiguration } from "./types";
 

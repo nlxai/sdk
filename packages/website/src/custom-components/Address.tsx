@@ -129,7 +129,7 @@ const AddressInput: FC<{
     };
 
     initializeAutocomplete();
-  }, [isGoogleMapsLoaded]);
+  }, [isGoogleMapsLoaded, onAddressChange]);
 
   return (
     <form

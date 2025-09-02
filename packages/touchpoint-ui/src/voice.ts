@@ -241,9 +241,10 @@ export const useVoice = ({
     context,
     setRoomState,
     setIsApplicationSpeaking,
-    setIsApplicationSpeaking,
     setAudioElement,
     setModalities,
+    disconnect,
+    setIsUserSpeaking,
   ]);
 
   const retry = async (): Promise<void> => {

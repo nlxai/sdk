@@ -43,7 +43,7 @@ const useUrlState = <T>(
       );
     }
     window.history.replaceState({}, "", `?${params.toString()}`);
-  }, [key, value]);
+  }, [key, value, defaultValue]);
 
   return [value, setValue] as const;
 };
