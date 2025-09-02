@@ -8,10 +8,10 @@ import { consola } from "consola";
 
 vi.mock("../src/utils", () => ({
   fetchManagementApi: vi.fn(async (url: string, method: string, body: any) => {
-    if (url === "/variables?size=1000") {
+    if (url === "variables?size=1000") {
       return { variables: [] };
     }
-    return { status: "ok", url, method, body };
+    return body;
   }),
 }));
 
