@@ -6,6 +6,26 @@ import fs from "fs";
 import path from "path";
 import * as login from "../../src/commands/auth/login.js";
 
+vi.mock("../src/utils", () => ({
+  fetchManagementApi: vi.fn(async (url: string, method: string, body: any) => {
+    return {
+      items: [
+        {
+          modelId: "TestModel",
+          schema: {
+            type: "object",
+            properties: {
+              foo: { type: "string" },
+              bar: { type: "number" },
+            },
+            required: ["foo", "bar"],
+          },
+        },
+      ],
+    };
+  }),
+}));
+
 describe("modalitiesCommand", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
@@ -23,19 +43,6 @@ describe("modalitiesGenerateCommand", () => {
   });
 
   it("should generate TypeScript file from models", async () => {
-    vi.spyOn(login, "ensureToken").mockResolvedValue("test-token");
-    global.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        items: [
-          {
-            modelId: "TestModel",
-            schema: { type: "object", properties: { foo: { type: "string" } } },
-          },
-        ],
-      }),
-    });
-
     const outFile = path.resolve(__dirname, "test-modalities-types.d.ts");
     if (fs.existsSync(outFile)) fs.unlinkSync(outFile);
     await modalitiesGenerateCommand.parseAsync([
@@ -46,7 +53,10 @@ describe("modalitiesGenerateCommand", () => {
     ]);
     expect(fs.existsSync(outFile)).toBe(true);
     const content = fs.readFileSync(outFile, "utf8");
-    expect(content).toContain("interface TestModel");
+    expect(content).toContain(`export interface TestModel {
+  foo: string;
+  bar: number;
+}`);
     fs.unlinkSync(outFile);
   });
 });
