@@ -2,11 +2,7 @@
 import { useState, type FC, type ReactNode, useRef, useEffect } from "react";
 import { clsx } from "clsx";
 import type { Context, ConversationHandler } from "@nlxai/core";
-import type {
-  ColorMode,
-  InitializeConversation,
-  CustomModalityComponent,
-} from "../interface";
+import type { ColorMode, CustomModalityComponent } from "../interface";
 
 import { FullscreenError } from "./FullscreenError";
 import { Ripple } from "./Ripple";
@@ -23,7 +19,6 @@ interface Props {
   brandIcon?: string;
   className?: string;
   context?: Context;
-  initializeConversation: InitializeConversation;
   customModalities?: Record<string, CustomModalityComponent<unknown>>;
 }
 
