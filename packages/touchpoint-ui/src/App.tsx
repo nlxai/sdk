@@ -499,7 +499,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             ) : null}
             <FullscreenVoice
               key={voiceKey}
-              initializeConversation={props.initializeConversation}
               brandIcon={props.brandIcon}
               handler={handler}
               speakersEnabled={fullscreenVoiceSpeakersEnabled}
