@@ -9,6 +9,7 @@
   },
   "npmClient": "npm",
   "packages": [
+    "packages/cli",
     "packages/core",
     "packages/voice-plus-core",
     "packages/voice-plus-web",
