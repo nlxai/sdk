@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import { type FC, useEffect, useRef } from "react";
 import { Rive, Layout, Fit } from "@rive-app/webgl2";
 
