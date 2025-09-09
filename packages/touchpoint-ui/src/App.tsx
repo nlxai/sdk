@@ -346,7 +346,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   if (input === "voiceMini") {
     return (
       <>
-        <RiveAnimation />
+        {props.animate ? <RiveAnimation /> : null}
         <CustomPropertiesContainer
           theme={props.theme}
           colorMode={colorMode}
