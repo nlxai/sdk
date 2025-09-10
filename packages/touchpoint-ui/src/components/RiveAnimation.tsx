@@ -24,6 +24,11 @@ export const RiveAnimation: FC<unknown> = () => {
         const vmi = riveInstance.viewModelInstance;
         if (vmi != null) {
           const run = vmi.trigger("run");
+          const color = vmi.color("color");
+          /* TODO: set this to the accent color rgb (ignore opacity)
+           * I suppose we might have to do something empirical like hidden-render a <p className="text-accent">  and read its computed color
+           * color?.rgb(255, 0, 0);
+           */
           if (run != null) {
             run.trigger();
           }
