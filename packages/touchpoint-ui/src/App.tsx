@@ -346,7 +346,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   if (input === "voiceMini") {
     return (
       <>
-        {props.animate ? <RiveAnimation /> : null}
         <CustomPropertiesContainer
           theme={props.theme}
           colorMode={colorMode}
@@ -355,6 +354,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             props.embedded ? "" : "fixed z-touchpoint bottom-2 right-2",
           )}
         >
+          {props.animate ? <RiveAnimation /> : null}
           <VoiceMini
             key={voiceKey}
             handler={handler}
