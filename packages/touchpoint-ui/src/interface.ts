@@ -450,8 +450,11 @@ export interface BidirectionalCustomCommand {
    * with this schema, so you are guaranteed type safe inputs to your handler.
    *
    * Should follow the JSONSchema specification.
+   *
+   * If omitted, then the command will not be sent to the application and must be triggered
+   * from the application side.
    */
-  schema: any;
+  schema?: any;
   /**
    * A handler that will be called with an argument matching the schema when the command is invoked.
    */
