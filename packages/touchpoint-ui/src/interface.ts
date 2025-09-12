@@ -376,6 +376,10 @@ export interface TouchpointConfiguration {
    */
   brandIcon?: string;
   /**
+   * Include border animation. Currently only supported in Voice Mini.
+   */
+  animate?: boolean;
+  /**
    * URL of icon used on the launch icon in the bottom right when the experience is collapsed.
    *
    * When set to `false`, no launch button is shown at all. When not set or set to `true`, the default launch icon is rendered.

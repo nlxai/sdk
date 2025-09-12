@@ -39,6 +39,7 @@ import { CustomPropertiesContainer } from "./components/Theme";
 import { VoiceMini } from "./components/VoiceMini";
 import { gatherAutomaticContext } from "./bidirectional/automaticContext";
 import { commandHandler } from "./bidirectional/commandHandler";
+import { RiveAnimation } from "./components/RiveAnimation";
 
 /**
  * Main Touchpoint creation properties object
@@ -344,25 +345,28 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   if (input === "voiceMini") {
     return (
-      <CustomPropertiesContainer
-        theme={props.theme}
-        colorMode={colorMode}
-        className={clsx(
-          "w-fit",
-          props.embedded ? "" : "fixed z-touchpoint bottom-2 right-2",
-        )}
-      >
-        <VoiceMini
-          key={voiceKey}
-          handler={handler}
-          context={props.initialContext}
-          onClose={() => {
-            onClose(new Event("close"));
-          }}
-          renderCollapse={props.onClose != null}
-          customModalities={customModalities}
-        />
-      </CustomPropertiesContainer>
+      <>
+        <CustomPropertiesContainer
+          theme={props.theme}
+          colorMode={colorMode}
+          className={clsx(
+            "w-fit",
+            props.embedded ? "" : "fixed z-touchpoint bottom-2 right-2",
+          )}
+        >
+          {props.animate ? <RiveAnimation /> : null}
+          <VoiceMini
+            key={voiceKey}
+            handler={handler}
+            context={props.initialContext}
+            onClose={() => {
+              onClose(new Event("close"));
+            }}
+            renderCollapse={props.onClose != null}
+            customModalities={customModalities}
+          />
+        </CustomPropertiesContainer>
+      </>
     );
   }
 
