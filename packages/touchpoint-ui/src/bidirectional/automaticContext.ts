@@ -110,10 +110,12 @@ const gatherContext = (
     uri: window.location.pathname,
     fields,
     destinations,
-    actions: customCommands.map((command) => {
-      const { handler: _, ...commandWithoutHandler } = command;
-      return commandWithoutHandler;
-    }),
+    actions: customCommands
+      .filter((command) => command.schema != null)
+      .map((command) => {
+        const { handler: _, ...commandWithoutHandler } = command;
+        return commandWithoutHandler;
+      }),
   };
 
   return {
