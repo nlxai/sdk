@@ -96,12 +96,25 @@ export const commandHandler = (
       case "custom":
         if (pageState.current.customCommands.has(event.action as string)) {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          const handler = pageState.current.customCommands.get(
+          const customHandler = pageState.current.customCommands.get(
             event.action as string,
           )!;
 
-          if (event.payload != null) {
-            handler(event.payload);
+          const expectsArgs =
+            typeof customHandler === "function" && customHandler.length > 0;
+          const payloadProvided = event.payload !== undefined && event.payload !== null;
+
+          if (payloadProvided) {
+            customHandler(event.payload);
+          } else if (!expectsArgs) {
+            (customHandler as () => void)();
+          } else {
+            // eslint-disable-next-line no-console
+            console.warn(
+              `Custom command "${String(
+                event.action,
+              )}" expects a payload, but none was provided. Skipping call.`,
+            );
           }
         }
         if (bidirectional?.custom != null) {
