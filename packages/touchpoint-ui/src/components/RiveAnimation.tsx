@@ -25,9 +25,13 @@ function resolveCssVariable(
   ];
 }
 
-export const RiveAnimation: FC<{ restored: boolean }> = ({ restored }) => {
+export const RiveAnimation: FC<{ restored: boolean; volumeLevel: number }> = ({
+  restored,
+  volumeLevel,
+}) => {
   const samplerRef = useRef<HTMLCanvasElement | null>(null);
   const ref = useRef<HTMLCanvasElement | null>(null);
+  const voiceInputRef = useRef<{ value: number }>({ value: 0 });
 
   useEffect(() => {
     const canvas = ref.current;
@@ -56,6 +60,7 @@ export const RiveAnimation: FC<{ restored: boolean }> = ({ restored }) => {
 
           if (voiceInput != null) {
             voiceInput.value = 100;
+            voiceInputRef.current = voiceInput;
           }
           color?.rgba(...resolveCssVariable("var(--accent)", sampler));
 
@@ -79,6 +84,10 @@ export const RiveAnimation: FC<{ restored: boolean }> = ({ restored }) => {
       window.removeEventListener("resize", handleResize, false);
     };
   }, []);
+
+  useEffect(() => {
+    voiceInputRef.current.value = Math.min(100, volumeLevel * 200);
+  }, [volumeLevel]);
 
   return (
     <>

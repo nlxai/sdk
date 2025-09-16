@@ -8,6 +8,7 @@ import type {
 } from "@nlxai/core";
 import { useDebouncedState } from "@react-hookz/web";
 import {
+  createAudioAnalyser,
   ParticipantEvent,
   Room,
   RoomEvent,
@@ -67,6 +68,7 @@ interface VoiceHookReturn {
   isApplicationSpeaking: boolean;
   modalities: ModalitiesWithContext[];
   retry: () => Promise<void>;
+  volumeLevel: number;
 }
 
 interface VoiceHookParams {
@@ -141,6 +143,11 @@ export const useVoice = ({
     const newVolume = speakersEnabled ? 1 : 0;
     audioElement.volume = newVolume;
   }, [audioElement, speakersEnabled]);
+
+  const remoteVolume = useTrackVolume(trackRef.current);
+  const localVolume = useTrackVolume(
+    roomRef.current?.localParticipant.getTrackPublications()[0]?.track ?? null,
+  );
 
   const setup = useCallback(async (): Promise<void> => {
     setRoomState("pending");
@@ -265,5 +272,39 @@ export const useVoice = ({
     isApplicationSpeaking,
     retry,
     modalities,
+    volumeLevel: Math.max(remoteVolume, localVolume),
   };
 };
+
+function useTrackVolume(track) {
+  const [volume, setVolume] = useState(0);
+  useEffect(() => {
+    if (!track || !track.mediaStream) {
+      return;
+    }
+
+    const { cleanup, analyser } = createAudioAnalyser(track, {});
+
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    const updateVolume = () => {
+      analyser.getByteFrequencyData(dataArray);
+      let sum = 0;
+      for (let i = 0; i < dataArray.length; i++) {
+        const a = dataArray[i];
+        sum += a * a;
+      }
+      setVolume(Math.sqrt(sum / dataArray.length) / 255);
+    };
+
+    const interval = setInterval(updateVolume, 1000 / 30);
+
+    return () => {
+      cleanup();
+      clearInterval(interval);
+    };
+  }, [track, track?.mediaStream]);
+
+  return volume;
+}
