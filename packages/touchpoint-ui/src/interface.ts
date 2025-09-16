@@ -439,6 +439,9 @@ export interface BidirectionalCustomCommand {
   action: string;
   /**
    * A short description of the command, used to help the LLM understand its purpose.
+   *
+   * If omitted, then the command will not be sent to the application and must be triggered
+   * from the application side.
    */
   description?: string;
 
@@ -450,9 +453,6 @@ export interface BidirectionalCustomCommand {
    * with this schema, so you are guaranteed type safe inputs to your handler.
    *
    * Should follow the JSONSchema specification.
-   *
-   * If omitted, then the command will not be sent to the application and must be triggered
-   * from the application side.
    */
   schema?: any;
   /**

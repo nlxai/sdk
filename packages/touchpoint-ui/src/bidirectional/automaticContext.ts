@@ -111,7 +111,7 @@ const gatherContext = (
     fields,
     destinations,
     actions: customCommands
-      .filter((command) => command.schema != null)
+      .filter((command) => command.description != null)
       .map((command) => {
         const { handler: _, ...commandWithoutHandler } = command;
         return commandWithoutHandler;
