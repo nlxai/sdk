@@ -78,7 +78,7 @@ export const RiveAnimation: FC<{ restored: boolean }> = ({ restored }) => {
       riveInstance.cleanup();
       window.removeEventListener("resize", handleResize, false);
     };
-  }, []);
+  }, [restored]);
 
   return (
     <>
