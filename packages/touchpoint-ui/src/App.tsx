@@ -354,7 +354,9 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             props.embedded ? "" : "fixed z-touchpoint bottom-2 right-2",
           )}
         >
-          {props.animate ? <RiveAnimation /> : null}
+          {props.animate ? (
+            <RiveAnimation restored={restoredConversation} />
+          ) : null}
           <VoiceMini
             key={voiceKey}
             handler={handler}
