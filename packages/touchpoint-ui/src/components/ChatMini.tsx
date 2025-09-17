@@ -12,12 +12,11 @@ import { ErrorMessage } from "./ErrorMessage";
 
 // Constants following user rules - define at top
 const CHAT_MINI_MAX_WIDTH = "400px";
-const CHAT_MINI_MAX_HEIGHT = "500px";
-const CHAT_MINI_MIN_HEIGHT = "300px";
+const CHAT_MINI_HEIGHT = "800px";
 const CHAT_MINI_CONTAINER_CLASSES = "bg-background backdrop-blur text-primary-80 rounded-outer shadow-lg border border-primary-10";
 const CHAT_MINI_RESPONSIVE_WIDTH = "w-[calc(100vw-16px)]";
 const CHAT_MINI_RESPONSIVE_MAX_WIDTH = "max-w-[400px]";
-const CHAT_MINI_HEIGHT_CLASSES = "h-[300px] max-h-[500px]";
+const CHAT_MINI_HEIGHT_CLASSES = "h-[800px]";
 
 const ChatMiniContainer: FC<{
   children: ReactNode;
