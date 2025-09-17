@@ -12,6 +12,7 @@ import { Close, Mic, MicOff, Volume, VolumeOff, Restart } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
 import { VoiceModalities } from "./FullscreenVoice";
 import { ErrorMessage } from "./ErrorMessage";
+import { RiveAnimation } from "./RiveAnimation";
 
 const containerClass =
   "bg-background backdrop-blur text-primary-80 rounded-outer p-2 w-[calc(100vw-16px)] max-w-[360px] space-y-4";
@@ -51,7 +52,17 @@ export const VoiceMini: FC<{
   renderCollapse: boolean;
   onClose: (event: Event) => void;
   context?: Context;
-}> = ({ handler, context, onClose, customModalities, renderCollapse }) => {
+  animate: boolean;
+  restored: boolean;
+}> = ({
+  handler,
+  context,
+  onClose,
+  customModalities,
+  renderCollapse,
+  animate,
+  restored,
+}) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
   const [speakersEnabled, setSpeakersEnabled] = useState<boolean>(true);
 
@@ -65,6 +76,7 @@ export const VoiceMini: FC<{
     isApplicationSpeaking,
     retry,
     modalities,
+    volumeLevel,
   } = useVoice({
     micEnabled,
     speakersEnabled,
@@ -105,73 +117,79 @@ export const VoiceMini: FC<{
 
   if (roomState === "pending") {
     return (
-      <CompactContainer className="relative">
-        <IconButton
-          Icon={Mic}
-          label="Microphone"
-          type="ghost"
-          className="invisible"
-        />
-        <IconButton
-          Icon={Volume}
-          label="Speakers"
-          type="ghost"
-          className="invisible"
-        />
-        <IconButton
-          Icon={Close}
-          label="Close"
-          type="ghost"
-          className="invisible"
-        />
-        <span className="w-6 h-6 block text-accent absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <LoaderAnimation />
-        </span>
-      </CompactContainer>
+      <>
+        <RiveAnimation restored={restored} volumeLevel={0} />
+        <CompactContainer className="relative">
+          <IconButton
+            Icon={Mic}
+            label="Microphone"
+            type="ghost"
+            className="invisible"
+          />
+          <IconButton
+            Icon={Volume}
+            label="Speakers"
+            type="ghost"
+            className="invisible"
+          />
+          <IconButton
+            Icon={Close}
+            label="Close"
+            type="ghost"
+            className="invisible"
+          />
+          <span className="w-6 h-6 block text-accent absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <LoaderAnimation />
+          </span>
+        </CompactContainer>
+      </>
     );
   }
 
   return (
-    <CompactContainer>
-      <div className="w-fit relative">
-        {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
+    <>
+      <RiveAnimation restored={restored} volumeLevel={volumeLevel} />
+      <CompactContainer>
+        <div className="w-fit relative">
+          {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
+          <IconButton
+            Icon={micEnabled ? Mic : MicOff}
+            label="Microphone"
+            type={micEnabled ? "activated" : "ghost"}
+            onClick={() => {
+              setMicEnabled((prev) => !prev);
+            }}
+          />
+        </div>
+        <div className="w-fit relative">
+          {isApplicationSpeaking ? <Ripple className="rounded-inner" /> : null}
+          <IconButton
+            Icon={speakersEnabled ? Volume : VolumeOff}
+            label="Speakers"
+            type={speakersEnabled ? "activated" : "ghost"}
+            onClick={() => {
+              setSpeakersEnabled((prev) => !prev);
+            }}
+          />
+        </div>
         <IconButton
-          Icon={micEnabled ? Mic : MicOff}
-          label="Microphone"
-          type={micEnabled ? "activated" : "ghost"}
+          label="Close"
+          Icon={Close}
+          type="error"
           onClick={() => {
-            setMicEnabled((prev) => !prev);
+            onCloseHandler();
           }}
         />
-      </div>
-      <div className="w-fit relative">
-        {isApplicationSpeaking ? <Ripple className="rounded-inner" /> : null}
-        <IconButton
-          Icon={speakersEnabled ? Volume : VolumeOff}
-          label="Speakers"
-          type={speakersEnabled ? "activated" : "ghost"}
-          onClick={() => {
-            setSpeakersEnabled((prev) => !prev);
-          }}
+        <VoiceModalities
+          className={clsx(
+            containerClass,
+            "absolute right-0 -top-2 transform -translate-y-full max-h-[360px] overflow-auto",
+          )}
+          modalities={modalities}
+          customModalities={customModalities}
+          handler={handler}
         />
-      </div>
-      <IconButton
-        label="Close"
-        Icon={Close}
-        type="error"
-        onClick={() => {
-          onCloseHandler();
-        }}
-      />
-      <VoiceModalities
-        className={clsx(
-          containerClass,
-          "absolute right-0 -top-2 transform -translate-y-full max-h-[360px] overflow-auto",
-        )}
-        modalities={modalities}
-        customModalities={customModalities}
-        handler={handler}
-      />
-    </CompactContainer>
+      </CompactContainer>
+    </>
   );
 };

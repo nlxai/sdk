@@ -354,9 +354,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             props.embedded ? "" : "fixed z-touchpoint bottom-2 right-2",
           )}
         >
-          {props.animate ? (
-            <RiveAnimation restored={restoredConversation} />
-          ) : null}
           <VoiceMini
             key={voiceKey}
             handler={handler}
@@ -366,6 +363,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             }}
             renderCollapse={props.onClose != null}
             customModalities={customModalities}
+            restored={restoredConversation}
+            animate={props.animate}
           />
         </CustomPropertiesContainer>
       </>
