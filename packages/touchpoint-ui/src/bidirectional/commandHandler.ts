@@ -99,10 +99,7 @@ export const commandHandler = (
           const handler = pageState.current.customCommands.get(
             event.action as string,
           )!;
-
-          if (event.payload != null) {
-            handler(event.payload);
-          }
+          handler(event.payload);
         }
         if (bidirectional?.custom != null) {
           if (bidirectional.automaticContext !== false) {
