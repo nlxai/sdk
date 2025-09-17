@@ -3,8 +3,8 @@ import type { ConversationHandler, Response, UploadUrl } from "@nlxai/core";
 import { type ReactNode, useState, type FC } from "react";
 import { clsx } from "clsx";
 
-import type { CustomModalityComponent, ColorMode } from "../interface";
-import { Messages } from "./Messages";
+import type { CustomModalityComponent, ColorMode, ChoiceMessage } from "../interface";
+import { Messages, MessageChoices } from "./Messages";
 import { Input } from "./Input";
 import { IconButton } from "./ui/IconButton";
 import { Close, Settings as SettingsIcon } from "./ui/Icons";
@@ -61,6 +61,7 @@ export const ChatMini: FC<{
   enabled: boolean;
   onFileUpload: (params: { uploadId: string; file: File }) => void;
   uploadUrl?: UploadUrl;
+  choiceMessage?: ChoiceMessage;
 }> = ({
   handler,
   onClose,
@@ -75,7 +76,8 @@ export const ChatMini: FC<{
   lastApplicationResponseIndex,
   enabled,
   onFileUpload,
-  uploadUrl
+  uploadUrl,
+  choiceMessage
 }) => {
   const onCloseHandler = (): void => {
     onClose(new Event("close"));
@@ -102,14 +104,19 @@ export const ChatMini: FC<{
       </div>
       
       {/* Input Area */}
-      <div className="flex-none p-2 border-t border-primary-10">
-        <Input
-          enabled={enabled}
-          handler={handler}
-          uploadUrl={uploadUrl}
-          onFileUpload={onFileUpload}
-          className="w-full"
-        />
+      <div className="flex-none p-2 border-t border-primary-10 flex flex-col gap-2">
+        {choiceMessage != null ? (
+          <MessageChoices {...choiceMessage} handler={handler} />
+        ) : null}
+        {choiceMessage?.message.selectedChoiceId != null ? null : (
+          <Input
+            enabled={enabled}
+            handler={handler}
+            uploadUrl={uploadUrl}
+            onFileUpload={onFileUpload}
+            className="w-full"
+          />
+        )}
       </div>
     </ChatMiniContainer>
   );

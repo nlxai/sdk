@@ -412,6 +412,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             uploadUrl={
               lastApplicationResponse?.response.payload.metadata?.uploadUrls?.[0]
             }
+            choiceMessage={choiceMessage}
           />
         </CustomPropertiesContainer>
       </>
