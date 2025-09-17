@@ -99,8 +99,6 @@ export const commandHandler = (
           const handler = pageState.current.customCommands.get(
             event.action as string,
           )!;
-
-          // TODO: perform runtime check on event.payload if a schema is present, warn if the payload doesn't match expectations
           handler(event.payload);
         }
         if (bidirectional?.custom != null) {
