@@ -199,7 +199,7 @@ export type CustomLaunchButton = ComponentType<{
 /**
  * Input type for the experience
  */
-export type Input = "text" | "voice" | "voiceMini";
+export type Input = "text" | "voice" | "voiceMini" | "chatMini";
 
 /**
  * Input field value

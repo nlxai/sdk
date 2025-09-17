@@ -171,7 +171,8 @@ const normalizeConfiguration = (
     initializeConversation:
       configuration.initializeConversation ??
       ((handler, context) => {
-        if ((configuration?.input ?? "text") === "text")
+        const inputMode = configuration?.input ?? "text";
+        if (inputMode === "text" || inputMode === "chatMini")
           handler.sendWelcomeFlow(context);
       }),
   };
@@ -188,7 +189,7 @@ let injectDefaultStyles: () => void = () => {
     display: block;
     height: 350px;
   }
-  :where(nlx-touchpoint.nlx-voiceMini) {
+  :where(nlx-touchpoint.nlx-voiceMini, nlx-touchpoint.nlx-chatMini) {
    display: inline-block;
 
   }`;

@@ -40,6 +40,7 @@ import { VoiceMini } from "./components/VoiceMini";
 import { gatherAutomaticContext } from "./bidirectional/automaticContext";
 import { commandHandler } from "./bidirectional/commandHandler";
 import { RiveAnimation } from "./components/RiveAnimation";
+import { ChatMini } from "./components/ChatMini";
 
 /**
  * Main Touchpoint creation properties object
@@ -366,6 +367,51 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             }}
             renderCollapse={props.onClose != null}
             customModalities={customModalities}
+          />
+        </CustomPropertiesContainer>
+      </>
+    );
+  }
+
+  if (input === "chatMini") {
+    return (
+      <>
+        <CustomPropertiesContainer
+          theme={props.theme}
+          colorMode={colorMode}
+          className={clsx(
+            "w-fit",
+            props.embedded ? "" : "fixed z-touchpoint bottom-2 right-2",
+          )}
+        >
+          {props.animate ? (
+            <RiveAnimation restored={restoredConversation} />
+          ) : null}
+          <ChatMini
+            key={`chatMini-${props.config.conversationId}`}
+            handler={handler}
+            onClose={() => {
+              onClose(new Event("close"));
+            }}
+            renderCollapse={props.onClose != null}
+            customModalities={customModalities}
+            responses={responses}
+            isWaiting={isWaiting}
+            userMessageBubble={props.userMessageBubble ?? false}
+            agentMessageBubble={props.agentMessageBubble ?? false}
+            colorMode={colorMode}
+            uploadedFiles={uploadedFiles}
+            lastApplicationResponseIndex={lastApplicationResponse?.index}
+            enabled={props.enabled}
+            onFileUpload={({ uploadId, file }) => {
+              setUploadedFiles((prev) => ({
+                ...prev,
+                [uploadId]: file,
+              }));
+            }}
+            uploadUrl={
+              lastApplicationResponse?.response.payload.metadata?.uploadUrls?.[0]
+            }
           />
         </CustomPropertiesContainer>
       </>
