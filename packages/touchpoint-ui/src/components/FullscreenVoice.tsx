@@ -1,7 +1,11 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { useState, type FC, type ReactNode, useRef, useEffect } from "react";
 import { clsx } from "clsx";
-import type { Context, ConversationHandler } from "@nlxai/core";
+import type {
+  Context,
+  ConversationHandler,
+  ModalitiesWithContext,
+} from "@nlxai/core";
 import type { ColorMode, CustomModalityComponent } from "../interface";
 
 import { FullscreenError } from "./FullscreenError";
@@ -10,7 +14,7 @@ import { Loader } from "./ui/Loader";
 import { IconButton } from "./ui/IconButton";
 import { TextButton } from "./ui/TextButton";
 import { Touchpoint, Mic, MicOff, Restart } from "./ui/Icons";
-import { type ModalitiesWithContext, useVoice } from "../voice";
+import { useVoice } from "../voice";
 
 interface Props {
   colorMode: ColorMode;

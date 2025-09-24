@@ -3,7 +3,17 @@ import { adjust, equals } from "ramda";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { v4 as uuid } from "uuid";
 import packageJson from "../package.json";
+import createVoiceHandler, {
+  type VoiceHandler,
+  type VoiceState,
+} from "./voice";
 
+export {
+  MissingAudioPermissionsError,
+  type VoiceHandler,
+  type VoiceState,
+  type ModalitiesWithContext,
+} from "./voice";
 /**
  * Package version
  */
@@ -720,12 +730,15 @@ export interface ConversationHandler {
   sendContext: (context: Context) => Promise<void>;
 
   /**
-   * Obtain Voice credentials to run the experience in voice.
-   * @internal
-   * @returns Voice credentials in promise form
+   * Initiate a voice connection.
+   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   * @param onStateChange - Callback for when the voice state changes.
+   * @returns The voice handler in promise form
    */
-  getVoiceCredentials: (context?: Context) => Promise<VoiceCredentials>;
-
+  initiateVoiceConnection: (
+    context?: Context,
+    onStateChange?: (state: VoiceState) => void,
+  ) => Promise<VoiceHandler>;
   /**
    * Send a combination of choice, slots, and intent in one request.
    * @param request -
@@ -1406,33 +1419,49 @@ export function createConversation(config: Config): ConversationHandler {
     currentLanguageCode: () => {
       return state.languageCode;
     },
-    getVoiceCredentials: async (context?: Context) => {
-      const url = normalizeToHttp(applicationUrl);
-      const res = await fetch(`${url}-${state.languageCode}/requestToken`, {
-        method: "POST",
-        headers: {
-          ...(config.headers ?? {}),
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "nlx-conversation-id": state.conversationId,
-          "nlx-sdk-version": packageJson.version,
+
+    initiateVoiceConnection: async (context, onStateChange) => {
+      return await createVoiceHandler(
+        {
+          setRequestOverride: (val: RequestOverride | undefined) => {
+            requestOverride = val;
+          },
+          getVoiceCredentials: async (context?: Context) => {
+            const res = await fetch(
+              config.experimental?.completeApplicationUrl === true
+                ? `${fullApplicationHttpUrl()}/voice/credentials`
+                : `${fullApplicationHttpUrl()}/requestToken`,
+              {
+                method: "POST",
+                headers: {
+                  ...(config.headers ?? {}),
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  "nlx-conversation-id": state.conversationId,
+                  "nlx-sdk-version": packageJson.version,
+                },
+                body: JSON.stringify({
+                  languageCode: state.languageCode,
+                  conversationId: state.conversationId,
+                  userId: state.userId,
+                  requestToken: true,
+                  context,
+                }),
+              },
+            );
+            if (res.status >= 400) {
+              throw new Error(`Responded with ${res.status}`);
+            }
+            const data = await res.json();
+            if (data?.url == null) {
+              throw new Error("Invalid response");
+            }
+            return data;
+          },
         },
-        body: JSON.stringify({
-          languageCode: state.languageCode,
-          conversationId: state.conversationId,
-          userId: state.userId,
-          requestToken: true,
-          context,
-        }),
-      });
-      if (res.status >= 400) {
-        throw new Error(`Responded with ${res.status}`);
-      }
-      const data = await res.json();
-      if (data?.url == null) {
-        throw new Error("Invalid response");
-      }
-      return data;
+        context ?? {},
+        onStateChange,
+      );
     },
     subscribe,
     unsubscribe,
