@@ -28,14 +28,7 @@ export const DefaultCarousel: CustomModalityComponent<{
   };
 
   return (
-    <Carousel
-      onStartScroll={() => {
-        console.log("start scroll");
-      }}
-      onEndScroll={() => {
-        console.log("end scroll");
-      }}
-    >
+    <Carousel>
       {data.cards.map((card, index) => (
         <CustomCard
           key={card.id ?? index}
