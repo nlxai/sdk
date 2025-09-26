@@ -1,6 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
-import { useEffect, type FC, type ReactNode } from "react";
+import { useEffect, type FC, type ReactNode, useContext } from "react";
+import { CarouselContext } from "./Carousel";
 
 import { type Icon } from "../ui/Icons";
 
@@ -49,6 +50,9 @@ export const CustomCard: FC<CustomCardProps> = ({
     onClick != null || href != null ? "hover:bg-primary-5" : "",
     className,
   );
+
+  const carouselContext = useContext(CarouselContext);
+
   useEffect(() => {
     if (href == null && newTab != null) {
       // eslint-disable-next-line no-console
@@ -69,9 +73,19 @@ export const CustomCard: FC<CustomCardProps> = ({
       </a>
     );
   }
+  const onClickCustom =
+    onClick == null
+      ? onClick
+      : () => {
+          if (carouselContext.recentlyEndedScrolling) {
+            return;
+          }
+
+          onClick();
+        };
   if (onClick != null) {
     return (
-      <button className={containerClassName} onClick={onClick}>
+      <button className={containerClassName} onClick={onClickCustom}>
         {children}
       </button>
     );
