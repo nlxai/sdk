@@ -15,6 +15,6 @@
     "packages/touchpoint-ui",
     "packages/website"
   ],
-  "version": "1.2.0",
+  "version": "1.2.1",
   "$schema": "node_modules/lerna/schemas/lerna-schema.json"
 }
