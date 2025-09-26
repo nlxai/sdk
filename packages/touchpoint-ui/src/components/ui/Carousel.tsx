@@ -9,17 +9,15 @@ import {
 import { clsx } from "clsx";
 import ScrollContainer from "react-indiana-drag-scroll";
 
-export interface CarouselProps {
-  className?: string;
-  children?: ReactNode;
-}
-
 // Stores whether the carousel recently went through a scroll end event. During this period, click events on child cards should not trigger
 export const CarouselContext = createContext<{
   recentlyEndedScrolling: boolean;
 }>({ recentlyEndedScrolling: false });
 
-export const Carousel: FC<CarouselProps> = (props) => {
+export const Carousel: FC<{
+  className?: string;
+  children?: ReactNode;
+}> = (props) => {
   const [recentlyEndedScrolling, setRecentlyEndedScrolling] =
     useState<boolean>(false);
 
