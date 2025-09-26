@@ -14,6 +14,7 @@ export interface CarouselProps {
   children?: ReactNode;
 }
 
+// Stores whether the carousel recently went through a scroll end event. During this period, click events on child cards should not trigger
 export const CarouselContext = createContext<{
   recentlyEndedScrolling: boolean;
 }>({ recentlyEndedScrolling: false });
