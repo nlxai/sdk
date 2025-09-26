@@ -1,6 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
-import { useEffect, type FC, type ReactNode, useRef } from "react";
+import { useEffect, type FC, type ReactNode, useContext } from "react";
+import { CarouselContext } from "./Carousel";
 
 import { type Icon } from "../ui/Icons";
 
@@ -50,8 +51,7 @@ export const CustomCard: FC<CustomCardProps> = ({
     className,
   );
 
-  const buttonContainerRef = useRef<HTMLButtonElement | null>(null);
-  const anchorContainerRef = useRef<HTMLAnchorElement | null>(null);
+  const carouselContext = useContext(CarouselContext);
 
   useEffect(() => {
     if (href == null && newTab != null) {
@@ -66,7 +66,6 @@ export const CustomCard: FC<CustomCardProps> = ({
       <a
         className={containerClassName}
         href={href}
-        ref={anchorContainerRef}
         onClick={onClick}
         {...(newTab ? { target: "_blank", rel: "noreferrer" } : {})}
       >
@@ -78,16 +77,16 @@ export const CustomCard: FC<CustomCardProps> = ({
     onClick == null
       ? onClick
       : () => {
-          // TODO: check parent container
+          if (carouselContext.recentlyEndedScrolling) {
+            return;
+          }
+          console.log("clicked");
+
           onClick();
         };
   if (onClick != null) {
     return (
-      <button
-        className={containerClassName}
-        onClick={onClickCustom}
-        ref={buttonContainerRef}
-      >
+      <button className={containerClassName} onClick={onClickCustom}>
         {children}
       </button>
     );
