@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
-import { useEffect, type FC, type ReactNode } from "react";
+import { useEffect, type FC, type ReactNode, useRef } from "react";
 
 import { type Icon } from "../ui/Icons";
 
@@ -49,6 +49,10 @@ export const CustomCard: FC<CustomCardProps> = ({
     onClick != null || href != null ? "hover:bg-primary-5" : "",
     className,
   );
+
+  const buttonContainerRef = useRef<HTMLButtonElement | null>(null);
+  const anchorContainerRef = useRef<HTMLAnchorElement | null>(null);
+
   useEffect(() => {
     if (href == null && newTab != null) {
       // eslint-disable-next-line no-console
@@ -62,6 +66,7 @@ export const CustomCard: FC<CustomCardProps> = ({
       <a
         className={containerClassName}
         href={href}
+        ref={anchorContainerRef}
         onClick={onClick}
         {...(newTab ? { target: "_blank", rel: "noreferrer" } : {})}
       >
@@ -69,9 +74,20 @@ export const CustomCard: FC<CustomCardProps> = ({
       </a>
     );
   }
+  const onClickCustom =
+    onClick == null
+      ? onClick
+      : () => {
+          // TODO: check parent container
+          onClick();
+        };
   if (onClick != null) {
     return (
-      <button className={containerClassName} onClick={onClick}>
+      <button
+        className={containerClassName}
+        onClick={onClickCustom}
+        ref={buttonContainerRef}
+      >
         {children}
       </button>
     );
