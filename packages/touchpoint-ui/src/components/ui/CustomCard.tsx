@@ -80,7 +80,6 @@ export const CustomCard: FC<CustomCardProps> = ({
           if (carouselContext.recentlyEndedScrolling) {
             return;
           }
-          console.log("clicked");
 
           onClick();
         };
