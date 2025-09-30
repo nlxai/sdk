@@ -101,6 +101,10 @@ export const commandHandler = (
           )!;
           handler(event.payload);
         }
+        // eslint-disable-next-line no-console
+        console.warn(
+          `No command handler was defined for the ${event.action} action.`,
+        );
         if (bidirectional?.custom != null) {
           if (bidirectional.automaticContext !== false) {
             // eslint-disable-next-line no-console
