@@ -101,9 +101,8 @@ export const commandHandler = (
           )!;
           handler(event.payload);
         }
-        // eslint-disable-next-line no-console
-        console.warn(
-          `No command handler was defined for the ${event.action} action.`,
+        debug(
+          `No custom command handler was defined for the %o action.\n\n%cTip: Set up a handler with \nsetCustomBidirectionalCommands([{ action: "${event.action}", handler() { }}])`, event.action, "font-style: italic; font-size: 90%"
         );
         if (bidirectional?.custom != null) {
           if (bidirectional.automaticContext !== false) {
