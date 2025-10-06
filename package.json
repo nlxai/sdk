@@ -13,6 +13,7 @@
     "postinstall": "npm run build",
     "publish": "lerna publish",
     "publish-docs": "lerna run publish-docs",
+    "gitbook-docs:update": "bash ./scripts/update-gitbook-developer-docs.sh",
     "test": "lerna run test",
     "tsc": "lerna run tsc",
     "watch": "lerna watch -- lerna run build --since HEAD --ignore @nlxai/website",
