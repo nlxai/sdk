@@ -302,7 +302,7 @@ const DesignSystem: FC<unknown> = () => {
   )?.component;
 
   return (
-    <div className="grid grid-cols-[320px,1fr]">
+    <div className="grid grid-cols-[320px_1fr]">
       <CustomPropertiesContainer colorMode="light" className="space-y-2">
         {tabs.map(({ tab, title }) => {
           const isActive = tab === activeTab;

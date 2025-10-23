@@ -254,7 +254,7 @@ export const Messages: FC<MessagesProps> = ({
       <div
         data-theme={colorMode === "dark" ? "light" : "dark"}
         className={clsx(
-          "absolute inset-x-0 h-[1px] top-0 bg-background opacity-[0.01] backdrop-blur-md",
+          "absolute inset-x-0 h-px top-0 bg-background opacity-[0.01] backdrop-blur-md",
         )}
       />
       {!chatMode && isWaiting ? (

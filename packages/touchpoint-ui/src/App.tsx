@@ -320,12 +320,12 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   if (!isExpanded) {
     return props.launchIcon !== false ? (
       <CustomPropertiesContainer
-        className="fixed z-launchButton bottom-2 right-2 w-fit"
+        className="fixed z-launch-button bottom-2 right-2 w-fit"
         theme={props.theme}
         colorMode={colorMode}
       >
         <LaunchButton
-          className="backdrop-blur"
+          className="backdrop-blur-sm"
           iconUrl={
             typeof props.launchIcon === "string" ? props.launchIcon : undefined
           }
@@ -409,7 +409,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           uploadedFiles={uploadedFiles}
           customModalities={customModalities}
           className={clsx(
-            "flex-grow",
+            "grow",
             windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
           )}
         />
@@ -518,7 +518,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               handler={handler}
               speakersEnabled={fullscreenVoiceSpeakersEnabled}
               colorMode={colorMode}
-              className={isSettingsOpen ? "hidden" : "flex-grow"}
+              className={isSettingsOpen ? "hidden" : "grow"}
               context={props.initialContext}
               customModalities={customModalities}
             />

@@ -7,7 +7,7 @@ import { Touchpoint } from "./ui/Icons";
 export const FullscreenError: FC<unknown> = () => (
   <div
     className={clsx(
-      "flex-grow flex flex-col items-center justify-center gap-6 text-primary-80",
+      "grow flex flex-col items-center justify-center gap-6 text-primary-80",
       // Used in CSS
       "fullscreen-error",
     )}

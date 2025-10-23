@@ -46,7 +46,7 @@ export const CustomCard: FC<CustomCardProps> = ({
   const containerClassName = clsx(
     "block shrink-0 rounded-inner overflow-hidden",
     "w-80 space-y-px",
-    selected ? "outline outline-2 outline-accent" : "",
+    selected ? "outline-solid outline-2 outline-accent" : "",
     onClick != null || href != null ? "hover:bg-primary-5" : "",
     className,
   );

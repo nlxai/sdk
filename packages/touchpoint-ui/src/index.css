@@ -1,22 +1,74 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --font-*: initial;
+  --font-sans: var(--font-family);
+
+  --backdrop-blur-overlay: 48px;
+
+  --container-content: 640px;
+
+  --radius-inner: var(--inner-border-radius);
+  --radius-outer: var(--outer-border-radius);
+
+  --z-index-touchpoint: 1000;
+  --z-index-launch-button: 100;
+
+  --color-primary-80: var(--primary-80);
+  --color-primary-60: var(--primary-60);
+  --color-primary-40: var(--primary-40);
+  --color-primary-20: var(--primary-20);
+  --color-primary-10: var(--primary-10);
+  --color-primary-5: var(--primary-5);
+  --color-primary-1: var(--primary-1);
+  --color-secondary-80: var(--secondary-80);
+  --color-secondary-60: var(--secondary-60);
+  --color-secondary-40: var(--secondary-40);
+  --color-secondary-20: var(--secondary-20);
+  --color-secondary-10: var(--secondary-10);
+  --color-secondary-5: var(--secondary-5);
+  --color-secondary-1: var(--secondary-1);
+  --color-accent: var(--accent);
+  --color-accent-20: var(--accent-20);
+  --color-background: var(--background);
+  --color-overlay: var(--overlay);
+  --color-warning-primary: var(--warning-primary);
+  --color-warning-secondary: var(--warning-secondary);
+  --color-error-primary: var(--error-primary);
+  --color-error-secondary: var(--error-secondary);
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility no-scrollbar {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 
 @layer base {
   * {
     font-family: var(--font-family) !important;
-  }
-}
-
-@layer utilities {
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  /* Hide scrollbar for IE, Edge and Firefox */
-  .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
   }
 }
 
