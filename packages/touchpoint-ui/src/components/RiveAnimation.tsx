@@ -57,7 +57,7 @@ export const RiveAnimation: FC<{ restored: boolean }> = ({ restored }) => {
           if (voiceInput != null) {
             voiceInput.value = 100;
           }
-          color?.rgba(...resolveCssVariable("var(--accent)", sampler));
+          color?.rgba(...resolveCssVariable("var(--color-accent)", sampler));
 
           if (restored) {
             runNoWave?.trigger();
