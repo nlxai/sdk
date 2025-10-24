@@ -2,40 +2,40 @@
 
 @theme {
   --font-*: initial;
-  --font-sans: var(--font-family);
+  --font-sans: inherit;
 
   --backdrop-blur-overlay: 48px;
 
   --container-content: 640px;
 
-  --radius-inner: var(--inner-border-radius);
-  --radius-outer: var(--outer-border-radius);
+  --radius-inner: inherit;
+  --radius-outer: inherit;
 
   --z-index-touchpoint: 1000;
   --z-index-launch-button: 100;
 
-  --color-primary-80: var(--primary-80);
-  --color-primary-60: var(--primary-60);
-  --color-primary-40: var(--primary-40);
-  --color-primary-20: var(--primary-20);
-  --color-primary-10: var(--primary-10);
-  --color-primary-5: var(--primary-5);
-  --color-primary-1: var(--primary-1);
-  --color-secondary-80: var(--secondary-80);
-  --color-secondary-60: var(--secondary-60);
-  --color-secondary-40: var(--secondary-40);
-  --color-secondary-20: var(--secondary-20);
-  --color-secondary-10: var(--secondary-10);
-  --color-secondary-5: var(--secondary-5);
-  --color-secondary-1: var(--secondary-1);
-  --color-accent: var(--accent);
-  --color-accent-20: var(--accent-20);
-  --color-background: var(--background);
-  --color-overlay: var(--overlay);
-  --color-warning-primary: var(--warning-primary);
-  --color-warning-secondary: var(--warning-secondary);
-  --color-error-primary: var(--error-primary);
-  --color-error-secondary: var(--error-secondary);
+  --color-primary-80: inherit;
+  --color-primary-60: inherit;
+  --color-primary-40: inherit;
+  --color-primary-20: inherit;
+  --color-primary-10: inherit;
+  --color-primary-5: inherit;
+  --color-primary-1: inherit;
+  --color-secondary-80: inherit;
+  --color-secondary-60: inherit;
+  --color-secondary-40: inherit;
+  --color-secondary-20: inherit;
+  --color-secondary-10: inherit;
+  --color-secondary-5: inherit;
+  --color-secondary-1: inherit;
+  --color-accent: inherit;
+  --color-accent-20: inherit;
+  --color-background: inherit;
+  --color-overlay: inherit;
+  --color-warning-primary: inherit;
+  --color-warning-secondary: inherit;
+  --color-error-primary: inherit;
+  --color-error-secondary: inherit;
 }
 
 /*
