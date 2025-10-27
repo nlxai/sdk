@@ -46,7 +46,7 @@ export const Header: FC<HeaderProps> = ({
         "p-2 md:p-3 items-center justify-between gap-2",
 
         {
-          "md:absolute md:w-fit md:flex-col md:left-0 md:transform md:-translate-x-full":
+          "md:absolute md:w-fit md:flex-col md:left-0 md:transform md:-translate-x-full md:translate-y-0":
             windowSize === "half",
           "md:absolute md:left-0 md:right-0 md:top-0":
             windowSize === "full" || windowSize === "embedded",
