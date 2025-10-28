@@ -26,3 +26,9 @@ const touchpoint = await create({
 
 `npm install`
 `npm run dev`
+
+## Styling
+
+Touchpoint UI is styled with [Tailwind](https://tailwindcss.com), with the compiled CSS injected inside the custom element's shadow root.
+
+> Since the @property rule doesn't work properly inside the shadow root, translation-related classes must specify both x and y coordinates, for example `transform translate-x-full translate-y-0` (where normally the last class name is not necessary).
