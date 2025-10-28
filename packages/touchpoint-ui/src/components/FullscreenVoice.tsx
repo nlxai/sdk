@@ -201,7 +201,7 @@ export const FullscreenVoice: FC<Props> = ({
         customModalities={customModalities}
         handler={handler}
       />
-      <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2">
+      <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-0">
         {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
         <IconButton
           Icon={micEnabled ? Mic : MicOff}
