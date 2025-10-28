@@ -41,17 +41,12 @@ export const Header: FC<HeaderProps> = ({
   const iconButtonType: IconButtonType = isHalf && isMd ? "overlay" : "ghost";
   return (
     <div
-      className={clsx(
-        "flex",
-        "p-2 md:p-3 items-center justify-between gap-2",
-
-        {
-          "md:absolute md:w-fit md:flex-col md:left-0 md:transform md:-translate-x-full md:translate-y-0":
-            windowSize === "half",
-          "md:absolute md:left-0 md:right-0 md:top-0":
-            windowSize === "full" || windowSize === "embedded",
-        },
-      )}
+      className={clsx("flex p-2 md:p-3 items-center justify-between gap-2", {
+        "md:absolute md:w-fit md:flex-col md:left-0 md:transform md:-translate-x-full md:translate-y-0":
+          windowSize === "half",
+        "@3xl/main:absolute @3xl/main:left-0 @3xl/main:right-0 @3xl/main:top-0":
+          windowSize === "full" || windowSize === "embedded",
+      })}
     >
       {brandIcon != null ? (
         <img className="w-10 h-10 block" src={brandIcon} role="presentation" />

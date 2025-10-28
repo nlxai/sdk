@@ -457,6 +457,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       ) : null}
       <div
         className={clsx(
+          "@container/main",
           "w-full bg-background text-primary-80 flex relative flex-col h-full backdrop-blur-overlay",
           {
             "col-span-2 md:col-span-1": windowSize === "half",
