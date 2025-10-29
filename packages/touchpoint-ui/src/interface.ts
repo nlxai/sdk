@@ -404,6 +404,11 @@ export interface TouchpointConfiguration {
   /**
    * Optional custom modality components to render in Touchpoint
    */
+  modalityRenderers?: Record<string, CustomModalityComponent<unknown>>;
+  /**
+   * Optional custom modality components to render in Touchpoint
+   * @deprecated use {@link TouchpointConfiguration.modalityRenderers} instead.
+   */
   customModalities?: Record<string, CustomModalityComponent<unknown>>;
   /**
    * Custom conversation init method. Defaults to sending the welcome intent

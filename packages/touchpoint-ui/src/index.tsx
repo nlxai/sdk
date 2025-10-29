@@ -142,8 +142,16 @@ const normalizeConfiguration = (
       "The 'botUrl' configuration option is deprecated. Use 'applicationUrl' instead.",
     );
   }
+  if ("customModalities" in configuration) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "The 'customModalities' configuration option is deprecated. Use 'modalityRenderers' instead.",
+    );
+  }
   const customModalities: Record<string, CustomModalityComponent<unknown>> = {
-    ...(configuration.customModalities ?? {}),
+    ...(configuration.modalityRenderers ??
+      configuration.customModalities ??
+      {}),
     DefaultDateInput: DefaultDateInput as CustomModalityComponent<unknown>,
     DefaultCard: DefaultCard as CustomModalityComponent<unknown>,
     DefaultCarousel: DefaultCarousel as CustomModalityComponent<unknown>,
