@@ -404,10 +404,10 @@ export interface TouchpointConfiguration {
   /**
    * Optional custom modality components to render in Touchpoint
    */
-  modalityRenderers?: Record<string, CustomModalityComponent<unknown>>;
+  modalityComponents?: Record<string, CustomModalityComponent<unknown>>;
   /**
    * Optional custom modality components to render in Touchpoint
-   * @deprecated use {@link TouchpointConfiguration.modalityRenderers} instead.
+   * @deprecated use {@link TouchpointConfiguration.modalityComponents} instead.
    */
   customModalities?: Record<string, CustomModalityComponent<unknown>>;
   /**

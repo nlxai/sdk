@@ -145,11 +145,11 @@ const normalizeConfiguration = (
   if ("customModalities" in configuration) {
     // eslint-disable-next-line no-console
     console.warn(
-      "The 'customModalities' configuration option is deprecated. Use 'modalityRenderers' instead.",
+      "The 'customModalities' configuration option is deprecated. Use 'modalityComponents' instead.",
     );
   }
   const customModalities: Record<string, CustomModalityComponent<unknown>> = {
-    ...(configuration.modalityRenderers ??
+    ...(configuration.modalityComponents ??
       configuration.customModalities ??
       {}),
     DefaultDateInput: DefaultDateInput as CustomModalityComponent<unknown>,
