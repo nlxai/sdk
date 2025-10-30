@@ -19,7 +19,7 @@ interface Props {
   brandIcon?: string;
   className?: string;
   context?: Context;
-  customModalities?: Record<string, CustomModalityComponent<unknown>>;
+  modalityComponents: Record<string, CustomModalityComponent<unknown>>;
 }
 
 const Container: FC<{ className?: string; children: ReactNode }> = ({
@@ -45,16 +45,16 @@ interface ModalityEntry {
 export const VoiceModalities: FC<{
   className?: string;
   modalities: ModalitiesWithContext[];
-  customModalities: Record<string, CustomModalityComponent<unknown>>;
+  modalityComponents: Record<string, CustomModalityComponent<unknown>>;
   handler: ConversationHandler;
-}> = ({ className, modalities, customModalities, handler }) => {
+}> = ({ className, modalities, modalityComponents, handler }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const customModalityComponents = modalities
     .map((m) => {
       const entries: ModalityEntry[] = Object.entries(m.modalities)
         .map(([key, value]) => {
-          const Component = customModalities[key];
+          const Component = modalityComponents[key];
           if (Component == null) {
             return null;
           }
@@ -111,7 +111,7 @@ export const FullscreenVoice: FC<Props> = ({
   brandIcon,
   className,
   context,
-  customModalities = {},
+  modalityComponents,
 }) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
 
@@ -198,7 +198,7 @@ export const FullscreenVoice: FC<Props> = ({
       <VoiceModalities
         className="absolute p-4 top-0 left-0 right-0 bottom-[72px] z-10 space-y-2 max-h-full overflow-auto border-b border-primary-10"
         modalities={modalities}
-        customModalities={customModalities}
+        modalityComponents={modalityComponents}
         handler={handler}
       />
       <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-0">

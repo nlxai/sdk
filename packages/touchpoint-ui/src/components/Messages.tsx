@@ -27,7 +27,7 @@ export interface MessagesProps {
   colorMode: ColorMode;
   uploadedFiles: Record<string, File>;
   lastApplicationResponseIndex?: number;
-  customModalities: Record<string, CustomModalityComponent<unknown>>;
+  modalityComponents: Record<string, CustomModalityComponent<unknown>>;
   className?: string;
   enabled: boolean;
 }
@@ -221,7 +221,7 @@ export const Messages: FC<MessagesProps> = ({
   agentMessageBubble,
   lastApplicationResponseIndex,
   isWaiting,
-  customModalities,
+  modalityComponents,
   handler,
   className,
   enabled,
@@ -342,7 +342,7 @@ export const Messages: FC<MessagesProps> = ({
                 ) : null}
                 {Object.entries(response.payload.modalities ?? {}).map(
                   ([key, value]) => {
-                    const Component = customModalities[key];
+                    const Component = modalityComponents[key];
                     if (Component == null) {
                       // eslint-disable-next-line no-console
                       console.warn(

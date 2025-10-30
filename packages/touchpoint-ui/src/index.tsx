@@ -142,8 +142,16 @@ const normalizeConfiguration = (
       "The 'botUrl' configuration option is deprecated. Use 'applicationUrl' instead.",
     );
   }
-  const customModalities: Record<string, CustomModalityComponent<unknown>> = {
-    ...(configuration.customModalities ?? {}),
+  if ("customModalities" in configuration) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "The 'customModalities' configuration option is deprecated. Use 'modalityComponents' instead.",
+    );
+  }
+  const modalityComponents: Record<string, CustomModalityComponent<unknown>> = {
+    ...(configuration.modalityComponents ??
+      configuration.customModalities ??
+      {}),
     DefaultDateInput: DefaultDateInput as CustomModalityComponent<unknown>,
     DefaultCard: DefaultCard as CustomModalityComponent<unknown>,
     DefaultCarousel: DefaultCarousel as CustomModalityComponent<unknown>,
@@ -167,7 +175,7 @@ const normalizeConfiguration = (
           : true,
     },
     input: configuration.input ?? "text",
-    customModalities,
+    modalityComponents,
     initializeConversation:
       configuration.initializeConversation ??
       ((handler, context) => {

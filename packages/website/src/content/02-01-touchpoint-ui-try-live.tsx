@@ -256,7 +256,7 @@ export const Content: FC<unknown> = () => {
               colorMode,
               input,
               launchIcon: false,
-              customModalities:
+              modalityComponents:
                 templateComponents === "museumComponents"
                   ? createCustomModalities(React, html)
                   : undefined,

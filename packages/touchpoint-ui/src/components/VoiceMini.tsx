@@ -46,12 +46,12 @@ const CompactContainer: FC<{ children: ReactNode; className?: string }> = ({
 );
 
 export const VoiceMini: FC<{
-  customModalities: Record<string, CustomModalityComponent<unknown>>;
+  modalityComponents: Record<string, CustomModalityComponent<unknown>>;
   handler: ConversationHandler;
   renderCollapse: boolean;
   onClose: (event: Event) => void;
   context?: Context;
-}> = ({ handler, context, onClose, customModalities, renderCollapse }) => {
+}> = ({ handler, context, onClose, modalityComponents, renderCollapse }) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
   const [speakersEnabled, setSpeakersEnabled] = useState<boolean>(true);
 
@@ -169,7 +169,7 @@ export const VoiceMini: FC<{
           "absolute right-0 -top-2 transform -translate-y-full max-h-[360px] overflow-auto",
         )}
         modalities={modalities}
-        customModalities={customModalities}
+        modalityComponents={modalityComponents}
         handler={handler}
       />
     </CompactContainer>
