@@ -14,7 +14,7 @@ import { VoiceModalities } from "./FullscreenVoice";
 import { ErrorMessage } from "./ErrorMessage";
 
 const containerClass =
-  "bg-background backdrop-blur text-primary-80 rounded-outer p-2 w-[calc(100vw-16px)] max-w-[360px] space-y-4";
+  "bg-background backdrop-blur-sm text-primary-80 rounded-outer p-2 w-[calc(100vw-16px)] max-w-[360px] space-y-4";
 
 const Container: FC<{
   children: ReactNode;

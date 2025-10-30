@@ -22,7 +22,7 @@ export const Settings: FC<SettingsProps> = ({
   return (
     <div
       className={clsx(
-        "p-2 md:p-3 flex flex-col flex-grow justify-center gap-2",
+        "p-2 md:p-3 flex flex-col grow justify-center gap-2",
         className,
       )}
     >

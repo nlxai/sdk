@@ -229,7 +229,7 @@ export const Input: FC<InputProps> = ({
           <TextareaAutosize
             disabled={isWaiting || !enabled}
             className={clsx(
-              "h-10 w-full resize-none mr-2 px-2 py-2 outline-none",
+              "h-10 w-full resize-none mr-2 px-2 py-2 outline-hidden",
               "bg-transparent text-primary-80 placeholder:text-primary-40 caret-accent",
               "disabled:text-primary-40",
             )}

@@ -159,7 +159,7 @@ export const FullscreenVoice: FC<Props> = ({
       <Container className={className}>
         <div
           className={clsx(
-            "flex-grow flex flex-col items-center justify-center gap-6 text-primary-80",
+            "grow flex flex-col items-center justify-center gap-6 text-primary-80",
           )}
         >
           <Touchpoint className="w-20 h-20 text-primary-20" />
@@ -201,7 +201,7 @@ export const FullscreenVoice: FC<Props> = ({
         customModalities={customModalities}
         handler={handler}
       />
-      <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2">
+      <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-0">
         {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
         <IconButton
           Icon={micEnabled ? Mic : MicOff}

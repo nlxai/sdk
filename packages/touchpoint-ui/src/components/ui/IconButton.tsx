@@ -60,10 +60,10 @@ const activatedClass =
   "bg-accent text-secondary-80 enabled:hover:before:bg-primary-40 focus:before:bg-primary-40 enabled:active:before:bg-secondary-10 disabled:bg-accent-20";
 
 const coverupClass =
-  "bg-secondary-60 backdrop-blur text-primary-80 enabled:hover:before:bg-primary-10 focus:before:bg-primary-10 enabled:active:before:bg-secondary-10 disabled:bg-secondary-20 disabled:text-primary-20";
+  "bg-secondary-60 backdrop-blur-sm text-primary-80 enabled:hover:before:bg-primary-10 focus:before:bg-primary-10 enabled:active:before:bg-secondary-10 disabled:bg-secondary-20 disabled:text-primary-20";
 
 const overlayClass =
-  "bg-background backdrop-blur text-primary-80 enabled:hover:before:bg-primary-10 focus:before:bg-primary-10 enabled:active:before:bg-secondary-10 disabled:bg-secondary-20 disabled:text-primary-20";
+  "bg-background backdrop-blur-sm text-primary-80 enabled:hover:before:bg-primary-10 focus:before:bg-primary-10 enabled:active:before:bg-secondary-10 disabled:bg-secondary-20 disabled:text-primary-20";
 
 const errorClass =
   "bg-error-primary text-secondary-80 enabled:hover:before:bg-primary-10";
