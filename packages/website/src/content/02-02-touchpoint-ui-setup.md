@@ -218,7 +218,7 @@ const touchpointConfig = {
 
 | Field                    | Type     | Default            | Description                                                                                                                                                                               |
 | ------------------------ | -------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modalityComponents`       | object   | {}                 | Custom UI components for rich responses. Read more in the [Custom Components](/guide-building-custom-components) for how customModalities are used.                                       |
+| `modalityComponents`     | object   | {}                 | Custom UI components for rich responses. Read more in the [Custom Components](/guide-building-custom-components) for how customModalities are used.                                       |
 | `initializeConversation` | function | Sends welcome flow | Control the first interaction. Read more in the [Launching with Context](/guide-custom-launch#customizing-initialization-logic-with-initializeconversation) section for more information. |
 | `initialContext`         | object   | undefined          | Context sent with initial request. Read more in the [Launching with Context](/guide-custom-launch#passing-initial-data-with-initialcontext) section for more information.                 |
 
