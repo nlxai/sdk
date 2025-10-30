@@ -148,7 +148,7 @@ const normalizeConfiguration = (
       "The 'customModalities' configuration option is deprecated. Use 'modalityComponents' instead.",
     );
   }
-  const customModalities: Record<string, CustomModalityComponent<unknown>> = {
+  const modalityComponents: Record<string, CustomModalityComponent<unknown>> = {
     ...(configuration.modalityComponents ??
       configuration.customModalities ??
       {}),
@@ -175,7 +175,7 @@ const normalizeConfiguration = (
           : true,
     },
     input: configuration.input ?? "text",
-    customModalities,
+    modalityComponents,
     initializeConversation:
       configuration.initializeConversation ??
       ((handler, context) => {

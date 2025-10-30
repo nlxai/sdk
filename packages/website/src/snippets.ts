@@ -131,7 +131,6 @@ export const touchpointUiSetupSnippet = ({
     fontFamily: string;
     accent: string;
   };
-  customModalitiesExample?: boolean;
   input: string;
   colorMode: "light" | "dark";
   templateComponents?: TemplateComponents;
@@ -158,7 +157,7 @@ export const touchpointUiSetupSnippet = ({
   }${
     templateComponents === "museumComponents"
       ? `
-  customModalities: { MuseumExhibitDetails, MuseumExhibitCarousel },`
+  modalityComponents: { MuseumExhibitDetails, MuseumExhibitCarousel },`
       : ""
   }${
     input === "voiceMini" && bidirectional

@@ -284,7 +284,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({});
 
-  const customModalities = props.customModalities ?? {};
+  const modalityComponents = props.modalityComponents ?? {};
 
   const [fullscreenVoiceSpeakersEnabled, setFullscreenVoiceSpeakersEnabled] =
     useState<boolean>(true);
@@ -365,7 +365,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               onClose(new Event("close"));
             }}
             renderCollapse={props.onClose != null}
-            customModalities={customModalities}
+            modalityComponents={modalityComponents}
           />
         </CustomPropertiesContainer>
       </>
@@ -407,7 +407,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           colorMode={colorMode}
           handler={handler}
           uploadedFiles={uploadedFiles}
-          customModalities={customModalities}
+          modalityComponents={modalityComponents}
           className={clsx(
             "flex-grow",
             windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
@@ -520,7 +520,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               colorMode={colorMode}
               className={isSettingsOpen ? "hidden" : "flex-grow"}
               context={props.initialContext}
-              customModalities={customModalities}
+              modalityComponents={modalityComponents}
             />
           </>
         )}

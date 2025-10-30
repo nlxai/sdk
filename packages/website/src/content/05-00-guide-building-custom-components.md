@@ -28,7 +28,7 @@ Each component should accept an object with `data` and `conversationHandler` to 
 - `data`: Can be any type. It will match the schema set in the modality within NLX.
 - `conversationHandler`: The [ConversationHandler](/headless-api-reference#interface-conversationhandler). Functions to access the conversational context and send data back to NLX.
 
-Add the Component to the `customModalities` configuration option paired with the name of Modality in NLX. In the example below the [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) is named "MyComponentModality".
+Add the Component to the `modalityComponents` configuration option paired with the name of Modality in NLX. In the example below the [modality](https://docs.studio.nlx.ai/1-build/resources/modalities) is named "MyComponentModality".
 
 ## Basic Component Structure
 
@@ -45,7 +45,7 @@ const touchpoint = await create({
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
   },
-  customModalities: {
+  modalityComponents: {
     SimpleModality: SimpleComponent,
   },
 });
@@ -242,7 +242,7 @@ const touchpoint = await create({
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
   },
-  customModalities: {
+  modalityComponents: {
     ItemsCarouselModality: ItemsCarousel,
   },
 });

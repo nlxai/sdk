@@ -54,7 +54,7 @@ const MyCustomButtonComponent = ({ data, conversationHandler }) => {
 };
 ```
 
-To use this component, you would register it in the `customModalities` option when creating the Touchpoint instance.
+To use this component, you would register it in the `modalityComponents` option when creating the Touchpoint instance.
 
 ## Sending Messages and Data
 

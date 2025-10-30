@@ -123,7 +123,7 @@ const touchpoint = await create({
     headers: { "nlx-api-key": "YOUR_API_KEY" },
     languageCode: "en-US",
   },
-  customModalities: {
+  modalityComponents: {
     ItemCardModality: ItemCard,
   },
 });
