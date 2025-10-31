@@ -1,4 +1,5 @@
 import { resolve } from "path";
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import replace from "@rollup/plugin-replace";
 import { defineConfig } from "vite";
@@ -25,6 +26,7 @@ const adjustJsEntryPoint = ({ mode }: { mode: string }): any => {
 export default defineConfig(({ mode, command }) => ({
   plugins: [
     react(),
+    tailwindcss(),
     replace(
       command === "serve"
         ? {}
