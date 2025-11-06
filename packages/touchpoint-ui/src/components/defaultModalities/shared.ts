@@ -31,5 +31,10 @@ export const saveFn = (
     if ($saveAs.type === "context") {
       void conversationHandler.sendContext({ [$saveAs.id]: val });
     }
+    if ($saveAs.type === "choiceId") {
+      conversationHandler.sendChoice(
+        typeof val === "string" ? val : JSON.stringify(val),
+      );
+    }
   };
 };
