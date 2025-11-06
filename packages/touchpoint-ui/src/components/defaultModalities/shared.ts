@@ -2,7 +2,7 @@
 import { type ConversationHandler } from "@nlxai/core";
 
 export interface SaveAs {
-  type: "slot" | "context";
+  type: "slot" | "context" | "choiceId";
   id: string;
 }
 
