@@ -166,7 +166,7 @@ export const VoiceMini: FC<{
       <VoiceModalities
         className={clsx(
           containerClass,
-          "absolute right-0 -top-2 transform -translate-y-full max-h-[360px] overflow-auto",
+          "absolute right-0 -top-2 transform translate-x-0 -translate-y-full max-h-[360px] overflow-auto",
         )}
         modalities={modalities}
         modalityComponents={modalityComponents}
