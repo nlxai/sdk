@@ -11,6 +11,8 @@ import { IconButton } from "./ui/IconButton";
 import { TextButton } from "./ui/TextButton";
 import { Touchpoint, Mic, MicOff, Restart } from "./ui/Icons";
 import { type ModalitiesWithContext, useVoice } from "../voice";
+import { ErrorBoundary } from "react-error-boundary";
+import { ErrorMessage } from "./ErrorMessage";
 
 interface Props {
   colorMode: ColorMode;
@@ -99,7 +101,9 @@ export const VoiceModalities: FC<{
 
   return (
     <div className={className} ref={containerRef}>
-      {customModalityComponents}
+      <ErrorBoundary fallback={<ErrorMessage message="Something went wrong" />}>
+        {customModalityComponents}
+      </ErrorBoundary>
     </div>
   );
 };
