@@ -25,6 +25,9 @@ export const saveFn = (
   conversationHandler: ConversationHandler,
 ): ((val: any) => void) => {
   return (val) => {
+    if ($saveAs == null) {
+      return;
+    }
     if ($saveAs.type === "slot") {
       conversationHandler.sendSlots({ [$saveAs.id]: val });
     }

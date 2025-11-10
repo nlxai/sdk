@@ -16,6 +16,7 @@ import { TextButton } from "./ui/TextButton";
 import { ArrowForward, ArrowRight, ArrowDown, OpenLink } from "./ui/Icons";
 import { UnsemanticIconButton } from "./ui/IconButton";
 import { type CustomModalityComponent, type ColorMode } from "../interface";
+import { ErrorBoundary } from "react-error-boundary";
 
 export interface MessagesProps {
   isWaiting: boolean;
@@ -340,26 +341,30 @@ export const Messages: FC<MessagesProps> = ({
                 {response.payload.metadata?.sources != null ? (
                   <Sources sources={response.payload.metadata.sources} />
                 ) : null}
-                {Object.entries(response.payload.modalities ?? {}).map(
-                  ([key, value]) => {
-                    const Component = modalityComponents[key];
-                    if (Component == null) {
-                      // eslint-disable-next-line no-console
-                      console.warn(
-                        `Custom component implementation missing for the ${key} modality.`,
+                <ErrorBoundary
+                  fallback={<ErrorMessage message="Something went wrong" />}
+                >
+                  {Object.entries(response.payload.modalities ?? {}).map(
+                    ([key, value]) => {
+                      const Component = modalityComponents[key];
+                      if (Component == null) {
+                        // eslint-disable-next-line no-console
+                        console.warn(
+                          `Custom component implementation missing for the ${key} modality.`,
+                        );
+                        return null;
+                      }
+                      return (
+                        <Component
+                          key={key}
+                          data={value}
+                          conversationHandler={handler}
+                          enabled={enabled}
+                        />
                       );
-                      return null;
-                    }
-                    return (
-                      <Component
-                        key={key}
-                        data={value}
-                        conversationHandler={handler}
-                        enabled={enabled}
-                      />
-                    );
-                  },
-                )}
+                    },
+                  )}
+                </ErrorBoundary>
               </div>
               {/* Render the selected choice text as a user message */}
               {response.payload.messages.map((message, messageIndex) => {

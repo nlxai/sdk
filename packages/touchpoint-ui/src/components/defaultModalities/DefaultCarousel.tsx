@@ -34,7 +34,7 @@ export const DefaultCarousel: CustomModalityComponent<{
           key={card.id ?? index}
           selected={card.id === selectedCard}
           onClick={
-            card.id != null
+            card.id != null && data.$saveAs != null
               ? () => {
                   if (card.id != null) {
                     handleClick(card.id);
