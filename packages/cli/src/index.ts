@@ -5,13 +5,11 @@ import { dataRequestsCommand } from "./commands/data-requests/index.js";
 import { httpCommand } from "./commands/http.js";
 import { testCommand } from "./commands/test.js";
 
-program.description(
-  "Keep your Typescript types and NLX schema definitions in sync",
-);
+program.description("Intereact with NLX from the command line");
 program.addCommand(authCommand);
 program.addCommand(modalitiesCommand);
 program.addCommand(dataRequestsCommand);
-program.addCommand(httpCommand);
 program.addCommand(testCommand);
+program.addCommand(httpCommand);
 
 program.parse(process.argv);

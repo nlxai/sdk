@@ -17,7 +17,7 @@ import chalk from "chalk";
 import boxen from "boxen";
 
 export const testCommand = new Command("test")
-  .description("Fetch conversation tests for a given application ID")
+  .description("Run conversation tests for a given application ID")
   .argument("<applicationId>", "Application ID to fetch tests for")
   .option("--env <environment>", "Specify the environment", "production")
   .option("--language <language>", "Specify the language code", "en-US")
