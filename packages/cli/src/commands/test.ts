@@ -19,6 +19,12 @@ import boxen from "boxen";
 export const testCommand = new Command("test")
   .description("Run conversation tests for a given application ID")
   .argument("<applicationId>", "Application ID to fetch tests for")
+  .optionsGroup("Test selection:")
+  .option(
+    "--only-execute-at-build",
+    "Only execute tests marked to run at build time",
+  )
+  .optionsGroup("Environment configuration:")
   .option("--env <environment>", "Specify the environment", "production")
   .option("--language <language>", "Specify the language code", "en-US")
   .option("--channel <channel>", "Specify the channel type", "API")
@@ -26,14 +32,36 @@ export const testCommand = new Command("test")
     "--applications-url-base-override <url>",
     "Override the base URL for applications",
   )
-  .option("--enterprise-region <region>", "Specify the enterprise region")
+  .option(
+    "--enterprise-region <region>",
+    "Specify the enterprise region. Required for enterprise users.",
+  )
   .action(async (applicationId, opts) => {
     try {
-      const { tests } = (await fetchManagementApi(
+      let { tests } = (await fetchManagementApi(
         `bots/${applicationId}/conversationTests`,
         "GET",
       )) as { tests: any };
+      if (opts.onlyExecuteAtBuild) {
+        let total = tests.length;
+        tests = tests.filter((test: any) => test.runAtBuild);
+        if (tests.length === 0) {
+          consola.error("No tests found.");
+          process.exit(1);
+        }
+        consola.log(
+          "Fetched %i tests, skipping %i not marked for build. Running %i tests...",
+          total,
+          total - tests.length,
+          tests.length,
+        );
+      } else {
+        if (tests.length === 0) {
+          consola.error("No tests found.");
+          process.exit(1);
+        }
       consola.log("Fetched %i tests. Running...", tests.length);
+      }
       const baseUrl = getBaseUrl(
         opts.enterpriseRegion == null,
         opts.applicationsUrlBaseOverride ?? "",
