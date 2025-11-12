@@ -44,7 +44,7 @@ export const testCommand = new Command("test")
       )) as { tests: any };
       if (opts.onlyExecuteAtBuild) {
         let total = tests.length;
-        tests = tests.filter((test: any) => test.runAtBuild);
+        tests = tests.filter((test: any) => test.executeAtBuild);
         if (tests.length === 0) {
           consola.error("No tests found.");
           process.exit(1);
@@ -60,7 +60,7 @@ export const testCommand = new Command("test")
           consola.error("No tests found.");
           process.exit(1);
         }
-      consola.log("Fetched %i tests. Running...", tests.length);
+        consola.log("Fetched %i tests. Running...", tests.length);
       }
       const baseUrl = getBaseUrl(
         opts.enterpriseRegion == null,
