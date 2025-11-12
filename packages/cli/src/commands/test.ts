@@ -15,6 +15,9 @@ import { ensureToken } from "./auth/login.js";
 import { flatten, uniq } from "ramda";
 import chalk from "chalk";
 import boxen from "boxen";
+import { cpus } from "os";
+
+const MAX_PARALLEL_REQUESTS = cpus().length;
 
 export const testCommand = new Command("test")
   .description("Run conversation tests for a given application ID")
@@ -36,6 +39,12 @@ export const testCommand = new Command("test")
     "--enterprise-region <region>",
     "Specify the enterprise region. Required for enterprise users.",
   )
+  .optionsGroup("Running against a deployed application:")
+  .option(
+    "--deployed [numParallel]",
+    "Run these tests against a deployed application rather than in sandbox. This will enable parallel execution of tests, but requires the application to be deployed. Optionally pass the number of parallel requests.",
+    parseInt,
+  )
   .action(async (applicationId, opts) => {
     try {
       let { tests } = (await fetchManagementApi(
@@ -44,7 +53,7 @@ export const testCommand = new Command("test")
       )) as { tests: any };
       if (opts.onlyExecuteAtBuild) {
         let total = tests.length;
-        tests = tests.filter((test: any) => test.runAtBuild);
+        tests = tests.filter((test: any) => test.executeAtBuild);
         if (tests.length === 0) {
           consola.error("No tests found.");
           process.exit(1);
@@ -60,27 +69,26 @@ export const testCommand = new Command("test")
           consola.error("No tests found.");
           process.exit(1);
         }
-      consola.log("Fetched %i tests. Running...", tests.length);
+        consola.log("Fetched %i tests. Running...", tests.length);
       }
-      const baseUrl = getBaseUrl(
-        opts.enterpriseRegion == null,
-        opts.applicationsUrlBaseOverride ?? "",
-        opts.enterpriseRegion ?? "US",
+
+      const { applicationUrl, apiKey } = await getApplicationUrlAndKey(
+        applicationId,
+        opts,
       );
-      const applicationUrl = `${baseUrl}/c/${applicationId}/sandbox`;
       consola.debug("Application URL:", applicationUrl);
       const accessToken = await ensureToken();
       const handlerConfig = {
         applicationUrl,
         headers: {
-          "nlx-api-key": accessToken,
+          "nlx-api-key": apiKey,
           Authorization: `Bearer ${accessToken}`,
         },
         environment: opts.env,
         languageCode: opts.language,
         experimental: {
           channelType: opts.channel,
-          completeApplicationUrl: true,
+          completeApplicationUrl: opts.deployed == null,
         },
       };
       const failures = [];
@@ -149,6 +157,68 @@ export const testCommand = new Command("test")
     }
   });
 
+// ---- configuration ----
+
+const getBaseUrl = (
+  isGa: boolean,
+  applicationsUrlBaseOverride: string,
+  region: string,
+): string => {
+  const httpsBaseUrl = isGa
+    ? `https://dev.apps.nlx.ai`
+    : `https://bots.dev.studio.nlx.ai`;
+  const baseUrl: string =
+    applicationsUrlBaseOverride.length > 0
+      ? applicationsUrlBaseOverride
+      : region === "EU"
+        ? httpsBaseUrl.replace("//", "//eu-central-1.")
+        : httpsBaseUrl;
+  return baseUrl;
+};
+
+const getApplicationUrlAndKey = async (
+  applicationId: string,
+  opts: any,
+): Promise<{ applicationUrl: string; apiKey: string }> => {
+  let applicationUrl: string;
+  let apiKey: string;
+  const baseUrl = getBaseUrl(
+    opts.enterpriseRegion == null,
+    opts.applicationsUrlBaseOverride ?? "",
+    opts.enterpriseRegion ?? "US",
+  );
+  if (opts.deployed == null) {
+    applicationUrl = `${baseUrl}/c/${applicationId}/sandbox`;
+    apiKey = await ensureToken();
+  } else {
+    const [channels, deployments] = await Promise.all([
+      fetchManagementApi<{ channels: any }>(`bots/${applicationId}/channels`),
+      fetchManagementApi<{ deployments: any }>(
+        `bots/${applicationId}/deployments`,
+      ),
+    ]);
+    const channel = (channels?.channels ?? []).find(
+      (c: any) => c.type === opts.channel,
+    );
+    if (channel == null) {
+      consola.error(
+        `No channel of type ${opts.channel} found for application ${applicationId}`,
+      );
+      process.exit(1);
+    }
+    const deployment = deployments?.deployments?.[0];
+    if (deployment == null) {
+      consola.error(`No deployment found for application ${applicationId}`);
+      process.exit(1);
+    }
+    applicationUrl = `${baseUrl}/c/${deployment.deploymentKey}/${channel.channelKey}`;
+    apiKey = channel.properties.apiKey;
+  }
+  return { applicationUrl, apiKey };
+};
+
+// ---- test execution ----
+
 interface Step {
   raw: UserResponsePayload;
   structured?: StructuredRequest;
@@ -180,7 +250,8 @@ const runTest = async (
 
   const { total, met } = assertionsSummary(responses, test.assertions);
   handler.destroy();
-  await fetchReset(applicationId);
+  if (config.applicationUrl?.includes("/sandbox"))
+    await fetchReset(applicationId);
   return { total, met, responses };
 };
 
@@ -327,21 +398,4 @@ const getAssertionNodes = (assertions: Assertion[]): string[] => {
       .map(({ nodeId }) => nodeId)
       .filter((nodeId): nodeId is string => nodeId != null),
   );
-};
-
-const getBaseUrl = (
-  isGa: boolean,
-  applicationsUrlBaseOverride: string,
-  region: string,
-): string => {
-  const httpsBaseUrl = isGa
-    ? `https://dev.apps.nlx.ai`
-    : `https://bots.dev.studio.nlx.ai`;
-  const baseUrl: string =
-    applicationsUrlBaseOverride.length > 0
-      ? applicationsUrlBaseOverride
-      : region === "EU"
-        ? httpsBaseUrl.replace("//", "//eu-central-1.")
-        : httpsBaseUrl;
-  return baseUrl;
 };
