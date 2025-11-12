@@ -13,7 +13,7 @@
   "license": "MIT",
   "main": "lib/index.ts",
   "bin": {
-    "npx": "bin/npx"
+    "nlx": "bin/nlx"
   },
   "directories": {
     "lib": "lib"
