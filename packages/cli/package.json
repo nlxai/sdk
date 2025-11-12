@@ -1,6 +1,5 @@
 {
   "name": "@nlxai/cli",
-  "private": true,
   "version": "1.1.8-alpha.3",
   "description": "Tools for integrating with NLX apps",
   "keywords": [
@@ -48,6 +47,9 @@
   },
   "bugs": {
     "url": "https://github.com/nlxai/sdk/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "@vitest/coverage-istanbul": "^3.2.4",
