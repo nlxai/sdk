@@ -17,6 +17,8 @@ Intereact with NLX from the command line
 
 Options:
   -h, --help                             display help for command
+  -v, --verbose                          enable verbose logging
+  -V, --version                          show program version
 
 Commands:
   auth                                   Authentication and user management
