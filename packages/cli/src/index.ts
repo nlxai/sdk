@@ -6,8 +6,11 @@ import { httpCommand } from "./commands/http.js";
 import { testCommand } from "./commands/test.js";
 import { consola } from "consola";
 import { readFileSync } from "fs";
+import { resolve } from "path";
 
-const packageJson = JSON.parse(readFileSync("../../package.json", "utf-8"));
+const packageJson = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../package.json"), "utf-8"),
+);
 
 program.description("Intereact with NLX from the command line");
 program
