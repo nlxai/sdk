@@ -49,7 +49,11 @@ export const Header: FC<HeaderProps> = ({
       })}
     >
       {brandIcon != null ? (
-        <img className="w-10 h-10 block" src={brandIcon} role="presentation" />
+        <img
+          className="w-10 h-10 block flex-none"
+          src={brandIcon}
+          role="presentation"
+        />
       ) : null}
 
       <IconButton

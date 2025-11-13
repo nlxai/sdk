@@ -48,10 +48,18 @@ const CompactContainer: FC<{ children: ReactNode; className?: string }> = ({
 export const VoiceMini: FC<{
   modalityComponents: Record<string, CustomModalityComponent<unknown>>;
   handler: ConversationHandler;
+  brandIcon?: string;
   renderCollapse: boolean;
   onClose: (event: Event) => void;
   context?: Context;
-}> = ({ handler, context, onClose, modalityComponents, renderCollapse }) => {
+}> = ({
+  handler,
+  context,
+  onClose,
+  modalityComponents,
+  renderCollapse,
+  brandIcon,
+}) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
   const [speakersEnabled, setSpeakersEnabled] = useState<boolean>(true);
 
@@ -103,9 +111,19 @@ export const VoiceMini: FC<{
     );
   }
 
+  const brandIconView =
+    brandIcon != null ? (
+      <img
+        className="w-10 h-10 block flex-none"
+        src={brandIcon}
+        role="presentation"
+      />
+    ) : null;
+
   if (roomState === "pending") {
     return (
       <CompactContainer className="relative">
+        {brandIconView}
         <IconButton
           Icon={Mic}
           label="Microphone"
@@ -133,6 +151,7 @@ export const VoiceMini: FC<{
 
   return (
     <CompactContainer>
+      {brandIconView}
       <div className="w-fit relative">
         {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
         <IconButton
