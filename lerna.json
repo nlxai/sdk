@@ -16,6 +16,6 @@
     "packages/cli",
     "packages/website"
   ],
-  "version": "1.2.2-alpha.5",
+  "version": "1.2.2-alpha.6",
   "$schema": "node_modules/lerna/schemas/lerna-schema.json"
 }
