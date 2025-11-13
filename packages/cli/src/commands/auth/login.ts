@@ -4,11 +4,19 @@ import open from "open";
 import * as os from "os";
 import * as path from "path";
 import { consola } from "consola";
-import keytar from "keytar";
+import type * as Keytar from "keytar";
 
 export const ACCOUNTS_PATH = path.join(os.homedir(), ".nlx-cli-auth.json");
 
+let _keytar: typeof Keytar;
+async function getKeytar() {
+  if (_keytar) return _keytar;
+  _keytar = await import("keytar");
+  return _keytar;
+}
+
 async function saveTokens(account: string, tokenData: any) {
+  const keytar = await getKeytar();
   await keytar.setPassword("nlx-cli", account, JSON.stringify(tokenData));
 }
 
@@ -27,6 +35,7 @@ async function loadTokens(): Promise<[string, any]> {
     const data = fs.readFileSync(ACCOUNTS_PATH, "utf8");
     const accounts = JSON.parse(data);
     if (accounts.currentAccount) {
+      const keytar = await getKeytar();
       const res = await keytar.getPassword("nlx-cli", accounts.currentAccount);
       if (res) return [accounts.currentAccount, JSON.parse(res)];
     }
