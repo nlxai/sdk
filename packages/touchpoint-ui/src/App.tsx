@@ -364,6 +364,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             key={voiceKey}
             handler={handler}
             context={props.initialContext}
+            brandIcon={props.brandIcon}
             onClose={() => {
               onClose(new Event("close"));
             }}
@@ -480,7 +481,10 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               : undefined
           }
           colorMode={colorMode}
-          brandIcon={props.brandIcon}
+          brandIcon={
+            /* In fullscreen voice mode, a separate header brand icon is not necessary because a brand icon+ripple are rendered in the middle */
+            input === "text" ? props.brandIcon : undefined
+          }
           isSettingsOpen={isSettingsOpen}
           enabled={props.enabled}
           toggleSettings={
