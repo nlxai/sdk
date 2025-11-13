@@ -12,6 +12,7 @@
     "lint": "lerna run lint",
     "postinstall": "npm run build",
     "publish": "lerna publish",
+    "prepublish": "npm run build",
     "publish-docs": "lerna run publish-docs",
     "gitbook-docs:update": "bash ./scripts/update-gitbook-developer-docs.sh",
     "test": "lerna run test",
