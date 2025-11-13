@@ -13,6 +13,16 @@ async function saveTokens(account: string, tokenData: any) {
 }
 
 async function loadTokens(): Promise<[string, any]> {
+  if (process.env.NLX_ACCESS_TOKEN) {
+    try {
+      console.log(
+        "Using access token from NLX_ACCESS_TOKEN environment variable",
+      );
+      return JSON.parse(atob(process.env.NLX_ACCESS_TOKEN));
+    } catch (error) {
+      consola.error("Failed to parse NLX_ACCESS_TOKEN:", error);
+    }
+  }
   try {
     const data = fs.readFileSync(ACCOUNTS_PATH, "utf8");
     const accounts = JSON.parse(data);
@@ -74,7 +84,8 @@ const AUDIENCE =
 
 export const loginCommand = new Command("login")
   .description("Authenticate with NLX")
-  .action(async () => {
+  .option("--print-token", "Print the access token after login (useful for CI)")
+  .action(async (opts) => {
     // Step 1: Start device flow
     const deviceCodeRes = await fetch(
       `https://${AUTH0_DOMAIN}/oauth/device/code`,
@@ -155,6 +166,12 @@ export const loginCommand = new Command("login")
     // Step 4: Store token securely
     tokenData.obtained_at = Math.floor(Date.now() / 1000);
     await saveTokens(userData.email, tokenData);
+    if (opts.printToken) {
+      console.log(
+        "Access token",
+        btoa(JSON.stringify([userData.email, tokenData])),
+      );
+    }
     consola.success("Login successful! Access token stored securely.");
   });
 
