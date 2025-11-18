@@ -5,25 +5,30 @@ import * as os from "os";
 import * as path from "path";
 import { consola } from "consola";
 import type * as Keytar from "keytar";
+import { singleton } from "../../utils/index.js";
 
 export const ACCOUNTS_PATH = path.join(os.homedir(), ".nlx-cli-auth.json");
 
 let _keytar: typeof Keytar;
-async function getKeytar() {
+export async function getKeytar() {
   if (_keytar) return _keytar;
-  _keytar = await import("keytar");
+  _keytar = ((await import("keytar")) as any).default;
   return _keytar;
 }
 
 async function saveTokens(account: string, tokenData: any) {
-  const keytar = await getKeytar();
-  await keytar.setPassword("nlx-cli", account, JSON.stringify(tokenData));
+  if (!process.env.NLX_ACCESS_TOKEN) {
+    const keytar = await getKeytar();
+    await keytar.setPassword("nlx-cli", account, JSON.stringify(tokenData));
+  } else {
+    process.env.NLX_ACCESS_TOKEN = btoa(JSON.stringify([account, tokenData]));
+  }
 }
 
 async function loadTokens(): Promise<[string, any]> {
   if (process.env.NLX_ACCESS_TOKEN) {
     try {
-      console.log(
+      consola.info(
         "Using access token from NLX_ACCESS_TOKEN environment variable",
       );
       return JSON.parse(atob(process.env.NLX_ACCESS_TOKEN));
@@ -45,7 +50,7 @@ async function loadTokens(): Promise<[string, any]> {
   }
 }
 
-async function refreshTokenIfNeeded() {
+const refreshTokenIfNeeded = singleton(async function () {
   let account, tokens;
   try {
     [account, tokens] = await loadTokens();
@@ -83,7 +88,7 @@ async function refreshTokenIfNeeded() {
     return newTokens.access_token;
   }
   return null;
-}
+});
 
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN || "nlxdev.us.auth0.com"; // e.g. 'dev-xxxxxx.us.auth0.com'
 const CLIENT_ID =
@@ -176,15 +181,13 @@ export const loginCommand = new Command("login")
     tokenData.obtained_at = Math.floor(Date.now() / 1000);
     await saveTokens(userData.email, tokenData);
     if (opts.printToken) {
-      console.log(
+      consola.success(
         "Access token",
         btoa(JSON.stringify([userData.email, tokenData])),
       );
     }
     consola.success("Login successful! Access token stored securely.");
   });
-
-// Example usage: get a valid access token
 
 export async function ensureToken(): Promise<string> {
   const accessToken = await refreshTokenIfNeeded();
