@@ -5,6 +5,7 @@ import * as os from "os";
 import * as path from "path";
 import { consola } from "consola";
 import type * as Keytar from "keytar";
+import { singleton } from "../../utils/index.js";
 
 export const ACCOUNTS_PATH = path.join(os.homedir(), ".nlx-cli-auth.json");
 
@@ -16,14 +17,19 @@ async function getKeytar() {
 }
 
 async function saveTokens(account: string, tokenData: any) {
-  const keytar = await getKeytar();
-  await keytar.setPassword("nlx-cli", account, JSON.stringify(tokenData));
+  if (!process.env.NLX_ACCESS_TOKEN) {
+    const keytar = await getKeytar();
+    console.log(keytar);
+    await keytar.setPassword("nlx-cli", account, JSON.stringify(tokenData));
+  } else {
+    process.env.NLX_ACCESS_TOKEN = btoa(JSON.stringify([account, tokenData]));
+  }
 }
 
 async function loadTokens(): Promise<[string, any]> {
   if (process.env.NLX_ACCESS_TOKEN) {
     try {
-      console.log(
+      consola.info(
         "Using access token from NLX_ACCESS_TOKEN environment variable",
       );
       return JSON.parse(atob(process.env.NLX_ACCESS_TOKEN));
@@ -45,7 +51,7 @@ async function loadTokens(): Promise<[string, any]> {
   }
 }
 
-async function refreshTokenIfNeeded() {
+const refreshTokenIfNeeded = singleton(async function () {
   let account, tokens;
   try {
     [account, tokens] = await loadTokens();
@@ -83,7 +89,7 @@ async function refreshTokenIfNeeded() {
     return newTokens.access_token;
   }
   return null;
-}
+});
 
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN || "nlxdev.us.auth0.com"; // e.g. 'dev-xxxxxx.us.auth0.com'
 const CLIENT_ID =

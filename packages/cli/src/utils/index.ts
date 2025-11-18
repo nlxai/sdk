@@ -27,3 +27,15 @@ export const fetchManagementApi = async <T extends unknown>(
   consola.debug("Response:", JSON.stringify(result));
   return result;
 };
+
+export const singleton = <T>(fn: () => Promise<T>): (() => Promise<T>) => {
+  let running: Promise<T> | null = null;
+  return async () => {
+    if (!running) {
+      running = fn().finally(() => {
+        running = null;
+      });
+    }
+    return running!;
+  };
+};
