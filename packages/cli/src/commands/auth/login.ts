@@ -10,7 +10,7 @@ import { singleton } from "../../utils/index.js";
 export const ACCOUNTS_PATH = path.join(os.homedir(), ".nlx-cli-auth.json");
 
 let _keytar: typeof Keytar;
-async function getKeytar() {
+export async function getKeytar() {
   console.log("Importing keytar...");
   if (_keytar) return _keytar;
   _keytar = ((await import("keytar")) as any).default;

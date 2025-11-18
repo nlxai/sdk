@@ -1,7 +1,6 @@
 import { Command } from "commander";
 import { consola } from "consola";
-import { ACCOUNTS_PATH } from "./login.js";
-import keytar from "keytar";
+import { ACCOUNTS_PATH, getKeytar } from "./login.js";
 import * as fs from "fs";
 import open from "open";
 import * as os from "os";
@@ -18,6 +17,7 @@ export const logoutCommand = new Command("logout")
         accounts = JSON.parse(data);
       }
       if (accounts.currentAccount) {
+        const keytar = await getKeytar();
         await keytar.deletePassword("nlx-cli", accounts.currentAccount);
         accounts.accounts = accounts.accounts.filter(
           (acc: string) => acc !== accounts.currentAccount,
