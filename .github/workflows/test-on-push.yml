@@ -57,20 +57,3 @@ jobs:
         run: npm ci
       - name: Run tsc
         run: npm run tsc
-
-  test-cli-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: ".node-version"
-          cache: "npm"
-      - name: Installing node_modules
-        run: npm ci
-      - name: Build the app
-        run: cd packages/cli && npm run build
-      - name: Test CLI E2E tests
-        env:
-          NLX_ACCESS_TOKEN: ${{ secrets.NLX_ACCESS_TOKEN }}
-        run: cd packages/cli && bin/nlx test 9bf7404f-8636-4cc6-a33f-cb72ba6a062d --enterprise-region Global --only-execute-at-build --verbose

@@ -2,9 +2,6 @@ import { Command } from "commander";
 import { consola } from "consola";
 import { ACCOUNTS_PATH, getKeytar } from "./login.js";
 import * as fs from "fs";
-import open from "open";
-import * as os from "os";
-import * as path from "path";
 
 export const logoutCommand = new Command("logout")
   .description("Clear stored authentication tokens")

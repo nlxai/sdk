@@ -11,7 +11,6 @@ export const ACCOUNTS_PATH = path.join(os.homedir(), ".nlx-cli-auth.json");
 
 let _keytar: typeof Keytar;
 export async function getKeytar() {
-  console.log("Importing keytar...");
   if (_keytar) return _keytar;
   _keytar = ((await import("keytar")) as any).default;
   return _keytar;
@@ -182,15 +181,13 @@ export const loginCommand = new Command("login")
     tokenData.obtained_at = Math.floor(Date.now() / 1000);
     await saveTokens(userData.email, tokenData);
     if (opts.printToken) {
-      console.log(
+      consola.success(
         "Access token",
         btoa(JSON.stringify([userData.email, tokenData])),
       );
     }
     consola.success("Login successful! Access token stored securely.");
   });
-
-// Example usage: get a valid access token
 
 export async function ensureToken(): Promise<string> {
   const accessToken = await refreshTokenIfNeeded();
