@@ -11,15 +11,15 @@ export const ACCOUNTS_PATH = path.join(os.homedir(), ".nlx-cli-auth.json");
 
 let _keytar: typeof Keytar;
 async function getKeytar() {
+  console.log("Importing keytar...");
   if (_keytar) return _keytar;
-  _keytar = await import("keytar");
+  _keytar = ((await import("keytar")) as any).default;
   return _keytar;
 }
 
 async function saveTokens(account: string, tokenData: any) {
   if (!process.env.NLX_ACCESS_TOKEN) {
     const keytar = await getKeytar();
-    console.log(keytar);
     await keytar.setPassword("nlx-cli", account, JSON.stringify(tokenData));
   } else {
     process.env.NLX_ACCESS_TOKEN = btoa(JSON.stringify([account, tokenData]));
