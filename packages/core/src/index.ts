@@ -724,7 +724,10 @@ export interface ConversationHandler {
    * @internal
    * @returns Voice credentials in promise form
    */
-  getVoiceCredentials: (context?: Context) => Promise<VoiceCredentials>;
+  getVoiceCredentials: (
+    context?: Context,
+    options?: { autoTriggerWelcomeFlow?: boolean },
+  ) => Promise<VoiceCredentials>;
 
   /**
    * Send a combination of choice, slots, and intent in one request.
@@ -1406,7 +1409,7 @@ export function createConversation(config: Config): ConversationHandler {
     currentLanguageCode: () => {
       return state.languageCode;
     },
-    getVoiceCredentials: async (context?: Context) => {
+    getVoiceCredentials: async (context, options) => {
       const url = normalizeToHttp(applicationUrl);
       const res = await fetch(`${url}-${state.languageCode}/requestToken`, {
         method: "POST",
@@ -1423,6 +1426,7 @@ export function createConversation(config: Config): ConversationHandler {
           userId: state.userId,
           requestToken: true,
           context,
+          autoTriggerWelcomeFlow: options?.autoTriggerWelcomeFlow ?? true,
         }),
       });
       if (res.status >= 400) {
