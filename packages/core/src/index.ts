@@ -730,6 +730,18 @@ export interface ConversationHandler {
   ) => Promise<VoiceCredentials>;
 
   /**
+   * Append messages manually to the transcript. This is an advanced feature that allows routing and aggregation of different chat message
+   * sources.
+   * @param response - the response with optional timestamps.
+   */
+  appendManually: (
+    response:
+      | (Omit<ApplicationResponse, "receivedAt"> & { receivedAt?: Time })
+      | (Omit<UserResponse, "receivedAt"> & { receivedAt?: Time })
+      | (Omit<FailureMessage, "receivedAt"> & { receivedAt?: Time }),
+  ) => void;
+
+  /**
    * Send a combination of choice, slots, and intent in one request.
    * @param request -
    * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
@@ -1352,6 +1364,20 @@ export function createConversation(config: Config): ConversationHandler {
       if (res.status >= 400) {
         throw new Error(`Responded with ${res.status}`);
       }
+    },
+    appendManually: (newResponse) => {
+      setState(
+        {
+          responses: [
+            ...state.responses,
+            {
+              ...newResponse,
+              receivedAt: newResponse.receivedAt ?? new Date().getTime(),
+            },
+          ],
+        },
+        newResponse,
+      );
     },
     sendStructured: (structured: StructuredRequest, context) => {
       appendStructuredUserResponse(structured, context);
