@@ -1366,17 +1366,15 @@ export function createConversation(config: Config): ConversationHandler {
       }
     },
     appendManually: (newResponse) => {
+      const newResponseWithTimestamp = {
+        ...newResponse,
+        receivedAt: newResponse.receivedAt ?? new Date().getTime(),
+      };
       setState(
         {
-          responses: [
-            ...state.responses,
-            {
-              ...newResponse,
-              receivedAt: newResponse.receivedAt ?? new Date().getTime(),
-            },
-          ],
+          responses: [...state.responses, newResponseWithTimestamp],
         },
-        newResponse,
+        newResponseWithTimestamp,
       );
     },
     sendStructured: (structured: StructuredRequest, context) => {
