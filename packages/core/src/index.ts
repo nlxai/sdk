@@ -734,7 +734,7 @@ export interface ConversationHandler {
    * sources.
    * @param response - the response with optional timestamps.
    */
-  appendManually: (
+  appendMessageToTranscript: (
     response:
       | (Omit<ApplicationResponse, "receivedAt"> & { receivedAt?: Time })
       | (Omit<UserResponse, "receivedAt"> & { receivedAt?: Time })
@@ -1037,6 +1037,9 @@ export function createConversation(config: Config): ConversationHandler {
   ): Promise<unknown> => {
     if (requestOverride != null) {
       requestOverride(body, (payload) => {
+        Console.warn(
+          "Using the second argument in `setRequestOverride` is deprecated. Use `conversationHandler.appendMessageToTranscript` instead.",
+        );
         const newResponse: Response = {
           type: ResponseType.Application,
           receivedAt: new Date().getTime(),
@@ -1365,7 +1368,7 @@ export function createConversation(config: Config): ConversationHandler {
         throw new Error(`Responded with ${res.status}`);
       }
     },
-    appendManually: (newResponse) => {
+    appendMessageToTranscript: (newResponse) => {
       const newResponseWithTimestamp = {
         ...newResponse,
         receivedAt: newResponse.receivedAt ?? new Date().getTime(),
