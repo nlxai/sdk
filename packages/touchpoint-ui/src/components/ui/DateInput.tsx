@@ -7,6 +7,8 @@ import { IconButton } from "./IconButton";
 
 /**
  * Props for the DateInput component
+ * @inline
+ * @hidden
  */
 export interface DateInputProps {
   /**
@@ -15,7 +17,7 @@ export interface DateInputProps {
    */
   onSubmit?: (date: string) => void;
   /**
-   * Class name
+   * Custom CSS class name
    */
   className?: string;
 }
@@ -26,6 +28,18 @@ const options = {
   showMask: true,
 };
 
+/**
+ * A date input
+ * @example
+ * ```tsx
+ * import { DateInput, React } from '@nlx/touchpoint-ui';
+ *
+ * const MyDateInput = ({conversationHandler}) => (
+ *  <DateInput onSubmit={(date) => conversationHandler.sendContext({myDate: date}) } />
+ * );
+ * ```
+ * @category Modality components
+ */
 export const DateInput: FC<DateInputProps> = ({ onSubmit, className }) => {
   const isDisabled = onSubmit == null;
 

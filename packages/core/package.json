@@ -16,33 +16,33 @@
   },
   "scripts": {
     "build": "rm -rf lib && rollup -c --configPlugin typescript --configImportAttributesKey with",
-    "docs": "rm -rf docs/ && typedoc && concat-md --decrease-title-levels --dir-name-as-title docs/ > docs/index.md",
     "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
     "prepublish": "npm run build",
-    "preview-docs": "npm run docs && comrak --unsafe --gfm -o docs/index.html docs/index.md && open docs/index.html",
-    "publish-docs": "npm run docs && mv docs/index.md ../website/src/content/headless-api-reference.md",
     "test": "typedoc --emit none",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "update-readme:docs": "rm -rf docs/ && typedoc",
+    "update-readme:merge": "../../scripts/transclude-markdown.js",
+    "update-readme": "npm run update-readme:docs && npm run update-readme:merge"
   },
   "author": "Peter Szerzo <peter@nlx.ai>",
   "license": "MIT",
   "devDependencies": {
-    "@types/isomorphic-fetch": "^0.0.36",
-    "@types/node": "^22.10.1",
-    "@types/ramda": "0.29.1",
+    "@types/isomorphic-fetch": "^0.0.39",
+    "@types/node": "^24.10.1",
+    "@types/ramda": "0.31.1",
     "@types/uuid": "^9.0.7",
     "concat-md": "^0.5.1",
     "eslint-config-nlx": "*",
     "prettier": "^3.1.0",
     "rollup-config-nlx": "*",
-    "typedoc": "^0.25.13",
-    "typedoc-plugin-markdown": "^3.17.1",
+    "typedoc": "^0.28.14",
+    "typedoc-plugin-markdown": "^4.9.0",
     "typescript": "^5.5.4"
   },
   "dependencies": {
     "isomorphic-fetch": "^3.0.0",
-    "ramda": "^0.29.1",
+    "ramda": "^0.32.0",
     "reconnecting-websocket": "^4.4.0",
     "uuid": "^9.0.1"
   },

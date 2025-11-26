@@ -28,12 +28,6 @@ import type {
 } from "./interface";
 import type { NormalizedTouchpointConfiguration } from "./types";
 
-export {
-  analyzePageForms,
-  type InteractiveElementInfo,
-  type PageForms,
-  type AccessibilityInformation,
-} from "./bidirectional/analyzePageForms";
 /**
  * If you wish to build custom modalities using JSX, you will want to
  *
@@ -43,11 +37,13 @@ export {
  *
  * instead of importing from "react" directly. This ensures that the custom modalities will
  * be running in the same React context as the Touchpoint UI using the correct version of React.
+ * @category Modality components
  */
 export { default as React } from "react";
 
 /**
  * Package version
+ * @category Utilities
  */
 export const version: string = packageJson.version;
 
@@ -58,6 +54,27 @@ const createHtml = (
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   htm.bind((type, ...rest) => createElement(components[type] ?? type, ...rest));
 
+/**
+ * A tagged literal for creating reactive elements for custom modalities.
+ * It already knows about all Touchpoint UI components, so you can use them directly without the need to import them.
+ * Also very useful when using Touchpoint directly from CDN or in projects without a build step.
+ * @example
+ * ```ts
+ * import { html, Icons } from '@nlx/touchpoint-ui';
+ *
+ * const MyCustomModality = ({data, conversationHandler}) =>
+ *   html`<div style="display: flex; gap: 8px;">
+ *    <IconButton label="Cancel" Icon=${Icons.Close} type="ghost" onClick=${cancel()} />
+ *    <TextButton
+ *     label="Submit"
+ *     Icon=${Icons.ArrowForward}
+ *     type="main"
+ *     onClick=${() => conversationHandler.sendText('Button clicked!')}
+ *   />
+ *  </div>`;
+ * ```
+ * @category Modality components
+ */
 export const html = createHtml({
   TextButton,
   IconButton,
@@ -71,20 +88,6 @@ export const html = createHtml({
   Ripple,
   ...Icons,
 });
-
-export {
-  TextButton,
-  IconButton,
-  BaseText,
-  SmallText,
-  DateInput,
-  Carousel,
-  CustomCard,
-  CustomCardRow,
-  CustomCardImageRow,
-  Icons,
-  Ripple,
-};
 
 // Export types for all components
 export {
@@ -114,6 +117,13 @@ export type {
   BidirectionalCustomCommand,
   TouchpointInstance,
 } from "./interface";
+
+export {
+  analyzePageForms,
+  type InteractiveElementInfo,
+  type PageForms,
+  type AccessibilityInformation,
+} from "./bidirectional/analyzePageForms";
 
 const defaultConversationId = (): string => {
   const id = crypto.randomUUID();
@@ -338,6 +348,7 @@ customElementsDefine("nlx-touchpoint", NlxTouchpointElement);
  * Creates a new Touchpoint UI instance and appends it to the document body
  * @param props - Configuration props for Touchpoint
  * @returns A promise that resolves to a TouchpointInstance
+ * @category Basics
  */
 export const create = (
   props: TouchpointConfiguration,
@@ -373,3 +384,17 @@ export const create = (
 };
 
 export { Container as PreviewContainer } from "./preview";
+
+export {
+  TextButton,
+  IconButton,
+  BaseText,
+  SmallText,
+  DateInput,
+  Carousel,
+  CustomCard,
+  CustomCardRow,
+  CustomCardImageRow,
+  Icons,
+  Ripple,
+};

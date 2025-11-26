@@ -7,6 +7,8 @@ import { type Icon } from "../ui/Icons";
 
 /**
  * Props for the CustomCard component
+ * @inline
+ * @hidden
  */
 export interface CustomCardProps {
   /**
@@ -35,6 +37,25 @@ export interface CustomCardProps {
   newTab?: boolean;
 }
 
+/**
+ * A customizable card component that can function as a button or link.
+ * @example
+ * ```tsx
+ * import { CustomCard, CustomCardImageRow, CustomCardRow, React } from '@nlx/touchpoint-ui';
+ *
+ * const MyCard = ({data}) => (
+ *   <CustomCard selected={data.active} onClick={() => alert('Card clicked!')}>
+ *     <CustomCardImageRow src="https://example.com/image.jpg" alt="Example Image" />
+ *     <CustomCardRow
+ *       left={<div>Left Content</div>}
+ *       right={<div>Right Content</div>}
+ *       icon={MyIcon}
+ *     />
+ *   </CustomCard>
+ * );
+ * ```
+ * @category Modality components
+ */
 export const CustomCard: FC<CustomCardProps> = ({
   children,
   className,
@@ -93,6 +114,10 @@ export const CustomCard: FC<CustomCardProps> = ({
   return <div className={containerClassName}>{children}</div>;
 };
 
+/**
+ * A row within a CustomCard that displays an image.
+ * @category Modality components
+ */
 export const CustomCardImageRow: FC<{ src: string; alt?: string }> = ({
   src,
   alt,
@@ -102,6 +127,8 @@ export const CustomCardImageRow: FC<{ src: string; alt?: string }> = ({
 
 /**
  * Props for the CustomCardRow component
+ * @inline
+ * @hidden
  */
 export interface CustomCardRowProps {
   /**
@@ -118,6 +145,22 @@ export interface CustomCardRowProps {
   icon?: Icon;
 }
 
+/**
+ * A row within a CustomCard that displays left and right content, with an optional centered icon.
+ * @example
+ * ```tsx
+ * import { CustomCardRow, Icons, BaseText, React } from '@nlx/touchpoint-ui';
+ *
+ * const MyCardRow = () => (
+ *   <CustomCardRow
+ *     left={<BaseText>Left Content</BaseText>}
+ *     right={<BaseText>Right Content</BaseText>}
+ *     icon={Icons.ArrowRight}
+ *   />
+ * );
+ * ```
+ * @category Modality components
+ */
 export const CustomCardRow: FC<CustomCardRowProps> = ({
   left,
   right,

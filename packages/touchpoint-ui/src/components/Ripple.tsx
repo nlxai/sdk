@@ -20,7 +20,10 @@ const PingCircle: FC<{
     />
   );
 };
-
+/**
+ * A ripple effect composed of expanding circles.
+ * @category Modality components
+ */
 export const Ripple: FC<{
   className?: string;
   style?: CSSProperties;

@@ -1,13 +1,22 @@
 # `@nlxai/cli`
 
-> Tools for integrating with NLX apps
+Tools for automating certain development tasks for integrating with NLX:
 
-**Warning:** This is an alpha package and will likely not work for you. Keep an eye on this space for a more feature complete release later.
+- Syncing OpenAPI/Swagger/Postman API specifications as collections of Data requests inside NLX. This can speed up exposing an internal API to conversation builders as well as keep the data requests inside NLX in sync as your API evolves.
+
+- Keeping **Modality** definitions in sync between a custom modality implementation in your front-end and what builders see inside NLX.
+
+- Running conversation tests for an application.
+
+and more.
+
+> [!WARNING]
+> This is an pre-release package and will likely not work for your use case. Keep an eye on this space for a more feature complete release later.
 
 ## Usage
 
 ```
-> npm -g i cli
+> npm -g i @nlxai/cli
 
 > nlx
 
@@ -85,4 +94,26 @@ Transcript:
     └───────┘
 
 Debug at:  https://dev.platform.nlx.ai/flows/SimpleCarousel
+```
+
+## Running in CI
+
+Many of the tasks outline above can be quite profitably run on CI servers during development as an additional check to make sure that developers of custom software components stay compatible with what builders are doing inside NLX (as often these can be separate teams).
+
+For example:
+
+- API endpoint developers may wish to sync their API description to NLX as part of their deployment process
+- Front-end developers will want their CI server to typecheck their modality typescript definitions against the source of truth inside NLX.
+- Backend systems may wish to run conversations tests that rely on said systems as part of their regression testing.
+
+To run securely on CI, a CI only user should be created in NLX with only the appropriate permissions set up. Then running `nlx auth login --print-token` and following the instructions will result in a token. This token should be setup as an secret environment variable named `NLX_ACCESS_TOKEN`.
+
+For instance in Github Actions, one can configure repository secrets, and then in the job will do:
+
+```yaml
+- name: Run example conversation test
+  env:
+    NLX_ACCESS_TOKEN: ${{ secrets.NLX_ACCESS_TOKEN }}
+  # For example:
+  run: nlx test 9bf7404f-8636-4cf6-a33f-cb72b36a062d
 ```
