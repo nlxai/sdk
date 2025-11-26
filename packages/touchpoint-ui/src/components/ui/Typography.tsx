@@ -1,4 +1,4 @@
-/* eslint-disable jsdoc/require-jsdoc */
+ 
 import { clsx } from "clsx";
 import { type FC, type ReactNode } from "react";
 

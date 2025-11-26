@@ -1,4 +1,4 @@
-/* eslint-disable jsdoc/require-jsdoc */
+ 
 import { clsx } from "clsx";
 import { type FC, useState } from "react";
 import { InputMask } from "@react-input/mask";

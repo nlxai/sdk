@@ -1,4 +1,4 @@
-/* eslint-disable jsdoc/require-jsdoc */
+ 
 import { clsx } from "clsx";
 import { type FC } from "react";
 import { type IconProps } from "./Icons";
