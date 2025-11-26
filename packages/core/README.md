@@ -55,6 +55,7 @@ If you want your application to communicate through a custom channel, then all y
 # API reference
 
 <!-- include docs/README.md -->
+
 ## Functions
 
 ### createConversation()
@@ -85,7 +86,7 @@ The [ConversationHandler](#conversationhandler) is a bundle of functions to inte
 import { createConversation } from "@nlx/core";
 
 const conversation = createConversation({
-  applicationUrl: "https://bots.studio.nlx.ai/c/cfab3-243ad-232dc",
+  applicationUrl: "https://apps.nlx.ai/c/cfab3-243ad-232dc",
   headers: {
     "nlx-api-key": "4393029032-dwsd",
   },
@@ -1781,4 +1782,3 @@ The callback function for listening to all responses.
 #### Returns
 
 `void`
-

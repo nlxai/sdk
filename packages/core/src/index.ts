@@ -896,7 +896,7 @@ type Timer = ReturnType<typeof setInterval>;
  * import { createConversation } from "@nlx/core";
  *
  * const conversation = createConversation({
- *   applicationUrl: "https://bots.studio.nlx.ai/c/cfab3-243ad-232dc",
+ *   applicationUrl: "https://apps.nlx.ai/c/cfab3-243ad-232dc",
  *   headers: {
  *     "nlx-api-key": "4393029032-dwsd",
  *   },
