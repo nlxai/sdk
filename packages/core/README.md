@@ -55,7 +55,6 @@ If you want your application to communicate through a custom channel, then all y
 # API reference
 
 <!-- include docs/README.md -->
-
 ## Functions
 
 ### createConversation()
@@ -523,6 +522,27 @@ Send context without sending a message
 ###### Returns
 
 `Promise`\<`void`\>
+
+##### appendMessageToTranscript()
+
+```ts
+appendMessageToTranscript: (response) => void;
+```
+
+Append messages manually to the transcript. This is an advanced feature that allows routing and aggregation of different chat message
+sources.
+
+###### Parameters
+
+###### response
+
+the response with optional timestamps.
+
+`Omit`\<[`ApplicationResponse`](#applicationresponse), `"receivedAt"`\> & `object` | `Omit`\<[`UserResponse`](#userresponse), `"receivedAt"`\> & `object` | `Omit`\<[`FailureMessage`](#failuremessage-1), `"receivedAt"`\> & `object`
+
+###### Returns
+
+`void`
 
 ##### sendStructured()
 
@@ -1761,3 +1781,4 @@ The callback function for listening to all responses.
 #### Returns
 
 `void`
+
