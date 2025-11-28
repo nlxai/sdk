@@ -172,6 +172,7 @@ export interface ConversationHandler {
   /**
    * Subscribe a callback to the conversation. On subscribe, the subscriber will receive all of the Responses that the conversation has already received.
    * @param subscriber - The callback to subscribe
+   * @returns A function to unsubscribe the callback.
    */
   subscribe: (subscriber: Subscriber) => () => void;
   /**

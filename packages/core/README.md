@@ -40,22 +40,190 @@ convo.sendText("hello");
 
 Generally we recommend using [Touchpoint](../touchpoint-ui/README.md) for integrating with an application, but if this is unsuitable for some reason, it is not difficult to build a custom widget. Here is a very simple example to get started:
 
-```typescript
-// todo
+```tsx
+import React, { StrictMode, type FC, useState, useEffect } from "react";
+import * as ReactDOMClient from "react-dom/client";
+import {
+  type ConversationHandler,
+  createConversation,
+  type Response,
+  ResponseType,
+} from "@nlxai/core";
+
+const App: FC<{ conversation: ConversationHandler }> = ({ conversation }) => {
+  const [messages, setMessages] = useState<Response[]>([]);
+  const [input, setInput] = useState<string>("");
+
+  // This effect synchronizes component state with the ConversationHandler state
+  useEffect(
+    () =>
+      conversation.subscribe((response) => {
+        setMessages(response);
+      }),
+    [conversation],
+  );
+
+  return (
+    <div className="chat">
+      <div className="history">
+        {messages.map((msg, idx) => {
+          if (msg.type === ResponseType.Application) {
+            return (
+              <div key={idx}>
+                {msg.payload.messages.map((m, i) => (
+                  <div key={i} className="app-msg">
+                    {m.text}
+                  </div>
+                ))}
+              </div>
+            );
+          } else if (
+            msg.type === ResponseType.User &&
+            msg.payload.type === "text"
+          ) {
+            return (
+              <div key={idx} className="user-msg">
+                {msg.payload.text}
+              </div>
+            );
+          }
+        })}
+      </div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          conversation.sendText(input);
+          setInput("");
+        }}
+      >
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
+      </form>
+    </div>
+  );
+};
+const rootElement = document.getElementById("root");
+const root = ReactDOMClient.createRoot(rootElement!);
+
+const conversation = createConversation({
+  applicationUrl:
+    "https://apps.nlx.ai/c/Xq3kT5uVOCGipRW8kW9pB/BajtUGSLN5hoqiSmgTA7B",
+  headers: {
+    "nlx-api-key": "VkvGvxQ-iQQ/EgpgyJQxkDL-OhmhVwzV",
+  },
+  languageCode: "en-US",
+});
+
+conversation.sendWelcomeFlow();
+
+root.render(
+  <StrictMode>
+    <App conversation={conversation} />
+  </StrictMode>,
+);
 ```
+
+[Play with it live](https://playcode.io/react-typescript-playground-hooks--019aca7a-bb1a-76be-adbc-158d25c32b99).
+
+Obviously there are many more features that you could implement, but the advantage of a custom implementation is that you only need to implement the features you will actually be using.
 
 ## Implementing a custom channel
 
-If you want your application to communicate through a custom channel, then all you need to do is to deploy a custom NodeJS endpoint (such as AWS Lambda or similar) that uses @nlxai/core to translate the various requests and responses into whatever format your custom channel expects.
+If you want your application to communicate through a custom channel, then all you need to do is to deploy a custom NodeJS endpoint (such as AWS Lambda or similar) that uses @nlxai/core to translate the various requests and responses into whatever format your custom channel expects. As an example, here is a way to allow your application to use GitHub Issues as a channel to communicate over (as a Deno app - [explore the implemtentation](https://www.val.town/x/jakubnlx/github-as-an-nlx-channel/code/README.md)):
 
 ```typescript
-// todo
+import { Octokit } from "npm:@octokit/core";
+import { createConversation, promisify, ResponseType } from "npm:@nlxai/core";
+
+const octokit = new Octokit({
+  auth: Deno.env.get("GITHUB_TOKEN"),
+});
+
+async function run(user: string, issueNumber: number, body?: string) {
+  const conversation = createConversation({
+    applicationUrl: Deno.env.get("NLX_APPLICATION_URL"),
+    headers: {
+      "nlx-api-key": Deno.env.get("NLX_API_KEY"),
+    },
+    languageCode: "en-US",
+    conversationId: `issue-${issueNumber}`,
+    userId: user,
+  });
+  const sendWelcomeFlow = promisify(conversation.sendWelcomeFlow, conversation);
+  const sendText = promisify(conversation.sendText, conversation);
+  let response;
+  if (!body) {
+    response = await sendWelcomeFlow();
+  } else {
+    response = await sendText(body);
+  }
+  if (response.type === ResponseType.Application) {
+    for (const message of response.payload.messages) {
+      await postComment(issueNumber, message.text);
+    }
+  }
+}
+
+async function postComment(issueNumber: number, body: string) {
+  await octokit.request(
+    "POST /repos/{owner}/{repo}/issues/{issue_number}/comments",
+    {
+      owner: Deno.env.get("GITHUB_OWNER"),
+      repo: Deno.env.get("GITHUB_REPO"),
+      issue_number: issueNumber,
+      body: body,
+    },
+  );
+}
+
+export default async function (req: Request): Promise<Response> {
+  try {
+    const event = req.headers.get("X-GitHub-Event") || "unknown";
+    const body = await req.text();
+    const payload = JSON.parse(body);
+
+    console.log(`GitHub webhook: ${event} event received`);
+    if (event === "issues" && payload.action === "opened") {
+      await run(payload.issue.user.login, payload.issue.number);
+    }
+    if (
+      event === "issue_comment" &&
+      payload.action === "created" &&
+      payload.comment.user.login !== Deno.env.get("GITHUB_OWNER")
+    ) {
+      console.log("user", payload.comment.user.login);
+      await run(
+        payload.comment.user.login,
+        payload.issue.number,
+        payload.comment.body,
+      );
+    }
+
+    // Handle other events
+    return Response.json({
+      status: "received",
+      event,
+      action: payload.action || null,
+    });
+  } catch (error) {
+    console.error("Webhook error:", error);
+    return Response.json(
+      {
+        error: "Processing failed",
+        message: error.message,
+      },
+      { status: 500 },
+    );
+  }
+}
 ```
 
 # API reference
 
 <!-- include docs/README.md -->
-
 ## Functions
 
 ### createConversation()
@@ -586,6 +754,8 @@ Subscribe a callback to the conversation. On subscribe, the subscriber will rece
 The callback to subscribe
 
 ###### Returns
+
+A function to unsubscribe the callback.
 
 ```ts
 (): void;
@@ -1782,3 +1952,4 @@ The callback function for listening to all responses.
 #### Returns
 
 `void`
+
