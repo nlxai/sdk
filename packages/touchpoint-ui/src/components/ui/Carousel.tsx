@@ -14,6 +14,24 @@ export const CarouselContext = createContext<{
   recentlyEndedScrolling: boolean;
 }>({ recentlyEndedScrolling: false });
 
+/**
+ * Renders a carousel of cards.
+ * @example
+ * ```tsx
+ * import { Carousel, CustomCard, CustomCardImageRow, React } from '@nlx/touchpoint-ui';
+ *
+ * const MyCarousel = ({ data }) => (
+ *   <Carousel>
+ *     {data.map((item) => (
+ *       <CustomCard key={item.id}>
+ *         <CustomCardImageRow src={item.image} alt={item.description} />
+ *       </CustomCard>
+ *     ))}
+ *   </Carousel>
+ * );
+ * ```
+ * @category Modality components
+ */
 export const Carousel: FC<{
   className?: string;
   children?: ReactNode;

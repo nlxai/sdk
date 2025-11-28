@@ -1,5 +1,5 @@
 import { type FC, useRef, type ReactNode } from "react";
-import { type Config, isConfigValid } from "@nlxai/core";
+import { type Config } from "@nlxai/core";
 import { useDebouncedEffect } from "@react-hookz/web";
 import { TouchpointIcon } from "../components/Icons";
 import { Toggle } from "../components/Toggle";
@@ -19,6 +19,11 @@ Touchpoint UI provides a customizable chat interface that you can embed in your 
 
 You can try your applications directly on this configuration page. Then you can copy the code snippet to your HTML file.
 `;
+
+const isConfigValid = (configuration: Config): boolean => {
+  const applicationUrl = configuration.applicationUrl ?? "";
+  return applicationUrl.length > 0;
+};
 
 export const snippetContent = ({
   config,

@@ -12,6 +12,7 @@ import { type IconProps } from "./Icons";
  * - `activated`: An icon button that indicates an active state.
  * - `coverup`: An icon button used to cover up or mask something.
  * - `overlay`: An icon button that appears over other content.
+ * @category Modality components
  */
 export type IconButtonType =
   | "main"
@@ -23,6 +24,8 @@ export type IconButtonType =
 
 /**
  * Props for the IconButton component
+ * @inline
+ * @hidden
  */
 export interface IconButtonProps {
   /**
@@ -91,6 +94,23 @@ export const UnsemanticIconButton: FC<{
   );
 };
 
+/**
+ * A button showing only an icon (textual label is provided for accessibility)
+ * @example
+ * ```tsx
+ * import { IconButton, Icons, React } from '@nlx/touchpoint-ui';
+ *
+ * const MyIconButton = () => (
+ *   <IconButton
+ *     label="Send message"
+ *     onClick={() => alert('Icon button clicked!')}
+ *     type="main"
+ *     Icon={Icons.ArrowForward}
+ *   />
+ * );
+ * ```
+ * @category Modality components
+ */
 export const IconButton: FC<IconButtonProps> = ({
   onClick,
   type,

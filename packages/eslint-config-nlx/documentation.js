@@ -7,19 +7,29 @@ module.exports = {
       "error",
       {
         require: {
-            FunctionDeclaration: true,
-            MethodDefinition: true,
-            ClassDeclaration: true,
-            ArrowFunctionExpression: true,
-            FunctionExpression: true
+          FunctionDeclaration: true,
+          MethodDefinition: true,
+          ClassDeclaration: true,
+          ArrowFunctionExpression: true,
+          FunctionExpression: true,
         },
         publicOnly: true,
         // these ensure that documentation of various type script constructs is required. Will tweak as we go.
-        contexts: ["TSTypeAliasDeclaration","TSInterfaceDeclaration","TSMethodSignature","TSPropertySignature"]
-      }
+        contexts: [
+          "TSTypeAliasDeclaration",
+          "TSInterfaceDeclaration",
+          "TSMethodSignature",
+          "TSPropertySignature",
+        ],
+      },
     ],
-    "jsdoc/check-tag-names": ["error", { definedTags: ["category", "hidden", "typeParam"] }],
-    "jsdoc/require-param": ["error", { checkDestructured: false }],
+    "jsdoc/check-tag-names": [
+      "error",
+      { definedTags: ["category", "hidden", "typeParam", "inline"] },
+    ],
+
+    "jsdoc/require-param": "off",
+    "jsdoc/require-returns": "off",
     "jsdoc/check-param-names": ["error", { checkDestructured: false }],
     "tsdoc/syntax": "error",
   },
@@ -28,7 +38,7 @@ module.exports = {
       files: ["*.cjs", "*.js"],
       rules: {
         "tsdoc/syntax": "off",
-      }
-    }
-  ]
+      },
+    },
+  ],
 };

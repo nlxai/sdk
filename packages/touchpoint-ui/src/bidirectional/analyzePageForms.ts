@@ -5,11 +5,13 @@ import {
 
 /**
  * Accessibility information
+ * @inline @hidden
  */
 export type AccessibilityInformation = Record<string, any>;
 
 /**
  * Accessibility information with ID
+ * @category Bidirectional Voice+
  */
 export interface InteractiveElementInfo extends AccessibilityInformation {
   /**
@@ -20,6 +22,7 @@ export interface InteractiveElementInfo extends AccessibilityInformation {
 
 /**
  * Page forms with elements
+ * @category Bidirectional Voice+
  */
 export interface PageForms {
   /**
@@ -84,7 +87,8 @@ const toAccessibilityInformation = (
 
 /**
  * Analyze page forms
- * @returns pageForms
+ * @returns Context and state about all the form elements detected on the page using accessibility APIs.
+ * @category Bidirectional Voice+
  */
 export const analyzePageForms = (): PageForms => {
   const interactiveNodes = Array.from(
