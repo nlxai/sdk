@@ -57,8 +57,8 @@ const App: FC<{ conversation: ConversationHandler }> = ({ conversation }) => {
   // This effect synchronizes component state with the ConversationHandler state
   useEffect(
     () =>
-      conversation.subscribe((response) => {
-        setMessages(response);
+      conversation.subscribe((responses) => {
+        setMessages(responses);
       }),
     [conversation],
   );
@@ -224,6 +224,7 @@ export default async function (req: Request): Promise<Response> {
 # API reference
 
 <!-- include docs/README.md -->
+
 ## Functions
 
 ### createConversation()
@@ -1952,4 +1953,3 @@ The callback function for listening to all responses.
 #### Returns
 
 `void`
-
