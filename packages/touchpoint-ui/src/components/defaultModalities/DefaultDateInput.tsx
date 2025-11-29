@@ -8,10 +8,10 @@ import { DateInput } from "../ui/DateInput";
 
 export const DefaultDateInput: CustomModalityComponent<{
   $saveAs: SaveAs;
-}> = ({ data, conversationHandler }) => {
+}> = ({ data, className, conversationHandler }) => {
   const save = useMemo(
     () => saveFn(data.$saveAs, conversationHandler),
     [data.$saveAs, conversationHandler],
   );
-  return <DateInput onSubmit={save} />;
+  return <DateInput className={className} onSubmit={save} />;
 };

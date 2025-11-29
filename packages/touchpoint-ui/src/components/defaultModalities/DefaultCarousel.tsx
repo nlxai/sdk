@@ -14,7 +14,7 @@ import { type SaveAs, type CardData, saveFn } from "./shared";
 export const DefaultCarousel: CustomModalityComponent<{
   cards: CardData[];
   $saveAs: SaveAs;
-}> = ({ data, conversationHandler }) => {
+}> = ({ data, className, conversationHandler, backdropBlur }) => {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
 
   const save = useMemo(
@@ -28,9 +28,10 @@ export const DefaultCarousel: CustomModalityComponent<{
   };
 
   return (
-    <Carousel>
+    <Carousel className={className}>
       {data.cards.map((card, index) => (
         <CustomCard
+          className={backdropBlur ? "backdrop-blur-overlay" : ""}
           key={card.id ?? index}
           selected={card.id === selectedCard}
           onClick={

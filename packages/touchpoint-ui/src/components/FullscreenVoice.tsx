@@ -48,8 +48,9 @@ export const VoiceModalities: FC<{
   className?: string;
   modalities: ModalitiesWithContext[];
   modalityComponents: Record<string, CustomModalityComponent<unknown>>;
+  backdropBlur: boolean;
   handler: ConversationHandler;
-}> = ({ className, modalities, modalityComponents, handler }) => {
+}> = ({ className, modalities, backdropBlur, modalityComponents, handler }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const customModalityComponents = modalities
@@ -72,7 +73,7 @@ export const VoiceModalities: FC<{
             return (
               <Component
                 key={key}
-                className="backdrop-blur-overlay"
+                backdropBlur={backdropBlur}
                 data={value}
                 conversationHandler={handler}
                 enabled={true}
@@ -201,6 +202,7 @@ export const FullscreenVoice: FC<Props> = ({
       </div>
       <VoiceModalities
         className="absolute p-4 top-0 left-0 right-0 bottom-[72px] z-10 space-y-2 max-h-full overflow-auto border-b border-primary-10"
+        backdropBlur
         modalities={modalities}
         modalityComponents={modalityComponents}
         handler={handler}
