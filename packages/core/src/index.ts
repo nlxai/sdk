@@ -13,6 +13,230 @@ export const version: string = packageJson.version;
 const Console = console;
 
 /**
+ * The configuration necessary to create a conversation.
+ */
+export interface Config {
+  /**
+   * The URL at which your conversational application is running.
+   * Fetch this from the application's API channel tab.
+   */
+  applicationUrl?: string;
+  /**
+   * Headers to forward to the NLX API.
+   */
+  headers: Record<string, string> & {
+    /**
+     * The `nlx-api-key` is required. Fetch this from the application's API channel tab.
+     */
+    "nlx-api-key": string;
+  };
+
+  /**
+   * Set `conversationId` to continue an existing conversation. If not set, a new conversation will be started (and a new conversationId will be generated internally).
+   */
+  conversationId?: string;
+  /**
+   * Setting the `userID` allows it to be searchable in application history, as well as usable via `{System.userId}` in the flow.
+   */
+  userId?: string;
+  /**
+   * When `responses` is set, initialize the chatHandler with historical messages. This is useful when restoring a previous conversation, that perhaps started on a different page.
+   */
+  responses?: Response[];
+  /**
+   * When set, this overrides the default failure message ("We encountered an issue. Please try again soon.").
+   */
+  failureMessage?: string;
+  /**
+   * The language code to use for the application. In the browser this can be fetched with `navigator.language`.
+   * If you don't have translations, hard-code this to the language code you support.
+   */
+  languageCode: LanguageCode;
+  /**
+   * @hidden @internal
+   * this should only be used for NLX internal testing.
+   */
+  environment?: Environment;
+  /**
+   * Specifies whether the conversation is using bidirectional Voice+ (if so, an additional command socket will be opened).
+   */
+  bidirectional?: boolean;
+  /**
+   * Experimental settings
+   * @internal
+   */
+  experimental?: {
+    /**
+     * Simulate alternative channel types
+     */
+    channelType?: string;
+    /**
+     * Prevent the `languageCode` parameter to be appended to the application URL - used in special deployment environments such as the sandbox chat inside Dialog Studio
+     */
+    completeApplicationUrl?: boolean;
+  };
+}
+
+/**
+ * A bundle of functions to interact with a conversation, created by {@link createConversation}.
+ */
+export interface ConversationHandler {
+  /**
+   * Send user's message
+   * @param text - the user's message
+   * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the flow.
+   */
+  sendText: (text: string, context?: Context) => void;
+  /**
+   * Send [slots](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/slots-custom#slot-settings) to the application.
+   * @param slots - The slots to populate
+   * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the flow.
+   */
+  sendSlots: (slots: SlotsRecordOrArray, context?: Context) => void;
+  /**
+   * Respond to [a choice](https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/nodes#user-choice) from the application.
+   * @param choiceId - The `choiceId` is in the {@link ApplicationResponse}'s `.payload.messages[].choices[].choiceId` fields
+   * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the flow.
+   * @param metadata - links the choice to the specific message and node in the conversation.
+   */
+  sendChoice: (
+    choiceId: string,
+    context?: Context,
+    metadata?: ChoiceRequestMetadata,
+  ) => void;
+
+  /**
+   * Trigger the welcome flow. This should be done when the user starts interacting with the conversation.
+   * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the flow.
+   */
+  sendWelcomeFlow: (context?: Context) => void;
+
+  /**
+   * Trigger the welcome [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents). This should be done when the user starts interacting with the conversation.
+   * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the intent.
+   * @deprecated use `sendWelcomeFlow` instead
+   * @hidden
+   */
+  sendWelcomeIntent: (context?: Context) => void;
+
+  /**
+   * Trigger a specific flow.
+   * @param flowId - the flow to trigger. The id is the name under the application's _Intents_.
+   * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the intent.
+   */
+  sendFlow: (flowId: string, context?: Context) => void;
+
+  /**
+   * Trigger a specific [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents).
+   * @param intentId - the intent to trigger. The id is the name under the application's _Intents_.
+   * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the intent.
+   * @deprecated use `sendFlow` instead
+   * @hidden
+   */
+  sendIntent: (intentId: string, context?: Context) => void;
+
+  /**
+   * Send context without sending a message
+   * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the intent.
+   */
+  sendContext: (context: Context) => Promise<void>;
+
+  /**
+   * Obtain Voice credentials to run the experience in voice.
+   * @internal
+   * @returns Voice credentials in promise form
+   */
+  getVoiceCredentials: (
+    context?: Context,
+    options?: { autoTriggerWelcomeFlow?: boolean },
+  ) => Promise<VoiceCredentials>;
+
+  /**
+   * Append messages manually to the transcript. This is an advanced feature that allows routing and aggregation of different chat message
+   * sources.
+   * @param response - the response with optional timestamps.
+   */
+  appendMessageToTranscript: (
+    response:
+      | (Omit<ApplicationResponse, "receivedAt"> & { receivedAt?: Time })
+      | (Omit<UserResponse, "receivedAt"> & { receivedAt?: Time })
+      | (Omit<FailureMessage, "receivedAt"> & { receivedAt?: Time }),
+  ) => void;
+
+  /**
+   * Send a combination of choice, slots, and intent in one request.
+   * @param request -
+   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   */
+  sendStructured: (request: StructuredRequest, context?: Context) => void;
+  /**
+   * Subscribe a callback to the conversation. On subscribe, the subscriber will receive all of the Responses that the conversation has already received.
+   * @param subscriber - The callback to subscribe
+   * @returns A function to unsubscribe the callback.
+   */
+  subscribe: (subscriber: Subscriber) => () => void;
+  /**
+   * Unsubscribe a callback from the conversation.
+   * @param subscriber - The callback to unsubscribe
+   */
+  unsubscribe: (subscriber: Subscriber) => void;
+  /**
+   * Unsubscribe all callback from the conversation.
+   */
+  unsubscribeAll: () => void;
+  /**
+   * Get the current conversation ID if it's set, or undefined if there is no conversation.
+   */
+  currentConversationId: () => string | undefined;
+  /**
+   * Get the current language code
+   */
+  currentLanguageCode: () => LanguageCode;
+  /**
+   * Set the language code
+   */
+  setLanguageCode: (languageCode: LanguageCode) => void;
+  /**
+   * Forces a new conversation. If `clearResponses` is set to true, will also clear historical responses passed to subscribers.
+   * Retains all existing subscribers.
+   */
+  reset: (options?: {
+    /**
+     * If set to true, will clear historical responses passed to subscribers.
+     */
+    clearResponses?: boolean;
+  }) => void;
+  /**
+   * Removes all subscribers and, if using websockets, closes the connection.
+   */
+  destroy: () => void;
+
+  /**
+   * Optional {@link RequestOverride} function used to bypass the application request and handle them in a custom fashion
+   */
+  setRequestOverride: (override: RequestOverride | undefined) => void;
+  /**
+   * Add a listener to one of the handler's custom events
+   */
+  addEventListener: (
+    event: ConversationHandlerEvent,
+    handler: EventHandlers[ConversationHandlerEvent],
+  ) => void;
+  /**
+   * Remove a listener to one of the handler's custom events
+   */
+  removeEventListener: (
+    event: ConversationHandlerEvent,
+    handler: EventHandlers[ConversationHandlerEvent],
+  ) => void;
+  /**
+   * Send voicePlus message
+   * @internal
+   */
+  sendVoicePlusContext: (context: VoicePlusContext) => void;
+}
+
+/**
  * [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
  */
 export type Context = Record<string, any>;
@@ -380,69 +604,6 @@ export type Time = number;
  */
 export type Environment = "production" | "development";
 
-/**
- * The configuration to create a conversation.
- */
-export interface Config {
-  /**
-   * Fetch this from the application's Deployment page.
-   */
-  applicationUrl?: string;
-  /**
-   * Headers to forward to the NLX API.
-   */
-  headers: Record<string, string> & {
-    /**
-     * The `nlx-api-key` is required. Fetch this from the application's Deployment page.
-     */
-    "nlx-api-key": string;
-  };
-
-  /**
-   * Set `conversationId` to continue an existing conversation. If not set, a new conversation will be started.
-   */
-  conversationId?: string;
-  /**
-   * Setting the `userID` allows it to be searchable in application history, as well as usable via `{System.userId}` in the intent.
-   */
-  userId?: string;
-  /**
-   * When `responses` is set, initialize the chatHandler with historical messages.
-   */
-  responses?: Response[];
-  /**
-   * When set, this overrides the default failure message ("We encountered an issue. Please try again soon.").
-   */
-  failureMessage?: string;
-  /**
-   * The language code to use for the application. In the browser this can be fetched with `navigator.language`.
-   * If you don't have translations, hard-code this to the language code you support.
-   */
-  languageCode: LanguageCode;
-  /**
-   * @hidden
-   * this should only be used for NLX internal testing.
-   */
-  environment?: Environment;
-  /**
-   * Specifies whether the conversation is bidirectional
-   */
-  bidirectional?: boolean;
-  /**
-   * Experimental settings
-   */
-  experimental?: {
-    /**
-     * Simulate alternative channel types
-     */
-    channelType?: string;
-    /**
-     * Prevent the `languageCode` parameter to be appended to the application URL - used in special deployment environments such as the sandbox chat inside Dialog Studio
-     */
-    completeApplicationUrl?: boolean;
-  };
-}
-
 const welcomeIntent = "NLX.Welcome";
 
 const defaultFailureMessage = "We encountered an issue. Please try again soon.";
@@ -644,6 +805,7 @@ export interface VoicePlusMessage {
 
 /**
  * Handler events
+ * @event voicePlusCommand
  */
 export type ConversationHandlerEvent = "voicePlusCommand";
 
@@ -655,161 +817,6 @@ export interface EventHandlers {
    * Voice+ command event handler
    */
   voicePlusCommand: (payload: any) => void;
-}
-
-/**
- * A bundle of functions to interact with a conversation, created by {@link createConversation}.
- */
-export interface ConversationHandler {
-  /**
-   * Send user's message
-   * @param text - the user's message
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   */
-  sendText: (text: string, context?: Context) => void;
-  /**
-   * Send [slots](https://docs.studio.nlx.ai/workspacesettings/introduction-to-settings) to the application.
-   * @param slots - The slots to populate
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   */
-  sendSlots: (slots: SlotsRecordOrArray, context?: Context) => void;
-  /**
-   * Respond to [a choice](https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/nodes#user-choice) from the application.
-   * @param choidId - The `choiceId` is in the {@link ApplicationResponse}'s `.payload.messages[].choices[].choiceId` fields
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   * @param metadata - links the choice to the specific message and node in the conversation.
-   */
-  sendChoice: (
-    choiceId: string,
-    context?: Context,
-    metadata?: ChoiceRequestMetadata,
-  ) => void;
-
-  /**
-   * Trigger the welcome flow. This should be done when the user starts interacting with the chat.
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   */
-  sendWelcomeFlow: (context?: Context) => void;
-
-  /**
-   * Trigger the welcome [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents). This should be done when the user starts interacting with the chat.
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   * @deprecated use `sendWelcomeFlow` instead
-   */
-  sendWelcomeIntent: (context?: Context) => void;
-
-  /**
-   * Trigger a specific flow.
-   * @param flowId - the flow to trigger. The id is the name under the application's _Intents_.
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   */
-  sendFlow: (flowId: string, context?: Context) => void;
-
-  /**
-   * Trigger a specific [intent](https://docs.studio.nlx.ai/intents/introduction-to-intents).
-   * @param intentId - the intent to trigger. The id is the name under the application's _Intents_.
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   * @deprecated use `sendFlow` instead
-   */
-  sendIntent: (intentId: string, context?: Context) => void;
-
-  /**
-   * Send context without sending a message
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   */
-  sendContext: (context: Context) => Promise<void>;
-
-  /**
-   * Obtain Voice credentials to run the experience in voice.
-   * @internal
-   * @returns Voice credentials in promise form
-   */
-  getVoiceCredentials: (
-    context?: Context,
-    options?: { autoTriggerWelcomeFlow?: boolean },
-  ) => Promise<VoiceCredentials>;
-
-  /**
-   * Append messages manually to the transcript. This is an advanced feature that allows routing and aggregation of different chat message
-   * sources.
-   * @param response - the response with optional timestamps.
-   */
-  appendMessageToTranscript: (
-    response:
-      | (Omit<ApplicationResponse, "receivedAt"> & { receivedAt?: Time })
-      | (Omit<UserResponse, "receivedAt"> & { receivedAt?: Time })
-      | (Omit<FailureMessage, "receivedAt"> & { receivedAt?: Time }),
-  ) => void;
-
-  /**
-   * Send a combination of choice, slots, and intent in one request.
-   * @param request -
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
-   */
-  sendStructured: (request: StructuredRequest, context?: Context) => void;
-  /**
-   * Subscribe a callback to the conversation. On subscribe, the subscriber will receive all of the Responses that the conversation has already received.
-   * @param subscriber - The callback to subscribe
-   */
-  subscribe: (subscriber: Subscriber) => () => void;
-  /**
-   * Unsubscribe a callback from the conversation.
-   * @param subscriber - The callback to unsubscribe
-   */
-  unsubscribe: (subscriber: Subscriber) => void;
-  /**
-   * Unsubscribe all callback from the conversation.
-   */
-  unsubscribeAll: () => void;
-  /**
-   * Get the current conversation ID if it's set, or undefined if there is no conversation.
-   */
-  currentConversationId: () => string | undefined;
-  /**
-   * Get the current language code
-   */
-  currentLanguageCode: () => LanguageCode;
-  /**
-   * Set the language code
-   */
-  setLanguageCode: (languageCode: LanguageCode) => void;
-  /**
-   * Forces a new conversation. If `clearResponses` is set to true, will also clear historical responses passed to subscribers.
-   * Retains all existing subscribers.
-   */
-  reset: (options?: {
-    /**
-     * If set to true, will clear historical responses passed to subscribers.
-     */
-    clearResponses?: boolean;
-  }) => void;
-  /**
-   * Removes all subscribers and, if using websockets, closes the connection.
-   */
-  destroy: () => void;
-
-  /**
-   * Optional {@link RequestOverride} function used to bypass the application request and handle them in a custom fashion
-   */
-  setRequestOverride: (override: RequestOverride | undefined) => void;
-  /**
-   * Add a listener to one of the handler's custom events
-   */
-  addEventListener: (
-    event: ConversationHandlerEvent,
-    handler: EventHandlers[ConversationHandlerEvent],
-  ) => void;
-  /**
-   * Remove a listener to one of the handler's custom events
-   */
-  removeEventListener: (
-    event: ConversationHandlerEvent,
-    handler: EventHandlers[ConversationHandlerEvent],
-  ) => void;
-  /**
-   * Send voicePlus message
-   */
-  sendVoicePlusContext: (context: VoicePlusContext) => void;
 }
 
 interface InternalState {
@@ -835,22 +842,6 @@ const safeJsonParse = (val: string): any => {
  * The callback function for listening to all responses.
  */
 export type Subscriber = (response: Response[], newResponse?: Response) => void;
-
-/**
- * Helper method to decide when a new {@link Config} requires creating a new {@link ConversationHandler} or whether the old `Config`'s
- * `ConversationHandler` can be used.
- *
- * The order of configs doesn't matter.
- * @param config1 -
- * @param config2 -
- * @returns true if `createConversation` should be called again
- */
-export const shouldReinitialize = (
-  config1: Config,
-  config2: Config,
-): boolean => {
-  return !equals(config1, config2);
-};
 
 const getBaseDomain = (url: string): string =>
   url.match(
@@ -895,24 +886,27 @@ const isWebsocketUrl = (url: string): boolean => {
   return url.indexOf("wss://") === 0;
 };
 
-/**
- * Check whether a configuration is value.
- * @param config - Chat configuration
- * @returns isValid - Whether the configuration is valid
- */
-export const isConfigValid = (config: Config): boolean => {
-  const applicationUrl = config.applicationUrl ?? "";
-  return applicationUrl.length > 0;
-};
-
 type Timer = ReturnType<typeof setInterval>;
 
 /**
  * Call this to create a conversation handler.
- * @param config -
+ * @param configuration - The necessary configuration to create the conversation.
  * @returns The {@link ConversationHandler} is a bundle of functions to interact with the conversation.
+ * @example
+ * ```typescript
+ * import { createConversation } from "@nlx/core";
+ *
+ * const conversation = createConversation({
+ *   applicationUrl: "https://apps.nlx.ai/c/cfab3-243ad-232dc",
+ *   headers: {
+ *     "nlx-api-key": "4393029032-dwsd",
+ *   },
+ *  userId: "abcd-1234",
+ *  languageCode: "en-US",
+ * });
+ * ```
  */
-export function createConversation(config: Config): ConversationHandler {
+export function createConversation(configuration: Config): ConversationHandler {
   let socket: ReconnectingWebSocket | undefined;
   let socketMessageQueue: ApplicationRequest[] = [];
   let socketMessageQueueCheckInterval: Timer | null = null;
@@ -921,7 +915,7 @@ export function createConversation(config: Config): ConversationHandler {
   let voicePlusSocketMessageQueue: VoicePlusMessage[] = [];
   let voicePlusSocketMessageQueueCheckInterval: Timer | null = null;
 
-  const applicationUrl = config.applicationUrl ?? "";
+  const applicationUrl = configuration.applicationUrl ?? "";
 
   // Check if the application URL has a language code appended to it
   if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(applicationUrl)) {
@@ -935,18 +929,18 @@ export function createConversation(config: Config): ConversationHandler {
     Array<EventHandlers[ConversationHandlerEvent]>
   > = { voicePlusCommand: [] };
 
-  const initialConversationId = config.conversationId ?? uuid();
+  const initialConversationId = configuration.conversationId ?? uuid();
 
   let state: InternalState = {
-    responses: config.responses ?? [],
-    languageCode: config.languageCode,
-    userId: config.userId,
+    responses: configuration.responses ?? [],
+    languageCode: configuration.languageCode,
+    userId: configuration.userId,
     conversationId: initialConversationId,
   };
 
   const fullApplicationHttpUrl = (): string =>
     `${normalizeToHttp(applicationUrl)}${
-      config.experimental?.completeApplicationUrl === true
+      configuration.experimental?.completeApplicationUrl === true
         ? ""
         : `-${state.languageCode}`
     }`;
@@ -970,7 +964,7 @@ export function createConversation(config: Config): ConversationHandler {
       type: ResponseType.Failure,
       receivedAt: new Date().getTime(),
       payload: {
-        text: config.failureMessage ?? defaultFailureMessage,
+        text: configuration.failureMessage ?? defaultFailureMessage,
       },
     };
     setState(
@@ -1059,8 +1053,8 @@ export function createConversation(config: Config): ConversationHandler {
       conversationId: state.conversationId,
       ...body,
       languageCode: state.languageCode,
-      channelType: config.experimental?.channelType,
-      environment: config.environment,
+      channelType: configuration.experimental?.channelType,
+      environment: configuration.environment,
     };
     if (isWebsocketUrl(applicationUrl)) {
       if (socket?.readyState === 1) {
@@ -1073,7 +1067,7 @@ export function createConversation(config: Config): ConversationHandler {
         const res = await fetch(fullApplicationHttpUrl(), {
           method: "POST",
           headers: {
-            ...(config.headers ?? {}),
+            ...(configuration.headers ?? {}),
             Accept: "application/json",
             "Content-Type": "application/json",
             "nlx-sdk-version": packageJson.version,
@@ -1115,7 +1109,7 @@ export function createConversation(config: Config): ConversationHandler {
     // If the socket is already set up, tear it down first
     teardownWebsocket();
     const url = new URL(applicationUrl);
-    if (config.experimental?.completeApplicationUrl !== true) {
+    if (configuration.experimental?.completeApplicationUrl !== true) {
       url.searchParams.set("languageCode", state.languageCode);
       url.searchParams.set(
         "channelKey",
@@ -1152,11 +1146,11 @@ export function createConversation(config: Config): ConversationHandler {
   const setupCommandWebsocket = (): void => {
     // If the socket is already set up, tear it down first
     teardownCommandWebsocket();
-    if (config.bidirectional !== true) {
+    if (configuration.bidirectional !== true) {
       return;
     }
     const url = new URL(normalizeToWebsocket(applicationUrl));
-    if (config.experimental?.completeApplicationUrl !== true) {
+    if (configuration.experimental?.completeApplicationUrl !== true) {
       url.searchParams.set("languageCode", state.languageCode);
       url.searchParams.set(
         "channelKey",
@@ -1165,7 +1159,7 @@ export function createConversation(config: Config): ConversationHandler {
     }
     url.searchParams.set("conversationId", state.conversationId);
     url.searchParams.set("type", "voice-plus");
-    const apiKey = config.headers["nlx-api-key"];
+    const apiKey = configuration.headers["nlx-api-key"];
     if (!isWebsocketUrl(applicationUrl) && apiKey != null) {
       url.searchParams.set("apiKey", apiKey);
     }
@@ -1351,7 +1345,7 @@ export function createConversation(config: Config): ConversationHandler {
       const res = await fetch(`${fullApplicationHttpUrl()}/context`, {
         method: "POST",
         headers: {
-          ...(config.headers ?? {}),
+          ...(configuration.headers ?? {}),
           Accept: "application/json",
           "Content-Type": "application/json",
           "nlx-conversation-id": state.conversationId,
@@ -1441,7 +1435,7 @@ export function createConversation(config: Config): ConversationHandler {
       const res = await fetch(`${url}-${state.languageCode}/requestToken`, {
         method: "POST",
         headers: {
-          ...(config.headers ?? {}),
+          ...(configuration.headers ?? {}),
           Accept: "application/json",
           "Content-Type": "application/json",
           "nlx-conversation-id": state.conversationId,
@@ -1505,9 +1499,57 @@ export function createConversation(config: Config): ConversationHandler {
 }
 
 /**
- * Get current expiration timestamp from the current list of reponses
- * @param responses - the current list of user and application responses (first argument in the subscribe callback)
- * @returns an expiration timestamp in Unix Epoch (`new Date().getTime()`), or `null` if this is not known (typically occurs if the application has not responded yet)
+ * Check whether a configuration is valid.
+ * @param configuration - Conversation configuration
+ * @returns Whether the configuration is valid?
+ */
+export const isConfigValid = (configuration: Config): boolean => {
+  const applicationUrl = configuration.applicationUrl ?? "";
+  return applicationUrl.length > 0;
+};
+
+/**
+ * Helper method to decide when a new {@link Config} requires creating a new {@link ConversationHandler} or whether the old `Config`'s
+ * `ConversationHandler` can be used.
+ *
+ * The order of configs doesn't matter.
+ * @param config1 -
+ * @param config2 -
+ * @returns true if `createConversation` should be called again
+ */
+export const shouldReinitialize = (
+  config1: Config,
+  config2: Config,
+): boolean => {
+  return !equals(config1, config2);
+};
+
+/**
+ * Get current expiration timestamp from a list of responses. Can be used to determine if a conversation has timed out.
+ * @example
+ * ```typescript
+ * import { useState } from "react";
+ * import { getCurrentExpirationTimestamp } from "@nlxai/core";
+ *
+ * const [isTimedOut, setIsTimedOut] = useState(false);
+ *
+ * conversation.subscribe((responses) => {
+ *   const expirationTimestamp = getCurrentExpirationTimestamp(responses);
+ *   if (expirationTimestamp != null && expirationTimestamp < new Date().getTime()) {
+ *     setIsTimedOut(true);
+ *   }
+ * });
+ *
+ * return (<div>
+ *   {isTimedOut ? (
+ *     <p>Your session has timed out. Please start a new conversation.</p>
+ *   ) : (
+ *     <p>Your session is active.</p>
+ *   )}
+ * </div>
+ * ```
+ * @param responses - The current list of user and application responses (first argument in the subscribe callback)
+ * @returns An expiration timestamp in Unix Epoch (`new Date().getTime()`), or `null` if this is not known (typically occurs if the application has not responded yet)
  */
 export const getCurrentExpirationTimestamp = (
   responses: Response[],
@@ -1540,18 +1582,18 @@ export const getCurrentExpirationTimestamp = (
  *   console.log(response);
  * });
  * ```
- * @typeParam T - the type of the function's params, e.g. for `sendText` it's `text: string, context?: Context`
+ * @typeParam Params - the type of the function's params, e.g. for `sendText` it's `text: string, context?: Context`
  * @param fn - the function to wrap (e.g. `convo.sendText`, `convo.sendChoice`, etc.)
  * @param convo - the `ConversationHandler` (from {@link createConversation})
  * @param timeout - the timeout in milliseconds
  * @returns A promise-wrapped version of the function. The function, when called, returns a promise that resolves to the Conversation's next response.
  */
-export function promisify<T>(
-  fn: (payload: T) => void,
+export function promisify<Params>(
+  fn: (payload: Params) => void,
   convo: ConversationHandler,
   timeout = 10000,
-): (payload: T) => Promise<Response | null> {
-  return async (payload: T) => {
+): (payload: Params) => Promise<Response | null> {
+  return async (payload: Params) => {
     return await new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         reject(new Error("The request timed out."));

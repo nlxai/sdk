@@ -1,10 +1,12 @@
-/* eslint-disable jsdoc/require-jsdoc */
+ 
 import { clsx } from "clsx";
 import { type FC } from "react";
 import { type IconProps } from "./Icons";
 
 /**
  * Props for the TextButton component
+ * @inline
+ * @hidden
  */
 export interface TextButtonProps {
   /**
@@ -30,6 +32,21 @@ export interface TextButtonProps {
   Icon: FC<IconProps>;
 }
 
+/**
+ * A button with a visible textual label
+ * @example
+ * ```tsx
+ * import { TextButton, ArrowForward, React } from '@nlx/touchpoint-ui';
+ *
+ * const MyTextButton = ({ onClickHandler }) => (
+ *  <TextButton
+ *    onClick={onClickHandler}
+ *    label="Continue"
+ *  />
+ * );
+ * ```
+ * @category Modality components
+ */
 export const TextButton: FC<TextButtonProps> = ({
   onClick,
   label,

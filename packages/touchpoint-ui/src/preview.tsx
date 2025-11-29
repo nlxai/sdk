@@ -1,5 +1,5 @@
-/* eslint-disable jsdoc/require-param */
-/* eslint-disable jsdoc/require-returns */
+ 
+ 
 import { type FC, type ReactNode } from "react";
 import type { ColorMode, Theme } from "./interface";
 import { CustomPropertiesContainer } from "./components/Theme";
