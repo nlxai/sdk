@@ -68,10 +68,10 @@ export type CustomModalityComponent<Data> = ComponentType<{
   className?: string;
 
   /**
-   * Specifies whether the component should include a backdrop blur, e.g. when the UI knows it might overlap with a background element
-   * such as the fullscreen voice ripple.
+   * Tells the component whether it is rendered as an overlay over other elements. In this case, the class `backdrop-blur-overlay` is required
+   * on transparent elements in order to make sure its contents remain visible.
    */
-  backdropBlur?: boolean;
+  renderedAsOverlay?: boolean;
 }>;
 
 /**

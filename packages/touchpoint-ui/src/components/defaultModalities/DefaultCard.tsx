@@ -13,7 +13,7 @@ import { type CardData } from "./shared";
 export const DefaultCard: CustomModalityComponent<CardData> = ({
   data,
   className,
-  backdropBlur,
+  renderedAsOverlay,
 }) => {
   return (
     <CustomCard className={clsx(className)}>
@@ -23,7 +23,7 @@ export const DefaultCard: CustomModalityComponent<CardData> = ({
       {data.rows != null
         ? data.rows.map((row, rowIndex) => (
             <CustomCardRow
-              className={backdropBlur ? "backdrop-blur-overlay" : ""}
+              className={renderedAsOverlay ? "backdrop-blur-overlay" : ""}
               key={rowIndex}
               left={<BaseText faded>{row.label}</BaseText>}
               right={<BaseText>{row.value}</BaseText>}
