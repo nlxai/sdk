@@ -39,71 +39,39 @@ const toCustomProperties = (theme: Theme): CSSProperties => {
   } as CSSProperties;
 };
 
-const lightModeCustomProperties: Theme = {
+const customProperties: Theme = {
   fontFamily: '"Neue Haas Grotesk", sans-serif',
   innerBorderRadius: "12px",
   outerBorderRadius: "20px",
 
-  primary80: "rgba(0, 2, 9, 0.8)",
-  primary60: "rgba(0, 2, 9, 0.6)",
-  primary40: "rgba(0, 2, 9, 0.4)",
-  primary20: "rgba(0, 2, 9, 0.2)",
-  primary10: "rgba(0, 2, 9, 0.1)",
-  primary5: "rgba(0, 2, 9, 0.05)",
-  primary1: "rgba(0, 2, 9, 0.01)",
+  primary80: "light-dark(rgba(0, 2, 9, 0.8), rgba(255, 255, 255, 0.85))",
+  primary60: "light-dark(rgba(0, 2, 9, 0.6), rgba(255, 255, 255, 0.65))",
+  primary40: "light-dark(rgba(0, 2, 9, 0.4), rgba(255, 255, 255, 0.45))",
+  primary20: "light-dark(rgba(0, 2, 9, 0.2), rgba(255, 255, 255, 0.25))",
+  primary10: "light-dark(rgba(0, 2, 9, 0.1), rgba(255, 255, 255, 0.15))",
+  primary5: "light-dark(rgba(0, 2, 9, 0.05), rgba(255, 255, 255, 0.08))",
+  primary1: "light-dark(rgba(0, 2, 9, 0.01), rgba(255, 255, 255, 0.01))",
 
-  secondary80: "rgba(255, 255, 255, 0.85)",
-  secondary60: "rgba(255, 255, 255, 0.65)",
-  secondary40: "rgba(255, 255, 255, 0.45)",
-  secondary20: "rgba(255, 255, 255, 0.25)",
-  secondary10: "rgba(255, 255, 255, 0.15)",
-  secondary5: "rgba(255, 255, 255, 0.08)",
-  secondary1: "rgba(255, 255, 255, 0.01)",
+  secondary80: "light-dark(rgba(255, 255, 255, 0.85), rgba(0, 2, 9, 0.8))",
+  secondary60: "light-dark(rgba(255, 255, 255, 0.65), rgba(0, 2, 9, 0.6))",
+  secondary40: "light-dark(rgba(255, 255, 255, 0.45), rgba(0, 2, 9, 0.4))",
+  secondary20: "light-dark(rgba(255, 255, 255, 0.25), rgba(0, 2, 9, 0.2))",
+  secondary10: "light-dark(rgba(255, 255, 255, 0.15), rgba(0, 2, 9, 0.1))",
+  secondary5: "light-dark(rgba(255, 255, 255, 0.08), rgba(0, 2, 9, 0.05))",
+  secondary1: "light-dark(rgba(255, 255, 255, 0.01), rgba(0, 2, 9, 0.01))",
 
-  accent: "rgb(28, 99, 218)",
-  accent20: "rgba(28, 99, 218, 0.2)",
-  background: "rgba(220, 220, 220, 0.9)",
+  accent: "light-dark(rgb(28, 99, 218), rgb(174, 202, 255))",
+  accent20: "light-dark(rgba(28, 99, 218, 0.2), rgba(174, 202, 255, 0.25))",
+  background: "light-dark(rgba(220, 220, 220, 0.9), rgba(0, 2, 9, 0.9))",
   overlay: "rgba(0, 2, 9, 0.4)",
 
-  warningPrimary: "rgb(220, 159, 3)",
-  warningSecondary: "rgb(255, 242, 209)",
-  errorPrimary: "rgb(157, 3, 3)",
-  errorSecondary: "rgb(255, 223, 230)",
+  warningPrimary: "light-dark(rgb(220, 159, 3), rgb(255, 214, 108))",
+  warningSecondary: "light-dark(rgb(255, 242, 209), rgb(95, 65, 29))",
+  errorPrimary: "light-dark(rgb(157, 3, 3), rgb(255, 133, 162))",
+  errorSecondary: "light-dark(rgb(255, 223, 230), rgb(94, 4, 4))",
 };
 
-const darkModeCustomProperties: Theme = {
-  fontFamily: '"Neue Haas Grotesk", sans-serif',
-  innerBorderRadius: "12px",
-  outerBorderRadius: "20px",
-
-  primary80: "rgba(255, 255, 255, 0.85)",
-  primary60: "rgba(255, 255, 255, 0.65)",
-  primary40: "rgba(255, 255, 255, 0.45)",
-  primary20: "rgba(255, 255, 255, 0.25)",
-  primary10: "rgba(255, 255, 255, 0.15)",
-  primary5: "rgba(255, 255, 255, 0.08)",
-  primary1: "rgba(255, 255, 255, 0.01)",
-
-  secondary80: "rgba(0, 2, 9, 0.8)",
-  secondary60: "rgba(0, 2, 9, 0.6)",
-  secondary40: "rgba(0, 2, 9, 0.4)",
-  secondary20: "rgba(0, 2, 9, 0.2)",
-  secondary10: "rgba(0, 2, 9, 0.1)",
-  secondary5: "rgba(0, 2, 9, 0.05)",
-  secondary1: "rgba(0, 2, 9, 0.01)",
-
-  accent: "rgb(174, 202, 255)",
-  accent20: "rgba(174, 202, 255, 0.25)",
-  background: "rgba(0, 2, 9, 0.9)",
-  overlay: "rgba(0, 2, 9, 0.4)",
-
-  warningPrimary: "rgb(255, 214, 108)",
-  warningSecondary: "rgb(95, 65, 29)",
-  errorPrimary: "rgb(255, 133, 162)",
-  errorSecondary: "rgb(94, 4, 4)",
-};
-
-const intelligentMerge = (theme: Partial<Theme>, base: Theme): Theme => {
+const intelligentMerge = (theme: Partial<Theme>): Theme => {
   const computed: Partial<Theme> = {};
 
   if (theme.accent != null && theme.accent20 == null) {
@@ -139,9 +107,8 @@ const intelligentMerge = (theme: Partial<Theme>, base: Theme): Theme => {
     if (theme.secondary1 == null)
       computed.secondary1 = `rgb(from ${theme.secondary80} r g b / 0.01)`;
   }
-
   return {
-    ...base,
+    ...customProperties,
     ...computed,
     ...theme,
   };
@@ -153,10 +120,7 @@ export const CustomPropertiesContainer: FC<{
   theme?: Partial<Theme>;
   children?: ReactNode;
 }> = ({ colorMode, children, theme, className }) => {
-  const themeWithOverrides: Theme = intelligentMerge(
-    theme ?? {},
-    colorMode === "dark" ? darkModeCustomProperties : lightModeCustomProperties,
-  );
+  const themeWithOverrides: Theme = intelligentMerge(theme ?? {});
   return (
     <div
       className={clsx(className, "font-sans")}
