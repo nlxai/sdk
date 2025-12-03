@@ -20,10 +20,7 @@
       style="width: 40vw; height: 80vh; margin: auto; padding-top: 10vh"
     ></div>
     <script type="module">
-      import {
-        create,
-        html,
-      } from "https://unpkg.com/@nlxai/touchpoint-ui/lib/index.js?module";
+      import { create, html } from "./src/index.tsx";
 
       const touchpoint = await create({
         config: {
@@ -35,14 +32,15 @@
           languageCode: "en-US",
         },
         windowSize: "full",
-        userMessageBubble: true,
-        agentMessageBubble: true,
-        chatMode: true,
+        colorMode: "light dark",
+        // userMessageBubble: true,
+        // agentMessageBubble: true,
+        // chatMode: true,
         theme: {
           accent: "rgba(255, 253, 114, 1)",
-          primary80: "rgba(255, 255, 255, 0.85)",
-          secondary80: "rgba(0, 2, 9, 0.4)",
-          background: "rgba(35, 43, 80, 0.9)",
+          primary80:
+            "light-dark(rgba(12, 12, 200, 0.8), rgba(255, 255, 255, 0.85))",
+
           fontFamily: "'BW Haas Text Mono C 55 Rom Regular', monospace",
         },
       });

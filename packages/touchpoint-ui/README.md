@@ -76,10 +76,10 @@ Optional window size for the chat window, defaults to `half`
 ##### colorMode?
 
 ```ts
-optional colorMode: "dark" | "light";
+optional colorMode: "dark" | "light" | "light dark";
 ```
 
-Optional color mode for the chat window, defaults to `dark`
+Optional color mode for the chat window, defaults to `dark`. Setting `light dark` enables automatic switching based on system settings.
 
 ##### brandIcon?
 
@@ -317,7 +317,21 @@ A list containing the custom commands to set.
 
 ### Theme
 
-The full theme expressed as CSS custom properties
+The full theme expressed as CSS custom properties.
+This means that for instance colors can be made to switch automatically based on the system color mode by using the `light-dark()` CSS function.
+Note also that not all colors need to be provided manually. For instance if only `primary80` is provided, the rest of the primary colors will be computed automatically based on it.
+Therefore, for a fully custom but minimal theme, you only need to provide `accent`, `primary80`, `secondary80`, `background`, `overlay`, and potentially the warning and error colors.
+
+#### Example
+
+```typescript
+const theme: Partial<Theme> = {
+  primary80: "light-dark(rgba(0, 2, 9, 0.8), rgba(255, 255, 255, 0.8))",
+  secondary80: "light-dark(rgba(255, 255, 255, 0.8), rgba(0, 2, 9, 0.8))",
+  accent: "light-dark(rgb(28, 99, 218), rgb(174, 202, 255))",
+  background: "light-dark(rgba(220, 220, 220, 0.9), rgba(0, 2, 9, 0.9))",
+};
+```
 
 #### Properties
 
