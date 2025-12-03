@@ -66,6 +66,12 @@ export type CustomModalityComponent<Data> = ComponentType<{
    * Class name to propagate to the container
    */
   className?: string;
+
+  /**
+   * Tells the component whether it is rendered as an overlay over other elements. In this case, the class `backdrop-blur-overlay` is required
+   * on transparent elements in order to make sure its contents remain visible.
+   */
+  renderedAsOverlay?: boolean;
 }>;
 
 /**

@@ -143,6 +143,10 @@ export interface CustomCardRowProps {
    * Optional icon to be displayed in the center of the row
    */
   icon?: Icon;
+  /**
+   * Class name
+   */
+  className?: string;
 }
 
 /**
@@ -164,10 +168,16 @@ export interface CustomCardRowProps {
 export const CustomCardRow: FC<CustomCardRowProps> = ({
   left,
   right,
+  className,
   icon: Icon,
 }) => {
   return (
-    <div className="flex items-center relative justify-between gap-2 bg-primary-5 px-3 py-4">
+    <div
+      className={clsx(
+        className,
+        "flex items-center relative justify-between gap-2 bg-primary-5 px-3 py-4",
+      )}
+    >
       <div className="space-y-1 text-left">{left}</div>
       <div className="space-y-1 text-right">{right}</div>
       {Icon != null ? (
