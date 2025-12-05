@@ -40,7 +40,8 @@ const toCustomProperties = (theme: Theme): CSSProperties => {
 };
 
 const customProperties: Theme = {
-  fontFamily: '"Neue Haas Grotesk", sans-serif',
+  fontFamily:
+    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
   innerBorderRadius: "12px",
   outerBorderRadius: "20px",
 
