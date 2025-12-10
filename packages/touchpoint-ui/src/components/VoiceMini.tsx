@@ -114,7 +114,7 @@ export const VoiceMini: FC<{
   const brandIconView =
     brandIcon != null ? (
       <img
-        className="w-10 h-10 block flex-none"
+        className="w-10 h-10 block flex-none object-contain object-center"
         src={brandIcon}
         role="presentation"
       />
