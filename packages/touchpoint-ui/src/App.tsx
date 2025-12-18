@@ -40,6 +40,9 @@ import { VoiceMini } from "./components/VoiceMini";
 import { gatherAutomaticContext } from "./bidirectional/automaticContext";
 import { commandHandler } from "./bidirectional/commandHandler";
 import { RiveAnimation } from "./components/RiveAnimation";
+import { IconButton } from "./components/ui/IconButton";
+import { ArrowLeft, Check } from "./components/ui/Icons";
+import { TextButton } from "./components/ui/TextButton";
 
 /**
  * Main Touchpoint creation properties object
@@ -316,6 +319,15 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     setVoiceKey((prev) => prev + 1);
   };
 
+  const [submittingComment, setSubmittingComment] = useState<{
+    commentText: string;
+    feedbackUrl: string;
+  } | null>(null);
+
+  const startFeedbackComment = useCallback((feedbackUrl: string) => {
+    setSubmittingComment({ commentText: "", feedbackUrl });
+  }, []);
+
   if (handler == null) {
     return null;
   }
@@ -407,11 +419,36 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           chatMode={props.chatMode ?? false}
           isWaiting={isWaiting}
           lastApplicationResponseIndex={lastApplicationResponse?.index}
-          responses={responses}
+          responses={responses.map((res) =>
+            res.type === ResponseType.Application
+              ? {
+                  ...res,
+                  payload: {
+                    ...res.payload,
+                    // Remove any upload URLs from messages to avoid confusion
+                    metadata: {
+                      ...res.payload.metadata,
+                      feedbackUrl:
+                        "https://dev.mm.nlx.ai/v1/feedback?nonce=vrNxL%2BuBSuMfK6ebXkSk8lTlnZu2iTms7OW2SiHZwsM%3D.NDg1ZWQ4NzMtZGZiYy00OWIzLWJlOTQtNjEwNjkyNTdkZTVjOjE5NWQ2NTEzLTJhNDYtNGQ2NS05MjFhLTYwZTdmNTJkMzAzMjoxZjNlOTRiNi1mNzIxLTQ2NDQtODJkMS02ZTE0N2U1MDAzZjk6MTc2NjA1NzM2MjE5Mg%3D%3D",
+                      feedbackConfig: {
+                        feedbackId: "ae1132f3-ff4c-4dcb-8f3d-821f6f3e4e12",
+                        feedbackName: "General Feedback",
+                        feedbackType: {
+                          type: "binary",
+                        },
+                        labels: {},
+                        commentsEnabled: true,
+                      },
+                    },
+                  },
+                }
+              : res,
+          )}
           colorMode={colorMode}
           handler={handler}
           uploadedFiles={uploadedFiles}
           modalityComponents={modalityComponents}
+          startFeedbackComment={startFeedbackComment}
           className={clsx(
             "grow",
             windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
@@ -469,67 +506,115 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           },
         )}
       >
-        <Header
-          windowSize={props.embedded ? "embedded" : windowSize}
-          errorThemedCloseButton={input === "voice"}
-          speakerControls={
-            input === "voice"
-              ? {
-                  enabled: fullscreenVoiceSpeakersEnabled,
-                  setEnabled: setFullscreenVoiceSpeakersEnabled,
-                }
-              : undefined
-          }
-          colorMode={colorMode}
-          brandIcon={
-            /* In fullscreen voice mode, a separate header brand icon is not necessary because a brand icon+ripple are rendered in the middle */
-            input === "text" ? props.brandIcon : undefined
-          }
-          isSettingsOpen={isSettingsOpen}
-          enabled={props.enabled}
-          toggleSettings={
-            props.enableSettings
-              ? () => {
-                  setIsSettingsOpen((prev) => !prev);
-                }
-              : undefined
-          }
-          renderCollapse={props.onClose != null}
-          collapse={onClose}
-          reset={reset}
-        />
-        {input === "text" ? (
-          textContent()
+        {submittingComment != null ? (
+          <form
+            className="flex flex-col grow p-2 gap-2.5"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handler
+                .submitFeedback(submittingComment.feedbackUrl, {
+                  text: submittingComment.commentText,
+                })
+                .then(() => {
+                  setSubmittingComment(null);
+                });
+            }}
+          >
+            <div className="flex items-center gap-2.5">
+              <IconButton
+                type="ghost"
+                Icon={ArrowLeft}
+                label="Back"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setSubmittingComment(null);
+                }}
+              />
+              <h2 className="">Provide feedback</h2>
+            </div>
+            <textarea
+              className="grow bg-primary-5 rounded-2xl p-2"
+              placeholder="Enter your feedback..."
+              value={submittingComment.commentText}
+              onChange={(e) => {
+                setSubmittingComment((prev) =>
+                  prev ? { ...prev, commentText: e.target.value } : null,
+                );
+              }}
+            ></textarea>
+            <TextButton
+              type="main"
+              label="Submit"
+              Icon={Check}
+              onClick={() => {}}
+            />
+          </form>
         ) : (
           <>
-            {isSettingsOpen ? (
-              <Settings
-                className={clsx(
-                  "flex-none",
-                  windowSize === "full"
-                    ? "w-full md:max-w-content md:mx-auto"
-                    : "",
-                )}
-                onClose={() => {
-                  setIsSettingsOpen(false);
-                }}
-                reset={() => {
-                  reset();
-                  setIsSettingsOpen(false);
-                }}
-                handler={handler}
-              />
-            ) : null}
-            <FullscreenVoice
-              key={voiceKey}
-              brandIcon={props.brandIcon}
-              handler={handler}
-              speakersEnabled={fullscreenVoiceSpeakersEnabled}
+            <Header
+              windowSize={props.embedded ? "embedded" : windowSize}
+              errorThemedCloseButton={input === "voice"}
+              speakerControls={
+                input === "voice"
+                  ? {
+                      enabled: fullscreenVoiceSpeakersEnabled,
+                      setEnabled: setFullscreenVoiceSpeakersEnabled,
+                    }
+                  : undefined
+              }
               colorMode={colorMode}
-              className={isSettingsOpen ? "hidden" : "grow"}
-              context={props.initialContext}
-              modalityComponents={modalityComponents}
+              brandIcon={
+                /* In fullscreen voice mode, a separate header brand icon is not necessary because a brand icon+ripple are rendered in the middle */
+                input === "text" ? props.brandIcon : undefined
+              }
+              isSettingsOpen={isSettingsOpen}
+              enabled={props.enabled}
+              toggleSettings={
+                props.enableSettings
+                  ? () => {
+                      setIsSettingsOpen((prev) => !prev);
+                    }
+                  : undefined
+              }
+              renderCollapse={props.onClose != null}
+              collapse={onClose}
+              reset={reset}
             />
+            {input === "text" ? (
+              textContent()
+            ) : (
+              <>
+                {isSettingsOpen ? (
+                  <Settings
+                    className={clsx(
+                      "flex-none",
+                      windowSize === "full"
+                        ? "w-full md:max-w-content md:mx-auto"
+                        : "",
+                    )}
+                    onClose={() => {
+                      setIsSettingsOpen(false);
+                    }}
+                    reset={() => {
+                      reset();
+                      setIsSettingsOpen(false);
+                    }}
+                    handler={handler}
+                  />
+                ) : null}
+                <FullscreenVoice
+                  key={voiceKey}
+                  brandIcon={props.brandIcon}
+                  handler={handler}
+                  speakersEnabled={fullscreenVoiceSpeakersEnabled}
+                  colorMode={colorMode}
+                  className={isSettingsOpen ? "hidden" : "grow"}
+                  context={props.initialContext}
+                  modalityComponents={modalityComponents}
+                />
+              </>
+            )}
           </>
         )}
       </div>

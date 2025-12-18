@@ -169,6 +169,16 @@ export interface ConversationHandler {
    * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
    */
   sendStructured: (request: StructuredRequest, context?: Context) => void;
+
+  /**
+   * Submit feedback about a response.
+   * @param url - The URL comming from the Application response `metadata.feedbackURL` field.
+   * @param feedback - Either a boolean indicating helpfulness or a textual comment.
+   */
+  submitFeedback: (
+    url: string,
+    feedback: { isHelpful: boolean } | { text: string },
+  ) => Promise<void>;
   /**
    * Subscribe a callback to the conversation. On subscribe, the subscriber will receive all of the Responses that the conversation has already received.
    * @param subscriber - The callback to subscribe
@@ -391,6 +401,18 @@ export interface ApplicationResponseMetadata {
    * Knowledge base sources
    */
   sources?: KnowledgeBaseResponseSource[];
+
+  /**
+   * URL to use for submitting feedback about this response. See `feedbackConfig` for what the expected feedback type is.
+   *
+   * You can pass this as the first argument to `submitFeedback`.
+   */
+  feedbackUrl?: string;
+
+  /**
+   * If present, the application would like to collect feedback from the user.
+   */
+  feedbackConfig?: FeedbackConfiguration;
 }
 
 /**
@@ -596,6 +618,54 @@ export type Response = ApplicationResponse | UserResponse | FailureMessage;
  * The time value in milliseconds since midnight, January 1, 1970 UTC.
  */
 export type Time = number;
+
+/**
+ * Configuration for feedback collection. You can use this to render an appropriate feedback widget in your application.
+ */
+export interface FeedbackConfiguration {
+  /** Unique identifier for the feedback collection. */
+  feedbackId: string;
+  /** Human readable name of this feedback collection. */
+  feedbackName: string;
+  /**
+   * Type of feedback being collected.
+   * At the moment only binary feedback is supported, but we plan to introduce more types in the future.
+   * Hence your code should make sure to check the `type` attribute to make sure the expected feedback type is handled.
+   */
+  feedbackType: FeedbackType;
+  /** Whether comments are enabled for this feedback collection. */
+  commentsEnabled: boolean;
+  /** Optional question to show to the user when collecting feedback. */
+  question?: string;
+  /** Labels for individual feedback UI elements as customised by the builder. */
+  labels: {
+    /** Label for positive feedback */
+    positive?: string;
+    /** Label for negative feedback */
+    negative?: string;
+  };
+}
+
+/**
+ * @inline @hidden
+ */
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+export type FeedbackType = {
+  /** A binary feedback type is a thumbs up/down sort of choice. */
+  type: "binary";
+  /** Configuration specific to binary feedback. */
+  config: BinaryFeedbackConfig;
+};
+
+/**
+ * @inline @hidden
+ */
+export interface BinaryFeedbackConfig {
+  /** Value to send for positive feedback. Default `1`. */
+  positiveValue: number;
+  /** Value to send for negative feedback. Default `-1`. */
+  negativeValue: number;
+}
 
 // Config and state
 
@@ -1411,6 +1481,26 @@ export function createConversation(configuration: Config): ConversationHandler {
       sendFlow(welcomeIntent, context);
     },
     sendChoice,
+    submitFeedback: async (feedbackUrl, feedback): Promise<void> => {
+      const res = await fetch(feedbackUrl, {
+        method: "POST",
+        headers: {
+          ...(configuration.headers ?? {}),
+          "Content-Type": "application/json",
+          "nlx-conversation-id": state.conversationId,
+          "nlx-sdk-version": packageJson.version,
+        },
+        body: JSON.stringify({
+          languageCode: state.languageCode,
+          conversationId: state.conversationId,
+          userId: state.userId,
+          ...feedback,
+        }),
+      });
+      if (res.status >= 400) {
+        throw new Error(`Responded with ${res.status}`);
+      }
+    },
     currentConversationId: () => {
       return state.conversationId;
     },

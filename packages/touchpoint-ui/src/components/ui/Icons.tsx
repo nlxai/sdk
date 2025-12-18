@@ -149,6 +149,17 @@ export const Attachment: Icon = (props) => {
   );
 };
 
+export const BotMessage: Icon = (props) => {
+  return (
+    <svg viewBox="0 0 12 12" {...iconSvgProps(props)}>
+      <path
+        d="M10 1H2C1.45 1 1.005 1.45 1.005 2L1 11L3 9H10C10.55 9 11 8.55 11 8V2C11 1.45 10.55 1 10 1ZM6 7H3V6H6V7ZM9 5.5H3V4.5H9V5.5ZM9 4H3V3H9V4Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
 export const Camera: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>

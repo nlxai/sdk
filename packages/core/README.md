@@ -224,7 +224,6 @@ export default async function (req: Request): Promise<Response> {
 # API reference
 
 <!-- include docs/README.md -->
-
 ## Functions
 
 ### createConversation()
@@ -738,6 +737,36 @@ Send a combination of choice, slots, and intent in one request.
 
 `void`
 
+##### submitFeedback()
+
+```ts
+submitFeedback: (url, feedback) => Promise<void>;
+```
+
+Submit feedback about a response.
+
+###### Parameters
+
+###### url
+
+`string`
+
+The URL comming from the Application response `metadata.feedbackURL` field.
+
+###### feedback
+
+Either a boolean indicating helpfulness or a textual comment.
+
+\{
+`isHelpful`: `boolean`;
+\} | \{
+`text`: `string`;
+\}
+
+###### Returns
+
+`Promise`\<`void`\>
+
 ##### subscribe()
 
 ```ts
@@ -1132,6 +1161,24 @@ optional sources: KnowledgeBaseResponseSource[];
 
 Knowledge base sources
 
+##### feedbackUrl?
+
+```ts
+optional feedbackUrl: string;
+```
+
+URL to use for submitting feedback about this response. See `feedbackConfig` for what the expected feedback type is.
+
+You can pass this as the first argument to `submitFeedback`.
+
+##### feedbackConfig?
+
+```ts
+optional feedbackConfig: FeedbackConfiguration;
+```
+
+If present, the application would like to collect feedback from the user.
+
 ---
 
 ### KnowledgeBaseResponseSource
@@ -1388,6 +1435,112 @@ receivedAt: number;
 ```
 
 When the failure occurred.
+
+---
+
+### FeedbackConfiguration
+
+Configuration for feedback collection. You can use this to render an appropriate feedback widget in your application.
+
+#### Properties
+
+##### feedbackId
+
+```ts
+feedbackId: string;
+```
+
+Unique identifier for the feedback collection.
+
+##### feedbackName
+
+```ts
+feedbackName: string;
+```
+
+Human readable name of this feedback collection.
+
+##### feedbackType
+
+```ts
+feedbackType: object;
+```
+
+Type of feedback being collected.
+At the moment only binary feedback is supported, but we plan to introduce more types in the future.
+Hence your code should make sure to check the `type` attribute to make sure the expected feedback type is handled.
+
+###### type
+
+```ts
+type: "binary";
+```
+
+A binary feedback type is a thumbs up/down sort of choice.
+
+###### config
+
+```ts
+config: object;
+```
+
+Configuration specific to binary feedback.
+
+###### config.positiveValue
+
+```ts
+positiveValue: number;
+```
+
+Value to send for positive feedback. Default `1`.
+
+###### config.negativeValue
+
+```ts
+negativeValue: number;
+```
+
+Value to send for negative feedback. Default `-1`.
+
+##### commentsEnabled
+
+```ts
+commentsEnabled: boolean;
+```
+
+Whether comments are enabled for this feedback collection.
+
+##### question?
+
+```ts
+optional question: string;
+```
+
+Optional question to show to the user when collecting feedback.
+
+##### labels
+
+```ts
+labels: object;
+```
+
+Labels for individual feedback UI elements as customised by the builder.
+
+###### positive?
+
+```ts
+optional positive: string;
+```
+
+Label for positive feedback
+
+###### negative?
+
+```ts
+optional negative: string;
+```
+
+Label for negative feedback
 
 ---
 
@@ -1953,3 +2106,4 @@ The callback function for listening to all responses.
 #### Returns
 
 `void`
+
