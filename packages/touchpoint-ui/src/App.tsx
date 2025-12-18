@@ -419,31 +419,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           chatMode={props.chatMode ?? false}
           isWaiting={isWaiting}
           lastApplicationResponseIndex={lastApplicationResponse?.index}
-          responses={responses.map((res) =>
-            res.type === ResponseType.Application
-              ? {
-                  ...res,
-                  payload: {
-                    ...res.payload,
-                    // Remove any upload URLs from messages to avoid confusion
-                    metadata: {
-                      ...res.payload.metadata,
-                      feedbackUrl:
-                        "https://dev.mm.nlx.ai/v1/feedback?nonce=vrNxL%2BuBSuMfK6ebXkSk8lTlnZu2iTms7OW2SiHZwsM%3D.NDg1ZWQ4NzMtZGZiYy00OWIzLWJlOTQtNjEwNjkyNTdkZTVjOjE5NWQ2NTEzLTJhNDYtNGQ2NS05MjFhLTYwZTdmNTJkMzAzMjoxZjNlOTRiNi1mNzIxLTQ2NDQtODJkMS02ZTE0N2U1MDAzZjk6MTc2NjA1NzM2MjE5Mg%3D%3D",
-                      feedbackConfig: {
-                        feedbackId: "ae1132f3-ff4c-4dcb-8f3d-821f6f3e4e12",
-                        feedbackName: "General Feedback",
-                        feedbackType: {
-                          type: "binary",
-                        },
-                        labels: {},
-                        commentsEnabled: true,
-                      },
-                    },
-                  },
-                }
-              : res,
-          )}
+          responses={responses}
           colorMode={colorMode}
           handler={handler}
           uploadedFiles={uploadedFiles}
