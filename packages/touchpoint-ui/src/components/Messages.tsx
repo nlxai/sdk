@@ -389,10 +389,7 @@ export const Messages: FC<MessagesProps> = ({
           );
         })}
         {chatMode && isWaiting ? (
-          <div className="text-primary-60 flex items-center gap-1 text-base">
-            <span className="w-5 h-5 block flex-none text-accent">
-              <LoaderAnimation />
-            </span>
+          <div className="text-primary-60 flex items-center gap-1 text-base shimmer w-fit">
             Thinking...
           </div>
         ) : null}
