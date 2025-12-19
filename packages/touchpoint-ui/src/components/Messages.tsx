@@ -11,7 +11,7 @@ import { clsx } from "clsx";
 import { marked } from "marked";
 
 import { ErrorMessage } from "./ErrorMessage";
-import { LoaderAnimation, Loader } from "./ui/Loader";
+import { Loader } from "./ui/Loader";
 import { TextButton } from "./ui/TextButton";
 import { ArrowForward, ArrowRight, ArrowDown, OpenLink } from "./ui/Icons";
 import { UnsemanticIconButton } from "./ui/IconButton";
