@@ -173,11 +173,11 @@ export interface ConversationHandler {
   /**
    * Submit feedback about a response.
    * @param url - The URL comming from the Application response `metadata.feedbackURL` field.
-   * @param feedback - Either a boolean indicating helpfulness or a textual comment.
+   * @param feedback - Either a numerical rating or a textual comment.
    */
   submitFeedback: (
     url: string,
-    feedback: { isHelpful: boolean } | { text: string },
+    feedback: { rating: number } | { comment: string },
   ) => Promise<void>;
   /**
    * Subscribe a callback to the conversation. On subscribe, the subscriber will receive all of the Responses that the conversation has already received.
@@ -1485,10 +1485,7 @@ export function createConversation(configuration: Config): ConversationHandler {
       const res = await fetch(feedbackUrl, {
         method: "POST",
         headers: {
-          ...(configuration.headers ?? {}),
           "Content-Type": "application/json",
-          "nlx-conversation-id": state.conversationId,
-          "nlx-sdk-version": packageJson.version,
         },
         body: JSON.stringify({
           languageCode: state.languageCode,

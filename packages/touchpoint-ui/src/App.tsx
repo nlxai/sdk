@@ -40,9 +40,9 @@ import { VoiceMini } from "./components/VoiceMini";
 import { gatherAutomaticContext } from "./bidirectional/automaticContext";
 import { commandHandler } from "./bidirectional/commandHandler";
 import { RiveAnimation } from "./components/RiveAnimation";
-import { IconButton } from "./components/ui/IconButton";
-import { ArrowLeft, Check } from "./components/ui/Icons";
-import { TextButton } from "./components/ui/TextButton";
+
+import { useFeedback } from "./feedback";
+import { FeedbackComment } from "./components/FeedbackComment";
 
 /**
  * Main Touchpoint creation properties object
@@ -319,14 +319,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     setVoiceKey((prev) => prev + 1);
   };
 
-  const [submittingComment, setSubmittingComment] = useState<{
-    commentText: string;
-    feedbackUrl: string;
-  } | null>(null);
-
-  const startFeedbackComment = useCallback((feedbackUrl: string) => {
-    setSubmittingComment({ commentText: "", feedbackUrl });
-  }, []);
+  const [feedbackState, feedbackActions] = useFeedback(handler);
 
   if (handler == null) {
     return null;
@@ -424,7 +417,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           handler={handler}
           uploadedFiles={uploadedFiles}
           modalityComponents={modalityComponents}
-          startFeedbackComment={startFeedbackComment}
+          feedbackState={feedbackState}
+          feedbackActions={feedbackActions}
           className={clsx(
             "grow",
             windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
@@ -482,50 +476,11 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           },
         )}
       >
-        {submittingComment != null ? (
-          <form
-            className="flex flex-col grow p-2 gap-2.5"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handler
-                .submitFeedback(submittingComment.feedbackUrl, {
-                  comment: submittingComment.commentText,
-                })
-                .then(() => {
-                  setSubmittingComment(null);
-                });
-            }}
-          >
-            <div className="flex items-center gap-2.5">
-              <IconButton
-                type="ghost"
-                Icon={ArrowLeft}
-                label="Back"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setSubmittingComment(null);
-                }}
-              />
-              <h2 className="">Provide feedback</h2>
-            </div>
-            <textarea
-              className="grow bg-primary-5 rounded-2xl p-2"
-              placeholder="Enter your feedback..."
-              value={submittingComment.commentText}
-              onChange={(e) => {
-                setSubmittingComment((prev) =>
-                  prev ? { ...prev, commentText: e.target.value } : null,
-                );
-              }}
-            ></textarea>
-            <TextButton
-              type="main"
-              label="Submit"
-              Icon={Check}
-              onClick={() => {}}
-            />
-          </form>
+        {feedbackState.comment.state !== "idle" ? (
+          <FeedbackComment
+            feedbackActions={feedbackActions}
+            feedbackState={feedbackState}
+          />
         ) : (
           <>
             <Header

@@ -23,10 +23,11 @@ import {
   ThumbDown,
   BotMessage,
 } from "./ui/Icons";
-import { IconButton, UnsemanticIconButton } from "./ui/IconButton";
+import { UnsemanticIconButton } from "./ui/IconButton";
 import { type CustomModalityComponent, type ColorMode } from "../interface";
 import { ErrorBoundary } from "react-error-boundary";
 import { MessageButton } from "./ui/MessageButton";
+import * as Feedback from "../feedback";
 
 export interface MessagesProps {
   isWaiting: boolean;
@@ -41,7 +42,8 @@ export interface MessagesProps {
   modalityComponents: Record<string, CustomModalityComponent<unknown>>;
   className?: string;
   enabled: boolean;
-  startFeedbackComment: (feedbackUrl: string) => void;
+  feedbackState: Feedback.State;
+  feedbackActions: Feedback.Actions;
 }
 
 export const MessageChoices: FC<{
@@ -224,80 +226,61 @@ const Sources: FC<{ sources: KnowledgeBaseResponseSource[] }> = ({
   );
 };
 
-const toggle =
-  (value: string) =>
-  (set: Set<string>): Set<string> => {
-    const newSet = new Set(set);
-    if (newSet.has(value)) {
-      newSet.delete(value);
-    } else {
-      newSet.add(value);
-    }
-    return newSet;
-  };
-
 const FeedbackCollection: FC<{
   feedbackUrl: string;
   feedbackConfig: FeedbackConfiguration;
-  conversationHandler: ConversationHandler;
-  startFeedbackComment: (feedbackUrl: string) => void;
-}> = ({
-  feedbackUrl,
-  feedbackConfig,
-  conversationHandler,
-  startFeedbackComment,
-}) => {
-  const [buttonsClicked, setButtonsClicked] = useState<Set<string>>(new Set());
-  return (
-    <div className="mt-4">
-      {/* Currently only binary feedback is supported */}
-      {feedbackConfig.feedbackType.type === "binary" ? (
+  feedbackState: Feedback.State;
+  feedbackActions: Feedback.Actions;
+}> = ({ feedbackUrl, feedbackConfig, feedbackState, feedbackActions }) => {
+  const localState = Feedback.getFeedbackInfo(feedbackState, feedbackUrl);
+
+  /* Currently only binary feedback is supported */
+  if (feedbackConfig.feedbackType.type === "binary") {
+    const { positiveValue, negativeValue } = feedbackConfig.feedbackType.config;
+
+    return (
+      <div className="mt-4">
         <div className="flex items-center gap-0.5">
           <span className="text-sm text-primary-60">
             {feedbackConfig.question ?? "Was this response helpful?"}
           </span>
 
-          {buttonsClicked.has("negative") ? null : (
+          {localState.rating == null || localState.rating === positiveValue ? (
             <MessageButton
-              type={buttonsClicked.has("positive") ? "activated" : "main"}
+              type={localState.rating === positiveValue ? "activated" : "main"}
               label={feedbackConfig.labels.positive ?? "Yes"}
               onClick={() => {
-                setButtonsClicked(toggle("positive"));
-                conversationHandler.submitFeedback(feedbackUrl, {
-                  isHelpful: true,
-                });
+                feedbackActions.clickRating(feedbackUrl, positiveValue);
               }}
               Icon={ThumbUp}
             />
-          )}
-          {buttonsClicked.has("positive") ? null : (
+          ) : null}
+          {localState.rating == null || localState.rating === negativeValue ? (
             <MessageButton
-              type={buttonsClicked.has("negative") ? "activated" : "main"}
+              type={localState.rating === negativeValue ? "activated" : "main"}
               label={feedbackConfig.labels.negative ?? "No"}
               onClick={() => {
-                setButtonsClicked(toggle("negative"));
-                conversationHandler.submitFeedback(feedbackUrl, {
-                  isHelpful: false,
-                });
+                feedbackActions.clickRating(feedbackUrl, negativeValue);
               }}
               Icon={ThumbDown}
             />
-          )}
-          {feedbackConfig.commentsEnabled === true ? (
+          ) : null}
+          {feedbackConfig.commentsEnabled ? (
             <MessageButton
-              type={buttonsClicked.has("comment") ? "activated" : "main"}
+              type={localState.commentSubmitted ? "activated" : "main"}
               label="Add comment"
               onClick={() => {
-                setButtonsClicked(toggle("comment"));
-                startFeedbackComment(feedbackUrl);
+                feedbackActions.clickCommentButton(feedbackUrl);
               }}
               Icon={BotMessage}
             />
           ) : null}
         </div>
-      ) : null}
-    </div>
-  );
+      </div>
+    );
+  } else {
+    return null;
+  }
 };
 
 export const Messages: FC<MessagesProps> = ({
@@ -313,7 +296,8 @@ export const Messages: FC<MessagesProps> = ({
   handler,
   className,
   enabled,
-  startFeedbackComment,
+  feedbackState,
+  feedbackActions,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -458,8 +442,8 @@ export const Messages: FC<MessagesProps> = ({
                   <FeedbackCollection
                     feedbackUrl={response.payload.metadata.feedbackUrl}
                     feedbackConfig={response.payload.metadata.feedbackConfig}
-                    conversationHandler={handler}
-                    startFeedbackComment={startFeedbackComment}
+                    feedbackState={feedbackState}
+                    feedbackActions={feedbackActions}
                   />
                 ) : null}
               </div>
