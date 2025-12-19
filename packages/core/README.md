@@ -755,12 +755,12 @@ The URL comming from the Application response `metadata.feedbackURL` field.
 
 ###### feedback
 
-Either a boolean indicating helpfulness or a textual comment.
+Either a numerical rating or a textual comment.
 
 \{
-`isHelpful`: `boolean`;
+`rating`: `number`;
 \} | \{
-`text`: `string`;
+`comment`: `string`;
 \}
 
 ###### Returns
