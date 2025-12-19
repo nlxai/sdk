@@ -489,7 +489,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               e.preventDefault();
               handler
                 .submitFeedback(submittingComment.feedbackUrl, {
-                  text: submittingComment.commentText,
+                  comment: submittingComment.commentText,
                 })
                 .then(() => {
                   setSubmittingComment(null);
