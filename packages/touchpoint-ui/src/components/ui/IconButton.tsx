@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
-import { MouseEventHandler, type FC } from "react";
+import { type MouseEventHandler, type FC } from "react";
 
 import { type IconProps } from "./Icons";
 
