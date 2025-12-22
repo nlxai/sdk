@@ -177,7 +177,7 @@ export interface ConversationHandler {
    */
   submitFeedback: (
     url: string,
-    feedback: { rating: number } | { comment: string },
+    feedback: { rating?: number; comment?: string },
   ) => Promise<void>;
   /**
    * Subscribe a callback to the conversation. On subscribe, the subscriber will receive all of the Responses that the conversation has already received.

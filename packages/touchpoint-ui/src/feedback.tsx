@@ -151,7 +151,6 @@ const reducer = (state: State, action: Action): State => {
               ? state.comment.activeFeedbackUrl
               : "",
           text: state.comment.state === "submitting" ? state.comment.text : "",
-
           state: "error",
         },
       };
@@ -198,6 +197,11 @@ const actions = (
       })
       .then(() => {
         dispatch({ type: "CLICK_RATING", value, feedbackUrl });
+      })
+      .catch((err: any) => {
+        // TODO: add proper error handling
+        // eslint-disable-next-line no-console
+        console.warn("Rating error", err);
       });
   },
   clickCommentButton: (feedbackUrl: string) => {
