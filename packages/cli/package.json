@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/cli",
-  "version": "1.2.4-alpha.0",
+  "version": "1.2.4-alpha.1",
   "description": "Tools for integrating with NLX apps",
   "keywords": [
     "NLX",
@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@inquirer/prompts": "^7.8.4",
-    "@nlxai/core": "^1.2.4-alpha.0",
+    "@nlxai/core": "^1.2.4-alpha.1",
     "boxen": "^8.0.1",
     "chalk": "^4.1.0",
     "commander": "^14.0",
