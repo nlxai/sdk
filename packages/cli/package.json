@@ -57,5 +57,6 @@
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
     "vitest": "^3.2.4"
-  }
+  },
+  "gitHead": "49fa71d3a638ad45e74800327d532b9ec4db1488"
 }
