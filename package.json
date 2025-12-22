@@ -29,6 +29,6 @@
   "author": "Peter Szerzo <peter@nlx.ai>",
   "license": "MIT",
   "devDependencies": {
-    "lerna": "^8.0"
+    "lerna": "^9.0"
   }
 }
