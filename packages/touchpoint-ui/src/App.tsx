@@ -41,6 +41,9 @@ import { gatherAutomaticContext } from "./bidirectional/automaticContext";
 import { commandHandler } from "./bidirectional/commandHandler";
 import { RiveAnimation } from "./components/RiveAnimation";
 
+import { useFeedback } from "./feedback";
+import { FeedbackComment } from "./components/FeedbackComment";
+
 /**
  * Main Touchpoint creation properties object
  */
@@ -316,6 +319,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     setVoiceKey((prev) => prev + 1);
   };
 
+  const [feedbackState, feedbackActions] = useFeedback(handler);
+
   if (handler == null) {
     return null;
   }
@@ -412,6 +417,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           handler={handler}
           uploadedFiles={uploadedFiles}
           modalityComponents={modalityComponents}
+          feedbackState={feedbackState}
+          feedbackActions={feedbackActions}
           className={clsx(
             "grow",
             windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
@@ -469,67 +476,76 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           },
         )}
       >
-        <Header
-          windowSize={props.embedded ? "embedded" : windowSize}
-          errorThemedCloseButton={input === "voice"}
-          speakerControls={
-            input === "voice"
-              ? {
-                  enabled: fullscreenVoiceSpeakersEnabled,
-                  setEnabled: setFullscreenVoiceSpeakersEnabled,
-                }
-              : undefined
-          }
-          colorMode={colorMode}
-          brandIcon={
-            /* In fullscreen voice mode, a separate header brand icon is not necessary because a brand icon+ripple are rendered in the middle */
-            input === "text" ? props.brandIcon : undefined
-          }
-          isSettingsOpen={isSettingsOpen}
-          enabled={props.enabled}
-          toggleSettings={
-            props.enableSettings
-              ? () => {
-                  setIsSettingsOpen((prev) => !prev);
-                }
-              : undefined
-          }
-          renderCollapse={props.onClose != null}
-          collapse={onClose}
-          reset={reset}
-        />
-        {input === "text" ? (
-          textContent()
+        {feedbackState.comment.state !== "idle" ? (
+          <FeedbackComment
+            feedbackActions={feedbackActions}
+            feedbackState={feedbackState}
+          />
         ) : (
           <>
-            {isSettingsOpen ? (
-              <Settings
-                className={clsx(
-                  "flex-none",
-                  windowSize === "full"
-                    ? "w-full md:max-w-content md:mx-auto"
-                    : "",
-                )}
-                onClose={() => {
-                  setIsSettingsOpen(false);
-                }}
-                reset={() => {
-                  reset();
-                  setIsSettingsOpen(false);
-                }}
-                handler={handler}
-              />
-            ) : null}
-            <FullscreenVoice
-              key={voiceKey}
-              brandIcon={props.brandIcon}
-              handler={handler}
-              speakersEnabled={fullscreenVoiceSpeakersEnabled}
+            <Header
+              windowSize={props.embedded ? "embedded" : windowSize}
+              errorThemedCloseButton={input === "voice"}
+              speakerControls={
+                input === "voice"
+                  ? {
+                      enabled: fullscreenVoiceSpeakersEnabled,
+                      setEnabled: setFullscreenVoiceSpeakersEnabled,
+                    }
+                  : undefined
+              }
               colorMode={colorMode}
-              className={isSettingsOpen ? "hidden" : "grow"}
-              context={props.initialContext}
-              modalityComponents={modalityComponents}
+              brandIcon={
+                /* In fullscreen voice mode, a separate header brand icon is not necessary because a brand icon+ripple are rendered in the middle */
+                input === "text" ? props.brandIcon : undefined
+              }
+              isSettingsOpen={isSettingsOpen}
+              enabled={props.enabled}
+              toggleSettings={
+                props.enableSettings
+                  ? () => {
+                      setIsSettingsOpen((prev) => !prev);
+                    }
+                  : undefined
+              }
+              renderCollapse={props.onClose != null}
+              collapse={onClose}
+              reset={reset}
             />
+            {input === "text" ? (
+              textContent()
+            ) : (
+              <>
+                {isSettingsOpen ? (
+                  <Settings
+                    className={clsx(
+                      "flex-none",
+                      windowSize === "full"
+                        ? "w-full md:max-w-content md:mx-auto"
+                        : "",
+                    )}
+                    onClose={() => {
+                      setIsSettingsOpen(false);
+                    }}
+                    reset={() => {
+                      reset();
+                      setIsSettingsOpen(false);
+                    }}
+                    handler={handler}
+                  />
+                ) : null}
+                <FullscreenVoice
+                  key={voiceKey}
+                  brandIcon={props.brandIcon}
+                  handler={handler}
+                  speakersEnabled={fullscreenVoiceSpeakersEnabled}
+                  colorMode={colorMode}
+                  className={isSettingsOpen ? "hidden" : "grow"}
+                  context={props.initialContext}
+                  modalityComponents={modalityComponents}
+                />
+              </>
+            )}
           </>
         )}
       </div>

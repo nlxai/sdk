@@ -149,6 +149,17 @@ export const Attachment: Icon = (props) => {
   );
 };
 
+export const BotMessage: Icon = (props) => {
+  return (
+    <svg viewBox="0 0 12 12" {...iconSvgProps(props)}>
+      <path
+        d="M10 1H2C1.45 1 1.005 1.45 1.005 2L1 11L3 9H10C10.55 9 11 8.55 11 8V2C11 1.45 10.55 1 10 1ZM6 7H3V6H6V7ZM9 5.5H3V4.5H9V5.5ZM9 4H3V3H9V4Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
 export const Camera: Icon = (props) => {
   return (
     <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
@@ -218,6 +229,17 @@ export const Delete: Icon = (props) => {
         fill="currentColor"
       />
       <path d="M15.5 4H19V6H5V4H8.5L9.5 3H14.5L15.5 4Z" fill="currentColor" />
+    </svg>
+  );
+};
+
+export const Edit: Icon = (props) => {
+  return (
+    <svg viewBox="0 0 16 16" {...iconSvgProps(props)}>
+      <path
+        d="M2 11.5002V14.0002H4.5L11.8733 6.62687L9.37333 4.12687L2 11.5002ZM13.8067 4.69354C14.0667 4.43354 14.0667 4.01354 13.8067 3.75354L12.2467 2.19354C11.9867 1.93354 11.5667 1.93354 11.3067 2.19354L10.0867 3.41354L12.5867 5.91354L13.8067 4.69354V4.69354Z"
+        fill="currentColor"
+      />
     </svg>
   );
 };

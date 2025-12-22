@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clsx } from "clsx";
-import { type FC } from "react";
+import { type MouseEventHandler, type FC } from "react";
 
 import { type IconProps } from "./Icons";
 
@@ -31,7 +31,7 @@ export interface IconButtonProps {
   /**
    * Handler function called when the button is clicked
    */
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   /**
    * Accessible label for the button
    */
