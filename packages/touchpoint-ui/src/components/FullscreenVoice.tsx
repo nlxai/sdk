@@ -207,7 +207,7 @@ export const FullscreenVoice: FC<Props> = ({
         {isApplicationSpeaking ? <Ripple className="rounded-full" /> : null}
       </div>
       <VoiceModalities
-        className="absolute p-4 top-0 left-0 right-0 bottom-[72px] z-10 space-y-2 max-h-full overflow-auto border-b border-primary-10"
+        className="absolute p-4 top-0 left-0 right-0 bottom-[72px] z-10 space-y-2 max-h-full overflow-auto border-b border-solid border-primary-10"
         renderedAsOverlay
         modalities={modalities}
         modalityComponents={modalityComponents}
