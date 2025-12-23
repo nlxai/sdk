@@ -877,7 +877,7 @@ export interface VoicePlusMessage {
  * Handler events
  * @event voicePlusCommand
  */
-export type ConversationHandlerEvent = "voicePlusCommand";
+export type ConversationHandlerEvent = "voicePlusCommand" | "interimMessage";
 
 /**
  * Dictionary of handler methods per event
@@ -887,6 +887,10 @@ export interface EventHandlers {
    * Voice+ command event handler
    */
   voicePlusCommand: (payload: any) => void;
+  /**
+   * Interim message event handler
+   */
+  interimMessage: (message: string) => void;
 }
 
 interface InternalState {
@@ -997,7 +1001,7 @@ export function createConversation(configuration: Config): ConversationHandler {
   const eventListeners: Record<
     ConversationHandlerEvent,
     Array<EventHandlers[ConversationHandlerEvent]>
-  > = { voicePlusCommand: [] };
+  > = { voicePlusCommand: [], interimMessage: [] };
 
   const initialConversationId = configuration.conversationId ?? uuid();
 
