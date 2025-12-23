@@ -12,7 +12,7 @@ export const FeedbackComment: FC<{
   if (feedbackState.comment.state === "idle") return null;
   if (feedbackState.comment.state === "submitted") {
     return (
-      <div className="flex flex-col grow p-2 gap-2.5">
+      <div className="flex flex-col grow p-2 md:p-3 gap-2.5">
         <div className="flex items-center gap-2.5">
           <IconButton
             type="ghost"
@@ -26,7 +26,7 @@ export const FeedbackComment: FC<{
           />
           <h2 className="">Feedback submitted</h2>
         </div>
-        <p className="grow border border-primary-10 rounded-2xl p-2">
+        <p className="grow border border-solid border-primary-10 rounded-2xl p-4">
           {feedbackState.comment.text}
         </p>
         <TextButton
