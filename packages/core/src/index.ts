@@ -30,7 +30,6 @@ export interface Config {
      */
     "nlx-api-key": string;
   };
-
   /**
    * Set `conversationId` to continue an existing conversation. If not set, a new conversation will be started (and a new conversationId will be generated internally).
    */
@@ -66,6 +65,10 @@ export interface Config {
    * @internal
    */
   experimental?: {
+    /**
+     * Check whether HTTP streaming should be enabled
+     */
+    streamHttp?: boolean;
     /**
      * Simulate alternative channel types
      */
@@ -887,7 +890,7 @@ export type VoicePlusCommandListener = (payload: any) => void;
 /**
  * Interim message listener
  */
-export type InterimMessageListener = (message: string) => void;
+export type InterimMessageListener = (message?: string) => void;
 
 /**
  * Dictionary of handler methods per event
@@ -981,11 +984,13 @@ const fetchUserMessage = async ({
   headers,
   body,
   stream,
+  eventListeners,
 }: {
   fullApplicationUrl: string;
   headers: Record<string, string>;
   body: unknown;
   stream: boolean;
+  eventListeners: ConversationHandlerEventListeners;
 }): Promise<RawApplicationResponsePayload> => {
   const streamRequest = async (
     body: unknown,
@@ -1029,19 +1034,18 @@ const fetchUserMessage = async ({
             try {
               const json = JSON.parse(candidate);
 
-              // --- LOGIC START ---
-              // Check the 'type' field instead of parsing the string prefix
               if (json.type === "interim") {
-                // TODO: do something with `json.type`
+                eventListeners.interimMessage.forEach(
+                  (listener: InterimMessageListener) => {
+                    listener(json.text);
+                  },
+                );
               } else if (json.type === "message") {
-                // This is a final bot response
                 // TODO: do something with `json.text` and `json.choices`
                 messages.push({ text: json.text, choices: json.choices ?? [] });
               } else if (json.type === "final_response") {
-                // TODO: do something with the response
                 finalResponse = json.data;
               }
-              // --- LOGIC END ---
 
               buffer = buffer.substring(i + 1);
               foundObject = true;
@@ -1054,6 +1058,11 @@ const fetchUserMessage = async ({
         if (!foundObject) break;
       }
     }
+    eventListeners.interimMessage.forEach(
+      (listener: InterimMessageListener) => {
+        listener(undefined);
+      },
+    );
     return { ...finalResponse, messages };
   };
   if (stream) {
@@ -1075,6 +1084,11 @@ const fetchUserMessage = async ({
     return json;
   }
 };
+
+type ConversationHandlerEventListeners = Record<
+  ConversationHandlerEvent,
+  Array<EventHandlers[ConversationHandlerEvent]>
+>;
 
 /**
  * Call this to create a conversation handler.
@@ -1112,10 +1126,10 @@ export function createConversation(configuration: Config): ConversationHandler {
     );
   }
 
-  const eventListeners: Record<
-    ConversationHandlerEvent,
-    Array<EventHandlers[ConversationHandlerEvent]>
-  > = { voicePlusCommand: [], interimMessage: [] };
+  const eventListeners: ConversationHandlerEventListeners = {
+    voicePlusCommand: [],
+    interimMessage: [],
+  };
 
   const initialConversationId = configuration.conversationId ?? uuid();
 
@@ -1255,7 +1269,8 @@ export function createConversation(configuration: Config): ConversationHandler {
         const json = await fetchUserMessage({
           fullApplicationUrl: fullApplicationHttpUrl(),
           headers: configuration.headers ?? {},
-          stream: false,
+          stream: configuration.experimental?.streamHttp ?? false,
+          eventListeners,
           body: bodyWithContext,
         });
         messageResponseHandler(json);
