@@ -988,22 +988,21 @@ const fetchUserMessage = async ({
 }: {
   fullApplicationUrl: string;
   headers: Record<string, string>;
-  body: unknown;
+  body: ApplicationRequest;
   stream: boolean;
   eventListeners: ConversationHandlerEventListeners;
 }): Promise<RawApplicationResponsePayload> => {
   const streamRequest = async (
-    body: unknown,
+    body: ApplicationRequest,
   ): Promise<RawApplicationResponsePayload> => {
     const response = await fetch(fullApplicationUrl, {
       method: "POST",
       headers: {
         ...headers,
-        Accept: "application/json",
         "Content-Type": "application/json",
         "nlx-sdk-version": packageJson.version,
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ ...body, stream: true }),
     });
 
     if (!response.ok || response.body == null)
@@ -1041,8 +1040,12 @@ const fetchUserMessage = async ({
                   },
                 );
               } else if (json.type === "message") {
-                // TODO: do something with `json.text` and `json.choices`
-                messages.push({ text: json.text, choices: json.choices ?? [] });
+                messages.push({
+                  text: json.text,
+                  choices: json.choices ?? [],
+                  messageId: json.messageId,
+                  metadata: json.metadata,
+                });
               } else if (json.type === "final_response") {
                 finalResponse = json.data;
               }
