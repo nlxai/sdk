@@ -81,9 +81,20 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     }
   }, [props.config.conversationId]);
 
+  const [interimMessage, setInterimMessage] = useState<string | undefined>(
+    undefined,
+  );
+
   const handler = useMemo(() => {
     return createConversation({ responses: responseData, ...props.config });
   }, [props.config, responseData]);
+
+  useEffect(() => {
+    handler.addEventListener("interimMessage", setInterimMessage);
+    return () => {
+      handler.removeEventListener("interimMessage", setInterimMessage);
+    };
+  }, [handler, setInterimMessage]);
 
   const [responses, setResponses] = useState<Response[]>([]);
 
@@ -411,6 +422,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           agentMessageBubble={props.agentMessageBubble ?? false}
           chatMode={props.chatMode ?? false}
           isWaiting={isWaiting}
+          interimMessage={interimMessage}
           lastApplicationResponseIndex={lastApplicationResponse?.index}
           responses={responses}
           colorMode={colorMode}

@@ -154,7 +154,9 @@ export const Loader: FC<LoaderProps> = ({ label, className }) => {
         <div className={clsx("w-8 h-8 block text-accent")}>
           <LoaderAnimation />
         </div>
-        {label != null ? <p className="text-primary-60">{label}</p> : null}
+        {label != null ? (
+          <p className="text-primary-60 max-w-sm text-center">{label}</p>
+        ) : null}
       </div>
     </div>
   );

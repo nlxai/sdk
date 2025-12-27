@@ -31,6 +31,7 @@ import * as Feedback from "../feedback";
 
 export interface MessagesProps {
   isWaiting: boolean;
+  interimMessage?: string;
   handler: ConversationHandler;
   responses: Response[];
   userMessageBubble: boolean;
@@ -291,6 +292,7 @@ export const Messages: FC<MessagesProps> = ({
   userMessageBubble,
   agentMessageBubble,
   lastApplicationResponseIndex,
+  interimMessage,
   isWaiting,
   modalityComponents,
   handler,
@@ -331,7 +333,10 @@ export const Messages: FC<MessagesProps> = ({
         )}
       />
       {!chatMode && isWaiting ? (
-        <Loader label="Thinking" className="absolute inset-0" />
+        <Loader
+          label={interimMessage ?? "Thinking"}
+          className="absolute inset-0"
+        />
       ) : null}
       <div
         key="messages"
@@ -474,7 +479,7 @@ export const Messages: FC<MessagesProps> = ({
             <span className="w-5 h-5 block flex-none text-accent">
               <LoaderAnimation />
             </span>
-            Thinking...
+            {interimMessage ?? "Thinking"}
           </div>
         ) : null}
       </div>

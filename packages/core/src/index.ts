@@ -30,7 +30,6 @@ export interface Config {
      */
     "nlx-api-key": string;
   };
-
   /**
    * Set `conversationId` to continue an existing conversation. If not set, a new conversation will be started (and a new conversationId will be generated internally).
    */
@@ -66,6 +65,10 @@ export interface Config {
    * @internal
    */
   experimental?: {
+    /**
+     * Check whether HTTP streaming should be enabled
+     */
+    streamHttp?: boolean;
     /**
      * Simulate alternative channel types
      */
@@ -877,7 +880,17 @@ export interface VoicePlusMessage {
  * Handler events
  * @event voicePlusCommand
  */
-export type ConversationHandlerEvent = "voicePlusCommand";
+export type ConversationHandlerEvent = "voicePlusCommand" | "interimMessage";
+
+/**
+ * Voice+ command listener
+ */
+export type VoicePlusCommandListener = (payload: any) => void;
+
+/**
+ * Interim message listener
+ */
+export type InterimMessageListener = (message?: string) => void;
 
 /**
  * Dictionary of handler methods per event
@@ -886,7 +899,11 @@ export interface EventHandlers {
   /**
    * Voice+ command event handler
    */
-  voicePlusCommand: (payload: any) => void;
+  voicePlusCommand: VoicePlusCommandListener;
+  /**
+   * Interim message event handler
+   */
+  interimMessage: InterimMessageListener;
 }
 
 interface InternalState {
@@ -958,6 +975,130 @@ const isWebsocketUrl = (url: string): boolean => {
 
 type Timer = ReturnType<typeof setInterval>;
 
+interface RawApplicationResponsePayload {
+  messages: unknown;
+}
+
+const fetchUserMessage = async ({
+  fullApplicationUrl,
+  headers,
+  body,
+  stream,
+  eventListeners,
+}: {
+  fullApplicationUrl: string;
+  headers: Record<string, string>;
+  body: ApplicationRequest;
+  stream: boolean;
+  eventListeners: ConversationHandlerEventListeners;
+}): Promise<RawApplicationResponsePayload> => {
+  const streamRequest = async (
+    body: ApplicationRequest,
+  ): Promise<RawApplicationResponsePayload> => {
+    const response = await fetch(fullApplicationUrl, {
+      method: "POST",
+      headers: {
+        ...headers,
+        "Content-Type": "application/json",
+        "nlx-sdk-version": packageJson.version,
+      },
+      body: JSON.stringify({ ...body, stream: true }),
+    });
+
+    if (!response.ok || response.body == null)
+      throw new Error(`HTTP Error: ${response.status}`);
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+
+    const messages: ApplicationMessage[] = [];
+
+    let finalResponse: Record<string, unknown> = {};
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+
+      while (true) {
+        const openBrace = buffer.indexOf("{");
+        if (openBrace === -1) break;
+
+        let foundObject = false;
+        for (let i = 0; i < buffer.length; i++) {
+          if (buffer[i] === "}") {
+            const candidate = buffer.substring(openBrace, i + 1);
+            try {
+              const json: {
+                type: "interim" | "message" | "final_response";
+                [k: string]: any;
+              } = JSON.parse(candidate);
+
+              if (json.type === "interim") {
+                const text = json.text;
+                if (typeof text === "string") {
+                  eventListeners.interimMessage.forEach(
+                    (listener: InterimMessageListener) => {
+                      listener(text);
+                    },
+                  );
+                }
+              } else if (json.type === "message") {
+                messages.push({
+                  text: json.text,
+                  choices: json.choices ?? [],
+                  messageId: json.messageId,
+                  metadata: json.metadata,
+                });
+              } else if (json.type === "final_response") {
+                finalResponse = json.data;
+              }
+
+              buffer = buffer.substring(i + 1);
+              foundObject = true;
+              break;
+            } catch (e) {
+              /* keep scanning */
+            }
+          }
+        }
+        if (!foundObject) break;
+      }
+    }
+    eventListeners.interimMessage.forEach(
+      (listener: InterimMessageListener) => {
+        listener(undefined);
+      },
+    );
+    return { ...finalResponse, messages };
+  };
+  if (stream) {
+    return await streamRequest(body);
+  } else {
+    const response = await fetch(fullApplicationUrl, {
+      method: "POST",
+      headers: {
+        ...(headers ?? {}),
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "nlx-sdk-version": packageJson.version,
+      },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok || response.body == null)
+      throw new Error(`HTTP Error: ${response.status}`);
+    const json = await response.json();
+    return json;
+  }
+};
+
+type ConversationHandlerEventListeners = Record<
+  ConversationHandlerEvent,
+  Array<EventHandlers[ConversationHandlerEvent]>
+>;
+
 /**
  * Call this to create a conversation handler.
  * @param configuration - The necessary configuration to create the conversation.
@@ -994,10 +1135,10 @@ export function createConversation(configuration: Config): ConversationHandler {
     );
   }
 
-  const eventListeners: Record<
-    ConversationHandlerEvent,
-    Array<EventHandlers[ConversationHandlerEvent]>
-  > = { voicePlusCommand: [] };
+  const eventListeners: ConversationHandlerEventListeners = {
+    voicePlusCommand: [],
+    interimMessage: [],
+  };
 
   const initialConversationId = configuration.conversationId ?? uuid();
 
@@ -1134,20 +1275,13 @@ export function createConversation(configuration: Config): ConversationHandler {
       }
     } else {
       try {
-        const res = await fetch(fullApplicationHttpUrl(), {
-          method: "POST",
-          headers: {
-            ...(configuration.headers ?? {}),
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "nlx-sdk-version": packageJson.version,
-          },
-          body: JSON.stringify(bodyWithContext),
+        const json = await fetchUserMessage({
+          fullApplicationUrl: fullApplicationHttpUrl(),
+          headers: configuration.headers ?? {},
+          stream: configuration.experimental?.streamHttp ?? false,
+          eventListeners,
+          body: bodyWithContext,
         });
-        if (res.status >= 400) {
-          throw new Error(`Responded with ${res.status}`);
-        }
-        const json = await res.json();
         messageResponseHandler(json);
       } catch (err) {
         Console.warn(err);
@@ -1205,9 +1339,11 @@ export function createConversation(configuration: Config): ConversationHandler {
       if (typeof e?.data === "string") {
         const command = safeJsonParse(e.data);
         if (command != null) {
-          eventListeners.voicePlusCommand.forEach((listener) => {
-            listener(command);
-          });
+          eventListeners.voicePlusCommand.forEach(
+            (listener: VoicePlusCommandListener) => {
+              listener(command);
+            },
+          );
         }
       }
     };
@@ -1241,9 +1377,11 @@ export function createConversation(configuration: Config): ConversationHandler {
       if (typeof e?.data === "string") {
         const command = safeJsonParse(e.data);
         if (command != null) {
-          eventListeners.voicePlusCommand.forEach((listener) => {
-            listener(command);
-          });
+          eventListeners.voicePlusCommand.forEach(
+            (listener: VoicePlusCommandListener) => {
+              listener(command);
+            },
+          );
         }
       }
     };
