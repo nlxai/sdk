@@ -1031,14 +1031,20 @@ const fetchUserMessage = async ({
           if (buffer[i] === "}") {
             const candidate = buffer.substring(openBrace, i + 1);
             try {
-              const json = JSON.parse(candidate);
+              const json: {
+                type: "interim" | "message" | "final_response";
+                [k: string]: any;
+              } = JSON.parse(candidate);
 
               if (json.type === "interim") {
-                eventListeners.interimMessage.forEach(
-                  (listener: InterimMessageListener) => {
-                    listener(json.text);
-                  },
-                );
+                const text = json.text;
+                if (typeof text === "string") {
+                  eventListeners.interimMessage.forEach(
+                    (listener: InterimMessageListener) => {
+                      listener(text);
+                    },
+                  );
+                }
               } else if (json.type === "message") {
                 messages.push({
                   text: json.text,
