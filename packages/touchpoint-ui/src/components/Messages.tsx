@@ -269,7 +269,7 @@ const FeedbackCollection: FC<{
           {feedbackConfig.commentsEnabled ? (
             <MessageButton
               type={localState.commentSubmitted ? "activated" : "main"}
-              label="Add comment"
+              label={feedbackConfig.labels.comment ?? "Add comment"}
               onClick={() => {
                 feedbackActions.clickCommentButton(feedbackUrl);
               }}
