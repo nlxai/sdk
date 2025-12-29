@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/core",
-  "version": "1.2.4-alpha.2",
+  "version": "1.2.4-alpha.3",
   "description": "Low-level SDK for building NLX experiences",
   "type": "module",
   "main": "lib/index.cjs",
