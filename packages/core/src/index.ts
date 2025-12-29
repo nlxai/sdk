@@ -646,6 +646,8 @@ export interface FeedbackConfiguration {
     positive?: string;
     /** Label for negative feedback */
     negative?: string;
+    /** Label for comment */
+    comment?: string;
   };
 }
 
