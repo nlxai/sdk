@@ -476,7 +476,7 @@ export const Messages: FC<MessagesProps> = ({
         })}
         {chatMode && isWaiting ? (
           <div className="text-primary-60 flex items-center gap-1 text-base shimmer w-fit">
-            Thinking...
+            {interimMessage ?? "Thinking"}
           </div>
         ) : null}
       </div>
