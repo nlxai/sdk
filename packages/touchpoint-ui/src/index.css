@@ -162,7 +162,7 @@
 }
 
 .markdown hr {
-  @apply border-primary-20;
+  @apply border-primary-20 border-solid;
 }
 
 .markdown a {

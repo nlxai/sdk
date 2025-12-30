@@ -1,4 +1,3 @@
- 
 import { clsx } from "clsx";
 import { type FC } from "react";
 import { type IconProps } from "./Icons";

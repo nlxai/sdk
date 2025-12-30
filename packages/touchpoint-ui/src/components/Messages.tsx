@@ -6,6 +6,7 @@ import {
   type ApplicationMessage,
   type KnowledgeBaseResponseSource,
   ResponseType,
+  type FeedbackConfiguration,
 } from "@nlxai/core";
 import { clsx } from "clsx";
 import { marked } from "marked";
@@ -13,13 +14,24 @@ import { marked } from "marked";
 import { ErrorMessage } from "./ErrorMessage";
 import { Loader } from "./ui/Loader";
 import { TextButton } from "./ui/TextButton";
-import { ArrowForward, ArrowRight, ArrowDown, OpenLink } from "./ui/Icons";
+import {
+  ArrowForward,
+  ArrowRight,
+  ArrowDown,
+  OpenLink,
+  ThumbUp,
+  ThumbDown,
+  BotMessage,
+} from "./ui/Icons";
 import { UnsemanticIconButton } from "./ui/IconButton";
 import { type CustomModalityComponent, type ColorMode } from "../interface";
 import { ErrorBoundary } from "react-error-boundary";
+import { MessageButton } from "./ui/MessageButton";
+import * as Feedback from "../feedback";
 
 export interface MessagesProps {
   isWaiting: boolean;
+  interimMessage?: string;
   handler: ConversationHandler;
   responses: Response[];
   userMessageBubble: boolean;
@@ -31,6 +43,8 @@ export interface MessagesProps {
   modalityComponents: Record<string, CustomModalityComponent<unknown>>;
   className?: string;
   enabled: boolean;
+  feedbackState: Feedback.State;
+  feedbackActions: Feedback.Actions;
 }
 
 export const MessageChoices: FC<{
@@ -213,6 +227,63 @@ const Sources: FC<{ sources: KnowledgeBaseResponseSource[] }> = ({
   );
 };
 
+const FeedbackCollection: FC<{
+  feedbackUrl: string;
+  feedbackConfig: FeedbackConfiguration;
+  feedbackState: Feedback.State;
+  feedbackActions: Feedback.Actions;
+}> = ({ feedbackUrl, feedbackConfig, feedbackState, feedbackActions }) => {
+  const localState = Feedback.getFeedbackInfo(feedbackState, feedbackUrl);
+
+  /* Currently only binary feedback is supported */
+  if (feedbackConfig.feedbackType.type === "binary") {
+    const { positiveValue, negativeValue } = feedbackConfig.feedbackType.config;
+
+    return (
+      <div className="mt-4">
+        <div className="flex items-center gap-0.5">
+          <span className="text-sm text-primary-60">
+            {feedbackConfig.question ?? "Was this response helpful?"}
+          </span>
+
+          {localState.rating == null || localState.rating === positiveValue ? (
+            <MessageButton
+              type={localState.rating === positiveValue ? "activated" : "main"}
+              label={feedbackConfig.labels.positive ?? "Yes"}
+              onClick={() => {
+                feedbackActions.clickRating(feedbackUrl, positiveValue);
+              }}
+              Icon={ThumbUp}
+            />
+          ) : null}
+          {localState.rating == null || localState.rating === negativeValue ? (
+            <MessageButton
+              type={localState.rating === negativeValue ? "activated" : "main"}
+              label={feedbackConfig.labels.negative ?? "No"}
+              onClick={() => {
+                feedbackActions.clickRating(feedbackUrl, negativeValue);
+              }}
+              Icon={ThumbDown}
+            />
+          ) : null}
+          {feedbackConfig.commentsEnabled ? (
+            <MessageButton
+              type={localState.commentSubmitted ? "activated" : "main"}
+              label={feedbackConfig.labels.comment ?? "Add comment"}
+              onClick={() => {
+                feedbackActions.clickCommentButton(feedbackUrl);
+              }}
+              Icon={BotMessage}
+            />
+          ) : null}
+        </div>
+      </div>
+    );
+  } else {
+    return null;
+  }
+};
+
 export const Messages: FC<MessagesProps> = ({
   responses,
   colorMode,
@@ -221,11 +292,14 @@ export const Messages: FC<MessagesProps> = ({
   userMessageBubble,
   agentMessageBubble,
   lastApplicationResponseIndex,
+  interimMessage,
   isWaiting,
   modalityComponents,
   handler,
   className,
   enabled,
+  feedbackState,
+  feedbackActions,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -259,7 +333,10 @@ export const Messages: FC<MessagesProps> = ({
         )}
       />
       {!chatMode && isWaiting ? (
-        <Loader label="Thinking" className="absolute inset-0" />
+        <Loader
+          label={interimMessage ?? "Thinking"}
+          className="absolute inset-0"
+        />
       ) : null}
       <div
         key="messages"
@@ -365,6 +442,15 @@ export const Messages: FC<MessagesProps> = ({
                     },
                   )}
                 </ErrorBoundary>
+                {response.payload.metadata?.feedbackConfig != null &&
+                response.payload.metadata?.feedbackUrl != null ? (
+                  <FeedbackCollection
+                    feedbackUrl={response.payload.metadata.feedbackUrl}
+                    feedbackConfig={response.payload.metadata.feedbackConfig}
+                    feedbackState={feedbackState}
+                    feedbackActions={feedbackActions}
+                  />
+                ) : null}
               </div>
               {/* Render the selected choice text as a user message */}
               {response.payload.messages.map((message, messageIndex) => {
