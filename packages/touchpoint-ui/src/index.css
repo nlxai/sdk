@@ -36,6 +36,29 @@
   --color-warning-secondary: inherit;
   --color-error-primary: inherit;
   --color-error-secondary: inherit;
+
+  --animate-shimmer: shimmer 1.5s linear infinite;
+  @keyframes shimmer {
+    0% {
+      background-position: -80px 0;
+    }
+    100% {
+      background-position: calc(100% + 80px) 0;
+    }
+  }
+}
+
+.shimmer {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-primary-1) 0%,
+    var(--color-primary-40) 50%,
+    var(--color-primary-1) 100%
+  );
+  background-size: 80px 100%;
+  background-clip: text;
+  background-repeat: no-repeat;
+  animation: var(--animate-shimmer);
 }
 
 /*

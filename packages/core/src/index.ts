@@ -66,7 +66,7 @@ export interface Config {
    */
   experimental?: {
     /**
-     * Check whether HTTP streaming should be enabled
+     * Check whether HTTP streaming should be enabled. Defaults to `true`.
      */
     streamHttp?: boolean;
     /**
@@ -1280,7 +1280,7 @@ export function createConversation(configuration: Config): ConversationHandler {
         const json = await fetchUserMessage({
           fullApplicationUrl: fullApplicationHttpUrl(),
           headers: configuration.headers ?? {},
-          stream: configuration.experimental?.streamHttp ?? false,
+          stream: configuration.experimental?.streamHttp ?? true,
           eventListeners,
           body: bodyWithContext,
         });

@@ -12,7 +12,7 @@ import { clsx } from "clsx";
 import { marked } from "marked";
 
 import { ErrorMessage } from "./ErrorMessage";
-import { LoaderAnimation, Loader } from "./ui/Loader";
+import { Loader } from "./ui/Loader";
 import { TextButton } from "./ui/TextButton";
 import {
   ArrowForward,
@@ -475,10 +475,7 @@ export const Messages: FC<MessagesProps> = ({
           );
         })}
         {chatMode && isWaiting ? (
-          <div className="text-primary-60 flex items-center gap-1 text-base">
-            <span className="w-5 h-5 block flex-none text-accent">
-              <LoaderAnimation />
-            </span>
+          <div className="text-primary-40 text-base shimmer w-fit">
             {interimMessage ?? "Thinking"}
           </div>
         ) : null}

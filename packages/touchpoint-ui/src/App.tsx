@@ -420,7 +420,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           enabled={props.enabled}
           userMessageBubble={props.userMessageBubble ?? false}
           agentMessageBubble={props.agentMessageBubble ?? false}
-          chatMode={props.chatMode ?? false}
+          chatMode={props.chatMode ?? true}
           isWaiting={isWaiting}
           interimMessage={interimMessage}
           lastApplicationResponseIndex={lastApplicationResponse?.index}
