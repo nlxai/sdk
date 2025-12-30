@@ -757,11 +757,13 @@ The URL comming from the Application response `metadata.feedbackURL` field.
 
 Either a numerical rating or a textual comment.
 
-\{
-`rating`: `number`;
-\} | \{
-`comment`: `string`;
-\}
+###### rating?
+
+`number`
+
+###### comment?
+
+`string`
 
 ###### Returns
 
@@ -934,11 +936,11 @@ Add a listener to one of the handler's custom events
 
 ###### event
 
-`"voicePlusCommand"`
+[`ConversationHandlerEvent`](#conversationhandlerevent)
 
 ###### handler
 
-(`payload`) => `void`
+[`VoicePlusCommandListener`](#voicepluscommandlistener) | [`InterimMessageListener`](#interimmessagelistener)
 
 ###### Returns
 
@@ -956,11 +958,11 @@ Remove a listener to one of the handler's custom events
 
 ###### event
 
-`"voicePlusCommand"`
+[`ConversationHandlerEvent`](#conversationhandlerevent)
 
 ###### handler
 
-(`payload`) => `void`
+[`VoicePlusCommandListener`](#voicepluscommandlistener) | [`InterimMessageListener`](#interimmessagelistener)
 
 ###### Returns
 
@@ -1542,6 +1544,14 @@ optional negative: string;
 
 Label for negative feedback
 
+###### comment?
+
+```ts
+optional comment: string;
+```
+
+Label for comment
+
 ---
 
 ### StructuredRequest
@@ -1795,23 +1805,21 @@ Dictionary of handler methods per event
 
 #### Properties
 
-##### voicePlusCommand()
+##### voicePlusCommand
 
 ```ts
-voicePlusCommand: (payload) => void;
+voicePlusCommand: VoicePlusCommandListener;
 ```
 
 Voice+ command event handler
 
-###### Parameters
+##### interimMessage
 
-###### payload
+```ts
+interimMessage: InterimMessageListener;
+```
 
-`any`
-
-###### Returns
-
-`void`
+Interim message event handler
 
 ## Enumerations
 
@@ -1850,7 +1858,7 @@ Generic failure (cannot be attributed to the application)
 ### ConversationHandlerEvent
 
 ```ts
-type ConversationHandlerEvent = "voicePlusCommand";
+type ConversationHandlerEvent = "voicePlusCommand" | "interimMessage";
 ```
 
 Handler events
@@ -2082,6 +2090,46 @@ type VoicePlusContext = any;
 ```
 
 Voice+ context, type to be defined
+
+---
+
+### VoicePlusCommandListener()
+
+```ts
+type VoicePlusCommandListener = (payload) => void;
+```
+
+Voice+ command listener
+
+#### Parameters
+
+##### payload
+
+`any`
+
+#### Returns
+
+`void`
+
+---
+
+### InterimMessageListener()
+
+```ts
+type InterimMessageListener = (message?) => void;
+```
+
+Interim message listener
+
+#### Parameters
+
+##### message?
+
+`string`
+
+#### Returns
+
+`void`
 
 ---
 

@@ -646,6 +646,7 @@ const CustomCardRow: FC<{
   left: ReactNode;
   right: ReactNode;
   icon?: Icon;
+  className?: string;
 }>;
 ```
 
@@ -718,7 +719,7 @@ Represents the different types of icon buttons available in the application.
 
 ```ts
 const IconButton: FC<{
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   label: string;
   className?: string;
   type: IconButtonType;
@@ -861,6 +862,7 @@ type CustomModalityComponent<Data> = ComponentType<{
   data: Data;
   conversationHandler: ConversationHandler;
   className?: string;
+  renderedAsOverlay?: boolean;
 }>;
 ```
 
