@@ -1078,7 +1078,14 @@ const fetchUserMessage = async ({
       ...finalResponse,
       messages: [
         ...messages,
-        ...((finalResponse.messages ?? []) as ApplicationMessage[]),
+        ...(((finalResponse.messages as ApplicationMessage[]) ?? []).map(
+          (json) => ({
+            text: json.text,
+            choices: json.choices ?? [],
+            messageId: json.messageId,
+            metadata: json.metadata,
+          }),
+        ) as ApplicationMessage[]),
       ],
     };
   };
