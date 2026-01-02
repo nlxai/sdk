@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/touchpoint-ui",
-  "version": "1.2.4-alpha.5",
+  "version": "1.2.4-alpha.6",
   "description": "Web UI for Touchpoint",
   "type": "module",
   "main": "lib/index.js",
@@ -27,7 +27,7 @@
     "update-readme": "npm run update-readme:docs && npm run update-readme:merge"
   },
   "dependencies": {
-    "@nlxai/core": "^1.2.4-alpha.5",
+    "@nlxai/core": "^1.2.4-alpha.6",
     "@react-hookz/web": "^25.0.1",
     "@react-input/mask": "^2.0.4",
     "@rive-app/webgl2": "^2.31.5",
