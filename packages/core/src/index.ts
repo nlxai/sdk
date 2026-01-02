@@ -1074,7 +1074,20 @@ const fetchUserMessage = async ({
         listener(undefined);
       },
     );
-    return { ...finalResponse, messages };
+    return {
+      ...finalResponse,
+      messages: [
+        ...messages,
+        ...(((finalResponse.messages as ApplicationMessage[]) ?? []).map(
+          (json) => ({
+            text: json.text,
+            choices: json.choices ?? [],
+            messageId: json.messageId,
+            metadata: json.metadata,
+          }),
+        ) as ApplicationMessage[]),
+      ],
+    };
   };
   if (stream) {
     return await streamRequest(body);
