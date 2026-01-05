@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable jsdoc/require-jsdoc */
 import { type ConversationHandler } from "@nlxai/core";
-import { useReducer } from "react";
+import { useState } from "react";
 
 interface FeedbackInfo {
   rating: number | null;
@@ -21,16 +21,6 @@ type CommentState =
   | { state: "submitted"; activeFeedbackUrl: string; text: string }
   | { state: "error"; activeFeedbackUrl: string; text: string };
 
-type Action =
-  | { type: "CLICK_RATING"; feedbackUrl: string; value: number }
-  | { type: "CLICK_COMMENT_BUTTON"; feedbackUrl: string }
-  | { type: "CLICK_COMMENT_EDIT"; feedbackUrl: string }
-  | { type: "EDIT_COMMENT_TEXT"; feedbackUrl: string; text: string }
-  | { type: "SUBMIT_COMMENT"; feedbackUrl: string }
-  | { type: "CANCEL_COMMENT" }
-  | { type: "SUBMISSION_SUCCESS" }
-  | { type: "SUBMISSION_ERROR" };
-
 const initialize: State = {
   comment: { state: "idle" },
   items: {},
@@ -49,115 +39,128 @@ export const getFeedbackInfo = (
   );
 };
 
-const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case "CLICK_RATING":
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          [action.feedbackUrl]: {
-            ...getFeedbackInfo(state, action.feedbackUrl),
-            rating:
-              state.items[action.feedbackUrl]?.rating == null
-                ? action.value
-                : null,
-          },
-        },
-      };
-    case "CLICK_COMMENT_BUTTON":
-      const existingFeedback = getFeedbackInfo(state, action.feedbackUrl);
+// Helper functions for state transitions
+function clickRatingState(
+  state: State,
+  feedbackUrl: string,
+  value: number,
+): State {
+  return {
+    ...state,
+    items: {
+      ...state.items,
+      [feedbackUrl]: {
+        ...getFeedbackInfo(state, feedbackUrl),
+        rating: state.items[feedbackUrl]?.rating == null ? value : null,
+      },
+    },
+  };
+}
 
-      if (existingFeedback.commentSubmitted) {
-        return {
-          ...state,
-          comment: {
-            state: "submitted",
-            activeFeedbackUrl: action.feedbackUrl,
-            text: existingFeedback.commentText,
-          },
-        };
-      } else {
-        return {
-          ...state,
-          comment: {
-            state: "editing",
-            activeFeedbackUrl: action.feedbackUrl,
-            text: state.items[action.feedbackUrl]?.commentText ?? "",
-          },
-        };
-      }
-    case "CLICK_COMMENT_EDIT":
-      const feedback = getFeedbackInfo(state, action.feedbackUrl);
-      return {
-        ...state,
-        comment: {
-          activeFeedbackUrl: action.feedbackUrl,
-          state: "editing",
-          text: feedback.commentText,
-        },
-      };
-    case "EDIT_COMMENT_TEXT":
-      return {
-        ...state,
-        comment: {
-          activeFeedbackUrl: action.feedbackUrl,
-          state: "editing",
-          text: action.text,
-        },
-      };
-    case "SUBMIT_COMMENT":
-      return {
-        ...state,
-        comment: {
-          activeFeedbackUrl: action.feedbackUrl,
-          state: "submitting",
-          text: state.comment.state === "editing" ? state.comment.text : "",
-        },
-      };
-    case "CANCEL_COMMENT":
-      return {
-        ...state,
-        comment: { state: "idle" },
-      };
-
-    case "SUBMISSION_SUCCESS":
-      if (state.comment.state !== "submitting") {
-        return state;
-      }
-      const feedbackUrl = state.comment.activeFeedbackUrl;
-      return {
-        ...state,
-        comment: {
-          activeFeedbackUrl: feedbackUrl,
-          state: "submitted",
-          text: state.comment.text,
-        },
-        items: {
-          ...state.items,
-          [feedbackUrl]: {
-            ...getFeedbackInfo(state, feedbackUrl),
-            commentSubmitted: true,
-            commentText: state.comment.text,
-          },
-        },
-      };
-    case "SUBMISSION_ERROR":
-      return {
-        ...state,
-        comment: {
-          activeFeedbackUrl:
-            state.comment.state === "submitting"
-              ? state.comment.activeFeedbackUrl
-              : "",
-          text: state.comment.state === "submitting" ? state.comment.text : "",
-          state: "error",
-        },
-      };
-    default:
-      throw new Error("Unknown action type");
+function clickCommentButtonState(state: State, feedbackUrl: string): State {
+  const existingFeedback = getFeedbackInfo(state, feedbackUrl);
+  if (existingFeedback.commentSubmitted) {
+    return {
+      ...state,
+      comment: {
+        state: "submitted",
+        activeFeedbackUrl: feedbackUrl,
+        text: existingFeedback.commentText,
+      },
+    };
+  } else {
+    return {
+      ...state,
+      comment: {
+        state: "editing",
+        activeFeedbackUrl: feedbackUrl,
+        text: state.items[feedbackUrl]?.commentText ?? "",
+      },
+    };
   }
-};
+}
+
+function clickCommentEditState(state: State, feedbackUrl: string): State {
+  const feedback = getFeedbackInfo(state, feedbackUrl);
+  return {
+    ...state,
+    comment: {
+      activeFeedbackUrl: feedbackUrl,
+      state: "editing",
+      text: feedback.commentText,
+    },
+  };
+}
+
+function editCommentTextState(
+  state: State,
+  feedbackUrl: string,
+  text: string,
+): State {
+  return {
+    ...state,
+    comment: {
+      activeFeedbackUrl: feedbackUrl,
+      state: "editing",
+      text,
+    },
+  };
+}
+
+function submitCommentState(state: State, feedbackUrl: string): State {
+  return {
+    ...state,
+    comment: {
+      activeFeedbackUrl: feedbackUrl,
+      state: "submitting",
+      text: state.comment.state === "editing" ? state.comment.text : "",
+    },
+  };
+}
+
+function cancelCommentState(state: State): State {
+  return {
+    ...state,
+    comment: { state: "idle" },
+  };
+}
+
+function submissionSuccessState(state: State): State {
+  if (state.comment.state !== "submitting") {
+    return state;
+  }
+  const feedbackUrl = state.comment.activeFeedbackUrl;
+  return {
+    ...state,
+    comment: {
+      activeFeedbackUrl: feedbackUrl,
+      state: "submitted",
+      text: state.comment.text,
+    },
+    items: {
+      ...state.items,
+      [feedbackUrl]: {
+        ...getFeedbackInfo(state, feedbackUrl),
+        commentSubmitted: true,
+        commentText: state.comment.text,
+      },
+    },
+  };
+}
+
+function submissionErrorState(state: State): State {
+  return {
+    ...state,
+    comment: {
+      activeFeedbackUrl:
+        state.comment.state === "submitting"
+          ? state.comment.activeFeedbackUrl
+          : "",
+      text: state.comment.state === "submitting" ? state.comment.text : "",
+      state: "error",
+    },
+  };
+}
 
 export interface Actions {
   clickRating: (feedbackUrl: string, value: number) => void;
@@ -169,34 +172,21 @@ export interface Actions {
 }
 
 const actions = (
-  dispatch: React.Dispatch<Action>,
+  setState: React.Dispatch<React.SetStateAction<State>>,
   handler: ConversationHandler,
   state: State,
 ): Actions => ({
   clickRating: (feedbackUrl: string, value: number) => {
-    // the following is a more correct and idiomatic version, but it will need to wait for a dependency update
-    // startTransition(async () => {
-    //   try {
-    //     await handler.submitFeedback(state.feedbackUrl, {
-    //       rating: value,
-    //     });
-    //     startTransition(() => {
-    //       dispatch({ type: "CLICK_RATING", value });
-    //     });
-    //   } catch (_error) {}
-    // });
-
     if (getFeedbackInfo(state, feedbackUrl).rating === value) {
-      dispatch({ type: "CLICK_RATING", value, feedbackUrl });
+      setState((prev) => clickRatingState(prev, feedbackUrl, value));
       return;
     }
-
     void handler
       .submitFeedback(feedbackUrl, {
         rating: value,
       })
       .then(() => {
-        dispatch({ type: "CLICK_RATING", value, feedbackUrl });
+        setState((prev) => clickRatingState(prev, feedbackUrl, value));
       })
       .catch((err: any) => {
         // TODO: add proper error handling
@@ -205,46 +195,47 @@ const actions = (
       });
   },
   clickCommentButton: (feedbackUrl: string) => {
-    dispatch({ type: "CLICK_COMMENT_BUTTON", feedbackUrl });
+    setState((prev) => clickCommentButtonState(prev, feedbackUrl));
   },
   clickCommentEdit: () => {
-    if (state.comment.state === "idle") return;
-    dispatch({
-      type: "CLICK_COMMENT_EDIT",
-      feedbackUrl: state.comment.activeFeedbackUrl,
+    setState((prev) => {
+      if (prev.comment.state === "idle") return prev;
+      return clickCommentEditState(prev, prev.comment.activeFeedbackUrl);
     });
   },
   editCommentText: (text: string) => {
-    if (state.comment.state === "idle") return;
-    dispatch({
-      type: "EDIT_COMMENT_TEXT",
-      text,
-      feedbackUrl: state.comment.activeFeedbackUrl,
+    setState((prev) => {
+      if (prev.comment.state === "idle") return prev;
+      return editCommentTextState(prev, prev.comment.activeFeedbackUrl, text);
     });
   },
   submitComment: async () => {
-    if (state.comment.state === "idle") return;
-    dispatch({
-      type: "SUBMIT_COMMENT",
-      feedbackUrl: state.comment.activeFeedbackUrl,
+    setState((prev) => {
+      if (prev.comment.state === "idle") return prev;
+      return submitCommentState(prev, prev.comment.activeFeedbackUrl);
     });
+    if (state.comment.state === "idle") return;
+    const feedbackUrl = state.comment.activeFeedbackUrl;
+
     handler
-      .submitFeedback(state.comment.activeFeedbackUrl, {
+      .submitFeedback(feedbackUrl, {
         comment: state.comment.text,
       })
       .then(() => {
-        dispatch({ type: "SUBMISSION_SUCCESS" });
+        setState((prev) => {
+          return submissionSuccessState(prev);
+        });
       })
       .catch(() => {
-        dispatch({ type: "SUBMISSION_ERROR" });
+        setState((prev) => submissionErrorState(prev));
       });
   },
   cancelComment: () => {
-    dispatch({ type: "CANCEL_COMMENT" });
+    setState((prev) => cancelCommentState(prev));
   },
 });
 
 export function useFeedback(handler: ConversationHandler): [State, Actions] {
-  const [state, dispatch] = useReducer(reducer, initialize);
-  return [state, actions(dispatch, handler, state)] as const;
+  const [state, setState] = useState<State>(initialize);
+  return [state, actions(setState, handler, state)] as const;
 }
