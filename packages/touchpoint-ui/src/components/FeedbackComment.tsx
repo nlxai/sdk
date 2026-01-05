@@ -12,7 +12,7 @@ export const FeedbackComment: FC<{
   if (feedbackState.comment.state === "idle") return null;
   if (feedbackState.comment.state === "submitted") {
     return (
-      <div className="flex flex-col grow p-2 md:p-3 gap-2.5">
+      <div className="flex flex-col grow p-2 md:p-3 gap-2.5 w-full md:max-w-content md:mx-auto md:pb-3">
         <div className="flex items-center gap-2.5">
           <IconButton
             type="ghost"
@@ -70,7 +70,14 @@ export const FeedbackComment: FC<{
           feedbackActions.editCommentText(e.target.value);
         }}
       ></textarea>
-      <TextButton type="main" label="Submit" Icon={Check} onClick={() => {}} />
+      <TextButton
+        type="main"
+        label="Submit"
+        Icon={Check}
+        onClick={
+          feedbackState.comment.state === "submitting" ? undefined : () => {}
+        }
+      />
     </form>
   );
 };

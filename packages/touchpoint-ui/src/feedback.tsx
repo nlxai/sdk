@@ -6,6 +6,7 @@ interface FeedbackInfo {
   rating: number | null;
   commentSubmitted: boolean;
   commentText: string;
+  pending: boolean;
 }
 
 export interface State {
@@ -38,11 +39,10 @@ export const getFeedbackInfo = (
   );
 };
 
-// Helper functions for state transitions
-function clickRatingState(
+function updateFeedbackInfo(
   state: State,
   feedbackUrl: string,
-  value: number,
+  info: Partial<FeedbackInfo>,
 ): State {
   return {
     ...state,
@@ -50,78 +50,72 @@ function clickRatingState(
       ...state.items,
       [feedbackUrl]: {
         ...getFeedbackInfo(state, feedbackUrl),
-        rating: state.items[feedbackUrl]?.rating == null ? value : null,
+        ...info,
       },
     },
+  };
+}
+
+// Helper functions for state transitions
+function clickRatingState(
+  state: State,
+  feedbackUrl: string,
+  pending: boolean,
+  value?: number,
+): State {
+  return updateFeedbackInfo(state, feedbackUrl, {
+    rating: value,
+    pending,
+  });
+}
+
+type Compatible<T, U> = T extends U ? U : never;
+
+function updateCommentState<S extends State, T extends Partial<CommentState>>(
+  state: S,
+  newState: Compatible<S["comment"], T>,
+): State {
+  if (newState.state === "idle") {
+    return {
+      ...state,
+      comment: { state: "idle" },
+    };
+  }
+  return {
+    ...state,
+    comment: { ...state.comment, ...newState },
   };
 }
 
 function clickCommentButtonState(state: State, feedbackUrl: string): State {
   const existingFeedback = getFeedbackInfo(state, feedbackUrl);
-  if (existingFeedback.commentSubmitted) {
-    return {
-      ...state,
-      comment: {
-        state: "submitted",
-        activeFeedbackUrl: feedbackUrl,
-        text: existingFeedback.commentText,
-      },
-    };
-  } else {
-    return {
-      ...state,
-      comment: {
-        state: "editing",
-        activeFeedbackUrl: feedbackUrl,
-        text: state.items[feedbackUrl]?.commentText ?? "",
-      },
-    };
-  }
+  return updateCommentState(state, {
+    state: existingFeedback.commentSubmitted ? "submitted" : "editing",
+    activeFeedbackUrl: feedbackUrl,
+    text: existingFeedback.commentText,
+  });
 }
 
 function clickCommentEditState(state: State, feedbackUrl: string): State {
-  const feedback = getFeedbackInfo(state, feedbackUrl);
-  return {
-    ...state,
-    comment: {
-      activeFeedbackUrl: feedbackUrl,
-      state: "editing",
-      text: feedback.commentText,
-    },
-  };
-}
-
-function editCommentTextState(
-  state: State,
-  feedbackUrl: string,
-  text: string,
-): State {
-  return {
-    ...state,
-    comment: {
-      activeFeedbackUrl: feedbackUrl,
-      state: "editing",
-      text,
-    },
-  };
+  return updateCommentState(state, {
+    state: "editing",
+    activeFeedbackUrl: feedbackUrl,
+    text: getFeedbackInfo(state, feedbackUrl).commentText,
+  });
 }
 
 function submitCommentState(state: State, feedbackUrl: string): State {
-  return {
-    ...state,
-    comment: {
-      activeFeedbackUrl: feedbackUrl,
-      state: "submitting",
-      text: state.comment.state === "editing" ? state.comment.text : "",
-    },
-  };
+  return updateCommentState(state, {
+    activeFeedbackUrl: feedbackUrl,
+    state: "submitting",
+    text: state.comment.state === "editing" ? state.comment.text : "",
+  });
 }
 
 function cancelCommentState(state: State): State {
-  return {
-    ...state,
-    comment: { state: "idle" },
-  };
+  return updateCommentState(state, {
+    state: "idle",
+  });
 }
 
 function submissionSuccessState(state: State): State {
@@ -173,17 +167,17 @@ const actions = (
   handler: ConversationHandler,
   state: State,
 ): Actions => ({
-  clickRating: (feedbackUrl: string, value: number) => {
+  clickRating: (feedbackUrl: string, value?: number) => {
     if (getFeedbackInfo(state, feedbackUrl).rating === value) {
-      setState((prev) => clickRatingState(prev, feedbackUrl, value));
-      return;
+      value = undefined;
     }
+    setState((prev) => clickRatingState(prev, feedbackUrl, true, value));
     void handler
       .submitFeedback(feedbackUrl, {
-        rating: value,
+        rating: value ?? 0,
       })
       .then(() => {
-        setState((prev) => clickRatingState(prev, feedbackUrl, value));
+        setState((prev) => clickRatingState(prev, feedbackUrl, false, value));
       })
       .catch((err: any) => {
         // TODO: add proper error handling
@@ -203,7 +197,11 @@ const actions = (
   editCommentText: (text: string) => {
     setState((prev) => {
       if (prev.comment.state === "idle") return prev;
-      return editCommentTextState(prev, prev.comment.activeFeedbackUrl, text);
+
+      return updateCommentState(prev, {
+        state: "editing",
+        text,
+      });
     });
   },
   submitComment: async () => {
