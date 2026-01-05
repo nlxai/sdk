@@ -42,7 +42,7 @@ export const FeedbackComment: FC<{
   }
   return (
     <form
-      className="flex flex-col grow p-2 gap-2.5"
+      className="flex flex-col grow p-2 gap-2.5 w-full md:max-w-content md:mx-auto md:pb-3"
       onSubmit={(e) => {
         e.preventDefault();
         void feedbackActions.submitComment();

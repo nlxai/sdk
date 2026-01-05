@@ -133,9 +133,7 @@ function submissionSuccessState(state: State): State {
   return {
     ...state,
     comment: {
-      activeFeedbackUrl: feedbackUrl,
-      state: "submitted",
-      text: state.comment.text,
+      state: "idle",
     },
     items: {
       ...state.items,

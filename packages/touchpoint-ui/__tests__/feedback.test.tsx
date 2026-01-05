@@ -76,7 +76,7 @@ describe("useFeedback", () => {
     // Wait for the state to update to 'submitted'
     await waitFor(() => {
       const [state] = result.current;
-      expect(state.comment.state).toBe("submitted");
+      expect(state.comment.state).toBe("idle");
     });
     const [state] = result.current;
     expect(getFeedbackInfo(state as any, "url4").commentSubmitted).toBe(true);
