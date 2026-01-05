@@ -1,4 +1,3 @@
-/* eslint-disable no-case-declarations */
 /* eslint-disable jsdoc/require-jsdoc */
 import { type ConversationHandler } from "@nlxai/core";
 import { useState } from "react";
