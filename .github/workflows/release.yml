@@ -15,7 +15,7 @@ on:
     branches:
       - main
       - master
-    types: [ closed ]
+    types: [closed]
   workflow_dispatch: # force release
 
 jobs:
@@ -62,8 +62,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
-          node-version: 18
-#          registry-url: 'https://npm.pkg.github.com'  
+          node-version-file: ".node-version"
+          #          registry-url: 'https://npm.pkg.github.com'
           # for publishing packages to npm
           registry-url: https://registry.npmjs.org
       - name: Git Identity
@@ -82,7 +82,7 @@ jobs:
         env:
           # actions/setup-node create .npmrc with `NODE_AUTH_TOKEN` env if `registry-url` is defined
           # === `echo "${ registry-url }/:_authToken=${ NODE_AUTH_TOKEN }" > .npmrc`
-#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          #          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # for publishing packages to npm
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

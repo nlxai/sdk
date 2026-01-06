@@ -250,9 +250,13 @@ const FeedbackCollection: FC<{
             <MessageButton
               type={localState.rating === positiveValue ? "activated" : "main"}
               label={feedbackConfig.labels.positive ?? "Yes"}
-              onClick={() => {
-                feedbackActions.clickRating(feedbackUrl, positiveValue);
-              }}
+              onClick={
+                localState.rating === positiveValue && localState.pending
+                  ? undefined
+                  : () => {
+                      feedbackActions.clickRating(feedbackUrl, positiveValue);
+                    }
+              }
               Icon={ThumbUp}
             />
           ) : null}
@@ -260,9 +264,13 @@ const FeedbackCollection: FC<{
             <MessageButton
               type={localState.rating === negativeValue ? "activated" : "main"}
               label={feedbackConfig.labels.negative ?? "No"}
-              onClick={() => {
-                feedbackActions.clickRating(feedbackUrl, negativeValue);
-              }}
+              onClick={
+                localState.rating === negativeValue && localState.pending
+                  ? undefined
+                  : () => {
+                      feedbackActions.clickRating(feedbackUrl, negativeValue);
+                    }
+              }
               Icon={ThumbDown}
             />
           ) : null}
