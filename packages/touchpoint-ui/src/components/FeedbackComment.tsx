@@ -5,6 +5,9 @@ import { IconButton } from "./ui/IconButton";
 import { ArrowLeft, Check, Edit } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
 
+const containerClass =
+  "flex flex-col grow p-2 md:p-3 gap-2.5 w-full md:max-w-content md:mx-auto md:pb-3";
+
 export const FeedbackComment: FC<{
   feedbackState: Feedback.State;
   feedbackActions: Feedback.Actions;
@@ -12,7 +15,7 @@ export const FeedbackComment: FC<{
   if (feedbackState.comment.state === "idle") return null;
   if (feedbackState.comment.state === "submitted") {
     return (
-      <div className="flex flex-col grow p-2 md:p-3 gap-2.5 w-full md:max-w-content md:mx-auto md:pb-3">
+      <div className={containerClass}>
         <div className="flex items-center gap-2.5">
           <IconButton
             type="ghost"
@@ -42,7 +45,7 @@ export const FeedbackComment: FC<{
   }
   return (
     <form
-      className="flex flex-col grow p-2 gap-2.5 w-full md:max-w-content md:mx-auto md:pb-3"
+      className={containerClass}
       onSubmit={(e) => {
         e.preventDefault();
         void feedbackActions.submitComment();
