@@ -1002,7 +1002,9 @@ const fetchUserMessage = async ({
       headers: {
         ...headers,
         "Content-Type": "application/json",
+        // Legacy header
         "nlx-sdk-version": packageJson.version,
+        "nlx-core-version": packageJson.version,
       },
       body: JSON.stringify({ ...body, stream: true }),
     });
@@ -1098,7 +1100,9 @@ const fetchUserMessage = async ({
         ...(headers ?? {}),
         Accept: "application/json",
         "Content-Type": "application/json",
+        // Legacy header
         "nlx-sdk-version": packageJson.version,
+        "nlx-core-version": packageJson.version,
       },
       body: JSON.stringify(body),
     });
@@ -1572,7 +1576,9 @@ export function createConversation(configuration: Config): ConversationHandler {
           Accept: "application/json",
           "Content-Type": "application/json",
           "nlx-conversation-id": state.conversationId,
+          // Legacy header
           "nlx-sdk-version": packageJson.version,
+          "nlx-core-version": packageJson.version,
         },
         body: JSON.stringify({
           languageCode: state.languageCode,
@@ -1679,7 +1685,9 @@ export function createConversation(configuration: Config): ConversationHandler {
           Accept: "application/json",
           "Content-Type": "application/json",
           "nlx-conversation-id": state.conversationId,
+          // Legacy header
           "nlx-sdk-version": packageJson.version,
+          "nlx-core-version": packageJson.version,
         },
         body: JSON.stringify({
           languageCode: state.languageCode,
