@@ -170,6 +170,10 @@ const normalizeConfiguration = (
     ...configuration,
     config: {
       ...configuration.config,
+      headers: {
+        ...configuration.config.headers,
+        "nlx-touchpoint-ui-version": version,
+      },
       applicationUrl,
       conversationId:
         configuration.config.conversationId ??
