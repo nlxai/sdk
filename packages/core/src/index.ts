@@ -1002,6 +1002,8 @@ const fetchUserMessage = async ({
       headers: {
         ...headers,
         "Content-Type": "application/json",
+        // Legacy header
+        "nlx-sdk-version": packageJson.version,
         "nlx-core-version": packageJson.version,
       },
       body: JSON.stringify({ ...body, stream: true }),
