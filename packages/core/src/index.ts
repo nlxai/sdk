@@ -1875,7 +1875,6 @@ export interface VoicePlusStepConfig {
    * The active conversation ID, passed from the active NLX voice application. This is what ties the script exectution to the specific Voice application.
    *
    * _Note: This must be dynamically set by the voice application._ Normally, when the voice application directs the user to the webpage running this code, it will include the conversation ID as a URL parameter which you can extract and pass here.
-   *
    * @example
    * ```typescript
    * const conversationId = new URLSearchParams(window.location.search).get("cid");
