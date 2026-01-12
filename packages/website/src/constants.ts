@@ -11,7 +11,7 @@ export const packageUrls = {
   touchpointUi: "https://github.com/nlxai/sdk/tree/main/packages/touchpoint-ui",
   core: "https://github.com/nlxai/sdk/tree/main/packages/core",
   voicePlusCore:
-    "https://github.com/nlxai/sdk/tree/main/packages/voice-plus-core",
+    "https://github.com/nlxai/sdk/tree/v1.2.4-alpha.7/packages/voice-plus-core",
   voicePlusWeb:
     "https://github.com/nlxai/sdk/tree/main/packages/voice-plus-web",
 };

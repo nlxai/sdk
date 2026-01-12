@@ -21,7 +21,6 @@
     "@docsearch/react": "^3.6.0",
     "@nlxai/core": "*",
     "@nlxai/touchpoint-ui": "*",
-    "@nlxai/voice-plus-core": "*",
     "@nlxai/voice-plus-web": "*",
     "@react-hookz/web": "^23.1.0",
     "clsx": "^2.1.1",
