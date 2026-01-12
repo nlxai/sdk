@@ -31,8 +31,11 @@
             "nlx-api-key": "crLjtXvXIOPtc1AgnPHoEE1y",
           },
           languageCode: "en-US",
+          conversationId: "12345",
         },
         windowSize: "full",
+        input: "external",
+        bidirectional: {},
         // colorMode: "light dark",
         // userMessageBubble: true,
         // agentMessageBubble: true,
@@ -45,6 +48,16 @@
         //   fontFamily: "'BW Haas Text Mono C 55 Rom Regular', monospace",
         // },
       });
+
+      touchpoint.setCustomBidirectionalCommands([
+        {
+          action: "externalInput",
+          // description: "Handle external input",
+          handler: (args) => {
+            alert(`External input received: ${args}`);
+          },
+        },
+      ]);
     </script>
   </body>
 </html>
