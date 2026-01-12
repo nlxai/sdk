@@ -440,6 +440,101 @@ sendTextWrapped("Hello").then((response) => {
 });
 ```
 
+---
+
+### sendVoicePlusStep()
+
+```ts
+function sendVoicePlusStep(configuration): Promise<void>;
+```
+
+Use this function when using **Voice+ scripts** to advance the conversation to the step specified.
+
+This functionality is orthogonal from other usage of the core SDK, as it may be used either using standard SDK communication channels or it can be used to provide a Voice+ script experience with for instance a telephony based channel.
+
+#### Parameters
+
+##### configuration
+
+Configuration for sending the step. Many of the values can be found on the deployment modal of the Voice+ script.
+
+###### apiKey
+
+`string`
+
+- the API key generated for the Voice+ script. Note that this value is different from the API key you would pass to [createConversation](#createconversation). You can control the API key on the Voice+ script settings page.
+
+###### scriptId?
+
+`string`
+
+The ID of the Voice+ script.
+
+###### workspaceId
+
+`string`
+
+Your workspace ID.
+
+###### conversationId
+
+`string`
+
+The active conversation ID, passed from the active NLX voice application. This is what ties the script exectution to the specific Voice application.
+
+_Note: This must be dynamically set by the voice application._ Normally, when the voice application directs the user to the webpage running this code, it will include the conversation ID as a URL parameter which you can extract and pass here.
+
+**Example**
+
+```typescript
+const conversationId = new URLSearchParams(window.location.search).get("cid");
+```
+
+###### languageCode
+
+`string`
+
+The user's language code, consistent with the language codes defined on the Voice+ script.
+
+###### step
+
+[`StepInfo`](#stepinfo)
+
+Which step to send.
+
+###### context
+
+[`Context`](#context)
+
+Any context.
+
+###### debug?
+
+`boolean` = `false`
+
+Set to `true` to help debug issues or errors. Defaults to `false`.
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Example
+
+```typescript
+import { sendVoicePlusStep } from "@nlxai/core";
+
+await sendVoicePlusStep({
+  // hard-coded params
+  apiKey: "REPLACE_WITH_API_KEY",
+  workspaceId: "REPLACE_WITH_WORKSPACE_ID",
+  scriptId: "REPLACE_WITH_SCRIPT_ID",
+  step: "REPLACE_WITH_STEP_ID",
+  // dynamic params
+  conversationId: "REPLACE_WITH_CONVERSATION_ID",
+  languageCode: "en-US",
+});
+```
+
 ## Variables
 
 ### version
@@ -2154,4 +2249,46 @@ The callback function for listening to all responses.
 #### Returns
 
 `void`
+
+---
+
+### StepInfo
+
+```ts
+type StepInfo =
+  | string
+  | {
+      stepId: string;
+      stepTriggerDescription?: string;
+    };
+```
+
+Step information, either a step ID as a single string or an object
+
+#### Type Declaration
+
+`string`
+
+```ts
+{
+  stepId: string;
+  stepTriggerDescription?: string;
+}
+```
+
+##### stepId
+
+```ts
+stepId: string;
+```
+
+Step ID
+
+##### stepTriggerDescription?
+
+```ts
+optional stepTriggerDescription: string;
+```
+
+Step trigger description
 
