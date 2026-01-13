@@ -1349,23 +1349,6 @@ export function createConversation(configuration: Config): ConversationHandler {
         messageResponseHandler(safeJsonParse(e.data));
       }
     };
-    url.searchParams.set("voice-plus", "true");
-    voicePlusSocket = new ReconnectingWebSocket(url.href);
-    voicePlusSocketMessageQueueCheckInterval = setInterval(() => {
-      checkVoicePlusSocketQueue();
-    }, 500);
-    voicePlusSocket.onmessage = (e) => {
-      if (typeof e?.data === "string") {
-        const command = safeJsonParse(e.data);
-        if (command != null) {
-          eventListeners.voicePlusCommand.forEach(
-            (listener: VoicePlusCommandListener) => {
-              listener(command);
-            },
-          );
-        }
-      }
-    };
   };
 
   const setupCommandWebsocket = (): void => {
