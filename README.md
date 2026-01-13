@@ -17,7 +17,7 @@ Welcome to the official NLX SDK. In this repository you will find several packag
   ➡️ [@nlxai/core](https://github.com/nlxai/sdk/tree/main/packages/core/README.md) or [use the REST API](https://docs.nlx.ai/platform/developers/conversation-api/rest)
 
 - I want my application using a telephony channel to interect with my website.  
-  ➡️ [@nlxai/voice-plus-core](https://github.com/nlxai/sdk/tree/main/packages/voice-plus-core/README.md) or [@nlxai/voice-plus-web](https://github.com/nlxai/sdk/tree/main/packages/voice-plus-web/README.md)
+  ➡️ [@nlxai/core](https://github.com/nlxai/sdk/tree/main/packages/core/README.md#sendvoiceplusstep).
 
 - I want to **automate aspects of my integration with NLX**, such as typecheck modalities, sync OpenAPI docs into Data requests or run conversation tests.  
   ➡️ [@nlxai/cli](https://github.com/nlxai/sdk/tree/main/packages/cli/README.md)

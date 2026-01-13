@@ -2,7 +2,6 @@ import { type FC, Fragment, useEffect } from "react";
 import { flatten, groupBy, sortBy } from "ramda";
 import { Routes, Route, useLocation } from "react-router-dom";
 
-import { Prototyping } from "./components/Prototyping";
 import { PageTitle } from "./components/PageTitle";
 import { NextPrevPage } from "./components/NextPrevPage";
 
@@ -125,9 +124,6 @@ export const ContentRoutes: FC<unknown> = () => {
         );
       })}
       <Route path="*" element={<p>Not found</p>} />
-      {import.meta.env.DEV ? (
-        <Route path="/dev" element={<Prototyping />} />
-      ) : null}
     </Routes>
   );
 };

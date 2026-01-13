@@ -1865,3 +1865,141 @@ export function promisify<Params>(
     });
   };
 }
+
+// Old school Voice+
+/**
+ *  @inline @hidden
+ */
+export interface VoicePlusStepConfig {
+  /** * the API key generated for the Voice+ script. Note that this value is different from the API key you would pass to {@link createConversation}. You can control the API key on the Voice+ script settings page.  */
+  apiKey: string;
+  /** The ID of the Voice+ script.  */
+  scriptId?: string;
+
+  /** Your workspace ID. */
+  workspaceId: string;
+
+  /**
+   * The active conversation ID, passed from the active NLX voice application. This is what ties the script exectution to the specific Voice application.
+   *
+   * _Note: This must be dynamically set by the voice application._ Normally, when the voice application directs the user to the webpage running this code, it will include the conversation ID as a URL parameter which you can extract and pass here.
+   * @example
+   * ```typescript
+   * const conversationId = new URLSearchParams(window.location.search).get("cid");
+   * ```
+   */
+  conversationId: string;
+
+  /**
+   * The user's language code, consistent with the language codes defined on the Voice+ script.
+   */
+  languageCode: string;
+
+  /** Which step to send.  */
+  step: StepInfo;
+
+  /** Any context. */
+  context: Context;
+
+  /** Set to `true` to help debug issues or errors. Defaults to `false`. */
+  debug?: boolean;
+
+  /** Used for library testing @internal @hidden */
+  dev?: boolean;
+}
+
+/**
+ * Step information, either a step ID as a single string or an object
+ */
+export type StepInfo =
+  | string
+  | {
+      /**
+       * Step ID
+       */
+      stepId: string;
+      /**
+       * Step trigger description
+       */
+      stepTriggerDescription?: string;
+    };
+
+/**
+ * Use this function when using **Voice+ scripts** to advance the conversation to the step specified.
+ *
+ * This functionality is orthogonal from other usage of the core SDK, as it may be used either using standard SDK communication channels or it can be used to provide a Voice+ script experience with for instance a telephony based channel.
+ * @example
+ * ```typescript
+ *  import { sendVoicePlusStep } from "@nlxai/core";
+ *
+ *  await sendVoicePlusStep({
+ *    // hard-coded params
+ *    apiKey: "REPLACE_WITH_API_KEY",
+ *    workspaceId: "REPLACE_WITH_WORKSPACE_ID",
+ *    scriptId: "REPLACE_WITH_SCRIPT_ID",
+ *    step: "REPLACE_WITH_STEP_ID",
+ *    // dynamic params
+ *    conversationId: "REPLACE_WITH_CONVERSATION_ID",
+ *    languageCode: "en-US",
+ * });
+ * ```
+ * @param configuration - Configuration for sending the step. Many of the values can be found on the deployment modal of the Voice+ script.
+ */
+export const sendVoicePlusStep = async ({
+  apiKey,
+  workspaceId,
+  conversationId,
+  scriptId,
+  languageCode,
+  step,
+  context,
+  debug = false,
+  dev = false,
+}: VoicePlusStepConfig): Promise<void> => {
+  if (scriptId == null) {
+    throw new Error("Voice+ scriptId is not defined.");
+  }
+  if (typeof conversationId !== "string" || conversationId.length === 0) {
+    throw new Error("Voice+ conversationId is not defined.");
+  }
+  const [stepId, stepTriggerDescription]: [string, string | undefined] =
+    typeof step === "string"
+      ? [step, undefined]
+      : [step.stepId, step.stepTriggerDescription];
+  if (!stepIdRegex.test(stepId)) {
+    throw new Error("Invalid stepId. It should be formatted as a UUID.");
+  }
+  const payload = {
+    stepId,
+    context,
+    conversationId,
+    journeyId: scriptId,
+    languageCode,
+    stepTriggerDescription,
+  };
+
+  try {
+    await fetch(`https://${dev ? "dev." : ""}mm.nlx.ai/v1/track`, {
+      method: "POST",
+      headers: {
+        "x-api-key": apiKey,
+        "x-nlx-id": workspaceId,
+        "Content-Type": "application/json",
+        "nlx-sdk-version": packageJson.version,
+        "nlx-core-version": packageJson.version,
+      },
+      body: JSON.stringify(payload),
+    });
+    if (debug) {
+      Console.info(`✓ step: ${stepId}`, payload);
+    }
+  } catch (err: any) {
+    if (debug) {
+      Console.error(`× step: ${stepId}`, err, payload);
+    }
+    throw err;
+  }
+};
+
+const stepIdRegex =
+  /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;

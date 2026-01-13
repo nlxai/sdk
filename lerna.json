@@ -10,7 +10,6 @@
   "npmClient": "npm",
   "packages": [
     "packages/core",
-    "packages/voice-plus-core",
     "packages/voice-plus-web",
     "packages/touchpoint-ui",
     "packages/cli",
