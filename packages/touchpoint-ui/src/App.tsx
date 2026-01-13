@@ -103,14 +103,16 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   const colorMode = props.colorMode ?? "dark";
 
   const [isExpanded, setIsExpanded] = useState(
-    props.embedded || restoredConversation,
+    props.embedded || props.input === "external" || restoredConversation,
   );
 
   const configValid = isConfigValid(props.config);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
-  const isExpandedRef = useRef<boolean>(props.embedded || restoredConversation);
+  const isExpandedRef = useRef<boolean>(
+    props.embedded || props.input === "external" || restoredConversation,
+  );
 
   const input = props.input ?? "text";
 
@@ -335,6 +337,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   if (handler == null) {
     return null;
   }
+
+  if (input === "external") return null;
 
   if (!isExpanded) {
     return props.launchIcon !== false ? (

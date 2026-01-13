@@ -187,7 +187,7 @@ the context object
 ##### input?
 
 ```ts
-optional input: "text" | "voice" | "voiceMini";
+optional input: "text" | "external" | "voice" | "voiceMini";
 ```
 
 Controls the ways in which the user can communicate with the application. Defaults to `"text"`
