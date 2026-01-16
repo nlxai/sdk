@@ -19,8 +19,21 @@ export interface Config {
   /**
    * The URL at which your conversational application is running.
    * Fetch this from the application's API channel tab.
+   * @deprecated use `endpoint`, `deploymentKey` and `channelKey` instead.
    */
   applicationUrl?: string;
+  /**
+   * Base endpoint.
+   */
+  endpoint?: string;
+  /**
+   * Deployment key.
+   */
+  deploymentKey?: string;
+  /**
+   * Channel key.
+   */
+  channelKey?: string;
   /**
    * Headers to forward to the NLX API.
    */
@@ -1180,13 +1193,19 @@ export function createConversation(configuration: Config): ConversationHandler {
         ? Protocol.Http
         : Protocol.HttpWithStreaming);
 
-  const websocketApplicationUrl = normalizeToWebsocket(
-    configuration.applicationUrl ?? "",
-  );
+  const applicationUrl = (() => {
+    if (
+      configuration.endpoint != null &&
+      configuration.deploymentKey != null &&
+      configuration.channelKey != null
+    ) {
+      return `${configuration.endpoint}/c/${configuration.deploymentKey}/${configuration.channelKey}`;
+    }
+    return configuration.applicationUrl ?? "";
+  })();
 
-  const httpApplicationUrl = normalizeToHttp(
-    configuration.applicationUrl ?? "",
-  );
+  const websocketApplicationUrl = normalizeToWebsocket(applicationUrl);
+  const httpApplicationUrl = normalizeToHttp(applicationUrl);
 
   // Check if the application URL has a language code appended to it
   if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(httpApplicationUrl)) {
