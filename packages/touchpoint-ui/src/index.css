@@ -14,6 +14,8 @@
   --z-index-touchpoint: 1000;
   --z-index-launch-button: 100;
 
+  --color-primary: inherit;
+  --color-primary-90: inherit;
   --color-primary-80: inherit;
   --color-primary-60: inherit;
   --color-primary-40: inherit;
@@ -21,6 +23,8 @@
   --color-primary-10: inherit;
   --color-primary-5: inherit;
   --color-primary-1: inherit;
+  --color-secondary: inherit;
+  --color-secondary-90: inherit;
   --color-secondary-80: inherit;
   --color-secondary-60: inherit;
   --color-secondary-40: inherit;
