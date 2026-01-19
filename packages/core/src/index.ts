@@ -296,11 +296,11 @@ export interface SlotValue {
  */
 export enum Protocol {
   /**
-   * Regular HTTP, without support for post-escalation message handling, interim messages and other streaming features.
+   * Regular encrypted HTTPS, without support for post-escalation message handling, interim messages and other streaming features.
    */
   Http = "http",
   /**
-   * HTTP with streaming enabled. This is the default setting and supports interim messages. Does not support post-escalation message handling.
+   * Encrypted HTTPS with streaming enabled. This is the default setting and supports interim messages. Does not support post-escalation message handling.
    */
   HttpWithStreaming = "httpWithStreaming",
   /**
@@ -1201,7 +1201,7 @@ export function createConversation(configuration: Config): ConversationHandler {
       configuration.deploymentKey != null &&
       configuration.channelKey != null
     ) {
-      return `${configuration.endpoint}/c/${configuration.deploymentKey}/${configuration.channelKey}`;
+      return `https://${configuration.endpoint}/c/${configuration.deploymentKey}/${configuration.channelKey}`;
     }
     return configuration.applicationUrl ?? "";
   })();
@@ -1803,6 +1803,13 @@ export function createConversation(configuration: Config): ConversationHandler {
  * @returns Whether the configuration is valid?
  */
 export const isConfigValid = (configuration: Config): boolean => {
+  if (
+    configuration.endpoint != null &&
+    configuration.deploymentKey != null &&
+    configuration.channelKey != null
+  ) {
+    return true;
+  }
   const applicationUrl = configuration.applicationUrl ?? "";
   return applicationUrl.length > 0;
 };
