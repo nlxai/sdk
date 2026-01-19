@@ -17,13 +17,19 @@ const Console = console;
  */
 export interface Config {
   /**
-   * The URL at which your conversational application is running.
-   * Fetch this from the application's API channel tab.
-   * @deprecated use `endpoint`, `deploymentKey` and `channelKey` instead.
+   * The URL at which your conversational application is running. Fetch this from the application's API channel tab.
+   * Currently, there are a few ways to specify the application URL:
+   * - (newest) leave out `applicationUrl` and specify `protocol`, `endpoint`, `deploymentKey` and `channelKey`.
+   * - specify the `applicationUrl` as well as the `protocol`.
+   * - (oldest) specify the `applicationUrl` generated either as an HTTP or websocket URL. Use `experimental.streamHttp` to control streaming.
    */
   applicationUrl?: string;
   /**
-   * Base endpoint.
+   * Specify the protocol (http, websocket or httpWithStreaming)
+   */
+  protocol?: Protocol;
+  /**
+   * Base endpoint, without a leading `https://`.
    */
   endpoint?: string;
   /**
@@ -64,10 +70,6 @@ export interface Config {
    * If you don't have translations, hard-code this to the language code you support.
    */
   languageCode: LanguageCode;
-  /**
-   * Protocol
-   */
-  protocol?: Protocol;
   /**
    * @hidden @internal
    * this should only be used for NLX internal testing.
