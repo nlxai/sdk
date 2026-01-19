@@ -13,7 +13,10 @@ import { createConversation } from "@nlxai/core";
 
 // Create some configuration
 const config = {
-  applicationUrl: "", // obtain from NLX deployments page
+  protocol: "httpsWithStreaming", // "httpsWithStreaming", "https" or "websocket"
+  host: "", // obtain from NLX deployments page
+  deploymentKey: "", // obtain from NLX deployments page
+  channelKey: "", // obtain from NLX deployments page
   headers: {
     "nlx-api-key": "", // obtain from NLX deployments page
   },

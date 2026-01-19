@@ -11,7 +11,9 @@ import { create } from "@nlxai/touchpoint-ui";
 
 const touchpoint = await create({
   config: {
-    applicationUrl: "REPLACE_WITH_APPLICATION_URL",
+    host: "REPLACE_WITH_HOST",
+    deploymentKey: "REPLACE_WITH_DEPLOYMENT_KEY",
+    channelKey: "REPLACE_WITH_CHANNEL_KEY",
     headers: {
       "nlx-api-key": "REPLACE_WITH_API_KEY",
     },
