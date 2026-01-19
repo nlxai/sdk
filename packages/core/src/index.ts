@@ -19,9 +19,9 @@ export interface Config {
   /**
    * The URL at which your conversational application is running. Fetch this from the application's API channel tab.
    * Currently, there are a few ways to specify the application URL:
-   * - (newest) leave out `applicationUrl` and specify `protocol`, `endpoint`, `deploymentKey` and `channelKey`.
-   * - specify the `applicationUrl` as well as the `protocol`.
-   * - (oldest) specify the `applicationUrl` generated either as an HTTP or websocket URL. Use `experimental.streamHttp` to control streaming.
+   * - (recommended) leave out `applicationUrl` and specify `protocol`, `host`, `deploymentKey` and `channelKey`.
+   * - specify the full `applicationUrl` as well as the `protocol`.
+   * - (legacy) specify the `applicationUrl` generated either as an HTTP or websocket URL. Use `experimental.streamHttp` to control streaming.
    */
   applicationUrl?: string;
   /**
@@ -29,9 +29,9 @@ export interface Config {
    */
   protocol?: Protocol;
   /**
-   * Base endpoint, without a leading `https://`.
+   * Hostname of the application deployment, without a leading `https://`.
    */
-  endpoint?: string;
+  host?: string;
   /**
    * Deployment key.
    */
@@ -298,11 +298,11 @@ export enum Protocol {
   /**
    * Regular encrypted HTTPS, without support for post-escalation message handling, interim messages and other streaming features.
    */
-  Http = "http",
+  Https = "https",
   /**
    * Encrypted HTTPS with streaming enabled. This is the default setting and supports interim messages. Does not support post-escalation message handling.
    */
-  HttpWithStreaming = "httpWithStreaming",
+  HttpsWithStreaming = "httpsWithStreaming",
   /**
    * Websocket, with support for post-escalation message handling.
    */
@@ -1192,16 +1192,21 @@ export function createConversation(configuration: Config): ConversationHandler {
     (isWebsocketUrl(configuration.applicationUrl ?? "")
       ? Protocol.Websocket
       : configuration.experimental?.streamHttp === false
-        ? Protocol.Http
-        : Protocol.HttpWithStreaming);
+        ? Protocol.Https
+        : Protocol.HttpsWithStreaming);
 
+  /**
+   * TODO: Instead of re-serializing the host/deploymentKey/channelKey combo and normalizing them again into various socket and HTTP URL's,
+   * parse them out of the `applicationUrl` if specified, and use them to build up the URL's in use. This way we avoid serializing and then
+   * parsing again.
+   */
   const applicationUrl = (() => {
     if (
-      configuration.endpoint != null &&
+      configuration.host != null &&
       configuration.deploymentKey != null &&
       configuration.channelKey != null
     ) {
-      return `https://${configuration.endpoint}/c/${configuration.deploymentKey}/${configuration.channelKey}`;
+      return `https://${configuration.host}/c/${configuration.deploymentKey}/${configuration.channelKey}`;
     }
     return configuration.applicationUrl ?? "";
   })();
@@ -1359,7 +1364,7 @@ export function createConversation(configuration: Config): ConversationHandler {
         const json = await fetchUserMessage({
           fullApplicationUrl: fullApplicationHttpUrl(),
           headers: configuration.headers ?? {},
-          stream: protocol === Protocol.HttpWithStreaming,
+          stream: protocol === Protocol.HttpsWithStreaming,
           eventListeners,
           body: bodyWithContext,
         });
@@ -1804,7 +1809,7 @@ export function createConversation(configuration: Config): ConversationHandler {
  */
 export const isConfigValid = (configuration: Config): boolean => {
   if (
-    configuration.endpoint != null &&
+    configuration.host != null &&
     configuration.deploymentKey != null &&
     configuration.channelKey != null
   ) {
