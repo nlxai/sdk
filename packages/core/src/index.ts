@@ -17,10 +17,29 @@ const Console = console;
  */
 export interface Config {
   /**
-   * The URL at which your conversational application is running.
-   * Fetch this from the application's API channel tab.
+   * The URL at which your conversational application is running. Fetch this from the application's API channel tab.
+   * Currently, there are a few ways to specify the application URL:
+   * - (recommended) leave out `applicationUrl` and specify `protocol`, `host`, `deploymentKey` and `channelKey`.
+   * - specify the full `applicationUrl` as well as the `protocol`.
+   * - (legacy) specify the `applicationUrl` generated either as an HTTP or websocket URL. Use `experimental.streamHttp` to control streaming.
    */
   applicationUrl?: string;
+  /**
+   * Specify the protocol (http, websocket or httpWithStreaming)
+   */
+  protocol?: Protocol;
+  /**
+   * Hostname of the application deployment, without a leading `https://`.
+   */
+  host?: string;
+  /**
+   * Deployment key.
+   */
+  deploymentKey?: string;
+  /**
+   * Channel key.
+   */
+  channelKey?: string;
   /**
    * Headers to forward to the NLX API.
    */
@@ -67,6 +86,7 @@ export interface Config {
   experimental?: {
     /**
      * Check whether HTTP streaming should be enabled. Defaults to `true`.
+     * @deprecated use the protocol setting instead.
      */
     streamHttp?: boolean;
     /**
@@ -269,6 +289,24 @@ export interface SlotValue {
    * for custom slots, this can optionally be the value's ID.
    */
   value: any;
+}
+
+/**
+ * The protocol used to communicate with the application
+ */
+export enum Protocol {
+  /**
+   * Regular encrypted HTTPS, without support for post-escalation message handling, interim messages and other streaming features.
+   */
+  Https = "https",
+  /**
+   * Encrypted HTTPS with streaming enabled. This is the default setting and supports interim messages. Does not support post-escalation message handling.
+   */
+  HttpsWithStreaming = "httpsWithStreaming",
+  /**
+   * Websocket, with support for post-escalation message handling.
+   */
+  Websocket = "websocket",
 }
 
 /**
@@ -1145,10 +1183,39 @@ export function createConversation(configuration: Config): ConversationHandler {
   let voicePlusSocketMessageQueue: VoicePlusMessage[] = [];
   let voicePlusSocketMessageQueueCheckInterval: Timer | null = null;
 
-  const applicationUrl = configuration.applicationUrl ?? "";
+  const protocol =
+    configuration.protocol ??
+    /**
+     * Backwards-compatibility: if a websocket URL was specified, assume it's websocket. Otherwise, look at the legacy experimental streamsetting
+     * and only assume non-streaming if it's explicitly set to false.
+     */
+    (isWebsocketUrl(configuration.applicationUrl ?? "")
+      ? Protocol.Websocket
+      : configuration.experimental?.streamHttp === false
+        ? Protocol.Https
+        : Protocol.HttpsWithStreaming);
+
+  /**
+   * TODO: Instead of re-serializing the host/deploymentKey/channelKey combo and normalizing them again into various socket and HTTP URL's,
+   * parse them out of the `applicationUrl` if specified, and use them to build up the URL's in use. This way we avoid serializing and then
+   * parsing again.
+   */
+  const applicationUrl = (() => {
+    if (
+      configuration.host != null &&
+      configuration.deploymentKey != null &&
+      configuration.channelKey != null
+    ) {
+      return `https://${configuration.host}/c/${configuration.deploymentKey}/${configuration.channelKey}`;
+    }
+    return configuration.applicationUrl ?? "";
+  })();
+
+  const websocketApplicationUrl = normalizeToWebsocket(applicationUrl);
+  const httpApplicationUrl = normalizeToHttp(applicationUrl);
 
   // Check if the application URL has a language code appended to it
-  if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(applicationUrl)) {
+  if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(httpApplicationUrl)) {
     Console.warn(
       "Since v1.0.0, the language code is no longer added at the end of the application URL. Please remove the modifier (e.g. '-en-US') from the URL, and specify it in the `languageCode` parameter instead.",
     );
@@ -1169,7 +1236,7 @@ export function createConversation(configuration: Config): ConversationHandler {
   };
 
   const fullApplicationHttpUrl = (): string =>
-    `${normalizeToHttp(applicationUrl)}${
+    `${httpApplicationUrl}${
       configuration.experimental?.completeApplicationUrl === true
         ? ""
         : `-${state.languageCode}`
@@ -1286,7 +1353,7 @@ export function createConversation(configuration: Config): ConversationHandler {
       channelType: configuration.experimental?.channelType,
       environment: configuration.environment,
     };
-    if (isWebsocketUrl(applicationUrl)) {
+    if (protocol === Protocol.Websocket) {
       if (socket?.readyState === 1) {
         socket.send(JSON.stringify(bodyWithContext));
       } else {
@@ -1297,7 +1364,7 @@ export function createConversation(configuration: Config): ConversationHandler {
         const json = await fetchUserMessage({
           fullApplicationUrl: fullApplicationHttpUrl(),
           headers: configuration.headers ?? {},
-          stream: configuration.experimental?.streamHttp ?? true,
+          stream: protocol === Protocol.HttpsWithStreaming,
           eventListeners,
           body: bodyWithContext,
         });
@@ -1331,7 +1398,7 @@ export function createConversation(configuration: Config): ConversationHandler {
   const setupWebsocket = (): void => {
     // If the socket is already set up, tear it down first
     teardownWebsocket();
-    const url = new URL(applicationUrl);
+    const url = new URL(websocketApplicationUrl);
     if (configuration.experimental?.completeApplicationUrl !== true) {
       url.searchParams.set("languageCode", state.languageCode);
       url.searchParams.set(
@@ -1340,6 +1407,10 @@ export function createConversation(configuration: Config): ConversationHandler {
       );
     }
     url.searchParams.set("conversationId", state.conversationId);
+    const apiKey = configuration.headers["nlx-api-key"];
+    if (apiKey != null) {
+      url.searchParams.set("apiKey", apiKey);
+    }
     socket = new ReconnectingWebSocket(url.href);
     socketMessageQueueCheckInterval = setInterval(() => {
       void checkSocketQueue();
@@ -1357,7 +1428,7 @@ export function createConversation(configuration: Config): ConversationHandler {
     if (configuration.bidirectional !== true) {
       return;
     }
-    const url = new URL(normalizeToWebsocket(applicationUrl));
+    const url = new URL(websocketApplicationUrl);
     if (configuration.experimental?.completeApplicationUrl !== true) {
       url.searchParams.set("languageCode", state.languageCode);
       url.searchParams.set(
@@ -1368,7 +1439,7 @@ export function createConversation(configuration: Config): ConversationHandler {
     url.searchParams.set("conversationId", state.conversationId);
     url.searchParams.set("type", "voice-plus");
     const apiKey = configuration.headers["nlx-api-key"];
-    if (!isWebsocketUrl(applicationUrl) && apiKey != null) {
+    if (apiKey != null) {
       url.searchParams.set("apiKey", apiKey);
     }
     voicePlusSocket = new ReconnectingWebSocket(url.href);
@@ -1411,7 +1482,7 @@ export function createConversation(configuration: Config): ConversationHandler {
     }
   };
 
-  if (isWebsocketUrl(applicationUrl)) {
+  if (protocol === Protocol.Websocket) {
     setupWebsocket();
   }
 
@@ -1650,7 +1721,7 @@ export function createConversation(configuration: Config): ConversationHandler {
         );
         return;
       }
-      if (isWebsocketUrl(applicationUrl)) {
+      if (protocol === Protocol.Websocket) {
         setupWebsocket();
       }
       setupCommandWebsocket();
@@ -1660,27 +1731,29 @@ export function createConversation(configuration: Config): ConversationHandler {
       return state.languageCode;
     },
     getVoiceCredentials: async (context, options) => {
-      const url = normalizeToHttp(applicationUrl);
-      const res = await fetch(`${url}-${state.languageCode}/requestToken`, {
-        method: "POST",
-        headers: {
-          ...(configuration.headers ?? {}),
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "nlx-conversation-id": state.conversationId,
-          // Legacy header
-          "nlx-sdk-version": packageJson.version,
-          "nlx-core-version": packageJson.version,
+      const res = await fetch(
+        `${httpApplicationUrl}-${state.languageCode}/requestToken`,
+        {
+          method: "POST",
+          headers: {
+            ...(configuration.headers ?? {}),
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "nlx-conversation-id": state.conversationId,
+            // Legacy header
+            "nlx-sdk-version": packageJson.version,
+            "nlx-core-version": packageJson.version,
+          },
+          body: JSON.stringify({
+            languageCode: state.languageCode,
+            conversationId: state.conversationId,
+            userId: state.userId,
+            requestToken: true,
+            context,
+            autoTriggerWelcomeFlow: options?.autoTriggerWelcomeFlow ?? true,
+          }),
         },
-        body: JSON.stringify({
-          languageCode: state.languageCode,
-          conversationId: state.conversationId,
-          userId: state.userId,
-          requestToken: true,
-          context,
-          autoTriggerWelcomeFlow: options?.autoTriggerWelcomeFlow ?? true,
-        }),
-      });
+      );
       if (res.status >= 400) {
         throw new Error(`Responded with ${res.status}`);
       }
@@ -1700,14 +1773,14 @@ export function createConversation(configuration: Config): ConversationHandler {
         conversationId: uuid(),
         responses: options?.clearResponses === true ? [] : state.responses,
       });
-      if (isWebsocketUrl(applicationUrl)) {
+      if (protocol === Protocol.Websocket) {
         setupWebsocket();
       }
       setupCommandWebsocket();
     },
     destroy: () => {
       subscribers = [];
-      if (isWebsocketUrl(applicationUrl)) {
+      if (protocol === Protocol.Websocket) {
         teardownWebsocket();
       }
       teardownCommandWebsocket();
@@ -1735,6 +1808,13 @@ export function createConversation(configuration: Config): ConversationHandler {
  * @returns Whether the configuration is valid?
  */
 export const isConfigValid = (configuration: Config): boolean => {
+  if (
+    configuration.host != null &&
+    configuration.deploymentKey != null &&
+    configuration.channelKey != null
+  ) {
+    return true;
+  }
   const applicationUrl = configuration.applicationUrl ?? "";
   return applicationUrl.length > 0;
 };
