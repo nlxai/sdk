@@ -100,7 +100,7 @@ export const MessageButton: FC<MessageButtonProps> = ({
         className={"z-touchpoint pointer-events-none"}
       >
         <Tooltip.Positioner sideOffset={4}>
-          <Tooltip.Popup className="bg-primary-90 text-secondary-90 text-xs px-2 py-1 rounded-inner shadow-lg">
+          <Tooltip.Popup className="bg-primary-90 text-secondary-90 text-xs px-2 py-1 rounded-[calc(var(--radius-inner)*0.6667)] shadow-lg">
             {label}
           </Tooltip.Popup>
         </Tooltip.Positioner>
