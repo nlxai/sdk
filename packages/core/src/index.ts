@@ -1830,15 +1830,7 @@ export function createConversation(configuration: Config): ConversationHandler {
  * @returns Whether the configuration is valid?
  */
 export const isConfigValid = (configuration: Config): boolean => {
-  if (
-    configuration.host != null &&
-    configuration.deploymentKey != null &&
-    configuration.channelKey != null
-  ) {
-    return true;
-  }
-  const applicationUrl = configuration.applicationUrl ?? "";
-  return applicationUrl.length > 0;
+  return parseConnection(configuration) != null;
 };
 
 /**
