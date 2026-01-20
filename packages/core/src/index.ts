@@ -989,7 +989,7 @@ interface Connection {
 
 /**
  * Parse configuration into structured connection information, taking into account `applicationUrl`-based configs.
- * @params config - client configuration.
+ * @param config - client configuration.
  * @returns connection - connection information, or `null` if the configuration is invalid.
  */
 const parseConnection = (config: Config): Connection | null => {
@@ -1226,8 +1226,6 @@ export function createConversation(configuration: Config): ConversationHandler {
   let voicePlusSocketMessageQueueCheckInterval: Timer | null = null;
 
   const connection = parseConnection(configuration);
-
-  console.log(connection);
 
   const websocketApplicationUrl =
     connection != null
