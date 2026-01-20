@@ -27,6 +27,7 @@
     "update-readme": "npm run update-readme:docs && npm run update-readme:merge"
   },
   "dependencies": {
+    "@base-ui/react": "^1.1.0",
     "@nlxai/core": "^1.2.4-alpha.9",
     "@react-hookz/web": "^25.0.1",
     "@react-input/mask": "^2.0.4",

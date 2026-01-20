@@ -43,6 +43,7 @@ import { RiveAnimation } from "./components/RiveAnimation";
 
 import { useFeedback } from "./feedback";
 import { FeedbackComment } from "./components/FeedbackComment";
+import { Tooltip } from "@base-ui/react/tooltip";
 
 /**
  * Main Touchpoint creation properties object
@@ -369,29 +370,31 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   if (input === "voiceMini") {
     return (
       <>
-        <CustomPropertiesContainer
-          theme={props.theme}
-          colorMode={colorMode}
-          className={clsx(
-            "w-fit",
-            props.embedded ? "" : "fixed z-touchpoint bottom-2 right-2",
-          )}
-        >
-          {props.animate ? (
-            <RiveAnimation restored={restoredConversation} />
-          ) : null}
-          <VoiceMini
-            key={voiceKey}
-            handler={handler}
-            context={props.initialContext}
-            brandIcon={props.brandIcon}
-            onClose={() => {
-              onClose(new Event("close"));
-            }}
-            renderCollapse={props.onClose != null}
-            modalityComponents={modalityComponents}
-          />
-        </CustomPropertiesContainer>
+        <Tooltip.Provider>
+          <CustomPropertiesContainer
+            theme={props.theme}
+            colorMode={colorMode}
+            className={clsx(
+              "w-fit",
+              props.embedded ? "" : "fixed z-touchpoint bottom-2 right-2",
+            )}
+          >
+            {props.animate ? (
+              <RiveAnimation restored={restoredConversation} />
+            ) : null}
+            <VoiceMini
+              key={voiceKey}
+              handler={handler}
+              context={props.initialContext}
+              brandIcon={props.brandIcon}
+              onClose={() => {
+                onClose(new Event("close"));
+              }}
+              renderCollapse={props.onClose != null}
+              modalityComponents={modalityComponents}
+            />
+          </CustomPropertiesContainer>
+        </Tooltip.Provider>
       </>
     );
   }
@@ -471,101 +474,103 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   };
 
   return (
-    <CustomPropertiesContainer
-      theme={props.theme}
-      colorMode={colorMode}
-      className={clsx(
-        "grid grid-cols-2 xl:grid-cols-[1fr_632px]",
-        props.embedded ? "w-full h-full" : "fixed inset-0 z-touchpoint",
-      )}
-    >
-      {windowSize === "half" ? (
-        <div className="hidden md:block bg-overlay" />
-      ) : null}
-      <div
+    <Tooltip.Provider>
+      <CustomPropertiesContainer
+        theme={props.theme}
+        colorMode={colorMode}
         className={clsx(
-          "@container/main",
-          "w-full bg-background text-primary-80 flex relative flex-col h-full backdrop-blur-overlay",
-          {
-            "col-span-2 md:col-span-1": windowSize === "half",
-            "col-span-2": windowSize === "full",
-          },
+          "grid grid-cols-2 xl:grid-cols-[1fr_632px]",
+          props.embedded ? "w-full h-full" : "fixed inset-0 z-touchpoint",
         )}
       >
-        {feedbackState.comment.state !== "idle" ? (
-          <FeedbackComment
-            feedbackActions={feedbackActions}
-            feedbackState={feedbackState}
-          />
-        ) : (
-          <>
-            <Header
-              windowSize={props.embedded ? "embedded" : windowSize}
-              errorThemedCloseButton={input === "voice"}
-              speakerControls={
-                input === "voice"
-                  ? {
-                      enabled: fullscreenVoiceSpeakersEnabled,
-                      setEnabled: setFullscreenVoiceSpeakersEnabled,
-                    }
-                  : undefined
-              }
-              colorMode={colorMode}
-              brandIcon={
-                /* In fullscreen voice mode, a separate header brand icon is not necessary because a brand icon+ripple are rendered in the middle */
-                input === "text" ? props.brandIcon : undefined
-              }
-              isSettingsOpen={isSettingsOpen}
-              enabled={props.enabled}
-              toggleSettings={
-                props.enableSettings
-                  ? () => {
-                      setIsSettingsOpen((prev) => !prev);
-                    }
-                  : undefined
-              }
-              renderCollapse={props.onClose != null}
-              collapse={onClose}
-              reset={reset}
+        {windowSize === "half" ? (
+          <div className="hidden md:block bg-overlay" />
+        ) : null}
+        <div
+          className={clsx(
+            "@container/main",
+            "w-full bg-background text-primary-80 flex relative flex-col h-full backdrop-blur-overlay",
+            {
+              "col-span-2 md:col-span-1": windowSize === "half",
+              "col-span-2": windowSize === "full",
+            },
+          )}
+        >
+          {feedbackState.comment.state !== "idle" ? (
+            <FeedbackComment
+              feedbackActions={feedbackActions}
+              feedbackState={feedbackState}
             />
-            {input === "text" ? (
-              textContent()
-            ) : (
-              <>
-                {isSettingsOpen ? (
-                  <Settings
-                    className={clsx(
-                      "flex-none",
-                      windowSize === "full"
-                        ? "w-full md:max-w-content md:mx-auto"
-                        : "",
-                    )}
-                    onClose={() => {
-                      setIsSettingsOpen(false);
-                    }}
-                    reset={() => {
-                      reset();
-                      setIsSettingsOpen(false);
-                    }}
+          ) : (
+            <>
+              <Header
+                windowSize={props.embedded ? "embedded" : windowSize}
+                errorThemedCloseButton={input === "voice"}
+                speakerControls={
+                  input === "voice"
+                    ? {
+                        enabled: fullscreenVoiceSpeakersEnabled,
+                        setEnabled: setFullscreenVoiceSpeakersEnabled,
+                      }
+                    : undefined
+                }
+                colorMode={colorMode}
+                brandIcon={
+                  /* In fullscreen voice mode, a separate header brand icon is not necessary because a brand icon+ripple are rendered in the middle */
+                  input === "text" ? props.brandIcon : undefined
+                }
+                isSettingsOpen={isSettingsOpen}
+                enabled={props.enabled}
+                toggleSettings={
+                  props.enableSettings
+                    ? () => {
+                        setIsSettingsOpen((prev) => !prev);
+                      }
+                    : undefined
+                }
+                renderCollapse={props.onClose != null}
+                collapse={onClose}
+                reset={reset}
+              />
+              {input === "text" ? (
+                textContent()
+              ) : (
+                <>
+                  {isSettingsOpen ? (
+                    <Settings
+                      className={clsx(
+                        "flex-none",
+                        windowSize === "full"
+                          ? "w-full md:max-w-content md:mx-auto"
+                          : "",
+                      )}
+                      onClose={() => {
+                        setIsSettingsOpen(false);
+                      }}
+                      reset={() => {
+                        reset();
+                        setIsSettingsOpen(false);
+                      }}
+                      handler={handler}
+                    />
+                  ) : null}
+                  <FullscreenVoice
+                    key={voiceKey}
+                    brandIcon={props.brandIcon}
                     handler={handler}
+                    speakersEnabled={fullscreenVoiceSpeakersEnabled}
+                    colorMode={colorMode}
+                    className={isSettingsOpen ? "hidden" : "grow"}
+                    context={props.initialContext}
+                    modalityComponents={modalityComponents}
                   />
-                ) : null}
-                <FullscreenVoice
-                  key={voiceKey}
-                  brandIcon={props.brandIcon}
-                  handler={handler}
-                  speakersEnabled={fullscreenVoiceSpeakersEnabled}
-                  colorMode={colorMode}
-                  className={isSettingsOpen ? "hidden" : "grow"}
-                  context={props.initialContext}
-                  modalityComponents={modalityComponents}
-                />
-              </>
-            )}
-          </>
-        )}
-      </div>
-    </CustomPropertiesContainer>
+                </>
+              )}
+            </>
+          )}
+        </div>
+      </CustomPropertiesContainer>
+    </Tooltip.Provider>
   );
 });
 

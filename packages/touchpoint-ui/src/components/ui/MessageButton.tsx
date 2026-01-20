@@ -2,6 +2,7 @@ import { clsx } from "clsx";
 import { type FC } from "react";
 
 import { type IconProps } from "./Icons";
+import { HeadlessIconButton } from "./IconButton";
 
 /**
  * Represents the different types of icon buttons available in the application.
@@ -76,12 +77,10 @@ export const MessageButton: FC<MessageButtonProps> = ({
   className,
   Icon,
 }) => {
-  const isDisabled = onClick == null;
   return (
-    <button
-      onClick={isDisabled ? undefined : onClick}
-      disabled={isDisabled}
-      aria-label={label}
+    <HeadlessIconButton
+      onClick={onClick}
+      label={label}
       className={clsx(
         baseClass,
         type === "main" ? mainClass : null,
@@ -90,6 +89,6 @@ export const MessageButton: FC<MessageButtonProps> = ({
       )}
     >
       <Icon size={12} />
-    </button>
+    </HeadlessIconButton>
   );
 };

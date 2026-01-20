@@ -279,7 +279,10 @@ const FeedbackCollection: FC<{
               type={localState.commentSubmitted ? "activated" : "main"}
               label={feedbackConfig.labels.comment ?? "Add comment"}
               onClick={() => {
-                feedbackActions.clickCommentButton(feedbackUrl);
+                feedbackActions.clickCommentButton(
+                  feedbackUrl,
+                  feedbackConfig.labels.comment ?? "Provide feedback",
+                );
               }}
               Icon={BotMessage}
             />
