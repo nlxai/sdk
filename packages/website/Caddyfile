@@ -1,7 +1,0 @@
-# used to reproduce github actions environment
-# for instance, to confirm <BrowserRouter> works correctly
-:{$CADDY_PORT:9000}
-root * ./dist/client
-# support rendering html files without extension (just like github)
-try_files {path}.html
-file_server
