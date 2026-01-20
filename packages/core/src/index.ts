@@ -47,12 +47,7 @@ export interface Config {
   /**
    * Headers to forward to the NLX API.
    */
-  headers?: Record<string, string> & {
-    /**
-     * The `nlx-api-key` is required. Fetch this from the application's API channel tab.
-     */
-    "nlx-api-key": string;
-  };
+  headers?: Record<string, string>;
   /**
    * Set `conversationId` to continue an existing conversation. If not set, a new conversation will be started (and a new conversationId will be generated internally).
    */
@@ -1756,7 +1751,7 @@ export function createConversation(configuration: Config): ConversationHandler {
           method: "POST",
           headers: {
             ...(configuration.headers ?? {}),
-            "nlx-api-key": configuration.apiKey ?? "",
+            "nlx-api-key": connection?.apiKey ?? "",
             Accept: "application/json",
             "Content-Type": "application/json",
             "nlx-conversation-id": state.conversationId,

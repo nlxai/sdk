@@ -171,7 +171,7 @@ const normalizeConfiguration = (
     config: {
       ...configuration.config,
       headers: {
-        ...configuration.config.headers,
+        ...(configuration.config.headers ?? {}),
         "nlx-touchpoint-ui-version": version,
       },
       applicationUrl,
