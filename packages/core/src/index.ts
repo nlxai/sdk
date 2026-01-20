@@ -1014,6 +1014,7 @@ const parseConnection = (config: Config): Connection | null => {
       deploymentKey: config.deploymentKey,
     };
   }
+  // `applicationUrl`-based definition: websocket case
   if (isWebsocketUrl(applicationUrl)) {
     const host = getHost(applicationUrl);
     const url = new URL(applicationUrl);
@@ -1023,13 +1024,24 @@ const parseConnection = (config: Config): Connection | null => {
     if (channelKey != null && deploymentKey != null) {
       return { protocol, channelKey, deploymentKey, host, apiKey };
     }
-  } else {
-    const host = getHost(applicationUrl);
-    const url = new URL(applicationUrl);
-    const pathChunks = url.pathname.split("/");
-    const deploymentKey = pathChunks[2];
-    const channelKey = pathChunks[3];
-    return { protocol, channelKey, deploymentKey, host, apiKey };
+    return null;
+  }
+  // `applicationUrl`-based definition: http case
+  const host = getHost(applicationUrl);
+  const parseResult = new URLPattern({
+    pathname: "/c/:deploymentKey/:channelKey",
+  }).exec(applicationUrl);
+  if (
+    parseResult?.pathname.groups.channelKey != null &&
+    parseResult?.pathname.groups.deploymentKey != null
+  ) {
+    return {
+      protocol,
+      channelKey: parseResult.pathname.groups.channelKey,
+      deploymentKey: parseResult.pathname.groups.deploymentKey,
+      host,
+      apiKey,
+    };
   }
   return null;
 };
