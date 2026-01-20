@@ -16,10 +16,16 @@ export interface State {
 
 type CommentState =
   | { state: "idle" }
-  | { state: "editing"; activeFeedbackUrl: string; text: string }
-  | { state: "submitting"; activeFeedbackUrl: string; text: string }
-  | { state: "submitted"; activeFeedbackUrl: string; text: string }
-  | { state: "error"; activeFeedbackUrl: string; text: string };
+  | ({ state: "editing" } & ActiveCommentState)
+  | ({ state: "submitting" } & ActiveCommentState)
+  | ({ state: "submitted" } & ActiveCommentState)
+  | ({ state: "error" } & ActiveCommentState);
+
+interface ActiveCommentState {
+  activeFeedbackUrl: string;
+  text: string;
+  prompt: string;
+}
 
 const initialize: State = {
   comment: { state: "idle" },
@@ -87,12 +93,17 @@ function updateCommentState<S extends State, T extends Partial<CommentState>>(
   };
 }
 
-function clickCommentButtonState(state: State, feedbackUrl: string): State {
+function clickCommentButtonState(
+  state: State,
+  feedbackUrl: string,
+  prompt: string,
+): State {
   const existingFeedback = getFeedbackInfo(state, feedbackUrl);
   return updateCommentState(state, {
     state: existingFeedback.commentSubmitted ? "submitted" : "editing",
     activeFeedbackUrl: feedbackUrl,
     text: existingFeedback.commentText,
+    prompt,
   });
 }
 
@@ -149,13 +160,14 @@ function submissionErrorState(state: State): State {
           : "",
       text: state.comment.state === "submitting" ? state.comment.text : "",
       state: "error",
+      prompt: state.comment.state === "submitting" ? state.comment.prompt : "",
     },
   };
 }
 
 export interface Actions {
   clickRating: (feedbackUrl: string, value: number) => void;
-  clickCommentButton: (feedbackUrl: string) => void;
+  clickCommentButton: (feedbackUrl: string, prompt: string) => void;
   clickCommentEdit: () => void;
   editCommentText: (text: string) => void;
   submitComment: () => Promise<void>;
@@ -185,8 +197,8 @@ const actions = (
         console.warn("Rating error", err);
       });
   },
-  clickCommentButton: (feedbackUrl: string) => {
-    setState((prev) => clickCommentButtonState(prev, feedbackUrl));
+  clickCommentButton: (feedbackUrl: string, prompt: string) => {
+    setState((prev) => clickCommentButtonState(prev, feedbackUrl, prompt));
   },
   clickCommentEdit: () => {
     setState((prev) => {

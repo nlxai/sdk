@@ -3,7 +3,8 @@ import { clsx } from "clsx";
 import { type MouseEventHandler, type FC } from "react";
 
 import { type IconProps } from "./Icons";
-
+import { Tooltip } from "@base-ui/react/tooltip";
+import { useAppRoot } from "../../utils/useAppRoot";
 /**
  * Represents the different types of icon buttons available in the application.
  *
@@ -94,6 +95,45 @@ export const UnsemanticIconButton: FC<{
   );
 };
 
+export const HeadlessIconButton: FC<{
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  label: string;
+  className?: string;
+  children: React.ReactNode;
+}> = ({ onClick, label, className, children }) => {
+  const isDisabled = onClick == null;
+  const appRoot = useAppRoot();
+  if (isDisabled) {
+    return (
+      <button disabled={true} aria-label={label} className={className}>
+        {children}
+      </button>
+    );
+  } else {
+    return (
+      <Tooltip.Root>
+        <Tooltip.Trigger
+          onClick={onClick}
+          aria-label={label}
+          className={className}
+        >
+          {children}
+        </Tooltip.Trigger>
+        <Tooltip.Portal
+          container={appRoot}
+          className={"z-touchpoint pointer-events-none"}
+        >
+          <Tooltip.Positioner sideOffset={4}>
+            <Tooltip.Popup className="bg-primary-90 text-secondary-90 text-xs px-2 py-1 rounded-[calc(var(--radius-inner)*0.6667)] shadow-lg">
+              {label}
+            </Tooltip.Popup>
+          </Tooltip.Positioner>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+    );
+  }
+};
+
 /**
  * A button showing only an icon (textual label is provided for accessibility)
  * @example
@@ -118,12 +158,10 @@ export const IconButton: FC<IconButtonProps> = ({
   className,
   Icon,
 }) => {
-  const isDisabled = onClick == null;
   return (
-    <button
-      onClick={isDisabled ? undefined : onClick}
-      disabled={isDisabled}
-      aria-label={label}
+    <HeadlessIconButton
+      onClick={onClick}
+      label={label}
       className={clsx(
         baseClass,
         type === "main" ? mainClass : null,
@@ -136,6 +174,6 @@ export const IconButton: FC<IconButtonProps> = ({
       )}
     >
       <Icon />
-    </button>
+    </HeadlessIconButton>
   );
 };

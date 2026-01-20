@@ -62,7 +62,7 @@ export const FeedbackComment: FC<{
             feedbackActions.cancelComment();
           }}
         />
-        <label htmlFor="feedback-form">Provide feedback</label>
+        <label htmlFor="feedback-form">{feedbackState.comment.prompt}</label>
       </div>
       <textarea
         id="feedback-form"
