@@ -365,7 +365,7 @@ The following features are not supported and will be silently ignored:
               message: "Open JSON in your editor",
               default: JSON.stringify(dataRequest, null, 2),
               postfix: ".json",
-              waitForUseInput: false,
+              waitForUserInput: false,
               validate: (text) => {
                 try {
                   JSON.parse(text);
