@@ -2,9 +2,10 @@
 import { type SetStateAction, type Dispatch, type FC } from "react";
 import { clsx } from "clsx";
 
+import { useCopy } from "../utils/useCopy";
 import { IconButton, type IconButtonType } from "./ui/IconButton";
 import { type WindowSize, type ColorMode } from "../interface";
-import { useTailwindMediaQuery } from "../hooks";
+import { useTailwindMediaQuery } from "../utils/useTailwindMediaQuery";
 import { Close, Settings, Undo, Volume, VolumeOff } from "./ui/Icons";
 
 interface HeaderProps {
@@ -39,6 +40,7 @@ export const Header: FC<HeaderProps> = ({
   const isHalf = windowSize === "half";
   const isMd = useTailwindMediaQuery("md");
   const iconButtonType: IconButtonType = isHalf && isMd ? "overlay" : "ghost";
+  const copy = useCopy();
   return (
     <div
       className={clsx("flex p-2 md:p-3 items-center justify-between gap-2", {
@@ -57,7 +59,7 @@ export const Header: FC<HeaderProps> = ({
       ) : null}
 
       <IconButton
-        label="Reset"
+        label={copy.restartConversationButtonLabel}
         type={iconButtonType}
         className={brandIcon == null ? "" : "ml-auto"}
         onClick={

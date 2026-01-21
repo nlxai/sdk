@@ -1,11 +1,9 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type FC, type ReactNode, type CSSProperties, useRef } from "react";
-import { clsx } from "clsx";
+import { type CSSProperties } from "react";
 
-import { type ColorMode, type Theme } from "../interface";
-import { AppRootProvider } from "../utils/useAppRoot";
+import { type Theme } from "../interface";
 
-const toCustomProperties = (theme: Theme): CSSProperties => {
+export const toCustomProperties = (theme: Theme): CSSProperties => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return {
     "--font-family": theme.fontFamily,
@@ -81,7 +79,7 @@ const customProperties: Theme = {
   errorSecondary: "light-dark(rgb(255, 223, 230), rgb(94, 4, 4))",
 };
 
-const intelligentMerge = (theme: Partial<Theme>): Theme => {
+export const intelligentMerge = (theme: Partial<Theme>): Theme => {
   const computed: Partial<Theme> = {};
 
   if (theme.accent != null && theme.accent20 == null) {
@@ -131,28 +129,4 @@ const intelligentMerge = (theme: Partial<Theme>): Theme => {
     ...computed,
     ...theme,
   };
-};
-
-export const CustomPropertiesContainer: FC<{
-  colorMode: ColorMode;
-  className?: string;
-  theme?: Partial<Theme>;
-  children?: ReactNode;
-}> = ({ colorMode, children, theme, className }) => {
-  const themeWithOverrides: Theme = intelligentMerge(theme ?? {});
-  const ref = useRef<HTMLDivElement>(null);
-  return (
-    <AppRootProvider value={ref}>
-      <div
-        className={clsx(className, "font-sans")}
-        ref={ref}
-        style={{
-          ...toCustomProperties(themeWithOverrides),
-          colorScheme: colorMode,
-        }}
-      >
-        <div className={clsx(className, "font-sans")}>{children}</div>
-      </div>
-    </AppRootProvider>
-  );
 };

@@ -16,9 +16,10 @@ import {
 } from "@nlxai/core";
 import { clsx } from "clsx";
 
+import { useCopy } from "../utils/useCopy";
 import { IconButton } from "./ui/IconButton";
 import { ArrowForward, Attachment, Delete, Check, Error } from "./ui/Icons";
-import { useTailwindMediaQuery } from "../hooks";
+import { useTailwindMediaQuery } from "../utils/useTailwindMediaQuery";
 
 interface InputProps {
   className?: string;
@@ -43,6 +44,8 @@ export const Input: FC<InputProps> = ({
   onFileUpload,
   enabled,
 }) => {
+  const copy = useCopy();
+
   // Text state
   const [isTextAreaInFocus, setIsTextAreaInFocus] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -255,7 +258,7 @@ export const Input: FC<InputProps> = ({
           />
           <IconButton
             className="flex-none"
-            label="Send message"
+            label={copy.sendMessageButtonLabel}
             onClick={
               inputMessageSendDisabled
                 ? undefined
