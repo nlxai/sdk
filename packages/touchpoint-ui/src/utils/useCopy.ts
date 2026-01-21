@@ -24,6 +24,7 @@ export const defaultCopy = (languageCode: string): Copy => {
       sendMessageButtonLabel: "Enviar mensaje",
     };
   }
+  // TODO: add default copy for other languages
   return {
     escalationNotice: "Your conversation has been escalated to an agent",
     restartConversationButtonLabel: "Restart conversation",
