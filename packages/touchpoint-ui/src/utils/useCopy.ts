@@ -1,12 +1,9 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { createContext, useContext } from "react";
-import { includes } from "ramda";
 import { type Copy } from "../interface";
 
 export const defaultCopy = (languageCode: string): Copy => {
-  if (
-    languageCode.startsWith("es")
-  ) {
+  if (languageCode.startsWith("es")) {
     return {
       escalationNotice: "Tu conversación ha sido escalada a un agente",
       restartConversationButtonLabel: "Reiniciar conversación",

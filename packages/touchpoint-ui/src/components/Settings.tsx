@@ -3,6 +3,7 @@ import { type FC } from "react";
 import { type ConversationHandler } from "@nlxai/core";
 
 import { Escalate, Restart } from "./ui/Icons";
+import { useCopy } from "../utils/useCopy";
 import { TextButton } from "./ui/TextButton";
 import { clsx } from "clsx";
 
@@ -19,6 +20,7 @@ export const Settings: FC<SettingsProps> = ({
   reset,
   className,
 }) => {
+  const copy = useCopy();
   return (
     <div
       className={clsx(
@@ -27,13 +29,13 @@ export const Settings: FC<SettingsProps> = ({
       )}
     >
       <TextButton
-        label="Restart conversation"
+        label={copy.restartConversationButtonLabel}
         Icon={Restart}
         type="ghost"
         onClick={reset}
       />
       <TextButton
-        label="Talk to an agent"
+        label={copy.escalationButtonLabel}
         Icon={Escalate}
         type="ghost"
         onClick={() => {
