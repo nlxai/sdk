@@ -5,17 +5,7 @@ import { type Copy } from "../interface";
 
 export const defaultCopy = (languageCode: string): Copy => {
   if (
-    includes(languageCode, [
-      "es-US",
-      "es-ES",
-      "es-AR",
-      "es-CL",
-      "es-CO",
-      "es-MX",
-      "es-PE",
-      "es-419",
-      "es-CB",
-    ])
+    languageCode.startsWith("es")
   ) {
     return {
       escalationNotice: "Tu conversación ha sido escalada a un agente",
