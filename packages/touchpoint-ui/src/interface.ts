@@ -6,7 +6,6 @@ import type {
 } from "@nlxai/core";
 import { type ComponentType } from "react";
 import type { InteractiveElementInfo } from "./bidirectional/analyzePageForms";
-import type { Copy } from "./copy";
 
 /**
  * Window size configuration
