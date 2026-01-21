@@ -326,12 +326,15 @@ export interface TouchpointConfiguration {
    * Context sent with the initial request.
    */
   initialContext?: Context;
-
   /**
    * Enables bidirectional mode of voice+. Will automatically set the bidirectional flag in the config.
    *
    */
   bidirectional?: BidirectionalConfig;
+  /**
+   * Copy
+   */
+  copy?: Partial<Copy>;
 }
 
 /**
@@ -585,4 +588,26 @@ export interface TouchpointInstance {
   setCustomBidirectionalCommands: (
     commands: BidirectionalCustomCommand[],
   ) => void;
+}
+
+/**
+ * Copy configuration
+ */
+export interface Copy {
+  /**
+   * Escalation notice
+   */
+  escalationNotice: string;
+  /**
+   * Restart conversation button label
+   */
+  restartConversationButtonLabel: string;
+  /**
+   * Restart conversation button label
+   */
+  escalationButtonLabel: string;
+  /**
+   * Send message button label
+   */
+  sendMessageButtonLabel: string;
 }

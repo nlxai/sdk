@@ -41,14 +41,13 @@ export interface Config {
    */
   channelKey?: string;
   /**
+   * API key.
+   */
+  apiKey?: string;
+  /**
    * Headers to forward to the NLX API.
    */
-  headers: Record<string, string> & {
-    /**
-     * The `nlx-api-key` is required. Fetch this from the application's API channel tab.
-     */
-    "nlx-api-key": string;
-  };
+  headers?: Record<string, string>;
   /**
    * Set `conversationId` to continue an existing conversation. If not set, a new conversation will be started (and a new conversationId will be generated internally).
    */
@@ -970,43 +969,89 @@ const safeJsonParse = (val: string): any => {
  */
 export type Subscriber = (response: Response[], newResponse?: Response) => void;
 
-const getBaseDomain = (url: string): string =>
+const getHost = (url: string): string =>
   url.match(
     /(bots\.dev\.studio\.nlx\.ai|bots\.studio\.nlx\.ai|apps\.nlx\.ai|dev\.apps\.nlx\.ai)/g,
   )?.[0] ?? "apps.nlx.ai";
 
-/**
- * When a HTTP URL is provided, deduce the websocket URL. Otherwise, return the argument.
- * @param applicationUrl - the websocket URL
- * @returns httpUrl - the HTTP URL
- */
-const normalizeToWebsocket = (applicationUrl: string): string => {
-  if (isWebsocketUrl(applicationUrl)) {
-    return applicationUrl;
-  }
-  const base = getBaseDomain(applicationUrl);
-  const url = new URL(applicationUrl);
-  const pathChunks = url.pathname.split("/");
-  const deploymentKey = pathChunks[2];
-  const channelKey = pathChunks[3];
-  return `wss://us-east-1-ws.${base}?deploymentKey=${deploymentKey}&channelKey=${channelKey}`;
-};
+interface Connection {
+  protocol: Protocol;
+  host: string;
+  deploymentKey: string;
+  channelKey: string;
+  apiKey: string;
+}
 
 /**
- * When a websocket URL is provided, deduce the HTTP URL. Otherwise, return the argument.
- * @param applicationUrl - the websocket URL
- * @returns httpUrl - the HTTP URL
+ * Parse configuration into structured connection information, taking into account `applicationUrl`-based configs.
+ * @param config - client configuration.
+ * @returns connection - connection information, or `null` if the configuration is invalid.
  */
-const normalizeToHttp = (applicationUrl: string): string => {
-  if (!isWebsocketUrl(applicationUrl)) {
-    return applicationUrl;
+const parseConnection = (config: Config): Connection | null => {
+  const applicationUrl = config.applicationUrl ?? "";
+  const apiKey = config.apiKey ?? config.headers?.["nlx-api-key"] ?? "";
+  const protocol =
+    config.protocol ??
+    /**
+     * Backwards-compatibility: if a websocket URL was specified, assume it's websocket. Otherwise, look at the legacy experimental streamsetting
+     * and only assume non-streaming if it's explicitly set to false.
+     */
+    (isWebsocketUrl(applicationUrl)
+      ? Protocol.Websocket
+      : config.experimental?.streamHttp === false
+        ? Protocol.Https
+        : Protocol.HttpsWithStreaming);
+  if (
+    config.host != null &&
+    config.channelKey != null &&
+    config.deploymentKey != null
+  ) {
+    return {
+      protocol,
+      apiKey,
+      host: config.host,
+      channelKey: config.channelKey,
+      deploymentKey: config.deploymentKey,
+    };
   }
-  const base = getBaseDomain(applicationUrl);
-  const url = new URL(applicationUrl);
-  const params = new URLSearchParams(url.search);
-  const channelKey = params.get("channelKey");
-  const deploymentKey = params.get("deploymentKey");
-  return `https://${base}/c/${deploymentKey}/${channelKey}`;
+  // `applicationUrl`-based definition: websocket case
+  if (isWebsocketUrl(applicationUrl)) {
+    const host = getHost(applicationUrl);
+    const url = new URL(applicationUrl);
+    const params = new URLSearchParams(url.search);
+    const channelKey = params.get("channelKey");
+    const deploymentKey = params.get("deploymentKey");
+    if (channelKey != null && deploymentKey != null) {
+      return { protocol, channelKey, deploymentKey, host, apiKey };
+    }
+    return null;
+  }
+  // `applicationUrl`-based definition: http case
+  const host = getHost(applicationUrl);
+  const parseResult = new URLPattern({
+    pathname: "/c/:deploymentKey/:channelKey",
+  }).exec(applicationUrl);
+  if (
+    parseResult?.pathname.groups.channelKey != null &&
+    parseResult?.pathname.groups.deploymentKey != null
+  ) {
+    return {
+      protocol,
+      channelKey: parseResult.pathname.groups.channelKey,
+      deploymentKey: parseResult.pathname.groups.deploymentKey,
+      host,
+      apiKey,
+    };
+  }
+  return null;
+};
+
+const toWebsocketUrl = (connection: Connection): string => {
+  return `wss://us-east-1-ws.${connection.host}?deploymentKey=${connection.deploymentKey}&channelKey=${connection.channelKey}&apiKey=${connection.apiKey}`;
+};
+
+const toHttpUrl = (connection: Connection): string => {
+  return `https://${connection.host}/c/${connection.deploymentKey}/${connection.channelKey}`;
 };
 
 const isWebsocketUrl = (url: string): boolean => {
@@ -1021,12 +1066,14 @@ interface RawApplicationResponsePayload {
 
 const fetchUserMessage = async ({
   fullApplicationUrl,
+  apiKey,
   headers,
   body,
   stream,
   eventListeners,
 }: {
   fullApplicationUrl: string;
+  apiKey: string;
   headers: Record<string, string>;
   body: ApplicationRequest;
   stream: boolean;
@@ -1039,6 +1086,7 @@ const fetchUserMessage = async ({
       method: "POST",
       headers: {
         ...headers,
+        "nlx-api-key": apiKey,
         "Content-Type": "application/json",
         // Legacy header
         "nlx-sdk-version": packageJson.version,
@@ -1136,6 +1184,7 @@ const fetchUserMessage = async ({
       method: "POST",
       headers: {
         ...(headers ?? {}),
+        "nlx-api-key": apiKey,
         Accept: "application/json",
         "Content-Type": "application/json",
         // Legacy header
@@ -1183,36 +1232,16 @@ export function createConversation(configuration: Config): ConversationHandler {
   let voicePlusSocketMessageQueue: VoicePlusMessage[] = [];
   let voicePlusSocketMessageQueueCheckInterval: Timer | null = null;
 
-  const protocol =
-    configuration.protocol ??
-    /**
-     * Backwards-compatibility: if a websocket URL was specified, assume it's websocket. Otherwise, look at the legacy experimental streamsetting
-     * and only assume non-streaming if it's explicitly set to false.
-     */
-    (isWebsocketUrl(configuration.applicationUrl ?? "")
-      ? Protocol.Websocket
-      : configuration.experimental?.streamHttp === false
-        ? Protocol.Https
-        : Protocol.HttpsWithStreaming);
+  const connection = parseConnection(configuration);
 
-  /**
-   * TODO: Instead of re-serializing the host/deploymentKey/channelKey combo and normalizing them again into various socket and HTTP URL's,
-   * parse them out of the `applicationUrl` if specified, and use them to build up the URL's in use. This way we avoid serializing and then
-   * parsing again.
-   */
-  const applicationUrl = (() => {
-    if (
-      configuration.host != null &&
-      configuration.deploymentKey != null &&
-      configuration.channelKey != null
-    ) {
-      return `https://${configuration.host}/c/${configuration.deploymentKey}/${configuration.channelKey}`;
-    }
-    return configuration.applicationUrl ?? "";
-  })();
-
-  const websocketApplicationUrl = normalizeToWebsocket(applicationUrl);
-  const httpApplicationUrl = normalizeToHttp(applicationUrl);
+  const websocketApplicationUrl =
+    connection != null
+      ? toWebsocketUrl(connection)
+      : configuration.applicationUrl ?? "";
+  const httpApplicationUrl =
+    connection != null
+      ? toHttpUrl(connection)
+      : configuration.applicationUrl ?? "";
 
   // Check if the application URL has a language code appended to it
   if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(httpApplicationUrl)) {
@@ -1353,7 +1382,7 @@ export function createConversation(configuration: Config): ConversationHandler {
       channelType: configuration.experimental?.channelType,
       environment: configuration.environment,
     };
-    if (protocol === Protocol.Websocket) {
+    if (connection?.protocol === Protocol.Websocket) {
       if (socket?.readyState === 1) {
         socket.send(JSON.stringify(bodyWithContext));
       } else {
@@ -1363,8 +1392,9 @@ export function createConversation(configuration: Config): ConversationHandler {
       try {
         const json = await fetchUserMessage({
           fullApplicationUrl: fullApplicationHttpUrl(),
+          apiKey: connection?.apiKey ?? "",
           headers: configuration.headers ?? {},
-          stream: protocol === Protocol.HttpsWithStreaming,
+          stream: connection?.protocol === Protocol.HttpsWithStreaming,
           eventListeners,
           body: bodyWithContext,
         });
@@ -1407,10 +1437,6 @@ export function createConversation(configuration: Config): ConversationHandler {
       );
     }
     url.searchParams.set("conversationId", state.conversationId);
-    const apiKey = configuration.headers["nlx-api-key"];
-    if (apiKey != null) {
-      url.searchParams.set("apiKey", apiKey);
-    }
     socket = new ReconnectingWebSocket(url.href);
     socketMessageQueueCheckInterval = setInterval(() => {
       void checkSocketQueue();
@@ -1438,9 +1464,8 @@ export function createConversation(configuration: Config): ConversationHandler {
     }
     url.searchParams.set("conversationId", state.conversationId);
     url.searchParams.set("type", "voice-plus");
-    const apiKey = configuration.headers["nlx-api-key"];
-    if (apiKey != null) {
-      url.searchParams.set("apiKey", apiKey);
+    if (connection?.apiKey != null) {
+      url.searchParams.set("apiKey", connection.apiKey);
     }
     voicePlusSocket = new ReconnectingWebSocket(url.href);
     voicePlusSocketMessageQueueCheckInterval = setInterval(() => {
@@ -1482,7 +1507,7 @@ export function createConversation(configuration: Config): ConversationHandler {
     }
   };
 
-  if (protocol === Protocol.Websocket) {
+  if (connection?.protocol === Protocol.Websocket) {
     setupWebsocket();
   }
 
@@ -1627,6 +1652,7 @@ export function createConversation(configuration: Config): ConversationHandler {
         method: "POST",
         headers: {
           ...(configuration.headers ?? {}),
+          "nlx-api-key": connection?.apiKey ?? "",
           Accept: "application/json",
           "Content-Type": "application/json",
           "nlx-conversation-id": state.conversationId,
@@ -1721,7 +1747,7 @@ export function createConversation(configuration: Config): ConversationHandler {
         );
         return;
       }
-      if (protocol === Protocol.Websocket) {
+      if (connection?.protocol === Protocol.Websocket) {
         setupWebsocket();
       }
       setupCommandWebsocket();
@@ -1737,6 +1763,7 @@ export function createConversation(configuration: Config): ConversationHandler {
           method: "POST",
           headers: {
             ...(configuration.headers ?? {}),
+            "nlx-api-key": connection?.apiKey ?? "",
             Accept: "application/json",
             "Content-Type": "application/json",
             "nlx-conversation-id": state.conversationId,
@@ -1773,14 +1800,14 @@ export function createConversation(configuration: Config): ConversationHandler {
         conversationId: uuid(),
         responses: options?.clearResponses === true ? [] : state.responses,
       });
-      if (protocol === Protocol.Websocket) {
+      if (connection?.protocol === Protocol.Websocket) {
         setupWebsocket();
       }
       setupCommandWebsocket();
     },
     destroy: () => {
       subscribers = [];
-      if (protocol === Protocol.Websocket) {
+      if (connection?.protocol === Protocol.Websocket) {
         teardownWebsocket();
       }
       teardownCommandWebsocket();
@@ -1808,15 +1835,7 @@ export function createConversation(configuration: Config): ConversationHandler {
  * @returns Whether the configuration is valid?
  */
 export const isConfigValid = (configuration: Config): boolean => {
-  if (
-    configuration.host != null &&
-    configuration.deploymentKey != null &&
-    configuration.channelKey != null
-  ) {
-    return true;
-  }
-  const applicationUrl = configuration.applicationUrl ?? "";
-  return applicationUrl.length > 0;
+  return parseConnection(configuration) != null;
 };
 
 /**

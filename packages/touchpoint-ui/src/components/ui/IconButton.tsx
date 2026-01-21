@@ -121,7 +121,7 @@ export const HeadlessIconButton: FC<{
         </Tooltip.Trigger>
         <Tooltip.Portal
           container={appRoot}
-          className={"z-touchpoint pointer-events-none"}
+          className={"z-touchpoint relative pointer-events-none"}
         >
           <Tooltip.Positioner sideOffset={4}>
             <Tooltip.Popup className="bg-primary-90 text-secondary-90 text-xs px-2 py-1 rounded-[calc(var(--radius-inner)*0.6667)] shadow-lg">
