@@ -1,7 +1,10 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import { type FC, useRef, useState, useMemo } from "react";
 import { useResizeObserver } from "@react-hookz/web";
 
-export const Notice: FC<{ text: string }> = ({ text }) => {
+export const Notice: FC<{
+  text: string;
+}> = ({ text }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const textRef = useRef<HTMLParagraphElement | null>(null);
   const [containerSize, setContainerSize] = useState<
