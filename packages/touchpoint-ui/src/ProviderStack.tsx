@@ -3,7 +3,7 @@ import { clsx } from "clsx";
 import { Tooltip } from "@base-ui/react/tooltip";
 
 import { CopyProvider, defaultCopy } from "./utils/useCopy";
-import { type Copy , type ColorMode, type Theme } from "./interface";
+import { type Copy, type ColorMode, type Theme } from "./interface";
 import { AppRootProvider } from "./utils/useAppRoot";
 import { intelligentMerge, toCustomProperties } from "./components/Theme";
 
@@ -43,8 +43,8 @@ export const ProviderStack: FC<{
       <CopyProvider value={{ ...defaultCopy(languageCode), ...(copy ?? {}) }}>
         <AppRootProvider value={ref}>
           <div
-            className={clsx(className, "font-sans")}
             ref={ref}
+            className="contents"
             style={{
               ...toCustomProperties(themeWithOverrides),
               colorScheme: colorMode,
