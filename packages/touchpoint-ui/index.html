@@ -1,63 +1,55 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Touchpoint</title>
-    <link
-      href="https://db.onlinewebfonts.com/c/0970e3fd1aa7e6ff6937c76a583f3a30?family=BW+Haas+Text+Mono+C+55+Rom+Regular"
-      rel="stylesheet"
-    />
-  </head>
 
-  <body
-    style="
-      background-image: url(https://platform.nlx.ai/onboarding-bg/voiceplus.webp);
-      background-size: cover;
-      color: white;
-    "
-  >
-    <div
-      style="width: 40vw; height: 80vh; margin: auto; padding-top: 10vh"
-    ></div>
-    <script type="module">
-      import { create, html } from "./src/index.tsx";
+<head>
+  <style>
+    html,
+    body,
+    nlx-touchpoint {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <meta charset="UTF-8" />
+  <title>Touchpoint</title>
+</head>
 
-      const touchpoint = await create({
-        config: {
-          applicationUrl:
-            "https://bots.dev.studio.nlx.ai/c/Nji0Tkk8UOqaFc3Z3mDW9/5p7ZdO_XgcnCKnuxbhNAS",
+<body>
+  <nlx-touchpoint></nlx-touchpoint>
+  <script type="module">
+    import {create, html} from "./src/index.tsx";
 
-          headers: {
-            "nlx-api-key": "crLjtXvXIOPtc1AgnPHoEE1y",
-          },
-          languageCode: "en-US",
-          conversationId: "12345",
+    const touchpointConfig = {
+      config: {
+        applicationUrl:
+          "https://bots.dev.studio.nlx.ai/c/Nji0Tkk8UOqaFc3Z3mDW9/5p7ZdO_XgcnCKnuxbhNAS",
+
+        headers: {
+          "nlx-api-key": "crLjtXvXIOPtc1AgnPHoEE1y",
         },
-        windowSize: "full",
-        input: "text",
-        bidirectional: {},
-        // colorMode: "light dark",
-        // userMessageBubble: true,
-        // agentMessageBubble: true,
-        // chatMode: true,
-        // theme: {
-        //   accent: "rgba(255, 253, 114, 1)",
-        //   primary80:
-        //     "light-dark(rgba(12, 12, 200, 0.8), rgba(255, 255, 255, 0.85))",
+        languageCode: "en-US",
+        conversationId: "12345",
+      },
+      windowSize: "full",
+      input: "text",
+      bidirectional: {},
+      // colorMode: "light dark",
+      // userMessageBubble: true,
+      // agentMessageBubble: true,
+      // chatMode: true,
+      // theme: {
+      //   accent: "rgba(255, 253, 114, 1)",
+      //   primary80:
+      //     "light-dark(rgba(12, 12, 200, 0.8), rgba(255, 255, 255, 0.85))",
 
-        //   fontFamily: "'BW Haas Text Mono C 55 Rom Regular', monospace",
-        // },
-      });
+      //   fontFamily: "'BW Haas Text Mono C 55 Rom Regular', monospace",
+      // },
+    };
 
-      touchpoint.setCustomBidirectionalCommands([
-        {
-          action: "externalInput",
-          // description: "Handle external input",
-          handler: (args) => {
-            alert(`External input received: ${args}`);
-          },
-        },
-      ]);
-    </script>
-  </body>
+    document.querySelector("nlx-touchpoint").touchpointConfiguration = touchpointConfig;
+  </script>
+</body>
+
 </html>
