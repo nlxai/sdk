@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/touchpoint-ui",
-  "version": "1.2.4-alpha.9",
+  "version": "1.2.4-alpha.10",
   "description": "Web UI for Touchpoint",
   "type": "module",
   "main": "lib/index.js",
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",
-    "@nlxai/core": "^1.2.4-alpha.9",
+    "@nlxai/core": "^1.2.4-alpha.10",
     "@react-hookz/web": "^25.0.1",
     "@react-input/mask": "^2.0.4",
     "@rive-app/webgl2": "^2.31.5",
