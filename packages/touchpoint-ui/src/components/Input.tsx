@@ -19,7 +19,7 @@ import { clsx } from "clsx";
 import { useCopy } from "../utils/useCopy";
 import { IconButton } from "./ui/IconButton";
 import { ArrowForward, Attachment, Delete, Check, Error } from "./ui/Icons";
-import { useTailwindMediaQuery } from "../hooks";
+import { useTailwindMediaQuery } from "../utils/useTailwindMediaQuery";
 
 interface InputProps {
   className?: string;

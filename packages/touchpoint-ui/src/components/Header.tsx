@@ -4,7 +4,7 @@ import { clsx } from "clsx";
 
 import { IconButton, type IconButtonType } from "./ui/IconButton";
 import { type WindowSize, type ColorMode } from "../interface";
-import { useTailwindMediaQuery } from "../hooks";
+import { useTailwindMediaQuery } from "../utils/useTailwindMediaQuery";
 import { Close, Settings, Undo, Volume, VolumeOff } from "./ui/Icons";
 
 interface HeaderProps {
