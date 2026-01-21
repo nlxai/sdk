@@ -15,7 +15,7 @@ import {
 import { ArrowRight, Close } from "./components/ui/Icons";
 import { Icons, BaseText, SmallText } from "./index";
 import { DateInput } from "./components/ui/DateInput";
-import { CustomPropertiesContainer } from "./components/Theme";
+import { Wrapper } from "./Wrapper";
 
 const TextButtonInstances: FC<unknown> = () => {
   return (
@@ -237,16 +237,17 @@ const Container: FC<{ children: ReactNode; mode: ColorMode }> = ({
   mode,
 }) => {
   return (
-    <CustomPropertiesContainer
+    <Wrapper
       className="bg-background p-4 rounded-outer space-y-4"
       theme={{
         fontFamily: "monospace",
         accent: "light-dark(purple, pink)",
       }}
       colorMode={mode}
+      languageCode="en-US"
     >
       {children}
-    </CustomPropertiesContainer>
+    </Wrapper>
   );
 };
 
@@ -303,7 +304,7 @@ const DesignSystem: FC<unknown> = () => {
 
   return (
     <div className="grid grid-cols-[320px_1fr]">
-      <CustomPropertiesContainer colorMode="light" className="space-y-2">
+      <Wrapper colorMode="light" className="space-y-2" languageCode="en-US">
         {tabs.map(({ tab, title }) => {
           const isActive = tab === activeTab;
           return (
@@ -327,7 +328,7 @@ const DesignSystem: FC<unknown> = () => {
             </a>
           );
         })}
-      </CustomPropertiesContainer>
+      </Wrapper>
       {ActiveTabComponent == null ? null : <ActiveTabComponent />}
     </div>
   );

@@ -6,6 +6,7 @@ import type {
 } from "@nlxai/core";
 import { type ComponentType } from "react";
 import type { InteractiveElementInfo } from "./bidirectional/analyzePageForms";
+import type { Copy } from "./copy";
 
 /**
  * Window size configuration
@@ -326,12 +327,15 @@ export interface TouchpointConfiguration {
    * Context sent with the initial request.
    */
   initialContext?: Context;
-
   /**
    * Enables bidirectional mode of voice+. Will automatically set the bidirectional flag in the config.
    *
    */
   bidirectional?: BidirectionalConfig;
+  /**
+   * Copy
+   */
+  copy?: Partial<Copy>;
 }
 
 /**

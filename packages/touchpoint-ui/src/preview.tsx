@@ -1,8 +1,6 @@
- 
- 
 import { type FC, type ReactNode } from "react";
 import type { ColorMode, Theme } from "./interface";
-import { CustomPropertiesContainer } from "./components/Theme";
+import { Wrapper } from "./Wrapper";
 import cssRaw from "./index.css?inline";
 /**
  * @internal
@@ -15,13 +13,14 @@ export const Container: FC<{
   return (
     <>
       <style>{cssRaw}</style>
-      <CustomPropertiesContainer
+      <Wrapper
         className="bg-background p-4 rounded-outer space-y-4"
         theme={theme}
         colorMode={mode}
+        languageCode="en-US"
       >
         {children}
-      </CustomPropertiesContainer>
+      </Wrapper>
     </>
   );
 };
