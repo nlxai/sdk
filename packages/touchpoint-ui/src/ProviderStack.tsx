@@ -2,13 +2,13 @@ import { type FC, type ReactNode, useRef } from "react";
 import { clsx } from "clsx";
 import { Tooltip } from "@base-ui/react/tooltip";
 
-import { CopyProvider } from "./utils/useCopy";
-import { type Copy, defaultCopy } from "./copy";
+import { CopyProvider, defaultCopy } from "./utils/useCopy";
+import { type Copy } from "./interface";
 import { type ColorMode, type Theme } from "./interface";
 import { AppRootProvider } from "./utils/useAppRoot";
 import { intelligentMerge, toCustomProperties } from "./components/Theme";
 
-export const Wrapper: FC<{
+export const ProviderStack: FC<{
   colorMode: ColorMode;
   className?: string;
   theme?: Partial<Theme>;

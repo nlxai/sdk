@@ -15,7 +15,7 @@ import {
 import { ArrowRight, Close } from "./components/ui/Icons";
 import { Icons, BaseText, SmallText } from "./index";
 import { DateInput } from "./components/ui/DateInput";
-import { Wrapper } from "./Wrapper";
+import { ProviderStack } from "./ProviderStack";
 
 const TextButtonInstances: FC<unknown> = () => {
   return (
@@ -237,7 +237,7 @@ const Container: FC<{ children: ReactNode; mode: ColorMode }> = ({
   mode,
 }) => {
   return (
-    <Wrapper
+    <ProviderStack
       className="bg-background p-4 rounded-outer space-y-4"
       theme={{
         fontFamily: "monospace",
@@ -247,7 +247,7 @@ const Container: FC<{ children: ReactNode; mode: ColorMode }> = ({
       languageCode="en-US"
     >
       {children}
-    </Wrapper>
+    </ProviderStack>
   );
 };
 
@@ -304,7 +304,11 @@ const DesignSystem: FC<unknown> = () => {
 
   return (
     <div className="grid grid-cols-[320px_1fr]">
-      <Wrapper colorMode="light" className="space-y-2" languageCode="en-US">
+      <ProviderStack
+        colorMode="light"
+        className="space-y-2"
+        languageCode="en-US"
+      >
         {tabs.map(({ tab, title }) => {
           const isActive = tab === activeTab;
           return (
@@ -328,7 +332,7 @@ const DesignSystem: FC<unknown> = () => {
             </a>
           );
         })}
-      </Wrapper>
+      </ProviderStack>
       {ActiveTabComponent == null ? null : <ActiveTabComponent />}
     </div>
   );

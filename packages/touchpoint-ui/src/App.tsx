@@ -21,7 +21,7 @@ import {
 import { clsx } from "clsx";
 import { findLastIndex } from "ramda";
 
-import { Wrapper } from "./Wrapper";
+import { ProviderStack } from "./ProviderStack";
 import { LaunchButton } from "./components/ui/LaunchButton";
 import { Header } from "./components/Header";
 import { FullscreenVoice } from "./components/FullscreenVoice";
@@ -342,7 +342,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   if (!isExpanded) {
     return props.launchIcon !== false ? (
-      <Wrapper
+      <ProviderStack
         className="fixed z-launch-button bottom-2 right-2 w-fit"
         theme={props.theme}
         colorMode={colorMode}
@@ -364,13 +364,13 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           }}
           label="Expand chat"
         />
-      </Wrapper>
+      </ProviderStack>
     ) : null;
   }
 
   if (input === "voiceMini") {
     return (
-      <Wrapper
+      <ProviderStack
         className={clsx(
           "w-fit",
           props.embedded ? "" : "fixed z-touchpoint bottom-2 right-2",
@@ -394,7 +394,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           renderCollapse={props.onClose != null}
           modalityComponents={modalityComponents}
         />
-      </Wrapper>
+      </ProviderStack>
     );
   }
 
@@ -473,7 +473,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   };
 
   return (
-    <Wrapper
+    <ProviderStack
       className={clsx(
         "grid grid-cols-2 xl:grid-cols-[1fr_632px]",
         props.embedded ? "w-full h-full" : "fixed inset-0 z-touchpoint",
@@ -569,7 +569,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           </>
         )}
       </div>
-    </Wrapper>
+    </ProviderStack>
   );
 });
 

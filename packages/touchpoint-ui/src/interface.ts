@@ -590,3 +590,25 @@ export interface TouchpointInstance {
     commands: BidirectionalCustomCommand[],
   ) => void;
 }
+
+/**
+ * Copy configuration
+ */
+export interface Copy {
+  /**
+   * Escalation notice
+   */
+  escalationNotice: string;
+  /**
+   * Restart conversation button label
+   */
+  restartConversationButtonLabel: string;
+  /**
+   * Restart conversation button label
+   */
+  escalationButtonLabel: string;
+  /**
+   * Send message button label
+   */
+  sendMessageButtonLabel: string;
+}
