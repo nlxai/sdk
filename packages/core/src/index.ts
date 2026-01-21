@@ -1652,7 +1652,7 @@ export function createConversation(configuration: Config): ConversationHandler {
         method: "POST",
         headers: {
           ...(configuration.headers ?? {}),
-          "nlx-api-key": configuration.apiKey ?? "",
+          "nlx-api-key": connection?.apiKey ?? "",
           Accept: "application/json",
           "Content-Type": "application/json",
           "nlx-conversation-id": state.conversationId,
