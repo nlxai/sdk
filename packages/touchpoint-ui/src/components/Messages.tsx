@@ -11,6 +11,7 @@ import {
 import { clsx } from "clsx";
 import { marked } from "marked";
 
+import { useCopy } from "../utils/useCopy";
 import { ErrorMessage } from "./ErrorMessage";
 import { Loader } from "./ui/Loader";
 import { TextButton } from "./ui/TextButton";
@@ -28,6 +29,7 @@ import { type CustomModalityComponent, type ColorMode } from "../interface";
 import { ErrorBoundary } from "react-error-boundary";
 import { MessageButton } from "./ui/MessageButton";
 import * as Feedback from "../feedback";
+import { Notice } from "./Notice";
 
 export interface MessagesProps {
   isWaiting: boolean;
@@ -80,6 +82,30 @@ export const MessageChoices: FC<{
       )}
     </ul>
   ) : null;
+};
+
+/**
+ * Find the index of the first application message immediately following an escalation. We assume this means successful escalation.
+ */
+const findFirstIndexAfterEscalation = (
+  responses: Response[],
+): number | null => {
+  let escalationIndex: number | null = null;
+  for (const [responseIndex, response] of responses.entries()) {
+    if (escalationIndex != null) {
+      if (response.type === ResponseType.Application) {
+        return responseIndex;
+      }
+    } else {
+      if (
+        response.type === ResponseType.Application &&
+        response.payload.metadata?.escalation
+      ) {
+        escalationIndex = responseIndex;
+      }
+    }
+  }
+  return null;
 };
 
 const UserMessage: FC<{ text: string; files?: File[]; bubble: boolean }> = ({
@@ -335,6 +361,13 @@ export const Messages: FC<MessagesProps> = ({
     }
   }, [responses.length, chatMode]);
 
+  const firstIndexAfterEscalation = useMemo(
+    () => findFirstIndexAfterEscalation(responses),
+    [responses],
+  );
+
+  const copy = useCopy();
+
   return (
     <div className={clsx("relative", className)}>
       <div
@@ -402,6 +435,9 @@ export const Messages: FC<MessagesProps> = ({
             responseIndex === lastApplicationResponseIndex;
           return (
             <Fragment key={responseIndex}>
+              {firstIndexAfterEscalation === responseIndex ? (
+                <Notice text={copy.escalationNotice} />
+              ) : null}
               <div
                 className={clsx(
                   "space-y-2",
@@ -482,6 +518,15 @@ export const Messages: FC<MessagesProps> = ({
                 }
                 return null;
               })}
+              {
+                /* An escalation has been triggered but no subsequent messages have been received yet. */
+                response.payload.metadata?.escalation &&
+                firstIndexAfterEscalation == null ? (
+                  <div className="text-primary-40 text-base shimmer w-fit">
+                    {copy.escalationAttemptNotice}
+                  </div>
+                ) : null
+              }
             </Fragment>
           );
         })}

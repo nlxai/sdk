@@ -5,7 +5,9 @@ import { type Copy } from "../interface";
 export const defaultCopy = (languageCode: string): Copy => {
   if (languageCode.startsWith("es")) {
     return {
-      escalationNotice: "Tu conversación ha sido escalada a un agente",
+      escalationAttemptNotice:
+        "Estoy intentando transferir tu conversación a un agente.",
+      escalationNotice: "Su conversación ha sido transferida a un agente",
       restartConversationButtonLabel: "Reiniciar conversación",
       escalationButtonLabel: "Hablar con un agente",
       sendMessageButtonLabel: "Enviar mensaje",
@@ -13,7 +15,9 @@ export const defaultCopy = (languageCode: string): Copy => {
   }
   // TODO: add default copy for other languages
   return {
-    escalationNotice: "Your conversation has been escalated to an agent",
+    escalationAttemptNotice:
+      "I'm attempting to transfer your conversation to an agent",
+    escalationNotice: "Your conversation has been transferred to an agent",
     restartConversationButtonLabel: "Restart conversation",
     escalationButtonLabel: "Talk to an agent",
     sendMessageButtonLabel: "Send message",

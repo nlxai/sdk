@@ -562,26 +562,60 @@ The configuration necessary to create a conversation.
 optional applicationUrl: string;
 ```
 
-The URL at which your conversational application is running.
-Fetch this from the application's API channel tab.
+The URL at which your conversational application is running. Fetch this from the application's API channel tab.
+Currently, there are a few ways to specify the application URL:
 
-##### headers
+- (recommended) leave out `applicationUrl` and specify `protocol`, `host`, `deploymentKey` and `channelKey`.
+- specify the full `applicationUrl` as well as the `protocol`.
+- (legacy) specify the `applicationUrl` generated either as an HTTP or websocket URL. Use `experimental.streamHttp` to control streaming.
+
+##### protocol?
 
 ```ts
-headers: Record<string, string> & object;
+optional protocol: Protocol;
+```
+
+Specify the protocol (http, websocket or httpWithStreaming)
+
+##### host?
+
+```ts
+optional host: string;
+```
+
+Hostname of the application deployment, without a leading `https://`.
+
+##### deploymentKey?
+
+```ts
+optional deploymentKey: string;
+```
+
+Deployment key.
+
+##### channelKey?
+
+```ts
+optional channelKey: string;
+```
+
+Channel key.
+
+##### apiKey?
+
+```ts
+optional apiKey: string;
+```
+
+API key.
+
+##### headers?
+
+```ts
+optional headers: Record<string, string>;
 ```
 
 Headers to forward to the NLX API.
-
-###### Type Declaration
-
-###### nlx-api-key
-
-```ts
-nlx-api-key: string;
-```
-
-The `nlx-api-key` is required. Fetch this from the application's API channel tab.
 
 ##### conversationId?
 
@@ -1920,6 +1954,38 @@ interimMessage: InterimMessageListener;
 Interim message event handler
 
 ## Enumerations
+
+### Protocol
+
+The protocol used to communicate with the application
+
+#### Enumeration Members
+
+##### Https
+
+```ts
+Https: "https";
+```
+
+Regular encrypted HTTPS, without support for post-escalation message handling, interim messages and other streaming features.
+
+##### HttpsWithStreaming
+
+```ts
+HttpsWithStreaming: "httpsWithStreaming";
+```
+
+Encrypted HTTPS with streaming enabled. This is the default setting and supports interim messages. Does not support post-escalation message handling.
+
+##### Websocket
+
+```ts
+Websocket: "websocket";
+```
+
+Websocket, with support for post-escalation message handling.
+
+---
 
 ### ResponseType
 
