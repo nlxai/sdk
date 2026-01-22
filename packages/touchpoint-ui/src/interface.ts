@@ -595,6 +595,10 @@ export interface TouchpointInstance {
  */
 export interface Copy {
   /**
+   * Escalation attempt notice
+   */
+  escalationAttemptNotice: string;
+  /**
    * Escalation notice
    */
   escalationNotice: string;
