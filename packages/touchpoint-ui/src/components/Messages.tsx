@@ -435,6 +435,9 @@ export const Messages: FC<MessagesProps> = ({
             responseIndex === lastApplicationResponseIndex;
           return (
             <Fragment key={responseIndex}>
+              {firstIndexAfterEscalation === responseIndex ? (
+                <Notice text={copy.escalationNotice} />
+              ) : null}
               <div
                 className={clsx(
                   "space-y-2",
@@ -524,9 +527,6 @@ export const Messages: FC<MessagesProps> = ({
                   </div>
                 ) : null
               }
-              {firstIndexAfterEscalation === responseIndex ? (
-                <Notice text={copy.escalationNotice} />
-              ) : null}
             </Fragment>
           );
         })}
