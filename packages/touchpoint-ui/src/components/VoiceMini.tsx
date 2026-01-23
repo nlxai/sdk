@@ -1,8 +1,15 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import type { Context, ConversationHandler } from "@nlxai/core";
+import {
+  ResponseType,
+  type ModalityPayloads,
+  type Context,
+  type ConversationHandler,
+  type Response,
+} from "@nlxai/core";
 import {
   type ReactNode,
   useEffect,
+  useCallback,
   useRef,
   useState,
   type FC,
@@ -118,6 +125,7 @@ const VoiceMiniLoader: FC<{ brandIconView: ReactNode }> = ({
 
 export const VoiceMini: FC<{
   modalityComponents: Record<string, CustomModalityComponent<unknown>>;
+  responses: Response[];
   handler: ConversationHandler;
   brandIcon?: string;
   renderCollapse: boolean;
@@ -129,6 +137,7 @@ export const VoiceMini: FC<{
   onClose,
   modalityComponents,
   renderCollapse,
+  responses,
   brandIcon,
 }) => {
   const onCloseHandler = (): void => {
@@ -166,7 +175,30 @@ export const VoiceMini: FC<{
       }
     };
     void fn();
-  }, [handler]);
+  }, [handler, setVoice]);
+
+  const retry = async () => {
+    try {
+      if (voice != null && voice != "loading" && voice.type !== "error") {
+        voice.handler.disconnect();
+      }
+      setVoice(null);
+      const voiceHandler = await initiateVoice(
+        handler,
+        context ?? {},
+        (newVoiceState) => {
+          setVoice((prev) =>
+            prev === null || prev === "loading" || prev.type === "error"
+              ? prev
+              : { ...prev, state: newVoiceState },
+          );
+        },
+      );
+      setVoice({ type: "success", handler: voiceHandler });
+    } catch (err) {
+      setVoice({ type: "error", error: String(err) });
+    }
+  };
 
   if (voice == null || voice === "loading") {
     return <VoiceMiniLoader brandIconView={brandIconView} />;
@@ -181,8 +213,7 @@ export const VoiceMini: FC<{
           label="Retry"
           Icon={Restart}
           onClick={() => {
-            // TODO: implement retry
-            // void retry();
+            void retry();
           }}
         />
       </Container>
@@ -235,10 +266,15 @@ export const VoiceMini: FC<{
           "absolute right-0 -top-2 transform translate-x-0 -translate-y-full max-h-[360px] overflow-auto",
         )}
         renderedAsOverlay={false}
-        modalities={
-          /* TODO: add modalities */
-          []
-        }
+        modalities={responses
+          .map((response) =>
+            response.type === ResponseType.Application
+              ? response.payload.modalities
+              : null,
+          )
+          .filter(
+            (modalities): modalities is ModalityPayloads => modalities != null,
+          )}
         modalityComponents={modalityComponents}
         handler={handler}
       />

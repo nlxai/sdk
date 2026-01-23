@@ -1,7 +1,11 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { useState, type FC, type ReactNode, useRef, useEffect } from "react";
 import { clsx } from "clsx";
-import type { Context, ConversationHandler } from "@nlxai/core";
+import type {
+  Context,
+  ConversationHandler,
+  ModalityPayloads,
+} from "@nlxai/core";
 import type { ColorMode, CustomModalityComponent } from "../interface";
 
 import { FullscreenError } from "./FullscreenError";
@@ -10,7 +14,7 @@ import { Loader } from "./ui/Loader";
 import { IconButton } from "./ui/IconButton";
 import { TextButton } from "./ui/TextButton";
 import { Touchpoint, Mic, MicOff, Restart } from "./ui/Icons";
-import { type ModalitiesWithContext, useVoice } from "../voice";
+import { useVoice } from "../useVoice";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorMessage } from "./ErrorMessage";
 
@@ -46,7 +50,7 @@ interface ModalityEntry {
 
 export const VoiceModalities: FC<{
   className?: string;
-  modalities: ModalitiesWithContext[];
+  modalities: ModalityPayloads[];
   modalityComponents: Record<string, CustomModalityComponent<unknown>>;
   renderedAsOverlay: boolean;
   handler: ConversationHandler;
@@ -209,7 +213,7 @@ export const FullscreenVoice: FC<Props> = ({
       <VoiceModalities
         className="absolute p-4 top-0 left-0 right-0 bottom-[72px] z-10 space-y-2 max-h-full overflow-auto border-b border-solid border-primary-10"
         renderedAsOverlay
-        modalities={modalities}
+        modalities={modalities.map((m) => m.modalities)}
         modalityComponents={modalityComponents}
         handler={handler}
       />

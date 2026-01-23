@@ -386,6 +386,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         <VoiceMini
           key={voiceKey}
           handler={handler}
+          responses={responses}
           context={props.initialContext}
           brandIcon={props.brandIcon}
           onClose={() => {
