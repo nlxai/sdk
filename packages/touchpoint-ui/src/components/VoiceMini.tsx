@@ -1,10 +1,18 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import type { Context, ConversationHandler } from "@nlxai/core";
-import { type ReactNode, useState, type FC } from "react";
+import {
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+  type FC,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { clsx } from "clsx";
 
 import type { CustomModalityComponent } from "../interface";
-import { useVoice } from "../voice";
+import { type VoiceHandler, type VoiceState, initiateVoice } from "../voice";
 import { LoaderAnimation } from "./ui/Loader";
 import { Ripple } from "./Ripple";
 import { IconButton } from "./ui/IconButton";
@@ -45,6 +53,69 @@ const CompactContainer: FC<{ children: ReactNode; className?: string }> = ({
   </div>
 );
 
+type WidgetVoiceState =
+  | null
+  | "loading"
+  | { type: "error"; error: string }
+  | { type: "success"; handler: VoiceHandler; state?: VoiceState };
+
+const useWidgetVoiceState = (): [
+  WidgetVoiceState,
+  Dispatch<SetStateAction<WidgetVoiceState>>,
+] => {
+  const [voice, setVoice] = useState<WidgetVoiceState>(null);
+
+  // Remember the last handler
+  const currentVoiceHandler = useRef<null | VoiceHandler>(null);
+  useEffect(() => {
+    if (voice != null && voice !== "loading" && voice.type !== "error") {
+      currentVoiceHandler.current = voice.handler;
+    }
+  }, [voice]);
+
+  // Perform final cleanup when component is unmounted
+  useEffect(() => {
+    return () => {
+      if (currentVoiceHandler.current != null) {
+        void currentVoiceHandler.current.disconnect();
+      }
+    };
+  }, []);
+
+  return [voice, setVoice];
+};
+
+const VoiceMiniLoader: FC<{ brandIconView: ReactNode }> = ({
+  brandIconView,
+}) => {
+  return (
+    <CompactContainer className="relative">
+      {brandIconView}
+      <IconButton
+        Icon={Mic}
+        label="Microphone"
+        type="ghost"
+        className="invisible"
+      />
+      <IconButton
+        Icon={Volume}
+        label="Speakers"
+        type="ghost"
+        className="invisible"
+      />
+      <IconButton
+        Icon={Close}
+        label="Close"
+        type="ghost"
+        className="invisible"
+      />
+      <span className="w-6 h-6 block text-accent absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <LoaderAnimation />
+      </span>
+    </CompactContainer>
+  );
+};
+
 export const VoiceMini: FC<{
   modalityComponents: Record<string, CustomModalityComponent<unknown>>;
   handler: ConversationHandler;
@@ -60,56 +131,9 @@ export const VoiceMini: FC<{
   renderCollapse,
   brandIcon,
 }) => {
-  const [micEnabled, setMicEnabled] = useState<boolean>(true);
-  const [speakersEnabled, setSpeakersEnabled] = useState<boolean>(true);
-
   const onCloseHandler = (): void => {
     onClose(new Event("close"));
   };
-
-  const {
-    roomState,
-    isUserSpeaking,
-    isApplicationSpeaking,
-    retry,
-    modalities,
-  } = useVoice({
-    micEnabled,
-    speakersEnabled,
-    handler,
-    context,
-  });
-
-  if (roomState === "error") {
-    return (
-      <Container renderCollapse={renderCollapse} onClose={onCloseHandler}>
-        <ErrorMessage message="I couldn’t connect" />
-        <TextButton
-          type="ghost"
-          label="Retry"
-          Icon={Restart}
-          onClick={() => {
-            void retry();
-          }}
-        />
-      </Container>
-    );
-  }
-  if (roomState === "noAudioPermissions") {
-    return (
-      <Container renderCollapse={renderCollapse} onClose={onCloseHandler}>
-        <ErrorMessage message="Connect your microphone and speaker" />
-        <TextButton
-          type="ghost"
-          label="Retry"
-          Icon={Restart}
-          onClick={() => {
-            void retry();
-          }}
-        />
-      </Container>
-    );
-  }
 
   const brandIconView =
     brandIcon != null ? (
@@ -120,57 +144,80 @@ export const VoiceMini: FC<{
       />
     ) : null;
 
-  if (roomState === "pending") {
+  const [voice, setVoice] = useWidgetVoiceState();
+
+  useEffect(() => {
+    const fn = async () => {
+      try {
+        const voiceHandler = await initiateVoice(
+          handler,
+          context ?? {},
+          (newVoiceState) => {
+            setVoice((prev) =>
+              prev === null || prev === "loading" || prev.type === "error"
+                ? prev
+                : { ...prev, state: newVoiceState },
+            );
+          },
+        );
+        setVoice({ type: "success", handler: voiceHandler });
+      } catch (err) {
+        setVoice({ type: "error", error: String(err) });
+      }
+    };
+    void fn();
+  }, [handler]);
+
+  if (voice == null || voice === "loading") {
+    return <VoiceMiniLoader brandIconView={brandIconView} />;
+  }
+
+  if (voice.type === "error") {
     return (
-      <CompactContainer className="relative">
-        {brandIconView}
-        <IconButton
-          Icon={Mic}
-          label="Microphone"
+      <Container renderCollapse={renderCollapse} onClose={onCloseHandler}>
+        <ErrorMessage message="I couldn’t connect" />
+        <TextButton
           type="ghost"
-          className="invisible"
+          label="Retry"
+          Icon={Restart}
+          onClick={() => {
+            // TODO: implement retry
+            // void retry();
+          }}
         />
-        <IconButton
-          Icon={Volume}
-          label="Speakers"
-          type="ghost"
-          className="invisible"
-        />
-        <IconButton
-          Icon={Close}
-          label="Close"
-          type="ghost"
-          className="invisible"
-        />
-        <span className="w-6 h-6 block text-accent absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <LoaderAnimation />
-        </span>
-      </CompactContainer>
+      </Container>
     );
   }
+
+  const micEnabled = voice.state?.isMicEnabled ?? true;
+  const speakersEnabled = voice.state?.isSpeakersEnabled ?? true;
 
   return (
     <CompactContainer>
       {brandIconView}
       <div className="w-fit relative">
-        {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
+        {voice.state?.isUserSpeaking ? (
+          <Ripple className="rounded-inner" />
+        ) : null}
         <IconButton
-          Icon={micEnabled ? Mic : MicOff}
+          Icon={voice.state?.isMicEnabled ? Mic : MicOff}
           label="Microphone"
-          type={micEnabled ? "activated" : "ghost"}
+          type={voice.state?.isMicEnabled ? "activated" : "ghost"}
           onClick={() => {
-            setMicEnabled((prev) => !prev);
+            voice.handler.setMicrophone(!micEnabled);
           }}
         />
       </div>
       <div className="w-fit relative">
-        {isApplicationSpeaking ? <Ripple className="rounded-inner" /> : null}
+        {voice.state?.isApplicationSpeaking ? (
+          <Ripple className="rounded-inner" />
+        ) : null}
         <IconButton
           Icon={speakersEnabled ? Volume : VolumeOff}
           label="Speakers"
           type={speakersEnabled ? "activated" : "ghost"}
           onClick={() => {
-            setSpeakersEnabled((prev) => !prev);
+            voice.handler.setSpeakers(!speakersEnabled);
           }}
         />
       </div>
@@ -188,7 +235,10 @@ export const VoiceMini: FC<{
           "absolute right-0 -top-2 transform translate-x-0 -translate-y-full max-h-[360px] overflow-auto",
         )}
         renderedAsOverlay={false}
-        modalities={modalities}
+        modalities={
+          /* TODO: add modalities */
+          []
+        }
         modalityComponents={modalityComponents}
         handler={handler}
       />
