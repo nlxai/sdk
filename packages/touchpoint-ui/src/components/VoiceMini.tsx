@@ -174,7 +174,7 @@ export const VoiceMini: FC<{
       }
     };
     void fn();
-  }, [handler, setVoice]);
+  }, [handler, setVoice, context]);
 
   const retry = async (): Promise<void> => {
     try {
