@@ -1,7 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import {
-  ResponseType,
-  type ModalityPayloads,
   type Context,
   type ConversationHandler,
   type Response,
@@ -124,6 +122,7 @@ const VoiceMiniLoader: FC<{ brandIconView: ReactNode }> = ({
 
 export const VoiceMini: FC<{
   modalityComponents: Record<string, CustomModalityComponent<unknown>>;
+  showTranscript: boolean;
   responses: Response[];
   handler: ConversationHandler;
   brandIcon?: string;
@@ -133,6 +132,7 @@ export const VoiceMini: FC<{
 }> = ({
   handler,
   context,
+  showTranscript,
   onClose,
   modalityComponents,
   renderCollapse,
@@ -264,16 +264,9 @@ export const VoiceMini: FC<{
           containerClass,
           "absolute right-0 -top-2 transform translate-x-0 -translate-y-full max-h-[360px] overflow-auto",
         )}
+        responses={responses}
         renderedAsOverlay={false}
-        modalities={responses
-          .map((response) =>
-            response.type === ResponseType.Application
-              ? response.payload.modalities
-              : null,
-          )
-          .filter(
-            (modalities): modalities is ModalityPayloads => modalities != null,
-          )}
+        showTranscript={showTranscript}
         modalityComponents={modalityComponents}
         handler={handler}
       />

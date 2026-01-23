@@ -323,6 +323,10 @@ export interface TouchpointConfiguration {
    */
   input?: Input;
   /**
+   * Sets whether the transcript is shown in `voice` and `voiceMini` inputs.
+   */
+  showVoiceTranscript?: boolean;
+  /**
    * Context sent with the initial request.
    */
   initialContext?: Context;

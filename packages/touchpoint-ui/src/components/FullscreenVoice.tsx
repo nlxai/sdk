@@ -1,10 +1,12 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { useState, type FC, type ReactNode, useRef, useEffect } from "react";
 import { clsx } from "clsx";
-import type {
-  Context,
-  ConversationHandler,
-  ModalityPayloads,
+import {
+  type Context,
+  type ConversationHandler,
+  type ModalityPayloads,
+  type Response,
+  ResponseType,
 } from "@nlxai/core";
 import type { ColorMode, CustomModalityComponent } from "../interface";
 
@@ -21,6 +23,7 @@ import { ErrorMessage } from "./ErrorMessage";
 interface Props {
   colorMode: ColorMode;
   handler: ConversationHandler;
+  responses: Response[];
   speakersEnabled: boolean;
   brandIcon?: string;
   className?: string;
@@ -50,18 +53,27 @@ interface ModalityEntry {
 
 export const VoiceModalities: FC<{
   className?: string;
-  modalities: ModalityPayloads[];
+  responses: Response[];
   modalityComponents: Record<string, CustomModalityComponent<unknown>>;
   renderedAsOverlay: boolean;
+  showTranscript: boolean;
   handler: ConversationHandler;
 }> = ({
   className,
-  modalities,
+  responses,
   renderedAsOverlay,
   modalityComponents,
   handler,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const modalities = responses
+    .map((response) =>
+      response.type === ResponseType.Application
+        ? response.payload.modalities
+        : null,
+    )
+    .filter((modalities): modalities is ModalityPayloads => modalities != null);
 
   const customModalityComponents = modalities
     .map((m) => {
@@ -122,6 +134,7 @@ export const VoiceModalities: FC<{
 export const FullscreenVoice: FC<Props> = ({
   handler,
   speakersEnabled,
+  responses,
   colorMode,
   brandIcon,
   className,
@@ -130,13 +143,7 @@ export const FullscreenVoice: FC<Props> = ({
 }) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
 
-  const {
-    roomState,
-    isUserSpeaking,
-    isApplicationSpeaking,
-    retry,
-    modalities,
-  } = useVoice({
+  const { roomState, isUserSpeaking, isApplicationSpeaking, retry } = useVoice({
     micEnabled,
     speakersEnabled,
     handler,
@@ -212,8 +219,9 @@ export const FullscreenVoice: FC<Props> = ({
       </div>
       <VoiceModalities
         className="absolute p-4 top-0 left-0 right-0 bottom-[72px] z-10 space-y-2 max-h-full overflow-auto border-b border-solid border-primary-10"
+        showTranscript={false}
+        responses={responses}
         renderedAsOverlay
-        modalities={modalities.map((m) => m.modalities)}
         modalityComponents={modalityComponents}
         handler={handler}
       />

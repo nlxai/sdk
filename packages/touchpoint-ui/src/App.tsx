@@ -387,6 +387,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           key={voiceKey}
           handler={handler}
           responses={responses}
+          showTranscript={props.showVoiceTranscript ?? false}
           context={props.initialContext}
           brandIcon={props.brandIcon}
           onClose={() => {
@@ -557,6 +558,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                 ) : null}
                 <FullscreenVoice
                   key={voiceKey}
+                  responses={responses}
                   brandIcon={props.brandIcon}
                   handler={handler}
                   speakersEnabled={fullscreenVoiceSpeakersEnabled}
