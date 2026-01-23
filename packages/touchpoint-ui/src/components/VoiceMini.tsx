@@ -9,7 +9,6 @@ import {
 import {
   type ReactNode,
   useEffect,
-  useCallback,
   useRef,
   useState,
   type FC,
@@ -156,7 +155,7 @@ export const VoiceMini: FC<{
   const [voice, setVoice] = useWidgetVoiceState();
 
   useEffect(() => {
-    const fn = async () => {
+    const fn = async (): Promise<void> => {
       try {
         const voiceHandler = await initiateVoice(
           handler,
@@ -177,10 +176,10 @@ export const VoiceMini: FC<{
     void fn();
   }, [handler, setVoice]);
 
-  const retry = async () => {
+  const retry = async (): Promise<void> => {
     try {
-      if (voice != null && voice != "loading" && voice.type !== "error") {
-        voice.handler.disconnect();
+      if (voice != null && voice !== "loading" && voice.type !== "error") {
+        await voice.handler.disconnect();
       }
       setVoice(null);
       const voiceHandler = await initiateVoice(
@@ -235,7 +234,7 @@ export const VoiceMini: FC<{
           label="Microphone"
           type={voice.state?.isMicEnabled ? "activated" : "ghost"}
           onClick={() => {
-            voice.handler.setMicrophone(!micEnabled);
+            void voice.handler.setMicrophone(!micEnabled);
           }}
         />
       </div>
@@ -248,7 +247,7 @@ export const VoiceMini: FC<{
           label="Speakers"
           type={speakersEnabled ? "activated" : "ghost"}
           onClick={() => {
-            voice.handler.setSpeakers(!speakersEnabled);
+            void voice.handler.setSpeakers(!speakersEnabled);
           }}
         />
       </div>

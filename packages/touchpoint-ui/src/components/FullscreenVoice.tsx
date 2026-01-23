@@ -65,7 +65,7 @@ export const VoiceModalities: FC<{
 
   const customModalityComponents = modalities
     .map((m) => {
-      const entries: ModalityEntry[] = Object.entries(m.modalities)
+      const entries: ModalityEntry[] = Object.entries(m)
         .map(([key, value]) => {
           const Component = modalityComponents[key];
           if (Component == null) {

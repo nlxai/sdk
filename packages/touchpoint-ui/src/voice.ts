@@ -92,6 +92,7 @@ const normalizeRoomData = (val: unknown): RoomDataEvent | null => {
   ) {
     return { type: "agent_interim_response", message: rawData.message };
   }
+  // eslint-disable-next-line no-console
   console.warn("Room data not recognized", val);
   return null;
 };
@@ -262,6 +263,7 @@ export const initiateVoice = async (
         handleIsSpeakingChanged,
       );
       room.on(RoomEvent.MediaDevicesError, () => {
+        // eslint-disable-next-line no-console
         console.info("media devices error");
       });
       room.on(RoomEvent.Disconnected, () => {
@@ -279,6 +281,7 @@ export const initiateVoice = async (
           JSON.stringify({ type: "request", payload: req }),
         );
         room.localParticipant.publishData(encodedData).catch((err) => {
+          // eslint-disable-next-line no-console
           console.error("Failed to publish data to LiveKit:", err);
         });
       });
