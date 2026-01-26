@@ -276,7 +276,7 @@ export const FullscreenVoice: FC<Props> = ({
     return (
       <Container className={className}>
         <FullscreenError />
-        <div className="w-full px-3 h-20 flex items-center">
+        <div className="w-full px-3 h-20 flex items-center max-w-content mx-auto">
           <TextButton
             type="ghost"
             label="Retry"
