@@ -16,8 +16,9 @@ import {
   type Response,
   ResponseType,
 } from "@nlxai/core";
-import type { ColorMode, CustomModalityComponent } from "../interface";
+import { marked } from "marked";
 
+import type { ColorMode, CustomModalityComponent } from "../interface";
 import { FullscreenError } from "./FullscreenError";
 import { Ripple } from "./Ripple";
 import { Loader } from "./ui/Loader";
@@ -27,12 +28,14 @@ import { Touchpoint, Mic, MicOff, Restart } from "./ui/Icons";
 import { type VoiceHandler, type VoiceState, initiateVoice } from "../voice";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorMessage } from "./ErrorMessage";
+import { UserMessage } from "./Messages";
 
 interface Props {
   colorMode: ColorMode;
   handler: ConversationHandler;
   responses: Response[];
   speakersEnabled: boolean;
+  showTranscript: boolean;
   brandIcon?: string;
   className?: string;
   context?: Context;
@@ -102,6 +105,7 @@ export const VoiceModalities: FC<{
   className,
   responses,
   renderedAsOverlay,
+  showTranscript,
   modalityComponents,
   handler,
 }) => {
@@ -109,14 +113,11 @@ export const VoiceModalities: FC<{
 
   const customModalityComponents = responses
     .map((response) => {
-      if (response.type !== ResponseType.Application) {
-        return null;
-      }
-      const modalities = response.payload.modalities;
-      if (modalities == null) {
-        return null;
-      }
-      const entries: ModalityEntry[] = Object.entries(modalities)
+      const modalities =
+        (response.type === ResponseType.Application
+          ? response.payload.modalities
+          : undefined) ?? {};
+      const modalityEntries: ModalityEntry[] = Object.entries(modalities)
         .map(([key, value]) => {
           const Component = modalityComponents[key];
           if (Component == null) {
@@ -125,12 +126,32 @@ export const VoiceModalities: FC<{
           return { key, value, Component };
         })
         .filter((entry): entry is ModalityEntry => entry != null);
-      if (entries.length === 0) {
+      // If nothing is to be rendered, return an explicit `null` so rendering the container can be completely skipped as well
+      if (!showTranscript && modalityEntries.length === 0) {
         return null;
       }
       return (
         <div className="space-y-2 last:h-full" key={response.receivedAt}>
-          {entries.map(({ key, value, Component }) => {
+          {showTranscript && response.type === ResponseType.Application
+            ? response.payload.messages.map((message, messageIndex) => {
+                return (
+                  <div key={messageIndex} className="text-base">
+                    <div
+                      className={clsx("space-y-6 markdown")}
+                      dangerouslySetInnerHTML={{
+                        __html: marked(message.text, { async: false }),
+                      }}
+                    />
+                  </div>
+                );
+              })
+            : null}
+          {showTranscript &&
+          response.type === ResponseType.User &&
+          response.payload.type === "text" ? (
+            <UserMessage text={response.payload.text} bubble={false} />
+          ) : null}
+          {modalityEntries.map(({ key, value, Component }) => {
             return (
               <Component
                 key={key}
@@ -174,6 +195,7 @@ export const FullscreenVoice: FC<Props> = ({
   handler,
   speakersEnabled,
   responses,
+  showTranscript,
   colorMode,
   brandIcon,
   className,
@@ -313,7 +335,7 @@ export const FullscreenVoice: FC<Props> = ({
       </div>
       <VoiceModalities
         className="absolute p-4 top-0 left-0 right-0 bottom-[72px] z-10 space-y-2 max-h-full overflow-auto border-b border-solid border-primary-10"
-        showTranscript={false}
+        showTranscript={showTranscript}
         responses={responses}
         renderedAsOverlay
         modalityComponents={modalityComponents}

@@ -560,6 +560,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                   key={voiceKey}
                   responses={responses}
                   brandIcon={props.brandIcon}
+                  showTranscript={props.showVoiceTranscript ?? false}
                   handler={handler}
                   speakersEnabled={fullscreenVoiceSpeakersEnabled}
                   colorMode={colorMode}
