@@ -111,7 +111,7 @@ export const VoiceModalities: FC<{
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const customModalityComponents = responses
+  const displayElements = responses
     .map((response) => {
       const modalities =
         (response.type === ResponseType.Application
@@ -176,16 +176,16 @@ export const VoiceModalities: FC<{
     if (lastChild instanceof HTMLElement) {
       lastChild.scrollIntoView({ behavior: "smooth" });
     }
-  }, [customModalityComponents.length]);
+  }, [displayElements.length]);
 
-  if (customModalityComponents.length === 0) {
+  if (displayElements.length === 0) {
     return null;
   }
 
   return (
     <div className={className} ref={containerRef}>
       <ErrorBoundary fallback={<ErrorMessage message="Something went wrong" />}>
-        {customModalityComponents}
+        {displayElements}
       </ErrorBoundary>
     </div>
   );
@@ -333,14 +333,16 @@ export const FullscreenVoice: FC<Props> = ({
           <Ripple className="rounded-full" />
         ) : null}
       </div>
-      <VoiceModalities
-        className="absolute p-4 top-0 left-0 right-0 bottom-[72px] z-10 space-y-2 max-h-full overflow-auto border-b border-solid border-primary-10"
-        showTranscript={showTranscript}
-        responses={responses}
-        renderedAsOverlay
-        modalityComponents={modalityComponents}
-        handler={handler}
-      />
+      <div className="absolute top-0 left-0 right-0 bottom-[72px] z-10 space-y-2 max-h-full overflow-auto border-b border-solid border-primary-10">
+        <VoiceModalities
+          className="p-2 md:p-3 w-full max-w-content mx-auto"
+          showTranscript={showTranscript}
+          responses={responses}
+          renderedAsOverlay
+          modalityComponents={modalityComponents}
+          handler={handler}
+        />
+      </div>
       <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-0">
         {voice.state?.isUserSpeaking ? (
           <Ripple className="rounded-inner" />
