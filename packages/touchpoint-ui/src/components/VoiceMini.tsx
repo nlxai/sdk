@@ -4,25 +4,17 @@ import {
   type ConversationHandler,
   type Response,
 } from "@nlxai/core";
-import {
-  type ReactNode,
-  useEffect,
-  useRef,
-  useState,
-  type FC,
-  type Dispatch,
-  type SetStateAction,
-} from "react";
+import { type ReactNode, useEffect, type FC } from "react";
 import { clsx } from "clsx";
 
 import type { CustomModalityComponent } from "../interface";
-import { type VoiceHandler, type VoiceState, initiateVoice } from "../voice";
+import { initiateVoice } from "../voice";
 import { LoaderAnimation } from "./ui/Loader";
 import { Ripple } from "./Ripple";
 import { IconButton } from "./ui/IconButton";
 import { Close, Mic, MicOff, Volume, VolumeOff, Restart } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
-import { VoiceModalities } from "./FullscreenVoice";
+import { VoiceModalities, useWidgetVoiceState } from "./FullscreenVoice";
 import { ErrorMessage } from "./ErrorMessage";
 
 const containerClass =
@@ -56,38 +48,6 @@ const CompactContainer: FC<{ children: ReactNode; className?: string }> = ({
     {children}
   </div>
 );
-
-type WidgetVoiceState =
-  | null
-  | "loading"
-  | { type: "error"; error: string }
-  | { type: "success"; handler: VoiceHandler; state?: VoiceState };
-
-const useWidgetVoiceState = (): [
-  WidgetVoiceState,
-  Dispatch<SetStateAction<WidgetVoiceState>>,
-] => {
-  const [voice, setVoice] = useState<WidgetVoiceState>(null);
-
-  // Remember the last handler
-  const currentVoiceHandler = useRef<null | VoiceHandler>(null);
-  useEffect(() => {
-    if (voice != null && voice !== "loading" && voice.type !== "error") {
-      currentVoiceHandler.current = voice.handler;
-    }
-  }, [voice]);
-
-  // Perform final cleanup when component is unmounted
-  useEffect(() => {
-    return () => {
-      if (currentVoiceHandler.current != null) {
-        void currentVoiceHandler.current.disconnect();
-      }
-    };
-  }, []);
-
-  return [voice, setVoice];
-};
 
 const VoiceMiniLoader: FC<{ brandIconView: ReactNode }> = ({
   brandIconView,
