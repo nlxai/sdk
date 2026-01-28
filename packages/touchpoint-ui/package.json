@@ -14,7 +14,7 @@
     "design-system": "vite --mode design-system",
     "build": "tsc && vite build",
     "docs": "rm -rf docs/ && typedoc && concat-md --decrease-title-levels --dir-name-as-title docs/ > docs/index.md",
-    "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0",
+    "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0  && markdown-link-check README.md",
     "prepublish": "npm run build",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
     "format": "git ls-files | grep -E '\\.(js|jsx|ts|tsx|css|html)$' | xargs prettier --write",
@@ -22,7 +22,7 @@
     "publish-docs": "npm run docs && mv docs/index.md ../website/src/content/touchpoint-ui-api-reference.md",
     "test": "typedoc --emit none && vitest run",
     "tsc": "tsc",
-    "update-readme:docs": "rm -rf docs/ && typedoc",
+    "update-readme:docs": "rm -rf docs/ && typedoc --excludeExternals --externalPattern src/components/ui/Icons.tsx",
     "update-readme:merge": "../../scripts/transclude-markdown.js",
     "update-readme": "npm run update-readme:docs && npm run update-readme:merge"
   },
@@ -45,6 +45,7 @@
     "react-textarea-autosize": "^8.5.6"
   },
   "devDependencies": {
+    "@boillodmanuel/markdown-link-check": "^4.7.0",
     "@rollup/plugin-replace": "^6.0.2",
     "@tailwindcss/vite": "^4.1.16",
     "@testing-library/react": "^16.3.1",

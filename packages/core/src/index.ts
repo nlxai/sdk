@@ -116,7 +116,7 @@ export interface ConversationHandler {
    */
   sendSlots: (slots: SlotsRecordOrArray, context?: Context) => void;
   /**
-   * Respond to [a choice](https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/nodes#user-choice) from the application.
+   * Respond to [a choice](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/nodes#user-choice) from the application.
    * @param choiceId - The `choiceId` is in the {@link ApplicationResponse}'s `.payload.messages[].choices[].choiceId` fields
    * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the flow.
    * @param metadata - links the choice to the specific message and node in the conversation.
@@ -143,8 +143,8 @@ export interface ConversationHandler {
 
   /**
    * Trigger a specific flow.
-   * @param flowId - the flow to trigger. The id is the name under the application's _Intents_.
-   * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the intent.
+   * @param flowId - the flow to trigger. The id is the name under the application's _Flows_.
+   * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the flow.
    */
   sendFlow: (flowId: string, context?: Context) => void;
 
@@ -159,7 +159,7 @@ export interface ConversationHandler {
 
   /**
    * Send context without sending a message
-   * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the intent.
+   * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the flow.
    */
   sendContext: (context: Context) => Promise<void>;
 
@@ -186,9 +186,9 @@ export interface ConversationHandler {
   ) => void;
 
   /**
-   * Send a combination of choice, slots, and intent in one request.
+   * Send a combination of choice, slots, and flow in one request.
    * @param request -
-   * @param context - [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+   * @param context - [Context](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/advanced/context-variables) for usage later in the flow.
    */
   sendStructured: (request: StructuredRequest, context?: Context) => void;
 
@@ -269,12 +269,12 @@ export interface ConversationHandler {
 }
 
 /**
- * [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+ * [Context](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/advanced/context-variables) for usage later in the flow.
  */
 export type Context = Record<string, any>;
 
 /**
- * Values to fill an intent's [attached slots](https://docs.studio.nlx.ai/intents/documentation-intents/intents-attached-slots).
+ * Values to fill an flow's [attached slots](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/setup#attached-slots).
  *
  * An array of `SlotValue` objects is equivalent to a {@link SlotsRecord}.
  */
@@ -284,7 +284,7 @@ export interface SlotValue {
    */
   slotId: string;
   /**
-   * Usually this will be a discrete value matching the slots's [type](https://docs.studio.nlx.ai/slots/documentation-slots/slots-values#system-slots).
+   * Usually this will be a discrete value matching the slots's [type](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/setup#custom-vs-built-in-slots).
    * for custom slots, this can optionally be the value's ID.
    */
   value: any;
@@ -327,11 +327,11 @@ export enum ResponseType {
 }
 
 /**
- * Values to fill an intent's [attached slots](https://docs.studio.nlx.ai/intents/documentation-intents/intents-attached-slots).
+ * Values to fill an flow's [attached slots](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/setup#attached-slots).
  *
  * `SlotRecord` Keys are the attached slot's name
  *
- * `SlotRecord` Values are usually a discrete value matching the slots's [type](https://docs.studio.nlx.ai/slots/documentation-slots/slots-values#system-slots).
+ * `SlotRecord` Values are usually a discrete value matching the slots's [type](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/setup#custom-vs-built-in-slots).
  * for custom slots, this can optionally be the value's ID.
  *
  * A `SlotsRecord` is equivalent to an array of {@link SlotValue} objects.
@@ -339,7 +339,7 @@ export enum ResponseType {
 export type SlotsRecord = Record<string, any>;
 
 /**
- * Values to fill an intent's [attached slots](https://docs.studio.nlx.ai/intents/documentation-intents/intents-attached-slots).
+ * Values to fill an flow's [attached slots](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/setup#attached-slots).
  *
  * Supports either a {@link SlotsRecord} or an array of {@link SlotValue} objects
  */
@@ -390,7 +390,7 @@ export interface ApplicationResponsePayload {
    */
   metadata?: ApplicationResponseMetadata;
   /**
-   * If configured, the [node's payload.](See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/advanced-messaging-+-functionality#add-functionality)
+   * If configured, the [node's payload](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/nodes#node-payload).
    */
   payload?: string;
   /**
@@ -414,7 +414,7 @@ export type ModalityPayloads = Record<string, any>;
  */
 export interface ApplicationResponseMetadata {
   /**
-   * The conversation's intent
+   * The conversation's flow ID (called `intentId` here for legacy reasons).
    */
   intentId?: string;
   /**
@@ -487,7 +487,7 @@ export interface KnowledgeBaseResponseSource {
  */
 export interface ApplicationMessageMetadata {
   /**
-   * The message node's intent
+   * The message node's flow ID (called `intentId` here for legacy reasons).
    */
   intentId?: string;
 }
@@ -594,7 +594,7 @@ export type UserResponsePayload =
        */
       text: string;
       /**
-       * [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+       * [Context](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/advanced/context-variables) for usage later in the flow.
        */
       context?: Context;
     }
@@ -609,7 +609,7 @@ export type UserResponsePayload =
        */
       choiceId: string;
       /**
-       * [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+       * [Context](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/advanced/context-variables) for usage later in the flow.
        */
       context?: Context;
     }
@@ -619,7 +619,7 @@ export type UserResponsePayload =
        */
       type: "structured";
       /**
-       * [Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+       * [Context](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/advanced/context-variables) for usage later in the flow.
        */
       context?: Context;
     } & StructuredRequest);
@@ -745,7 +745,7 @@ const normalizeStructuredRequest = (
 
 /**
  * The body of `sendStructured`
- * Includes a combination of choice, slots, and intent in one request.
+ * Includes a combination of choice, slots, and flow in one request.
  */
 export interface StructuredRequest {
   /**
@@ -880,9 +880,14 @@ export interface ChoiceRequestMetadata {
    */
   nodeId?: string;
   /**
-   * Intent ID, used for sending to the NLU to allow it to double-check
+   * Intent ID, used for sending to the NLU to allow it to double-check.
+   * @deprecated use `flowId` instead.
    */
   intentId?: string;
+  /**
+   * Flow ID, used for sending to the NLU to allow it to double-check.
+   */
+  flowId?: string;
 }
 
 /**
@@ -1626,7 +1631,7 @@ export function createConversation(configuration: Config): ConversationHandler {
       request: {
         structured: {
           nodeId: metadata?.nodeId,
-          intentId: metadata?.intentId,
+          intentId: metadata?.flowId ?? metadata?.intentId,
           choiceId,
         },
       },
