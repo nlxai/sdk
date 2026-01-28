@@ -194,6 +194,14 @@ optional input: "text" | "external" | "voice" | "voiceMini";
 
 Controls the ways in which the user can communicate with the application. Defaults to `"text"`
 
+##### showVoiceTranscript?
+
+```ts
+optional showVoiceTranscript: boolean;
+```
+
+Sets whether the transcript is shown in `voice` and `voiceMini` inputs.
+
 ##### initialContext?
 
 ```ts
@@ -1407,10 +1415,6 @@ A handler that will be called with an argument matching the schema when the comm
 ###### Returns
 
 `void`
-
-## Other
-
-- [Icons](@nlxai/namespaces/Icons.md)
 
 ## Utilities
 

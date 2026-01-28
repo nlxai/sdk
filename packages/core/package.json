@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "rm -rf lib && rollup -c --configPlugin typescript --configImportAttributesKey with",
-    "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0",
+    "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0 && markdown-link-check README.md",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
     "prepublish": "npm run build",
     "test": "typedoc --emit none",
@@ -28,6 +28,7 @@
   "author": "Peter Szerzo <peter@nlx.ai>",
   "license": "MIT",
   "devDependencies": {
+    "@boillodmanuel/markdown-link-check": "^4.7.0",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",

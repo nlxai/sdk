@@ -732,7 +732,7 @@ The slots to populate
 sendChoice: (choiceId, context?, metadata?) => void;
 ```
 
-Respond to [a choice](https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/nodes#user-choice) from the application.
+Respond to [a choice](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/nodes#user-choice) from the application.
 
 ###### Parameters
 
@@ -792,13 +792,13 @@ Trigger a specific flow.
 
 `string`
 
-the flow to trigger. The id is the name under the application's _Intents_.
+the flow to trigger. The id is the name under the application's _Flows_.
 
 ###### context?
 
 [`Context`](#context)
 
-[Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the intent.
+[Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the flow.
 
 ###### Returns
 
@@ -818,7 +818,7 @@ Send context without sending a message
 
 [`Context`](#context)
 
-[Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the intent.
+[Context](https://docs.nlx.ai/platform/nlx-platform-guide/build-with-nlx/flows/context-variables#what-are-context-variables) for usage later in the flow.
 
 ###### Returns
 
@@ -851,7 +851,7 @@ the response with optional timestamps.
 sendStructured: (request, context?) => void;
 ```
 
-Send a combination of choice, slots, and intent in one request.
+Send a combination of choice, slots, and flow in one request.
 
 ###### Parameters
 
@@ -863,7 +863,7 @@ Send a combination of choice, slots, and intent in one request.
 
 [`Context`](#context)
 
-[Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+[Context](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/advanced/context-variables) for usage later in the flow.
 
 ###### Returns
 
@@ -1104,7 +1104,7 @@ Remove a listener to one of the handler's custom events
 
 ### SlotValue
 
-Values to fill an intent's [attached slots](https://docs.studio.nlx.ai/intents/documentation-intents/intents-attached-slots).
+Values to fill an flow's [attached slots](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/setup#attached-slots).
 
 An array of `SlotValue` objects is equivalent to a [SlotsRecord](#slotsrecord).
 
@@ -1124,7 +1124,7 @@ The attached slot's name
 value: any;
 ```
 
-Usually this will be a discrete value matching the slots's [type](https://docs.studio.nlx.ai/slots/documentation-slots/slots-values#system-slots).
+Usually this will be a discrete value matching the slots's [type](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/setup#custom-vs-built-in-slots).
 for custom slots, this can optionally be the value's ID.
 
 ---
@@ -1212,7 +1212,7 @@ as well as whether the client should poll for more application responses.
 optional payload: string;
 ```
 
-If configured, the [node's payload.](See: https://docs.studio.nlx.ai/intentflows/documentation-flows/flows-build-mode/advanced-messaging-+-functionality#add-functionality)
+If configured, the [node's payload](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/nodes#node-payload).
 
 ##### modalities?
 
@@ -1245,7 +1245,7 @@ as well as whether the client should poll for more application responses.
 optional intentId: string;
 ```
 
-The conversation's intent
+The conversation's flow ID (called `intentId` here for legacy reasons).
 
 ##### escalation?
 
@@ -1376,7 +1376,7 @@ as well as whether the client should poll for more application responses.
 optional intentId: string;
 ```
 
-The message node's intent
+The message node's flow ID (called `intentId` here for legacy reasons).
 
 ---
 
@@ -1689,7 +1689,7 @@ Label for comment
 ### StructuredRequest
 
 The body of `sendStructured`
-Includes a combination of choice, slots, and intent in one request.
+Includes a combination of choice, slots, and flow in one request.
 
 #### Properties
 
@@ -1905,13 +1905,25 @@ optional nodeId: string;
 Required if you want to change a choice that's already been sent.
 The `nodeId` can be found in the corresponding [ApplicationMessage](#applicationmessage).
 
-##### intentId?
+##### ~~intentId?~~
 
 ```ts
 optional intentId: string;
 ```
 
-Intent ID, used for sending to the NLU to allow it to double-check
+Intent ID, used for sending to the NLU to allow it to double-check.
+
+###### Deprecated
+
+use `flowId` instead.
+
+##### flowId?
+
+```ts
+optional flowId: string;
+```
+
+Flow ID, used for sending to the NLU to allow it to double-check.
 
 ---
 
@@ -2036,7 +2048,7 @@ voicePlusCommand
 type Context = Record<string, any>;
 ```
 
-[Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+[Context](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/advanced/context-variables) for usage later in the flow.
 
 ---
 
@@ -2046,11 +2058,11 @@ type Context = Record<string, any>;
 type SlotsRecord = Record<string, any>;
 ```
 
-Values to fill an intent's [attached slots](https://docs.studio.nlx.ai/intents/documentation-intents/intents-attached-slots).
+Values to fill an flow's [attached slots](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/setup#attached-slots).
 
 `SlotRecord` Keys are the attached slot's name
 
-`SlotRecord` Values are usually a discrete value matching the slots's [type](https://docs.studio.nlx.ai/slots/documentation-slots/slots-values#system-slots).
+`SlotRecord` Values are usually a discrete value matching the slots's [type](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/setup#custom-vs-built-in-slots).
 for custom slots, this can optionally be the value's ID.
 
 A `SlotsRecord` is equivalent to an array of [SlotValue](#slotvalue) objects.
@@ -2063,7 +2075,7 @@ A `SlotsRecord` is equivalent to an array of [SlotValue](#slotvalue) objects.
 type SlotsRecordOrArray = SlotsRecord | SlotValue[];
 ```
 
-Values to fill an intent's [attached slots](https://docs.studio.nlx.ai/intents/documentation-intents/intents-attached-slots).
+Values to fill an intent's [attached slots](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/setup#attached-slots).
 
 Supports either a [SlotsRecord](#slotsrecord) or an array of [SlotValue](#slotvalue) objects
 
@@ -2130,7 +2142,7 @@ The user's message
 optional context: Context;
 ```
 
-[Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+[Context](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/advanced/context-variables) for usage later in the flow.
 
 ```ts
 {
@@ -2163,7 +2175,7 @@ Correlates to a `choiceId` in the [ApplicationResponse](#applicationresponse)'s 
 optional context: Context;
 ```
 
-[Context](https://docs.studio.nlx.ai/workspacesettings/documentation-settings/settings-context-attributes) for usage later in the intent.
+[Context](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/advanced/context-variables) for usage later in the flow.
 
 `object` & [`StructuredRequest`](#structuredrequest)
 
