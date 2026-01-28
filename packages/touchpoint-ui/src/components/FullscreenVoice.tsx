@@ -1,28 +1,78 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { useState, type FC, type ReactNode, useRef, useEffect } from "react";
+import {
+  useMemo,
+  useState,
+  useRef,
+  useEffect,
+  type FC,
+  type ReactNode,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { clsx } from "clsx";
-import type { Context, ConversationHandler } from "@nlxai/core";
-import type { ColorMode, CustomModalityComponent } from "../interface";
+import {
+  type Context,
+  type ConversationHandler,
+  type Response,
+  ResponseType,
+} from "@nlxai/core";
+import { marked } from "marked";
 
+import type { ColorMode, CustomModalityComponent } from "../interface";
 import { FullscreenError } from "./FullscreenError";
 import { Ripple } from "./Ripple";
 import { Loader } from "./ui/Loader";
 import { IconButton } from "./ui/IconButton";
 import { TextButton } from "./ui/TextButton";
 import { Touchpoint, Mic, MicOff, Restart } from "./ui/Icons";
-import { type ModalitiesWithContext, useVoice } from "../voice";
+import { type VoiceHandler, type VoiceState, initiateVoice } from "../voice";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorMessage } from "./ErrorMessage";
+import { UserMessage } from "./Messages";
 
 interface Props {
   colorMode: ColorMode;
   handler: ConversationHandler;
+  responses: Response[];
   speakersEnabled: boolean;
+  showTranscript: boolean;
   brandIcon?: string;
   className?: string;
   context?: Context;
   modalityComponents: Record<string, CustomModalityComponent<unknown>>;
 }
+
+export type WidgetVoiceState =
+  | null
+  | "loading"
+  | { type: "error"; error: string }
+  | { type: "success"; handler: VoiceHandler; state?: VoiceState };
+
+export const useWidgetVoiceState = (): [
+  WidgetVoiceState,
+  Dispatch<SetStateAction<WidgetVoiceState>>,
+] => {
+  const [voice, setVoice] = useState<WidgetVoiceState>(null);
+
+  // Remember the last handler
+  const currentVoiceHandler = useRef<null | VoiceHandler>(null);
+  useEffect(() => {
+    if (voice != null && voice !== "loading" && voice.type !== "error") {
+      currentVoiceHandler.current = voice.handler;
+    }
+  }, [voice]);
+
+  // Perform final cleanup when component is unmounted
+  useEffect(() => {
+    return () => {
+      if (currentVoiceHandler.current != null) {
+        void currentVoiceHandler.current.disconnect();
+      }
+    };
+  }, []);
+
+  return [voice, setVoice];
+};
 
 const Container: FC<{ className?: string; children: ReactNode }> = ({
   className,
@@ -46,22 +96,28 @@ interface ModalityEntry {
 
 export const VoiceModalities: FC<{
   className?: string;
-  modalities: ModalitiesWithContext[];
+  responses: Response[];
   modalityComponents: Record<string, CustomModalityComponent<unknown>>;
   renderedAsOverlay: boolean;
+  showTranscript: boolean;
   handler: ConversationHandler;
 }> = ({
   className,
-  modalities,
+  responses,
   renderedAsOverlay,
+  showTranscript,
   modalityComponents,
   handler,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const customModalityComponents = modalities
-    .map((m) => {
-      const entries: ModalityEntry[] = Object.entries(m.modalities)
+  const displayElements = responses
+    .map((response) => {
+      const modalities =
+        (response.type === ResponseType.Application
+          ? response.payload.modalities
+          : undefined) ?? {};
+      const modalityEntries: ModalityEntry[] = Object.entries(modalities)
         .map(([key, value]) => {
           const Component = modalityComponents[key];
           if (Component == null) {
@@ -70,12 +126,32 @@ export const VoiceModalities: FC<{
           return { key, value, Component };
         })
         .filter((entry): entry is ModalityEntry => entry != null);
-      if (entries.length === 0) {
+      // If nothing is to be rendered, return an explicit `null` so rendering the container can be completely skipped as well
+      if (!showTranscript && modalityEntries.length === 0) {
         return null;
       }
       return (
-        <div className="space-y-2 last:h-full" key={m.timestamp}>
-          {entries.map(({ key, value, Component }) => {
+        <div className="space-y-2 last:h-full" key={response.receivedAt}>
+          {showTranscript && response.type === ResponseType.Application
+            ? response.payload.messages.map((message, messageIndex) => {
+                return (
+                  <div key={messageIndex} className="text-base">
+                    <div
+                      className={clsx("space-y-6 markdown")}
+                      dangerouslySetInnerHTML={{
+                        __html: marked(message.text, { async: false }),
+                      }}
+                    />
+                  </div>
+                );
+              })
+            : null}
+          {showTranscript &&
+          response.type === ResponseType.User &&
+          response.payload.type === "text" ? (
+            <UserMessage text={response.payload.text} bubble={false} />
+          ) : null}
+          {modalityEntries.map(({ key, value, Component }) => {
             return (
               <Component
                 key={key}
@@ -100,16 +176,16 @@ export const VoiceModalities: FC<{
     if (lastChild instanceof HTMLElement) {
       lastChild.scrollIntoView({ behavior: "smooth" });
     }
-  }, [customModalityComponents.length]);
+  }, [displayElements.length]);
 
-  if (customModalityComponents.length === 0) {
+  if (displayElements.length === 0) {
     return null;
   }
 
   return (
     <div className={className} ref={containerRef}>
       <ErrorBoundary fallback={<ErrorMessage message="Something went wrong" />}>
-        {customModalityComponents}
+        {displayElements}
       </ErrorBoundary>
     </div>
   );
@@ -118,6 +194,8 @@ export const VoiceModalities: FC<{
 export const FullscreenVoice: FC<Props> = ({
   handler,
   speakersEnabled,
+  responses,
+  showTranscript,
   colorMode,
   brandIcon,
   className,
@@ -126,20 +204,67 @@ export const FullscreenVoice: FC<Props> = ({
 }) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
 
-  const {
-    roomState,
-    isUserSpeaking,
-    isApplicationSpeaking,
-    retry,
-    modalities,
-  } = useVoice({
-    micEnabled,
-    speakersEnabled,
-    handler,
-    context,
-  });
+  const [voice, setVoice] = useWidgetVoiceState();
 
-  if (roomState === "pending") {
+  const setSpeakers = useMemo(() => {
+    if (voice == null || voice === "loading" || voice.type === "error") {
+      return null;
+    }
+    return voice.handler.setSpeakers;
+  }, [voice]);
+
+  useEffect(() => {
+    if (setSpeakers != null) {
+      void setSpeakers(speakersEnabled);
+    }
+  }, [setSpeakers, speakersEnabled]);
+
+  useEffect(() => {
+    const fn = async (): Promise<void> => {
+      try {
+        const voiceHandler = await initiateVoice(
+          handler,
+          context ?? {},
+          (newVoiceState) => {
+            setVoice((prev) =>
+              prev === null || prev === "loading" || prev.type === "error"
+                ? prev
+                : { ...prev, state: newVoiceState },
+            );
+          },
+        );
+        setVoice({ type: "success", handler: voiceHandler });
+      } catch (err) {
+        setVoice({ type: "error", error: String(err) });
+      }
+    };
+    void fn();
+  }, [handler, setVoice, context]);
+
+  const retry = async (): Promise<void> => {
+    try {
+      if (voice != null && voice !== "loading" && voice.type !== "error") {
+        await voice.handler.disconnect();
+      }
+      setVoice(null);
+      const voiceHandler = await initiateVoice(
+        handler,
+        context ?? {},
+        (newVoiceState) => {
+          setVoice((prev) =>
+            prev === null || prev === "loading" || prev.type === "error"
+              ? prev
+              : { ...prev, state: newVoiceState },
+          );
+        },
+      );
+      setVoice({ type: "success", handler: voiceHandler });
+    } catch (err) {
+      setVoice({ type: "error", error: String(err) });
+    }
+  };
+
+  if (voice == null || voice === "loading") {
     return (
       <Container className={className}>
         <Loader />
@@ -147,11 +272,11 @@ export const FullscreenVoice: FC<Props> = ({
     );
   }
 
-  if (roomState === "error" || roomState === "noAudioPermissions") {
+  if (voice.type === "error") {
     return (
       <Container className={className}>
         <FullscreenError />
-        <div className="w-full px-3 h-20 flex items-center">
+        <div className="w-full px-3 h-20 flex items-center max-w-content mx-auto">
           <TextButton
             type="ghost"
             label="Retry"
@@ -165,7 +290,7 @@ export const FullscreenVoice: FC<Props> = ({
     );
   }
 
-  if (roomState === "terminated") {
+  if (voice.state?.isTerminated) {
     return (
       <Container className={className}>
         <div
@@ -204,17 +329,24 @@ export const FullscreenVoice: FC<Props> = ({
             <Touchpoint className="w-full h-full text-primary-40" />
           ) : null}
         </div>
-        {isApplicationSpeaking ? <Ripple className="rounded-full" /> : null}
+        {voice.state?.isApplicationSpeaking ? (
+          <Ripple className="rounded-full" />
+        ) : null}
       </div>
-      <VoiceModalities
-        className="absolute p-4 top-0 left-0 right-0 bottom-[72px] z-10 space-y-2 max-h-full overflow-auto border-b border-solid border-primary-10"
-        renderedAsOverlay
-        modalities={modalities}
-        modalityComponents={modalityComponents}
-        handler={handler}
-      />
+      <div className="absolute top-0 left-0 right-0 bottom-[72px] z-10 space-y-2 max-h-full overflow-auto border-b border-solid border-primary-10">
+        <VoiceModalities
+          className="p-2 md:p-3 w-full max-w-content mx-auto"
+          showTranscript={showTranscript}
+          responses={responses}
+          renderedAsOverlay
+          modalityComponents={modalityComponents}
+          handler={handler}
+        />
+      </div>
       <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-0">
-        {isUserSpeaking ? <Ripple className="rounded-inner" /> : null}
+        {voice.state?.isUserSpeaking ? (
+          <Ripple className="rounded-inner" />
+        ) : null}
         <IconButton
           Icon={micEnabled ? Mic : MicOff}
           label="Voice"

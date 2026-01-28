@@ -108,11 +108,11 @@ const findFirstIndexAfterEscalation = (
   return null;
 };
 
-const UserMessage: FC<{ text: string; files?: File[]; bubble: boolean }> = ({
-  text,
-  bubble,
-  files,
-}) => {
+export const UserMessage: FC<{
+  text: string;
+  files?: File[];
+  bubble: boolean;
+}> = ({ text, bubble, files }) => {
   return (
     <div className="space-y-2">
       <div className="flex justify-end pl-10 text-base">
