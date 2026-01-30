@@ -131,7 +131,7 @@ export const VoiceModalities: FC<{
         return null;
       }
       return (
-        <div className="space-y-2 last:h-full" key={response.receivedAt}>
+        <div className="space-y-2" key={response.receivedAt}>
           {showTranscript && response.type === ResponseType.Application
             ? response.payload.messages.map((message, messageIndex) => {
                 return (
@@ -310,10 +310,10 @@ export const FullscreenVoice: FC<Props> = ({
 
   return (
     <Container className={className}>
-      <div className="rounded-full w-fit relative">
+      <div className="rounded-full w-fit absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 z-0">
         <div
           className={clsx(
-            "w-[128px] h-[128px] p-4 z-10 relative rounded-full overflow-hidden bg-cover bg-center",
+            "w-[128px] h-[128px] p-4 relative rounded-full overflow-hidden bg-cover bg-center",
             // This color imitates primary5 overlayed on the regular background, but it has to be solid
             brandIcon != null
               ? ""
@@ -333,16 +333,14 @@ export const FullscreenVoice: FC<Props> = ({
           <Ripple className="rounded-full" />
         ) : null}
       </div>
-      <div className="absolute top-0 left-0 right-0 bottom-[72px] z-10 space-y-2 max-h-full overflow-auto border-b border-solid border-primary-10">
-        <VoiceModalities
-          className="p-2 md:p-3 w-full max-w-content mx-auto"
-          showTranscript={showTranscript}
-          responses={responses}
-          renderedAsOverlay
-          modalityComponents={modalityComponents}
-          handler={handler}
-        />
-      </div>
+      <VoiceModalities
+        className="p-2 md:p-3 w-full max-w-content mx-auto grow overflow-auto border-b border-solid boder-primary-10 z-10"
+        showTranscript={showTranscript}
+        responses={responses}
+        renderedAsOverlay
+        modalityComponents={modalityComponents}
+        handler={handler}
+      />
       <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-0">
         {voice.state?.isUserSpeaking ? (
           <Ripple className="rounded-inner" />
