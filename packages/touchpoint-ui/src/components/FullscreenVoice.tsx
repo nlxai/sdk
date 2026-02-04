@@ -17,6 +17,7 @@ import {
   ResponseType,
 } from "@nlxai/core";
 import { marked } from "marked";
+import DOMPurify from "dompurify";
 
 import type { ColorMode, CustomModalityComponent } from "../interface";
 import { FullscreenError } from "./FullscreenError";
@@ -139,7 +140,9 @@ export const VoiceModalities: FC<{
                     <div
                       className={clsx("space-y-6 markdown")}
                       dangerouslySetInnerHTML={{
-                        __html: marked(message.text, { async: false }),
+                        __html: DOMPurify.sanitize(
+                          marked(message.text, { async: false }),
+                        ),
                       }}
                     />
                   </div>

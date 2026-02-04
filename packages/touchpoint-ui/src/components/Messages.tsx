@@ -10,6 +10,7 @@ import {
 } from "@nlxai/core";
 import { clsx } from "clsx";
 import { marked } from "marked";
+import DOMPurify from "dompurify";
 
 import { useCopy } from "../utils/useCopy";
 import { ErrorMessage } from "./ErrorMessage";
@@ -456,7 +457,9 @@ export const Messages: FC<MessagesProps> = ({
                             : "",
                         )}
                         dangerouslySetInnerHTML={{
-                          __html: marked(message.text, { async: false }),
+                          __html: DOMPurify.sanitize(
+                            marked(message.text, { async: false }),
+                          ),
                         }}
                       />
                     </div>
