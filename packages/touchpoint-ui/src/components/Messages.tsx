@@ -123,7 +123,7 @@ export const UserMessage: FC<{
             bubble ? "bg-primary-5 p-3" : "",
           )}
         >
-          {text}
+          {DOMPurify.sanitize(text)}
         </div>
       </div>
       {files != null ? (
