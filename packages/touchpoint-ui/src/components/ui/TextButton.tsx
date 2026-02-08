@@ -1,6 +1,5 @@
 import { clsx } from "clsx";
 import { type FC } from "react";
-import DOMPurify from "dompurify";
 
 import { type IconProps } from "./Icons";
 
@@ -70,7 +69,7 @@ export const TextButton: FC<TextButtonProps> = ({
         className,
       )}
     >
-      {DOMPurify.sanitize(label)}
+      {label}
       <Icon size={16} />
     </button>
   );
