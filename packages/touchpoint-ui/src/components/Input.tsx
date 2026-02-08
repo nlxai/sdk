@@ -103,6 +103,8 @@ export const Input: FC<InputProps> = ({
 
     setIsWaiting(true);
 
+    // TODO: disallow user-input HTML in general
+    // TODO: also add this logic to the NLU
     const sanitizedInputValue = DOMPurify.sanitize(inputValue);
 
     if (uploadUrl != null && uploadedFileInfo != null) {
