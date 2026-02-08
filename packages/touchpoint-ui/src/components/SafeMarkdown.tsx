@@ -1,4 +1,5 @@
-import React, { useMemo, type FC, type DetailedHTMLProps } from "react";
+/* eslint-disable jsdoc/require-jsdoc */
+import { useMemo, type FC, type DetailedHTMLProps } from "react";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 
