@@ -15,6 +15,7 @@ import {
   ResponseType,
 } from "@nlxai/core";
 import { clsx } from "clsx";
+import DOMPurify from "dompurify";
 
 import { useCopy } from "../utils/useCopy";
 import { IconButton } from "./ui/IconButton";
@@ -102,13 +103,15 @@ export const Input: FC<InputProps> = ({
 
     setIsWaiting(true);
 
+    const sanitizedInputValue = DOMPurify.sanitize(inputValue);
+
     if (uploadUrl != null && uploadedFileInfo != null) {
       handler.sendStructured({
         uploadIds: [uploadUrl.uploadId],
-        utterance: inputValue,
+        utterance: sanitizedInputValue,
       });
     } else {
-      handler.sendText(inputValue);
+      handler.sendText(sanitizedInputValue);
     }
   };
 
