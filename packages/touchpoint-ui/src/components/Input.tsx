@@ -109,7 +109,6 @@ export const Input: FC<InputProps> = ({
       ALLOWED_TAGS: [],
     });
 
-    console.log(sanitizedInputValue);
 
     if (uploadUrl != null && uploadedFileInfo != null) {
       handler.sendStructured({
