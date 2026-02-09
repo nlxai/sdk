@@ -103,20 +103,13 @@ export const Input: FC<InputProps> = ({
 
     setIsWaiting(true);
 
-    // Disallow all user-input HTML
-    // TODO: also add this logic to the NLU
-    const sanitizedInputValue = DOMPurify.sanitize(inputValue, {
-      ALLOWED_TAGS: [],
-    });
-
-
     if (uploadUrl != null && uploadedFileInfo != null) {
       handler.sendStructured({
         uploadIds: [uploadUrl.uploadId],
-        utterance: sanitizedInputValue,
+        utterance: inputValue,
       });
     } else {
-      handler.sendText(sanitizedInputValue);
+      handler.sendText(inputValue);
     }
   };
 
