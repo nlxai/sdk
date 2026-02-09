@@ -9,8 +9,8 @@ import {
   type FeedbackConfiguration,
 } from "@nlxai/core";
 import { clsx } from "clsx";
-import { marked } from "marked";
 
+import { SafeMarkdown } from "./SafeMarkdown";
 import { useCopy } from "../utils/useCopy";
 import { ErrorMessage } from "./ErrorMessage";
 import { Loader } from "./ui/Loader";
@@ -448,16 +448,14 @@ export const Messages: FC<MessagesProps> = ({
                 {response.payload.messages.map((message, messageIndex) => {
                   return (
                     <div key={messageIndex} className="text-base">
-                      <div
+                      <SafeMarkdown
                         className={clsx(
                           "space-y-6 markdown",
                           agentMessageBubble
                             ? "p-3 w-fit bg-secondary-40 mr-10 rounded-inner"
                             : "",
                         )}
-                        dangerouslySetInnerHTML={{
-                          __html: marked(message.text, { async: false }),
-                        }}
+                        contents={message.text}
                       />
                     </div>
                   );

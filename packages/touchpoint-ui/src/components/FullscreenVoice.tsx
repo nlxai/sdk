@@ -16,8 +16,8 @@ import {
   type Response,
   ResponseType,
 } from "@nlxai/core";
-import { marked } from "marked";
 
+import { SafeMarkdown } from "./SafeMarkdown";
 import type { ColorMode, CustomModalityComponent } from "../interface";
 import { FullscreenError } from "./FullscreenError";
 import { Ripple } from "./Ripple";
@@ -136,11 +136,9 @@ export const VoiceModalities: FC<{
             ? response.payload.messages.map((message, messageIndex) => {
                 return (
                   <div key={messageIndex} className="text-base">
-                    <div
-                      className={clsx("space-y-6 markdown")}
-                      dangerouslySetInnerHTML={{
-                        __html: marked(message.text, { async: false }),
-                      }}
+                    <SafeMarkdown
+                      className="space-y-6 markdown"
+                      contents={message.text}
                     />
                   </div>
                 );
