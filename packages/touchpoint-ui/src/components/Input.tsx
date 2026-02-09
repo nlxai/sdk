@@ -15,7 +15,6 @@ import {
   ResponseType,
 } from "@nlxai/core";
 import { clsx } from "clsx";
-import DOMPurify from "dompurify";
 
 import { useCopy } from "../utils/useCopy";
 import { IconButton } from "./ui/IconButton";
