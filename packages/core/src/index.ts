@@ -1003,9 +1003,9 @@ const parseConnection = (config: Config): Connection | null => {
      */
     (isWebsocketUrl(applicationUrl)
       ? Protocol.Websocket
-      : config.experimental?.streamHttp === false
-        ? Protocol.Https
-        : Protocol.HttpsWithStreaming);
+      : config.experimental?.streamHttp === true
+        ? Protocol.HttpsWithStreaming
+        : Protocol.Https);
   if (
     config.host != null &&
     config.channelKey != null &&
