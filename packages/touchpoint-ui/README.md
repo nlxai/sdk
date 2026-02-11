@@ -1398,6 +1398,14 @@ with this schema, so you are guaranteed type safe inputs to your handler.
 
 Should follow the JSONSchema specification.
 
+##### input?
+
+```ts
+optional input: any;
+```
+
+Any additional input data that the LLM should have.
+
 ##### handler()
 
 ```ts
