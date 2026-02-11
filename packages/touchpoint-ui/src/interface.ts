@@ -513,6 +513,11 @@ export interface BidirectionalCustomCommand {
    * Should follow the JSONSchema specification.
    */
   schema?: any;
+
+  /**
+   * Any additional input data that the LLM should have.
+   */
+  input?: any;
   /**
    * A handler that will be called with an argument matching the schema when the command is invoked.
    */
