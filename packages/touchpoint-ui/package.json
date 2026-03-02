@@ -58,7 +58,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/ui": "^3.2.4",
     "dom-accessibility-api": "^0.7.0",
-    "eslint-config-nlx": "*",
+    "@nlxai/eslint-config": "*",
     "jsdom": "^27.0.1",
     "tailwindcss": "^4.1.16",
     "typedoc": "^0.28.14",
