@@ -38,9 +38,10 @@
     "rollup-config-nlx": "*",
     "rollup-plugin-import-css": "^3.5.0",
     "ts-jest": "^29.4.6",
-    "typedoc": "^0.25.13",
-    "typedoc-plugin-markdown": "^3.17.1",
-    "typescript": "^5.5.4"
+    "ts-node": "^10.9.2",
+    "typedoc": "^0.28.14",
+    "typedoc-plugin-markdown": "^4.9.0",
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.6.7",
