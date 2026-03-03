@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "index.js",
+  "main": "lib/index.js",
   "types": "index.ts",
   "scripts": {
     "postinstall": "npm run tsc",
-    "tsc": "tsc index.ts --target ESNext --moduleResolution 'bundler'"
+    "tsc": "tsc"
   },
   "devDependencies": {
-    "typescript": "^5.5.4"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",

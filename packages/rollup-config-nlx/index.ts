@@ -72,7 +72,7 @@ export default function rollupConfig({
         commonjs(), // needed to bundle node modules that use cjs
         json(), // needed to fetch package version from package.json
         nodeResolve({ browser: true }), // bundles packages from node_modules
-        nodePolyfills(),
+        nodePolyfills() as Plugin,
         terser(),
         replace({
           preventAssignment: true,
