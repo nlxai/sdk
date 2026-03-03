@@ -41,7 +41,7 @@
     "@nlxai/eslint-config": "*",
     "prettier": "^3.1.0",
     "rollup": "^4.3.0",
-    "rollup-config-nlx": "*",
+    "@nlxai/rollup-config": "*",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "typedoc": "^0.28.14",
     "typedoc-plugin-markdown": "^4.9.0",

@@ -1,5 +1,5 @@
 {
-  "name": "rollup-config-nlx",
+  "name": "@nlxai/rollup-config",
   "version": "0.0.0",
   "private": true,
   "type": "module",
