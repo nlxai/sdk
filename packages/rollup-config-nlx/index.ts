@@ -1,6 +1,6 @@
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
-import nodePolyfills from "rollup-plugin-polyfill-node";
+import nodePolyfills from "rollup-plugin-node-polyfills";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import replace from "@rollup/plugin-replace";
@@ -72,7 +72,7 @@ export default function rollupConfig({
         commonjs(), // needed to bundle node modules that use cjs
         json(), // needed to fetch package version from package.json
         nodeResolve({ browser: true }), // bundles packages from node_modules
-        nodePolyfills(),
+        nodePolyfills() as Plugin,
         terser(),
         replace({
           preventAssignment: true,

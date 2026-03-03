@@ -1,5 +1,5 @@
 {
-  "name": "eslint-config-nlx",
+  "name": "@nlxai/eslint-config",
   "version": "0.0.0",
   "private": true,
   "dependencies": {

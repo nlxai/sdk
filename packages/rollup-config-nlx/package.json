@@ -1,25 +1,25 @@
 {
-  "name": "rollup-config-nlx",
+  "name": "@nlxai/rollup-config",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "index.js",
+  "main": "lib/index.js",
   "types": "index.ts",
   "scripts": {
     "postinstall": "npm run tsc",
-    "tsc": "tsc index.ts --target ESNext --moduleResolution 'bundler'"
+    "tsc": "tsc"
   },
   "devDependencies": {
-    "typescript": "^5.5.4"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
-    "@rollup/plugin-json": "^6.0.1",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.5",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.2",
-    "rollup": "^4.28",
-    "rollup-plugin-polyfill-node": "^0.13.0"
+    "rollup": "^4.59.0",
+    "rollup-plugin-node-polyfills": "^0.2.1"
   }
 }

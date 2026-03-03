@@ -1,4 +1,4 @@
-import rollupConfig from "rollup-config-nlx";
+import rollupConfig from "@nlxai/rollup-config";
 import pkg from "./package.json" with { type: "json" };
 import css from "rollup-plugin-import-css";
 
