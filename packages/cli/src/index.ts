@@ -4,6 +4,7 @@ import { modalitiesCommand } from "./commands/modalities/index.js";
 import { dataRequestsCommand } from "./commands/data-requests/index.js";
 import { httpCommand } from "./commands/http.js";
 import { testCommand } from "./commands/test.js";
+import { codeCommand } from "./commands/code/index.js";
 import { consola } from "consola";
 import { readFileSync } from "fs";
 import { resolve } from "path";
@@ -22,10 +23,12 @@ program
   });
 program.configureHelp({ showGlobalOptions: true });
 program.version(packageJson.version);
+
 program.addCommand(authCommand);
 program.addCommand(modalitiesCommand);
 program.addCommand(dataRequestsCommand);
 program.addCommand(testCommand);
+program.addCommand(codeCommand);
 program.addCommand(httpCommand);
 
 program.parse(process.argv);
