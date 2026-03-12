@@ -28,6 +28,25 @@ export const fetchManagementApi = async <T extends unknown>(
   return result;
 };
 
+export const fetchManagementApiPaginated = async <T extends unknown>(
+  path: string,
+): Promise<T[]> => {
+  let result: any = await fetchManagementApi(
+    path + (path.includes("?") ? "&size=1000" : "?size=1000"),
+  );
+
+  let agg;
+
+  const key = Object.keys(result).filter((k) => k !== "nextPageId")[0];
+  agg = result[key];
+
+  while (result.nextPageId) {
+    result = await fetchManagementApi(path + `?page=${result.nextPageId}`);
+    agg.push(...result[key]);
+  }
+  return agg;
+};
+
 export const singleton = <T>(fn: () => Promise<T>): (() => Promise<T>) => {
   let running: Promise<T> | null = null;
   return async () => {

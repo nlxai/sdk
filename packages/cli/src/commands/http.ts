@@ -1,7 +1,10 @@
 import { Command } from "commander";
 import * as fs from "fs";
 import * as path from "path";
-import { fetchManagementApi } from "../utils/index.js";
+import {
+  fetchManagementApi,
+  fetchManagementApiPaginated,
+} from "../utils/index.js";
 import { consola } from "consola";
 
 export const httpCommand = new Command("http")
@@ -44,34 +47,13 @@ export const httpCommand = new Command("http")
           process.exit(1);
         }
       }
-
-      let result: any = await fetchManagementApi(
-        apiPath +
-          (opts.paginate
-            ? apiPath.includes("?")
-              ? "&size=1000"
-              : "?size=1000"
-            : ""),
-        method.toUpperCase(),
-        body,
-      );
-
-      let agg;
+      let result: any;
       if (opts.paginate) {
-        const key = Object.keys(result).filter((k) => k !== "nextPageId")[0];
-        agg = result[key];
-        while (result.nextPageId) {
-          result = await fetchManagementApi(
-            apiPath + `?pageId=${result.nextPageId}`,
-            method.toUpperCase(),
-            body,
-          );
-          agg.push(...result[key]);
-        }
+        result = await fetchManagementApiPaginated(apiPath);
       } else {
-        agg = result;
+        result = await fetchManagementApi(apiPath, method.toUpperCase(), body);
       }
 
-      console.log(JSON.stringify(agg, null, 2));
+      console.log(JSON.stringify(result, null, 2));
     },
   );
