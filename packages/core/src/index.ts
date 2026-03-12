@@ -295,6 +295,10 @@ export interface SlotValue {
  */
 export enum Protocol {
   /**
+   * Supported for development purposes only
+   */
+  Http = "http",
+  /**
    * Regular encrypted HTTPS, without support for post-escalation message handling, interim messages and other streaming features.
    */
   Https = "https",
@@ -1032,7 +1036,8 @@ const parseConnection = (config: Config): Connection | null => {
     return null;
   }
   // `applicationUrl`-based definition: http case
-  const host = getHost(applicationUrl);
+  const urlObject = new URL(applicationUrl);
+  const host = urlObject.host;
   const parseResult = new URLPattern({
     pathname: "/c/:deploymentKey/:channelKey",
   }).exec(applicationUrl);
@@ -1041,7 +1046,7 @@ const parseConnection = (config: Config): Connection | null => {
     parseResult?.pathname.groups.deploymentKey != null
   ) {
     return {
-      protocol,
+      protocol: urlObject.protocol === "http:" ? Protocol.Http : protocol,
       channelKey: parseResult.pathname.groups.channelKey,
       deploymentKey: parseResult.pathname.groups.deploymentKey,
       host,
@@ -1056,7 +1061,7 @@ const toWebsocketUrl = (connection: Connection): string => {
 };
 
 const toHttpUrl = (connection: Connection): string => {
-  return `https://${connection.host}/c/${connection.deploymentKey}/${connection.channelKey}`;
+  return `${connection.protocol === Protocol.Http ? "http" : "https"}://${connection.host}/c/${connection.deploymentKey}/${connection.channelKey}`;
 };
 
 const isWebsocketUrl = (url: string): boolean => {
