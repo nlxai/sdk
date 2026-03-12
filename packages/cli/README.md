@@ -41,6 +41,10 @@ Commands:
   data-requests                          Data Requests
   data-requests sync [opts] <input>      Sync Data Requests from an OpenAPI Specification or Swagger
   test [options] <applicationId>         Run conversation tests for a given application ID
+  code                                   Work with code nodes in NLX flows
+  code init                              Initialize local folders for flows with code nodes
+  code pull [options]                    Pull code nodes from a flow into local files
+  code push [options]                    Push local code node files to NLX flow
   http [options] <method> <path> [body]  Perform an authenticated request to the management API
   help [command]                         display help for command
 
@@ -94,6 +98,22 @@ Transcript:
     └───────┘
 
 Debug at:  https://dev.platform.nlx.ai/flows/SimpleCarousel
+
+
+> nlx code init
+ℹ Fetching available flows...
+✔ Select flows to initialize: ChattyKathy
+✔ Created folder ChattyKathy
+ℹ Fetching flow from conversationTrees/ChattyKathy-Omni
+✔ Created/Updated 74af8e42-4c30-4ce0-aaec-bb2b155f2f95.js
+
+> cd ChattyKathy
+
+> echo "export default async (input, system) => { console.log('Hello world'); }" > 74af8e42-4c30-4ce0-aaec-bb2b155f2f95.js
+
+> nlx code push
+✔ Updated code for node 74af8e42-4c30-4ce0-aaec-bb2b155f2f95
+✔ Pushed 1 code node(s) to flow.
 ```
 
 ## Running in CI
