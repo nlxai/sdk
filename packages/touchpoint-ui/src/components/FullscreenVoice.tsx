@@ -339,7 +339,7 @@ export const FullscreenVoice: FC<Props> = ({
         modalityComponents={modalityComponents}
         handler={handler}
       />
-      <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-0">
+      <div className="w-fit flex-none absolute bottom-4 left-1/2 -translate-x-1/2">
         {voice.state?.isUserSpeaking ? (
           <Ripple className="rounded-inner" />
         ) : null}
