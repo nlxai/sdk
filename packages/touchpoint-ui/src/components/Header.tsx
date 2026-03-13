@@ -44,7 +44,7 @@ export const Header: FC<HeaderProps> = ({
   return (
     <div
       className={clsx("flex p-2 md:p-3 items-center justify-between gap-2", {
-        "md:absolute md:w-fit md:flex-col md:left-0 md:transform md:-translate-x-full md:translate-y-0":
+        "md:absolute md:w-fit md:flex-col md:left-0 md:-translate-x-full":
           windowSize === "half",
         "@3xl/main:absolute @3xl/main:left-0 @3xl/main:right-0 @3xl/main:top-0":
           windowSize === "full" || windowSize === "embedded",

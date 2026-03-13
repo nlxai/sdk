@@ -29,6 +29,15 @@ import type {
 import type { NormalizedTouchpointConfiguration } from "./types";
 
 /**
+ * A single CSSStyleSheet shared across all shadow roots and the document.
+ * Adopting the same object in both locations ensures that @property rules
+ * (which must live at the document level) are registered correctly, while
+ * scoped utility classes still apply inside the shadow DOM.
+ */
+const sheet = new CSSStyleSheet();
+sheet.replaceSync(cssRaw);
+
+/**
  * If you wish to build custom modalities using JSX, you will want to
  *
  * ```javascript
@@ -282,6 +291,15 @@ class NlxTouchpointElement extends HTMLElement {
   #render(): void {
     this.#shadowRoot ??= this.attachShadow({ mode: "closed" });
     this.#root ??= createRoot(this.#shadowRoot);
+
+    // Adopt the shared sheet in the shadow root for scoped utility classes,
+    // and in the document so that @property rules are registered at the
+    // correct scope (they are silently ignored inside a shadow root).
+    this.#shadowRoot.adoptedStyleSheets = [sheet];
+    if (!document.adoptedStyleSheets.includes(sheet)) {
+      document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+    }
+
     if (this.#touchpointConfiguration != null) {
       const configuration = normalizeConfiguration(
         this.#touchpointConfiguration,
@@ -289,7 +307,6 @@ class NlxTouchpointElement extends HTMLElement {
 
       this.#root.render(
         <>
-          <style>{cssRaw}</style>
           <App
             {...configuration}
             embedded={this.embedded}
