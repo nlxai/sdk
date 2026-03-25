@@ -15,12 +15,12 @@ import {
   ResponseType,
   isConfigValid,
   type Subscriber,
-  type Response,
   type ApplicationResponse,
 } from "@nlxai/core";
 import { clsx } from "clsx";
 import { findLastIndex } from "ramda";
 
+import { type AppState, useAppState } from "./state";
 import { ProviderStack } from "./ProviderStack";
 import { LaunchButton } from "./components/ui/LaunchButton";
 import { Header } from "./components/Header";
@@ -82,11 +82,14 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     }
   }, [props.config.conversationId]);
 
-  const [interimMessage, setInterimMessage] = useState<string | undefined>(
-    undefined,
-  );
-
-  const [voice, setVoice] = useState<WidgetVoiceState>(null);
+  const {
+    interimMessage,
+    setInterimMessage,
+    voice,
+    setVoice,
+    responses,
+    setResponses,
+  } = useAppState();
 
   // Remember the last handler
   const currentVoiceHandler = useRef<null | VoiceHandler>(null);
@@ -115,8 +118,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       handler.removeEventListener("interimMessage", setInterimMessage);
     };
   }, [handler, setInterimMessage]);
-
-  const [responses, setResponses] = useState<Response[]>([]);
 
   const isWaiting = responses[responses.length - 1]?.type === ResponseType.User;
 
