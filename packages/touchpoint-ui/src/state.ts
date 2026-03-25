@@ -1,5 +1,10 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { useState, type Dispatch, type SetStateAction } from "react";
+import {
+  useState,
+  useCallback,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { type WidgetVoiceState } from "./voice";
 import { type Response } from "@nlxai/core";
 
@@ -27,47 +32,61 @@ export const useAppState = (): AppState & AppStateSetters => {
     isSettingsOpen: false,
   });
 
-  const setResponses: SetState<Response[]> = (action) => {
-    setAppState((prev) => ({
-      ...prev,
-      responses:
-        typeof action === "function"
-          ? (action as (prev: Response[]) => Response[])(prev.responses)
-          : action,
-    }));
-  };
+  const setResponses: SetState<Response[]> = useCallback(
+    (action) => {
+      setAppState((prev) => ({
+        ...prev,
+        responses:
+          typeof action === "function"
+            ? (action as (prev: Response[]) => Response[])(prev.responses)
+            : action,
+      }));
+    },
+    [setAppState],
+  );
 
-  const setVoice: SetState<WidgetVoiceState> = (action) => {
-    setAppState((prev) => ({
-      ...prev,
-      voice:
-        typeof action === "function"
-          ? (action as (prev: WidgetVoiceState) => WidgetVoiceState)(prev.voice)
-          : action,
-    }));
-  };
+  const setVoice: SetState<WidgetVoiceState> = useCallback(
+    (action) => {
+      setAppState((prev) => ({
+        ...prev,
+        voice:
+          typeof action === "function"
+            ? (action as (prev: WidgetVoiceState) => WidgetVoiceState)(
+                prev.voice,
+              )
+            : action,
+      }));
+    },
+    [setAppState],
+  );
 
-  const setInterimMessage: SetState<string | undefined> = (action) => {
-    setAppState((prev) => ({
-      ...prev,
-      interimMessage:
-        typeof action === "function"
-          ? (action as (prev: string | undefined) => string | undefined)(
-              prev.interimMessage,
-            )
-          : action,
-    }));
-  };
+  const setInterimMessage: SetState<string | undefined> = useCallback(
+    (action) => {
+      setAppState((prev) => ({
+        ...prev,
+        interimMessage:
+          typeof action === "function"
+            ? (action as (prev: string | undefined) => string | undefined)(
+                prev.interimMessage,
+              )
+            : action,
+      }));
+    },
+    [setAppState],
+  );
 
-  const setIsSettingsOpen: SetState<boolean> = (action) => {
-    setAppState((prev) => ({
-      ...prev,
-      isSettingsOpen:
-        typeof action === "function"
-          ? (action as (prev: boolean) => boolean)(prev.isSettingsOpen)
-          : action,
-    }));
-  };
+  const setIsSettingsOpen: SetState<boolean> = useCallback(
+    (action) => {
+      setAppState((prev) => ({
+        ...prev,
+        isSettingsOpen:
+          typeof action === "function"
+            ? (action as (prev: boolean) => boolean)(prev.isSettingsOpen)
+            : action,
+      }));
+    },
+    [setAppState],
+  );
 
   return {
     responses: appState.responses,
