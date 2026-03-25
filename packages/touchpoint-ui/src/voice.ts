@@ -16,6 +16,13 @@ import {
   type ApplicationMessage,
   type ApplicationResponsePayload,
 } from "@nlxai/core";
+import {
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 type DebugEvent = any;
 
@@ -371,4 +378,65 @@ export const initiateVoice = async (
     },
     disconnect,
   };
+};
+
+/**
+ * State for voice widget
+ */
+export type WidgetVoiceState =
+  | null
+  | "loading"
+  | {
+      /**
+       * Error type literal
+       */
+      type: "error";
+      /**
+       * Error message
+       */
+      error: string;
+    }
+  | {
+      /**
+       * Success literal
+       */
+      type: "success";
+      /**
+       * Voice handler
+       */
+      handler: VoiceHandler;
+      /**
+       * State
+       */
+      state?: VoiceState;
+    };
+
+/**
+ * Hook for widget voice state
+ * @returns set state output
+ */
+export const useWidgetVoiceState = (): [
+  WidgetVoiceState,
+  Dispatch<SetStateAction<WidgetVoiceState>>,
+] => {
+  const [voice, setVoice] = useState<WidgetVoiceState>(null);
+
+  // Remember the last handler
+  const currentVoiceHandler = useRef<null | VoiceHandler>(null);
+  useEffect(() => {
+    if (voice != null && voice !== "loading" && voice.type !== "error") {
+      currentVoiceHandler.current = voice.handler;
+    }
+  }, [voice]);
+
+  // Perform final cleanup when component is unmounted
+  useEffect(() => {
+    return () => {
+      if (currentVoiceHandler.current != null) {
+        void currentVoiceHandler.current.disconnect();
+      }
+    };
+  }, []);
+
+  return [voice, setVoice];
 };

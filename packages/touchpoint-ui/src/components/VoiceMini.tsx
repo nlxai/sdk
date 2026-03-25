@@ -4,18 +4,37 @@ import {
   type ConversationHandler,
   type Response,
 } from "@nlxai/core";
-import { type ReactNode, useEffect, type FC } from "react";
+import {
+  type ReactNode,
+  useEffect,
+  type FC,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { clsx } from "clsx";
 
 import type { CustomModalityComponent } from "../interface";
-import { initiateVoice } from "../voice";
+import { initiateVoice, type WidgetVoiceState } from "../voice";
 import { LoaderAnimation } from "./ui/Loader";
 import { Ripple } from "./Ripple";
 import { IconButton } from "./ui/IconButton";
 import { Close, Mic, MicOff, Volume, VolumeOff, Restart } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
-import { VoiceModalities, useWidgetVoiceState } from "./FullscreenVoice";
+import { VoiceModalities } from "./FullscreenVoice";
 import { ErrorMessage } from "./ErrorMessage";
+
+interface Props {
+  modalityComponents: Record<string, CustomModalityComponent<unknown>>;
+  showTranscript: boolean;
+  responses: Response[];
+  handler: ConversationHandler;
+  brandIcon?: string;
+  renderCollapse: boolean;
+  onClose: (event: Event) => void;
+  context?: Context;
+  voice: WidgetVoiceState;
+  setVoice: Dispatch<SetStateAction<WidgetVoiceState>>;
+}
 
 const containerClass =
   "bg-background backdrop-blur-sm text-primary-80 rounded-outer p-2 w-[calc(100vw-16px)] max-w-[360px] space-y-4";
@@ -80,16 +99,7 @@ const VoiceMiniLoader: FC<{ brandIconView: ReactNode }> = ({
   );
 };
 
-export const VoiceMini: FC<{
-  modalityComponents: Record<string, CustomModalityComponent<unknown>>;
-  showTranscript: boolean;
-  responses: Response[];
-  handler: ConversationHandler;
-  brandIcon?: string;
-  renderCollapse: boolean;
-  onClose: (event: Event) => void;
-  context?: Context;
-}> = ({
+export const VoiceMini: FC<Props> = ({
   handler,
   context,
   showTranscript,
@@ -98,6 +108,8 @@ export const VoiceMini: FC<{
   renderCollapse,
   responses,
   brandIcon,
+  voice,
+  setVoice,
 }) => {
   const onCloseHandler = (): void => {
     onClose(new Event("close"));
@@ -111,8 +123,6 @@ export const VoiceMini: FC<{
         role="presentation"
       />
     ) : null;
-
-  const [voice, setVoice] = useWidgetVoiceState();
 
   useEffect(() => {
     const fn = async (): Promise<void> => {

@@ -40,6 +40,7 @@ import { VoiceMini } from "./components/VoiceMini";
 import { gatherAutomaticContext } from "./bidirectional/automaticContext";
 import { commandHandler } from "./bidirectional/commandHandler";
 import { RiveAnimation } from "./components/RiveAnimation";
+import { type WidgetVoiceState, type VoiceHandler } from "./voice";
 
 import { useFeedback } from "./feedback";
 import { FeedbackComment } from "./components/FeedbackComment";
@@ -84,6 +85,25 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   const [interimMessage, setInterimMessage] = useState<string | undefined>(
     undefined,
   );
+
+  const [voice, setVoice] = useState<WidgetVoiceState>(null);
+
+  // Remember the last handler
+  const currentVoiceHandler = useRef<null | VoiceHandler>(null);
+  useEffect(() => {
+    if (voice != null && voice !== "loading" && voice.type !== "error") {
+      currentVoiceHandler.current = voice.handler;
+    }
+  }, [voice]);
+
+  // Perform final cleanup when component is unmounted
+  useEffect(() => {
+    return () => {
+      if (currentVoiceHandler.current != null) {
+        void currentVoiceHandler.current.disconnect();
+      }
+    };
+  }, []);
 
   const handler = useMemo(() => {
     return createConversation({ responses: responseData, ...props.config });
@@ -395,6 +415,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           }}
           renderCollapse={props.onClose != null}
           modalityComponents={modalityComponents}
+          voice={voice}
+          setVoice={setVoice}
         />
       </ProviderStack>
     );
@@ -567,6 +589,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
                   className={isSettingsOpen ? "hidden" : "grow"}
                   context={props.initialContext}
                   modalityComponents={modalityComponents}
+                  voice={voice}
+                  setVoice={setVoice}
                 />
               </>
             )}

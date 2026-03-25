@@ -25,7 +25,7 @@ import { Loader } from "./ui/Loader";
 import { IconButton } from "./ui/IconButton";
 import { TextButton } from "./ui/TextButton";
 import { Touchpoint, Mic, MicOff, Restart } from "./ui/Icons";
-import { type VoiceHandler, type VoiceState, initiateVoice } from "../voice";
+import { type WidgetVoiceState, initiateVoice } from "../voice";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorMessage } from "./ErrorMessage";
 import { UserMessage } from "./Messages";
@@ -40,39 +40,9 @@ interface Props {
   className?: string;
   context?: Context;
   modalityComponents: Record<string, CustomModalityComponent<unknown>>;
+  voice: WidgetVoiceState;
+  setVoice: Dispatch<SetStateAction<WidgetVoiceState>>;
 }
-
-export type WidgetVoiceState =
-  | null
-  | "loading"
-  | { type: "error"; error: string }
-  | { type: "success"; handler: VoiceHandler; state?: VoiceState };
-
-export const useWidgetVoiceState = (): [
-  WidgetVoiceState,
-  Dispatch<SetStateAction<WidgetVoiceState>>,
-] => {
-  const [voice, setVoice] = useState<WidgetVoiceState>(null);
-
-  // Remember the last handler
-  const currentVoiceHandler = useRef<null | VoiceHandler>(null);
-  useEffect(() => {
-    if (voice != null && voice !== "loading" && voice.type !== "error") {
-      currentVoiceHandler.current = voice.handler;
-    }
-  }, [voice]);
-
-  // Perform final cleanup when component is unmounted
-  useEffect(() => {
-    return () => {
-      if (currentVoiceHandler.current != null) {
-        void currentVoiceHandler.current.disconnect();
-      }
-    };
-  }, []);
-
-  return [voice, setVoice];
-};
 
 const Container: FC<{ className?: string; children: ReactNode }> = ({
   className,
@@ -199,10 +169,10 @@ export const FullscreenVoice: FC<Props> = ({
   className,
   context,
   modalityComponents,
+  voice,
+  setVoice,
 }) => {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
-
-  const [voice, setVoice] = useWidgetVoiceState();
 
   const setSpeakers = useMemo(() => {
     if (voice == null || voice === "loading" || voice.type === "error") {

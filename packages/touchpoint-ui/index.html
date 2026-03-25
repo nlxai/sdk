@@ -21,31 +21,28 @@
   <script type="module">
     import {create, html} from "./src/index.tsx";
 
+    const config = {
+      protocol: "https",
+      host: "dev.apps.nlx.ai",
+      deploymentKey: "gFS1N2WyDTfDffIqKxSI0",
+      channelKey: "gCinjDrCSoQvbhBBaiiZf",
+      apiKey: "w0P5c3y3TR80jnvmpzsLDRYe",
+      languageCode: "en-US",
+      userId: self.crypto.randomUUID()
+    };
+
+
     const touchpointConfig = {
-      config: {
-        applicationUrl:
-          "https://bots.dev.studio.nlx.ai/c/Nji0Tkk8UOqaFc3Z3mDW9/5p7ZdO_XgcnCKnuxbhNAS",
-
-        headers: {
-          "nlx-api-key": "crLjtXvXIOPtc1AgnPHoEE1y",
-        },
-        languageCode: "en-US",
-        conversationId: "12345",
-      },
+      config,
       windowSize: "full",
-      input: "text",
-      bidirectional: {},
-      // colorMode: "light dark",
-      // userMessageBubble: true,
-      // agentMessageBubble: true,
-      // chatMode: true,
-      // theme: {
-      //   accent: "rgba(255, 253, 114, 1)",
-      //   primary80:
-      //     "light-dark(rgba(12, 12, 200, 0.8), rgba(255, 255, 255, 0.85))",
-
-      //   fontFamily: "'BW Haas Text Mono C 55 Rom Regular', monospace",
-      // },
+      colorMode: "dark",
+      input: "voice",
+      theme: {
+        fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+        accent: "#AECAFF"
+      },
+      brandIcon: undefined,
+      showTranscript: true
     };
 
     document.querySelector("nlx-touchpoint").touchpointConfiguration = touchpointConfig;
