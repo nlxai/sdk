@@ -24,12 +24,9 @@ export interface AppStateSetters {
   setIsSettingsOpen: SetState<boolean>;
 }
 
-type AppStateHookReturn = AppState &
-  AppStateSetters & { freeze: boolean; setFreeze: SetState<boolean> };
+type AppStateHookReturn = AppState & AppStateSetters & { freeze: boolean };
 
 export const useAppState = (): AppStateHookReturn => {
-  const [freeze, setFreeze] = useState<boolean>(false);
-
   const [appState, setAppState] = useState<AppState>({
     responses: [],
     voice: null,
@@ -102,7 +99,7 @@ export const useAppState = (): AppStateHookReturn => {
     setInterimMessage,
     isSettingsOpen: appState.isSettingsOpen,
     setIsSettingsOpen,
-    freeze,
-    setFreeze,
+    // Sets whether the application state is frozen. In this case, effects that change state should not run.
+    freeze: false,
   };
 };
