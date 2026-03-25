@@ -11,7 +11,6 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "design-system": "vite --mode design-system",
     "build": "tsc && vite build",
     "docs": "rm -rf docs/ && typedoc && concat-md --decrease-title-levels --dir-name-as-title docs/ > docs/index.md",
     "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0",
