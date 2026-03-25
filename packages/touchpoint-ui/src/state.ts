@@ -1,6 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { type WidgetVoiceState } from "./voice";
+import { type Response } from "@nlxai/core";
 
 export interface AppState {
   responses: Response[];
@@ -9,7 +10,16 @@ export interface AppState {
   isSettingsOpen: boolean;
 }
 
-export const useAppState = () => {
+type SetState<T> = Dispatch<SetStateAction<T>>;
+
+export interface AppStateSetters {
+  setResponses: SetState<Response[]>;
+  setVoice: SetState<WidgetVoiceState>;
+  setInterimMessage: SetState<string | undefined>;
+  setIsSettingsOpen: SetState<boolean>;
+}
+
+export const useAppState = (): AppState & AppStateSetters => {
   const [appState, setAppState] = useState<AppState>({
     responses: [],
     voice: null,
@@ -17,7 +27,7 @@ export const useAppState = () => {
     isSettingsOpen: false,
   });
 
-  const setResponses: Dispatch<SetStateAction<Response[]>> = (action) => {
+  const setResponses: SetState<Response[]> = (action) => {
     setAppState((prev) => ({
       ...prev,
       responses:
@@ -27,7 +37,7 @@ export const useAppState = () => {
     }));
   };
 
-  const setVoice: Dispatch<SetStateAction<WidgetVoiceState>> = (action) => {
+  const setVoice: SetState<WidgetVoiceState> = (action) => {
     setAppState((prev) => ({
       ...prev,
       voice:
@@ -37,9 +47,7 @@ export const useAppState = () => {
     }));
   };
 
-  const setInterimMessage: Dispatch<SetStateAction<string | undefined>> = (
-    action,
-  ) => {
+  const setInterimMessage: SetState<string | undefined> = (action) => {
     setAppState((prev) => ({
       ...prev,
       interimMessage:
@@ -51,7 +59,7 @@ export const useAppState = () => {
     }));
   };
 
-  const setIsSettingsOpen: Dispatch<SetStateAction<boolean>> = (action) => {
+  const setIsSettingsOpen: SetState<boolean> = (action) => {
     setAppState((prev) => ({
       ...prev,
       isSettingsOpen:

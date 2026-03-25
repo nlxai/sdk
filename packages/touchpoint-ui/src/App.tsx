@@ -20,7 +20,7 @@ import {
 import { clsx } from "clsx";
 import { findLastIndex } from "ramda";
 
-import { type AppState, useAppState } from "./state";
+import { useAppState } from "./state";
 import { ProviderStack } from "./ProviderStack";
 import { LaunchButton } from "./components/ui/LaunchButton";
 import { Header } from "./components/Header";
@@ -40,7 +40,7 @@ import { VoiceMini } from "./components/VoiceMini";
 import { gatherAutomaticContext } from "./bidirectional/automaticContext";
 import { commandHandler } from "./bidirectional/commandHandler";
 import { RiveAnimation } from "./components/RiveAnimation";
-import { type WidgetVoiceState, type VoiceHandler } from "./voice";
+import { type VoiceHandler } from "./voice";
 
 import { useFeedback } from "./feedback";
 import { FeedbackComment } from "./components/FeedbackComment";
