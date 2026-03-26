@@ -189,6 +189,37 @@ export const VoiceModalities: FC<{
   );
 };
 
+export const VoiceIcon: FC<{
+  brandIcon?: string;
+  colorMode: ColorMode;
+  addRipple: boolean;
+  className?: string;
+}> = ({ brandIcon, colorMode, addRipple, className }) => {
+  return (
+    <div className={clsx("rounded-full w-fit", className)}>
+      <div
+        className={clsx(
+          "w-[128px] h-[128px] p-4 relative rounded-full overflow-hidden bg-cover bg-center",
+          // This color imitates primary5 overlayed on the regular background, but it has to be solid
+          brandIcon != null
+            ? ""
+            : colorMode === "dark"
+              ? "bg-[rgb(40,41,47)]"
+              : "bg-[rgb(175,175,175)]",
+        )}
+        style={
+          brandIcon != null ? { backgroundImage: `url(${brandIcon})` } : {}
+        }
+      >
+        {brandIcon == null ? (
+          <Touchpoint className="w-full h-full text-primary-40" />
+        ) : null}
+      </div>
+      {addRipple ? <Ripple className="rounded-full" /> : null}
+    </div>
+  );
+};
+
 export const FullscreenVoice: FC<Props> = ({
   handler,
   speakersEnabled,
@@ -308,29 +339,12 @@ export const FullscreenVoice: FC<Props> = ({
 
   return (
     <Container className={className}>
-      <div className="rounded-full w-fit absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 z-0">
-        <div
-          className={clsx(
-            "w-[128px] h-[128px] p-4 relative rounded-full overflow-hidden bg-cover bg-center",
-            // This color imitates primary5 overlayed on the regular background, but it has to be solid
-            brandIcon != null
-              ? ""
-              : colorMode === "dark"
-                ? "bg-[rgb(40,41,47)]"
-                : "bg-[rgb(175,175,175)]",
-          )}
-          style={
-            brandIcon != null ? { backgroundImage: `url(${brandIcon})` } : {}
-          }
-        >
-          {brandIcon == null ? (
-            <Touchpoint className="w-full h-full text-primary-40" />
-          ) : null}
-        </div>
-        {voice.state?.isApplicationSpeaking ? (
-          <Ripple className="rounded-full" />
-        ) : null}
-      </div>
+      <VoiceIcon
+        brandIcon={brandIcon}
+        colorMode={colorMode}
+        className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 z-0"
+        addRipple={voice.state?.isApplicationSpeaking ?? false}
+      />
       <VoiceModalities
         className="p-2 md:p-3 w-full max-w-content mx-auto grow overflow-auto border-b border-solid boder-primary-10 z-10"
         showTranscript={showTranscript}
