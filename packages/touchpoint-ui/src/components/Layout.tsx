@@ -22,3 +22,21 @@ export const Main: FC<{ windowSize: WindowSize; children: ReactNode }> = ({
     </div>
   );
 };
+
+export const HeaderContainer: FC<{
+  leftColumn: boolean;
+  children: ReactNode;
+}> = ({ leftColumn, children }) => {
+  return (
+    <div
+      className={clsx("flex p-2 md:p-3 items-center justify-between gap-2", {
+        "md:absolute md:w-fit md:flex-col md:left-0 md:transform md:-translate-x-full md:translate-y-0":
+          leftColumn,
+        "@3xl/main:absolute @3xl/main:left-0 @3xl/main:right-0 @3xl/main:top-0":
+          !leftColumn,
+      })}
+    >
+      {children}
+    </div>
+  );
+};

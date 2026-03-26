@@ -7,6 +7,7 @@ import { IconButton, type IconButtonType } from "./ui/IconButton";
 import { type WindowSize, type ColorMode } from "../interface";
 import { useTailwindMediaQuery } from "../utils/useTailwindMediaQuery";
 import { Close, Settings, Undo, Volume, VolumeOff } from "./ui/Icons";
+import { HeaderContainer } from "./Layout";
 
 interface HeaderProps {
   windowSize: WindowSize | "embedded";
@@ -42,14 +43,7 @@ export const Header: FC<HeaderProps> = ({
   const iconButtonType: IconButtonType = isHalf && isMd ? "overlay" : "ghost";
   const copy = useCopy();
   return (
-    <div
-      className={clsx("flex p-2 md:p-3 items-center justify-between gap-2", {
-        "md:absolute md:w-fit md:flex-col md:left-0 md:transform md:-translate-x-full md:translate-y-0":
-          windowSize === "half",
-        "@3xl/main:absolute @3xl/main:left-0 @3xl/main:right-0 @3xl/main:top-0":
-          windowSize === "full" || windowSize === "embedded",
-      })}
-    >
+    <HeaderContainer leftColumn={windowSize === "half"}>
       {brandIcon != null ? (
         <img
           className="w-10 h-10 block flex-none"
@@ -108,6 +102,6 @@ export const Header: FC<HeaderProps> = ({
           Icon={Close}
         />
       ) : null}
-    </div>
+    </HeaderContainer>
   );
 };

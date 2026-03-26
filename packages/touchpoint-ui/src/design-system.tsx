@@ -16,59 +16,7 @@ import { ArrowRight, Close } from "./components/ui/Icons";
 import { Icons, BaseText, SmallText } from "./index";
 import { DateInput } from "./components/ui/DateInput";
 import { ProviderStack } from "./ProviderStack";
-import { LaunchButton } from "./components/ui/LaunchButton";
-import { Main } from "./components/Layout";
-
-const Mock: FC<{ embedded: boolean }> = (props) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
-
-  const windowSize = "half";
-
-  if (!isExpanded) {
-    return (
-      <ProviderStack
-        className="fixed z-launch-button bottom-2 right-2 w-fit"
-        theme={{
-          fontFamily: "monospace",
-          accent: "light-dark(purple, pink)",
-        }}
-        colorMode={"dark"}
-        languageCode="en-US"
-      >
-        <LaunchButton
-          className="backdrop-blur-sm"
-          onClick={() => {
-            setIsExpanded(true);
-          }}
-          label="Expand chat"
-        />
-      </ProviderStack>
-    );
-  }
-
-  // TODO: add buttons
-  // TODO: generate sample conversation
-
-  return (
-    <ProviderStack
-      className={clsx(
-        "grid grid-cols-2 xl:grid-cols-[1fr_632px]",
-        props.embedded ? "w-full h-full" : "fixed inset-0 z-touchpoint",
-      )}
-      theme={{
-        fontFamily: "monospace",
-        accent: "light-dark(purple, pink)",
-      }}
-      colorMode={"dark"}
-      languageCode="en-US"
-    >
-      {windowSize === "half" ? (
-        <div className="hidden md:block bg-overlay" />
-      ) : null}
-      <Main windowSize={windowSize}>abcd</Main>
-    </ProviderStack>
-  );
-};
+import { Mock1 } from "./mocks/Mock1";
 
 const TextButtonInstances: FC<unknown> = () => {
   return (
@@ -391,7 +339,7 @@ const DesignSystem: FC<unknown> = () => {
       <div className="p-4 space-y-4">
         {ActiveTabComponent == null ? null : <ActiveTabComponent />}
       </div>
-      <Mock embedded={false} />
+      <Mock1 embedded={false} />
     </div>
   );
 };
