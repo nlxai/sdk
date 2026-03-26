@@ -45,6 +45,10 @@ const Mock: FC<{ embedded: boolean }> = (props) => {
       </ProviderStack>
     );
   }
+
+  // TODO: add buttons
+  // TODO: generate sample conversation
+
   return (
     <ProviderStack
       className={clsx(
