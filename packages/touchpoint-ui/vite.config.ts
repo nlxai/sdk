@@ -11,23 +11,33 @@ import dts from "vite-plugin-dts";
 const adjustJsEntryPoint = ({ mode }: { mode: string }): any => {
   return {
     name: "html-transform",
-    order: "pre",
-    transformIndexHtml: (html: string) => {
-      if (mode === "design-system") {
-        return `
-<html>
-  <body>
-    <main></main>
-    <script type="module">
-      import { renderDesignSystem } from "./src/design-system.tsx";
-      
-      renderDesignSystem(document.querySelector("main"));
-    </script>
-  </body>
+    transformIndexHtml: {
+      order: "pre",
+      handler: (html: string) => {
+        if (mode === "design-system") {
+          return {
+            html: `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design System</title>
+</head>
+<body>
+  <main></main>
+  <script type="module">
+    import { renderDesignSystem } from "./src/design-system.tsx";
+
+    renderDesignSystem(document.querySelector("main"));
+  </script>
+</body>
 </html>
-`;
-      }
-      return html;
+`,
+            tags: [],
+          };
+        }
+        return html;
+      },
     },
   };
 };
@@ -35,6 +45,7 @@ const adjustJsEntryPoint = ({ mode }: { mode: string }): any => {
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }) => ({
   plugins: [
+    adjustJsEntryPoint({ mode }),
     react(),
     tailwindcss(),
     replace(
@@ -44,7 +55,6 @@ export default defineConfig(({ mode, command }) => ({
             "process.env.NODE_ENV": JSON.stringify("production"),
           },
     ),
-    adjustJsEntryPoint({ mode }),
     dts(),
   ],
   resolve: {},

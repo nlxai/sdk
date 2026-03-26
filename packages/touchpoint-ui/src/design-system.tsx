@@ -16,9 +16,54 @@ import { ArrowRight, Close } from "./components/ui/Icons";
 import { Icons, BaseText, SmallText } from "./index";
 import { DateInput } from "./components/ui/DateInput";
 import { ProviderStack } from "./ProviderStack";
+import { LaunchButton } from "./components/ui/LaunchButton";
+import { Main } from "./components/Layout";
 
-const Mock: FC<unknown> = () => {
-  return <div>abcd</div>;
+const Mock: FC<{ embedded: boolean }> = (props) => {
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
+  const windowSize = "half";
+
+  if (!isExpanded) {
+    return (
+      <ProviderStack
+        className="fixed z-launch-button bottom-2 right-2 w-fit"
+        theme={{
+          fontFamily: "monospace",
+          accent: "light-dark(purple, pink)",
+        }}
+        colorMode={"dark"}
+        languageCode="en-US"
+      >
+        <LaunchButton
+          className="backdrop-blur-sm"
+          onClick={() => {
+            setIsExpanded(true);
+          }}
+          label="Expand chat"
+        />
+      </ProviderStack>
+    );
+  }
+  return (
+    <ProviderStack
+      className={clsx(
+        "grid grid-cols-2 xl:grid-cols-[1fr_632px]",
+        props.embedded ? "w-full h-full" : "fixed inset-0 z-touchpoint",
+      )}
+      theme={{
+        fontFamily: "monospace",
+        accent: "light-dark(purple, pink)",
+      }}
+      colorMode={"dark"}
+      languageCode="en-US"
+    >
+      {windowSize === "half" ? (
+        <div className="hidden md:block bg-overlay" />
+      ) : null}
+      <Main windowSize={windowSize}>abcd</Main>
+    </ProviderStack>
+  );
 };
 
 const TextButtonInstances: FC<unknown> = () => {
@@ -48,14 +93,14 @@ const TextButtonInstances: FC<unknown> = () => {
 
 const TextButtons: FC<unknown> = () => {
   return (
-    <div className="space-y-4">
+    <>
       <Container mode="dark">
         <TextButtonInstances />
       </Container>
       <Container mode="light">
         <TextButtonInstances />
       </Container>
-    </div>
+    </>
   );
 };
 
@@ -137,21 +182,21 @@ const IconButtonInstances: FC<unknown> = () => {
 
 const IconButtons: FC<unknown> = () => {
   return (
-    <div className="space-y-4">
+    <>
       <Container mode="dark">
         <IconButtonInstances />
       </Container>
       <Container mode="light">
         <IconButtonInstances />
       </Container>
-    </div>
+    </>
   );
 };
 
 const IconInstances: FC<unknown> = () => {
   return (
     <Container mode="light">
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-8 gap-2">
         {Object.entries(Icons).map(([name, Icon]) => {
           return (
             <div
@@ -170,7 +215,7 @@ const IconInstances: FC<unknown> = () => {
 
 const Carousels: FC<unknown> = () => {
   return (
-    <div className="space-y-4">
+    <>
       <Container mode="dark">
         <CustomCard>
           <CustomCardRow
@@ -194,13 +239,13 @@ const Carousels: FC<unknown> = () => {
           <PicturesContainer payload={examplePicturesPayload} />
         </div>
       </Container>
-    </div>
+    </>
   );
 };
 
 const DateInputs: FC<unknown> = () => {
   return (
-    <div className="grid h-[360px] grid-cols-2 gap-2 relative">
+    <>
       <Container mode="dark">
         <DateInput />
         <DateInput
@@ -219,20 +264,20 @@ const DateInputs: FC<unknown> = () => {
           }}
         />
       </Container>
-    </div>
+    </>
   );
 };
 
 const Loaders: FC<unknown> = () => {
   return (
-    <div className="grid h-[360px] grid-cols-2 gap-2 relative">
+    <>
       <Container mode="dark">
         <Loader label="Thinking" />
       </Container>
       <Container mode="light">
         <Loader label="Thinking" />
       </Container>
-    </div>
+    </>
   );
 };
 
@@ -308,37 +353,41 @@ const DesignSystem: FC<unknown> = () => {
 
   return (
     <div className="grid grid-cols-[320px_1fr]">
-      <Mock />
       <ProviderStack
         colorMode="light"
         className="space-y-2"
         languageCode="en-US"
       >
-        {tabs.map(({ tab, title }) => {
-          const isActive = tab === activeTab;
-          return (
-            <a
-              className={clsx(
-                "block hover:text-primary-80",
-                isActive ? "text-primary-80" : "text-primary-40",
-              )}
-              aria-current={isActive ? "page" : undefined}
-              key={tab}
-              href={`#${tab}`}
-              onClick={(ev) => {
-                if (!ev.metaKey) {
-                  ev.preventDefault();
-                  setActiveTab(tab);
-                  window.location.hash = `#${tab}`;
-                }
-              }}
-            >
-              {title}
-            </a>
-          );
-        })}
+        <div className="p-4 space-y-2">
+          {tabs.map(({ tab, title }) => {
+            const isActive = tab === activeTab;
+            return (
+              <a
+                className={clsx(
+                  "block hover:text-primary-80",
+                  isActive ? "text-primary-80" : "text-primary-40",
+                )}
+                aria-current={isActive ? "page" : undefined}
+                key={tab}
+                href={`#${tab}`}
+                onClick={(ev) => {
+                  if (!ev.metaKey) {
+                    ev.preventDefault();
+                    setActiveTab(tab);
+                    window.location.hash = `#${tab}`;
+                  }
+                }}
+              >
+                {title}
+              </a>
+            );
+          })}
+        </div>
       </ProviderStack>
-      {ActiveTabComponent == null ? null : <ActiveTabComponent />}
+      <div className="p-4 space-y-4">
+        {ActiveTabComponent == null ? null : <ActiveTabComponent />}
+      </div>
+      <Mock embedded={false} />
     </div>
   );
 };
