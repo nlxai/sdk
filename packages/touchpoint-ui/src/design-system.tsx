@@ -17,6 +17,10 @@ import { Icons, BaseText, SmallText } from "./index";
 import { DateInput } from "./components/ui/DateInput";
 import { ProviderStack } from "./ProviderStack";
 
+const Mock: FC<unknown> = () => {
+  return <div>abcd</div>;
+};
+
 const TextButtonInstances: FC<unknown> = () => {
   return (
     <>
@@ -304,6 +308,7 @@ const DesignSystem: FC<unknown> = () => {
 
   return (
     <div className="grid grid-cols-[320px_1fr]">
+      <Mock />
       <ProviderStack
         colorMode="light"
         className="space-y-2"
@@ -353,7 +358,6 @@ const examplePicturesPayload: PicturesProps[] = [
   },
 ];
 
-const main = document.querySelector("main");
-if (main != null) {
-  createRoot(main).render(<DesignSystem />);
-}
+export const renderDesignSystem = (element: HTMLElement) => {
+  createRoot(element).render(<DesignSystem />);
+};

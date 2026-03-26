@@ -13,9 +13,19 @@ const adjustJsEntryPoint = ({ mode }: { mode: string }): any => {
     name: "html-transform",
     order: "pre",
     transformIndexHtml: (html: string) => {
-      const entryPoint = "/src/index.tsx";
       if (mode === "design-system") {
-        return html.replace(entryPoint, "/src/design-system.tsx");
+        return `
+<html>
+  <body>
+    <main></main>
+    <script type="module">
+      import { renderDesignSystem } from "./src/design-system.tsx";
+      
+      renderDesignSystem(document.querySelector("main"));
+    </script>
+  </body>
+</html>
+`;
       }
       return html;
     },
