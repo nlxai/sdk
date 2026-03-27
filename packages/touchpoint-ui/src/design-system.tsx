@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import { useEffect, useState, type FC, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { clsx } from "clsx";
@@ -7,12 +8,9 @@ import { type ColorMode } from "./interface";
 import { TextButton } from "./components/ui/TextButton";
 import { IconButton } from "./components/ui/IconButton";
 import { Loader } from "./components/ui/Loader";
+import { LightDarkToggle } from "./components/ui/LightDarkToggle";
 import { CustomCard, CustomCardRow } from "./components/ui/CustomCard";
-import {
-  PicturesContainer,
-  type PicturesProps,
-} from "./components/ui/PicturesContainer";
-import { ArrowRight, Close } from "./components/ui/Icons";
+import { ArrowRight, Close, Touchpoint } from "./components/ui/Icons";
 import { Icons, BaseText, SmallText } from "./index";
 import { DateInput } from "./components/ui/DateInput";
 import { ProviderStack } from "./ProviderStack";
@@ -43,16 +41,11 @@ const TextButtonInstances: FC<unknown> = () => {
   );
 };
 
-const TextButtons: FC<unknown> = () => {
+const TextButtons: FC<{ colorMode: ColorMode }> = ({ colorMode }) => {
   return (
-    <>
-      <Container mode="dark">
-        <TextButtonInstances />
-      </Container>
-      <Container mode="light">
-        <TextButtonInstances />
-      </Container>
-    </>
+    <Container mode={colorMode}>
+      <TextButtonInstances />
+    </Container>
   );
 };
 
@@ -132,22 +125,17 @@ const IconButtonInstances: FC<unknown> = () => {
   );
 };
 
-const IconButtons: FC<unknown> = () => {
+const IconButtons: FC<{ colorMode: ColorMode }> = ({ colorMode }) => {
   return (
-    <>
-      <Container mode="dark">
-        <IconButtonInstances />
-      </Container>
-      <Container mode="light">
-        <IconButtonInstances />
-      </Container>
-    </>
+    <Container mode={colorMode}>
+      <IconButtonInstances />
+    </Container>
   );
 };
 
-const IconInstances: FC<unknown> = () => {
+const IconInstances: FC<{ colorMode: ColorMode }> = ({ colorMode }) => {
   return (
-    <Container mode="light">
+    <Container mode={colorMode}>
       <div className="grid grid-cols-8 gap-2">
         {Object.entries(Icons).map(([name, Icon]) => {
           return (
@@ -165,71 +153,48 @@ const IconInstances: FC<unknown> = () => {
   );
 };
 
-const Carousels: FC<unknown> = () => {
+const Carousels: FC<{ colorMode: ColorMode }> = ({ colorMode }) => {
   return (
-    <>
-      <Container mode="dark">
-        <CustomCard>
-          <CustomCardRow
-            left={<BaseText faded>abcd</BaseText>}
-            right={
-              <>
-                <BaseText>abcd</BaseText>
-                <SmallText>efgh</SmallText>
-              </>
-            }
-            icon={Icons.ArrowForward}
-          />
-          <CustomCardRow
-            left={<BaseText>abcd</BaseText>}
-            right={<BaseText>abcd</BaseText>}
-          />
-        </CustomCard>
-      </Container>
-      <Container mode="dark">
-        <div className="max-w-content mx-auto">
-          <PicturesContainer payload={examplePicturesPayload} />
-        </div>
-      </Container>
-    </>
+    <Container mode={colorMode}>
+      <CustomCard>
+        <CustomCardRow
+          left={<BaseText faded>abcd</BaseText>}
+          right={
+            <>
+              <BaseText>abcd</BaseText>
+              <SmallText>efgh</SmallText>
+            </>
+          }
+          icon={Icons.ArrowForward}
+        />
+        <CustomCardRow
+          left={<BaseText>abcd</BaseText>}
+          right={<BaseText>abcd</BaseText>}
+        />
+      </CustomCard>
+    </Container>
   );
 };
 
-const DateInputs: FC<unknown> = () => {
+const DateInputs: FC<{ colorMode: ColorMode }> = ({ colorMode }) => {
   return (
-    <>
-      <Container mode="dark">
-        <DateInput />
-        <DateInput
-          onSubmit={(date) => {
-            // eslint-disable-next-line no-console
-            console.log(date);
-          }}
-        />
-      </Container>
-      <Container mode="light">
-        <DateInput />
-        <DateInput
-          onSubmit={(date) => {
-            // eslint-disable-next-line no-console
-            console.log(date);
-          }}
-        />
-      </Container>
-    </>
+    <Container mode={colorMode}>
+      <DateInput />
+      <DateInput
+        onSubmit={(date) => {
+          // eslint-disable-next-line no-console
+          console.log(date);
+        }}
+      />
+    </Container>
   );
 };
 
-const Loaders: FC<unknown> = () => {
+const Loaders: FC<{ colorMode: ColorMode }> = ({ colorMode }) => {
   return (
-    <>
-      <Container mode="dark">
-        <Loader label="Thinking" />
-      </Container>
-      <Container mode="light">
-        <Loader label="Thinking" />
-      </Container>
-    </>
+    <Container mode={colorMode}>
+      <Loader label="Thinking" />
+    </Container>
   );
 };
 
@@ -240,10 +205,7 @@ const Container: FC<{ children: ReactNode; mode: ColorMode }> = ({
   return (
     <ProviderStack
       className="bg-background p-4 rounded-outer space-y-4"
-      theme={{
-        fontFamily: "monospace",
-        accent: "light-dark(purple, pink)",
-      }}
+      theme={{}}
       colorMode={mode}
       languageCode="en-US"
     >
@@ -260,7 +222,9 @@ type Tab =
   | "carousels"
   | "loader";
 
-const tabs: Array<{ tab: Tab; title: string; component: FC<unknown> }> = [
+type TabComponent = FC<{ colorMode: ColorMode }> | FC<unknown>;
+
+const tabs: Array<{ tab: Tab; title: string; component: TabComponent }> = [
   {
     tab: "text-buttons",
     title: "Text buttons",
@@ -288,6 +252,7 @@ const tabFromUrl = (): Tab => {
 
 const DesignSystem: FC<unknown> = () => {
   const [activeTab, setActiveTab] = useState<Tab>(tabFromUrl());
+  const [colorMode, setColorMode] = useState<ColorMode>("light");
 
   useEffect(() => {
     const handler = (): void => {
@@ -304,64 +269,66 @@ const DesignSystem: FC<unknown> = () => {
   )?.component;
 
   return (
-    <div className="grid grid-cols-[320px_1fr]">
+    <div className="grid grid-cols-[320px_1fr] h-screen">
       <ProviderStack
         colorMode="light"
-        className="space-y-2"
+        className="space-y-2 border-r border-primary-10"
         languageCode="en-US"
       >
-        <div className="p-4 space-y-2">
-          {tabs.map(({ tab, title }) => {
-            const isActive = tab === activeTab;
-            return (
-              <a
-                className={clsx(
-                  "block hover:text-primary-80",
-                  isActive ? "text-primary-80" : "text-primary-40",
-                )}
-                aria-current={isActive ? "page" : undefined}
-                key={tab}
-                href={`#${tab}`}
-                onClick={(ev) => {
-                  if (!ev.metaKey) {
-                    ev.preventDefault();
-                    setActiveTab(tab);
-                    window.location.hash = `#${tab}`;
-                  }
-                }}
-              >
-                {title}
-              </a>
-            );
-          })}
+        <div className="p-4 space-y-4 flex flex-col h-full">
+          <div className="flex items-center gap-2">
+            <Touchpoint size={24} className="text-primary-80" />
+            <h1 className="text-lg font-semibold text-primary-80">
+              Touchpoint Design System
+            </h1>
+          </div>
+          <div className="space-y-2 overflow-y-auto">
+            {tabs.map(({ tab, title }) => {
+              const isActive = tab === activeTab;
+              return (
+                <a
+                  className={clsx(
+                    "block hover:text-primary-80",
+                    isActive ? "text-primary-80" : "text-primary-40",
+                  )}
+                  aria-current={isActive ? "page" : undefined}
+                  key={tab}
+                  href={`#${tab}`}
+                  onClick={(ev) => {
+                    if (!ev.metaKey) {
+                      ev.preventDefault();
+                      setActiveTab(tab);
+                      window.location.hash = `#${tab}`;
+                    }
+                  }}
+                >
+                  {title}
+                </a>
+              );
+            })}
+          </div>
         </div>
       </ProviderStack>
-      <div className="p-4 space-y-4">
-        {ActiveTabComponent == null ? null : <ActiveTabComponent />}
+      <div className="flex flex-col overflow-auto">
+        <ProviderStack colorMode="light" languageCode="en-US">
+          <div className="p-4 flex justify-between items-center">
+            <h2 className="text-lg font-semibold text-primary-80">
+              {tabs.find(({ tab }) => tab === activeTab)?.title}
+            </h2>
+            <LightDarkToggle value={colorMode} onChange={setColorMode} />
+          </div>
+        </ProviderStack>
+        <div className="px-4">
+          {ActiveTabComponent == null ? null : (
+            <ActiveTabComponent colorMode={colorMode} />
+          )}
+        </div>
       </div>
-      <Mock1 embedded={false} />
+      <Mock1 embedded={false} colorMode={colorMode} />
     </div>
   );
 };
 
-const examplePicturesPayload: PicturesProps[] = [
-  {
-    imgSrc:
-      "https://s3-alpha-sig.figma.com/img/b00d/c6c1/1ff64663da245bd22ec1a8191c21a050?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=aVmzwN59arzrH1aRqF~jSicGqH0zEPPCH762JbOTBP66ubQT7EqreplRoAlrBzBq006rRu0AuI5SCaWV6kzI0Zos9FWLTdbgLr9pzuDruqL08qhS6rEUaTR6uLCjLbfZ5AwWKXo4juMEcetR-75y0oL6jx4bcS-icOHy1c17OJ8ikYtbMy-4g69c2mJkOpB~O8~Nmt6Hmv0AeBMc~pcE6eMADnZWQUFnHnzao063Y5vyKlzOPCPsAJZ~lpqq7pUrSwekvhz~wBGmK8Sg04JDeR74bKn4iISZRh4ExKPBkFZnRjFoExjudMQFo~vx0hItHxN9lfAcvDp28yhrlYsg2Q__",
-  },
-  {
-    imgSrc:
-      "https://s3-alpha-sig.figma.com/img/01bf/644f/fb38de40bc1d110bd8c1707588701f1b?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dOdOnzvAn350cJrKSnHyvMT7ln6LOjz4ehVZdT4En9czjfGkOwLaLFhw-IcirMB9ztsZrbpI-ovsCTkARJxEm1silscbizWhmB4trABHWlgRTvQDAzojyRgGjYM31UvUI0zW9I6E6qJurDJYtpH74pAWPonRoYGwRgLF7aimR9lpVL5-8SalwiO3OjRPIq5rw4hzzDjpMxL4YCjswO-CrOvGO61axTNxvKhElCU4XvaEDk2VrreLEMXzIjQIoE4rzqLE5fcdBuaqnBx9qyeQQ31DlDiOIrnVIAf~gJDDhtdgiyb2fcUeEKSyfrcjPGash7aH5Y9o~QbdMajctYKVxg__",
-  },
-  {
-    imgSrc:
-      "https://s3-alpha-sig.figma.com/img/01bf/644f/fb38de40bc1d110bd8c1707588701f1b?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dOdOnzvAn350cJrKSnHyvMT7ln6LOjz4ehVZdT4En9czjfGkOwLaLFhw-IcirMB9ztsZrbpI-ovsCTkARJxEm1silscbizWhmB4trABHWlgRTvQDAzojyRgGjYM31UvUI0zW9I6E6qJurDJYtpH74pAWPonRoYGwRgLF7aimR9lpVL5-8SalwiO3OjRPIq5rw4hzzDjpMxL4YCjswO-CrOvGO61axTNxvKhElCU4XvaEDk2VrreLEMXzIjQIoE4rzqLE5fcdBuaqnBx9qyeQQ31DlDiOIrnVIAf~gJDDhtdgiyb2fcUeEKSyfrcjPGash7aH5Y9o~QbdMajctYKVxg__",
-  },
-];
-
-/**
- *
- */
 export const renderDesignSystem = (element: HTMLElement): void => {
   createRoot(element).render(<DesignSystem />);
 };

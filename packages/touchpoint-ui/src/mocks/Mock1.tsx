@@ -10,9 +10,12 @@ import { Close } from "../components/ui/Icons";
 import { Messages } from "../components/Messages";
 import { mockConversationHandler, responses } from "./shared";
 import { useFeedback } from "../feedback";
-import { type WindowSize } from "../interface";
+import { type WindowSize, type ColorMode } from "../interface";
 
-export const Mock1: FC<{ embedded: boolean }> = (props) => {
+export const Mock1: FC<{ embedded: boolean; colorMode?: ColorMode }> = (
+  props,
+) => {
+  const colorMode = props.colorMode ?? "dark";
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   const [feedbackState, feedbackActions] = useFeedback(mockConversationHandler);
@@ -27,7 +30,7 @@ export const Mock1: FC<{ embedded: boolean }> = (props) => {
           fontFamily: "monospace",
           accent: "light-dark(purple, pink)",
         }}
-        colorMode={"dark"}
+        colorMode={colorMode}
         languageCode="en-US"
       >
         <LaunchButton
@@ -51,7 +54,7 @@ export const Mock1: FC<{ embedded: boolean }> = (props) => {
         fontFamily: "monospace",
         accent: "light-dark(purple, pink)",
       }}
-      colorMode={"dark"}
+      colorMode={colorMode}
       languageCode="en-US"
     >
       {windowSize === "half" ? (
@@ -75,7 +78,7 @@ export const Mock1: FC<{ embedded: boolean }> = (props) => {
           userMessageBubble={true}
           agentMessageBubble={true}
           chatMode={true}
-          colorMode="dark"
+          colorMode={colorMode}
           uploadedFiles={{}}
           lastApplicationResponseIndex={3}
           modalityComponents={{}}
