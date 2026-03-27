@@ -53,7 +53,7 @@ export const LightDarkToggle: FC<Props> = ({
   className,
   label = "Toggle light/dark mode",
 }) => {
-  const handleClick = () => {
+  const handleClick = (): void => {
     onChange(value === "light" ? "dark" : "light");
   };
 

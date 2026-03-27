@@ -12,7 +12,7 @@ import { mockConversationHandler, responses, useEscapeKeyHandler } from "./share
 import { useFeedback } from "../feedback";
 import { type WindowSize, type ColorMode } from "../interface";
 
-export const Mock1: FC<{
+export const Mock2: FC<{
   embedded: boolean;
   colorMode?: ColorMode;
   isExpanded: boolean;

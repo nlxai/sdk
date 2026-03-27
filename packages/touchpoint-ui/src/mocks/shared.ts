@@ -1,9 +1,18 @@
 /* eslint-disable jsdoc/require-jsdoc */
+import { useKeyboardEvent } from "@react-hookz/web";
+import { useCallback } from "react";
 import {
   ResponseType,
   type Response,
   type ConversationHandler,
 } from "@nlxai/core";
+
+export const useEscapeKeyHandler = (callback: () => void): void => {
+  useKeyboardEvent(
+    (event) => event.code === "Escape",
+    useCallback(callback, [callback]),
+  );
+};
 
 export const mockConversationHandler: ConversationHandler = {
   sendText: () => {},
@@ -14,9 +23,15 @@ export const mockConversationHandler: ConversationHandler = {
   sendFlow: () => {},
   sendIntent: () => {},
   sendStructured: () => {},
-  sendContext: () => Promise.reject("Mock implementation"),
-  getVoiceCredentials: () => Promise.reject("Mock implementation"),
-  submitFeedback: () => Promise.reject("Mock implementation"),
+  sendContext: async () => {
+    await Promise.reject(new Error("Mock implementation"));
+  },
+  getVoiceCredentials: async () => {
+    return await Promise.reject(new Error("Mock implementation"));
+  },
+  submitFeedback: async () => {
+    await Promise.reject(new Error("Mock implementation"));
+  },
   appendMessageToTranscript: () => {},
   subscribe: () => () => {},
   unsubscribe: () => {},

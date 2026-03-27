@@ -2,6 +2,7 @@
 import { useEffect, useState, type FC, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { clsx } from "clsx";
+import { useKeyboardEvent } from "@react-hookz/web";
 
 import "./index.css";
 import { type ColorMode } from "./interface";
@@ -14,7 +15,12 @@ import { ArrowRight, Close, Touchpoint } from "./components/ui/Icons";
 import { Icons, BaseText, SmallText } from "./index";
 import { DateInput } from "./components/ui/DateInput";
 import { ProviderStack } from "./ProviderStack";
+import { Radio } from "./components/ui/Radio";
 import { Mock1 } from "./mocks/Mock1";
+import { Mock2 } from "./mocks/Mock2";
+import { Mock3 } from "./mocks/Mock3";
+
+type MockVersion = "mock1" | "mock2" | "mock3";
 
 const TextButtonInstances: FC<unknown> = () => {
   return (
@@ -253,6 +259,8 @@ const tabFromUrl = (): Tab => {
 const DesignSystem: FC<unknown> = () => {
   const [activeTab, setActiveTab] = useState<Tab>(tabFromUrl());
   const [colorMode, setColorMode] = useState<ColorMode>("light");
+  const [activeMock, setActiveMock] = useState<MockVersion>("mock1");
+  const [isMockExpanded, setIsMockExpanded] = useState<boolean>(false);
 
   useEffect(() => {
     const handler = (): void => {
@@ -264,9 +272,32 @@ const DesignSystem: FC<unknown> = () => {
     };
   }, [setActiveTab]);
 
+  useKeyboardEvent(
+    (event) => event.code === "Digit1",
+    () => { setActiveMock("mock1"); },
+  );
+
+  useKeyboardEvent(
+    (event) => event.code === "Digit2",
+    () => { setActiveMock("mock2"); },
+  );
+
+  useKeyboardEvent(
+    (event) => event.code === "Digit3",
+    () => { setActiveMock("mock3"); },
+  );
+
   const ActiveTabComponent = tabs.find(
     ({ tab }) => tab === activeTab,
   )?.component;
+
+  const mockProps = {
+    embedded: false as const,
+    colorMode,
+    isExpanded: isMockExpanded,
+    onExpand: () => { setIsMockExpanded(true); },
+    onClose: () => { setIsMockExpanded(false); },
+  };
 
   return (
     <div className="grid grid-cols-[320px_1fr] h-screen">
@@ -282,30 +313,53 @@ const DesignSystem: FC<unknown> = () => {
               Touchpoint Design System
             </h1>
           </div>
-          <div className="space-y-2 overflow-y-auto">
-            {tabs.map(({ tab, title }) => {
-              const isActive = tab === activeTab;
-              return (
-                <a
-                  className={clsx(
-                    "block hover:text-primary-80",
-                    isActive ? "text-primary-80" : "text-primary-40",
-                  )}
-                  aria-current={isActive ? "page" : undefined}
-                  key={tab}
-                  href={`#${tab}`}
-                  onClick={(ev) => {
-                    if (!ev.metaKey) {
-                      ev.preventDefault();
-                      setActiveTab(tab);
-                      window.location.hash = `#${tab}`;
-                    }
-                  }}
-                >
-                  {title}
-                </a>
-              );
-            })}
+          <div className="space-y-4">
+            <div>
+              <p className="text-xs font-semibold text-primary-60 mb-2">
+                Components
+              </p>
+              <div className="space-y-2 overflow-y-auto">
+                {tabs.map(({ tab, title }) => {
+                  const isActive = tab === activeTab;
+                  return (
+                    <a
+                      className={clsx(
+                        "block hover:text-primary-80",
+                        isActive ? "text-primary-80" : "text-primary-40",
+                      )}
+                      aria-current={isActive ? "page" : undefined}
+                      key={tab}
+                      href={`#${tab}`}
+                      onClick={(ev) => {
+                        if (!ev.metaKey) {
+                          ev.preventDefault();
+                          setActiveTab(tab);
+                          window.location.hash = `#${tab}`;
+                        }
+                      }}
+                    >
+                      {title}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="border-t border-primary-10 pt-4">
+              <p className="text-xs font-semibold text-primary-60 mb-2">
+                Chat frame
+              </p>
+              <Radio
+                name="mock-version"
+                options={[
+                  { value: "mock1", label: "Mock 1" },
+                  { value: "mock2", label: "Mock 2" },
+                  { value: "mock3", label: "Mock 3" },
+                ]}
+                value={activeMock}
+                onChange={(value) => { setActiveMock(value as MockVersion); }}
+              />
+              <p className="text-xs text-primary-40 mt-2">or press 1, 2, 3</p>
+            </div>
           </div>
         </div>
       </ProviderStack>
@@ -324,7 +378,9 @@ const DesignSystem: FC<unknown> = () => {
           )}
         </div>
       </div>
-      <Mock1 embedded={false} colorMode={colorMode} />
+      {activeMock === "mock1" && <Mock1 {...mockProps} />}
+      {activeMock === "mock2" && <Mock2 {...mockProps} />}
+      {activeMock === "mock3" && <Mock3 {...mockProps} />}
     </div>
   );
 };
