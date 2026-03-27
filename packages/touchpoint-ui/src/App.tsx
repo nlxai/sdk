@@ -40,7 +40,6 @@ import { VoiceMini } from "./components/VoiceMini";
 import { gatherAutomaticContext } from "./bidirectional/automaticContext";
 import { commandHandler } from "./bidirectional/commandHandler";
 import { RiveAnimation } from "./components/RiveAnimation";
-import { type VoiceHandler } from "./voice";
 import { Main } from "./components/Layout";
 
 import { useFeedback } from "./feedback";

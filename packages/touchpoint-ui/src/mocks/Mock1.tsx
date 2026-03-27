@@ -1,4 +1,5 @@
-import { FC, useState } from "react";
+/* eslint-disable jsdoc/require-jsdoc */
+import { type FC, useState } from "react";
 import { ProviderStack } from "../ProviderStack";
 import { LaunchButton } from "../components/ui/LaunchButton";
 import { clsx } from "clsx";

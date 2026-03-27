@@ -359,6 +359,9 @@ const examplePicturesPayload: PicturesProps[] = [
   },
 ];
 
-export const renderDesignSystem = (element: HTMLElement) => {
+/**
+ *
+ */
+export const renderDesignSystem = (element: HTMLElement): void => {
   createRoot(element).render(<DesignSystem />);
 };
