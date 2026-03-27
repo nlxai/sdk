@@ -40,7 +40,7 @@ import { VoiceMini } from "./components/VoiceMini";
 import { gatherAutomaticContext } from "./bidirectional/automaticContext";
 import { commandHandler } from "./bidirectional/commandHandler";
 import { RiveAnimation } from "./components/RiveAnimation";
-import { Main } from "./components/Layout";
+import { Main, InputContainer } from "./components/Layout";
 
 import { useFeedback } from "./feedback";
 import { FeedbackComment } from "./components/FeedbackComment";
@@ -445,12 +445,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
           )}
         />
-        <div
-          className={clsx(
-            "p-2 md:p-3 flex flex-col flex-none gap-2",
-            windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
-          )}
-        >
+        <InputContainer windowSize={windowSize}>
           {choiceMessage != null ? (
             <MessageChoices {...choiceMessage} handler={handler} />
           ) : null}
@@ -470,7 +465,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               }}
             />
           )}
-        </div>
+        </InputContainer>
       </>
     );
   };

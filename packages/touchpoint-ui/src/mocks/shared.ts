@@ -1,5 +1,36 @@
- 
-import { ResponseType, type Response } from "@nlxai/core";
+/* eslint-disable jsdoc/require-jsdoc */
+import {
+  ResponseType,
+  type Response,
+  type ConversationHandler,
+} from "@nlxai/core";
+
+export const mockConversationHandler: ConversationHandler = {
+  sendText: () => {},
+  sendSlots: () => {},
+  sendChoice: () => {},
+  sendWelcomeFlow: () => {},
+  sendWelcomeIntent: () => {},
+  sendFlow: () => {},
+  sendIntent: () => {},
+  sendStructured: () => {},
+  sendContext: () => Promise.reject("Mock implementation"),
+  getVoiceCredentials: () => Promise.reject("Mock implementation"),
+  submitFeedback: () => Promise.reject("Mock implementation"),
+  appendMessageToTranscript: () => {},
+  subscribe: () => () => {},
+  unsubscribe: () => {},
+  unsubscribeAll: () => {},
+  currentConversationId: () => undefined,
+  setLanguageCode: () => {},
+  reset: () => {},
+  destroy: () => {},
+  currentLanguageCode: () => "en-US",
+  setRequestOverride: () => {},
+  addEventListener: () => {},
+  removeEventListener: () => {},
+  sendVoicePlusContext: () => {},
+};
 
 export const responses: Response[] = [
   {

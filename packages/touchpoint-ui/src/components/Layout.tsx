@@ -40,3 +40,19 @@ export const HeaderContainer: FC<{
     </div>
   );
 };
+
+export const InputContainer: FC<{
+  windowSize: WindowSize;
+  children: ReactNode;
+}> = ({ windowSize, children }) => {
+  return (
+    <div
+      className={clsx(
+        "p-2 md:p-3 flex flex-col flex-none gap-2",
+        windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
+      )}
+    >
+      {children}
+    </div>
+  );
+};

@@ -3,14 +3,21 @@ import { type FC, useState } from "react";
 import { ProviderStack } from "../ProviderStack";
 import { LaunchButton } from "../components/ui/LaunchButton";
 import { clsx } from "clsx";
-import { Main, HeaderContainer } from "../components/Layout";
+import { Main, HeaderContainer, InputContainer } from "../components/Layout";
 import { IconButton } from "../components/ui/IconButton";
+import { Input } from "../components/Input";
 import { Close } from "../components/ui/Icons";
+import { Messages } from "../components/Messages";
+import { mockConversationHandler, responses } from "./shared";
+import { useFeedback } from "../feedback";
+import { type WindowSize } from "../interface";
 
 export const Mock1: FC<{ embedded: boolean }> = (props) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-  const windowSize = "half";
+  const [feedbackState, feedbackActions] = useFeedback(mockConversationHandler);
+
+  const windowSize: WindowSize = "half";
 
   if (!isExpanded) {
     return (
@@ -33,9 +40,6 @@ export const Mock1: FC<{ embedded: boolean }> = (props) => {
       </ProviderStack>
     );
   }
-
-  // TODO: add buttons
-  // TODO: generate sample conversation
 
   return (
     <ProviderStack
@@ -64,7 +68,34 @@ export const Mock1: FC<{ embedded: boolean }> = (props) => {
             type="overlay"
           />
         </HeaderContainer>
-        abcd
+        <Messages
+          isWaiting={false}
+          handler={mockConversationHandler}
+          responses={responses}
+          userMessageBubble={true}
+          agentMessageBubble={true}
+          chatMode={true}
+          colorMode="dark"
+          uploadedFiles={{}}
+          lastApplicationResponseIndex={3}
+          modalityComponents={{}}
+          enabled={true}
+          feedbackState={feedbackState}
+          feedbackActions={feedbackActions}
+          className={clsx(
+            "grow",
+            (windowSize as WindowSize) === "full"
+              ? "w-full md:max-w-content md:mx-auto"
+              : "",
+          )}
+        />
+        <InputContainer windowSize={windowSize}>
+          <Input
+            enabled
+            handler={mockConversationHandler}
+            onFileUpload={() => {}}
+          />
+        </InputContainer>
       </Main>
     </ProviderStack>
   );
