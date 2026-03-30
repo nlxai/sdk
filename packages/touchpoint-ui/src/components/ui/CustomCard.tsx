@@ -1,4 +1,3 @@
- 
 import { clsx } from "clsx";
 import { useEffect, type FC, type ReactNode, useContext } from "react";
 import { CarouselContext } from "./Carousel";

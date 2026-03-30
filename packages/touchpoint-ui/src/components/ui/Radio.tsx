@@ -25,13 +25,18 @@ export const Radio: FC<RadioProps<string | number>> = ({
   return (
     <fieldset className={clsx("space-y-2", className)}>
       {options.map((option) => (
-        <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+        <label
+          key={option.value}
+          className="flex items-center gap-2 cursor-pointer"
+        >
           <input
             type="radio"
             name={name}
             value={option.value}
             checked={value === option.value}
-            onChange={() => { onChange(option.value); }}
+            onChange={() => {
+              onChange(option.value);
+            }}
             className="w-4 h-4"
           />
           <span className="text-sm text-primary-80">{option.label}</span>

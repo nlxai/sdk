@@ -11,6 +11,7 @@ import { Messages } from "../components/Messages";
 import { mockConversationHandler, responses } from "./shared";
 import { useFeedback } from "../feedback";
 import { type WindowSize, type ColorMode } from "../interface";
+import { VoiceIcon } from "../components/FullscreenVoice";
 
 export const MockVoice: FC<{
   embedded: boolean;
@@ -70,27 +71,9 @@ export const MockVoice: FC<{
             type="overlay"
           />
         </HeaderContainer>
-        <Messages
-          isWaiting={false}
-          handler={mockConversationHandler}
-          responses={responses}
-          userMessageBubble={true}
-          agentMessageBubble={true}
-          chatMode={true}
-          colorMode={colorMode}
-          uploadedFiles={{}}
-          lastApplicationResponseIndex={3}
-          modalityComponents={{}}
-          enabled={true}
-          feedbackState={feedbackState}
-          feedbackActions={feedbackActions}
-          className={clsx(
-            "grow",
-            (windowSize) === "full"
-              ? "w-full md:max-w-content md:mx-auto"
-              : "",
-          )}
-        />
+        <div className="grow">
+          <VoiceIcon colorMode={colorMode} addRipple className="relative" />
+        </div>
         <InputContainer windowSize={windowSize}>
           <Input
             enabled

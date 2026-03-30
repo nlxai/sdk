@@ -1,52 +1,51 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <style>
+      html,
+      body,
+      nlx-touchpoint {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <title>Touchpoint</title>
+  </head>
 
-<head>
-  <style>
-    html,
-    body,
-    nlx-touchpoint {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
-  <meta charset="UTF-8" />
-  <title>Touchpoint</title>
-</head>
+  <body>
+    <nlx-touchpoint></nlx-touchpoint>
+    <script type="module">
+      import { create, html } from "./src/index.tsx";
 
-<body>
-  <nlx-touchpoint></nlx-touchpoint>
-  <script type="module">
-    import {create, html} from "./src/index.tsx";
+      const config = {
+        protocol: "https",
+        host: "dev.apps.nlx.ai",
+        deploymentKey: "gFS1N2WyDTfDffIqKxSI0",
+        channelKey: "gCinjDrCSoQvbhBBaiiZf",
+        apiKey: "w0P5c3y3TR80jnvmpzsLDRYe",
+        languageCode: "en-US",
+        userId: self.crypto.randomUUID(),
+      };
 
-    const config = {
-      protocol: "https",
-      host: "dev.apps.nlx.ai",
-      deploymentKey: "gFS1N2WyDTfDffIqKxSI0",
-      channelKey: "gCinjDrCSoQvbhBBaiiZf",
-      apiKey: "w0P5c3y3TR80jnvmpzsLDRYe",
-      languageCode: "en-US",
-      userId: self.crypto.randomUUID()
-    };
+      const touchpointConfig = {
+        config,
+        windowSize: "full",
+        colorMode: "dark",
+        input: "text",
+        theme: {
+          fontFamily:
+            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+          accent: "#AECAFF",
+        },
+        brandIcon: undefined,
+        showTranscript: true,
+      };
 
-
-    const touchpointConfig = {
-      config,
-      windowSize: "full",
-      colorMode: "dark",
-      input: "text",
-      theme: {
-        fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
-        accent: "#AECAFF"
-      },
-      brandIcon: undefined,
-      showTranscript: true
-    };
-
-    document.querySelector("nlx-touchpoint").touchpointConfiguration = touchpointConfig;
-  </script>
-</body>
-
+      document.querySelector("nlx-touchpoint").touchpointConfiguration =
+        touchpointConfig;
+    </script>
+  </body>
 </html>

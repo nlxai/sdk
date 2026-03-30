@@ -1,4 +1,3 @@
- 
 import type { FC, CSSProperties } from "react";
 import { clsx } from "clsx";
 

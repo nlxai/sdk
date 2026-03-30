@@ -304,7 +304,7 @@ const DesignSystem: FC<unknown> = () => {
   useKeyboardEvent(
     (event) => event.code === "Enter",
     () => {
-      setIsMockExpanded(true);
+      setIsMockExpanded((prev) => !prev);
     },
   );
 

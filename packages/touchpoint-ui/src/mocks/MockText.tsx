@@ -8,10 +8,7 @@ import { IconButton } from "../components/ui/IconButton";
 import { Input } from "../components/Input";
 import { Close } from "../components/ui/Icons";
 import { Messages } from "../components/Messages";
-import {
-  mockConversationHandler,
-  responses,
-} from "./shared";
+import { mockConversationHandler, responses } from "./shared";
 import { useFeedback } from "../feedback";
 import { type WindowSize, type ColorMode } from "../interface";
 
@@ -89,9 +86,7 @@ export const MockText: FC<{
           feedbackActions={feedbackActions}
           className={clsx(
             "grow",
-            (windowSize) === "full"
-              ? "w-full md:max-w-content md:mx-auto"
-              : "",
+            windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
           )}
         />
         <InputContainer windowSize={windowSize}>
