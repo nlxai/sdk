@@ -7,7 +7,9 @@ import { IconButton } from "../components/ui/IconButton";
 import { Close } from "../components/ui/Icons";
 import { mockConversationHandler, mockTheme, responses } from "./shared";
 import { type ColorMode } from "../interface";
-import { VoiceMiniControls } from "../components/Layout";
+import { VoiceMiniControls, voiceMiniPanelClass } from "../components/Layout";
+import { VoiceModalities } from "../components/FullscreenVoice";
+import { defaultModalities } from "../components/defaultModalities/shared";
 
 export const MockVoiceMini: FC<{
   colorMode?: ColorMode;
@@ -44,6 +46,23 @@ export const MockVoiceMini: FC<{
     >
       <VoiceMiniControls>
         <IconButton label="Close" Icon={Close} type="error" onClick={onClose} />
+        <VoiceModalities
+          className={clsx(
+            voiceMiniPanelClass,
+            "absolute right-0 -top-2 transform translate-x-0 -translate-y-full max-h-[360px] overflow-auto",
+          )}
+          responses={[
+            ...responses,
+            ...responses.map((res) => ({
+              ...res,
+              receivedAt: res.receivedAt + 10000000,
+            })),
+          ]}
+          renderedAsOverlay={false}
+          showTranscript={false}
+          modalityComponents={defaultModalities}
+          handler={mockConversationHandler}
+        />
       </VoiceMiniControls>
     </ProviderStack>
   );

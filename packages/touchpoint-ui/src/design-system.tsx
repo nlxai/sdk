@@ -264,10 +264,50 @@ const tabFromUrl = (): Tab => {
 
 const DesignSystem: FC<unknown> = () => {
   const [activeTab, setActiveTab] = useState<Tab>(tabFromUrl());
-  const [colorMode, setColorMode] = useState<ColorMode>("light");
-  const [activeMock, setActiveMock] = useState<MockVersion>("mock1");
-  const [isMockExpanded, setIsMockExpanded] = useState<boolean>(false);
-  const [windowSize, setWindowSize] = useState<WindowSize>("half");
+
+  // Color mode state with session storage
+
+  const [colorMode, setColorMode] = useState<ColorMode>(() => {
+    const stored = sessionStorage.getItem("touchpoint-colorMode");
+    return (stored as ColorMode) ?? "light";
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem("touchpoint-colorMode", colorMode);
+  }, [colorMode]);
+
+  // Active mock state with session storage
+
+  const [activeMock, setActiveMock] = useState<MockVersion>(() => {
+    const stored = sessionStorage.getItem("touchpoint-activeMock");
+    return (stored as MockVersion) ?? "mock1";
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem("touchpoint-activeMock", activeMock);
+  }, [activeMock]);
+
+  // Mock expanded state with session storage
+
+  const [isMockExpanded, setIsMockExpanded] = useState<boolean>(() => {
+    const stored = sessionStorage.getItem("touchpoint-isMockExpanded");
+    return stored === "true";
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem("touchpoint-isMockExpanded", String(isMockExpanded));
+  }, [isMockExpanded]);
+
+  // Window size state with session storage
+
+  const [windowSize, setWindowSize] = useState<WindowSize>(() => {
+    const stored = sessionStorage.getItem("touchpoint-windowSize");
+    return (stored as WindowSize) ?? "half";
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem("touchpoint-windowSize", windowSize);
+  }, [windowSize]);
 
   useEffect(() => {
     const handler = (): void => {
