@@ -8,7 +8,7 @@ import { IconButton } from "../components/ui/IconButton";
 import { Input } from "../components/Input";
 import { Close } from "../components/ui/Icons";
 import { Messages } from "../components/Messages";
-import { mockConversationHandler, responses } from "./shared";
+import { mockConversationHandler, mockTheme, responses } from "./shared";
 import { useFeedback } from "../feedback";
 import { type WindowSize, type ColorMode } from "../interface";
 import { defaultModalities } from "../components/defaultModalities/shared";
@@ -30,10 +30,7 @@ export const MockText: FC<{
     return (
       <ProviderStack
         className="fixed z-launch-button bottom-2 right-2 w-fit"
-        theme={{
-          fontFamily: "monospace",
-          accent: "light-dark(purple, pink)",
-        }}
+        theme={mockTheme}
         colorMode={colorMode}
         languageCode="en-US"
       >
@@ -52,10 +49,7 @@ export const MockText: FC<{
         "grid grid-cols-2 xl:grid-cols-[1fr_632px]",
         props.embedded ? "w-full h-full" : "fixed inset-0 z-touchpoint",
       )}
-      theme={{
-        fontFamily: "monospace",
-        accent: "light-dark(purple, pink)",
-      }}
+      theme={mockTheme}
       colorMode={colorMode}
       languageCode="en-US"
     >

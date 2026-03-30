@@ -3,17 +3,13 @@ import { type FC } from "react";
 import { ProviderStack } from "../ProviderStack";
 import { LaunchButton } from "../components/ui/LaunchButton";
 import { clsx } from "clsx";
-import { Main, HeaderContainer, InputContainer } from "../components/Layout";
 import { IconButton } from "../components/ui/IconButton";
-import { Input } from "../components/Input";
 import { Close } from "../components/ui/Icons";
-import { Messages } from "../components/Messages";
-import { mockConversationHandler, responses } from "./shared";
-import { useFeedback } from "../feedback";
-import { type WindowSize, type ColorMode } from "../interface";
+import { mockConversationHandler, mockTheme, responses } from "./shared";
+import { type ColorMode } from "../interface";
+import { VoiceMiniControls } from "../components/Layout";
 
 export const MockVoiceMini: FC<{
-  embedded: boolean;
   colorMode?: ColorMode;
   isExpanded: boolean;
   onClose: () => void;
@@ -22,18 +18,11 @@ export const MockVoiceMini: FC<{
   const colorMode = props.colorMode ?? "dark";
   const { isExpanded, onClose, onExpand } = props;
 
-  const [feedbackState, feedbackActions] = useFeedback(mockConversationHandler);
-
-  const windowSize: WindowSize = "half";
-
   if (!isExpanded) {
     return (
       <ProviderStack
         className="fixed z-launch-button bottom-2 right-2 w-fit"
-        theme={{
-          fontFamily: "monospace",
-          accent: "light-dark(purple, pink)",
-        }}
+        theme={mockTheme}
         colorMode={colorMode}
         languageCode="en-US"
       >
@@ -48,58 +37,14 @@ export const MockVoiceMini: FC<{
 
   return (
     <ProviderStack
-      className={clsx(
-        "grid grid-cols-2 xl:grid-cols-[1fr_632px]",
-        props.embedded ? "w-full h-full" : "fixed inset-0 z-touchpoint",
-      )}
-      theme={{
-        fontFamily: "monospace",
-        accent: "light-dark(purple, pink)",
-      }}
+      className={clsx("fixed bottom-2 right-2")}
+      theme={mockTheme}
       colorMode={colorMode}
       languageCode="en-US"
     >
-      {windowSize === "half" ? (
-        <div className="hidden md:block bg-overlay" />
-      ) : null}
-      <Main windowSize={windowSize}>
-        <HeaderContainer leftColumn={windowSize === "half"}>
-          <IconButton
-            Icon={Close}
-            label="Close"
-            onClick={onClose}
-            type="overlay"
-          />
-        </HeaderContainer>
-        <Messages
-          isWaiting={false}
-          handler={mockConversationHandler}
-          responses={responses}
-          userMessageBubble={true}
-          agentMessageBubble={true}
-          chatMode={true}
-          colorMode={colorMode}
-          uploadedFiles={{}}
-          lastApplicationResponseIndex={3}
-          modalityComponents={{}}
-          enabled={true}
-          feedbackState={feedbackState}
-          feedbackActions={feedbackActions}
-          className={clsx(
-            "grow",
-            (windowSize as WindowSize) === "full"
-              ? "w-full md:max-w-content md:mx-auto"
-              : "",
-          )}
-        />
-        <InputContainer windowSize={windowSize}>
-          <Input
-            enabled
-            handler={mockConversationHandler}
-            onFileUpload={() => {}}
-          />
-        </InputContainer>
-      </Main>
+      <VoiceMiniControls>
+        <IconButton label="Close" Icon={Close} type="error" onClick={onClose} />
+      </VoiceMiniControls>
     </ProviderStack>
   );
 };

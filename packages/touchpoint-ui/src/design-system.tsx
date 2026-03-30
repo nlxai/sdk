@@ -296,6 +296,7 @@ const DesignSystem: FC<unknown> = () => {
     () => {
       setActiveMock("mock1");
     },
+    [],
   );
 
   useKeyboardEvent(
@@ -303,6 +304,7 @@ const DesignSystem: FC<unknown> = () => {
     () => {
       setActiveMock("mock2");
     },
+    [],
   );
 
   useKeyboardEvent(
@@ -310,18 +312,24 @@ const DesignSystem: FC<unknown> = () => {
     () => {
       setActiveMock("mock3");
     },
+    [],
   );
 
   useKeyboardEvent(
     (event) => event.code === "Space",
     () => {
-      setWindowSize((prev) => (prev === "half" ? "full" : "half"));
+      if (activeMock !== "mock3") {
+        setWindowSize((prev) => (prev === "half" ? "full" : "half"));
+      }
     },
+    [activeMock],
   );
 
-  useKeyboardEvent((event) => event.code === "Enter", toggleMock);
+  useKeyboardEvent((event) => event.code === "Enter", toggleMock, [toggleMock]);
 
-  useKeyboardEvent((event) => event.code === "Escape", collapseMock);
+  useKeyboardEvent((event) => event.code === "Escape", collapseMock, [
+    collapseMock,
+  ]);
 
   const ActiveTabComponent = tabs.find(
     ({ tab }) => tab === activeTab,
@@ -405,9 +413,13 @@ const DesignSystem: FC<unknown> = () => {
                       { value: "full", label: "Full" },
                     ]}
                     value={windowSize}
-                    onChange={(value) => {
-                      setWindowSize(value as WindowSize);
-                    }}
+                    onChange={
+                      activeMock === "mock3"
+                        ? undefined
+                        : (value) => {
+                            setWindowSize(value as WindowSize);
+                          }
+                    }
                   />
                   <p className="text-xs text-primary-40 mt-2">or press space</p>
                 </div>
@@ -453,7 +465,6 @@ const DesignSystem: FC<unknown> = () => {
       )}
       {activeMock === "mock3" && (
         <MockVoiceMini
-          embedded={false}
           colorMode={colorMode}
           isExpanded={isMockExpanded}
           onExpand={expandMock}

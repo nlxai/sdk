@@ -9,8 +9,9 @@ import { Input } from "../components/Input";
 import { Close } from "../components/ui/Icons";
 import { mockConversationHandler, responses } from "./shared";
 import { type WindowSize, type ColorMode } from "../interface";
-import { VoiceIcon , VoiceModalities } from "../components/FullscreenVoice";
+import { VoiceIcon, VoiceModalities } from "../components/FullscreenVoice";
 import { defaultModalities } from "../components/defaultModalities/shared";
+import { mockTheme } from "./shared";
 
 export const MockVoice: FC<{
   embedded: boolean;
@@ -27,10 +28,7 @@ export const MockVoice: FC<{
     return (
       <ProviderStack
         className="fixed z-launch-button bottom-2 right-2 w-fit"
-        theme={{
-          fontFamily: "monospace",
-          accent: "light-dark(purple, pink)",
-        }}
+        theme={mockTheme}
         colorMode={colorMode}
         languageCode="en-US"
       >
@@ -49,10 +47,7 @@ export const MockVoice: FC<{
         "grid grid-cols-2 xl:grid-cols-[1fr_632px]",
         props.embedded ? "w-full h-full" : "fixed inset-0 z-touchpoint",
       )}
-      theme={{
-        fontFamily: "monospace",
-        accent: "light-dark(purple, pink)",
-      }}
+      theme={mockTheme}
       colorMode={colorMode}
       languageCode="en-US"
     >

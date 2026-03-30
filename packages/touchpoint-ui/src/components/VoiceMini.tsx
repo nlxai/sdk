@@ -16,31 +16,17 @@ import { Close, Mic, MicOff, Volume, VolumeOff, Restart } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
 import { VoiceModalities, useWidgetVoiceState } from "./FullscreenVoice";
 import { ErrorMessage } from "./ErrorMessage";
-import { VoiceMiniFrame } from "./Layout";
-
-const containerClass =
-  "bg-background backdrop-blur-sm text-primary-80 rounded-outer p-2 w-[calc(100vw-16px)] max-w-[360px] space-y-4";
-
-const Container: FC<{
-  children: ReactNode;
-  onClose: () => void;
-  renderCollapse: boolean;
-}> = ({ children, renderCollapse, onClose }) => (
-  <div className={containerClass}>
-    {renderCollapse && (
-      <div className="flex items-center justify-end">
-        <IconButton onClick={onClose} Icon={Close} type="ghost" label="Close" />
-      </div>
-    )}
-    {children}
-  </div>
-);
+import {
+  VoiceMiniControls,
+  VoiceMiniPanel,
+  voiceMiniPanelClass,
+} from "./Layout";
 
 const VoiceMiniLoader: FC<{ brandIconView: ReactNode }> = ({
   brandIconView,
 }) => {
   return (
-    <VoiceMiniFrame className="relative">
+    <VoiceMiniControls className="relative">
       {brandIconView}
       <IconButton
         Icon={Mic}
@@ -63,7 +49,7 @@ const VoiceMiniLoader: FC<{ brandIconView: ReactNode }> = ({
       <span className="w-6 h-6 block text-accent absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <LoaderAnimation />
       </span>
-    </VoiceMiniFrame>
+    </VoiceMiniControls>
   );
 };
 
@@ -152,7 +138,7 @@ export const VoiceMini: FC<{
 
   if (voice.type === "error") {
     return (
-      <Container renderCollapse={renderCollapse} onClose={onCloseHandler}>
+      <VoiceMiniPanel onClose={renderCollapse ? onCloseHandler : undefined}>
         <ErrorMessage message="I couldn’t connect" />
         <TextButton
           type="ghost"
@@ -162,7 +148,7 @@ export const VoiceMini: FC<{
             void retry();
           }}
         />
-      </Container>
+      </VoiceMiniPanel>
     );
   }
 
@@ -170,7 +156,7 @@ export const VoiceMini: FC<{
   const speakersEnabled = voice.state?.isSpeakersEnabled ?? true;
 
   return (
-    <VoiceMiniFrame>
+    <VoiceMiniControls>
       {brandIconView}
       <div className="w-fit relative">
         {voice.state?.isUserSpeaking ? (
@@ -208,7 +194,7 @@ export const VoiceMini: FC<{
       />
       <VoiceModalities
         className={clsx(
-          containerClass,
+          voiceMiniPanelClass,
           "absolute right-0 -top-2 transform translate-x-0 -translate-y-full max-h-[360px] overflow-auto",
         )}
         responses={responses}
@@ -217,6 +203,6 @@ export const VoiceMini: FC<{
         modalityComponents={modalityComponents}
         handler={handler}
       />
-    </VoiceMiniFrame>
+    </VoiceMiniControls>
   );
 };

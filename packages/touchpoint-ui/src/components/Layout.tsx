@@ -2,6 +2,8 @@
 import { clsx } from "clsx";
 import { type FC, type ReactNode } from "react";
 import { type WindowSize } from "../interface";
+import { IconButton } from "./ui/IconButton";
+import { Close } from "./ui/Icons";
 
 export const Main: FC<{ windowSize: WindowSize; children: ReactNode }> = ({
   windowSize,
@@ -57,7 +59,7 @@ export const InputContainer: FC<{
   );
 };
 
-export const VoiceMiniFrame: FC<{
+export const VoiceMiniControls: FC<{
   children: ReactNode;
   className?: string;
 }> = ({ children, className }) => (
@@ -67,6 +69,23 @@ export const VoiceMiniFrame: FC<{
       className,
     )}
   >
+    {children}
+  </div>
+);
+
+export const voiceMiniPanelClass =
+  "bg-background backdrop-blur-sm text-primary-80 rounded-outer p-2 w-[calc(100vw-16px)] max-w-[360px] space-y-4";
+
+export const VoiceMiniPanel: FC<{
+  children: ReactNode;
+  onClose?: () => void;
+}> = ({ children, onClose }) => (
+  <div className={voiceMiniPanelClass}>
+    {onClose != null && (
+      <div className="flex items-center justify-end">
+        <IconButton onClick={onClose} Icon={Close} type="ghost" label="Close" />
+      </div>
+    )}
     {children}
   </div>
 );
