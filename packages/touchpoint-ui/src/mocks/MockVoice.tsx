@@ -7,11 +7,10 @@ import { Main, HeaderContainer, InputContainer } from "../components/Layout";
 import { IconButton } from "../components/ui/IconButton";
 import { Input } from "../components/Input";
 import { Close } from "../components/ui/Icons";
-import { mockConversationHandler, responses } from "./shared";
+import { mockConversationHandler, mockTheme, responses } from "./shared";
 import { type WindowSize, type ColorMode } from "../interface";
 import { VoiceIcon, VoiceModalities } from "../components/FullscreenVoice";
 import { defaultModalities } from "../components/defaultModalities/shared";
-import { mockTheme } from "./shared";
 
 export const MockVoice: FC<{
   embedded: boolean;
