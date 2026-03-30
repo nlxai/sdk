@@ -12,21 +12,20 @@ import { mockConversationHandler, responses, useEscapeKeyHandler } from "./share
 import { useFeedback } from "../feedback";
 import { type WindowSize, type ColorMode } from "../interface";
 
-export const Mock3: FC<{
+export const MockVoice: FC<{
   embedded: boolean;
   colorMode?: ColorMode;
   isExpanded: boolean;
   onClose: () => void;
   onExpand: () => void;
+  windowSize: WindowSize;
 }> = (props) => {
   const colorMode = props.colorMode ?? "dark";
-  const { isExpanded, onClose, onExpand } = props;
+  const { isExpanded, onClose, onExpand, windowSize } = props;
 
   useEscapeKeyHandler(onClose);
 
   const [feedbackState, feedbackActions] = useFeedback(mockConversationHandler);
-
-  const windowSize: WindowSize = "half";
 
   if (!isExpanded) {
     return (
@@ -89,7 +88,7 @@ export const Mock3: FC<{
           feedbackActions={feedbackActions}
           className={clsx(
             "grow",
-            (windowSize as WindowSize) === "full"
+            (windowSize) === "full"
               ? "w-full md:max-w-content md:mx-auto"
               : "",
           )}

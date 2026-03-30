@@ -5,7 +5,7 @@ import { clsx } from "clsx";
 import { useKeyboardEvent } from "@react-hookz/web";
 
 import "./index.css";
-import { type ColorMode } from "./interface";
+import { type ColorMode, type WindowSize } from "./interface";
 import { TextButton } from "./components/ui/TextButton";
 import { IconButton } from "./components/ui/IconButton";
 import { Loader } from "./components/ui/Loader";
@@ -16,9 +16,9 @@ import { Icons, BaseText, SmallText } from "./index";
 import { DateInput } from "./components/ui/DateInput";
 import { ProviderStack } from "./ProviderStack";
 import { Radio } from "./components/ui/Radio";
-import { Mock1 } from "./mocks/Mock1";
-import { Mock2 } from "./mocks/Mock2";
-import { Mock3 } from "./mocks/Mock3";
+import { MockText } from "./mocks/MockText";
+import { MockVoice } from "./mocks/MockVoice";
+import { MockVoiceMini } from "./mocks/MockVoiceMini";
 
 type MockVersion = "mock1" | "mock2" | "mock3";
 
@@ -261,6 +261,7 @@ const DesignSystem: FC<unknown> = () => {
   const [colorMode, setColorMode] = useState<ColorMode>("light");
   const [activeMock, setActiveMock] = useState<MockVersion>("mock1");
   const [isMockExpanded, setIsMockExpanded] = useState<boolean>(false);
+  const [windowSize, setWindowSize] = useState<WindowSize>("half");
 
   useEffect(() => {
     const handler = (): void => {
@@ -274,17 +275,30 @@ const DesignSystem: FC<unknown> = () => {
 
   useKeyboardEvent(
     (event) => event.code === "Digit1",
-    () => { setActiveMock("mock1"); },
+    () => {
+      setActiveMock("mock1");
+    },
   );
 
   useKeyboardEvent(
     (event) => event.code === "Digit2",
-    () => { setActiveMock("mock2"); },
+    () => {
+      setActiveMock("mock2");
+    },
   );
 
   useKeyboardEvent(
     (event) => event.code === "Digit3",
-    () => { setActiveMock("mock3"); },
+    () => {
+      setActiveMock("mock3");
+    },
+  );
+
+  useKeyboardEvent(
+    (event) => event.code === "Space",
+    () => {
+      setWindowSize((prev) => (prev === "half" ? "full" : "half"));
+    },
   );
 
   const ActiveTabComponent = tabs.find(
@@ -295,8 +309,13 @@ const DesignSystem: FC<unknown> = () => {
     embedded: false as const,
     colorMode,
     isExpanded: isMockExpanded,
-    onExpand: () => { setIsMockExpanded(true); },
-    onClose: () => { setIsMockExpanded(false); },
+    onExpand: () => {
+      setIsMockExpanded(true);
+    },
+    onClose: () => {
+      setIsMockExpanded(false);
+    },
+    windowSize,
   };
 
   return (
@@ -345,20 +364,45 @@ const DesignSystem: FC<unknown> = () => {
               </div>
             </div>
             <div className="border-t border-primary-10 pt-4">
-              <p className="text-xs font-semibold text-primary-60 mb-2">
-                Chat frame
-              </p>
-              <Radio
-                name="mock-version"
-                options={[
-                  { value: "mock1", label: "Mock 1" },
-                  { value: "mock2", label: "Mock 2" },
-                  { value: "mock3", label: "Mock 3" },
-                ]}
-                value={activeMock}
-                onChange={(value) => { setActiveMock(value as MockVersion); }}
-              />
-              <p className="text-xs text-primary-40 mt-2">or press 1, 2, 3</p>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs font-semibold text-primary-60 mb-2">
+                    Chat frame
+                  </p>
+                  <Radio
+                    name="mock-version"
+                    options={[
+                      { value: "mock1", label: "Text" },
+                      { value: "mock2", label: "Voice" },
+                      { value: "mock3", label: "Voice mini" },
+                    ]}
+                    value={activeMock}
+                    onChange={(value) => {
+                      setActiveMock(value as MockVersion);
+                    }}
+                  />
+                  <p className="text-xs text-primary-40 mt-2">
+                    or press 1, 2, 3
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-primary-60 mb-2">
+                    Window size
+                  </p>
+                  <Radio
+                    name="window-size"
+                    options={[
+                      { value: "half", label: "Half" },
+                      { value: "full", label: "Full" },
+                    ]}
+                    value={windowSize}
+                    onChange={(value) => {
+                      setWindowSize(value as WindowSize);
+                    }}
+                  />
+                  <p className="text-xs text-primary-40 mt-2">or press space</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -378,9 +422,9 @@ const DesignSystem: FC<unknown> = () => {
           )}
         </div>
       </div>
-      {activeMock === "mock1" && <Mock1 {...mockProps} />}
-      {activeMock === "mock2" && <Mock2 {...mockProps} />}
-      {activeMock === "mock3" && <Mock3 {...mockProps} />}
+      {activeMock === "mock1" && <MockText {...mockProps} />}
+      {activeMock === "mock2" && <MockVoice {...mockProps} />}
+      {activeMock === "mock3" && <MockVoiceMini {...mockProps} />}
     </div>
   );
 };
