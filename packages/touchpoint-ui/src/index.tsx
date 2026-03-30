@@ -6,6 +6,7 @@ import { equals } from "ramda";
 import packageJson from "../package.json";
 import App, { type AppRef } from "./App";
 import cssRaw from "./index.css?inline";
+import { adoptPropertyDeclarations } from "./adoptPropertyDeclarations";
 import * as Icons from "./components/ui/Icons";
 import { TextButton } from "./components/ui/TextButton";
 import { IconButton } from "./components/ui/IconButton";
@@ -282,6 +283,7 @@ class NlxTouchpointElement extends HTMLElement {
   #render(): void {
     this.#shadowRoot ??= this.attachShadow({ mode: "closed" });
     this.#root ??= createRoot(this.#shadowRoot);
+    adoptPropertyDeclarations(cssRaw);
     if (this.#touchpointConfiguration != null) {
       const configuration = normalizeConfiguration(
         this.#touchpointConfiguration,
