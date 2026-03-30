@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { type ConversationHandler } from "@nlxai/core";
-import { CustomModalityComponent } from "../../interface";
+import { type CustomModalityComponent } from "../../interface";
 import { DefaultDateInput } from "./DefaultDateInput";
 import { DefaultCard } from "./DefaultCard";
 import { DefaultCarousel } from "./DefaultCarousel";

@@ -279,6 +279,18 @@ const DesignSystem: FC<unknown> = () => {
     };
   }, [setActiveTab]);
 
+  const expandMock = useCallback(() => {
+    setIsMockExpanded(true);
+  }, [setIsMockExpanded]);
+
+  const collapseMock = useCallback(() => {
+    setIsMockExpanded(false);
+  }, [setIsMockExpanded]);
+
+  const toggleMock = useCallback(() => {
+    setIsMockExpanded((prev) => !prev);
+  }, [setIsMockExpanded]);
+
   useKeyboardEvent(
     (event) => event.code === "Digit1",
     () => {
@@ -307,31 +319,9 @@ const DesignSystem: FC<unknown> = () => {
     },
   );
 
-  useKeyboardEvent(
-    (event) => event.code === "Enter",
-    () => {
-      setIsMockExpanded((prev) => !prev);
-    },
-  );
+  useKeyboardEvent((event) => event.code === "Enter", toggleMock);
 
-  useKeyboardEvent(
-    (event) => event.code === "Escape",
-    () => {
-      setIsMockExpanded(false);
-    },
-  );
-
-  const expandMock = useCallback(() => {
-    setIsMockExpanded(true);
-  }, [setIsMockExpanded]);
-
-  const collapseMock = useCallback(() => {
-    setIsMockExpanded(false);
-  }, [setIsMockExpanded]);
-
-  const toggleMock = useCallback(() => {
-    setIsMockExpanded((prev) => !prev);
-  }, [setIsMockExpanded]);
+  useKeyboardEvent((event) => event.code === "Escape", collapseMock);
 
   const ActiveTabComponent = tabs.find(
     ({ tab }) => tab === activeTab,
