@@ -1,10 +1,23 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { type ConversationHandler } from "@nlxai/core";
+import { CustomModalityComponent } from "../../interface";
+import { DefaultDateInput } from "./DefaultDateInput";
+import { DefaultCard } from "./DefaultCard";
+import { DefaultCarousel } from "./DefaultCarousel";
 
 export interface SaveAs {
   type: "slot" | "context" | "choiceId";
   id: string;
 }
+
+export const defaultModalities: Record<
+  string,
+  CustomModalityComponent<unknown>
+> = {
+  DefaultDateInput: DefaultDateInput as CustomModalityComponent<unknown>,
+  DefaultCard: DefaultCard as CustomModalityComponent<unknown>,
+  DefaultCarousel: DefaultCarousel as CustomModalityComponent<unknown>,
+};
 
 export interface CardRow {
   label: string;

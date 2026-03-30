@@ -1,5 +1,11 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { useEffect, useState, type FC, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type FC,
+  type ReactNode,
+} from "react";
 import { createRoot } from "react-dom/client";
 import { clsx } from "clsx";
 import { useKeyboardEvent } from "@react-hookz/web";
@@ -315,22 +321,21 @@ const DesignSystem: FC<unknown> = () => {
     },
   );
 
+  const expandMock = useCallback(() => {
+    setIsMockExpanded(true);
+  }, [setIsMockExpanded]);
+
+  const collapseMock = useCallback(() => {
+    setIsMockExpanded(false);
+  }, [setIsMockExpanded]);
+
+  const toggleMock = useCallback(() => {
+    setIsMockExpanded((prev) => !prev);
+  }, [setIsMockExpanded]);
+
   const ActiveTabComponent = tabs.find(
     ({ tab }) => tab === activeTab,
   )?.component;
-
-  const mockProps = {
-    embedded: false as const,
-    colorMode,
-    isExpanded: isMockExpanded,
-    onExpand: () => {
-      setIsMockExpanded(true);
-    },
-    onClose: () => {
-      setIsMockExpanded(false);
-    },
-    windowSize,
-  };
 
   return (
     <div className="grid grid-cols-[320px_1fr] h-screen">
@@ -436,9 +441,35 @@ const DesignSystem: FC<unknown> = () => {
           )}
         </div>
       </div>
-      {activeMock === "mock1" && <MockText {...mockProps} />}
-      {activeMock === "mock2" && <MockVoice {...mockProps} />}
-      {activeMock === "mock3" && <MockVoiceMini {...mockProps} />}
+      {activeMock === "mock1" && (
+        <MockText
+          embedded={false}
+          colorMode={colorMode}
+          isExpanded={isMockExpanded}
+          onExpand={expandMock}
+          onClose={collapseMock}
+          windowSize={windowSize}
+        />
+      )}
+      {activeMock === "mock2" && (
+        <MockVoice
+          embedded={false}
+          colorMode={colorMode}
+          isExpanded={isMockExpanded}
+          onExpand={expandMock}
+          onClose={collapseMock}
+          windowSize={windowSize}
+        />
+      )}
+      {activeMock === "mock3" && (
+        <MockVoiceMini
+          embedded={false}
+          colorMode={colorMode}
+          isExpanded={isMockExpanded}
+          onExpand={expandMock}
+          onClose={collapseMock}
+        />
+      )}
     </div>
   );
 };

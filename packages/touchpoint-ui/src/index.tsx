@@ -18,9 +18,7 @@ import {
 } from "./components/ui/CustomCard";
 import { Carousel } from "./components/ui/Carousel";
 import { DateInput } from "./components/ui/DateInput";
-import { DefaultDateInput } from "./components/defaultModalities/DefaultDateInput";
-import { DefaultCard } from "./components/defaultModalities/DefaultCard";
-import { DefaultCarousel } from "./components/defaultModalities/DefaultCarousel";
+import { defaultModalities } from "./components/defaultModalities/shared";
 import type {
   TouchpointConfiguration,
   CustomModalityComponent,
@@ -146,26 +144,28 @@ const normalizeConfiguration = (
     ("botUrl" in configuration.config
       ? (configuration.config.botUrl as string)
       : undefined);
+
   if ("botUrl" in configuration.config) {
     // eslint-disable-next-line no-console
     console.warn(
       "The 'botUrl' configuration option is deprecated. Use 'applicationUrl' instead.",
     );
   }
+
   if ("customModalities" in configuration) {
     // eslint-disable-next-line no-console
     console.warn(
       "The 'customModalities' configuration option is deprecated. Use 'modalityComponents' instead.",
     );
   }
+
   const modalityComponents: Record<string, CustomModalityComponent<unknown>> = {
     ...(configuration.modalityComponents ??
       configuration.customModalities ??
       {}),
-    DefaultDateInput: DefaultDateInput as CustomModalityComponent<unknown>,
-    DefaultCard: DefaultCard as CustomModalityComponent<unknown>,
-    DefaultCarousel: DefaultCarousel as CustomModalityComponent<unknown>,
+    ...defaultModalities,
   };
+
   return {
     ...configuration,
     config: {

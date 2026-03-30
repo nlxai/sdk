@@ -11,6 +11,7 @@ import { Messages } from "../components/Messages";
 import { mockConversationHandler, responses } from "./shared";
 import { useFeedback } from "../feedback";
 import { type WindowSize, type ColorMode } from "../interface";
+import { defaultModalities } from "../components/defaultModalities/shared";
 
 export const MockText: FC<{
   embedded: boolean;
@@ -80,7 +81,7 @@ export const MockText: FC<{
           colorMode={colorMode}
           uploadedFiles={{}}
           lastApplicationResponseIndex={3}
-          modalityComponents={{}}
+          modalityComponents={defaultModalities}
           enabled={true}
           feedbackState={feedbackState}
           feedbackActions={feedbackActions}

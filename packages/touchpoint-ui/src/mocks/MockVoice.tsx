@@ -7,11 +7,11 @@ import { Main, HeaderContainer, InputContainer } from "../components/Layout";
 import { IconButton } from "../components/ui/IconButton";
 import { Input } from "../components/Input";
 import { Close } from "../components/ui/Icons";
-import { Messages } from "../components/Messages";
 import { mockConversationHandler, responses } from "./shared";
-import { useFeedback } from "../feedback";
 import { type WindowSize, type ColorMode } from "../interface";
 import { VoiceIcon } from "../components/FullscreenVoice";
+import { VoiceModalities } from "../components/FullscreenVoice";
+import { defaultModalities } from "../components/defaultModalities/shared";
 
 export const MockVoice: FC<{
   embedded: boolean;
@@ -23,8 +23,6 @@ export const MockVoice: FC<{
 }> = (props) => {
   const colorMode = props.colorMode ?? "dark";
   const { isExpanded, onClose, onExpand, windowSize } = props;
-
-  const [feedbackState, feedbackActions] = useFeedback(mockConversationHandler);
 
   if (!isExpanded) {
     return (
@@ -71,8 +69,25 @@ export const MockVoice: FC<{
             type="overlay"
           />
         </HeaderContainer>
-        <div className="grow">
-          <VoiceIcon colorMode={colorMode} addRipple className="relative" />
+        <div className="grow relative">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <VoiceIcon colorMode={colorMode} addRipple className="relative" />
+          </div>
+          <div className="absolute inset-0">
+            <VoiceModalities
+              responses={responses}
+              modalityComponents={defaultModalities}
+              renderedAsOverlay={true}
+              handler={mockConversationHandler}
+              showTranscript={true}
+              className={clsx(
+                "relative p-2 md:p-3",
+                windowSize === "full"
+                  ? "w-full md:max-w-content md:mx-auto"
+                  : "",
+              )}
+            />
+          </div>
         </div>
         <InputContainer windowSize={windowSize}>
           <Input

@@ -56,3 +56,17 @@ export const InputContainer: FC<{
     </div>
   );
 };
+
+export const VoiceMiniFrame: FC<{
+  children: ReactNode;
+  className?: string;
+}> = ({ children, className }) => (
+  <div
+    className={clsx(
+      "bg-background rounded-outer p-2 w-fit flex items-center gap-2",
+      className,
+    )}
+  >
+    {children}
+  </div>
+);
