@@ -1,18 +1,9 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { useKeyboardEvent } from "@react-hookz/web";
-import { useCallback } from "react";
 import {
   ResponseType,
   type Response,
   type ConversationHandler,
 } from "@nlxai/core";
-
-export const useEscapeKeyHandler = (callback: () => void): void => {
-  useKeyboardEvent(
-    (event) => event.code === "Escape",
-    useCallback(callback, [callback]),
-  );
-};
 
 export const mockConversationHandler: ConversationHandler = {
   sendText: () => {},

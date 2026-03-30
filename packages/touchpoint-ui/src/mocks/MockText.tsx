@@ -11,7 +11,6 @@ import { Messages } from "../components/Messages";
 import {
   mockConversationHandler,
   responses,
-  useEscapeKeyHandler,
 } from "./shared";
 import { useFeedback } from "../feedback";
 import { type WindowSize, type ColorMode } from "../interface";
@@ -26,8 +25,6 @@ export const MockText: FC<{
 }> = (props) => {
   const colorMode = props.colorMode ?? "dark";
   const { isExpanded, onClose, onExpand, windowSize } = props;
-
-  useEscapeKeyHandler(onClose);
 
   const [feedbackState, feedbackActions] = useFeedback(mockConversationHandler);
 

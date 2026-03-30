@@ -301,6 +301,20 @@ const DesignSystem: FC<unknown> = () => {
     },
   );
 
+  useKeyboardEvent(
+    (event) => event.code === "Enter",
+    () => {
+      setIsMockExpanded(true);
+    },
+  );
+
+  useKeyboardEvent(
+    (event) => event.code === "Escape",
+    () => {
+      setIsMockExpanded(false);
+    },
+  );
+
   const ActiveTabComponent = tabs.find(
     ({ tab }) => tab === activeTab,
   )?.component;

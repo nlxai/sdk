@@ -8,7 +8,7 @@ import { IconButton } from "../components/ui/IconButton";
 import { Input } from "../components/Input";
 import { Close } from "../components/ui/Icons";
 import { Messages } from "../components/Messages";
-import { mockConversationHandler, responses, useEscapeKeyHandler } from "./shared";
+import { mockConversationHandler, responses } from "./shared";
 import { useFeedback } from "../feedback";
 import { type WindowSize, type ColorMode } from "../interface";
 
@@ -22,8 +22,6 @@ export const MockVoice: FC<{
 }> = (props) => {
   const colorMode = props.colorMode ?? "dark";
   const { isExpanded, onClose, onExpand, windowSize } = props;
-
-  useEscapeKeyHandler(onClose);
 
   const [feedbackState, feedbackActions] = useFeedback(mockConversationHandler);
 
