@@ -14,10 +14,8 @@ import {
   type Context,
   type ConversationHandler,
   type Response,
-  ResponseType,
 } from "@nlxai/core";
 
-import { SafeMarkdown } from "./SafeMarkdown";
 import type { ColorMode, CustomModalityComponent } from "../interface";
 import { FullscreenError } from "./FullscreenError";
 import { Ripple } from "./Ripple";
@@ -26,9 +24,7 @@ import { IconButton } from "./ui/IconButton";
 import { TextButton } from "./ui/TextButton";
 import { Touchpoint, Mic, MicOff, Restart } from "./ui/Icons";
 import { type VoiceHandler, type VoiceState, initiateVoice } from "../voice";
-import { ErrorBoundary } from "react-error-boundary";
-import { ErrorMessage } from "./ErrorMessage";
-import { UserMessage } from "./Messages";
+import { VoiceModalities } from "./VoiceModalities";
 
 interface Props {
   colorMode: ColorMode;
@@ -87,107 +83,6 @@ const Container: FC<{ className?: string; children: ReactNode }> = ({
     {children}
   </div>
 );
-
-interface ModalityEntry {
-  key: string;
-  value: any;
-  Component: CustomModalityComponent<unknown>;
-}
-
-export const VoiceModalities: FC<{
-  className?: string;
-  responses: Response[];
-  modalityComponents: Record<string, CustomModalityComponent<unknown>>;
-  renderedAsOverlay: boolean;
-  showTranscript: boolean;
-  handler: ConversationHandler;
-}> = ({
-  className,
-  responses,
-  renderedAsOverlay,
-  showTranscript,
-  modalityComponents,
-  handler,
-}) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
-  const displayElements = responses
-    .map((response) => {
-      const modalities =
-        (response.type === ResponseType.Application
-          ? response.payload.modalities
-          : undefined) ?? {};
-      const modalityEntries: ModalityEntry[] = Object.entries(modalities)
-        .map(([key, value]) => {
-          const Component = modalityComponents[key];
-          if (Component == null) {
-            return null;
-          }
-          return { key, value, Component };
-        })
-        .filter((entry): entry is ModalityEntry => entry != null);
-      // If nothing is to be rendered, return an explicit `null` so rendering the container can be completely skipped as well
-      if (!showTranscript && modalityEntries.length === 0) {
-        return null;
-      }
-      return (
-        <div className="space-y-2" key={response.receivedAt}>
-          {showTranscript && response.type === ResponseType.Application
-            ? response.payload.messages.map((message, messageIndex) => {
-                return (
-                  <div key={messageIndex} className="text-base">
-                    <SafeMarkdown
-                      className="space-y-6 markdown"
-                      contents={message.text}
-                    />
-                  </div>
-                );
-              })
-            : null}
-          {showTranscript &&
-          response.type === ResponseType.User &&
-          response.payload.type === "text" ? (
-            <UserMessage text={response.payload.text} bubble={false} />
-          ) : null}
-          {modalityEntries.map(({ key, value, Component }) => {
-            return (
-              <Component
-                key={key}
-                renderedAsOverlay={renderedAsOverlay}
-                data={value}
-                conversationHandler={handler}
-                enabled={true}
-              />
-            );
-          })}
-        </div>
-      );
-    })
-    .filter(Boolean);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (container == null) {
-      return;
-    }
-    const lastChild = container.lastChild;
-    if (lastChild instanceof HTMLElement) {
-      lastChild.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [displayElements.length]);
-
-  if (displayElements.length === 0) {
-    return null;
-  }
-
-  return (
-    <div className={className} ref={containerRef}>
-      <ErrorBoundary fallback={<ErrorMessage message="Something went wrong" />}>
-        {displayElements}
-      </ErrorBoundary>
-    </div>
-  );
-};
 
 export const VoiceIcon: FC<{
   brandIcon?: string;
@@ -346,7 +241,7 @@ export const FullscreenVoice: FC<Props> = ({
         addRipple={voice.state?.isApplicationSpeaking ?? false}
       />
       <VoiceModalities
-        className="p-2 md:p-3 w-full max-w-content mx-auto grow overflow-auto border-b border-solid boder-primary-10 z-10"
+        className="p-2 md:p-3 w-full max-w-content mx-auto grow overflow-auto border-b border-solid boder-primary-10 z-10 space-y-2"
         showTranscript={showTranscript}
         responses={responses}
         renderedAsOverlay

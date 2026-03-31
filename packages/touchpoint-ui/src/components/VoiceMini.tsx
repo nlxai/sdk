@@ -14,7 +14,8 @@ import { Ripple } from "./Ripple";
 import { IconButton } from "./ui/IconButton";
 import { Close, Mic, MicOff, Volume, VolumeOff, Restart } from "./ui/Icons";
 import { TextButton } from "./ui/TextButton";
-import { VoiceModalities, useWidgetVoiceState } from "./FullscreenVoice";
+import { useWidgetVoiceState } from "./FullscreenVoice";
+import { VoiceModalities } from "./VoiceModalities";
 import { ErrorMessage } from "./ErrorMessage";
 import {
   VoiceMiniControls,

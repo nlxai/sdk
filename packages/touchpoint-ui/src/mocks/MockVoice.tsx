@@ -66,7 +66,7 @@ export const MockVoice: FC<{
           <div className="absolute inset-0 flex items-center justify-center">
             <VoiceIcon colorMode={colorMode} addRipple className="relative" />
           </div>
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 space-y-4">
             <VoiceModalities
               responses={responses}
               modalityComponents={defaultModalities}
