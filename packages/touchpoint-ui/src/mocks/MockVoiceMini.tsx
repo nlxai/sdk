@@ -8,7 +8,7 @@ import { Close } from "../components/ui/Icons";
 import { mockConversationHandler, mockTheme, responses } from "./shared";
 import { type ColorMode } from "../interface";
 import { VoiceMiniControls, voiceMiniPanelClass } from "../components/Layout";
-import { VoiceModalities } from "../components/FullscreenVoice";
+import { VoiceModalities } from "../components/VoiceModalities";
 import { defaultModalities } from "../components/defaultModalities/shared";
 
 export const MockVoiceMini: FC<{
@@ -39,7 +39,7 @@ export const MockVoiceMini: FC<{
 
   return (
     <ProviderStack
-      className={clsx("fixed bottom-2 right-2")}
+      className={clsx("fixed bottom-2 right-2 z-touchpoint")}
       theme={mockTheme}
       colorMode={colorMode}
       languageCode="en-US"

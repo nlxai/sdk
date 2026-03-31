@@ -1,16 +1,18 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { type FC } from "react";
+import { clsx } from "clsx";
+
 import { ProviderStack } from "../ProviderStack";
 import { LaunchButton } from "../components/ui/LaunchButton";
-import { clsx } from "clsx";
-import { Main, HeaderContainer, InputContainer } from "../components/Layout";
+import { Main, HeaderContainer } from "../components/Layout";
 import { IconButton } from "../components/ui/IconButton";
-import { Input } from "../components/Input";
-import { Close } from "../components/ui/Icons";
+import { Close, Mic } from "../components/ui/Icons";
 import { mockConversationHandler, mockTheme, responses } from "./shared";
 import { type WindowSize, type ColorMode } from "../interface";
-import { VoiceIcon, VoiceModalities } from "../components/FullscreenVoice";
+import { VoiceIcon } from "../components/FullscreenVoice";
 import { defaultModalities } from "../components/defaultModalities/shared";
+import { VoiceModalities } from "../components/VoiceModalities";
+import { Ripple } from "../components/Ripple";
 
 export const MockVoice: FC<{
   embedded: boolean;
@@ -66,7 +68,7 @@ export const MockVoice: FC<{
           <div className="absolute inset-0 flex items-center justify-center">
             <VoiceIcon colorMode={colorMode} addRipple className="relative" />
           </div>
-          <div className="absolute inset-0 space-y-4">
+          <div className="absolute inset-0 overflow-auto">
             <VoiceModalities
               responses={responses}
               modalityComponents={defaultModalities}
@@ -74,7 +76,7 @@ export const MockVoice: FC<{
               handler={mockConversationHandler}
               showTranscript={true}
               className={clsx(
-                "relative p-2 md:p-3",
+                "relative p-2 md:p-3 space-y-4",
                 windowSize === "full"
                   ? "w-full md:max-w-content md:mx-auto"
                   : "",
@@ -82,13 +84,17 @@ export const MockVoice: FC<{
             />
           </div>
         </div>
-        <InputContainer windowSize={windowSize}>
-          <Input
-            enabled
-            handler={mockConversationHandler}
-            onFileUpload={() => {}}
-          />
-        </InputContainer>
+        <div className="flex items-center justify-center py-4">
+          <div className="w-fit relative">
+            <Ripple className="rounded-inner" />
+            <IconButton
+              Icon={Mic}
+              label="Voice"
+              type={"activated"}
+              onClick={() => {}}
+            />
+          </div>
+        </div>
       </Main>
     </ProviderStack>
   );

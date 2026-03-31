@@ -65,7 +65,7 @@ export const VoiceMiniControls: FC<{
 }> = ({ children, className }) => (
   <div
     className={clsx(
-      "bg-background rounded-outer p-2 w-fit flex items-center gap-2",
+      "bg-background backdrop-blur-overlay rounded-outer p-2 w-fit flex items-center gap-2",
       className,
     )}
   >
@@ -74,7 +74,7 @@ export const VoiceMiniControls: FC<{
 );
 
 export const voiceMiniPanelClass =
-  "bg-background backdrop-blur-sm text-primary-80 rounded-outer p-2 w-[calc(100vw-16px)] max-w-[360px] space-y-4";
+  "bg-background backdrop-blur-overlay text-primary-80 rounded-outer p-2 w-[calc(100vw-16px)] max-w-[360px] space-y-4";
 
 export const VoiceMiniPanel: FC<{
   children: ReactNode;
