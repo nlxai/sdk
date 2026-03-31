@@ -110,7 +110,7 @@ export const VoiceIcon: FC<{
           <Touchpoint className="w-full h-full text-primary-40" />
         ) : null}
       </div>
-      {addRipple ? <Ripple className="rounded-full" /> : null}
+      {addRipple ? <Ripple className="rounded-full z-[-1]" /> : null}
     </div>
   );
 };
@@ -237,11 +237,11 @@ export const FullscreenVoice: FC<Props> = ({
       <VoiceIcon
         brandIcon={brandIcon}
         colorMode={colorMode}
-        className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 z-0"
+        className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 z-[-1]"
         addRipple={voice.state?.isApplicationSpeaking ?? false}
       />
       <VoiceModalities
-        className="p-2 md:p-3 w-full max-w-content mx-auto grow overflow-auto border-b border-solid boder-primary-10 z-10 space-y-2"
+        className="p-2 md:p-3 w-full max-w-content mx-auto grow overflow-auto border-b border-solid boder-primary-10 space-y-2"
         showTranscript={showTranscript}
         responses={responses}
         renderedAsOverlay

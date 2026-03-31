@@ -68,21 +68,18 @@ export const MockVoice: FC<{
           <div className="absolute inset-0 flex items-center justify-center">
             <VoiceIcon colorMode={colorMode} addRipple className="relative" />
           </div>
-          <div className="absolute inset-0 overflow-auto">
-            <VoiceModalities
-              responses={responses}
-              modalityComponents={defaultModalities}
-              renderedAsOverlay={true}
-              handler={mockConversationHandler}
-              showTranscript={true}
-              className={clsx(
-                "relative p-2 md:p-3 space-y-4",
-                windowSize === "full"
-                  ? "w-full md:max-w-content md:mx-auto"
-                  : "",
-              )}
-            />
-          </div>
+          <VoiceModalities
+            responses={responses}
+            modalityComponents={defaultModalities}
+            renderedAsOverlay={true}
+            handler={mockConversationHandler}
+            showTranscript={true}
+            className={clsx(
+              "absolute inset-0 overflow-auto p-2 md:p-3 space-y-4 z-10",
+              "border-b border-solid border-primary-10",
+              windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
+            )}
+          />
         </div>
         <div className="flex items-center justify-center py-4">
           <div className="w-fit relative">
