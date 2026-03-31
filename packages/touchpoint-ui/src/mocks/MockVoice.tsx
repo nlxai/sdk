@@ -64,7 +64,12 @@ export const MockVoice: FC<{
             type="overlay"
           />
         </HeaderContainer>
-        <div className="grow relative">
+        <div
+          className={clsx(
+            "grow relative",
+            windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
+          )}
+        >
           <div className="absolute inset-0 flex items-center justify-center">
             <VoiceIcon colorMode={colorMode} addRipple className="relative" />
           </div>
@@ -77,11 +82,10 @@ export const MockVoice: FC<{
             className={clsx(
               "absolute inset-0 overflow-auto p-2 md:p-3 space-y-4 z-10",
               "border-b border-solid border-primary-10",
-              windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
             )}
           />
         </div>
-        <div className="flex items-center justify-center py-4">
+        <div className="flex items-center justify-center py-4 flex-none">
           <div className="w-fit relative">
             <Ripple className="rounded-inner" />
             <IconButton

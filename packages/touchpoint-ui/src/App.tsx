@@ -410,7 +410,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             setIsSettingsOpen(false);
           }}
           className={clsx(
-            "flex-none",
             windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
           )}
           onClose={() => {
@@ -475,7 +474,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       {isSettingsOpen ? (
         <Settings
           className={clsx(
-            "flex-none",
             windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
           )}
           onClose={() => {
@@ -496,7 +494,10 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         handler={handler}
         speakersEnabled={fullscreenVoiceSpeakersEnabled}
         colorMode={colorMode}
-        className={isSettingsOpen ? "hidden" : "grow"}
+        className={clsx(
+          isSettingsOpen ? "hidden" : "grow",
+          windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
+        )}
         context={props.initialContext}
         modalityComponents={modalityComponents}
       />

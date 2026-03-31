@@ -234,32 +234,41 @@ export const FullscreenVoice: FC<Props> = ({
 
   return (
     <Container className={className}>
-      <VoiceIcon
-        brandIcon={brandIcon}
-        colorMode={colorMode}
-        className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 z-[-1]"
-        addRipple={voice.state?.isApplicationSpeaking ?? false}
-      />
-      <VoiceModalities
-        className="p-2 md:p-3 w-full max-w-content mx-auto grow overflow-auto border-b border-solid boder-primary-10 space-y-2"
-        showTranscript={showTranscript}
-        responses={responses}
-        renderedAsOverlay
-        modalityComponents={modalityComponents}
-        handler={handler}
-      />
-      <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-0">
-        {voice.state?.isUserSpeaking ? (
-          <Ripple className="rounded-inner" />
-        ) : null}
-        <IconButton
-          Icon={micEnabled ? Mic : MicOff}
-          label="Voice"
-          type={micEnabled ? "activated" : "ghost"}
-          onClick={() => {
-            setMicEnabled((prev) => !prev);
-          }}
+      <div className="relative grow">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <VoiceIcon
+            colorMode={colorMode}
+            addRipple={voice.state?.isApplicationSpeaking ?? false}
+            brandIcon={brandIcon}
+            className="relative"
+          />
+        </div>
+        <VoiceModalities
+          className={clsx(
+            "absolute inset-0 overflow-auto p-2 md:p-3 space-y-4 z-10",
+            "border-b border-solid border-primary-10",
+          )}
+          showTranscript={showTranscript}
+          responses={responses}
+          renderedAsOverlay
+          modalityComponents={modalityComponents}
+          handler={handler}
         />
+      </div>
+      <div className="flex items-center justify-center py-4 flex-none">
+        <div className="w-fit relative">
+          {voice.state?.isUserSpeaking ? (
+            <Ripple className="rounded-inner" />
+          ) : null}
+          <IconButton
+            Icon={micEnabled ? Mic : MicOff}
+            label="Voice"
+            type={micEnabled ? "activated" : "ghost"}
+            onClick={() => {
+              setMicEnabled((prev) => !prev);
+            }}
+          />
+        </div>
       </div>
     </Container>
   );
