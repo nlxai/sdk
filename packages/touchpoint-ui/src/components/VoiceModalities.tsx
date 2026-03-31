@@ -1,5 +1,6 @@
-import { FC, useEffect, useRef } from "react";
-import { CustomModalityComponent } from "../interface";
+/* eslint-disable jsdoc/require-jsdoc */
+import { type FC, useEffect, useRef } from "react";
+import { type CustomModalityComponent } from "../interface";
 import {
   type Response,
   type ConversationHandler,
