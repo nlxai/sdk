@@ -66,34 +66,37 @@ export const MockVoice: FC<{
         </HeaderContainer>
         <div
           className={clsx(
-            "grow relative",
+            "grow flex flex-col",
             windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
           )}
         >
-          <div className="absolute inset-0 flex items-center justify-center">
-            <VoiceIcon colorMode={colorMode} addRipple className="relative" />
-          </div>
-          <VoiceModalities
-            responses={responses}
-            modalityComponents={defaultModalities}
-            renderedAsOverlay={true}
-            handler={mockConversationHandler}
-            showTranscript={true}
-            className={clsx(
-              "absolute inset-0 overflow-auto p-2 md:p-3 space-y-4 z-10",
-              "border-b border-solid border-primary-10",
-            )}
-          />
-        </div>
-        <div className="flex items-center justify-center py-4 flex-none">
-          <div className="w-fit relative">
-            <Ripple className="rounded-inner" />
-            <IconButton
-              Icon={Mic}
-              label="Voice"
-              type={"activated"}
-              onClick={() => {}}
+          <div className="relative grow">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <VoiceIcon colorMode={colorMode} addRipple className="relative" />
+            </div>
+            <VoiceModalities
+              responses={responses}
+              modalityComponents={defaultModalities}
+              renderedAsOverlay={true}
+              handler={mockConversationHandler}
+              showTranscript={true}
+              className={clsx(
+                "w-full",
+                "absolute inset-0 overflow-auto p-2 md:p-3 space-y-4 z-10",
+                "border-b border-solid border-primary-10",
+              )}
             />
+          </div>
+          <div className="flex items-center justify-center py-4 flex-none">
+            <div className="w-fit relative">
+              <Ripple className="rounded-inner" />
+              <IconButton
+                Icon={Mic}
+                label="Voice"
+                type={"activated"}
+                onClick={() => {}}
+              />
+            </div>
           </div>
         </div>
       </Main>
