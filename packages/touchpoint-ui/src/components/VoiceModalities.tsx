@@ -1,5 +1,11 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type RefObject, type FC, useEffect, useRef } from "react";
+import {
+  type RefObject,
+  type ReactNode,
+  type FC,
+  useEffect,
+  useRef,
+} from "react";
 import { type CustomModalityComponent } from "../interface";
 import {
   type Response,
@@ -35,6 +41,31 @@ const useScrollToBottom = <T,>(
   }, [containerRef, dependency]);
 };
 
+// Extract valid modality components from a response, along with the value for the `data` prop.
+const toModalityEntries = (
+  response: Response,
+  modalityComponents: Record<string, CustomModalityComponent<unknown>>,
+): Array<{
+  key: string;
+  value: unknown;
+  Component: CustomModalityComponent<unknown>;
+}> => {
+  const modalities =
+    (response.type === ResponseType.Application
+      ? response.payload.modalities
+      : undefined) ?? {};
+
+  return Object.entries(modalities)
+    .map(([key, value]) => {
+      const Component = modalityComponents[key];
+      if (Component == null) {
+        return null;
+      }
+      return { key, value, Component };
+    })
+    .filter((entry): entry is ModalityEntry => entry != null);
+};
+
 export const VoiceModalities: FC<{
   className?: string;
   responses: Response[];
@@ -52,22 +83,13 @@ export const VoiceModalities: FC<{
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const displayElements = responses
+  /**
+   * Assemble a list of rendered components. If the list is empty (e.g. a voice transcript isn't shown and there are no modalities),
+   * the component must render `null` out of layout constraints.
+   */
+  const displayElements: ReactNode[] = responses
     .map((response) => {
-      const modalities =
-        (response.type === ResponseType.Application
-          ? response.payload.modalities
-          : undefined) ?? {};
-
-      const modalityEntries: ModalityEntry[] = Object.entries(modalities)
-        .map(([key, value]) => {
-          const Component = modalityComponents[key];
-          if (Component == null) {
-            return null;
-          }
-          return { key, value, Component };
-        })
-        .filter((entry): entry is ModalityEntry => entry != null);
+      const modalityEntries = toModalityEntries(response, modalityComponents);
 
       // If nothing is to be rendered, return an explicit `null` so rendering the container can be completely skipped as well
       if (!showTranscript && modalityEntries.length === 0) {
