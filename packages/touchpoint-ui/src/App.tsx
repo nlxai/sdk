@@ -40,6 +40,7 @@ import { VoiceMini } from "./components/VoiceMini";
 import { gatherAutomaticContext } from "./bidirectional/automaticContext";
 import { commandHandler } from "./bidirectional/commandHandler";
 import { RiveAnimation } from "./components/RiveAnimation";
+import { Main, InputContainer } from "./components/Layout";
 
 import { useFeedback } from "./feedback";
 import { FeedbackComment } from "./components/FeedbackComment";
@@ -409,7 +410,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             setIsSettingsOpen(false);
           }}
           className={clsx(
-            "flex-none",
             windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
           )}
           onClose={() => {
@@ -444,12 +444,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
             windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
           )}
         />
-        <div
-          className={clsx(
-            "p-2 md:p-3 flex flex-col flex-none gap-2",
-            windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
-          )}
-        >
+        <InputContainer windowSize={windowSize}>
           {choiceMessage != null ? (
             <MessageChoices {...choiceMessage} handler={handler} />
           ) : null}
@@ -469,10 +464,49 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               }}
             />
           )}
-        </div>
+        </InputContainer>
       </>
     );
   };
+
+  const voiceContent = (
+    <>
+      {isSettingsOpen ? (
+        <Settings
+          className={clsx(
+            windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
+          )}
+          onClose={() => {
+            setIsSettingsOpen(false);
+          }}
+          reset={() => {
+            reset();
+            setIsSettingsOpen(false);
+          }}
+          handler={handler}
+        />
+      ) : null}
+      <FullscreenVoice
+        key={voiceKey}
+        responses={responses}
+        brandIcon={props.brandIcon}
+        showTranscript={props.showVoiceTranscript ?? false}
+        handler={handler}
+        speakersEnabled={fullscreenVoiceSpeakersEnabled}
+        colorMode={colorMode}
+        className={clsx(
+          /**
+           * IMPORTANT: when settings are open, the component must still be mounted, even if hidden by CSS, as it has local state and effects
+           * that keep the call going.
+           */
+          isSettingsOpen ? "hidden" : "grow",
+          windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
+        )}
+        context={props.initialContext}
+        modalityComponents={modalityComponents}
+      />
+    </>
+  );
 
   return (
     <ProviderStack
@@ -488,16 +522,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       {windowSize === "half" ? (
         <div className="hidden md:block bg-overlay" />
       ) : null}
-      <div
-        className={clsx(
-          "@container/main",
-          "w-full bg-background text-primary-80 flex relative flex-col h-full backdrop-blur-overlay",
-          {
-            "col-span-2 md:col-span-1": windowSize === "half",
-            "col-span-2": windowSize === "full",
-          },
-        )}
-      >
+      <Main windowSize={windowSize}>
         {feedbackState.comment.state !== "idle" ? (
           <FeedbackComment
             feedbackActions={feedbackActions}
@@ -534,45 +559,10 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
               collapse={onClose}
               reset={reset}
             />
-            {input === "text" ? (
-              textContent()
-            ) : (
-              <>
-                {isSettingsOpen ? (
-                  <Settings
-                    className={clsx(
-                      "flex-none",
-                      windowSize === "full"
-                        ? "w-full md:max-w-content md:mx-auto"
-                        : "",
-                    )}
-                    onClose={() => {
-                      setIsSettingsOpen(false);
-                    }}
-                    reset={() => {
-                      reset();
-                      setIsSettingsOpen(false);
-                    }}
-                    handler={handler}
-                  />
-                ) : null}
-                <FullscreenVoice
-                  key={voiceKey}
-                  responses={responses}
-                  brandIcon={props.brandIcon}
-                  showTranscript={props.showVoiceTranscript ?? false}
-                  handler={handler}
-                  speakersEnabled={fullscreenVoiceSpeakersEnabled}
-                  colorMode={colorMode}
-                  className={isSettingsOpen ? "hidden" : "grow"}
-                  context={props.initialContext}
-                  modalityComponents={modalityComponents}
-                />
-              </>
-            )}
+            {input === "text" ? textContent() : voiceContent}
           </>
         )}
-      </div>
+      </Main>
     </ProviderStack>
   );
 });

@@ -5,7 +5,6 @@ import {
   useRef,
   useEffect,
   type FC,
-  type ReactNode,
   type Dispatch,
   type SetStateAction,
 } from "react";
@@ -14,10 +13,8 @@ import {
   type Context,
   type ConversationHandler,
   type Response,
-  ResponseType,
 } from "@nlxai/core";
 
-import { SafeMarkdown } from "./SafeMarkdown";
 import type { ColorMode, CustomModalityComponent } from "../interface";
 import { FullscreenError } from "./FullscreenError";
 import { Ripple } from "./Ripple";
@@ -26,9 +23,7 @@ import { IconButton } from "./ui/IconButton";
 import { TextButton } from "./ui/TextButton";
 import { Touchpoint, Mic, MicOff, Restart } from "./ui/Icons";
 import { type VoiceHandler, type VoiceState, initiateVoice } from "../voice";
-import { ErrorBoundary } from "react-error-boundary";
-import { ErrorMessage } from "./ErrorMessage";
-import { UserMessage } from "./Messages";
+import { VoiceModalities } from "./VoiceModalities";
 
 interface Props {
   colorMode: ColorMode;
@@ -74,117 +69,33 @@ export const useWidgetVoiceState = (): [
   return [voice, setVoice];
 };
 
-const Container: FC<{ className?: string; children: ReactNode }> = ({
-  className,
-  children,
-}) => (
-  <div
-    className={clsx(
-      "relative flex flex-col items-center justify-center",
-      className,
-    )}
-  >
-    {children}
-  </div>
-);
-
-interface ModalityEntry {
-  key: string;
-  value: any;
-  Component: CustomModalityComponent<unknown>;
-}
-
-export const VoiceModalities: FC<{
+export const VoiceIcon: FC<{
+  brandIcon?: string;
+  colorMode: ColorMode;
+  addRipple: boolean;
   className?: string;
-  responses: Response[];
-  modalityComponents: Record<string, CustomModalityComponent<unknown>>;
-  renderedAsOverlay: boolean;
-  showTranscript: boolean;
-  handler: ConversationHandler;
-}> = ({
-  className,
-  responses,
-  renderedAsOverlay,
-  showTranscript,
-  modalityComponents,
-  handler,
-}) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
-  const displayElements = responses
-    .map((response) => {
-      const modalities =
-        (response.type === ResponseType.Application
-          ? response.payload.modalities
-          : undefined) ?? {};
-      const modalityEntries: ModalityEntry[] = Object.entries(modalities)
-        .map(([key, value]) => {
-          const Component = modalityComponents[key];
-          if (Component == null) {
-            return null;
-          }
-          return { key, value, Component };
-        })
-        .filter((entry): entry is ModalityEntry => entry != null);
-      // If nothing is to be rendered, return an explicit `null` so rendering the container can be completely skipped as well
-      if (!showTranscript && modalityEntries.length === 0) {
-        return null;
-      }
-      return (
-        <div className="space-y-2" key={response.receivedAt}>
-          {showTranscript && response.type === ResponseType.Application
-            ? response.payload.messages.map((message, messageIndex) => {
-                return (
-                  <div key={messageIndex} className="text-base">
-                    <SafeMarkdown
-                      className="space-y-6 markdown"
-                      contents={message.text}
-                    />
-                  </div>
-                );
-              })
-            : null}
-          {showTranscript &&
-          response.type === ResponseType.User &&
-          response.payload.type === "text" ? (
-            <UserMessage text={response.payload.text} bubble={false} />
-          ) : null}
-          {modalityEntries.map(({ key, value, Component }) => {
-            return (
-              <Component
-                key={key}
-                renderedAsOverlay={renderedAsOverlay}
-                data={value}
-                conversationHandler={handler}
-                enabled={true}
-              />
-            );
-          })}
-        </div>
-      );
-    })
-    .filter(Boolean);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (container == null) {
-      return;
-    }
-    const lastChild = container.lastChild;
-    if (lastChild instanceof HTMLElement) {
-      lastChild.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [displayElements.length]);
-
-  if (displayElements.length === 0) {
-    return null;
-  }
-
+}> = ({ brandIcon, colorMode, addRipple, className }) => {
   return (
-    <div className={className} ref={containerRef}>
-      <ErrorBoundary fallback={<ErrorMessage message="Something went wrong" />}>
-        {displayElements}
-      </ErrorBoundary>
+    <div className={clsx("rounded-full w-fit", className)}>
+      <div
+        className={clsx(
+          "w-[128px] h-[128px] p-4 relative rounded-full overflow-hidden bg-cover bg-center",
+          // This color imitates primary5 overlayed on the regular background, but it has to be solid
+          brandIcon != null
+            ? ""
+            : colorMode === "dark"
+              ? "bg-[rgb(40,41,47)]"
+              : "bg-[rgb(175,175,175)]",
+        )}
+        style={
+          brandIcon != null ? { backgroundImage: `url(${brandIcon})` } : {}
+        }
+      >
+        {brandIcon == null ? (
+          <Touchpoint className="w-full h-full text-primary-40" />
+        ) : null}
+      </div>
+      {addRipple ? <Ripple className="rounded-full z-[-1]" /> : null}
     </div>
   );
 };
@@ -264,15 +175,17 @@ export const FullscreenVoice: FC<Props> = ({
 
   if (voice == null || voice === "loading") {
     return (
-      <Container className={className}>
+      <div
+        className={clsx("flex flex-col items-center justify-center", className)}
+      >
         <Loader />
-      </Container>
+      </div>
     );
   }
 
   if (voice.type === "error") {
     return (
-      <Container className={className}>
+      <div className={clsx("flex flex-col", className)}>
         <FullscreenError />
         <div className="w-full px-3 h-20 flex items-center max-w-content mx-auto">
           <TextButton
@@ -284,74 +197,66 @@ export const FullscreenVoice: FC<Props> = ({
             }}
           />
         </div>
-      </Container>
+      </div>
     );
   }
 
   if (voice.state?.isTerminated) {
     return (
-      <Container className={className}>
-        <div
-          className={clsx(
-            "grow flex flex-col items-center justify-center gap-6 text-primary-80",
-          )}
-        >
-          <Touchpoint className="w-20 h-20 text-primary-20" />
-          <div className="text-center">
-            <h3 className="text-xl mb-2">The conversation has ended</h3>
-            <p>You can close this panel now or restart.</p>
-          </div>
+      <div
+        className={clsx(
+          "flex flex-col items-center justify-center gap-6 text-primary-80",
+          className,
+        )}
+      >
+        <Touchpoint className="w-20 h-20 text-primary-20" />
+        <div className="text-center">
+          <h3 className="text-xl mb-2">The conversation has ended</h3>
+          <p>You can close this panel now or restart.</p>
         </div>
-      </Container>
+      </div>
     );
   }
 
   return (
-    <Container className={className}>
-      <div className="rounded-full w-fit absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 z-0">
-        <div
-          className={clsx(
-            "w-[128px] h-[128px] p-4 relative rounded-full overflow-hidden bg-cover bg-center",
-            // This color imitates primary5 overlayed on the regular background, but it has to be solid
-            brandIcon != null
-              ? ""
-              : colorMode === "dark"
-                ? "bg-[rgb(40,41,47)]"
-                : "bg-[rgb(175,175,175)]",
-          )}
-          style={
-            brandIcon != null ? { backgroundImage: `url(${brandIcon})` } : {}
-          }
-        >
-          {brandIcon == null ? (
-            <Touchpoint className="w-full h-full text-primary-40" />
-          ) : null}
+    <div className={clsx("flex flex-col", className)}>
+      <div className="relative grow">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <VoiceIcon
+            colorMode={colorMode}
+            addRipple={voice.state?.isApplicationSpeaking ?? false}
+            brandIcon={brandIcon}
+            className="relative"
+          />
         </div>
-        {voice.state?.isApplicationSpeaking ? (
-          <Ripple className="rounded-full" />
-        ) : null}
-      </div>
-      <VoiceModalities
-        className="p-2 md:p-3 w-full max-w-content mx-auto grow overflow-auto border-b border-solid boder-primary-10 z-10"
-        showTranscript={showTranscript}
-        responses={responses}
-        renderedAsOverlay
-        modalityComponents={modalityComponents}
-        handler={handler}
-      />
-      <div className="w-fit flex-none absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-0">
-        {voice.state?.isUserSpeaking ? (
-          <Ripple className="rounded-inner" />
-        ) : null}
-        <IconButton
-          Icon={micEnabled ? Mic : MicOff}
-          label="Voice"
-          type={micEnabled ? "activated" : "ghost"}
-          onClick={() => {
-            setMicEnabled((prev) => !prev);
-          }}
+        <VoiceModalities
+          className={clsx(
+            "w-full",
+            "absolute inset-0 overflow-auto p-2 md:p-3 space-y-4 z-10",
+            "border-b border-solid border-primary-10",
+          )}
+          showTranscript={showTranscript}
+          responses={responses}
+          renderedAsOverlay
+          modalityComponents={modalityComponents}
+          handler={handler}
         />
       </div>
-    </Container>
+      <div className="flex items-center justify-center py-4 flex-none">
+        <div className="w-fit relative">
+          {voice.state?.isUserSpeaking ? (
+            <Ripple className="rounded-inner" />
+          ) : null}
+          <IconButton
+            Icon={micEnabled ? Mic : MicOff}
+            label="Voice"
+            type={micEnabled ? "activated" : "ghost"}
+            onClick={() => {
+              setMicEnabled((prev) => !prev);
+            }}
+          />
+        </div>
+      </div>
+    </div>
   );
 };
