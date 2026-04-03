@@ -28,7 +28,7 @@ const useScrollToBottom = (
   containerRef: RefObject<HTMLElement>,
   // Dependency list controlling when scrolling should take place
   deps: DependencyList,
-) => {
+): void => {
   useEffect(() => {
     const container = containerRef.current;
     if (container == null) {
