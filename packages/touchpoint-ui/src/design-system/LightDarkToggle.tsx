@@ -1,7 +1,8 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import { type FC } from "react";
 import { clsx } from "clsx";
 import { type ColorMode } from "../interface";
-import { Icon, iconSvgProps } from "../components/ui/Icons";
+import { type Icon, iconSvgProps } from "../components/ui/Icons";
 
 export const LightMode: Icon = (props) => {
   return (
