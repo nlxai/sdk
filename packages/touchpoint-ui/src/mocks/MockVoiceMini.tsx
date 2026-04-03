@@ -9,7 +9,7 @@ import { mockConversationHandler, mockTheme, responses } from "./shared";
 import { type ColorMode } from "../interface";
 import { VoiceMiniControls, voiceMiniPanelClass } from "../components/Layout";
 import { VoiceModalities } from "../components/VoiceModalities";
-import { defaultModalities } from "../components/defaultModalities/shared";
+import { defaultModalities } from "../components/defaultModalities";
 
 export const MockVoiceMini: FC<{
   colorMode?: ColorMode;

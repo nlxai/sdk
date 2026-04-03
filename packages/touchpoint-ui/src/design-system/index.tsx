@@ -10,21 +10,21 @@ import { createRoot } from "react-dom/client";
 import { clsx } from "clsx";
 import { useKeyboardEvent } from "@react-hookz/web";
 
-import "./index.css";
-import { type ColorMode, type WindowSize } from "./interface";
-import { TextButton } from "./components/ui/TextButton";
-import { IconButton } from "./components/ui/IconButton";
-import { Loader } from "./components/ui/Loader";
-import { LightDarkToggle } from "./components/ui/LightDarkToggle";
-import { CustomCard, CustomCardRow } from "./components/ui/CustomCard";
-import { ArrowRight, Close, Touchpoint } from "./components/ui/Icons";
-import { Icons, BaseText, SmallText } from "./index";
-import { DateInput } from "./components/ui/DateInput";
-import { ProviderStack } from "./ProviderStack";
-import { Radio } from "./components/ui/Radio";
-import { MockText } from "./mocks/MockText";
-import { MockVoice } from "./mocks/MockVoice";
-import { MockVoiceMini } from "./mocks/MockVoiceMini";
+import "../index.css";
+import { type ColorMode, type WindowSize } from "../interface";
+import { TextButton } from "../components/ui/TextButton";
+import { IconButton } from "../components/ui/IconButton";
+import { Loader } from "../components/ui/Loader";
+import { LightDarkToggle } from "./LightDarkToggle";
+import { CustomCard, CustomCardRow } from "../components/ui/CustomCard";
+import { ArrowRight, Close, Touchpoint } from "../components/ui/Icons";
+import { Icons, BaseText, SmallText } from "../index";
+import { DateInput } from "../components/ui/DateInput";
+import { ProviderStack } from "../ProviderStack";
+import { Radio } from "../components/ui/Radio";
+import { MockText } from "../mocks/MockText";
+import { MockVoice } from "../mocks/MockVoice";
+import { MockVoiceMini } from "../mocks/MockVoiceMini";
 
 type MockVersion = "mock1" | "mock2" | "mock3";
 

@@ -10,7 +10,7 @@ import { Close, Mic } from "../components/ui/Icons";
 import { mockConversationHandler, mockTheme, responses } from "./shared";
 import { type WindowSize, type ColorMode } from "../interface";
 import { VoiceIcon } from "../components/FullscreenVoice";
-import { defaultModalities } from "../components/defaultModalities/shared";
+import { defaultModalities } from "../components/defaultModalities";
 import { VoiceModalities } from "../components/VoiceModalities";
 import { Ripple } from "../components/Ripple";
 

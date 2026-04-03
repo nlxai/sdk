@@ -26,7 +26,7 @@ const designSystemEntryPoint = (): PluginOption => {
 <body>
   <main></main>
   <script type="module">
-    import { renderDesignSystem } from "./src/design-system.tsx";
+    import { renderDesignSystem } from "./src/design-system/index.tsx";
 
     renderDesignSystem(document.querySelector("main"));
   </script>

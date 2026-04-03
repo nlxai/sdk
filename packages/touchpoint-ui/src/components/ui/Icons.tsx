@@ -20,7 +20,7 @@ export interface IconProps {
  */
 export type Icon = FC<IconProps>;
 
-const iconSvgProps = (props: IconProps): SVGProps<SVGSVGElement> => ({
+export const iconSvgProps = (props: IconProps): SVGProps<SVGSVGElement> => ({
   width: props.size != null ? `${props.size}px` : "100%",
   height: props.size != null ? `${props.size}px` : "100%",
   className: props.className,
@@ -534,28 +534,6 @@ export const OpenLink: Icon = (props) => {
     <svg viewBox="0 0 16 16" {...iconSvgProps(props)} fill="currentColor">
       <path d="M12.6667 7.33326V12.6666H3.33333V3.33326H8.66667V1.99992H3.33333C2.6 1.99992 2 2.59992 2 3.33326V12.6666C2 13.3999 2.6 13.9999 3.33333 13.9999H12.6667C13.4 13.9999 14 13.3999 14 12.6666V7.33326H12.6667Z" />
       <path d="M14.0183 1.97412L10.0699 1.97412L11.5506 3.45477L7.66668 7.33327L8.65378 8.32037L12.5377 4.44188L14.0183 5.92253V1.97412Z" />
-    </svg>
-  );
-};
-
-export const LightMode: Icon = (props) => {
-  return (
-    <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
-      <path
-        d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-};
-
-export const DarkMode: Icon = (props) => {
-  return (
-    <svg viewBox="0 0 24 24" {...iconSvgProps(props)}>
-      <path
-        d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1"
-        fill="currentColor"
-      />
     </svg>
   );
 };

@@ -18,7 +18,7 @@ import {
 } from "./components/ui/CustomCard";
 import { Carousel } from "./components/ui/Carousel";
 import { DateInput } from "./components/ui/DateInput";
-import { defaultModalities } from "./components/defaultModalities/shared";
+import { defaultModalities } from "./components/defaultModalities";
 import type {
   TouchpointConfiguration,
   CustomModalityComponent,

@@ -11,7 +11,7 @@ import { Messages } from "../components/Messages";
 import { mockConversationHandler, mockTheme, responses } from "./shared";
 import { useFeedback } from "../feedback";
 import { type WindowSize, type ColorMode } from "../interface";
-import { defaultModalities } from "../components/defaultModalities/shared";
+import { defaultModalities } from "../components/defaultModalities";
 
 export const MockText: FC<{
   embedded: boolean;
