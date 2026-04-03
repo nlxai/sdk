@@ -496,8 +496,8 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
         colorMode={colorMode}
         className={clsx(
           /**
-           * IMPORTANT: when settings are open, the component must still be mounted, even if hidden by CSS, as it has local state management
-           * that keeps the call going.
+           * IMPORTANT: when settings are open, the component must still be mounted, even if hidden by CSS, as it has local state and effects
+           * that keep the call going.
            */
           isSettingsOpen ? "hidden" : "grow",
           windowSize === "full" ? "w-full md:max-w-content md:mx-auto" : "",
