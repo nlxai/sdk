@@ -1,5 +1,11 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type FC, useEffect, useRef } from "react";
+import {
+  type DependencyList,
+  type RefObject,
+  type FC,
+  useEffect,
+  useRef,
+} from "react";
 import { type CustomModalityComponent } from "../interface";
 import {
   type Response,
@@ -16,6 +22,24 @@ interface ModalityEntry {
   value: any;
   Component: CustomModalityComponent<unknown>;
 }
+
+const useScrollToBottom = (
+  // Container element - scrolling always happens to the last child
+  containerRef: RefObject<HTMLElement>,
+  // Dependency list controlling when scrolling should take place
+  deps: DependencyList,
+) => {
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container == null) {
+      return;
+    }
+    const lastChild = container.lastChild;
+    if (lastChild instanceof HTMLElement) {
+      lastChild.scrollIntoView({ behavior: "smooth" });
+    }
+  }, deps);
+};
 
 export const VoiceModalities: FC<{
   className?: string;
@@ -90,16 +114,7 @@ export const VoiceModalities: FC<{
     })
     .filter(Boolean);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (container == null) {
-      return;
-    }
-    const lastChild = container.lastChild;
-    if (lastChild instanceof HTMLElement) {
-      lastChild.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [displayElements.length]);
+  useScrollToBottom(containerRef, [displayElements.length]);
 
   if (displayElements.length === 0) {
     return null;
