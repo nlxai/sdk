@@ -20,7 +20,7 @@ export interface IconProps {
  */
 export type Icon = FC<IconProps>;
 
-export const iconSvgProps = (props: IconProps): SVGProps<SVGSVGElement> => ({
+const iconSvgProps = (props: IconProps): SVGProps<SVGSVGElement> => ({
   width: props.size != null ? `${props.size}px` : "100%",
   height: props.size != null ? `${props.size}px` : "100%",
   className: props.className,

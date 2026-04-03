@@ -1,8 +1,14 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type FC } from "react";
+import { type SVGProps, type FC } from "react";
 import { clsx } from "clsx";
 import { type ColorMode } from "../interface";
-import { type Icon, iconSvgProps } from "../components/ui/Icons";
+import { type Icon, type IconProps } from "../components/ui/Icons";
+
+const iconSvgProps = (props: IconProps): SVGProps<SVGSVGElement> => ({
+  width: props.size != null ? `${props.size}px` : "100%",
+  height: props.size != null ? `${props.size}px` : "100%",
+  className: props.className,
+});
 
 export const LightMode: Icon = (props) => {
   return (
