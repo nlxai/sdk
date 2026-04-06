@@ -86,7 +86,10 @@ export const Input: FC<InputProps> = ({
 
     // Before sending a application message, subscribe to its response and clear the input only then
     const subscriber: Subscriber = (_responses, newResponse) => {
-      if (newResponse?.type === ResponseType.Application) {
+      if (
+        newResponse?.type === ResponseType.Application ||
+        newResponse?.type === ResponseType.Failure
+      ) {
         setIsWaiting(false);
         handler.unsubscribe(subscriber);
         setInputValue("");
