@@ -58,6 +58,7 @@ export default defineConfig(({ mode, command }) =>
   mode === "design-system"
     ? {
         plugins: [designSystemEntryPoint(), ...sharedPlugins(command)],
+        base: "./",
         build: {
           outDir: "build",
         },
