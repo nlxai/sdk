@@ -29,7 +29,6 @@
   "author": "Peter Szerzo <peter@nlx.ai>",
   "license": "MIT",
   "overrides": {
-    "minimatch": "^3.1.5",
     "tar": ">=7.5.10",
     "underscore": ">=1.13.8",
     "serialize-javascript": ">=7.0.3",
