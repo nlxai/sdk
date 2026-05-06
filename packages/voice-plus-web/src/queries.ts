@@ -140,7 +140,7 @@ export async function evaluate(q: Query): Promise<boolean> {
   try {
     await find(q);
     return true;
-  } catch (e) {
+  } catch (_e) {
     return false;
   }
 }

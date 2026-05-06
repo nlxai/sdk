@@ -4,7 +4,7 @@ import { type CSSProperties } from "react";
 import { type Theme } from "../interface";
 
 export const toCustomProperties = (theme: Theme): CSSProperties => {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+   
   return {
     "--font-family": theme.fontFamily,
     "--radius-inner": theme.innerBorderRadius,

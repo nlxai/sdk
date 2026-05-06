@@ -27,7 +27,7 @@ const debounceAsync = <T extends any[]>(
       lastPromise = lastPromise.then(async () => {
         try {
           await func.apply(null, args);
-        } catch (error) {}
+        } catch (_error) {}
       });
       firstRequestTime = null; // Reset the first request time
     };
@@ -70,7 +70,7 @@ export const gatherAutomaticContext = (
         try {
           debug("Automatic context sent:", context);
           await handler.sendContext({ "nlx:vpContext": context });
-        } catch (error) {}
+        } catch (_error) {}
         setPageState(state);
         previousContext = context;
       }

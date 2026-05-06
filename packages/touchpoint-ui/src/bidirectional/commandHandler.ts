@@ -40,10 +40,10 @@ export const commandHandler = (
                   window.location.href = url;
                 } else {
                   try {
-                    // eslint-disable-next-line no-new -- Throws an error if the URL is invalid
+                     
                     new URL(event.destination as string);
                     window.location.href = event.destination as string;
-                  } catch (error) {
+                  } catch (_error) {
                     debug(
                       `Custom page navigation action received, but no URL found for destination".`,
                       event.destination,

@@ -1,44 +1,39 @@
-/** @type {import('eslint').Linter.Config } */
-module.exports = {
-  extends: ["plugin:jsdoc/recommended-typescript-error"],
-  plugins: ["eslint-plugin-tsdoc"],
-  rules: {
-    "jsdoc/require-jsdoc": [
-      "error",
-      {
-        require: {
-          FunctionDeclaration: true,
-          MethodDefinition: true,
-          ClassDeclaration: true,
-          ArrowFunctionExpression: true,
-          FunctionExpression: true,
-        },
-        publicOnly: true,
-        // these ensure that documentation of various type script constructs is required. Will tweak as we go.
-        contexts: [
-          "TSTypeAliasDeclaration",
-          "TSInterfaceDeclaration",
-          "TSMethodSignature",
-          "TSPropertySignature",
-        ],
-      },
-    ],
-    "jsdoc/check-tag-names": [
-      "error",
-      { definedTags: ["category", "hidden", "typeParam", "inline"] },
-    ],
+import jsdoc from "eslint-plugin-jsdoc";
 
-    "jsdoc/require-param": "off",
-    "jsdoc/require-returns": "off",
-    "jsdoc/check-param-names": ["error", { checkDestructured: false }],
-    "tsdoc/syntax": "error",
-  },
-  overrides: [
-    {
-      files: ["*.cjs", "*.js"],
-      rules: {
-        "tsdoc/syntax": "off",
-      },
+/** @type {import('eslint').Linter.Config[]} */
+export default [
+  jsdoc.configs["flat/recommended-typescript-error"],
+  {
+    plugins: {
+      jsdoc,
     },
-  ],
-};
+    rules: {
+      "jsdoc/require-jsdoc": [
+        "error",
+        {
+          require: {
+            FunctionDeclaration: true,
+            MethodDefinition: true,
+            ClassDeclaration: true,
+            ArrowFunctionExpression: true,
+            FunctionExpression: true,
+          },
+          publicOnly: true,
+          contexts: [
+            "TSTypeAliasDeclaration",
+            "TSInterfaceDeclaration",
+            "TSMethodSignature",
+            "TSPropertySignature",
+          ],
+        },
+      ],
+      "jsdoc/check-tag-names": [
+        "error",
+        { definedTags: ["category", "hidden", "typeParam", "inline"] },
+      ],
+      "jsdoc/require-param": "off",
+      "jsdoc/require-returns": "off",
+      "jsdoc/check-param-names": ["error", { checkDestructured: false }],
+    },
+  },
+];

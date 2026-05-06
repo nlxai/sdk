@@ -1,4 +1,3 @@
-import fetch from "isomorphic-fetch";
 import { adjust, equals } from "ramda";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { v4 as uuid } from "uuid";
@@ -695,7 +694,6 @@ export interface FeedbackConfiguration {
 /**
  * @inline @hidden
  */
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export type FeedbackType = {
   /** A binary feedback type is a thumbs up/down sort of choice. */
   type: "binary";
@@ -1159,7 +1157,7 @@ const fetchUserMessage = async ({
               buffer = buffer.substring(i + 1);
               foundObject = true;
               break;
-            } catch (e) {
+            } catch (_e) {
               /* keep scanning */
             }
           }

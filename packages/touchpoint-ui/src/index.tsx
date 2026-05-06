@@ -1,4 +1,4 @@
-/* eslint-disable accessor-pairs */
+ 
 import { createElement, type FC } from "react";
 import { type Root, createRoot } from "react-dom/client";
 import htm from "htm";
@@ -49,7 +49,7 @@ export const version: string = packageJson.version;
 const createHtml = (
   components: Record<string, FC<any>>,
 ): ReturnType<typeof htm.bind> =>
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+   
   htm.bind((type, ...rest) => createElement(components[type] ?? type, ...rest));
 
 /**
@@ -356,7 +356,7 @@ customElementsDefine("nlx-touchpoint", NlxTouchpointElement);
  */
 export const create = (
   props: TouchpointConfiguration,
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
+   
 ): Promise<TouchpointInstance> => {
   return new Promise((resolve) => {
     const element: any = document.createElement("nlx-touchpoint");
