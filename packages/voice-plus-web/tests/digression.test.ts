@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from "vitest";
 import prepareDigression from "../src/digression";
 import { Triggers } from "../src/trigger";
 describe("digression detection", () => {
@@ -21,7 +22,7 @@ describe("digression detection", () => {
         },
       },
     };
-    const onDigression = jest.fn();
+    const onDigression = vi.fn();
     const digression = prepareDigression(triggers, onDigression);
 
     // Shouldn't call the callback before we call the digression function
@@ -61,7 +62,7 @@ describe("digression detection", () => {
         once: true,
       },
     };
-    const onDigression = jest.fn();
+    const onDigression = vi.fn();
     const digression = prepareDigression(triggers, onDigression);
 
     // Shouldn't call the callback before we call the digression function

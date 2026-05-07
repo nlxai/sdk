@@ -62,7 +62,7 @@ export const matchesUrlCondition = (
         return false;
       }
       return true;
-    } catch (e) {
+    } catch (_e) {
       return false;
     }
   }

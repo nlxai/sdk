@@ -77,7 +77,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
       if (Array.isArray(responses[props.config.conversationId])) {
         return responses[props.config.conversationId];
       }
-    } catch (err) {
+    } catch (_err) {
       return null;
     }
   }, [props.config.conversationId]);

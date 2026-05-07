@@ -1,3 +1,4 @@
+import { describe, test, expect } from "vitest";
 import { matchesUrlCondition, UrlCondition } from "../src/UrlCondition";
 
 describe("matchesUrlCondition", () => {

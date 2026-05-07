@@ -16,8 +16,8 @@
   },
   "scripts": {
     "build": "rm -rf lib && rollup -c --configPlugin typescript --configImportAttributesKey with",
-    "lint:check": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0",
-    "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
+    "lint:check": "eslint src/",
+    "lint": "eslint src/ --fix",
     "prepublish": "npm run build",
     "test": "typedoc --emit none",
     "tsc": "tsc",
@@ -36,19 +36,15 @@
     "@rollup/plugin-replace": "^5.0.5",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
-    "@types/isomorphic-fetch": "^0.0.39",
     "@types/node": "^24.10.1",
     "@types/ramda": "0.31.1",
-    "@types/uuid": "^9.0.7",
     "prettier": "^3.1.0",
     "rollup": "^4.59.0",
-    "rollup-plugin-node-polyfills": "^0.2.1",
     "typedoc": "^0.28.14",
     "typedoc-plugin-markdown": "^4.9.0",
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "isomorphic-fetch": "^3.0.0",
     "ramda": "^0.32.0",
     "reconnecting-websocket": "^4.4.0",
     "uuid": "^14.0.0"

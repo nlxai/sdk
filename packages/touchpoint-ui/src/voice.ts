@@ -52,7 +52,7 @@ const decodeRoomData = (val: Uint8Array): RoomDataEvent | null => {
       throw new Error("Invalid parsed");
     }
     return normalizeRoomData(parsed);
-  } catch (err) {
+  } catch (_err) {
     return null;
   }
 };
@@ -137,7 +137,7 @@ export class MissingAudioPermissionsError extends Error {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/promise-function-async
+ 
 const wait = <T>(timeout: number, value?: T): Promise<T> =>
   new Promise((resolve) => {
     setTimeout(resolve, timeout, value);
@@ -314,7 +314,7 @@ export const initiateVoice = async (
         }
       });
 
-      // eslint-disable-next-line @typescript-eslint/promise-function-async
+       
       const createAgentJoinedPromise = (): Promise<unknown> =>
         new Promise((resolve) => {
           if (room.remoteParticipants.size > 0) {

@@ -4,7 +4,7 @@
  * @returns A promise that resolves when the DOM is loaded.
  */
 
-// eslint-disable-next-line @typescript-eslint/promise-function-async
+ 
 export const contentLoaded = (): Promise<void> => {
   if (document.readyState === "loading") {
     return new Promise((resolve) => {
