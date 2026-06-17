@@ -35,7 +35,7 @@
     "@rive-app/webgl2": "^2.31.5",
     "@types/json-schema": "^7.0.15",
     "clsx": "^2.1.1",
-    "dompurify": "^3.4.0",
+    "dompurify": "^3.4.9",
     "htm": "^3.1.1",
     "livekit-client": "^2.18.9",
     "marked": "^15.0.4",
