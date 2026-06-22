@@ -1,0 +1,53 @@
+{
+  "name": "@nlxai/connect-chat-adapter",
+  "version": "0.1.0",
+  "description": "Amazon Connect Chat adapter for Touchpoint UI",
+  "type": "module",
+  "main": "lib/index.cjs",
+  "module": "lib/index.esm.js",
+  "browser": "lib/index.umd.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.esm.js",
+      "require": "./lib/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "rm -rf lib && rollup -c --configPlugin typescript --configImportAttributesKey with",
+    "lint:check": "eslint src/",
+    "lint": "eslint src/ --fix",
+    "prepublish": "npm run build",
+    "tsc": "tsc"
+  },
+  "author": "NLX <engineering@nlx.ai>",
+  "license": "MIT",
+  "devDependencies": {
+    "@nlxai/eslint-config": "*",
+    "@nlxai/rollup-config": "*",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.5",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/node": "^24.10.1",
+    "rollup": "^4.59.0",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@nlxai/core": "^1.2.6"
+  },
+  "peerDependencies": {
+    "amazon-connect-chatjs": "^2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "amazon-connect-chatjs": {
+      "optional": false
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -87,8 +87,11 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   );
 
   const handler = useMemo(() => {
+    if (props.conversationHandler != null) {
+      return props.conversationHandler;
+    }
     return createConversation({ responses: responseData, ...props.config });
-  }, [props.config, responseData]);
+  }, [props.conversationHandler, props.config, responseData]);
 
   useEffect(() => {
     handler.addEventListener("interimMessage", setInterimMessage);
@@ -107,7 +110,7 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     props.embedded || props.input === "external" || restoredConversation,
   );
 
-  const configValid = isConfigValid(props.config);
+  const configValid = props.conversationHandler != null || isConfigValid(props.config);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
