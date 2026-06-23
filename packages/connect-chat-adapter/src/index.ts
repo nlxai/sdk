@@ -133,17 +133,9 @@ interface ResolvedChatDetails {
  * });
  * ```
  */
-export interface ConnectChatConversationHandler extends ConversationHandler {
-  /**
-   * Emit a custom interim message to display in Touchpoint's loading state.
-   * Pass `undefined` to clear it.
-   */
-  emitInterimMessage: (message?: string) => void;
-}
-
 export function createConnectChatConversation(
   config: ConnectChatConfig,
-): ConnectChatConversationHandler {
+): ConversationHandler {
   let subscribers: Subscriber[] = [];
   let responses: Response[] = [];
   let languageCode: LanguageCode = config.languageCode ?? "en-US";
@@ -151,7 +143,10 @@ export function createConnectChatConversation(
   let chatSession: any;
   let connected = false;
 
-  const eventListeners: Record<ConversationHandlerEvent, Array<(...args: any[]) => void>> = {
+  const eventListeners: Record<
+    ConversationHandlerEvent,
+    Array<(...args: any[]) => void>
+  > = {
     interimMessage: [],
     voicePlusCommand: [],
   };
@@ -164,19 +159,26 @@ export function createConnectChatConversation(
 
   const appendResponse = (response: Response): void => {
     if (response.type === ResponseType.Application) {
-      eventListeners.interimMessage.forEach((listener) => (listener as any)(undefined));
+      eventListeners.interimMessage.forEach((listener) =>
+        (listener as any)(undefined),
+      );
     }
     responses = [...responses, response];
     notify(response);
   };
 
   const getConnectGlobal = (): any => {
-    const g = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : undefined;
+    const g =
+      typeof globalThis !== "undefined"
+        ? globalThis
+        : typeof window !== "undefined"
+          ? window
+          : undefined;
     const connectObj = (g as any)?.connect;
     if (connectObj?.ChatSession == null) {
       throw new Error(
         "@nlxai/connect-chat-adapter: amazon-connect-chatjs must be loaded before creating a Connect Chat conversation. " +
-        "Import it via `import 'amazon-connect-chatjs'` or include the script tag.",
+          "Import it via `import 'amazon-connect-chatjs'` or include the script tag.",
       );
     }
     return connectObj;
@@ -208,13 +210,13 @@ export function createConnectChatConversation(
       body.Attributes = config.startChatParams.contactAttributes;
     }
 
-    body.SupportedMessagingContentTypes =
-      config.startChatParams?.supportedMessagingContentTypes ?? [
-        "text/plain",
-        "text/markdown",
-        "application/json",
-        "application/vnd.amazonaws.connect.message.interactive",
-      ];
+    body.SupportedMessagingContentTypes = config.startChatParams
+      ?.supportedMessagingContentTypes ?? [
+      "text/plain",
+      "text/markdown",
+      "application/json",
+      "application/vnd.amazonaws.connect.message.interactive",
+    ];
 
     const res = await fetch(config.startChatEndpoint, {
       method: "POST",
@@ -231,8 +233,10 @@ export function createConnectChatConversation(
     const startChatResult = data?.data?.startChatResult ?? data?.data ?? data;
     return {
       contactId: startChatResult.ContactId ?? startChatResult.contactId,
-      participantId: startChatResult.ParticipantId ?? startChatResult.participantId,
-      participantToken: startChatResult.ParticipantToken ?? startChatResult.participantToken,
+      participantId:
+        startChatResult.ParticipantId ?? startChatResult.participantId,
+      participantToken:
+        startChatResult.ParticipantToken ?? startChatResult.participantToken,
     };
   };
 
@@ -263,10 +267,7 @@ export function createConnectChatConversation(
 
       const contentType: string = data.ContentType ?? "";
 
-      if (
-        contentType === "text/plain" ||
-        contentType === "text/markdown"
-      ) {
+      if (contentType === "text/plain" || contentType === "text/markdown") {
         const text = data.Content ?? "";
         if (text.startsWith("{") && text.includes('"modalities"')) {
           handleJsonMessage(text);
@@ -284,7 +285,9 @@ export function createConnectChatConversation(
         }
       } else if (contentType === "application/json") {
         handleJsonMessage(data.Content);
-      } else if (contentType === "application/vnd.amazonaws.connect.message.interactive") {
+      } else if (
+        contentType === "application/vnd.amazonaws.connect.message.interactive"
+      ) {
         handleInteractiveMessage(data.Content);
       }
     });
@@ -314,14 +317,18 @@ export function createConnectChatConversation(
     try {
       const parsed = JSON.parse(content);
 
-      const messages: Array<{ text: string; choices: Array<{ choiceId: string; choiceText: string }> }> = [];
+      const messages: Array<{
+        text: string;
+        choices: Array<{ choiceId: string; choiceText: string }>;
+      }> = [];
 
       if (Array.isArray(parsed.messages) && parsed.messages.length > 0) {
         for (const msg of parsed.messages) {
           const choices = Array.isArray(msg.choices)
             ? msg.choices.map((c: any, i: number) => ({
                 choiceId: c.choiceId ?? c.id ?? `choice-${i}`,
-                choiceText: c.choiceText ?? c.text ?? c.label ?? `Option ${i + 1}`,
+                choiceText:
+                  c.choiceText ?? c.text ?? c.label ?? `Option ${i + 1}`,
               }))
             : [];
           messages.push({ text: msg.text ?? "", choices });
@@ -422,7 +429,9 @@ export function createConnectChatConversation(
     appendResponse({
       type: ResponseType.Failure,
       receivedAt: Date.now(),
-      payload: { text: `Failed to connect: ${err instanceof Error ? err.message : "Unknown error"}` },
+      payload: {
+        text: `Failed to connect: ${err instanceof Error ? err.message : "Unknown error"}`,
+      },
     });
   });
 
@@ -486,7 +495,7 @@ export function createConnectChatConversation(
     subscribers = subscribers.filter((fn) => fn !== subscriber);
   };
 
-  const handler: ConnectChatConversationHandler = {
+  const handler: ConversationHandler = {
     sendText,
     sendChoice,
 
@@ -514,7 +523,10 @@ export function createConnectChatConversation(
       // No-op
     },
 
-    sendStructured: (structured: StructuredRequest, _context?: Context): void => {
+    sendStructured: (
+      structured: StructuredRequest,
+      _context?: Context,
+    ): void => {
       if (structured.utterance != null) {
         sendText(structured.utterance);
       }
@@ -525,7 +537,9 @@ export function createConnectChatConversation(
     },
 
     getVoiceCredentials: async (): Promise<VoiceCredentials> => {
-      throw new Error("Voice credentials are not supported by the Connect Chat adapter.");
+      throw new Error(
+        "Voice credentials are not supported by the Connect Chat adapter.",
+      );
     },
 
     submitFeedback: async (): Promise<void> => {
@@ -563,7 +577,11 @@ export function createConnectChatConversation(
       notify();
       // Disconnect old session and start a fresh Connect Chat session
       if (chatSession != null && connected) {
-        try { chatSession.disconnectParticipant(); } catch (_e) { /* best effort */ }
+        try {
+          chatSession.disconnectParticipant();
+        } catch (_e) {
+          /* best effort */
+        }
       }
       connected = false;
       chatSession = null;
@@ -572,7 +590,9 @@ export function createConnectChatConversation(
         appendResponse({
           type: ResponseType.Failure,
           receivedAt: Date.now(),
-          payload: { text: `Failed to reconnect: ${err instanceof Error ? err.message : "Unknown error"}` },
+          payload: {
+            text: `Failed to reconnect: ${err instanceof Error ? err.message : "Unknown error"}`,
+          },
         });
       });
     },
@@ -599,11 +619,15 @@ export function createConnectChatConversation(
       event: ConversationHandlerEvent,
       handler: EventHandlers[ConversationHandlerEvent],
     ): void => {
-      eventListeners[event] = eventListeners[event].filter((h) => h !== handler);
+      eventListeners[event] = eventListeners[event].filter(
+        (h) => h !== handler,
+      );
     },
 
-    emitInterimMessage: (message?: string): void => {
-      eventListeners.interimMessage.forEach((listener) => (listener as any)(message));
+    setInterimMessage: (message?: string): void => {
+      eventListeners.interimMessage.forEach((listener) =>
+        (listener as any)(message),
+      );
     },
   };
 

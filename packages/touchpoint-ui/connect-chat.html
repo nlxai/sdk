@@ -10,6 +10,7 @@
         margin: 0;
         padding: 0;
       }
+
       .config-form {
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -20,16 +21,19 @@
         border-radius: 12px;
         color: #e0e0e0;
       }
+
       .config-form h1 {
         font-size: 20px;
         margin: 0 0 8px;
         color: #fff;
       }
+
       .config-form p {
         font-size: 13px;
         color: #999;
         margin: 0 0 24px;
       }
+
       .config-form label {
         display: block;
         font-size: 12px;
@@ -37,6 +41,7 @@
         margin-bottom: 4px;
         color: #aaa;
       }
+
       .config-form input {
         width: 100%;
         padding: 8px 12px;
@@ -48,9 +53,11 @@
         font-size: 14px;
         box-sizing: border-box;
       }
+
       .config-form input::placeholder {
         color: #555;
       }
+
       .config-form button {
         width: 100%;
         padding: 12px;
@@ -62,6 +69,7 @@
         font-weight: 600;
         cursor: pointer;
       }
+
       .config-form button:hover {
         background: #0860b0;
       }
@@ -171,7 +179,7 @@
           });
 
           // Set custom loading text (instead of default "Thinking")
-          conversationHandler.emitInterimMessage("Connecting...");
+          conversationHandler.setInterimMessage("Connecting...");
 
           tpEl.touchpointConfiguration = {
             conversationHandler,
