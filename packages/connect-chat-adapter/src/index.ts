@@ -14,6 +14,7 @@ import type {
   LanguageCode,
 } from "@nlxai/core";
 import { ResponseType } from "@nlxai/core";
+import "amazon-connect-chatjs";
 
 /**
  * Configuration for the Amazon Connect Chat adapter.
@@ -21,55 +22,11 @@ import { ResponseType } from "@nlxai/core";
  * No AWS access keys or secret keys are required client-side. Authentication
  * is handled via the participant token returned by the StartChatContact API.
  *
- * There are two ways to obtain chat details:
- *
- * 1. **Use `startChatEndpoint`** (recommended) — provide the URL of your API Gateway
- *    endpoint (deployed via the AWS-provided CloudFormation template). The adapter
- *    calls it automatically to start the chat.
- *
- * 2. **Use `chatDetails` directly** — if you've already called StartChatContact
- *    yourself, pass the response directly.
+ * Chat details are obtained via the `fetchChatDetails` call.
  */
 export interface ConnectChatConfig {
-  /**
-   * URL of the API Gateway endpoint that calls StartChatContact.
-   * This is the endpoint created by the AWS CloudFormation template for Connect Chat.
-   * When provided, the adapter automatically initiates the chat — no manual
-   * StartChatContact call is needed.
-   *
-   * Mutually exclusive with `chatDetails`.
-   */
-  startChatEndpoint?: string;
-  /**
-   * Parameters to pass when calling the `startChatEndpoint`.
-   */
-  startChatParams?: {
-    /** Connect instance ID */
-    instanceId?: string;
-    /** Contact flow ID to use */
-    contactFlowId?: string;
-    /** Customer display name */
-    participantDisplayName?: string;
-    /** Contact attributes passed to the contact flow */
-    contactAttributes?: Record<string, string>;
-    /**
-     * Content types the chat participant supports receiving.
-     * Defaults to text/plain, text/markdown, application/json, and interactive messages.
-     */
-    supportedMessagingContentTypes?: string[];
-  };
-  /**
-   * Pre-obtained chat details from a prior StartChatContact call.
-   * Mutually exclusive with `startChatEndpoint`.
-   */
-  chatDetails?: {
-    /** The contact ID */
-    contactId: string;
-    /** The participant ID */
-    participantId: string;
-    /** The participant token used for authentication */
-    participantToken: string;
-  };
+  /** Pre-obtained chat details from a prior StartChatContact call. */
+  details: ChatDetails;
   /** AWS region (e.g., "us-east-1"). Defaults to "us-west-2". */
   region?: string;
   /** Language code for the conversation */
@@ -81,11 +38,91 @@ export interface ConnectChatConfig {
   globalConfig?: Record<string, unknown>;
 }
 
-interface ResolvedChatDetails {
+/**
+ * Chat details
+ */
+export interface ChatDetails {
+  /** The contact ID */
   contactId: string;
+  /** The participant ID */
   participantId: string;
+  /** The participant token used for authentication */
   participantToken: string;
 }
+
+/**
+ * Parameters to pass when calling the `startChatEndpoint`.
+ */
+export interface DetailsParams {
+  /** Connect instance ID */
+  instanceId?: string;
+  /** Contact flow ID to use */
+  contactFlowId?: string;
+  /** Customer display name */
+  participantDisplayName?: string;
+  /** Contact attributes passed to the contact flow */
+  contactAttributes?: Record<string, string>;
+  /**
+   * Content types the chat participant supports receiving.
+   * Defaults to text/plain, text/markdown, application/json, and interactive messages.
+   */
+  supportedMessagingContentTypes?: string[];
+}
+
+/**
+ * Fetch chat details via API Gateway endpoint
+ */
+export const fetchChatDetails = async (
+  endpoint: string,
+  params: DetailsParams,
+): Promise<ChatDetails> => {
+  const body: Record<string, unknown> = {
+    InstanceId: params.instanceId,
+    ContactFlowId: params.contactFlowId,
+    ParticipantDetails: {
+      DisplayName: params.participantDisplayName,
+    },
+    Attributes: params.contactAttributes,
+    SupportedMessagingContentTypes: params.supportedMessagingContentTypes ?? [
+      "text/plain",
+      "text/markdown",
+      "application/json",
+      "application/vnd.amazonaws.connect.message.interactive",
+    ],
+  };
+
+  const res = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    throw new Error(`StartChatContact endpoint returned ${res.status}`);
+  }
+
+  const data = await res.json();
+  // The CloudFormation-deployed Lambda returns: { data: { startChatResult: { ContactId, ParticipantId, ParticipantToken } } }
+  const startChatResult = data?.data?.startChatResult;
+  return {
+    contactId: startChatResult.ContactId ?? startChatResult.contactId,
+    participantId:
+      startChatResult.ParticipantId ?? startChatResult.participantId,
+    participantToken:
+      startChatResult.ParticipantToken ?? startChatResult.participantToken,
+  };
+};
+
+const warnMethod = (methodName: string): void => {
+  console.warn(
+    `Message not sent: the '${methodName}' method is not supported by the Amazon Connect Chat Interface integration.`,
+  );
+};
+
+type ConversationHandlerEventListeners = Record<
+  ConversationHandlerEvent,
+  Array<EventHandlers[ConversationHandlerEvent]>
+>;
 
 /**
  * Creates a ConversationHandler backed by Amazon Connect Chat via amazon-connect-chatjs.
@@ -93,36 +130,14 @@ interface ResolvedChatDetails {
  * This adapter conforms to the same interface used by \@nlxai/core's `createConversation`,
  * so it can be passed directly to Touchpoint UI via the `conversationHandler` prop.
  *
- * Prerequisites:
- * - `amazon-connect-chatjs` must be loaded before calling this function
- *   (via `import "amazon-connect-chatjs"` or a `<script>` tag).
- * - Either provide a `startChatEndpoint` (URL of the API Gateway from the AWS
- *   CloudFormation template) or pre-obtained `chatDetails`.
- *
  * @example
  * ```typescript
- * import "amazon-connect-chatjs";
  * import { createConnectChatConversation } from "@nlxai/connect-chat-adapter";
  * import { create } from "@nlxai/touchpoint-ui";
  *
- * // Option 1: Let the adapter call StartChatContact via your API Gateway
  * const touchpoint = await create({
  *   conversationHandler: createConnectChatConversation({
- *     startChatEndpoint: "https://abc123.execute-api.us-east-1.amazonaws.com/Prod",
- *     startChatParams: {
- *       instanceId: "your-connect-instance-id",
- *       contactFlowId: "your-contact-flow-id",
- *       participantDisplayName: "Customer",
- *     },
- *     region: "us-east-1",
- *   }),
- *   theme: { accent: "#0972d3" },
- * });
- *
- * // Option 2: Pass pre-obtained chatDetails
- * const touchpoint = await create({
- *   conversationHandler: createConnectChatConversation({
- *     chatDetails: {
+ *     details: {
  *       contactId: "abc-123",
  *       participantId: "def-456",
  *       participantToken: "token-xyz",
@@ -133,25 +148,19 @@ interface ResolvedChatDetails {
  * });
  * ```
  */
-export interface ConnectChatConversationHandler extends ConversationHandler {
-  /**
-   * Emit a custom interim message to display in Touchpoint's loading state.
-   * Pass `undefined` to clear it.
-   */
-  emitInterimMessage: (message?: string) => void;
-}
-
-export function createConnectChatConversation(
+export const createConnectChatConversation = (
   config: ConnectChatConfig,
-): ConnectChatConversationHandler {
+): ConversationHandler => {
+  const connect = (window as any).connect;
+
   let subscribers: Subscriber[] = [];
   let responses: Response[] = [];
   let languageCode: LanguageCode = config.languageCode ?? "en-US";
   let requestOverride: RequestOverride | undefined;
-  let chatSession: any;
+  let chatSession: ReturnType<typeof connect.ChatSession.create> | null = null;
   let connected = false;
 
-  const eventListeners: Record<ConversationHandlerEvent, Array<(...args: any[]) => void>> = {
+  const eventListeners: ConversationHandlerEventListeners = {
     interimMessage: [],
     voicePlusCommand: [],
   };
@@ -164,94 +173,27 @@ export function createConnectChatConversation(
 
   const appendResponse = (response: Response): void => {
     if (response.type === ResponseType.Application) {
-      eventListeners.interimMessage.forEach((listener) => (listener as any)(undefined));
+      eventListeners.interimMessage.forEach((listener) =>
+        (listener as any)(undefined),
+      );
     }
     responses = [...responses, response];
     notify(response);
   };
 
-  const getConnectGlobal = (): any => {
-    const g = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : undefined;
-    const connectObj = (g as any)?.connect;
-    if (connectObj?.ChatSession == null) {
-      throw new Error(
-        "@nlxai/connect-chat-adapter: amazon-connect-chatjs must be loaded before creating a Connect Chat conversation. " +
-        "Import it via `import 'amazon-connect-chatjs'` or include the script tag.",
-      );
-    }
-    return connectObj;
-  };
-
-  const fetchChatDetails = async (): Promise<ResolvedChatDetails> => {
-    if (config.chatDetails != null) {
-      return config.chatDetails;
-    }
-    if (config.startChatEndpoint == null) {
-      throw new Error(
-        "@nlxai/connect-chat-adapter: Either 'chatDetails' or 'startChatEndpoint' must be provided.",
-      );
-    }
-
-    const body: Record<string, unknown> = {};
-    if (config.startChatParams?.instanceId != null) {
-      body.InstanceId = config.startChatParams.instanceId;
-    }
-    if (config.startChatParams?.contactFlowId != null) {
-      body.ContactFlowId = config.startChatParams.contactFlowId;
-    }
-    if (config.startChatParams?.participantDisplayName != null) {
-      body.ParticipantDetails = {
-        DisplayName: config.startChatParams.participantDisplayName,
-      };
-    }
-    if (config.startChatParams?.contactAttributes != null) {
-      body.Attributes = config.startChatParams.contactAttributes;
-    }
-
-    body.SupportedMessagingContentTypes =
-      config.startChatParams?.supportedMessagingContentTypes ?? [
-        "text/plain",
-        "text/markdown",
-        "application/json",
-        "application/vnd.amazonaws.connect.message.interactive",
-      ];
-
-    const res = await fetch(config.startChatEndpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-
-    if (!res.ok) {
-      throw new Error(`StartChatContact endpoint returned ${res.status}`);
-    }
-
-    const data = await res.json();
-    // The CloudFormation-deployed Lambda returns: { data: { startChatResult: { ContactId, ParticipantId, ParticipantToken } } }
-    const startChatResult = data?.data?.startChatResult ?? data?.data ?? data;
-    return {
-      contactId: startChatResult.ContactId ?? startChatResult.contactId,
-      participantId: startChatResult.ParticipantId ?? startChatResult.participantId,
-      participantToken: startChatResult.ParticipantToken ?? startChatResult.participantToken,
-    };
-  };
-
   let resolvedContactId: string | undefined;
 
   const initSession = async (): Promise<void> => {
-    const chatDetails = await fetchChatDetails();
-    resolvedContactId = chatDetails.contactId;
+    resolvedContactId = config.details.contactId;
 
-    const connectGlobal = getConnectGlobal();
-
-    connectGlobal.ChatSession.setGlobalConfig({
+    connect.ChatSession.setGlobalConfig({
       region: config.region ?? "us-west-2",
       ...(config.globalConfig ?? {}),
     });
 
-    chatSession = connectGlobal.ChatSession.create({
-      chatDetails,
-      type: connectGlobal.ChatSession.SessionTypes.CUSTOMER,
+    chatSession = connect.ChatSession.create({
+      chatDetails: config.details,
+      type: connect.ChatSession.SessionTypes.CUSTOMER,
     });
 
     chatSession.onMessage((event: any) => {
@@ -263,11 +205,8 @@ export function createConnectChatConversation(
 
       const contentType: string = data.ContentType ?? "";
 
-      if (
-        contentType === "text/plain" ||
-        contentType === "text/markdown"
-      ) {
-        const text = data.Content ?? "";
+      if (contentType === "text/plain" || contentType === "text/markdown") {
+        const text: string = data.Content ?? "";
         if (text.startsWith("{") && text.includes('"modalities"')) {
           handleJsonMessage(text);
         } else {
@@ -284,7 +223,9 @@ export function createConnectChatConversation(
         }
       } else if (contentType === "application/json") {
         handleJsonMessage(data.Content);
-      } else if (contentType === "application/vnd.amazonaws.connect.message.interactive") {
+      } else if (
+        contentType === "application/vnd.amazonaws.connect.message.interactive"
+      ) {
         handleInteractiveMessage(data.Content);
       }
     });
@@ -314,14 +255,18 @@ export function createConnectChatConversation(
     try {
       const parsed = JSON.parse(content);
 
-      const messages: Array<{ text: string; choices: Array<{ choiceId: string; choiceText: string }> }> = [];
+      const messages: Array<{
+        text: string;
+        choices: Array<{ choiceId: string; choiceText: string }>;
+      }> = [];
 
       if (Array.isArray(parsed.messages) && parsed.messages.length > 0) {
         for (const msg of parsed.messages) {
           const choices = Array.isArray(msg.choices)
             ? msg.choices.map((c: any, i: number) => ({
                 choiceId: c.choiceId ?? c.id ?? `choice-${i}`,
-                choiceText: c.choiceText ?? c.text ?? c.label ?? `Option ${i + 1}`,
+                choiceText:
+                  c.choiceText ?? c.text ?? c.label ?? `Option ${i + 1}`,
               }))
             : [];
           messages.push({ text: msg.text ?? "", choices });
@@ -347,6 +292,7 @@ export function createConnectChatConversation(
           ...(modalities != null ? { modalities } : {}),
         },
       };
+
       appendResponse(newResponse);
     } catch (_err) {
       appendResponse({
@@ -422,7 +368,9 @@ export function createConnectChatConversation(
     appendResponse({
       type: ResponseType.Failure,
       receivedAt: Date.now(),
-      payload: { text: `Failed to connect: ${err instanceof Error ? err.message : "Unknown error"}` },
+      payload: {
+        text: `Failed to connect: ${err instanceof Error ? err.message : "Unknown error"}`,
+      },
     });
   });
 
@@ -486,50 +434,55 @@ export function createConnectChatConversation(
     subscribers = subscribers.filter((fn) => fn !== subscriber);
   };
 
-  const handler: ConnectChatConversationHandler = {
+  const handler: ConversationHandler = {
     sendText,
     sendChoice,
 
     sendSlots: (_slots: SlotsRecordOrArray, _context?: Context): void => {
-      // No-op: Connect Chat does not have a slots concept
+      warnMethod("sendSlots");
     },
 
     sendWelcomeFlow: (_context?: Context): void => {
-      // Connect Chat triggers the contact flow automatically on connection
+      warnMethod("sendWelcomeFlow");
     },
 
     sendWelcomeIntent: (_context?: Context): void => {
-      // Deprecated, no-op
+      warnMethod("sendWelcomeIntent");
     },
 
     sendFlow: (_flowId: string, _context?: Context): void => {
-      // No-op: Connect Chat does not support arbitrary flow triggering from client
+      warnMethod("sendFlow");
     },
 
     sendIntent: (_intentId: string, _context?: Context): void => {
-      // Deprecated, no-op
+      warnMethod("sendIntent");
     },
 
     sendContext: async (_context: Context): Promise<void> => {
-      // No-op
+      warnMethod("sendContext");
     },
 
-    sendStructured: (structured: StructuredRequest, _context?: Context): void => {
+    sendStructured: (
+      structured: StructuredRequest,
+      _context?: Context,
+    ): void => {
       if (structured.utterance != null) {
         sendText(structured.utterance);
       }
     },
 
     sendVoicePlusContext: (_context: VoicePlusContext): void => {
-      // No-op
+      warnMethod("sendVoicePlusContext");
     },
 
     getVoiceCredentials: async (): Promise<VoiceCredentials> => {
-      throw new Error("Voice credentials are not supported by the Connect Chat adapter.");
+      throw new Error(
+        "Voice credentials are not supported by the Connect Chat adapter.",
+      );
     },
 
     submitFeedback: async (): Promise<void> => {
-      // No-op
+      warnMethod("submitFeedback");
     },
 
     appendMessageToTranscript: (newResponse): void => {
@@ -537,8 +490,8 @@ export function createConnectChatConversation(
         ...newResponse,
         receivedAt: (newResponse as any).receivedAt ?? Date.now(),
       };
-      responses = [...responses, responseWithTimestamp as Response];
-      notify(responseWithTimestamp as Response);
+      responses = [...responses, responseWithTimestamp];
+      notify(responseWithTimestamp);
     },
 
     subscribe,
@@ -563,7 +516,11 @@ export function createConnectChatConversation(
       notify();
       // Disconnect old session and start a fresh Connect Chat session
       if (chatSession != null && connected) {
-        try { chatSession.disconnectParticipant(); } catch (_e) { /* best effort */ }
+        try {
+          (chatSession as any).disconnectParticipant();
+        } catch (_e) {
+          /* best effort */
+        }
       }
       connected = false;
       chatSession = null;
@@ -572,7 +529,9 @@ export function createConnectChatConversation(
         appendResponse({
           type: ResponseType.Failure,
           receivedAt: Date.now(),
-          payload: { text: `Failed to reconnect: ${err instanceof Error ? err.message : "Unknown error"}` },
+          payload: {
+            text: `Failed to reconnect: ${err instanceof Error ? err.message : "Unknown error"}`,
+          },
         });
       });
     },
@@ -580,7 +539,7 @@ export function createConnectChatConversation(
     destroy: (): void => {
       subscribers = [];
       if (chatSession != null && connected) {
-        chatSession.disconnectParticipant();
+        (chatSession as any).disconnectParticipant();
       }
     },
 
@@ -599,13 +558,17 @@ export function createConnectChatConversation(
       event: ConversationHandlerEvent,
       handler: EventHandlers[ConversationHandlerEvent],
     ): void => {
-      eventListeners[event] = eventListeners[event].filter((h) => h !== handler);
+      eventListeners[event] = eventListeners[event].filter(
+        (h) => h !== handler,
+      );
     },
 
-    emitInterimMessage: (message?: string): void => {
-      eventListeners.interimMessage.forEach((listener) => (listener as any)(message));
+    setInterimMessage: (message?: string): void => {
+      eventListeners.interimMessage.forEach((listener) =>
+        (listener as any)(message),
+      );
     },
   };
 
   return handler;
-}
+};
