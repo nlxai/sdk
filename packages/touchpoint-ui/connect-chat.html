@@ -158,16 +158,17 @@
           tpEl.style.height = "100%";
 
           // Import the adapter — it's in the sibling package
-          const { createConnectChatConversation } =
+          const { createConnectChatConversation, fetchChatDetails } =
             await import("../../packages/connect-chat-adapter/src/index.ts");
 
+          const details = fetchChatDetails(endpoint, {
+            instanceId,
+            contactFlowId,
+            participantDisplayName: displayName,
+          });
+
           const conversationHandler = createConnectChatConversation({
-            startChatEndpoint: endpoint,
-            startChatParams: {
-              instanceId,
-              contactFlowId,
-              participantDisplayName: displayName,
-            },
+            details,
             region,
           });
 

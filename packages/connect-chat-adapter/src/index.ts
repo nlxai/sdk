@@ -21,55 +21,11 @@ import { ResponseType } from "@nlxai/core";
  * No AWS access keys or secret keys are required client-side. Authentication
  * is handled via the participant token returned by the StartChatContact API.
  *
- * There are two ways to obtain chat details:
- *
- * 1. **Use `startChatEndpoint`** (recommended) — provide the URL of your API Gateway
- *    endpoint (deployed via the AWS-provided CloudFormation template). The adapter
- *    calls it automatically to start the chat.
- *
- * 2. **Use `chatDetails` directly** — if you've already called StartChatContact
- *    yourself, pass the response directly.
+ * Chat details are obtained via the `fetchChatDetails` call.
  */
 export interface ConnectChatConfig {
-  /**
-   * URL of the API Gateway endpoint that calls StartChatContact.
-   * This is the endpoint created by the AWS CloudFormation template for Connect Chat.
-   * When provided, the adapter automatically initiates the chat — no manual
-   * StartChatContact call is needed.
-   *
-   * Mutually exclusive with `chatDetails`.
-   */
-  startChatEndpoint?: string;
-  /**
-   * Parameters to pass when calling the `startChatEndpoint`.
-   */
-  startChatParams?: {
-    /** Connect instance ID */
-    instanceId?: string;
-    /** Contact flow ID to use */
-    contactFlowId?: string;
-    /** Customer display name */
-    participantDisplayName?: string;
-    /** Contact attributes passed to the contact flow */
-    contactAttributes?: Record<string, string>;
-    /**
-     * Content types the chat participant supports receiving.
-     * Defaults to text/plain, text/markdown, application/json, and interactive messages.
-     */
-    supportedMessagingContentTypes?: string[];
-  };
-  /**
-   * Pre-obtained chat details from a prior StartChatContact call.
-   * Mutually exclusive with `startChatEndpoint`.
-   */
-  chatDetails?: {
-    /** The contact ID */
-    contactId: string;
-    /** The participant ID */
-    participantId: string;
-    /** The participant token used for authentication */
-    participantToken: string;
-  };
+  /** Pre-obtained chat details from a prior StartChatContact call. */
+  details: ChatDetails;
   /** AWS region (e.g., "us-east-1"). Defaults to "us-west-2". */
   region?: string;
   /** Language code for the conversation */
@@ -81,11 +37,78 @@ export interface ConnectChatConfig {
   globalConfig?: Record<string, unknown>;
 }
 
-interface ResolvedChatDetails {
+/**
+ * Chat details
+ */
+export interface ChatDetails {
+  /** The contact ID */
   contactId: string;
+  /** The participant ID */
   participantId: string;
+  /** The participant token used for authentication */
   participantToken: string;
 }
+
+/**
+ * Parameters to pass when calling the `startChatEndpoint`.
+ */
+export interface DetailsParams {
+  /** Connect instance ID */
+  instanceId?: string;
+  /** Contact flow ID to use */
+  contactFlowId?: string;
+  /** Customer display name */
+  participantDisplayName?: string;
+  /** Contact attributes passed to the contact flow */
+  contactAttributes?: Record<string, string>;
+  /**
+   * Content types the chat participant supports receiving.
+   * Defaults to text/plain, text/markdown, application/json, and interactive messages.
+   */
+  supportedMessagingContentTypes?: string[];
+}
+
+/**
+ *
+ */
+export const fetchChatDetails = async (
+  endpoint: string,
+  params: DetailsParams,
+): Promise<ChatDetails> => {
+  const body: Record<string, unknown> = {
+    InstanceId: params.instanceId,
+    ContactFlowId: params.contactFlowId,
+    DisplayName: params.participantDisplayName,
+    Attributes: params.contactAttributes,
+    SupportedMessagingContentTypes: params.supportedMessagingContentTypes ?? [
+      "text/plain",
+      "text/markdown",
+      "application/json",
+      "application/vnd.amazonaws.connect.message.interactive",
+    ],
+  };
+
+  const res = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    throw new Error(`StartChatContact endpoint returned ${res.status}`);
+  }
+
+  const data = await res.json();
+  // The CloudFormation-deployed Lambda returns: { data: { startChatResult: { ContactId, ParticipantId, ParticipantToken } } }
+  const startChatResult = data?.data?.startChatResult ?? data?.data ?? data;
+  return {
+    contactId: startChatResult.ContactId ?? startChatResult.contactId,
+    participantId:
+      startChatResult.ParticipantId ?? startChatResult.participantId,
+    participantToken:
+      startChatResult.ParticipantToken ?? startChatResult.participantToken,
+  };
+};
 
 /**
  * Creates a ConversationHandler backed by Amazon Connect Chat via amazon-connect-chatjs.
@@ -95,10 +118,9 @@ interface ResolvedChatDetails {
  *
  * Prerequisites:
  * - `amazon-connect-chatjs` must be loaded before calling this function
- *   (via `import "amazon-connect-chatjs"` or a `<script>` tag).
+ * (via `import "amazon-connect-chatjs"` or a `<script>` tag).
  * - Either provide a `startChatEndpoint` (URL of the API Gateway from the AWS
- *   CloudFormation template) or pre-obtained `chatDetails`.
- *
+ * CloudFormation template) or pre-obtained `chatDetails`.
  * @example
  * ```typescript
  * import "amazon-connect-chatjs";
@@ -133,9 +155,9 @@ interface ResolvedChatDetails {
  * });
  * ```
  */
-export function createConnectChatConversation(
+export const createConnectChatConversation = (
   config: ConnectChatConfig,
-): ConversationHandler {
+): ConversationHandler => {
   let subscribers: Subscriber[] = [];
   let responses: Response[] = [];
   let languageCode: LanguageCode = config.languageCode ?? "en-US";
@@ -184,67 +206,10 @@ export function createConnectChatConversation(
     return connectObj;
   };
 
-  const fetchChatDetails = async (): Promise<ResolvedChatDetails> => {
-    if (config.chatDetails != null) {
-      return config.chatDetails;
-    }
-    if (config.startChatEndpoint == null) {
-      throw new Error(
-        "@nlxai/connect-chat-adapter: Either 'chatDetails' or 'startChatEndpoint' must be provided.",
-      );
-    }
-
-    const body: Record<string, unknown> = {};
-    if (config.startChatParams?.instanceId != null) {
-      body.InstanceId = config.startChatParams.instanceId;
-    }
-    if (config.startChatParams?.contactFlowId != null) {
-      body.ContactFlowId = config.startChatParams.contactFlowId;
-    }
-    if (config.startChatParams?.participantDisplayName != null) {
-      body.ParticipantDetails = {
-        DisplayName: config.startChatParams.participantDisplayName,
-      };
-    }
-    if (config.startChatParams?.contactAttributes != null) {
-      body.Attributes = config.startChatParams.contactAttributes;
-    }
-
-    body.SupportedMessagingContentTypes = config.startChatParams
-      ?.supportedMessagingContentTypes ?? [
-      "text/plain",
-      "text/markdown",
-      "application/json",
-      "application/vnd.amazonaws.connect.message.interactive",
-    ];
-
-    const res = await fetch(config.startChatEndpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-
-    if (!res.ok) {
-      throw new Error(`StartChatContact endpoint returned ${res.status}`);
-    }
-
-    const data = await res.json();
-    // The CloudFormation-deployed Lambda returns: { data: { startChatResult: { ContactId, ParticipantId, ParticipantToken } } }
-    const startChatResult = data?.data?.startChatResult ?? data?.data ?? data;
-    return {
-      contactId: startChatResult.ContactId ?? startChatResult.contactId,
-      participantId:
-        startChatResult.ParticipantId ?? startChatResult.participantId,
-      participantToken:
-        startChatResult.ParticipantToken ?? startChatResult.participantToken,
-    };
-  };
-
   let resolvedContactId: string | undefined;
 
   const initSession = async (): Promise<void> => {
-    const chatDetails = await fetchChatDetails();
-    resolvedContactId = chatDetails.contactId;
+    resolvedContactId = config.details.contactId;
 
     const connectGlobal = getConnectGlobal();
 
@@ -254,7 +219,7 @@ export function createConnectChatConversation(
     });
 
     chatSession = connectGlobal.ChatSession.create({
-      chatDetails,
+      chatDetails: config.details,
       type: connectGlobal.ChatSession.SessionTypes.CUSTOMER,
     });
 
@@ -268,7 +233,7 @@ export function createConnectChatConversation(
       const contentType: string = data.ContentType ?? "";
 
       if (contentType === "text/plain" || contentType === "text/markdown") {
-        const text = data.Content ?? "";
+        const text: string = data.Content ?? "";
         if (text.startsWith("{") && text.includes('"modalities"')) {
           handleJsonMessage(text);
         } else {
@@ -551,8 +516,8 @@ export function createConnectChatConversation(
         ...newResponse,
         receivedAt: (newResponse as any).receivedAt ?? Date.now(),
       };
-      responses = [...responses, responseWithTimestamp as Response];
-      notify(responseWithTimestamp as Response);
+      responses = [...responses, responseWithTimestamp];
+      notify(responseWithTimestamp);
     },
 
     subscribe,
@@ -632,4 +597,4 @@ export function createConnectChatConversation(
   };
 
   return handler;
-}
+};
