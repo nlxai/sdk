@@ -14,6 +14,7 @@ import type {
   LanguageCode,
 } from "@nlxai/core";
 import { ResponseType } from "@nlxai/core";
+import "amazon-connect-chatjs";
 
 /**
  * Configuration for the Amazon Connect Chat adapter.
@@ -110,6 +111,12 @@ export const fetchChatDetails = async (
   };
 };
 
+const warnMethod = (methodName: string): void => {
+  console.warn(
+    `Message not sent: the '${methodName}' method is not supported by the Amazon Connect Chat Interface integration.`,
+  );
+};
+
 /**
  * Creates a ConversationHandler backed by Amazon Connect Chat via amazon-connect-chatjs.
  *
@@ -158,11 +165,13 @@ export const fetchChatDetails = async (
 export const createConnectChatConversation = (
   config: ConnectChatConfig,
 ): ConversationHandler => {
+  const connect = (window as any).connect;
+
   let subscribers: Subscriber[] = [];
   let responses: Response[] = [];
   let languageCode: LanguageCode = config.languageCode ?? "en-US";
   let requestOverride: RequestOverride | undefined;
-  let chatSession: any;
+  let chatSession: ReturnType<typeof connect.ChatSession.create> | null = null;
   let connected = false;
 
   const eventListeners: Record<
@@ -189,38 +198,19 @@ export const createConnectChatConversation = (
     notify(response);
   };
 
-  const getConnectGlobal = (): any => {
-    const g =
-      typeof globalThis !== "undefined"
-        ? globalThis
-        : typeof window !== "undefined"
-          ? window
-          : undefined;
-    const connectObj = (g as any)?.connect;
-    if (connectObj?.ChatSession == null) {
-      throw new Error(
-        "@nlxai/connect-chat-adapter: amazon-connect-chatjs must be loaded before creating a Connect Chat conversation. " +
-          "Import it via `import 'amazon-connect-chatjs'` or include the script tag.",
-      );
-    }
-    return connectObj;
-  };
-
   let resolvedContactId: string | undefined;
 
   const initSession = async (): Promise<void> => {
     resolvedContactId = config.details.contactId;
 
-    const connectGlobal = getConnectGlobal();
-
-    connectGlobal.ChatSession.setGlobalConfig({
+    connect.ChatSession.setGlobalConfig({
       region: config.region ?? "us-west-2",
       ...(config.globalConfig ?? {}),
     });
 
-    chatSession = connectGlobal.ChatSession.create({
+    chatSession = connect.ChatSession.create({
       chatDetails: config.details,
-      type: connectGlobal.ChatSession.SessionTypes.CUSTOMER,
+      type: connect.ChatSession.SessionTypes.CUSTOMER,
     });
 
     chatSession.onMessage((event: any) => {
@@ -274,7 +264,7 @@ export const createConnectChatConversation = (
       connected = false;
     });
 
-    await chatSession.connect();
+    await chatSession.connect(null);
   };
 
   const handleJsonMessage = (content: string | undefined): void => {
@@ -465,27 +455,27 @@ export const createConnectChatConversation = (
     sendChoice,
 
     sendSlots: (_slots: SlotsRecordOrArray, _context?: Context): void => {
-      // No-op: Connect Chat does not have a slots concept
+      warnMethod("sendSlots");
     },
 
     sendWelcomeFlow: (_context?: Context): void => {
-      // Connect Chat triggers the contact flow automatically on connection
+      warnMethod("sendWelcomeFlow");
     },
 
     sendWelcomeIntent: (_context?: Context): void => {
-      // Deprecated, no-op
+      warnMethod("sendWelcomeIntent");
     },
 
     sendFlow: (_flowId: string, _context?: Context): void => {
-      // No-op: Connect Chat does not support arbitrary flow triggering from client
+      warnMethod("sendFlow");
     },
 
     sendIntent: (_intentId: string, _context?: Context): void => {
-      // Deprecated, no-op
+      warnMethod("sendIntent");
     },
 
     sendContext: async (_context: Context): Promise<void> => {
-      // No-op
+      warnMethod("sendContext");
     },
 
     sendStructured: (
@@ -498,7 +488,7 @@ export const createConnectChatConversation = (
     },
 
     sendVoicePlusContext: (_context: VoicePlusContext): void => {
-      // No-op
+      warnMethod("sendVoicePlusContext");
     },
 
     getVoiceCredentials: async (): Promise<VoiceCredentials> => {
@@ -508,7 +498,7 @@ export const createConnectChatConversation = (
     },
 
     submitFeedback: async (): Promise<void> => {
-      // No-op
+      warnMethod("submitFeedback");
     },
 
     appendMessageToTranscript: (newResponse): void => {
@@ -543,7 +533,7 @@ export const createConnectChatConversation = (
       // Disconnect old session and start a fresh Connect Chat session
       if (chatSession != null && connected) {
         try {
-          chatSession.disconnectParticipant();
+          (chatSession as any).disconnectParticipant();
         } catch (_e) {
           /* best effort */
         }
@@ -565,7 +555,7 @@ export const createConnectChatConversation = (
     destroy: (): void => {
       subscribers = [];
       if (chatSession != null && connected) {
-        chatSession.disconnectParticipant();
+        (chatSession as any).disconnectParticipant();
       }
     },
 

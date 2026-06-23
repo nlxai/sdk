@@ -37,10 +37,8 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@nlxai/core": "^1.2.6"
-  },
-  "peerDependencies": {
-    "amazon-connect-chatjs": "^2.0.0"
+    "@nlxai/core": "^1.2.6",
+    "amazon-connect-chatjs": "^2.3.2"
   },
   "peerDependenciesMeta": {
     "amazon-connect-chatjs": {

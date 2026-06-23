@@ -128,7 +128,6 @@
 
     <nlx-touchpoint id="touchpoint" style="display: none"></nlx-touchpoint>
 
-    <script src="https://cdn.jsdelivr.net/npm/amazon-connect-chatjs@2/dist/amazon-connect-chat.js"></script>
     <script type="module">
       import { create } from "./src/index.tsx";
 
@@ -161,11 +160,13 @@
           const { createConnectChatConversation, fetchChatDetails } =
             await import("../../packages/connect-chat-adapter/src/index.ts");
 
-          const details = fetchChatDetails(endpoint, {
+          const details = await fetchChatDetails(endpoint, {
             instanceId,
             contactFlowId,
             participantDisplayName: displayName,
           });
+
+          console.log(details);
 
           const conversationHandler = createConnectChatConversation({
             details,
