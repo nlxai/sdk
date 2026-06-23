@@ -119,41 +119,25 @@ const warnMethod = (methodName: string): void => {
   );
 };
 
+type ConversationHandlerEventListeners = Record<
+  ConversationHandlerEvent,
+  Array<EventHandlers[ConversationHandlerEvent]>
+>;
+
 /**
  * Creates a ConversationHandler backed by Amazon Connect Chat via amazon-connect-chatjs.
  *
  * This adapter conforms to the same interface used by \@nlxai/core's `createConversation`,
  * so it can be passed directly to Touchpoint UI via the `conversationHandler` prop.
  *
- * Prerequisites:
- * - `amazon-connect-chatjs` must be loaded before calling this function
- * (via `import "amazon-connect-chatjs"` or a `<script>` tag).
- * - Either provide a `startChatEndpoint` (URL of the API Gateway from the AWS
- * CloudFormation template) or pre-obtained `chatDetails`.
  * @example
  * ```typescript
- * import "amazon-connect-chatjs";
  * import { createConnectChatConversation } from "@nlxai/connect-chat-adapter";
  * import { create } from "@nlxai/touchpoint-ui";
  *
- * // Option 1: Let the adapter call StartChatContact via your API Gateway
  * const touchpoint = await create({
  *   conversationHandler: createConnectChatConversation({
- *     startChatEndpoint: "https://abc123.execute-api.us-east-1.amazonaws.com/Prod",
- *     startChatParams: {
- *       instanceId: "your-connect-instance-id",
- *       contactFlowId: "your-contact-flow-id",
- *       participantDisplayName: "Customer",
- *     },
- *     region: "us-east-1",
- *   }),
- *   theme: { accent: "#0972d3" },
- * });
- *
- * // Option 2: Pass pre-obtained chatDetails
- * const touchpoint = await create({
- *   conversationHandler: createConnectChatConversation({
- *     chatDetails: {
+ *     details: {
  *       contactId: "abc-123",
  *       participantId: "def-456",
  *       participantToken: "token-xyz",
@@ -176,10 +160,7 @@ export const createConnectChatConversation = (
   let chatSession: ReturnType<typeof connect.ChatSession.create> | null = null;
   let connected = false;
 
-  const eventListeners: Record<
-    ConversationHandlerEvent,
-    Array<(...args: any[]) => void>
-  > = {
+  const eventListeners: ConversationHandlerEventListeners = {
     interimMessage: [],
     voicePlusCommand: [],
   };
@@ -311,6 +292,7 @@ export const createConnectChatConversation = (
           ...(modalities != null ? { modalities } : {}),
         },
       };
+
       appendResponse(newResponse);
     } catch (_err) {
       appendResponse({
