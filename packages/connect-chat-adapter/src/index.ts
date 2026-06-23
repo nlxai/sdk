@@ -69,7 +69,7 @@ export interface DetailsParams {
 }
 
 /**
- *
+ * Fetch chat details via API Gateway endpoint
  */
 export const fetchChatDetails = async (
   endpoint: string,
