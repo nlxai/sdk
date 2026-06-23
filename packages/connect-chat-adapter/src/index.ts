@@ -266,7 +266,7 @@ export const createConnectChatConversation = (
       connected = false;
     });
 
-    await chatSession.connect(null);
+    await chatSession.connect();
   };
 
   const handleJsonMessage = (content: string | undefined): void => {
