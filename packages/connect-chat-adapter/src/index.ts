@@ -79,7 +79,9 @@ export const fetchChatDetails = async (
   const body: Record<string, unknown> = {
     InstanceId: params.instanceId,
     ContactFlowId: params.contactFlowId,
-    DisplayName: params.participantDisplayName,
+    ParticipantDetails: {
+      DisplayName: params.participantDisplayName,
+    },
     Attributes: params.contactAttributes,
     SupportedMessagingContentTypes: params.supportedMessagingContentTypes ?? [
       "text/plain",
@@ -101,7 +103,7 @@ export const fetchChatDetails = async (
 
   const data = await res.json();
   // The CloudFormation-deployed Lambda returns: { data: { startChatResult: { ContactId, ParticipantId, ParticipantToken } } }
-  const startChatResult = data?.data?.startChatResult ?? data?.data ?? data;
+  const startChatResult = data?.data?.startChatResult;
   return {
     contactId: startChatResult.ContactId ?? startChatResult.contactId,
     participantId:
