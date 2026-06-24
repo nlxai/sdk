@@ -172,11 +172,6 @@ export const createConnectChatConversation = (
   };
 
   const appendResponse = (response: Response): void => {
-    if (response.type === ResponseType.Application) {
-      eventListeners.interimMessage.forEach((listener) =>
-        (listener as any)(undefined),
-      );
-    }
     responses = [...responses, response];
     notify(response);
   };
@@ -564,9 +559,7 @@ export const createConnectChatConversation = (
     },
 
     setInterimMessage: (message?: string): void => {
-      eventListeners.interimMessage.forEach((listener) =>
-        (listener as any)(message),
-      );
+      eventListeners.interimMessage.forEach((listener) => listener(message));
     },
   };
 

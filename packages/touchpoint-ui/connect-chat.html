@@ -171,16 +171,6 @@
             region,
           });
 
-          // Seed a synthetic user message so Touchpoint shows its loading animation
-          // while waiting for the first Connect Chat response
-          conversationHandler.appendMessageToTranscript({
-            type: "user",
-            payload: { type: "text", text: "" },
-          });
-
-          // Set custom loading text (instead of default "Thinking")
-          conversationHandler.setInterimMessage("Connecting...");
-
           tpEl.touchpointConfiguration = {
             conversationHandler,
             config: {
@@ -189,6 +179,7 @@
             windowSize: "half",
             colorMode: "dark",
             input: "text",
+            chatMode: true,
             theme: {
               fontFamily:
                 '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
