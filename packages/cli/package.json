@@ -53,9 +53,9 @@
     "access": "public"
   },
   "devDependencies": {
-    "@vitest/coverage-istanbul": "^3.2.4",
-    "@vitest/coverage-v8": "^3.2.4",
-    "@vitest/ui": "^3.2.4",
+    "@vitest/coverage-istanbul": "^4.1.0",
+    "@vitest/coverage-v8": "^4.1.0",
+    "@vitest/ui": "^4.1.0",
     "vitest": "^4.1.0"
   },
   "gitHead": "b4642b95ec6a2752e4ef1cad2accf262f9fadaa7"
