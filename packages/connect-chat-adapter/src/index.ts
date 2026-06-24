@@ -114,6 +114,7 @@ export const fetchChatDetails = async (
 };
 
 const warnMethod = (methodName: string): void => {
+  // eslint-disable-next-line no-console
   console.warn(
     `Message not sent: the '${methodName}' method is not supported by the Amazon Connect Chat Interface integration.`,
   );
@@ -129,7 +130,6 @@ type ConversationHandlerEventListeners = Record<
  *
  * This adapter conforms to the same interface used by \@nlxai/core's `createConversation`,
  * so it can be passed directly to Touchpoint UI via the `conversationHandler` prop.
- *
  * @example
  * ```typescript
  * import { createConnectChatConversation } from "@nlxai/connect-chat-adapter";
@@ -157,7 +157,7 @@ export const createConnectChatConversation = (
   let responses: Response[] = [];
   let languageCode: LanguageCode = config.languageCode ?? "en-US";
   let requestOverride: RequestOverride | undefined;
-  let chatSession: ReturnType<typeof connect.ChatSession.create> | null = null;
+  let chatSession: Record<string, any> | null = null;
   let connected = false;
 
   const eventListeners: ConversationHandlerEventListeners = {
@@ -194,7 +194,7 @@ export const createConnectChatConversation = (
     chatSession = connect.ChatSession.create({
       chatDetails: config.details,
       type: connect.ChatSession.SessionTypes.CUSTOMER,
-    });
+    }) as Record<string, any>;
 
     chatSession.onMessage((event: any) => {
       const data = event.data;
