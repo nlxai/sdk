@@ -203,7 +203,7 @@ vi.mock("@inquirer/prompts", () => ({
 
 describe("syncCommand interactive mode", () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   it("should prompt and sync when user chooses 'sync'", async () => {
