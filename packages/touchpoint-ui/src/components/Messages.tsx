@@ -32,7 +32,6 @@ import * as Feedback from "../feedback";
 import { Notice } from "./Notice";
 
 export interface MessagesProps {
-  isWaiting: boolean;
   interimMessage?: string;
   handler: ConversationHandler;
   responses: Response[];
@@ -330,7 +329,6 @@ export const Messages: FC<MessagesProps> = ({
   agentMessageBubble,
   lastApplicationResponseIndex,
   interimMessage,
-  isWaiting,
   modalityComponents,
   handler,
   className,
@@ -341,6 +339,8 @@ export const Messages: FC<MessagesProps> = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const lastApplicationMessageRef = useRef<HTMLDivElement | null>(null);
+
+  const isWaiting = interimMessage != null;
 
   useEffect(() => {
     if (!chatMode && !isWaiting) {
@@ -528,9 +528,9 @@ export const Messages: FC<MessagesProps> = ({
             </Fragment>
           );
         })}
-        {chatMode && isWaiting ? (
+        {chatMode && interimMessage != null ? (
           <div className="text-primary-40 text-base shimmer w-fit">
-            {interimMessage ?? "Thinking"}
+            {interimMessage}
           </div>
         ) : null}
       </div>
