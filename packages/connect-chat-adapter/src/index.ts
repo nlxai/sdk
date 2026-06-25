@@ -53,7 +53,7 @@ export interface ChatDetails {
 /**
  * Parameters to pass when calling the `startChatEndpoint`.
  */
-export interface DetailsParams {
+export interface DetailsRequestParams {
   /** Connect instance ID */
   instanceId?: string;
   /** Contact flow ID to use */
@@ -74,7 +74,7 @@ export interface DetailsParams {
  */
 export const fetchChatDetails = async (
   endpoint: string,
-  params: DetailsParams,
+  params: DetailsRequestParams,
 ): Promise<ChatDetails> => {
   const body: Record<string, unknown> = {
     InstanceId: params.instanceId,
@@ -134,9 +134,6 @@ const copy = {
 
 /**
  * Creates a ConversationHandler backed by Amazon Connect Chat via amazon-connect-chatjs.
- * @params config - configuration
- * This adapter conforms to the same interface used by \@nlxai/core's `createConversation`,
- * so it can be passed directly to Touchpoint UI via the `conversationHandler` prop.
  * @example
  * ```typescript
  * import { createConnectChatConversation } from "@nlxai/connect-chat-adapter";
@@ -154,6 +151,8 @@ const copy = {
  *   theme: { accent: "#0972d3" },
  * });
  * ```
+ * @param config {ConnectChatConfig} - configuration
+ * @returns conversationHandler {ConversationHandler} - `@nlxai/core`-compatible conversation handler, directly passable to Touchpoint UI.
  */
 export const createConnectChatConversation = (
   config: ConnectChatConfig,
@@ -168,7 +167,7 @@ export const createConnectChatConversation = (
   let connected: boolean = false;
   let currentInterimMessage: string | undefined = undefined;
   // TODO: keep track of when the conversation is escalated, stop triggering a typing interim message if true
-  let escalated: boolean = false;
+  const escalated: boolean = false;
 
   const eventListeners: ConversationHandlerEventListeners = {
     interimMessage: [],
