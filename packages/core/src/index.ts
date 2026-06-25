@@ -1095,6 +1095,11 @@ const fetchUserMessage = async ({
   const streamRequest = async (
     body: ApplicationRequest,
   ): Promise<RawApplicationResponsePayload> => {
+    eventListeners.interimMessage.forEach(
+      (listener: InterimMessageListener) => {
+        listener("Thinking...");
+      },
+    );
     const response = await fetch(fullApplicationUrl, {
       method: "POST",
       headers: {

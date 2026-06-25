@@ -160,14 +160,13 @@
           const { createConnectChatConversation, fetchChatDetails } =
             await import("../../packages/connect-chat-adapter/src/index.ts");
 
-          const details = await fetchChatDetails(endpoint, {
-            instanceId,
-            contactFlowId,
-            participantDisplayName: displayName,
-          });
-
           const conversationHandler = createConnectChatConversation({
-            details,
+            details: () =>
+              fetchChatDetails(endpoint, {
+                instanceId,
+                contactFlowId,
+                participantDisplayName: displayName,
+              }),
             region,
           });
 

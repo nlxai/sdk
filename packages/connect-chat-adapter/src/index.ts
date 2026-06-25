@@ -26,7 +26,7 @@ import "amazon-connect-chatjs";
  */
 export interface ConnectChatConfig {
   /** Pre-obtained chat details from a prior StartChatContact call. */
-  details: ChatDetails;
+  details: ChatDetails | (() => Promise<ChatDetails>);
   /** AWS region (e.g., "us-east-1"). Defaults to "us-west-2". */
   region?: string;
   /** Language code for the conversation */
@@ -125,9 +125,16 @@ type ConversationHandlerEventListeners = Record<
   Array<EventHandlers[ConversationHandlerEvent]>
 >;
 
+const copy = {
+  thinking: "Thinking...",
+  typing: "Typing...",
+  connecting: "Connecting...",
+  connectionLost: "Connection lost. Please try again.",
+};
+
 /**
  * Creates a ConversationHandler backed by Amazon Connect Chat via amazon-connect-chatjs.
- *
+ * @params config - configuration
  * This adapter conforms to the same interface used by \@nlxai/core's `createConversation`,
  * so it can be passed directly to Touchpoint UI via the `conversationHandler` prop.
  * @example
@@ -158,11 +165,19 @@ export const createConnectChatConversation = (
   let languageCode: LanguageCode = config.languageCode ?? "en-US";
   let requestOverride: RequestOverride | undefined;
   let chatSession: Record<string, any> | null = null;
-  let connected = false;
+  let connected: boolean = false;
+  let currentInterimMessage: string | undefined = undefined;
+  // TODO: keep track of when the conversation is escalated, stop triggering a typing interim message if true
+  let escalated: boolean = false;
 
   const eventListeners: ConversationHandlerEventListeners = {
     interimMessage: [],
     voicePlusCommand: [],
+  };
+
+  const setInterimMessage = (message?: string): void => {
+    currentInterimMessage = message;
+    eventListeners.interimMessage.forEach((listener) => listener(message));
   };
 
   const notify = (newResponse?: Response): void => {
@@ -179,7 +194,15 @@ export const createConnectChatConversation = (
   let resolvedContactId: string | undefined;
 
   const initSession = async (): Promise<void> => {
-    resolvedContactId = config.details.contactId;
+    setInterimMessage(copy.connecting);
+
+    const details: ChatDetails = await (typeof config.details === "function"
+      ? config.details()
+      : Promise.resolve(config.details));
+
+    setInterimMessage(copy.thinking);
+
+    resolvedContactId = details.contactId;
 
     connect.ChatSession.setGlobalConfig({
       region: config.region ?? "us-west-2",
@@ -187,7 +210,7 @@ export const createConnectChatConversation = (
     });
 
     chatSession = connect.ChatSession.create({
-      chatDetails: config.details,
+      chatDetails: details,
       type: connect.ChatSession.SessionTypes.CUSTOMER,
     }) as Record<string, any>;
 
@@ -197,6 +220,8 @@ export const createConnectChatConversation = (
 
       const participantRole = data.ParticipantRole;
       if (participantRole === "CUSTOMER") return;
+
+      setInterimMessage(undefined);
 
       const contentType: string = data.ContentType ?? "";
 
@@ -234,8 +259,12 @@ export const createConnectChatConversation = (
       appendResponse({
         type: ResponseType.Failure,
         receivedAt: Date.now(),
-        payload: { text: "Connection lost. Please try again." },
+        payload: { text: copy.connectionLost },
       });
+    });
+
+    chatSession.onTyping?.(() => {
+      setInterimMessage(copy.typing);
     });
 
     chatSession.onEnded(() => {
@@ -381,6 +410,8 @@ export const createConnectChatConversation = (
       );
       return;
     }
+
+    setInterimMessage(escalated ? undefined : copy.thinking);
 
     const newResponse: Response = {
       type: ResponseType.User,
@@ -546,7 +577,10 @@ export const createConnectChatConversation = (
       event: ConversationHandlerEvent,
       handler: EventHandlers[ConversationHandlerEvent],
     ): void => {
-      eventListeners[event].push(handler as any);
+      if (event === "interimMessage") {
+        handler(currentInterimMessage);
+      }
+      eventListeners[event].push(handler);
     },
 
     removeEventListener: (
@@ -558,9 +592,7 @@ export const createConnectChatConversation = (
       );
     },
 
-    setInterimMessage: (message?: string): void => {
-      eventListeners.interimMessage.forEach((listener) => listener(message));
-    },
+    setInterimMessage,
   };
 
   return handler;
