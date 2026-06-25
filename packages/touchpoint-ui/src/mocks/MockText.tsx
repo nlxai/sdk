@@ -90,7 +90,6 @@ export const MockText: FC<{
         ) : (
           <>
             <Messages
-              isWaiting={false}
               handler={mockConversationHandler}
               responses={responses}
               userMessageBubble={true}

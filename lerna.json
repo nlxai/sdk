@@ -10,6 +10,7 @@
   "npmClient": "npm",
   "packages": [
     "packages/core",
+    "packages/connect-chat-adapter",
     "packages/voice-plus-web",
     "packages/touchpoint-ui",
     "packages/cli"

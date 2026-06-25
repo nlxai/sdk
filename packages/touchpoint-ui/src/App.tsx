@@ -87,8 +87,11 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
   );
 
   const handler = useMemo(() => {
+    if (props.conversationHandler != null) {
+      return props.conversationHandler;
+    }
     return createConversation({ responses: responseData, ...props.config });
-  }, [props.config, responseData]);
+  }, [props.conversationHandler, props.config, responseData]);
 
   useEffect(() => {
     handler.addEventListener("interimMessage", setInterimMessage);
@@ -99,15 +102,14 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
 
   const [responses, setResponses] = useState<Response[]>([]);
 
-  const isWaiting = responses[responses.length - 1]?.type === ResponseType.User;
-
   const colorMode = props.colorMode ?? "dark";
 
   const [isExpanded, setIsExpanded] = useState(
     props.embedded || props.input === "external" || restoredConversation,
   );
 
-  const configValid = isConfigValid(props.config);
+  const configValid =
+    props.conversationHandler != null || isConfigValid(props.config);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
@@ -143,33 +145,29 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
     isExpandedRef.current = isExpanded;
   }, [isExpanded]);
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        setExpanded(val: boolean) {
-          if (val) {
-            setIsExpanded(true);
-          } else {
-            hangUp();
-            setIsExpanded(false);
-          }
-        },
-        getExpanded() {
-          return isExpandedRef.current;
-        },
-        getConversationHandler() {
-          return handler;
-        },
-        setCustomBidirectionalCommands: (
-          commands: BidirectionalCustomCommand[],
-        ) => {
-          customCommandsChangeHandler.current(commands);
-        },
-      };
-    },
-    [handler, setIsExpanded, hangUp],
-  );
+  useImperativeHandle(ref, () => {
+    return {
+      setExpanded(val: boolean) {
+        if (val) {
+          setIsExpanded(true);
+        } else {
+          hangUp();
+          setIsExpanded(false);
+        }
+      },
+      getExpanded() {
+        return isExpandedRef.current;
+      },
+      getConversationHandler() {
+        return handler;
+      },
+      setCustomBidirectionalCommands: (
+        commands: BidirectionalCustomCommand[],
+      ) => {
+        customCommandsChangeHandler.current(commands);
+      },
+    };
+  }, [handler, setIsExpanded, hangUp]);
 
   useEffect(() => {
     const fn: Subscriber = (responses) => {
@@ -429,7 +427,6 @@ const App = forwardRef<AppRef, Props>((props, ref) => {
           userMessageBubble={props.userMessageBubble ?? false}
           agentMessageBubble={props.agentMessageBubble ?? false}
           chatMode={props.chatMode ?? true}
-          isWaiting={isWaiting}
           interimMessage={interimMessage}
           lastApplicationResponseIndex={lastApplicationResponse?.index}
           responses={responses}

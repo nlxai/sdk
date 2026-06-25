@@ -42,6 +42,7 @@ export const mockConversationHandler: ConversationHandler = {
   addEventListener: () => {},
   removeEventListener: () => {},
   sendVoicePlusContext: () => {},
+  setInterimMessage: () => {},
 };
 
 export const responses: Response[] = [

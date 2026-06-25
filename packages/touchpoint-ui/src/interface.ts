@@ -261,9 +261,16 @@ export type BidirectionalConfig =
  */
 export interface TouchpointConfiguration {
   /**
-   * Connection information for the \@nlxai/core conversation handler
+   * Connection information for the \@nlxai/core conversation handler.
+   * Required unless `conversationHandler` is provided.
    */
-  config: Config;
+  config?: Config;
+  /**
+   * A pre-built conversation handler. When provided, Touchpoint will use this
+   * instead of creating one from `config`. This enables adapters like
+   * \@nlxai/connect-chat-adapter to power the Touchpoint UI.
+   */
+  conversationHandler?: ConversationHandler;
   /**
    * Optional window size for the chat window, defaults to `half`
    */

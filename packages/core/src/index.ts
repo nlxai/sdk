@@ -265,6 +265,11 @@ export interface ConversationHandler {
    * @internal
    */
   sendVoicePlusContext: (context: VoicePlusContext) => void;
+  /**
+   * Set interim message. Setting `undefined` clears the current interim message.
+   * @param message - interim message.
+   */
+  setInterimMessage: (message?: string) => void;
 }
 
 /**
@@ -1090,6 +1095,11 @@ const fetchUserMessage = async ({
   const streamRequest = async (
     body: ApplicationRequest,
   ): Promise<RawApplicationResponsePayload> => {
+    eventListeners.interimMessage.forEach(
+      (listener: InterimMessageListener) => {
+        listener("Thinking...");
+      },
+    );
     const response = await fetch(fullApplicationUrl, {
       method: "POST",
       headers: {
@@ -1245,11 +1255,11 @@ export function createConversation(configuration: Config): ConversationHandler {
   const websocketApplicationUrl =
     connection != null
       ? toWebsocketUrl(connection)
-      : configuration.applicationUrl ?? "";
+      : (configuration.applicationUrl ?? "");
   const httpApplicationUrl =
     connection != null
       ? toHttpUrl(connection)
-      : configuration.applicationUrl ?? "";
+      : (configuration.applicationUrl ?? "");
 
   // Check if the application URL has a language code appended to it
   if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(httpApplicationUrl)) {
@@ -1358,6 +1368,14 @@ export function createConversation(configuration: Config): ConversationHandler {
     } else {
       voicePlusSocketMessageQueue = [...voicePlusSocketMessageQueue, message];
     }
+  };
+
+  const setInterimMessage = (message?: string) => {
+    eventListeners.interimMessage.forEach(
+      (listener: InterimMessageListener) => {
+        listener(message);
+      },
+    );
   };
 
   const sendToApplication = async (
@@ -1691,6 +1709,7 @@ export function createConversation(configuration: Config): ConversationHandler {
         newResponseWithTimestamp,
       );
     },
+    setInterimMessage,
     sendStructured: (structured: StructuredRequest, context) => {
       appendStructuredUserResponse(structured, context);
       void sendToApplication({

@@ -6,7 +6,8 @@ export type NormalizedTouchpointConfiguration = TouchpointConfiguration &
   Required<
     Pick<TouchpointConfiguration, "initializeConversation" | "input">
   > & {
-    config: Required<
-      Pick<Config, "conversationId" | "userId" | "bidirectional">
-    >;
+    config: Config &
+      Required<
+        Pick<Config, "conversationId" | "userId" | "bidirectional" | "languageCode">
+      >;
   };

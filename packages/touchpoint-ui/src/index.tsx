@@ -19,6 +19,7 @@ import {
 import { Carousel } from "./components/ui/Carousel";
 import { DateInput } from "./components/ui/DateInput";
 import { defaultModalities } from "./components/defaultModalities";
+import type { Config } from "@nlxai/core";
 import type {
   TouchpointConfiguration,
   CustomModalityComponent,
@@ -138,20 +139,6 @@ const defaultUserId = (): string => {
 const normalizeConfiguration = (
   configuration: TouchpointConfiguration,
 ): NormalizedTouchpointConfiguration => {
-  const applicationUrl =
-    configuration.config.applicationUrl ??
-    // Make this not break and require a major version bump
-    ("botUrl" in configuration.config
-      ? (configuration.config.botUrl as string)
-      : undefined);
-
-  if ("botUrl" in configuration.config) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      "The 'botUrl' configuration option is deprecated. Use 'applicationUrl' instead.",
-    );
-  }
-
   if ("customModalities" in configuration) {
     // eslint-disable-next-line no-console
     console.warn(
@@ -166,26 +153,44 @@ const normalizeConfiguration = (
     ...defaultModalities,
   };
 
+  // When a pre-built conversationHandler is provided, config is optional.
+  // Build a minimal config for internal use (session storage, language code, etc.)
+  const configObj: Partial<Config> = configuration.config ?? {};
+
+  const applicationUrl =
+    configObj.applicationUrl ??
+    ("botUrl" in configObj
+      ? (configObj.botUrl as string)
+      : undefined);
+
+  if ("botUrl" in configObj) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "The 'botUrl' configuration option is deprecated. Use 'applicationUrl' instead.",
+    );
+  }
+
   return {
     ...configuration,
     config: {
-      ...configuration.config,
+      ...configObj,
       headers: {
-        ...(configuration.config.headers ?? {}),
+        ...(configObj.headers ?? {}),
         "nlx-touchpoint-ui-version": version,
       },
       applicationUrl,
+      languageCode: configObj.languageCode ?? "en-US",
       conversationId:
-        configuration.config.conversationId ??
+        configObj.conversationId ??
         sessionStorage.getItem("nlxConversationId") ??
         defaultConversationId(),
       userId:
-        configuration.config.userId ??
+        configObj.userId ??
         localStorage.getItem("nlxUserId") ??
         defaultUserId(),
       bidirectional:
         configuration.bidirectional == null
-          ? configuration.config.bidirectional ?? false
+          ? configObj.bidirectional ?? false
           : true,
     },
     input: configuration.input ?? "text",

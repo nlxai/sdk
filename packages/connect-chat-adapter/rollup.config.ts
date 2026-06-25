@@ -3,7 +3,7 @@ import pkg from "./package.json" with { type: "json" };
 
 export default rollupConfig({
   pkg: pkg,
-  name: "nlxai.core",
-  externalDeps: ["reconnecting-websocket", "uuid", "ramda"],
+  name: "nlxai.connectChatAdapter",
+  externalDeps: [],
   input: "src/index.ts",
 });
