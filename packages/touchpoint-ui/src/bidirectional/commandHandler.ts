@@ -94,16 +94,16 @@ export const commandHandler = (
         }
         break;
       case "custom":
-        if (pageState.current.customCommands.has(event.payload.action as string)) {
+        if (pageState.current.customCommands.has(event.action as string)) {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const handler = pageState.current.customCommands.get(
-            event.payload.action as string,
+            event.action as string,
           )!;
           handler(event.payload);
         }
         debug(
-          `No custom command handler was defined for the %o action.\n\n%cTip: Set up a handler with \nsetCustomBidirectionalCommands([{ action: "${event.payload.action}", handler() { }}])`,
-          event.payload.action,
+          `No custom command handler was defined for the %o action.\n\n%cTip: Set up a handler with \nsetCustomBidirectionalCommands([{ action: "${event.action}", handler() { }}])`,
+          event.action,
           "font-style: italic; font-size: 90%",
         );
         if (bidirectional?.custom != null) {
@@ -113,7 +113,7 @@ export const commandHandler = (
               "bidirectional.custom is deprecated in automatic context mode. Please use `setCustomBidirectionalCommands` instead.",
             );
           }
-          bidirectional.custom(event.payload.action as string, event.payload);
+          bidirectional.custom(event.action as string, event.payload);
         }
         break;
     }
