@@ -1252,15 +1252,20 @@ export function createConversation(configuration: Config): ConversationHandler {
 
   const connection = parseConnection(configuration);
 
+  const complete = configuration.experimental?.completeApplicationUrl === true;
+
   const websocketApplicationUrl =
-    connection != null
-      ? toWebsocketUrl(connection)
-      : (configuration.applicationUrl ?? "");
-  const httpApplicationUrl =
-    connection == null ||
-    configuration.experimental?.completeApplicationUrl === true
+    complete && isWebsocketUrl(configuration.applicationUrl ?? "")
       ? (configuration.applicationUrl ?? "")
-      : toHttpUrl(connection);
+      : connection != null
+        ? toWebsocketUrl(connection)
+        : (configuration.applicationUrl ?? "");
+  const httpApplicationUrl =
+    complete && !isWebsocketUrl(configuration.applicationUrl ?? "")
+      ? (configuration.applicationUrl ?? "")
+      : connection != null
+        ? toHttpUrl(connection)
+        : (configuration.applicationUrl ?? "");
 
   // Check if the application URL has a language code appended to it
   if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(httpApplicationUrl)) {
@@ -1268,6 +1273,15 @@ export function createConversation(configuration: Config): ConversationHandler {
       "Since v1.0.0, the language code is no longer added at the end of the application URL. Please remove the modifier (e.g. '-en-US') from the URL, and specify it in the `languageCode` parameter instead.",
     );
   }
+
+  const protocol =
+    connection != null
+      ? connection.protocol
+      : isWebsocketUrl(configuration.applicationUrl ?? "")
+        ? Protocol.Websocket
+        : configuration.experimental?.streamHttp === false
+          ? Protocol.Https
+          : Protocol.HttpsWithStreaming;
 
   const eventListeners: ConversationHandlerEventListeners = {
     voicePlusCommand: [],
@@ -1284,11 +1298,7 @@ export function createConversation(configuration: Config): ConversationHandler {
   };
 
   const fullApplicationHttpUrl = (): string =>
-    `${httpApplicationUrl}${
-      configuration.experimental?.completeApplicationUrl === true
-        ? ""
-        : `-${state.languageCode}`
-    }`;
+    `${httpApplicationUrl}${complete ? "" : `-${state.languageCode}`}`;
 
   const setState = (
     change: Partial<InternalState>,
@@ -1409,7 +1419,7 @@ export function createConversation(configuration: Config): ConversationHandler {
       channelType: configuration.experimental?.channelType,
       environment: configuration.environment,
     };
-    if (connection?.protocol === Protocol.Websocket) {
+    if (protocol === Protocol.Websocket) {
       if (socket?.readyState === 1) {
         socket.send(JSON.stringify(bodyWithContext));
       } else {
@@ -1421,7 +1431,7 @@ export function createConversation(configuration: Config): ConversationHandler {
           fullApplicationUrl: fullApplicationHttpUrl(),
           apiKey: connection?.apiKey ?? "",
           headers: configuration.headers ?? {},
-          stream: connection?.protocol === Protocol.HttpsWithStreaming,
+          stream: protocol === Protocol.HttpsWithStreaming,
           eventListeners,
           body: bodyWithContext,
         });
@@ -1534,7 +1544,7 @@ export function createConversation(configuration: Config): ConversationHandler {
     }
   };
 
-  if (connection?.protocol === Protocol.Websocket) {
+  if (protocol === Protocol.Websocket) {
     setupWebsocket();
   }
 
