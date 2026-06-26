@@ -1257,9 +1257,11 @@ export function createConversation(configuration: Config): ConversationHandler {
       ? toWebsocketUrl(connection)
       : (configuration.applicationUrl ?? "");
   const httpApplicationUrl =
-    connection != null
-      ? toHttpUrl(connection)
-      : (configuration.applicationUrl ?? "");
+    configuration.experimental?.completeApplicationUrl === true
+      ? (configuration.applicationUrl ?? "")
+      : connection != null
+        ? toHttpUrl(connection)
+        : (configuration.applicationUrl ?? "");
 
   // Check if the application URL has a language code appended to it
   if (/[-|_][a-z]{2,}[-|_][A-Z]{2,}$/.test(httpApplicationUrl)) {
