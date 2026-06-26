@@ -992,6 +992,7 @@ interface Connection {
   deploymentKey: string;
   channelKey: string;
   apiKey: string;
+  applicationUrl?: string;
 }
 
 /**
@@ -1002,6 +1003,9 @@ interface Connection {
 const parseConnection = (config: Config): Connection | null => {
   const applicationUrl = config.applicationUrl ?? "";
   const apiKey = config.apiKey ?? config.headers?.["nlx-api-key"] ?? "";
+  const completeApplicationUrl = config.experimental?.completeApplicationUrl
+    ? { applicationUrl }
+    : {};
   const protocol =
     config.protocol ??
     /**
@@ -1024,6 +1028,7 @@ const parseConnection = (config: Config): Connection | null => {
       host: config.host,
       channelKey: config.channelKey,
       deploymentKey: config.deploymentKey,
+      ...completeApplicationUrl,
     };
   }
   // `applicationUrl`-based definition: websocket case
@@ -1034,7 +1039,14 @@ const parseConnection = (config: Config): Connection | null => {
     const channelKey = params.get("channelKey");
     const deploymentKey = params.get("deploymentKey");
     if (channelKey != null && deploymentKey != null) {
-      return { protocol, channelKey, deploymentKey, host, apiKey };
+      return {
+        protocol,
+        channelKey,
+        deploymentKey,
+        host,
+        apiKey,
+        ...completeApplicationUrl,
+      };
     }
     return null;
   }
@@ -1054,16 +1066,19 @@ const parseConnection = (config: Config): Connection | null => {
       deploymentKey: parseResult.pathname.groups.deploymentKey,
       host,
       apiKey,
+      ...completeApplicationUrl,
     };
   }
   return null;
 };
 
 const toWebsocketUrl = (connection: Connection): string => {
+  if (connection.applicationUrl != null) return connection.applicationUrl;
   return `wss://us-east-1-ws.${connection.host}?deploymentKey=${connection.deploymentKey}&channelKey=${connection.channelKey}&apiKey=${connection.apiKey}`;
 };
 
 const toHttpUrl = (connection: Connection): string => {
+  if (connection.applicationUrl != null) return connection.applicationUrl;
   return `${connection.protocol === Protocol.Http ? "http" : "https"}://${connection.host}/c/${connection.deploymentKey}/${connection.channelKey}`;
 };
 
