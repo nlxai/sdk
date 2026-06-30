@@ -167,7 +167,7 @@ export const createConnectChatConversation = (
   let connected: boolean = false;
   let currentInterimMessage: string | undefined = undefined;
   // TODO: keep track of when the conversation is escalated, stop triggering a typing interim message if true
-  const escalated: boolean = false;
+  let escalated: boolean = false;
 
   const eventListeners: ConversationHandlerEventListeners = {
     interimMessage: [],
@@ -220,9 +220,19 @@ export const createConnectChatConversation = (
       const participantRole = data.ParticipantRole;
       if (participantRole === "CUSTOMER") return;
 
-      setInterimMessage(undefined);
-
       const contentType: string = data.ContentType ?? "";
+
+      if (
+        contentType ===
+          "application/vnd.amazonaws.connect.event.participant.joined" &&
+        data.participantRole === "AGENT"
+      ) {
+        escalated = true;
+        // TODO: add future escalation handling here (e.g. notice message)
+        return;
+      }
+
+      setInterimMessage(undefined);
 
       if (contentType === "text/plain" || contentType === "text/markdown") {
         const text: string = data.Content ?? "";
@@ -417,6 +427,7 @@ export const createConnectChatConversation = (
       receivedAt: Date.now(),
       payload: { type: "text", text, context },
     };
+
     appendResponse(newResponse);
 
     void connectionReady.then(() => {
@@ -437,6 +448,9 @@ export const createConnectChatConversation = (
       receivedAt: Date.now(),
       payload: { type: "choice", choiceId },
     };
+
+    setInterimMessage(escalated ? undefined : copy.thinking);
+
     appendResponse(newResponse);
 
     void connectionReady.then(() => {

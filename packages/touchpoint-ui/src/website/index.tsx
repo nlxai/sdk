@@ -11,6 +11,7 @@ import { clsx } from "clsx";
 import { useKeyboardEvent } from "@react-hookz/web";
 
 import "../index.css";
+import { ConnectChat } from "./ConnectChat";
 import { type ColorMode, type WindowSize } from "../interface";
 import { TextButton } from "../components/ui/TextButton";
 import { IconButton } from "../components/ui/IconButton";
@@ -515,6 +516,9 @@ const DesignSystem: FC<unknown> = () => {
   );
 };
 
-export const renderDesignSystem = (element: HTMLElement): void => {
-  createRoot(element).render(<DesignSystem />);
+export const renderWebsite = (element: HTMLElement): void => {
+  const params = new URLSearchParams(window.location.search);
+  createRoot(element).render(
+    params.get("page") === "connect" ? <ConnectChat /> : <DesignSystem />,
+  );
 };
