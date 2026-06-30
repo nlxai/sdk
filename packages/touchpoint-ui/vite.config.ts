@@ -21,14 +21,17 @@ const designSystemEntryPoint = (): PluginOption => {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Design System</title>
+  <title>NLX SDK</title>
+  <style>
+    html, body, main, nlx-touchpoint { margin: 0; padding: 0px; height: 100%; }
+  </style>
 </head>
 <body>
   <main></main>
   <script type="module">
-    import { renderDesignSystem } from "./src/design-system/index.tsx";
+    import { renderWebsite } from "./src/website/index.tsx";
 
-    renderDesignSystem(document.querySelector("main"));
+    renderWebsite(document.querySelector("main"));
   </script>
 </body>
 </html>
