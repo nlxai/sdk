@@ -3,6 +3,26 @@ import type { ConversationHandler } from "@nlxai/core";
 import type { PageState, BidirectionalConfig, InputField } from "../interface";
 import { debug } from "./debug";
 
+type BidirectionalEvent =
+  | {
+      classification: "navigation";
+      payload: {
+        action: "page_next" | "page_previous" | "page_custom" | "page_unknown";
+        destination: string | undefined;
+      };
+    }
+  | {
+      classification: "input";
+      payload: {
+        fields: InputField[];
+      };
+    }
+  | {
+      classification: "custom";
+      action: string;
+      payload: unknown;
+    };
+
 export const commandHandler = (
   handler: ConversationHandler,
   bidirectional: BidirectionalConfig,
@@ -10,22 +30,18 @@ export const commandHandler = (
     current: PageState;
   },
 ) => {
-  const impl = (event: any): void => {
+  const impl = (event: BidirectionalEvent): void => {
     debug("Command received", event);
     switch (event.classification) {
       case "navigation":
         if (bidirectional.navigation != null) {
           bidirectional.navigation(
-            event.action as
-              | "page_next"
-              | "page_previous"
-              | "page_custom"
-              | "page_unknown",
-            event.destination as string | undefined,
+            event.payload.action,
+            event.payload.destination,
             pageState.current.links,
           );
         } else if (bidirectional.automaticContext !== false) {
-          switch (event.action) {
+          switch (event.payload.action) {
             case "page_next":
               window.history.forward();
               break;
@@ -34,19 +50,18 @@ export const commandHandler = (
 
               break;
             case "page_custom":
-              if (event.destination != null) {
-                const url = pageState.current.links[event.destination];
+              if (event.payload.destination != null) {
+                const url = pageState.current.links[event.payload.destination];
                 if (url != null) {
                   window.location.href = url;
                 } else {
                   try {
-                     
-                    new URL(event.destination as string);
-                    window.location.href = event.destination as string;
+                    new URL(event.payload.destination);
+                    window.location.href = event.payload.destination;
                   } catch (_error) {
                     debug(
                       `Custom page navigation action received, but no URL found for destination".`,
-                      event.destination,
+                      event.payload.destination,
                     );
                   }
                 }
@@ -62,11 +77,11 @@ export const commandHandler = (
       case "input":
         if (bidirectional?.input != null) {
           bidirectional.input(
-            event.fields as InputField[],
+            event.payload.fields,
             pageState.current.formElements,
           );
         } else if (bidirectional?.automaticContext !== false) {
-          event.fields.forEach((field: InputField) => {
+          event.payload.fields.forEach((field) => {
             if (pageState.current.formElements[field.id] != null) {
               const element = pageState.current.formElements[field.id] as
                 | HTMLInputElement
@@ -93,13 +108,12 @@ export const commandHandler = (
           });
         }
         break;
-      case "custom":
-        if (pageState.current.customCommands.has(event.action as string)) {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          const handler = pageState.current.customCommands.get(
-            event.action as string,
-          )!;
-          handler(event.payload);
+      case "custom": {
+        const customHandler = pageState.current.customCommands.get(
+          event.action,
+        );
+        if (customHandler != null) {
+          customHandler(event.payload);
         }
         debug(
           `No custom command handler was defined for the %o action.\n\n%cTip: Set up a handler with \nsetCustomBidirectionalCommands([{ action: "${event.action}", handler() { }}])`,
@@ -113,9 +127,10 @@ export const commandHandler = (
               "bidirectional.custom is deprecated in automatic context mode. Please use `setCustomBidirectionalCommands` instead.",
             );
           }
-          bidirectional.custom(event.action as string, event.payload);
+          bidirectional.custom(event.action, event.payload);
         }
         break;
+      }
     }
   };
   handler.addEventListener("voicePlusCommand", impl);
