@@ -58,7 +58,7 @@ const sharedPlugins = (command: "serve" | "build"): PluginOption[] => [
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }) =>
-  mode === "design-system"
+  mode === "website"
     ? {
         plugins: [designSystemEntryPoint(), ...sharedPlugins(command)],
         base: "./",

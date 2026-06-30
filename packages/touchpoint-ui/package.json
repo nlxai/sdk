@@ -12,8 +12,8 @@
   "scripts": {
     "dev": "vite",
     "dev:connect": "vite --open connect-chat.html",
-    "design-system": "vite --mode design-system",
-    "build:design-system": "vite build --mode design-system",
+    "website": "vite --mode website",
+    "build:website": "vite build --mode website",
     "build": "tsc && vite build",
     "lint:check": "eslint src/",
     "prepublish": "npm run build",
