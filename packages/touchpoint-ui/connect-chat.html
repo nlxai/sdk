@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- DEPRECATED: the Connect demo moved to the website. Remove as soon as the team is used to it. -->
 <html lang="en">
   <head>
     <style>
@@ -129,95 +130,95 @@
     <nlx-touchpoint id="touchpoint" style="display: none"></nlx-touchpoint>
 
     <script type="module">
-      import { create } from "./src/index.tsx";
+       import { create } from "./src/index.tsx";
 
-      const fields = [
-        "endpoint",
-        "instanceId",
-        "contactFlowId",
-        "displayName",
-        "region",
-      ];
-      const defaults = { displayName: "Customer", region: "us-east-1" };
-      const params = new URLSearchParams(window.location.search);
-      fields.forEach((key) => {
-        const value = params.get(key);
-        if (value) document.getElementById(key).value = value;
-      });
+       const fields = [
+         "endpoint",
+         "instanceId",
+         "contactFlowId",
+         "displayName",
+         "region",
+       ];
+       const defaults = { displayName: "Customer", region: "us-east-1" };
+       const params = new URLSearchParams(window.location.search);
+       fields.forEach((key) => {
+         const value = params.get(key);
+         if (value) document.getElementById(key).value = value;
+       });
 
-      fields.forEach((key) => {
-        document.getElementById(key).addEventListener("input", () => {
-          const url = new URL(window.location.href);
-          fields.forEach((k) => {
-            const v = document.getElementById(k).value.trim();
-            if (v && v !== (defaults[k] || "")) url.searchParams.set(k, v);
-            else url.searchParams.delete(k);
-          });
-          history.replaceState(null, "", url);
-        });
-      });
+       fields.forEach((key) => {
+         document.getElementById(key).addEventListener("input", () => {
+           const url = new URL(window.location.href);
+           fields.forEach((k) => {
+             const v = document.getElementById(k).value.trim();
+             if (v && v !== (defaults[k] || "")) url.searchParams.set(k, v);
+             else url.searchParams.delete(k);
+           });
+           history.replaceState(null, "", url);
+         });
+       });
 
-      document
-        .getElementById("start-btn")
-        .addEventListener("click", async () => {
-          const endpoint = document.getElementById("endpoint").value.trim();
-          const instanceId = document.getElementById("instanceId").value.trim();
-          const contactFlowId = document
-            .getElementById("contactFlowId")
-            .value.trim();
-          const displayName =
-            document.getElementById("displayName").value.trim() || "Customer";
-          const region =
-            document.getElementById("region").value.trim() || "us-east-1";
+       document
+         .getElementById("start-btn")
+         .addEventListener("click", async () => {
+           const endpoint = document.getElementById("endpoint").value.trim();
+           const instanceId = document.getElementById("instanceId").value.trim();
+           const contactFlowId = document
+             .getElementById("contactFlowId")
+             .value.trim();
+           const displayName =
+             document.getElementById("displayName").value.trim() || "Customer";
+           const region =
+             document.getElementById("region").value.trim() || "us-east-1";
 
-          if (!endpoint) {
-            alert("API Gateway Endpoint URL is required.");
-            return;
-          }
+           if (!endpoint) {
+             alert("API Gateway Endpoint URL is required.");
+             return;
+           }
 
-          // Hide config, show touchpoint
-          document.getElementById("config-screen").style.display = "none";
-          const tpEl = document.getElementById("touchpoint");
-          tpEl.style.display = "block";
-          tpEl.style.width = "100%";
-          tpEl.style.height = "100%";
+           // Hide config, show touchpoint
+           document.getElementById("config-screen").style.display = "none";
+           const tpEl = document.getElementById("touchpoint");
+           tpEl.style.display = "block";
+           tpEl.style.width = "100%";
+           tpEl.style.height = "100%";
 
-          // Import the adapter — it's in the sibling package
-          const { createConnectChatConversation, fetchChatDetails } =
-            await import("../../packages/connect-chat-adapter/src/index.ts");
+           // Import the adapter — it's in the sibling package
+           const { createConnectChatConversation, fetchChatDetails } =
+             await import("../../packages/connect-chat-adapter/src/index.ts");
 
-          const conversationHandler = createConnectChatConversation({
-            details: () =>
-              fetchChatDetails(endpoint, {
-                instanceId,
-                contactFlowId,
-                participantDisplayName: displayName,
-              }),
-            region,
-          });
+           const conversationHandler = createConnectChatConversation({
+             details: () =>
+               fetchChatDetails(endpoint, {
+                 instanceId,
+                 contactFlowId,
+                 participantDisplayName: displayName,
+               }),
+             region,
+           });
 
-          tpEl.touchpointConfiguration = {
-            conversationHandler,
-            config: {
-              languageCode: "en-US",
-            },
-            windowSize: "half",
-            colorMode: "dark",
-            input: "text",
-            chatMode: true,
-            theme: {
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-              accent: "#e8600a",
-              primary: "rgb(255, 255, 255)",
-              secondary: "rgb(0, 2, 9)",
-              background: "rgba(0, 2, 9, 0.95)",
-            },
-            initializeConversation: () => {
-              // No-op: Connect Chat starts the flow on connection automatically
-            },
-          };
-        });
+           tpEl.touchpointConfiguration = {
+             conversationHandler,
+             config: {
+               languageCode: "en-US",
+             },
+             windowSize: "half",
+             colorMode: "dark",
+             input: "text",
+             chatMode: true,
+             theme: {
+               fontFamily:
+                 '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+               accent: "#e8600a",
+               primary: "rgb(255, 255, 255)",
+               secondary: "rgb(0, 2, 9)",
+               background: "rgba(0, 2, 9, 0.95)",
+
+      initializeConversation: () => {
+               // No-op: Connect Chat starts the flow on connection automatically
+             },
+           };
+         });
     </script>
   </body>
 </html>
