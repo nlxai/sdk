@@ -101,9 +101,10 @@ export const ConnectChat: FC = () => {
         fetchChatDetails(endpoint, {
           instanceId,
           contactFlowId,
-          participantDisplayName: displayName || defaults.displayName!,
+          participantDisplayName:
+            displayName === "" ? defaults.displayName : displayName,
         }),
-      region: region || defaults.region!,
+      region: region === "" ? defaults.region : region,
     });
 
     (touchpointRef.current as any).touchpointConfiguration = {
