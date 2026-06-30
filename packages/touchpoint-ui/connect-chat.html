@@ -131,6 +131,32 @@
     <script type="module">
       import { create } from "./src/index.tsx";
 
+      const fields = [
+        "endpoint",
+        "instanceId",
+        "contactFlowId",
+        "displayName",
+        "region",
+      ];
+      const defaults = { displayName: "Customer", region: "us-east-1" };
+      const params = new URLSearchParams(window.location.search);
+      fields.forEach((key) => {
+        const value = params.get(key);
+        if (value) document.getElementById(key).value = value;
+      });
+
+      fields.forEach((key) => {
+        document.getElementById(key).addEventListener("input", () => {
+          const url = new URL(window.location.href);
+          fields.forEach((k) => {
+            const v = document.getElementById(k).value.trim();
+            if (v && v !== (defaults[k] || "")) url.searchParams.set(k, v);
+            else url.searchParams.delete(k);
+          });
+          history.replaceState(null, "", url);
+        });
+      });
+
       document
         .getElementById("start-btn")
         .addEventListener("click", async () => {
