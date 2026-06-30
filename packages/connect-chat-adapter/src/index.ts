@@ -228,7 +228,7 @@ export const createConnectChatConversation = (
         data.participantRole === "AGENT"
       ) {
         escalated = true;
-        // TODO: rest of escalation handling
+        // TODO: add future escalation handling here (e.g. notice message)
         return;
       }
 
