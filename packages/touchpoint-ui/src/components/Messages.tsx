@@ -429,6 +429,13 @@ export const Messages: FC<MessagesProps> = ({
               />
             );
           }
+          if (response.type === ResponseType.Notice) {
+            return (
+              <p className="text-center text-primary-60 text-base">
+                {response.payload.text}
+              </p>
+            );
+          }
           // Application response
           const isLast =
             lastApplicationResponseIndex != null &&
