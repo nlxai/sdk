@@ -303,6 +303,10 @@ export enum Protocol {
    */
   Http = "http",
   /**
+   * Supported for development purposes only
+   */
+  HttpWithStreaming = "httpWithStreaming",
+  /**
    * Regular encrypted HTTPS, without support for post-escalation message handling, interim messages and other streaming features.
    */
   Https = "https",
@@ -1049,7 +1053,13 @@ const parseConnection = (config: Config): Connection | null => {
     parseResult?.pathname.groups.deploymentKey != null
   ) {
     return {
-      protocol: urlObject.protocol === "http:" ? Protocol.Http : protocol,
+      protocol:
+        // Correction for the dev case
+        urlObject.protocol === "http:"
+          ? config.experimental?.streamHttp === false
+            ? Protocol.Http
+            : Protocol.HttpWithStreaming
+          : protocol,
       channelKey: parseResult.pathname.groups.channelKey,
       deploymentKey: parseResult.pathname.groups.deploymentKey,
       host,
@@ -1315,6 +1325,11 @@ export function createConversation(configuration: Config): ConversationHandler {
   };
 
   const failureHandler = (): void => {
+    eventListeners.interimMessage.forEach(
+      (listener: InterimMessageListener) => {
+        listener(undefined);
+      },
+    );
     const newResponse: Response = {
       type: ResponseType.Failure,
       receivedAt: new Date().getTime(),
@@ -1431,7 +1446,9 @@ export function createConversation(configuration: Config): ConversationHandler {
           fullApplicationUrl: fullApplicationHttpUrl(),
           apiKey: connection?.apiKey ?? "",
           headers: configuration.headers ?? {},
-          stream: protocol === Protocol.HttpsWithStreaming,
+          stream:
+            protocol === Protocol.HttpsWithStreaming ||
+            protocol === Protocol.HttpWithStreaming,
           eventListeners,
           body: bodyWithContext,
         });
