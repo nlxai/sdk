@@ -1054,6 +1054,7 @@ const parseConnection = (config: Config): Connection | null => {
   ) {
     return {
       protocol:
+        // Correction for the dev case
         urlObject.protocol === "http:"
           ? config.experimental?.streamHttp === false
             ? Protocol.Http
