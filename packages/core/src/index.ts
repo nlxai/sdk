@@ -1325,6 +1325,11 @@ export function createConversation(configuration: Config): ConversationHandler {
   };
 
   const failureHandler = (): void => {
+    eventListeners.interimMessage.forEach(
+      (listener: InterimMessageListener) => {
+        listener(undefined);
+      },
+    );
     const newResponse: Response = {
       type: ResponseType.Failure,
       receivedAt: new Date().getTime(),
