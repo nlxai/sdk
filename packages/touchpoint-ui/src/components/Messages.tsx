@@ -431,7 +431,10 @@ export const Messages: FC<MessagesProps> = ({
           }
           if (response.type === ResponseType.Notice) {
             return (
-              <p className="text-center text-primary-60 text-base">
+              <p
+                className="text-center text-primary-60 text-base"
+                key={responseIndex}
+              >
                 {response.payload.text}
               </p>
             );
