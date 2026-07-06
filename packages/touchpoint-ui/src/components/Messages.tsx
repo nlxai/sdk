@@ -420,6 +420,7 @@ export const Messages: FC<MessagesProps> = ({
               return null;
             }
           }
+
           // Failure
           if (response.type === ResponseType.Failure) {
             return (
@@ -429,6 +430,8 @@ export const Messages: FC<MessagesProps> = ({
               />
             );
           }
+
+          // Notice
           if (response.type === ResponseType.Notice) {
             return (
               <p
@@ -439,6 +442,7 @@ export const Messages: FC<MessagesProps> = ({
               </p>
             );
           }
+
           // Application response
           const isLast =
             lastApplicationResponseIndex != null &&
