@@ -239,6 +239,22 @@ export const createConnectChatConversation = (
         return;
       }
 
+      if (
+        contentType ===
+          "application/vnd.amazonaws.connect.event.participant.left" &&
+        participantRole === "AGENT"
+      ) {
+        const newResponse: Response = {
+          type: ResponseType.Notice,
+          receivedAt: Date.now(),
+          payload: {
+            text: "Agent has left",
+          },
+        };
+        appendResponse(newResponse);
+        return;
+      }
+
       setInterimMessage(undefined);
 
       if (contentType === "text/plain" || contentType === "text/markdown") {
