@@ -59,18 +59,29 @@ Main Touchpoint creation properties object
 
 #### Properties
 
-##### config
+##### config?
 
 ```ts
-config: Config;
+optional config?: Config;
 ```
 
-Connection information for the @nlxai/core conversation handler
+Connection information for the @nlxai/core conversation handler.
+Required unless `conversationHandler` is provided.
+
+##### conversationHandler?
+
+```ts
+optional conversationHandler?: ConversationHandler;
+```
+
+A pre-built conversation handler. When provided, Touchpoint will use this
+instead of creating one from `config`. This enables adapters like
+@nlxai/connect-chat-adapter to power the Touchpoint UI.
 
 ##### windowSize?
 
 ```ts
-optional windowSize: "full" | "half";
+optional windowSize?: "full" | "half";
 ```
 
 Optional window size for the chat window, defaults to `half`
@@ -78,7 +89,7 @@ Optional window size for the chat window, defaults to `half`
 ##### colorMode?
 
 ```ts
-optional colorMode: "dark" | "light" | "light dark";
+optional colorMode?: "dark" | "light" | "light dark";
 ```
 
 Optional color mode for the chat window, defaults to `dark`. Setting `light dark` enables automatic switching based on system settings.
@@ -86,7 +97,7 @@ Optional color mode for the chat window, defaults to `dark`. Setting `light dark
 ##### brandIcon?
 
 ```ts
-optional brandIcon: string;
+optional brandIcon?: string;
 ```
 
 URL of icon used to display the brand in the chat header
@@ -94,7 +105,7 @@ URL of icon used to display the brand in the chat header
 ##### animate?
 
 ```ts
-optional animate: boolean;
+optional animate?: boolean;
 ```
 
 Include border animation. Currently only supported in Voice Mini.
@@ -102,7 +113,7 @@ Include border animation. Currently only supported in Voice Mini.
 ##### launchIcon?
 
 ```ts
-optional launchIcon:
+optional launchIcon?:
   | string
   | boolean
   |
@@ -123,7 +134,7 @@ When set to `false`, no launch button is shown at all. When not set or set to `t
 ##### userMessageBubble?
 
 ```ts
-optional userMessageBubble: boolean;
+optional userMessageBubble?: boolean;
 ```
 
 Specifies whether the user message has bubbles or not
@@ -131,7 +142,7 @@ Specifies whether the user message has bubbles or not
 ##### agentMessageBubble?
 
 ```ts
-optional agentMessageBubble: boolean;
+optional agentMessageBubble?: boolean;
 ```
 
 Specifies whether the agent message has bubbles or not
@@ -139,7 +150,7 @@ Specifies whether the agent message has bubbles or not
 ##### chatMode?
 
 ```ts
-optional chatMode: boolean;
+optional chatMode?: boolean;
 ```
 
 Enables chat mode, a classic chat experience with inline loaders and the chat history visible at all times.
@@ -147,7 +158,7 @@ Enables chat mode, a classic chat experience with inline loaders and the chat hi
 ##### theme?
 
 ```ts
-optional theme: Partial<Theme>;
+optional theme?: Partial<Theme>;
 ```
 
 Optional theme object to override default theme values
@@ -155,15 +166,15 @@ Optional theme object to override default theme values
 ##### modalityComponents?
 
 ```ts
-optional modalityComponents: Record<string, CustomModalityComponent<unknown>>;
+optional modalityComponents?: Record<string, CustomModalityComponent<unknown>>;
 ```
 
 Optional [custom modality components](#custommodalitycomponent) to render in Touchpoint
 
-##### initializeConversation()?
+##### initializeConversation?
 
 ```ts
-optional initializeConversation: (handler, context?) => void;
+optional initializeConversation?: (handler, context?) => void;
 ```
 
 Custom conversation init method. Defaults to sending the welcome flow.
@@ -189,7 +200,7 @@ the context object
 ##### input?
 
 ```ts
-optional input: "text" | "external" | "voice" | "voiceMini";
+optional input?: "text" | "external" | "voice" | "voiceMini";
 ```
 
 Controls the ways in which the user can communicate with the application. Defaults to `"text"`
@@ -197,7 +208,7 @@ Controls the ways in which the user can communicate with the application. Defaul
 ##### showVoiceTranscript?
 
 ```ts
-optional showVoiceTranscript: boolean;
+optional showVoiceTranscript?: boolean;
 ```
 
 Sets whether the transcript is shown in `voice` and `voiceMini` inputs.
@@ -205,7 +216,7 @@ Sets whether the transcript is shown in `voice` and `voiceMini` inputs.
 ##### initialContext?
 
 ```ts
-optional initialContext: Context;
+optional initialContext?: Context;
 ```
 
 Context sent with the initial request.
@@ -213,7 +224,7 @@ Context sent with the initial request.
 ##### bidirectional?
 
 ```ts
-optional bidirectional: BidirectionalConfig;
+optional bidirectional?: BidirectionalConfig;
 ```
 
 Enables bidirectional mode of voice+. Will automatically set the bidirectional flag in the config.
@@ -221,7 +232,7 @@ Enables bidirectional mode of voice+. Will automatically set the bidirectional f
 ##### copy?
 
 ```ts
-optional copy: Partial<Copy>;
+optional copy?: Partial<Copy>;
 ```
 
 Copy
@@ -250,7 +261,7 @@ conversationHandler: ConversationHandler;
 
 The conversation handler instance for interacting with the application
 
-##### teardown()
+##### teardown
 
 ```ts
 teardown: () => void;
@@ -262,7 +273,7 @@ Method to remove the Touchpoint UI from the DOM
 
 `void`
 
-##### setCustomBidirectionalCommands()
+##### setCustomBidirectionalCommands
 
 ```ts
 setCustomBidirectionalCommands: (commands) => void;
@@ -857,7 +868,7 @@ Small text component with smaller typography styles applied.
 
 ---
 
-### html()
+### html
 
 ```ts
 const html: (strings, ...values) => unknown;
@@ -1034,7 +1045,7 @@ Bidirectional context information that is sent to the LLM.
 ##### uri?
 
 ```ts
-optional uri: string;
+optional uri?: string;
 ```
 
 Identifier for which page you are currently on. This can be used to filter the relevant KB pages.
@@ -1042,7 +1053,7 @@ Identifier for which page you are currently on. This can be used to filter the r
 ##### fields?
 
 ```ts
-optional fields: InteractiveElementInfo[];
+optional fields?: InteractiveElementInfo[];
 ```
 
 The active form fields that can be filled in.
@@ -1050,7 +1061,7 @@ The active form fields that can be filled in.
 ##### destinations?
 
 ```ts
-optional destinations: string[];
+optional destinations?: string[];
 ```
 
 Human readable location names that can be navigated to.
@@ -1058,7 +1069,7 @@ Human readable location names that can be navigated to.
 ##### actions?
 
 ```ts
-optional actions: object[];
+optional actions?: object[];
 ```
 
 Custom actions that can be performed.
@@ -1074,7 +1085,7 @@ The name of the command, used to invoke it.
 ###### description?
 
 ```ts
-optional description: string;
+optional description?: string;
 ```
 
 A short description of the command
@@ -1082,7 +1093,7 @@ A short description of the command
 ###### schema?
 
 ```ts
-optional schema: any;
+optional schema?: any;
 ```
 
 A schema for validating the command's input. Should follow the JSON Schema specification.
@@ -1110,7 +1121,9 @@ type BidirectionalConfig =
 
 Configuration for bidirectional mode of voice+.
 
-#### Type Declaration
+#### Union Members
+
+##### Type Literal
 
 ```ts
 {
@@ -1122,10 +1135,10 @@ Configuration for bidirectional mode of voice+.
 }
 ```
 
-##### automaticContext?
+###### automaticContext?
 
 ```ts
-optional automaticContext: true;
+optional automaticContext?: true;
 ```
 
 Attempt to gather and send page context automatically. This will work well on semantically coded pages without too many custom form controls.
@@ -1133,10 +1146,10 @@ This enables a number of automatic features.
 
 Defaults to `true`.
 
-##### navigation()?
+###### navigation?
 
 ```ts
-optional navigation: (action, destination, destinations) => void;
+optional navigation?: (action, destination, destinations) => void;
 ```
 
 Navigation handler for bidirectional mode.
@@ -1147,15 +1160,15 @@ The default implementation will navigate to those pages using standard `window.l
 
 ###### action
 
-The navigation action to perform.
+`"page_next"` \| `"page_previous"` \| `"page_custom"` \| `"page_unknown"`
 
-`"page_next"` | `"page_previous"` | `"page_custom"` | `"page_unknown"`
+The navigation action to perform.
 
 ###### destination
 
-The name of the destination to navigate to if `action` is `"page_custom"`.
+`string` \| `undefined`
 
-`string` | `undefined`
+The name of the destination to navigate to if `action` is `"page_custom"`.
 
 ###### destinations
 
@@ -1167,10 +1180,10 @@ A map of destination names to URLs for custom navigation.
 
 `void`
 
-##### input()?
+###### input?
 
 ```ts
-optional input: (fields, pageFields) => void;
+optional input?: (fields, pageFields) => void;
 ```
 
 A callback for filling out form fields in bidirectional mode.
@@ -1195,10 +1208,10 @@ A map of field IDs to DOM elements for custom form filling.
 
 `void`
 
-##### ~~custom()?~~
+###### ~~custom?~~
 
 ```ts
-optional custom: (action, payload) => void;
+optional custom?: (action, payload) => void;
 ```
 
 A callback for custom actions in bidirectional mode.
@@ -1225,10 +1238,10 @@ The payload defined for the custom action.
 
 Use [TouchpointInstance.setCustomBidirectionalCommands](#setcustombidirectionalcommands) instead.
 
-##### customizeAutomaticContext()?
+###### customizeAutomaticContext?
 
 ```ts
-optional customizeAutomaticContext: (arg) => object;
+optional customizeAutomaticContext?: (arg) => object;
 ```
 
 A callback for customizing the automatic context gathering.
@@ -1267,6 +1280,10 @@ state: PageState;
 
 The current state of the page - this is stuff not sent to the LLM, but needed to connect the results back to actions to take on the page.
 
+---
+
+##### Type Literal
+
 ```ts
 {
   automaticContext: false;
@@ -1276,7 +1293,7 @@ The current state of the page - this is stuff not sent to the LLM, but needed to
 }
 ```
 
-##### automaticContext
+###### automaticContext
 
 ```ts
 automaticContext: false;
@@ -1284,10 +1301,10 @@ automaticContext: false;
 
 Disable gathering page context automatically.
 
-##### navigation()?
+###### navigation?
 
 ```ts
-optional navigation: (action, destination?) => void;
+optional navigation?: (action, destination?) => void;
 ```
 
 Navigation handler for bidirectional mode. Without automatic context there is no default implementation.
@@ -1296,9 +1313,9 @@ Navigation handler for bidirectional mode. Without automatic context there is no
 
 ###### action
 
-The navigation action to perform.
+`"page_next"` \| `"page_previous"` \| `"page_custom"` \| `"page_unknown"`
 
-`"page_next"` | `"page_previous"` | `"page_custom"` | `"page_unknown"`
+The navigation action to perform.
 
 ###### destination?
 
@@ -1310,10 +1327,10 @@ The name of the destination to navigate to if `action` is `"page_custom"`.
 
 `void`
 
-##### input()?
+###### input?
 
 ```ts
-optional input: (fields) => void;
+optional input?: (fields) => void;
 ```
 
 A callback for filling out form fields in bidirectional mode. Without automatic context there is no default implementation.
@@ -1330,10 +1347,10 @@ An array of field objects with `id` and `value` properties.
 
 `void`
 
-##### custom()?
+###### custom?
 
 ```ts
-optional custom: (action, payload) => void;
+optional custom?: (action, payload) => void;
 ```
 
 A callback for custom actions in bidirectional mode.
@@ -1376,7 +1393,7 @@ The name of the command, used to invoke it. Should be unique and descriptive in 
 ##### description?
 
 ```ts
-optional description: string;
+optional description?: string;
 ```
 
 A short description of the command, used to help the LLM understand its purpose.
@@ -1387,7 +1404,7 @@ from the application side.
 ##### schema?
 
 ```ts
-optional schema: any;
+optional schema?: any;
 ```
 
 A JSON Schema that defines the structure of the command's input.
@@ -1401,12 +1418,12 @@ Should follow the JSONSchema specification.
 ##### input?
 
 ```ts
-optional input: any;
+optional input?: any;
 ```
 
 Any additional input data that the LLM should have.
 
-##### handler()
+##### handler
 
 ```ts
 handler: (value) => void;

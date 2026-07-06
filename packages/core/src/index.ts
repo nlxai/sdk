@@ -181,7 +181,8 @@ export interface ConversationHandler {
     response:
       | (Omit<ApplicationResponse, "receivedAt"> & { receivedAt?: Time })
       | (Omit<UserResponse, "receivedAt"> & { receivedAt?: Time })
-      | (Omit<FailureMessage, "receivedAt"> & { receivedAt?: Time }),
+      | (Omit<FailureMessage, "receivedAt"> & { receivedAt?: Time })
+      | (Omit<NoticeResponse, "receivedAt"> & { receivedAt?: Time }),
   ) => void;
 
   /**
@@ -336,6 +337,10 @@ export enum ResponseType {
    * Generic failure (cannot be attributed to the application)
    */
   Failure = "failure",
+  /**
+   * Notices for important conversation events like agent joined
+   */
+  Notice = "notice",
 }
 
 /**
@@ -362,6 +367,7 @@ export type SlotsRecordOrArray = SlotsRecord | SlotValue[];
  *
  * See also:
  * - {@link UserResponse}
+ * - {@link FailureMessage}
  * - {@link FailureMessage}
  * - {@link Response}
  */
@@ -573,6 +579,7 @@ export interface Choice {
  *
  * See also:
  * - {@link ApplicationResponse}
+ * - {@link NoticeResponse}
  * - {@link FailureMessage}
  * - {@link Response}
  *
@@ -640,6 +647,12 @@ export type UserResponsePayload =
 
 /**
  * A failure message is received when the NLX api is unreachable, or sends an unparsable response.
+ *
+ * See also:
+ * - {@link ApplicationResponse}
+ * - {@link NoticeResponse}
+ * - {@link UserResponse}
+ * - {@link Response}
  */
 export interface FailureMessage {
   /**
@@ -662,9 +675,42 @@ export interface FailureMessage {
 }
 
 /**
+ * A message from the user
+ *
+ * See also:
+ * - {@link ApplicationResponse}
+ * - {@link FailureMessage}
+ * - {@link Response}
+ *
+ */
+export interface NoticeResponse {
+  /**
+   * The notice response type
+   */
+  type: ResponseType.Notice;
+  /**
+   * When the response was received
+   */
+  receivedAt: Time;
+  /**
+   * The payload of the response
+   */
+  payload: {
+    /**
+     * The error message is either the default, or the `failureMessage` set in the {@link Config}.
+     */
+    text: string;
+  };
+}
+
+/**
  * A response from the application or the user.
  */
-export type Response = ApplicationResponse | UserResponse | FailureMessage;
+export type Response =
+  | ApplicationResponse
+  | UserResponse
+  | NoticeResponse
+  | FailureMessage;
 
 /**
  * The time value in milliseconds since midnight, January 1, 1970 UTC.

@@ -225,10 +225,33 @@ export const createConnectChatConversation = (
       if (
         contentType ===
           "application/vnd.amazonaws.connect.event.participant.joined" &&
-        data.participantRole === "AGENT"
+        participantRole === "AGENT"
       ) {
         escalated = true;
-        // TODO: add future escalation handling here (e.g. notice message)
+        const newResponse: Response = {
+          type: ResponseType.Notice,
+          receivedAt: Date.now(),
+          payload: {
+            text: "Agent has joined",
+          },
+        };
+        appendResponse(newResponse);
+        return;
+      }
+
+      if (
+        contentType ===
+          "application/vnd.amazonaws.connect.event.participant.left" &&
+        participantRole === "AGENT"
+      ) {
+        const newResponse: Response = {
+          type: ResponseType.Notice,
+          receivedAt: Date.now(),
+          payload: {
+            text: "Agent has left",
+          },
+        };
+        appendResponse(newResponse);
         return;
       }
 
