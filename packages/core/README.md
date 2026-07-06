@@ -375,7 +375,7 @@ return (<div>
 function promisify<Params>(
   fn,
   convo,
-  timeout,
+  timeout?,
 ): (payload) => Promise<Response | null>;
 ```
 
@@ -405,7 +405,7 @@ the function to wrap (e.g. `convo.sendText`, `convo.sendChoice`, etc.)
 
 the `ConversationHandler` (from [createConversation](#createconversation))
 
-##### timeout
+##### timeout?
 
 `number` = `10000`
 
@@ -415,19 +415,7 @@ the timeout in milliseconds
 
 A promise-wrapped version of the function. The function, when called, returns a promise that resolves to the Conversation's next response.
 
-```ts
-(payload): Promise<Response | null>;
-```
-
-##### Parameters
-
-###### payload
-
-`Params`
-
-##### Returns
-
-`Promise`\<[`Response`](#response) \| `null`\>
+(`payload`) => `Promise`\<[`Response`](#response) \| `null`\>
 
 #### Example
 
@@ -559,7 +547,7 @@ The configuration necessary to create a conversation.
 ##### applicationUrl?
 
 ```ts
-optional applicationUrl: string;
+optional applicationUrl?: string;
 ```
 
 The URL at which your conversational application is running. Fetch this from the application's API channel tab.
@@ -572,7 +560,7 @@ Currently, there are a few ways to specify the application URL:
 ##### protocol?
 
 ```ts
-optional protocol: Protocol;
+optional protocol?: Protocol;
 ```
 
 Specify the protocol (http, websocket or httpWithStreaming)
@@ -580,7 +568,7 @@ Specify the protocol (http, websocket or httpWithStreaming)
 ##### host?
 
 ```ts
-optional host: string;
+optional host?: string;
 ```
 
 Hostname of the application deployment, without a leading `https://`.
@@ -588,7 +576,7 @@ Hostname of the application deployment, without a leading `https://`.
 ##### deploymentKey?
 
 ```ts
-optional deploymentKey: string;
+optional deploymentKey?: string;
 ```
 
 Deployment key.
@@ -596,7 +584,7 @@ Deployment key.
 ##### channelKey?
 
 ```ts
-optional channelKey: string;
+optional channelKey?: string;
 ```
 
 Channel key.
@@ -604,7 +592,7 @@ Channel key.
 ##### apiKey?
 
 ```ts
-optional apiKey: string;
+optional apiKey?: string;
 ```
 
 API key.
@@ -612,7 +600,7 @@ API key.
 ##### headers?
 
 ```ts
-optional headers: Record<string, string>;
+optional headers?: Record<string, string>;
 ```
 
 Headers to forward to the NLX API.
@@ -620,7 +608,7 @@ Headers to forward to the NLX API.
 ##### conversationId?
 
 ```ts
-optional conversationId: string;
+optional conversationId?: string;
 ```
 
 Set `conversationId` to continue an existing conversation. If not set, a new conversation will be started (and a new conversationId will be generated internally).
@@ -628,7 +616,7 @@ Set `conversationId` to continue an existing conversation. If not set, a new con
 ##### userId?
 
 ```ts
-optional userId: string;
+optional userId?: string;
 ```
 
 Setting the `userID` allows it to be searchable in application history, as well as usable via `{System.userId}` in the flow.
@@ -636,7 +624,7 @@ Setting the `userID` allows it to be searchable in application history, as well 
 ##### responses?
 
 ```ts
-optional responses: Response[];
+optional responses?: Response[];
 ```
 
 When `responses` is set, initialize the chatHandler with historical messages. This is useful when restoring a previous conversation, that perhaps started on a different page.
@@ -644,7 +632,7 @@ When `responses` is set, initialize the chatHandler with historical messages. Th
 ##### failureMessage?
 
 ```ts
-optional failureMessage: string;
+optional failureMessage?: string;
 ```
 
 When set, this overrides the default failure message ("We encountered an issue. Please try again soon.").
@@ -661,7 +649,7 @@ If you don't have translations, hard-code this to the language code you support.
 ##### bidirectional?
 
 ```ts
-optional bidirectional: boolean;
+optional bidirectional?: boolean;
 ```
 
 Specifies whether the conversation is using bidirectional Voice+ (if so, an additional command socket will be opened).
@@ -674,7 +662,7 @@ A bundle of functions to interact with a conversation, created by [createConvers
 
 #### Properties
 
-##### sendText()
+##### sendText
 
 ```ts
 sendText: (text, context?) => void;
@@ -700,7 +688,7 @@ the user's message
 
 `void`
 
-##### sendSlots()
+##### sendSlots
 
 ```ts
 sendSlots: (slots, context?) => void;
@@ -726,7 +714,7 @@ The slots to populate
 
 `void`
 
-##### sendChoice()
+##### sendChoice
 
 ```ts
 sendChoice: (choiceId, context?, metadata?) => void;
@@ -758,7 +746,7 @@ links the choice to the specific message and node in the conversation.
 
 `void`
 
-##### sendWelcomeFlow()
+##### sendWelcomeFlow
 
 ```ts
 sendWelcomeFlow: (context?) => void;
@@ -778,7 +766,7 @@ Trigger the welcome flow. This should be done when the user starts interacting w
 
 `void`
 
-##### sendFlow()
+##### sendFlow
 
 ```ts
 sendFlow: (flowId, context?) => void;
@@ -804,7 +792,7 @@ the flow to trigger. The id is the name under the application's _Flows_.
 
 `void`
 
-##### sendContext()
+##### sendContext
 
 ```ts
 sendContext: (context) => Promise<void>;
@@ -824,7 +812,7 @@ Send context without sending a message
 
 `Promise`\<`void`\>
 
-##### appendMessageToTranscript()
+##### appendMessageToTranscript
 
 ```ts
 appendMessageToTranscript: (response) => void;
@@ -837,15 +825,18 @@ sources.
 
 ###### response
 
-the response with optional timestamps.
+\| `Omit`\<[`ApplicationResponse`](#applicationresponse), `"receivedAt"`\> & `object`
+\| `Omit`\<[`UserResponse`](#userresponse), `"receivedAt"`\> & `object`
+\| `Omit`\<[`FailureMessage`](#failuremessage-1), `"receivedAt"`\> & `object`
+\| `Omit`\<[`NoticeResponse`](#noticeresponse), `"receivedAt"`\> & `object`
 
-`Omit`\<[`ApplicationResponse`](#applicationresponse), `"receivedAt"`\> & `object` | `Omit`\<[`UserResponse`](#userresponse), `"receivedAt"`\> & `object` | `Omit`\<[`FailureMessage`](#failuremessage-1), `"receivedAt"`\> & `object`
+the response with optional timestamps.
 
 ###### Returns
 
 `void`
 
-##### sendStructured()
+##### sendStructured
 
 ```ts
 sendStructured: (request, context?) => void;
@@ -869,7 +860,7 @@ Send a combination of choice, slots, and flow in one request.
 
 `void`
 
-##### submitFeedback()
+##### submitFeedback
 
 ```ts
 submitFeedback: (url, feedback) => Promise<void>;
@@ -901,7 +892,7 @@ Either a numerical rating or a textual comment.
 
 `Promise`\<`void`\>
 
-##### subscribe()
+##### subscribe
 
 ```ts
 subscribe: (subscriber) => () => void;
@@ -921,15 +912,9 @@ The callback to subscribe
 
 A function to unsubscribe the callback.
 
-```ts
-(): void;
-```
+() => `void`
 
-###### Returns
-
-`void`
-
-##### unsubscribe()
+##### unsubscribe
 
 ```ts
 unsubscribe: (subscriber) => void;
@@ -949,7 +934,7 @@ The callback to unsubscribe
 
 `void`
 
-##### unsubscribeAll()
+##### unsubscribeAll
 
 ```ts
 unsubscribeAll: () => void;
@@ -961,7 +946,7 @@ Unsubscribe all callback from the conversation.
 
 `void`
 
-##### currentConversationId()
+##### currentConversationId
 
 ```ts
 currentConversationId: () => string | undefined;
@@ -973,7 +958,7 @@ Get the current conversation ID if it's set, or undefined if there is no convers
 
 `string` \| `undefined`
 
-##### currentLanguageCode()
+##### currentLanguageCode
 
 ```ts
 currentLanguageCode: () => string;
@@ -985,7 +970,7 @@ Get the current language code
 
 `string`
 
-##### setLanguageCode()
+##### setLanguageCode
 
 ```ts
 setLanguageCode: (languageCode) => void;
@@ -1003,7 +988,7 @@ Set the language code
 
 `void`
 
-##### reset()
+##### reset
 
 ```ts
 reset: (options?) => void;
@@ -1026,7 +1011,7 @@ If set to true, will clear historical responses passed to subscribers.
 
 `void`
 
-##### destroy()
+##### destroy
 
 ```ts
 destroy: () => void;
@@ -1038,7 +1023,7 @@ Removes all subscribers and, if using websockets, closes the connection.
 
 `void`
 
-##### setRequestOverride()
+##### setRequestOverride
 
 ```ts
 setRequestOverride: (override) => void;
@@ -1050,13 +1035,13 @@ Optional [RequestOverride](#requestoverride) function used to bypass the applica
 
 ###### override
 
-[`RequestOverride`](#requestoverride) | `undefined`
+[`RequestOverride`](#requestoverride) \| `undefined`
 
 ###### Returns
 
 `void`
 
-##### addEventListener()
+##### addEventListener
 
 ```ts
 addEventListener: (event, handler) => void;
@@ -1072,13 +1057,14 @@ Add a listener to one of the handler's custom events
 
 ###### handler
 
-[`VoicePlusCommandListener`](#voicepluscommandlistener) | [`InterimMessageListener`](#interimmessagelistener)
+\| [`VoicePlusCommandListener`](#voicepluscommandlistener)
+\| [`InterimMessageListener`](#interimmessagelistener)
 
 ###### Returns
 
 `void`
 
-##### removeEventListener()
+##### removeEventListener
 
 ```ts
 removeEventListener: (event, handler) => void;
@@ -1094,7 +1080,28 @@ Remove a listener to one of the handler's custom events
 
 ###### handler
 
-[`VoicePlusCommandListener`](#voicepluscommandlistener) | [`InterimMessageListener`](#interimmessagelistener)
+\| [`VoicePlusCommandListener`](#voicepluscommandlistener)
+\| [`InterimMessageListener`](#interimmessagelistener)
+
+###### Returns
+
+`void`
+
+##### setInterimMessage
+
+```ts
+setInterimMessage: (message?) => void;
+```
+
+Set interim message. Setting `undefined` clears the current interim message.
+
+###### Parameters
+
+###### message?
+
+`string`
+
+interim message.
 
 ###### Returns
 
@@ -1137,6 +1144,7 @@ See also:
 
 - [UserResponse](#userresponse)
 - [FailureMessage](#failuremessage-1)
+- [FailureMessage](#failuremessage-1)
 - [Response](#response)
 
 #### Properties
@@ -1176,7 +1184,7 @@ The payload of the application response
 ##### expirationTimestamp?
 
 ```ts
-optional expirationTimestamp: number;
+optional expirationTimestamp?: number;
 ```
 
 If there isn't some interaction by this time, the conversation will expire.
@@ -1184,7 +1192,7 @@ If there isn't some interaction by this time, the conversation will expire.
 ##### conversationId?
 
 ```ts
-optional conversationId: string;
+optional conversationId?: string;
 ```
 
 The active conversation ID. If not set, a new conversation will be started.
@@ -1200,7 +1208,7 @@ Any messages from the application.
 ##### metadata?
 
 ```ts
-optional metadata: ApplicationResponseMetadata;
+optional metadata?: ApplicationResponseMetadata;
 ```
 
 Global state about the current conversation
@@ -1209,7 +1217,7 @@ as well as whether the client should poll for more application responses.
 ##### payload?
 
 ```ts
-optional payload: string;
+optional payload?: string;
 ```
 
 If configured, the [node's payload](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/nodes#node-payload).
@@ -1217,7 +1225,7 @@ If configured, the [node's payload](https://docs.nlx.ai/platform/nlx-platform-gu
 ##### modalities?
 
 ```ts
-optional modalities: ModalityPayloads;
+optional modalities?: ModalityPayloads;
 ```
 
 If configured, the node's modalities and their payloads.
@@ -1225,7 +1233,7 @@ If configured, the node's modalities and their payloads.
 ##### context?
 
 ```ts
-optional context: Context;
+optional context?: Context;
 ```
 
 If the node is set to send context, the whole context associated with the conversation.
@@ -1242,7 +1250,7 @@ as well as whether the client should poll for more application responses.
 ##### intentId?
 
 ```ts
-optional intentId: string;
+optional intentId?: string;
 ```
 
 The conversation's flow ID (called `intentId` here for legacy reasons).
@@ -1250,7 +1258,7 @@ The conversation's flow ID (called `intentId` here for legacy reasons).
 ##### escalation?
 
 ```ts
-optional escalation: boolean;
+optional escalation?: boolean;
 ```
 
 Whether the current conversation has been marked as incomprehension.
@@ -1258,7 +1266,7 @@ Whether the current conversation has been marked as incomprehension.
 ##### frustration?
 
 ```ts
-optional frustration: boolean;
+optional frustration?: boolean;
 ```
 
 Whether the current conversation has been marked frustrated
@@ -1266,7 +1274,7 @@ Whether the current conversation has been marked frustrated
 ##### incomprehension?
 
 ```ts
-optional incomprehension: boolean;
+optional incomprehension?: boolean;
 ```
 
 Whether the current conversation has been marked as incomprehension.
@@ -1282,7 +1290,7 @@ Upload URL's
 ##### hasPendingDataRequest?
 
 ```ts
-optional hasPendingDataRequest: boolean;
+optional hasPendingDataRequest?: boolean;
 ```
 
 Whether the client should poll for more application responses.
@@ -1290,7 +1298,7 @@ Whether the client should poll for more application responses.
 ##### sources?
 
 ```ts
-optional sources: KnowledgeBaseResponseSource[];
+optional sources?: KnowledgeBaseResponseSource[];
 ```
 
 Knowledge base sources
@@ -1298,7 +1306,7 @@ Knowledge base sources
 ##### feedbackUrl?
 
 ```ts
-optional feedbackUrl: string;
+optional feedbackUrl?: string;
 ```
 
 URL to use for submitting feedback about this response. See `feedbackConfig` for what the expected feedback type is.
@@ -1308,7 +1316,7 @@ You can pass this as the first argument to `submitFeedback`.
 ##### feedbackConfig?
 
 ```ts
-optional feedbackConfig: FeedbackConfiguration;
+optional feedbackConfig?: FeedbackConfiguration;
 ```
 
 If present, the application would like to collect feedback from the user.
@@ -1324,7 +1332,7 @@ Response for knowlege base sources
 ##### fileName?
 
 ```ts
-optional fileName: string;
+optional fileName?: string;
 ```
 
 File name
@@ -1332,7 +1340,7 @@ File name
 ##### pageNumber?
 
 ```ts
-optional pageNumber: number;
+optional pageNumber?: number;
 ```
 
 Page number
@@ -1340,7 +1348,7 @@ Page number
 ##### content?
 
 ```ts
-optional content: string;
+optional content?: string;
 ```
 
 Content
@@ -1348,7 +1356,7 @@ Content
 ##### metadata?
 
 ```ts
-optional metadata: Record<string, unknown>;
+optional metadata?: Record<string, unknown>;
 ```
 
 Metadata
@@ -1356,7 +1364,7 @@ Metadata
 ##### presignedUrl?
 
 ```ts
-optional presignedUrl: string;
+optional presignedUrl?: string;
 ```
 
 Presigned URL for direct retrieval
@@ -1373,7 +1381,7 @@ as well as whether the client should poll for more application responses.
 ##### intentId?
 
 ```ts
-optional intentId: string;
+optional intentId?: string;
 ```
 
 The message node's flow ID (called `intentId` here for legacy reasons).
@@ -1389,7 +1397,7 @@ A message from the application, as well as any choices the user can make.
 ##### messageId?
 
 ```ts
-optional messageId: string;
+optional messageId?: string;
 ```
 
 A unique identifier for the message.
@@ -1397,7 +1405,7 @@ A unique identifier for the message.
 ##### nodeId?
 
 ```ts
-optional nodeId: string;
+optional nodeId?: string;
 ```
 
 The node id that this message is associated with.
@@ -1422,7 +1430,7 @@ A selection of choices to show to the user. They may choose one of them.
 ##### metadata?
 
 ```ts
-optional metadata: ApplicationMessageMetadata;
+optional metadata?: ApplicationMessageMetadata;
 ```
 
 Metadata
@@ -1430,7 +1438,7 @@ Metadata
 ##### selectedChoiceId?
 
 ```ts
-optional selectedChoiceId: string;
+optional selectedChoiceId?: string;
 ```
 
 After a choice has been made by the user, this will be updated locally to the selected choice id.
@@ -1487,7 +1495,7 @@ The text of the choice
 ##### choicePayload?
 
 ```ts
-optional choicePayload: any;
+optional choicePayload?: any;
 ```
 
 An optional, schemaless payload for the choice.
@@ -1501,6 +1509,7 @@ A message from the user
 See also:
 
 - [ApplicationResponse](#applicationresponse)
+- [NoticeResponse](#noticeresponse)
 - [FailureMessage](#failuremessage-1)
 - [Response](#response)
 
@@ -1536,6 +1545,13 @@ The payload of the response
 
 A failure message is received when the NLX api is unreachable, or sends an unparsable response.
 
+See also:
+
+- [ApplicationResponse](#applicationresponse)
+- [NoticeResponse](#noticeresponse)
+- [UserResponse](#userresponse)
+- [Response](#response)
+
 #### Properties
 
 ##### type
@@ -1569,6 +1585,52 @@ receivedAt: number;
 ```
 
 When the failure occurred.
+
+---
+
+### NoticeResponse
+
+A message from the user
+
+See also:
+
+- [ApplicationResponse](#applicationresponse)
+- [FailureMessage](#failuremessage-1)
+- [Response](#response)
+
+#### Properties
+
+##### type
+
+```ts
+type: Notice;
+```
+
+The notice response type
+
+##### receivedAt
+
+```ts
+receivedAt: number;
+```
+
+When the response was received
+
+##### payload
+
+```ts
+payload: object;
+```
+
+The payload of the response
+
+###### text
+
+```ts
+text: string;
+```
+
+The error message is either the default, or the `failureMessage` set in the [Config](#config).
 
 ---
 
@@ -1647,7 +1709,7 @@ Whether comments are enabled for this feedback collection.
 ##### question?
 
 ```ts
-optional question: string;
+optional question?: string;
 ```
 
 Optional question to show to the user when collecting feedback.
@@ -1663,7 +1725,7 @@ Labels for individual feedback UI elements as customised by the builder.
 ###### positive?
 
 ```ts
-optional positive: string;
+optional positive?: string;
 ```
 
 Label for positive feedback
@@ -1671,7 +1733,7 @@ Label for positive feedback
 ###### negative?
 
 ```ts
-optional negative: string;
+optional negative?: string;
 ```
 
 Label for negative feedback
@@ -1679,7 +1741,7 @@ Label for negative feedback
 ###### comment?
 
 ```ts
-optional comment: string;
+optional comment?: string;
 ```
 
 Label for comment
@@ -1696,7 +1758,7 @@ Includes a combination of choice, slots, and flow in one request.
 ##### choiceId?
 
 ```ts
-optional choiceId: string;
+optional choiceId?: string;
 ```
 
 The `choiceId` is in the [ApplicationResponse](#applicationresponse)'s `.payload.messages[].choices[].choiceId` fields
@@ -1704,7 +1766,7 @@ The `choiceId` is in the [ApplicationResponse](#applicationresponse)'s `.payload
 ##### nodeId?
 
 ```ts
-optional nodeId: string;
+optional nodeId?: string;
 ```
 
 Required if you want to change a choice that's already been sent.
@@ -1713,7 +1775,7 @@ The `nodeId` can be found in the corresponding [ApplicationMessage](#application
 ##### ~~intentId?~~
 
 ```ts
-optional intentId: string;
+optional intentId?: string;
 ```
 
 The intent to trigger. The `intentId` is the name under the application's _Intents_.
@@ -1725,7 +1787,7 @@ use `flowId` instead.
 ##### flowId?
 
 ```ts
-optional flowId: string;
+optional flowId?: string;
 ```
 
 The flow to trigger. The `flowId` is the name under the application's _Flows_.
@@ -1733,7 +1795,7 @@ The flow to trigger. The `flowId` is the name under the application's _Flows_.
 ##### slots?
 
 ```ts
-optional slots: SlotsRecordOrArray;
+optional slots?: SlotsRecordOrArray;
 ```
 
 The slots to populate
@@ -1741,7 +1803,7 @@ The slots to populate
 ##### uploadIds?
 
 ```ts
-optional uploadIds: string[];
+optional uploadIds?: string[];
 ```
 
 Upload ID
@@ -1749,7 +1811,7 @@ Upload ID
 ##### utterance?
 
 ```ts
-optional utterance: string;
+optional utterance?: string;
 ```
 
 Upload utterance
@@ -1765,7 +1827,7 @@ The request data actually sent to the application, slightly different from [User
 ##### conversationId?
 
 ```ts
-optional conversationId: string;
+optional conversationId?: string;
 ```
 
 The current conversation ID
@@ -1773,7 +1835,7 @@ The current conversation ID
 ##### userId?
 
 ```ts
-optional userId: string;
+optional userId?: string;
 ```
 
 The current user ID
@@ -1781,7 +1843,7 @@ The current user ID
 ##### context?
 
 ```ts
-optional context: Context;
+optional context?: Context;
 ```
 
 Request context, if applicable
@@ -1797,7 +1859,7 @@ Main request
 ###### unstructured?
 
 ```ts
-optional unstructured: object;
+optional unstructured?: object;
 ```
 
 Unstructured request
@@ -1813,7 +1875,7 @@ Request body text
 ###### structured?
 
 ```ts
-optional structured: StructuredRequest & object;
+optional structured?: StructuredRequest & object;
 ```
 
 Structured request
@@ -1823,7 +1885,7 @@ Structured request
 ###### slots?
 
 ```ts
-optional slots: SlotValue[];
+optional slots?: SlotValue[];
 ```
 
 Only array-form slots are allowed for the purposes of sending to the backend
@@ -1879,7 +1941,7 @@ Helps link the choice to the specific message in the conversation.
 ##### responseIndex?
 
 ```ts
-optional responseIndex: number;
+optional responseIndex?: number;
 ```
 
 The index of the [Response](#response) associated with this choice.
@@ -1889,7 +1951,7 @@ It is not sent to the application.
 ##### messageIndex?
 
 ```ts
-optional messageIndex: number;
+optional messageIndex?: number;
 ```
 
 The index of the [ApplicationMessage](#applicationmessage) associated with this choice.
@@ -1899,7 +1961,7 @@ It is not sent to the application.
 ##### nodeId?
 
 ```ts
-optional nodeId: string;
+optional nodeId?: string;
 ```
 
 Required if you want to change a choice that's already been sent.
@@ -1908,7 +1970,7 @@ The `nodeId` can be found in the corresponding [ApplicationMessage](#application
 ##### ~~intentId?~~
 
 ```ts
-optional intentId: string;
+optional intentId?: string;
 ```
 
 Intent ID, used for sending to the NLU to allow it to double-check.
@@ -1920,7 +1982,7 @@ use `flowId` instead.
 ##### flowId?
 
 ```ts
-optional flowId: string;
+optional flowId?: string;
 ```
 
 Flow ID, used for sending to the NLU to allow it to double-check.
@@ -1972,6 +2034,22 @@ Interim message event handler
 The protocol used to communicate with the application
 
 #### Enumeration Members
+
+##### Http
+
+```ts
+Http: "http";
+```
+
+Supported for development purposes only
+
+##### HttpWithStreaming
+
+```ts
+HttpWithStreaming: "httpWithStreaming";
+```
+
+Supported for development purposes only
 
 ##### Https
 
@@ -2029,6 +2107,14 @@ Failure: "failure";
 
 Generic failure (cannot be attributed to the application)
 
+##### Notice
+
+```ts
+Notice: "notice";
+```
+
+Notices for important conversation events like agent joined
+
 ## Events
 
 ### ConversationHandlerEvent
@@ -2075,7 +2161,7 @@ A `SlotsRecord` is equivalent to an array of [SlotValue](#slotvalue) objects.
 type SlotsRecordOrArray = SlotsRecord | SlotValue[];
 ```
 
-Values to fill an intent's [attached slots](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/setup#attached-slots).
+Values to fill an flow's [attached slots](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/overview/setup#attached-slots).
 
 Supports either a [SlotsRecord](#slotsrecord) or an array of [SlotValue](#slotvalue) objects
 
@@ -2110,7 +2196,9 @@ type UserResponsePayload =
 
 The payload of the user response
 
-#### Type Declaration
+#### Union Members
+
+##### Type Literal
 
 ```ts
 {
@@ -2120,7 +2208,7 @@ The payload of the user response
 }
 ```
 
-##### type
+###### type
 
 ```ts
 type: "text";
@@ -2128,7 +2216,7 @@ type: "text";
 
 Set when `sendText` is called.
 
-##### text
+###### text
 
 ```ts
 text: string;
@@ -2136,13 +2224,17 @@ text: string;
 
 The user's message
 
-##### context?
+###### context?
 
 ```ts
-optional context: Context;
+optional context?: Context;
 ```
 
 [Context](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/advanced/context-variables) for usage later in the flow.
+
+---
+
+##### Type Literal
 
 ```ts
 {
@@ -2152,7 +2244,7 @@ optional context: Context;
 }
 ```
 
-##### type
+###### type
 
 ```ts
 type: "choice";
@@ -2160,7 +2252,7 @@ type: "choice";
 
 Set when `sendChoice` is called.
 
-##### choiceId
+###### choiceId
 
 ```ts
 choiceId: string;
@@ -2169,13 +2261,15 @@ choiceId: string;
 The `choiceId` passed to `sendChoice`
 Correlates to a `choiceId` in the [ApplicationResponse](#applicationresponse)'s `.payload.messages[].choices[].choiceId` fields
 
-##### context?
+###### context?
 
 ```ts
-optional context: Context;
+optional context?: Context;
 ```
 
 [Context](https://docs.nlx.ai/platform/nlx-platform-guide/flows-and-building-blocks/advanced/context-variables) for usage later in the flow.
+
+---
 
 `object` & [`StructuredRequest`](#structuredrequest)
 
@@ -2184,7 +2278,11 @@ optional context: Context;
 ### Response
 
 ```ts
-type Response = ApplicationResponse | UserResponse | FailureMessage;
+type Response =
+  | ApplicationResponse
+  | UserResponse
+  | NoticeResponse
+  | FailureMessage;
 ```
 
 A response from the application or the user.
@@ -2214,7 +2312,7 @@ Normalized structured request with a single way to represent slots
 ##### slots?
 
 ```ts
-optional slots: SlotValue[];
+optional slots?: SlotValue[];
 ```
 
 Only array-form slots are allowed for the purposes of sending to the backend
@@ -2231,7 +2329,7 @@ Language code named for clarity, may restrict it to a finite list
 
 ---
 
-### RequestOverride()
+### RequestOverride
 
 ```ts
 type RequestOverride = (applicationRequest, appendResponse) => void;
@@ -2269,7 +2367,7 @@ Voice+ context, type to be defined
 
 ---
 
-### VoicePlusCommandListener()
+### VoicePlusCommandListener
 
 ```ts
 type VoicePlusCommandListener = (payload) => void;
@@ -2289,7 +2387,7 @@ Voice+ command listener
 
 ---
 
-### InterimMessageListener()
+### InterimMessageListener
 
 ```ts
 type InterimMessageListener = (message?) => void;
@@ -2309,7 +2407,7 @@ Interim message listener
 
 ---
 
-### Subscriber()
+### Subscriber
 
 ```ts
 type Subscriber = (response, newResponse?) => void;
@@ -2346,9 +2444,13 @@ type StepInfo =
 
 Step information, either a step ID as a single string or an object
 
-#### Type Declaration
+#### Union Members
 
 `string`
+
+---
+
+##### Type Literal
 
 ```ts
 {
@@ -2357,7 +2459,7 @@ Step information, either a step ID as a single string or an object
 }
 ```
 
-##### stepId
+###### stepId
 
 ```ts
 stepId: string;
@@ -2365,10 +2467,10 @@ stepId: string;
 
 Step ID
 
-##### stepTriggerDescription?
+###### stepTriggerDescription?
 
 ```ts
-optional stepTriggerDescription: string;
+optional stepTriggerDescription?: string;
 ```
 
 Step trigger description

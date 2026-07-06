@@ -89,7 +89,7 @@ Fetch chat details via API Gateway endpoint
 
 ##### params
 
-[`DetailsParams`](#detailsparams)
+[`DetailsRequestParams`](#detailsrequestparams)
 
 #### Returns
 
@@ -105,18 +105,19 @@ function createConnectChatConversation(config): ConversationHandler;
 
 Creates a ConversationHandler backed by Amazon Connect Chat via amazon-connect-chatjs.
 
-This adapter conforms to the same interface used by @nlxai/core's `createConversation`,
-so it can be passed directly to Touchpoint UI via the `conversationHandler` prop.
-
 #### Parameters
 
 ##### config
 
 [`ConnectChatConfig`](#connectchatconfig)
 
+{ConnectChatConfig} - configuration
+
 #### Returns
 
 `ConversationHandler`
+
+conversationHandler {ConversationHandler} - `@nlxai/core`-compatible conversation handler, directly passable to Touchpoint UI.
 
 #### Example
 
@@ -153,7 +154,9 @@ Chat details are obtained via the `fetchChatDetails` call.
 ##### details
 
 ```ts
-details: ChatDetails;
+details:
+  | ChatDetails
+  | (() => Promise<ChatDetails>);
 ```
 
 Pre-obtained chat details from a prior StartChatContact call.
@@ -217,7 +220,7 @@ The participant token used for authentication
 
 ---
 
-### DetailsParams
+### DetailsRequestParams
 
 Parameters to pass when calling the `startChatEndpoint`.
 
