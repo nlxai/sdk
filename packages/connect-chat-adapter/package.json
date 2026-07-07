@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/connect-chat-adapter",
-  "version": "1.2.7-alpha.2",
+  "version": "1.2.7-alpha.3",
   "description": "Amazon Connect Chat adapter for Touchpoint UI",
   "type": "module",
   "main": "lib/index.cjs",
@@ -43,7 +43,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@nlxai/core": "^1.2.7-alpha.2",
+    "@nlxai/core": "^1.2.7-alpha.3",
     "amazon-connect-chatjs": "^2.3.2"
   },
   "publishConfig": {
