@@ -369,7 +369,23 @@ export const createConnectChatConversation = (
       const interactive = JSON.parse(content);
       const templateType = interactive.templateType;
 
-      if (templateType === "QuickReply" || templateType === "ListPicker") {
+      if (templateType === "TouchpointModality") {
+        const title = interactive.data?.content?.title ?? "";
+        const modalities = interactive.data?.content?.modalityPayload ?? {};
+        const newResponse: Response = {
+          type: ResponseType.Application,
+          receivedAt: Date.now(),
+          payload: {
+            conversationId: resolvedContactId,
+            messages: [{ text: title, choices: [] }],
+            modalities,
+          },
+        };
+        appendResponse(newResponse);
+      } else if (
+        templateType === "QuickReply" ||
+        templateType === "ListPicker"
+      ) {
         const title =
           interactive.data?.content?.title ??
           interactive.data?.content?.subtitle ??
