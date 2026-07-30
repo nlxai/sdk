@@ -370,14 +370,18 @@ export const createConnectChatConversation = (
       const templateType = interactive.templateType;
 
       if (templateType === "TouchpointModality") {
-        const title = interactive.data?.content?.title ?? "";
-        const modalities = interactive.data?.content?.modalityPayload ?? {};
+        const messages =
+          interactive.data?.content?.modalityPayload?.messages?.map(
+            (message: any) => ({ ...message, choices: message.choices ?? [] }),
+          ) ?? [{ text: interactive.data?.content?.title ?? "", choices: [] }];
+        const modalities =
+          interactive.data?.content?.modalityPayload?.modalities ?? {};
         const newResponse: Response = {
           type: ResponseType.Application,
           receivedAt: Date.now(),
           payload: {
             conversationId: resolvedContactId,
-            messages: [{ text: title, choices: [] }],
+            messages,
             modalities,
           },
         };
