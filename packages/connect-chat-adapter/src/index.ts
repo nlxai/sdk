@@ -370,22 +370,26 @@ export const createConnectChatConversation = (
       const templateType = interactive.templateType;
 
       if (templateType === "TouchpointModality") {
-        const messages =
-          interactive.data?.content?.modalityPayload?.messages?.map(
-            (message: any) => ({ ...message, choices: message.choices ?? [] }),
-          ) ?? [{ text: interactive.data?.content?.title ?? "", choices: [] }];
-        const modalities =
-          interactive.data?.content?.modalityPayload?.modalities ?? {};
-        const newResponse: Response = {
-          type: ResponseType.Application,
-          receivedAt: Date.now(),
-          payload: {
-            conversationId: resolvedContactId,
-            messages,
-            modalities,
-          },
-        };
-        appendResponse(newResponse);
+        const modalityPayload = interactive.data?.content?.modalityPayload;
+        if (modalityPayload?.type === "message") {
+          const choices = modalityPayload?.choices;
+          const messages = [
+            { text: modalityPayload?.message, choices: choices ?? [] },
+          ];
+          const modalities = modalityPayload?.modalities;
+          const newResponse: Response = {
+            type: ResponseType.Application,
+            receivedAt: Date.now(),
+            payload: {
+              conversationId: resolvedContactId,
+              messages,
+              modalities,
+            },
+          };
+          appendResponse(newResponse);
+        } else if (modalityPayload?.type === "interim") {
+          setInterimMessage(modalityPayload?.message);
+        }
       } else if (
         templateType === "QuickReply" ||
         templateType === "ListPicker"
@@ -441,6 +445,7 @@ export const createConnectChatConversation = (
 
   // Initialize — stores promise for queueing sends until connection is ready
   let connectionReady = initSession().catch((err) => {
+    setInterimMessage(undefined);
     appendResponse({
       type: ResponseType.Failure,
       receivedAt: Date.now(),
