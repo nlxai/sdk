@@ -57,6 +57,7 @@
     "@types/sdp-transform": "^2.4.9",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/ui": "^4.1.0",
+    "amazon-chime-sdk-js": "^3.32.0",
     "dom-accessibility-api": "^0.7.0",
     "jsdom": "^27.0.1",
     "tailwindcss": "^4.1.16",
