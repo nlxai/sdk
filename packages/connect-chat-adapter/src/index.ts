@@ -369,7 +369,31 @@ export const createConnectChatConversation = (
       const interactive = JSON.parse(content);
       const templateType = interactive.templateType;
 
-      if (templateType === "QuickReply" || templateType === "ListPicker") {
+      if (templateType === "TouchpointModality") {
+        const modalityPayload = interactive.data?.content?.modalityPayload;
+        if (modalityPayload?.type === "message") {
+          const choices = modalityPayload?.choices;
+          const messages = [
+            { text: modalityPayload?.message, choices: choices ?? [] },
+          ];
+          const modalities = modalityPayload?.modalities;
+          const newResponse: Response = {
+            type: ResponseType.Application,
+            receivedAt: Date.now(),
+            payload: {
+              conversationId: resolvedContactId,
+              messages,
+              modalities,
+            },
+          };
+          appendResponse(newResponse);
+        } else if (modalityPayload?.type === "interim") {
+          setInterimMessage(modalityPayload?.message);
+        }
+      } else if (
+        templateType === "QuickReply" ||
+        templateType === "ListPicker"
+      ) {
         const title =
           interactive.data?.content?.title ??
           interactive.data?.content?.subtitle ??
@@ -421,6 +445,7 @@ export const createConnectChatConversation = (
 
   // Initialize — stores promise for queueing sends until connection is ready
   let connectionReady = initSession().catch((err) => {
+    setInterimMessage(undefined);
     appendResponse({
       type: ResponseType.Failure,
       receivedAt: Date.now(),
