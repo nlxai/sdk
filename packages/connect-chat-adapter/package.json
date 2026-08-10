@@ -1,6 +1,6 @@
 {
   "name": "@nlxai/connect-chat-adapter",
-  "version": "1.2.7-alpha.3",
+  "version": "1.2.7-alpha.4",
   "description": "Amazon Connect Chat adapter for Touchpoint UI",
   "type": "module",
   "main": "lib/index.cjs",
