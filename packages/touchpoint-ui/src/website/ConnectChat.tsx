@@ -5,6 +5,11 @@ import {
   fetchChatDetails,
 } from "@nlxai/connect-chat-adapter";
 import { ProviderStack } from "../ProviderStack";
+import {
+  joinVoiceSession,
+  startWebRtcContact,
+  type VoiceSession,
+} from "./connectVoiceSession";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -75,8 +80,16 @@ export const ConnectChat: FC = () => {
     };
   });
 
+  const [voiceEnabled, setVoiceEnabled] = useState(
+    () => new URLSearchParams(window.location.search).get("voice") === "1",
+  );
   const [started, setStarted] = useState(false);
+  const [voiceMuted, setVoiceMuted] = useState(false);
+  const [voiceActive, setVoiceActive] = useState(false);
+  const [voiceError, setVoiceError] = useState<string | null>(null);
   const touchpointRef = useRef<HTMLElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const voiceSessionRef = useRef<VoiceSession | null>(null);
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -88,8 +101,13 @@ export const ConnectChat: FC = () => {
         url.searchParams.delete(key);
       }
     }
+    if (voiceEnabled) {
+      url.searchParams.set("voice", "1");
+    } else {
+      url.searchParams.delete("voice");
+    }
     history.replaceState(null, "", url);
-  }, [config]);
+  }, [config, voiceEnabled]);
 
   useEffect(() => {
     if (!started || !touchpointRef.current) return;
@@ -128,6 +146,66 @@ export const ConnectChat: FC = () => {
     };
   }, [started]);
 
+  useEffect(() => {
+    const { endpoint, instanceId, contactFlowId, displayName } = config;
+
+    const audioElement = audioRef.current;
+
+    // Voice is opt-in: it needs a backend route that calls StartWebRTCContact,
+    // which the StartChatContact endpoint used for chat cannot do.
+    if (!started || !voiceEnabled || audioElement == null) return;
+
+    // Tracks whether this effect run is still current, so a session started by a
+    // run that has since been cleaned up gets torn down instead of leaking.
+    let cancelled = false;
+
+    startWebRtcContact(endpoint, {
+      instanceId,
+      contactFlowId,
+      participantDisplayName:
+        displayName === "" ? (defaults.displayName ?? "") : displayName,
+    })
+      .then(async (contact) => {
+        // eslint-disable-next-line no-console
+        console.log("WebRTC contact", contact);
+
+        const session = await joinVoiceSession({
+          connectionData: contact.ConnectionData,
+          audioElement,
+          onStart: () => setVoiceActive(true),
+          onStop: () => setVoiceActive(false),
+        });
+
+        if (cancelled) {
+          await session.leave();
+          return;
+        }
+        voiceSessionRef.current = session;
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error("Failed to start voice call", err);
+        if (!cancelled) {
+          setVoiceError(err instanceof Error ? err.message : String(err));
+        }
+      });
+
+    return () => {
+      cancelled = true;
+      const session = voiceSessionRef.current;
+      voiceSessionRef.current = null;
+      setVoiceActive(false);
+      setVoiceError(null);
+      void session?.leave();
+    };
+  }, [started, voiceEnabled]);
+
+  const handleToggleMute = (): void => {
+    const session = voiceSessionRef.current;
+    if (session == null) return;
+    setVoiceMuted(session.toggleMute());
+  };
+
   const handleSubmit = (): void => {
     if (!config.endpoint.trim()) {
       alert("API Gateway Endpoint URL is required.");
@@ -138,7 +216,24 @@ export const ConnectChat: FC = () => {
 
   if (started) {
     return (
-      <nlx-touchpoint ref={touchpointRef} className="block w-full h-screen" />
+      <>
+        <nlx-touchpoint ref={touchpointRef} className="block w-full h-screen" />
+        {/* Remote call audio is routed here; must stay mounted for the session. */}
+        <audio ref={audioRef} />
+        {voiceActive && (
+          <button
+            onClick={handleToggleMute}
+            className="fixed bottom-4 left-4 rounded-inner bg-accent px-4 py-2 text-sm font-semibold text-secondary focus:outline-none focus:ring-2 focus:ring-accent"
+          >
+            {voiceMuted ? "Unmute" : "Mute"}
+          </button>
+        )}
+        {voiceError != null && (
+          <p className="fixed bottom-4 left-4 max-w-sm rounded-inner bg-secondary px-4 py-2 text-xs text-primary-60">
+            Voice call unavailable: {voiceError}
+          </p>
+        )}
+      </>
     );
   }
 
@@ -175,6 +270,25 @@ export const ConnectChat: FC = () => {
                 />
               </div>
             ))}
+
+            <label
+              htmlFor="connect-chat-voice"
+              className="flex items-start gap-2 text-xs font-medium text-primary-60"
+            >
+              <input
+                id="connect-chat-voice"
+                type="checkbox"
+                checked={voiceEnabled}
+                onChange={(e) => setVoiceEnabled(e.target.checked)}
+                className="mt-0.5 accent-accent"
+              />
+              <span>
+                Also start a voice call
+                <span className="block text-primary-40">
+                  Requires the endpoint to expose a StartWebRTCContact route.
+                </span>
+              </span>
+            </label>
           </div>
 
           <button
